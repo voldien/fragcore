@@ -1,0 +1,13 @@
+
+# GCC compiler flag options.
+IF ((CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX) AND NOT CMAKE_COMPILER_IS_MINGW)
+
+ENDIF ()
+
+# Source files.
+FILE(GLOB SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
+
+ADD_LIBRARY(fragcore-prpc ${SOURCE_FILES})
+TARGET_LINK_LIBRARIES(fragcore-prpc PVEngine)
+ADD_DEPENDENCIES(fragcore-prpc fragview-core)
+INSTALL(TARGETS fragcore-prpc DESTINATION lib)

@@ -1,0 +1,16 @@
+
+# GCC compiler flag options.
+IF ((CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX) AND NOT CMAKE_COMPILER_IS_MINGW)
+
+ENDIF ()
+
+# Source files.
+#TODO add physx library targets.
+FILE(GLOB SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
+SET(PHYSX_INCLUDE_DIRS "")
+
+ADD_LIBRARY(fragcore-ppx ${SOURCE_FILES})
+TARGET_LINK_LIBRARIES(fragcore-ppx fragcore )
+ADD_DEPENDENCIES(fragcore-ppx fragcore)
+INSTALL(TARGETS fragcore-ppx DESTINATION lib)
+TARGET_INCLUDE_DIRECTORIES( fragcore-ppx PUBLIC "${PHYSX_INCLUDE_DIRS}" )

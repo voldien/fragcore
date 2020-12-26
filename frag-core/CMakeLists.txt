@@ -1,0 +1,160 @@
+
+OPTION(BUILD_WITH_SDL_WINDOW "Use SDL for window mangement." ON)
+#OPTION(BUILD_WITH_TASK_SCHEDULER_SCHTASK ON)
+
+# Find all required libaries for the program.
+FIND_PACKAGE(ZLIB)
+FIND_PACKAGE(Backtrace)
+FIND_PACKAGE(OpenSSL)
+
+#
+IF(PKG_CONFIG_FOUND)
+	MESSAGE(STATUS "Found pkg-config: ${PKG_CONFIG_EXECUTABLE} -- version ${PKG_CONFIG_VERSION_STRING}.")
+	# Find library and compiling options.
+	#TODO add logic for handling if any of the pkg fails.
+	PKG_CHECK_MODULES(JSONC QUIET json-c)
+	PKG_CHECK_MODULES(SDL2 QUIET sdl2)
+	PKG_CHECK_MODULES(AVFORMAT QUIET libavformat)
+	PKG_CHECK_MODULES(AVCODEC QUIET libavcodec)
+	PKG_CHECK_MODULES(AVUTIL QUIET libavutil)
+	PKG_CHECK_MODULES(SWSCALE QUIET libswscale)
+	PKG_CHECK_MODULES(ZIP QUIET libzip)
+ELSE()
+	MESSAGE(ERROR "")
+	# TODO add logic for handling if pkg-config not available.
+ENDIF()
+
+IF(ZLIB_FOUND)
+	MESSAGE(STATUS "zlib found: ${ZLIB_LIBRARIES} -- ${ZLIB_VERSION_STRING}")
+ELSE()
+
+ENDIF()
+
+IF(Backtrace_FOUND)
+	MESSAGE(STATUS "backtrace found: ${Backtrace_LIBRARIES} -- ${Backtrace_HEADER}")
+ELSE()
+
+ENDIF()
+
+IF(OPENSSL_FOUND)
+	MESSAGE(STATUS "backtrace found: ${OPENSSL_LIBRARIES} -- ${OPENSSL_VERSION}")
+ELSE()
+
+ENDIF()
+
+#
+FIND_PACKAGE(Freetype)
+IF(FREETYPE_FOUND)
+	MESSAGE(STATUS "Using freetype version ${FREETYPE_VERSION_STRING}.")
+	#INCLUDE_DIRECTORIES(${FREETYPE_INCLUDE_DIRS})
+ELSE()
+	# Attempt to find it manually.
+ENDIF()
+
+# Find and include libxml2 for supporting configuration.
+FIND_PACKAGE(LibXml2)
+IF ( LIBXML2_FOUND )
+	MESSAGE(STATUS "Using xml2 version ${LIBXML2_VERSION_STRING}.")
+	INCLUDE_DIRECTORIES(${LIBXML2_INCLUDE_DIR})
+ELSE()
+
+ENDIF()
+
+
+# Define all file lists.
+FILE(GLOB SOURCE_FILES  ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/src/audio/*.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/src/physic/*.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/src/scene/*.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/src/scene/subgraph/*.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/src/renderpipeline/*.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/src/renderer/*.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/src/exception/*.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/src/utils/*.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/src/core/*.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/src/core/io/*.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/src/core/Scheduler/*.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/src/video/*.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/src/window/*.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/src/window/SDL/*.cpp #TODO remove later once relocated to platform.
+		${CMAKE_CURRENT_SOURCE_DIR}/src/shaders/*.cpp)
+FILE(GLOB SOURCE_MAIN_FILES client/src/main.cpp)
+FILE(GLOB HEADER_FILES  ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h
+		${CMAKE_CURRENT_SOURCE_DIR}/include/Animation/*.h
+		${CMAKE_CURRENT_SOURCE_DIR}/include/Core/*.h
+		${CMAKE_CURRENT_SOURCE_DIR}/include/Exception/*.h
+		${CMAKE_CURRENT_SOURCE_DIR}/include/Renderer/*.h
+		${CMAKE_CURRENT_SOURCE_DIR}/include/RenderPipeline/*.h
+		${CMAKE_CURRENT_SOURCE_DIR}/include/Video/*.h
+		${CMAKE_CURRENT_SOURCE_DIR}/include/Utils/*.h)
+# Public headers - subset of header files.
+FILE(GLOB DEVELOPMENT_HEADER_FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h
+									${CMAKE_CURRENT_SOURCE_DIR}/include/Core/*.h
+									${CMAKE_CURRENT_SOURCE_DIR}/include/Core/IO/*.h
+									${CMAKE_CURRENT_SOURCE_DIR}/include/Renderer/*.h
+									${CMAKE_CURRENT_SOURCE_DIR}/include/physic/*.h
+									${CMAKE_CURRENT_SOURCE_DIR}/include/Window/*.h
+									${CMAKE_CURRENT_SOURCE_DIR}/include/Video/*.h
+									${CMAKE_CURRENT_SOURCE_DIR}/include/Utils/*.h
+									${CMAKE_CURRENT_SOURCE_DIR}/include/Exception/*.h)
+
+SET(FRAG_CORE_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/include")
+SET(FRAG_CORE_INCLUDE_SUB_DIR 
+				${CMAKE_CURRENT_SOURCE_DIR}/include/
+				${CMAKE_CURRENT_SOURCE_DIR}/include/audio
+				${CMAKE_CURRENT_SOURCE_DIR}/include/Core
+				${CMAKE_CURRENT_SOURCE_DIR}/include/Renderer
+				${CMAKE_CURRENT_SOURCE_DIR}/include/Utils
+				${CMAKE_CURRENT_SOURCE_DIR}/include/physic
+				${CMAKE_CURRENT_SOURCE_DIR}/include/Window
+				${CMAKE_CURRENT_SOURCE_DIR}/include/Video
+				${CMAKE_CURRENT_SOURCE_DIR}/include/Exception)
+
+# Extract 
+GET_TARGET_PROPERTY(LIBHPMCPP_INCLUDE_DIR hpmcpp INCLUDE_DIRECTORIES)
+GET_TARGET_PROPERTY(LIBHPMCPP_INCLUDE_DIR hpmcpp INCLUDE_DIRECTORIES)
+
+
+# Core library for adding support for plugin.
+ADD_LIBRARY(fragcore ${SOURCE_FILES} ${HEADER_FILES}
+ 							${OPEN_SIMPLEX_NOISE_SOURCE}  ${PCG_C_BASIC_SOURCE}
+							${RECASTNAVIGATION_SOURCE} ${POLYPARITION_SOURCE} ${KISS_FFT_SOURCE}
+							${MISC_SOURCE} ) #${ZSTD_SOURCE}
+SET_TARGET_PROPERTIES(fragcore PROPERTIES
+		COMPILE_FLAGS "${JSONC_CFLAGS_OTHER} ${SDL2_CFLAGS_OTHER} ${AVFORMAT_CFLAGS_OTHER} ${AVCODEC_CFLAGS_OTHER}
+		${AVUTIL_CFLAGS_OTHER} ${SWSCALE_CFLAGS_OTHER} ${ZIP_CFLAGS_OTHER}")
+#
+set_property(TARGET fragcore PROPERTY CXX_STANDARD 20)
+target_compile_features(fragcore PUBLIC c_std_11 cxx_std_20)
+
+TARGET_LINK_LIBRARIES(fragcore ${SDL2_LIBRARIES} ${ZLIB_LIBRARIES} ${LIBXML2_LIBRARIES} ${Backtrace_LIBRARIES} ${FREETYPE_LIBRARIES}
+		${ZIP_LIBRARIES} freeimage m dl taskSch fswatch ${JSONC_LIBRARIES} yaml hpmcpp hpm ${OPENSSL_CRYPTO_LIBRARY}
+		${AVFORMAT_LIBRARIES} ${AVCODEC_LIBRARIES} ${SWSCALE_LIBRARIES} )
+ADD_DEPENDENCIES(fragcore taskSch hpmcpp hpm)
+TARGET_COMPILE_DEFINITIONS(fragcore PRIVATE FRAG_CORE_INTERNAL_IMP=1)
+
+#
+TARGET_INCLUDE_DIRECTORIES(fragcore PRIVATE ${SDL2_INCLUDE_DIRS} ${ZIP_INCLUDE_DIRS} ${JSONC_INCLUDE_DIRS}
+													 ${NANOSVG_INCLUDE_DIRS} ${RECASTNAVIGATION_INCLUDE_DIRS} ${NANOSVG_INCLUDE_DIRS}
+													 ${OPEN_SIMPLEX_NOISE_INCLUDE_DIRS} ${PCG_C_BASIC_INCLUDE_DIRS} ${XATLAS_INCLUDE_DIRS}
+													 ${KISS_FFT_INCLUDE_DIRS} ${MISC_INCLUDE_DIRS} ${FREETYPE_INCLUDE_DIRS} ${Backtrace_INCLUDE_DIRS}
+													 ${ZLIB_INCLUDE_DIRS} ${ZSTD_INCLUDE_DIRS} ${HPMCPP_INCLUDE_DIRS} ${TASKSCH_INCLUDE_DIRS} ${HPM_INCLUDE_DIRS}
+										PUBLIC ${FRAG_CORE_INCLUDE})
+TARGET_INCLUDE_DIRECTORIES (fragcore PUBLIC
+	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+	$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
+	$<INSTALL_INTERFACE:include>
+)
+
+# Create package information
+CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/fragcore.pc.in" "${PROJECT_BINARY_DIR}/fragcore.pc" @ONLY)
+
+IF(BUILD_WITH_INSTALL)
+	INSTALL(TARGETS fragcore DESTINATION lib COMPONENT ${LIBFRAGCORE_COMPONENT})
+
+	INSTALL(DIRECTORY ${FRAG_CORE_INCLUDE_SUB_DIR} # source directory
+			DESTINATION include/fragcore # target directory
+			COMPONENT ${LIBFRAGCORE-DEV_COMPONENT}
+			)
+	INSTALL( FILES "${PROJECT_BINARY_DIR}/fragcore.pc" DESTINATION ${FRAGCORE_LIB_INSTALL_DIR}/pkgconfig/ COMPONENT ${LIBFRAGCORE-DEV_COMPONENT})
+ENDIF()
