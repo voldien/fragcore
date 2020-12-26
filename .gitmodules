@@ -1,0 +1,9 @@
+[submodule "extern/hpmcpp"]
+	path = extern/hpmcpp
+	url = https://github.com/voldien/hpmcpp
+[submodule "extern/task-scheduler"]
+	path = extern/task-scheduler
+	url = https://github.com/voldien/task-scheduler
+[submodule "extern/jhpm"]
+	path = extern/jhpm
+	url = https://github.com/voldien/jhpm
