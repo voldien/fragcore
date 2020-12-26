@@ -21,10 +21,8 @@ ENDIF(NOT BUILD_SHARED_LIBS)
 
 #
 OPTION(BUILD_WITH_TEST "Enable Testing." ON)
-OPTION(BUILD_WITH_EDITOR "Build editor." ON)
 OPTION(BUILD_WITH_DOCS "Build documentation." OFF)
 OPTION(BUILD_WITH_CORE "Build Core" ON)
-OPTION(BUILD_WITH_ENGINE "Build Frag Engine" ON)
 OPTION(BUILD_WITH_SAMPLES "Build sample codes" ON)
 
 # Build external interface plugin.
@@ -80,7 +78,6 @@ ENDIF()
 #   ${CMAKE_CURRENT_LIST_DIR}/revision.h.in
 #   ${CMAKE_CURRENT_BINARY_DIR}/revision.h
 # )
-
 
 LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake-modules" )
 SET(LIBFRAGCORE_COMPONENT "libfragcore{VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_REVISION}")
@@ -242,8 +239,6 @@ ELSE()
 
 ENDIF()
 
-#SET(FRAGENGINE_SUBMODULE_PATH ${PROJECT_SOURCE_DIR}/extern/repo/fragengine)
-
 IF(GIT_FOUND)
 	MESSAGE(STATUS "git found: ${GIT_EXECUTABLE} -- ${GIT_VERSION_STRING}")
 ENDIF()
@@ -263,11 +258,6 @@ IF(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
 ELSE()
 
 ENDIF()
-
-#TODO add validation test if the repository are fetched properly.
-# IF(NOT EXISTS "${PROJECT_SOURCE_DIR}/extern/repo/fragengine")
-# 	MESSAGE(FATAL_ERROR "The submodules were not downloaded! GIT_SUBMODULE was turned off or failed. Please update submodules and try again.")
-# ENDIF()
 
 # Inlucde external resources.
 INCLUDE(${CMAKE_CURRENT_SOURCE_DIR}/extern/CMakeLists.txt)
@@ -306,7 +296,6 @@ ENDIF()
 IF(BUILD_WITH_CORE)
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/frag-core)
 ENDIF()
-
 
 # Rendering interfaces.
 IF(BUILD_EXTERNAL_RENDERER)
@@ -411,17 +400,11 @@ IF( UNIX )
 			COMMAND mkdir -p ${TARGETDIR}
 			COMMAND ${CP} -r   ${CMAKE_CURRENT_SOURCE_DIR}/src
 			${CMAKE_CURRENT_SOURCE_DIR}/frag-core
-			${CMAKE_CURRENT_SOURCE_DIR}/samples
 
 			${CMAKE_CURRENT_SOURCE_DIR}/utils
 			${CMAKE_CURRENT_SOURCE_DIR}/test
 			${CMAKE_CURRENT_SOURCE_DIR}/images
-			${CMAKE_CURRENT_SOURCE_DIR}/client
-			${CMAKE_CURRENT_SOURCE_DIR}/editor
 			${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt
-			${CMAKE_CURRENT_SOURCE_DIR}/.travis.yaml
-			${CMAKE_CURRENT_SOURCE_DIR}/bashcomplete
-			${CMAKE_CURRENT_SOURCE_DIR}/fragview.png
 			${CMAKE_CURRENT_SOURCE_DIR}/.gitignore
 			${CMAKE_CURRENT_SOURCE_DIR}/LICENSE
 			${TARGETDIR}
@@ -452,35 +435,6 @@ IF( UNIX )
 		MESSAGE(WARNING "Could not find the program tools for installing the icon and its images.")
 	ENDIF()
 
-	FIND_PROGRAM(CONVERT convert)
-	IF(CONVERT)
-		# Create icons for all sizes
-		ADD_CUSTOM_TARGET(create-icons
-				COMMENT "Creating icon for all sizes."
-				COMMAND mkdir -p ${CMAKE_CURRENT_SOURCE_DIR}/images/
-				COMMAND mkdir -p ${CMAKE_CURRENT_SOURCE_DIR}/images/icons
-				COMMAND mkdir -p ${CMAKE_CURRENT_SOURCE_DIR}/images/icons/16x16
-				COMMAND mkdir -p ${CMAKE_CURRENT_SOURCE_DIR}/images/icons/24x24
-				COMMAND mkdir -p ${CMAKE_CURRENT_SOURCE_DIR}/images/icons/32x32
-				COMMAND mkdir -p ${CMAKE_CURRENT_SOURCE_DIR}/images/icons/48x48
-				COMMAND mkdir -p ${CMAKE_CURRENT_SOURCE_DIR}/images/icons/64x64
-				COMMAND mkdir -p ${CMAKE_CURRENT_SOURCE_DIR}/images/icons/96x96
-				COMMAND mkdir -p ${CMAKE_CURRENT_SOURCE_DIR}/images/icons/128x128
-				COMMAND mkdir -p ${CMAKE_CURRENT_SOURCE_DIR}/images/icons/256x256
-				COMMAND mkdir -p ${CMAKE_CURRENT_SOURCE_DIR}/images/icons/1024x1024
-				COMMAND convert ${CMAKE_CURRENT_SOURCE_DIR}/fragview.png -resize 16x16 ${CMAKE_CURRENT_SOURCE_DIR}/images/icons/16x16/fragview.png
-				COMMAND convert ${CMAKE_CURRENT_SOURCE_DIR}/fragview.png -resize 24x24 ${CMAKE_CURRENT_SOURCE_DIR}/images/icons/24x24/fragview.png
-				COMMAND convert ${CMAKE_CURRENT_SOURCE_DIR}/fragview.png -resize 32x32 ${CMAKE_CURRENT_SOURCE_DIR}/images/icons/32x32/fragview.png
-				COMMAND convert ${CMAKE_CURRENT_SOURCE_DIR}/fragview.png -resize 48x48 ${CMAKE_CURRENT_SOURCE_DIR}/images/icons/48x48/fragview.png
-				COMMAND convert ${CMAKE_CURRENT_SOURCE_DIR}/fragview.png -resize 64x64 ${CMAKE_CURRENT_SOURCE_DIR}/images/icons/64x64/fragview.png
-				COMMAND convert ${CMAKE_CURRENT_SOURCE_DIR}/fragview.png -resize 96x96 ${CMAKE_CURRENT_SOURCE_DIR}/images/icons/96x96/fragview.png
-				COMMAND convert ${CMAKE_CURRENT_SOURCE_DIR}/fragview.png -resize 128x128 ${CMAKE_CURRENT_SOURCE_DIR}/images/icons/128x128/fragview.png
-				COMMAND convert ${CMAKE_CURRENT_SOURCE_DIR}/fragview.png -resize 256x256 ${CMAKE_CURRENT_SOURCE_DIR}/images/icons/256x256/fragview.png
-				COMMAND convert ${CMAKE_CURRENT_SOURCE_DIR}/fragview.png -resize 1024x1024 ${CMAKE_CURRENT_SOURCE_DIR}/images/icons/1024x1024/fragview.png)
-	ELSE()
-		MESSAGE(WARNING "Could not find the convert program for resizing the images.")
-	ENDIF()
-
 ELSEIF(WIN32)
 
 ELSE()
@@ -497,34 +451,6 @@ ELSE()
 	SET(CMAKE_INSTALL_FULL_BINDIR ${CMAKE_INSTALL_PREFIX}/${FRAG_BIN_INSTALL_DIR})
 ENDIF()
 
-FIND_PACKAGE(Icotool)
-IF(ICOTOOL_FOUND)
-	MESSAGE(STATUS "icotool: ${ICOTOOL_EXECUTABLE} -- ${ICOTOOL_VERSION_STRING}")
-	# Generate icon for window platforms.
-	# -c -o favicon.ico mysite_32x32.png mysite_64x64.png
-	ADD_CUSTOM_TARGET( create-icon-type
-			COMMENT "Creating header and source file for display shaders."
-			COMMAND ${ICOTOOL_EXECUTABLE} -c -o favicon.ico mysite_32x32.png mysite_64x64.png)
-ELSE()
-	MESSAGE(WARNING "Could not find the program tools for creating window icons.")
-ENDIF()
-
-
-IF(BUILD_WITH_INSTALL)
-
-	# TODO add some logic for determine if exists.
-	# TODO relocate to their respective locations.
-	IF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/images/icons AND UNIX)
-		FOREACH(size 16 24 32 48 64 128 256)
-			INSTALL( FILES ${CMAKE_CURRENT_SOURCE_DIR}/images/icons/${size}x${size}/fragview.png DESTINATION /usr/share/icons/hicolor/${size}x${size}/apps/
-					RENAME fragview.png)
-			INSTALL( FILES ${CMAKE_CURRENT_SOURCE_DIR}/images/icons/${size}x${size}/fragview.png DESTINATION /usr/share/icons/hicolor/${size}x${size}/mimetypes/
-					RENAME application-fragview-doc.png)
-		ENDFOREACH()
-	ENDIF()
-
-ENDIF()
-
 
 FIND_PACKAGE(PythonInterp REQUIRED)
 IF(PYTHONINTERP_FOUND)
@@ -534,9 +460,7 @@ IF(PYTHONINTERP_FOUND)
 			COMMENT "Creating header and source file for display shaders."
 			COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/utils/glsl2CString.py ${CMAKE_CURRENT_SOURCE_DIR}/shaders/glsl/
 			DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/utils/glsl2CString.py)
-	#ADD_DEPENDENCIES(fragview compile-shader)
 ENDIF()
-
 
 IF(WIN32)
 	IF (CMAKE_SIZEOF_VOID_P EQUAL 8)

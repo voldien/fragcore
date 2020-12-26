@@ -10,7 +10,7 @@ jobs:
     # Windows 10 with latest image
     runs-on: "windows-latest"
     # Windows Editor - checkout with the plugin
-    name: Editor
+    name: Core
 
     steps:
     - uses: actions/checkout@v2
