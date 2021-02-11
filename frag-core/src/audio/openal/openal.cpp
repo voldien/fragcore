@@ -110,6 +110,8 @@ static const char* openAlErrorToString(int err)
 		return "AL_INVALID_ENUM";
 	case AL_INVALID_VALUE:
 		return "AL_INVALID_VALUE";
+	case AL_INVALID_OPERATION:
+		return "AL_INVALID_OPERATION";
 	case AL_OUT_OF_MEMORY:
 		return "AL_OUT_OF_MEMORY";
 	default:
