@@ -391,7 +391,7 @@ void Config::parseGetOpt(int argc, const char **argv) {
 					                        RenderingFactory::getInterfaceLibraryPath(RenderingFactory::Vulkan));
 				if (strcmp(option, "renderer-opencl") == 0)
 					this->set<const char *>("renderer-dynamicInterface",
-					                        RenderingFactory::getInterfaceLibraryPath(RenderingFactory::eOpenCL));
+					                        RenderingFactory::getInterfaceLibraryPath(RenderingFactory::OpenCL));
 				if (strcmp(option, "renderer-directx") == 0)
 					this->set<const char *>("renderer-dynamicInterface",
 					                        RenderingFactory::getInterfaceLibraryPath(RenderingFactory::DirectX));

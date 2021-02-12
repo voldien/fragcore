@@ -16,7 +16,7 @@ int main(int argc, const char** argv) {
 	Display* primaryDisplay = WindowManager::getInstance()->getDisplay(0);
 
 	Ref<IRenderer> renderer = Ref<IRenderer>(
-		RenderingFactory::createRendering(RenderingFactory::OpenGL, NULL));
+		RenderingFactory::createRendering(RenderingFactory::RenderingAPI::Vulkan, NULL));
 	RendererWindow* window = renderer->createWindow(
 		primaryDisplay->width() / 4, primaryDisplay->height() / 4,
 		primaryDisplay->width() / 2, primaryDisplay->width() / 2);
@@ -27,6 +27,13 @@ int main(int argc, const char** argv) {
 	//ShaderUtil::loadProgram()
 	// Shader* shader = renderer->createShader(NULL);
 	// Geometry* obj= renderer->createGeometry(NULL);
+
+	CommandList *clc = renderer->createCommandBuffer();
+	Ref<FrameBuffer> defaultFramebuffer = Ref<FrameBuffer>(renderer->getDefaultFramebuffer(NULL));
+	clc->bindFramebuffer(defaultFramebuffer);
+	clc->clearColorTarget(0, PVColor(1, 0, 0, 1));
+	// clc->bindPipeline(NULL);
+	// clc->draw
 
 	int width, height;
 	window->getSize(&width, &height);
@@ -42,8 +49,7 @@ int main(int argc, const char** argv) {
 
 	/*	*/
 	//window->getDefaultFrameBuffer()->clearColor(0.125f,0.125f,0.125f,1.0f);
-
-
+	
 	SDL_Event event = {};
 	const int timeout = 0;
 	while (1) {
@@ -97,17 +103,17 @@ int main(int argc, const char** argv) {
 					break;
 			}
 		}
-		window->getDefaultFrameBuffer()->bind();
-		window->getDefaultFrameBuffer()->clear(eColor | eDepth);
+		//window->getDefaultFrameBuffer()->bind();
+		//window->getDefaultFrameBuffer()->clear(eColor | eDepth);
 
-
+		//renderer->submittCommand(Ref<CommadList>(clc));
 		/*	Draw rotating cube.	*/
 		//cubeRotation *= PVQuaternion::rotate(0.01f,0.01f,0.01f);
 		//shader->setMatrix4f(shader->getLocation("mvp"), NULL);
 		//shader->bind();
 		//renderer->drawInstance(obj, 1);
 
-		window->getDefaultFrameBuffer()->unBind();
+		//window->getDefaultFrameBuffer()->unBind();
 		window->swapBuffer();
 	}
 done:

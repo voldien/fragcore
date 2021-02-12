@@ -4,7 +4,7 @@
 using namespace fragcore;
 
 
-//TODO 
+//TODO
 #define SETRENDERAPISCOPE(obj, renderingApi)   \
     {                                               \
     switch (renderingApi) {                        \
@@ -14,7 +14,7 @@ using namespace fragcore;
         case RenderingFactory::Vulkan:{\
             SCOPED_TRACE(obj->apiNames[1]);\
         }break;\
-        case RenderingFactory::eOpenCL:{\
+        case RenderingFactory::OpenCL:{\
             SCOPED_TRACE(obj->apiNames[2]);\
         }break;\
         case RenderingFactory::DirectX:{\

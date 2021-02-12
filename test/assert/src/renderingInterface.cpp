@@ -472,7 +472,7 @@ TEST_F(RenderingInterfaceTest, Sampler)
 	}
 }
 
-TEST_F(RenderingInterfaceTest, ProgramPipeline)
+TEST_F(RenderingInterfaceTest, RenderPipeline)
 {
 	std::vector<RenderingFactory::RenderingAPI>::const_iterator it = apis.cbegin();
 
