@@ -25,7 +25,7 @@
 
 
 namespace fragcore {
-	
+
 	/**
 	 *
 	 */
@@ -98,11 +98,11 @@ namespace fragcore {
 		static void
 		loadProgramPipeline(const ShaderObject *vshader, const ShaderObject *fshader, const ShaderObject *gshader,
 							const ShaderObject *tcshader,
-							const ShaderObject *teshader, IRenderer *renderer, ProgramPipeline **pshader);
+							const ShaderObject *teshader, IRenderer *renderer, RenderPipeline **pshader);
 
 		/*	*/
 		static void
-		loadComputeShaderSource(ShaderObject *shaderDesc, IRenderer *renderer, ProgramPipeline **programPipeline);
+		loadComputeShaderSource(ShaderObject *shaderDesc, IRenderer *renderer, RenderPipeline **programPipeline);
 
 		static ShaderCodeType getCodeType(
 			const char *filePath); /*  Determine if shader is binary or source file based on the file basename.    */

@@ -51,11 +51,10 @@ namespace fragcore {
 	/*  Network.    */
 	class IP;
 	class NetSocket;
-	
+
 
 	//class SandBoxSubScene;
 	class RenderPipeline;
-
 
 	/**
 	 *

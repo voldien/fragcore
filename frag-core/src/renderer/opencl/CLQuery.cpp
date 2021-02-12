@@ -6,7 +6,6 @@ QueryObject::~QueryObject(void) {
 
 }
 
-
 void QueryObject::begin(Target target, unsigned int index) {
 	//GLQuery* query = (GLQuery*)obj;
 

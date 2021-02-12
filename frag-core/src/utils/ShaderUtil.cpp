@@ -1,15 +1,14 @@
-#include"Utils/ShaderUtil.h"
-#include"Core/IO/IOUtil.h"
-#include"Core/IO/FileSystem.h"
-#include<stdexcept>
-#include <Utils/ShaderUtil.h>
-#include <Renderer/RenderDesc.h>
-#include <Utils/StringUtil.h>
-#include <Exception/InvalidArgumentException.h>
+#include "Utils/ShaderUtil.h"
+#include "Core/IO/FileSystem.h"
+#include "Core/IO/IOUtil.h"
 #include "Exception/RuntimeException.h"
-#include"Renderer/ProgramPipeline.h"
-#include"Core/IO/IOUtil.h"
-#include<assert.h>
+#include "Renderer/RenderPipeline.h"
+#include <Exception/InvalidArgumentException.h>
+#include <Renderer/RenderDesc.h>
+#include <Utils/ShaderUtil.h>
+#include <Utils/StringUtil.h>
+#include <assert.h>
+#include <stdexcept>
 
 using namespace fragcore;
 
@@ -285,9 +284,9 @@ void ShaderUtil::loadProgramFromMem(const ShaderObject *vshader, const ShaderObj
 
 void ShaderUtil::loadProgramPipeline(const ShaderObject *vshader, const ShaderObject *fshader, const ShaderObject *gshader,
                                      const ShaderObject *tcshader,
-                                     const ShaderObject *teshader, IRenderer *renderer, ProgramPipeline **pshader) {
+                                     const ShaderObject *teshader, IRenderer *renderer, RenderPipeline **pshader) {
 	ProgramPipelineDesc pipelineDesc = {0};
-	ProgramPipeline *pipeline;
+	RenderPipeline *pipeline;
 
 	// if (vshader) {
 	// 	Shader *vertex;
@@ -591,7 +590,7 @@ void ShaderUtil::loadComputeProgram(const char *pData, long int nBytes, ShaderLa
 }
 
 void ShaderUtil::loadComputeShaderSource(ShaderObject *shaderDesc, IRenderer *renderer,
-                                         ProgramPipeline **programPipeline) {
+                                         RenderPipeline **programPipeline) {
 	Shader *shader;
 	ProgramPipelineDesc progDes = {0};
 

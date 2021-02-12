@@ -426,6 +426,10 @@ void VKRenderWindow::swapBuffer() {
 	// if (result != VK_SUCCESS) throw RuntimeException("Failed to start the ");
 }
 
+void VKRenderWindow::createSwapChain(void){
+
+}
+
 void VKRenderWindow::setPosition(int x, int y) {
 	SDL_SetWindowPosition(this->window, x, y);
 }

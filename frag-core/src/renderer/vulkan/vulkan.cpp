@@ -1,5 +1,4 @@
 #include <limits>
-
 #include "Exception/InvalidArgumentException.h"
 #include "Exception/RuntimeException.h"
 #include "Renderer/vulkan/internal_object_type.h"
@@ -21,6 +20,50 @@ using namespace fragcore;
 
 //     return extensions;
 // }
+
+static const char* getVKResultString(VkResult result){
+	switch (result)
+	{
+		case VK_SUCCESS:
+			return "VK_SUCCESS";
+		case VK_ERROR_OUT_OF_HOST_MEMORY:
+			return "VK_ERROR_OUT_OF_HOST_MEMORY";
+		case VK_ERROR_OUT_OF_DEVICE_MEMORY:
+			return "VK_ERROR_OUT_OF_DEVICE_MEMORY";
+		case VK_ERROR_INITIALIZATION_FAILED:
+			return "VK_ERROR_INITIALIZATION_FAILED";
+		case VK_ERROR_DEVICE_LOST:
+			return "VK_ERROR_DEVICE_LOST";
+		case VK_ERROR_MEMORY_MAP_FAILED:
+			return "VK_ERROR_MEMORY_MAP_FAILED";
+		case VK_ERROR_LAYER_NOT_PRESENT:
+			return "VK_ERROR_LAYER_NOT_PRESENT";
+		case VK_ERROR_EXTENSION_NOT_PRESENT:
+			return "VK_ERROR_EXTENSION_NOT_PRESENT";
+		case VK_ERROR_INCOMPATIBLE_DRIVER:
+			return "VK_ERROR_INCOMPATIBLE_DRIVER";
+		case VK_ERROR_TOO_MANY_OBJECTS:
+			return "VK_ERROR_TOO_MANY_OBJECTS";
+		case VK_ERROR_FORMAT_NOT_SUPPORTED:
+			return "VK_ERROR_FORMAT_NOT_SUPPORTED";
+		case VK_ERROR_FRAGMENTED_POOL:
+			return "VK_ERROR_FRAGMENTED_POOL";
+		case VK_ERROR_UNKNOWN:
+			return "VK_ERROR_UNKNOWN";
+		case VK_ERROR_OUT_OF_POOL_MEMORY:
+			return "VK_ERROR_OUT_OF_POOL_MEMORY";
+		case VK_ERROR_INVALID_EXTERNAL_HANDLE:
+			return "VK_ERROR_INVALID_EXTERNAL_HANDLE";
+		case VK_ERROR_FRAGMENTATION:
+			return "VK_ERROR_FRAGMENTATION";
+	}
+}
+
+void checkError(VkResult result){
+	if (result != VK_SUCCESS && result < VK_SUCCESS) {
+		throw RuntimeException(fvformatf("Unsuccessful VkResult: %s", getVKResultString(result)));
+	}
+}
 
 uint32_t findMemoryType(fragcore::VulkanCore* vulkanCore, uint32_t typeFilter,
 						VkMemoryPropertyFlags properties) {
@@ -204,12 +247,13 @@ VkSurfaceFormatKHR chooseSwapSurfaceFormat(
 		return {VK_FORMAT_B8G8R8A8_UNORM, VK_COLOR_SPACE_SRGB_NONLINEAR_KHR};
 	}
 
-	for (const auto& availableFormat : availableFormats) {
-		if (availableFormat.format == VK_FORMAT_B8G8R8A8_UNORM &&
-			availableFormat.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR) {
-			return availableFormat;
-		}
-	}
+	for (const auto& availableFormat : availableFormats)
+			{
+				if (availableFormat.format == VK_FORMAT_B8G8R8A8_UNORM &&
+					availableFormat.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR) {
+					return availableFormat;
+				}
+			}
 	return availableFormats[0];
 }
 

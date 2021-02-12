@@ -1,7 +1,7 @@
 # Add support for compiling with debug tracer enable in the code.
 IF (CMAKE_BUILD_TYPE STREQUAL "Debug")
-    #TODO resolve with another cmake function.
-    ADD_DEFINITIONS(-DDEBUG_TRACKER)
+	#TODO resolve with another cmake function.
+	ADD_DEFINITIONS(-DDEBUG_TRACKER)
 ENDIF()
 
 FIND_PACKAGE(Vulkan)

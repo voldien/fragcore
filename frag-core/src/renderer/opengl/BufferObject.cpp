@@ -10,11 +10,13 @@ Buffer::~Buffer(void) {}
 void Buffer::bind() {
 	GLBufferObject *bufobj = (GLBufferObject *) this->pdata;
 	glBindBufferARB(bufobj->target, bufobj->buffer);
+	checkError();
 }
 
 void Buffer::bind(unsigned int offset, unsigned int size){
 	GLBufferObject *bufobj = (GLBufferObject *) this->pdata;
 	glBindBufferRange(bufobj->target, bufobj->base, bufobj->buffer, offset, size);
+	checkError();
 }
 
 void Buffer::bindBase(unsigned int base) {
@@ -22,6 +24,7 @@ void Buffer::bindBase(unsigned int base) {
 
 	bufobj->base = base;
 	glBindBufferBase(bufobj->target, base, bufobj->buffer);
+	checkError();
 }
 
 void Buffer::subData(const void *data, unsigned int offset, unsigned int size) {
@@ -30,6 +33,7 @@ void Buffer::subData(const void *data, unsigned int offset, unsigned int size) {
 
 	this->bind();
 	pmap = (char *) this->mapBuffer(Buffer::eWrite);
+	checkError();
 	if (pmap) {
 		memcpy(pmap + offset, data, size);
 		this->unMapBuffer();
@@ -48,9 +52,11 @@ void *Buffer::getData(unsigned int offset, unsigned int size) {
 
 	if (glGetNamedBufferSubData) {
 		glGetNamedBufferSubData(bufobj->buffer, offset, size, pbuffer);
+		checkError();
 	} else {
 		this->bind();
 		glGetBufferSubDataARB(bufobj->target, offset, size, pbuffer);
+		checkError();
 	}
 
 	return pbuffer;
@@ -66,6 +72,7 @@ long int Buffer::getSize(void){
 	GLBufferObject *bufobj = (GLBufferObject *) this->getObject();
 	this->bind();
 	glGetBufferParameteriv(bufobj->target, GL_BUFFER_SIZE, &size);
+	checkError();
 	return size;
 }
 
@@ -130,9 +137,11 @@ void Buffer::flush(unsigned long int offset, unsigned long int length) {
 
 	if (glFlushMappedNamedBufferRange) {
 		glFlushMappedNamedBufferRange(bufobj->buffer, offset, length);
+		checkError();
 	} else {
 		this->bind();
 		glFlushMappedBufferRange(bufobj->target, offset, length);
+		checkError();
 	}
 }
 

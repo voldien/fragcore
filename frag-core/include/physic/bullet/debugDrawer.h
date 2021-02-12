@@ -4,6 +4,7 @@
 #include<bullet/btBulletCollisionCommon.h>
 #include<bullet/btBulletDynamicsCommon.h>
 #include <Renderer/IRenderer.h>
+#include <Renderer/CommandList.h>
 #include"internal_object_type.h"
 
 namespace fragcore {
@@ -12,7 +13,7 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC DebugDrawer : public btIDebugDraw {
 	public:
-		DebugDrawer(IRenderer* renderer);
+		DebugDrawer(Ref<IRenderer>& renderer);
 
 		DefaultColors getDefaultColors() const override;
 
@@ -36,7 +37,9 @@ namespace fragcore {
 		void flushLines() override;
 
 	private:
-		IRenderer* renderer;
+		Ref<IRenderer> renderer;
+		Ref<CommandList> cb;
+		// TODO add list of vector cached.
 	};
 }
 

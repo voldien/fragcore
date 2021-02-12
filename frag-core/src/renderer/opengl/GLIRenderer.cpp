@@ -1,23 +1,23 @@
-#include"Renderer/IRenderer.h"
-#include"Renderer/ProgramPipeline.h"
-#include"Renderer/opengl/internal_object_type.h"
-#include"Core/IConfig.h"
-#include<SDL2/SDL.h>
-#include<GL/glew.h>
-#include<Utils/StringUtil.h>
-#include<exception>
-#include<vector>
-#include <Renderer/Sampler.h>
-#include <Renderer/RenderDesc.h>
-#include <Renderer/Sync.h>
-#include <Renderer/opengl/DefaultFrameBufferTexture.h>
+#include "Core/IConfig.h"
+#include "Renderer/IRenderer.h"
+#include "Renderer/RenderPipeline.h"
+#include "Renderer/ViewPort.h"
+#include "Renderer/opengl/GLRenderWindow.h"
+#include "Renderer/opengl/internal_object_type.h"
+#include <Exception/InvalidArgumentException.h>
 #include <Exception/NotImplementedException.h>
 #include <Exception/RuntimeException.h>
+#include <GL/glew.h>
+#include <Renderer/RenderDesc.h>
 #include <Renderer/RendererWindow.h>
-#include <Exception/InvalidArgumentException.h>
+#include <Renderer/Sampler.h>
+#include <Renderer/Sync.h>
+#include <Renderer/opengl/DefaultFrameBufferTexture.h>
+#include <SDL2/SDL.h>
+#include <Utils/StringUtil.h>
 #include <Window/WindowManager.h>
-#include"Renderer/ViewPort.h"
-#include"Renderer/opengl/GLRenderWindow.h"
+#include <exception>
+#include <vector>
 using namespace fragcore;
 
 //GL_NV_gpu_program4: SM 4.0 or better.
@@ -414,39 +414,59 @@ Texture *IRenderer::createTexture(TextureDesc *desc) {
 		if (glTextureView) {
 			const GLTextureObject *textureOriginal = (const GLTextureObject *) desc->originalTexture->getObject();
 			glTextureView(texture, target, textureOriginal->texture, internalformat, 0, 1, 0, 1);
-			//TODO add reference.
+			checkError();
+			// TODO add reference.
 		} else{
 			throw RuntimeException("glTextureView not supported");
 			}
 	} else {
 		glBindTexture(target, texture);
+		checkError();
 
 		/*	wrap and filter	*/
 		glTexParameteri(target, GL_TEXTURE_WRAP_S, getWrapMode(desc->sampler.AddressU));
+		checkError();
 		glTexParameteri(target, GL_TEXTURE_WRAP_T, getWrapMode(desc->sampler.AddressV));
+		checkError();
 		glTexParameteri(target, GL_TEXTURE_WRAP_R, getWrapMode(desc->sampler.AddressW));
+		checkError();
 
 		glTexParameteri(target, GL_TEXTURE_MIN_FILTER,
 		                getFilterMode(desc->sampler.minFilter, desc->sampler.mipmapFilter));
+		checkError();
 		glTexParameteri(target, GL_TEXTURE_MAG_FILTER,
 		                getFilterMode(desc->sampler.magFilter, SamplerDesc::eNoFilterMode));
+		checkError();
 
-		resetErrorFlag();
 		const GLint compareMode =
 				desc->sampler.compareMode == SamplerDesc::eNoCompare ? GL_NONE : GL_COMPARE_REF_TO_TEXTURE;
 		glTexParameteri(target, GL_TEXTURE_COMPARE_MODE, compareMode);
-		if (desc->sampler.compareMode)
-			glTexParameteri(target, GL_TEXTURE_COMPARE_FUNC, getCompareMode(desc->sampler.compareFunc));
+		checkError();
 
-		if (desc->sampler.anisotropy > 0)
+		if (desc->sampler.compareMode){
+			glTexParameteri(target, GL_TEXTURE_COMPARE_FUNC, getCompareMode(desc->sampler.compareFunc));
+			checkError();
+		}
+
+		if (desc->sampler.anisotropy > 0 && glCore->features.ansi) {
 			glTexParameterf(target, GL_TEXTURE_MAX_ANISOTROPY_EXT, desc->sampler.anisotropy);
+			checkError();
+		}
 
 		glTexParameterfv(target, GL_TEXTURE_BORDER_COLOR, &desc->sampler.borderColor[0]);
+		checkError();
 
 		glTexParameteri(target, GL_TEXTURE_MIN_LOD, desc->sampler.maxLOD);
+		checkError();
+
 		glTexParameteri(target, GL_TEXTURE_MAX_LOD, desc->sampler.minLOD);
+		checkError();
+
 		glTexParameteri(target, GL_TEXTURE_LOD_BIAS, desc->sampler.biasLOD);
+		checkError();
+
 		glTexParameteri(target, GL_TEXTURE_BASE_LEVEL, 0);
+		checkError();
 
 		if(desc->Swizzler != TextureDesc::eNoSwizzle)
 			glTexParameteri(target, GL_TEXTURE_SWIZZLE_R, getTextureSwizzle(desc->Swizzler));
@@ -457,11 +477,10 @@ Texture *IRenderer::createTexture(TextureDesc *desc) {
 		if(desc->Swizzlea != TextureDesc::eNoSwizzle)
 			glTexParameteri(target, GL_TEXTURE_SWIZZLE_A, getTextureSwizzle(desc->Swizzlea));
 
-		GLenum errorStatus = glGetError();
-		if (errorStatus != GL_NO_ERROR)
-			throw RuntimeException(::fvformatf("Error when setting texture parameters - %d, %s", errorStatus,
-			                                   gluErrorString(errorStatus)));
-		resetErrorFlag();
+		// if (errorStatus != GL_NO_ERROR)
+		// 	throw RuntimeException(::fvformatf("Error when setting texture parameters - %d, %s", errorStatus,
+		// 	                                   gluErrorString(errorStatus)));
+
 		/*	assign data.	*/
 		if (desc->pixel || !desc->immutable) {
 			switch (target) {
@@ -469,6 +488,7 @@ Texture *IRenderer::createTexture(TextureDesc *desc) {
 					break;
 				case GL_TEXTURE_2D:
 					glTexImage2D(target, 0, internalformat, desc->width, desc->height, 0, format, type, desc->pixel);
+					checkError();
 					break;
 				case GL_TEXTURE_2D_ARRAY:
 					//throw NotImplementedException("");
@@ -477,6 +497,7 @@ Texture *IRenderer::createTexture(TextureDesc *desc) {
 				case GL_TEXTURE_2D_MULTISAMPLE:
 					glTexImage2DMultisample(target, desc->nrSamples, internalformat, desc->width, desc->height,
 					                        GL_FALSE);
+					checkError();
 					break;
 				case GL_TEXTURE_2D_MULTISAMPLE_ARRAY:
 					//throw NotImplementedException("");
@@ -486,21 +507,27 @@ Texture *IRenderer::createTexture(TextureDesc *desc) {
 					glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + 0, 0, internalformat, desc->width, desc->height, 0,
 					             format,
 					             type, desc->cubepixel[0]);
+					checkError();
 					glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + 1, 0, internalformat, desc->width, desc->height, 0,
 					             format,
 					             type, desc->cubepixel[1]);
+					checkError();
 					glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + 2, 0, internalformat, desc->width, desc->height, 0,
 					             format,
 					             type, desc->cubepixel[2]);
+					checkError();
 					glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + 3, 0, internalformat, desc->width, desc->height, 0,
 					             format,
 					             type, desc->cubepixel[3]);
+					checkError();
 					glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + 4, 0, internalformat, desc->width, desc->height, 0,
 					             format,
 					             type, desc->cubepixel[4]);
+					checkError();
 					glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + 5, 0, internalformat, desc->width, desc->height, 0,
 					             format,
 					             type, desc->cubepixel[5]);
+					checkError();
 					break;
 				case GL_TEXTURE_1D:
 				default:
@@ -511,7 +538,9 @@ Texture *IRenderer::createTexture(TextureDesc *desc) {
 			if (desc->numlevel > 0 && desc->usemipmaps != 0 && target != GL_TEXTURE_CUBE_MAP && target != GL_TEXTURE_CUBE_MAP_ARRAY) {
 				// Generate the mip maps.
 				glTexParameteri(target, GL_TEXTURE_MAX_LEVEL, desc->numlevel);
+				checkError();
 				glGenerateMipmap(target);
+				checkError();
 				//glGenerateTextureMipmap
 			}
 
@@ -549,6 +578,7 @@ Texture *IRenderer::createTexture(TextureDesc *desc) {
 
 	// Unbound texture.
 	glBindTexture(target, 0);
+	checkError();
 
 	// Add debug marker information.
 	addMarkerLabel(glCore, GL_TEXTURE, texture, &desc->marker);
@@ -570,8 +600,11 @@ Texture *IRenderer::createTexture(TextureDesc *desc) {
 void IRenderer::deleteTexture(Texture *texture) {
 	GLTextureObject* textureObject = (GLTextureObject*)texture->getObject();
 
-	if(glIsTexture(textureObject->texture))
+	if(glIsTexture(textureObject->texture)){
+		checkError();
 		glDeleteTextures(1, &textureObject->texture);
+		checkError();
+	}
 	else
 		throw InvalidArgumentException("Invalid texture object.");
 
@@ -602,11 +635,16 @@ Sampler *IRenderer::createSampler(SamplerDesc *desc) {
 	const GLint wrapR = getWrapMode(desc->AddressW);
 
 	glSamplerParameteri(sampler, GL_TEXTURE_WRAP_S, wrapS);
+	checkError();
 	glSamplerParameteri(sampler, GL_TEXTURE_WRAP_T, wrapT);
+	checkError();
 	glSamplerParameteri(sampler, GL_TEXTURE_WRAP_R, wrapR);
+	checkError();
 
 	glSamplerParameteri(sampler, GL_TEXTURE_MIN_FILTER, getFilterMode(desc->minFilter, desc->mipmapFilter));
+	checkError();
 	glSamplerParameteri(sampler, GL_TEXTURE_MAG_FILTER, getFilterMode(desc->magFilter, SamplerDesc::eNoFilterMode));
+	checkError();
 
 	const GLint compareMode = desc->compareMode == SamplerDesc::eNoCompare ? GL_NONE : GL_COMPARE_REF_TO_TEXTURE;
 	glSamplerParameteri(sampler, GL_TEXTURE_COMPARE_MODE, compareMode);
@@ -654,25 +692,29 @@ static void checkShaderError(int shader) {
 
 	/*  */
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &lstatus);
+	checkError();
 
 	/*	*/
 	if (lstatus != GL_TRUE) {
 		GLint maxLength = 0;
 		glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &maxLength);
+		checkError();
 
 		char log[maxLength];
 		glGetShaderInfoLog(shader, sizeof(log), &maxLength, log);
+		checkError();
 		throw RuntimeException(fvformatf("Shader compilation error\n%s", log));
 	}
 }
 
-ProgramPipeline *IRenderer::createPipeline(const ProgramPipelineDesc *desc) {
+RenderPipeline *IRenderer::createPipeline(const ProgramPipelineDesc *desc) {
 	unsigned int pipeline;
 	OpenGLCore *glCore = (OpenGLCore *) this->pdata;
 	GLProgramPipeline *pipe = new GLProgramPipeline();
-	ProgramPipeline *programPipeline = new ProgramPipeline();
+	RenderPipeline *programPipeline = new RenderPipeline();
 
 	glCreateProgramPipelines(1, &pipeline);
+	checkError();
 
 	if (desc->v) {
 		GLShaderObject *v = (GLShaderObject *) desc->v->pdata;
@@ -729,7 +771,7 @@ ProgramPipeline *IRenderer::createPipeline(const ProgramPipelineDesc *desc) {
 	return programPipeline;
 }
 
-void IRenderer::deletePipeline(ProgramPipeline *obj) {
+void IRenderer::deletePipeline(RenderPipeline *obj) {
 	GLProgramPipeline *pipeline = (GLProgramPipeline *) obj->pdata;
 
 	if (glIsProgramPipeline(pipeline->program))
@@ -765,6 +807,7 @@ Shader *IRenderer::createShader(ShaderDesc *desc) {
 	////glCreateShaderProgramv
 
 	program = glCreateProgram();
+	checkError();
 
 	if (program <= 0)
 		throw RuntimeException("Internal error, could not create shader program.");
@@ -888,6 +931,7 @@ Shader *IRenderer::createShader(ShaderDesc *desc) {
 //	}
 
 	glLinkProgramARB(program);
+	checkError();
 
 	finished:
 	glGetProgramiv(program, GL_LINK_STATUS, &lstatus);
@@ -972,28 +1016,35 @@ Buffer *IRenderer::createBuffer(BufferDesc *desc) {
 	//TODO improve the extension usage.
 	/*	Create buffer object.	*/
 	if (glGenBuffersARB) {
+
 		glGenBuffersARB(1, &buf);
+		checkError();
 		glBindBufferARB(target, buf);
+		checkError();
 
 		/*	Allocate buffer.	*/
-		resetErrorFlag();
 		glBufferDataARB(target, desc->size, desc->data, usage);
+		checkError();
 
 		/*  Check for errors.   */
 		error = glGetError();
 		if (error != GL_NO_ERROR) {
 			glDeleteBuffers(1, &buf);
+			checkError();
 			throw RuntimeException(fvformatf("Failed to create buffer - %s", glewGetErrorString(error)));
 		}
 
 		glBindBufferARB(target, 0);
+		checkError();
 	} else {
 		glGenBuffers(1, &buf);
+		checkError();
 		glBindBuffer(target, buf);
+		checkError();
 
 		/*	Allocate buffer.	*/
-		resetErrorFlag();
 		glBufferData(target, desc->size, desc->data, usage);
+		checkError();
 
 		/*  Check for errors.   */
 		error = glGetError();
@@ -1003,6 +1054,7 @@ Buffer *IRenderer::createBuffer(BufferDesc *desc) {
 		}
 
 		glBindBuffer(target, 0);
+		checkError();
 	}
 
 	// Add debug marker information.
@@ -2034,6 +2086,26 @@ void IRenderer::getStatus(MemoryInfo *memoryInfo) {
 	memoryInfo->currentVRam = dedicatedVRMem;
 	glGetIntegerv(GL_GPU_MEMORY_INFO_EVICTION_COUNT_NVX, &dedicatedVRMem);              //count of total evictions seen by system
 	glGetIntegerv(GL_GPU_MEMORY_INFO_EVICTED_MEMORY_NVX, &dedicatedVRMem);              // size of total video memory evicted (in kb)
+
+}
+
+void IRenderer::getFeatures(Features *features) {
+	OpenGLCore *glCore = (OpenGLCore *)this->pdata;
+	memcpy(features, &glCore->features, sizeof(Features));
+
+	features->raytracing = glewIsExtensionSupported("GL_NV_ray_tracing");
+	features->variableRateShading = glewIsExtensionSupported("GL_NV_shading_rate_image");
+}
+
+CommandList *IRenderer::createCommandBuffer(void){
+
+}
+
+void IRenderer::submittCommand(Ref<CommandList> &list){
+
+}
+
+void IRenderer::execute(CommandList *list){
 
 }
 

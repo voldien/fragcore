@@ -457,7 +457,7 @@ bool PhysicInterface::raySphereTest(const PVRay& ray, RayCastHit* hit){
 void PhysicInterface::setDebugRenderer(Ref <IRenderer>& renderer) {
 	PhysicCore* physicore = (PhysicCore*)this->pdata;
 
-	physicore->drawDebugger = new DebugDrawer(*renderer);
+	physicore->drawDebugger = new DebugDrawer(renderer);
 	physicore->dynamicsWorld->setDebugDrawer(physicore->drawDebugger);
 }
 

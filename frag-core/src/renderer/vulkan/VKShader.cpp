@@ -18,7 +18,6 @@ int Shader::getLocation(const char *cparamname) {
 
 }
 
-
 void Shader::setInt(int location, int value) {
 	VKShaderObject *shadobj = (VKShaderObject *) this->pdata;
 

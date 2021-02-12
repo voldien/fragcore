@@ -22,7 +22,7 @@
 namespace fragcore {
 	class RendererWindow;
 	class Shader;
-	class ProgramPipeline;
+	class RenderPipeline;
 	class Texture;
 	class Sampler;
 	class FrameBuffer;
@@ -33,6 +33,7 @@ namespace fragcore {
 	class ViewPort;
 	class QueryObject;
 	class Sync;
+	class CommandList;
 }
 
 #endif

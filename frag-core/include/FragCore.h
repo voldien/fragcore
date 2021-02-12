@@ -48,6 +48,7 @@
 #include"Core/Network/NetSocket.h"
 /*  */
 #include"Renderer/RendererFactory.h"
+#include"Renderer/CommandList.h"
 /*  */
 #include"audio/AudioFactory.h"
 /*  */

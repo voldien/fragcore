@@ -4,18 +4,21 @@
 #include "../Core/SmartReference.h"
 #include "../Prerequisites.h"
 #include "../Core/Module.h"
+#include "../Core/Ref.h"
 
 namespace fragcore {
 	/**
-	 * 
+	 *
 	 */
 	class FVDECLSPEC ICompute : public Module {
 	public:
 
 		virtual void OnInitialization(void);
 		virtual void OnDestruction(void);
-	
-		/*	*/
+
+		/**
+		 *
+		 */
 		virtual bool supportCompute(void);
 		/**
 		 * Dispatch compute program.
@@ -39,6 +42,10 @@ namespace fragcore {
 		// virtual Shader* deleteComputeProgram(void);
 		// virtual void getComputeCapabilties(void);
 		//virtual void getDeviceInfo(std::vector<DeviceInfo> &devices);
+
+		virtual CommandList *createCommandBuffer(void);
+		virtual void submittCommand(Ref<CommandList>& list);
+		virtual void execute(CommandList *list);
 
 		ICompute(void) = default;
 		~ICompute(void) = default;

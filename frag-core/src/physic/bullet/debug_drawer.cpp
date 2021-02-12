@@ -1,10 +1,10 @@
-#include <Core/Log.h>
+#include"Core/Log.h"
 #include"physic/bullet/internal_object_type.h"
 #include"physic/bullet/debugDrawer.h"
 
 using namespace fragcore;
 
-DebugDrawer::DebugDrawer(IRenderer *renderer) {
+DebugDrawer::DebugDrawer(Ref<IRenderer>& renderer) {
 	renderer->increment();
 	this->renderer = renderer;
 
@@ -24,13 +24,13 @@ void DebugDrawer::setDefaultColors(const btIDebugDraw::DefaultColors &colors) {
 
 
 void DebugDrawer::drawLine(const btVector3 &from, const btVector3 &to, const btVector3 &color) {
-
+	/*	Accumulate line to buffer.	*/
 }
 
 void
 DebugDrawer::drawContactPoint(const btVector3 &PointOnB, const btVector3 &normalOnB, btScalar distance, int lifeTime,
                               const btVector3 &color) {
-
+	/*	Accumulate line to buffer.	*/
 }
 
 void DebugDrawer::reportErrorWarning(const char *warningString) {
@@ -50,13 +50,12 @@ int DebugDrawer::getDebugMode() const {
 }
 
 void DebugDrawer::clearLines() {
-
-
 	btIDebugDraw::clearLines();
 }
 
 void DebugDrawer::flushLines() {
 	btIDebugDraw::flushLines();
-
+	//TODO update buffer and add draw command.
+	//this->cb->
 
 }

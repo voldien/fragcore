@@ -709,6 +709,28 @@ namespace fragcore {
 	/**
 	 *
 	 */
+	typedef struct features_t{
+		bool computeShaders;
+		bool geomtryShader;
+		bool tesselationShader;
+		bool raytracing;
+		bool multiviewports;
+		bool samplerLodBias;
+		bool drawBaseVertex;
+		bool drawBaseInstance;
+		bool drawIndirect;
+		bool drawIndirectBaseInstance;
+		bool independentBlend;
+		bool mapBuffer;
+		bool commandListDebugMarkers;
+		bool variableRateShading;
+		bool shaderFloat64;
+		bool ansi;
+	} Features;
+
+	/**
+	 *
+	 */
 	typedef struct compatibility_t {
 		bool windowRenderer;
 		bool sDepthStencil; /*  */
@@ -748,6 +770,7 @@ namespace fragcore {
 		bool sConditionalRendering;
 		bool sShaderBinary;
 		bool sVirtualTexture; /*  */
+		bool variableRateShading;
 
 		/*	*/
 		long int sMaxElementVertices;
@@ -808,9 +831,9 @@ namespace fragcore {
 	} Capability;
 
 	/**
-	 * 
+	 *
 	 */
-//TODO improve.	
+//TODO improve.
 	typedef struct device_info_t
 	{
 		const char *name;

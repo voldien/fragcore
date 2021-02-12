@@ -28,6 +28,7 @@ namespace fragcore {
 		/*  Cached internal capabilities.   */
 		Capability capability;
 		TextureDesc::Compression compression;
+		Features features;
 
 		/*  Context version.    */
 		int majorVersion;
@@ -129,6 +130,7 @@ namespace fragcore {
 extern void addMarkerLabel(const fragcore::OpenGLCore *glcore, unsigned int identifier,
 		unsigned int object, const fragcore::MarkerDebug *debug);
 
+extern void checkError(void);
 extern void resetErrorFlag(void);
 extern unsigned int getWrapMode(fragcore::SamplerDesc::AddressMode mode);
 

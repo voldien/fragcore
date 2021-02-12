@@ -42,7 +42,7 @@ IRenderer *RenderingFactory::createRendering(const char *cpathlib, IConfig *conf
 	return interface;
 }
 
-constexpr const char *RenderingFactory::getInterfaceLibraryPath(RenderingFactory::RenderingAPI api) {
+const char *RenderingFactory::getInterfaceLibraryPath(RenderingFactory::RenderingAPI api) {
 	//TODO append api value to the exception string.
 #ifdef FV_UNIX
 	switch (api) {
@@ -52,7 +52,7 @@ constexpr const char *RenderingFactory::getInterfaceLibraryPath(RenderingFactory
 			return "libfragcore-rvk.so";
 		case RenderingAPI::DirectX:
 			throw InvalidArgumentException("Not supported on Unix Systems.");
-		case RenderingAPI::eOpenCL:
+		case RenderingAPI::OpenCL:
 			return "libfragcore-rcl.so";
 		default:
 			throw InvalidArgumentException("Not a valid rendering API enumerator.");

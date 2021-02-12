@@ -9,13 +9,6 @@ void ViewPort::depthRange(double near, double far) {
 void ViewPort::setDimensions(int x, int y, int width, int height) {
 	VKViewPort* viewPort = (VKViewPort*)this->pdata;
 
-	VkViewport vkViewport = {
-			.x = (float)x,
-			.y = (float)y,
-			.width = (float)width,
-			.height = (float)height,
-	};
-//	vkCmdSetViewport(NULL, viewPort->viewport, 1, )
 }
 
 void ViewPort::setscissorView(int x, int y, int width, int height) {

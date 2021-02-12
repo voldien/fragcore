@@ -23,6 +23,7 @@ Window* WindowManager::createWindow(const std::string& title) {
 
 void WindowManager::onCreation(Ref<WindowManager>& instance) {
 	//TODO add event for new window added for handle internal resources and etc.
+
 }
 
 WindowManager::WindowManager(void){

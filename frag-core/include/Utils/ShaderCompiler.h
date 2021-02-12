@@ -10,7 +10,7 @@
 namespace fragcore {
 
 	/**
-	 * 
+	 *
 	 */
 	class FVDECLSPEC ShaderCompiler{
 	public:
@@ -51,6 +51,9 @@ namespace fragcore {
 
 		std::map<long int, ShaderResult>
 		CompilePermutation(Ref<IRenderer> &renderer, CompilerSources* references, const CompilerOptionSet &optionset);
-	};
-} 
+
+		/**/
+		void CompileCrossShader(Ref<IO> &io, Ref<IO>& out);
+  	};
+}
 #endif

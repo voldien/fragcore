@@ -149,6 +149,12 @@ namespace fragcore {
 		unsigned int tessc;
 	} VKShaderObject;
 
+	typedef struct vulkan_pipeline_object_t{
+		VulkanCore *vulkanCore;
+		VkPipeline graphicsPipeline;
+		VkPipelineLayout pipelineLayout;
+		VkDescriptorSet descriptorSet;
+	} VKPipelineObject;
 
 	/**
 	 *
@@ -191,6 +197,19 @@ namespace fragcore {
 // extern void createInstance(fragcore::VulkanCore *vulkanCore, IConfig *config);
 // extern void createDebugMessenger(fragcore::VulkanCore *vulkanCore, IConfig  *config);
 // extern void createSurface(fragcore::VulkanCore *vulkanCore, IConfig *config);
+
+#ifdef _DEBUG
+
+// #define checkError(result)	\
+// 	if(result != VK_SUCCESS) \
+// 		printf(__LINE__)	\
+// 		checkError(result);	\
+
+extern void checkError(VkResult result);
+#else
+extern void checkError(VkResult result);
+#endif
+
 
 /*  Helper functions.   */
 extern uint32_t findMemoryType(fragcore::VulkanCore *vulkanCore, uint32_t typeFilter, VkMemoryPropertyFlags properties);

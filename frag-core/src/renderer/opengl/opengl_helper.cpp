@@ -3,16 +3,29 @@
 #include <stdexcept>
 #include <Utils/StringUtil.h>
 #include <Exception/InvalidArgumentException.h>
+#include<Exception/RuntimeException.h>
 #include"Renderer/IRenderer.h"
 using namespace fragcore;
+
 /*  Assign marker for debugging.    */
 //GL_MAX_LABEL_LENGTH
 void addMarkerLabel(const OpenGLCore *glcore, unsigned int identifier, unsigned int object, const MarkerDebug *debug) {
 	if(identifier != 0){
 		//glObjectPtrLabel
+		int maxLabelLength;
+		glGetIntegerv(GL_MAX_LABEL_LENGTH, &maxLabelLength);
+		checkError();
 		if (glcore->debug && debug->markerName) {
 			glObjectLabel(identifier, object, -1, debug->markerName);
+			checkError();
 		}
+	}
+}
+
+void checkError(void) {
+	GLenum error = glGetError();
+	if (error != GL_NO_ERROR) {
+		throw RuntimeException(fvformatf("glGetError indicated an error: %s", glewGetErrorString(error)));
 	}
 }
 

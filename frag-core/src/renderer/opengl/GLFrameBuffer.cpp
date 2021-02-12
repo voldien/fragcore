@@ -1,7 +1,6 @@
 #include"Renderer/IRenderer.h"
 #include"Renderer/opengl/internal_object_type.h"
 #include<GL/glew.h>
-#include <Renderer/opengl/internal_object_type.h>
 #include <stdexcept>
 #include <Utils/StringUtil.h>
 #include <Exception/InvalidArgumentException.h>

@@ -33,7 +33,6 @@ Texture::WrapMode Texture::getWrapMode(void) {
 
 }
 
-
 void Texture::setAnisotropic(float anisotropic) {
 
 }

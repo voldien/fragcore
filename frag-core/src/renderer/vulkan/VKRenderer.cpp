@@ -1,5 +1,6 @@
 #include"Renderer/IRenderer.h"
 #include"Renderer/vulkan/internal_object_type.h"
+#include"Renderer/vulkan/VKCommandList.h"
 #include"Core/IConfig.h"
 #include<SDL2/SDL.h>
 #include<SDL2/SDL_video.h>
@@ -532,12 +533,12 @@ void IRenderer::deleteSampler(Sampler* sampler){
 }
 
 
-ProgramPipeline *IRenderer::createPipeline(const ProgramPipelineDesc *desc) {
+RenderPipeline *IRenderer::createPipeline(const ProgramPipelineDesc *desc) {
 
 //    desc.
 }
 
-void IRenderer::deletePipeline(ProgramPipeline *obj) {
+void IRenderer::deletePipeline(RenderPipeline *obj) {
 
 }
 
@@ -1121,7 +1122,7 @@ FrameBuffer *IRenderer::getDefaultFramebuffer(void *window) {
 	static FrameBuffer *defaultFrambuffer = NULL;
 	/*  TODO add support.   */
 	if (defaultFrambuffer == NULL) {
-		FrameBuffer *frameBuffer = new FrameBuffer();
+		//FrameBuffer *frameBuffer = new FrameBuffer();
 	}
 
 	return defaultFrambuffer;
@@ -1498,16 +1499,16 @@ void IRenderer::getCapability(Capability *capability) {
 	vkGetPhysicalDeviceProperties2(vulkanCore->gpu, &deviceProperties2);
 	vkGetPhysicalDeviceFeatures2(vulkanCore->gpu, &deviceFeatures2);
 
-	capability->sDepthStencil = VK_TRUE;
-	capability->sFramebuffer = VK_TRUE;
-	capability->sFrameBufferMSAA = VK_TRUE;
-	capability->sCubeMap = VK_TRUE;
+	capability->sDepthStencil = true;
+	capability->sFramebuffer = true;
+	capability->sFrameBufferMSAA = true;
+	capability->sCubeMap = true;
 	capability->sCubeMapArray = deviceFeatures2.features.imageCubeArray;
-	capability->sQueryOcclusion = VK_FALSE;
-	capability->sShaderImageLoadStorage = VK_TRUE;
-	capability->sShaderStorageBuffer = VK_TRUE;
-	capability->sUniformBuffer = VK_TRUE;
-	capability->sMapBuffer = VK_TRUE;
+	capability->sQueryOcclusion = true;
+	capability->sShaderImageLoadStorage = true;
+	capability->sShaderStorageBuffer = true;
+	capability->sUniformBuffer = true;
+	capability->sMapBuffer = true;
 
 	capability->sGeometryShader = deviceFeatures2.features.geometryShader;
 	capability->sTessellation = deviceFeatures2.features.tessellationShader;
@@ -1515,10 +1516,10 @@ void IRenderer::getCapability(Capability *capability) {
 	capability->sIndirectMultiDraw = deviceFeatures2.features.multiDrawIndirect;
 	capability->sIndirectDraw = deviceFeatures2.features.drawIndirectFirstInstance;
 
-	capability->sVertexShader = VK_TRUE;
-	capability->sFragmentShader = VK_TRUE;
-	capability->sShadow = VK_TRUE;
-	capability->sInstancing = VK_TRUE;
+	capability->sVertexShader = true;
+	capability->sFragmentShader = true;
+	capability->sShadow = true;
+	capability->sInstancing = true;
 	capability->sTextureCompression = deviceFeatures2.features.textureCompressionASTC_LDR | deviceFeatures2.features.textureCompressionETC2 |deviceFeatures2.features.textureCompressionBC;
 	capability->sVirtualViewPort = deviceFeatures2.features.multiViewport;
 	capability->sConditionalRendering = conditionalRenderingFeaturesExt.conditionalRendering;
@@ -1558,7 +1559,7 @@ void IRenderer::getCapability(Capability *capability) {
 	capability->sMaxLocalWorkGroupSize[2] = properties.limits.maxComputeWorkGroupSize[2];
 
 	capability->sWorkGroupDimensions = 3;
-	capability->sComputeShader = VK_TRUE;
+	capability->sComputeShader = true;
 
 	//properties.limits.maxColorAttachments;
 	//properties.
@@ -1567,7 +1568,15 @@ void IRenderer::getCapability(Capability *capability) {
 
 }
 
+void IRenderer::getFeatures(Features *features){
+	VulkanCore *vulkanCore = (VulkanCore *)this->pdata;
+	assert(features);
 
+	if (features == NULL)
+		throw InvalidArgumentException("Must not be a null pointer.");
+
+
+}
 
 const char *IRenderer::getShaderVersion(ShaderLanguage language) const {
 	static char shaderversion[64];
@@ -1603,6 +1612,31 @@ const char *IRenderer::getVersion(void) const {
 }*/
 
 void IRenderer::getStatus(MemoryInfo* memoryInfo){}
+
+CommandList *IRenderer::createCommandBuffer(void)
+{
+
+}
+
+void IRenderer::submittCommand(Ref<CommandList> &list)
+{
+	VulkanCore *vulkanCore = (VulkanCore *)this->pdata;
+	VKCommandList *l = (VKCommandList *)*list;
+
+	VkSubmitInfo submitInfo = {};
+	submitInfo.sType                = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+	submitInfo.commandBufferCount   = 1;
+	submitInfo.pCommandBuffers      = &l->cmdBuffer;
+
+	VkResult result = vkQueueSubmit(vulkanCore->queue, 1, &submitInfo, NULL);
+	if(result != VK_SUCCESS)
+		throw RuntimeException("Failed to submit to queue.");
+}
+
+void IRenderer::execute(CommandList *list)
+{
+	
+}
 
 void* IRenderer::getData(void) {
 	return this->pdata;

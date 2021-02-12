@@ -89,14 +89,14 @@ namespace fragcore {
 		 * @param desc
 		 * @return
 		 */
-		virtual ProgramPipeline *createPipeline(const ProgramPipelineDesc *desc);
+		virtual RenderPipeline *createPipeline(const ProgramPipelineDesc *desc);
 
 		/**
 		 *
 		 * @param obj
 		 * @return
 		 */
-		virtual void deletePipeline(ProgramPipeline *obj);
+		virtual void deletePipeline(RenderPipeline *obj);
 
 		/**
 		 *	Create shader.
@@ -287,6 +287,8 @@ namespace fragcore {
 
 		virtual void deleteSync(Sync *sync);
 
+		//virtual void execute(CommandList *list);
+
 		/**
 		 * Set debug state.
 		 * @param enable
@@ -333,12 +335,21 @@ namespace fragcore {
 		virtual void getCapability(Capability *capability);
 
 		/**
+		 *
+		 */
+		virtual void getFeatures(Features *features);
+
+		/**
 		 * TODO add for reading status such as memory.
 		 *  NVX_gpu_memory_info
 		 *  ATI_meminfo
 		 */
 		//TODO imporove later
 		virtual void getStatus(MemoryInfo *memoryInfo);
+
+		virtual CommandList *createCommandBuffer(void);
+		virtual void submittCommand(Ref<CommandList> &list);
+		virtual void execute(CommandList *list);
 
 		IRenderer(IConfig *config);
 

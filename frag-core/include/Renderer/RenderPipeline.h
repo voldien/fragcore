@@ -24,7 +24,7 @@ namespace fragcore {
 	/**
 	 *
 	 */
-	class ProgramPipeline : public RenderObject {
+	class RenderPipeline : public RenderObject {
 		friend class IRenderer;
 	public:
 

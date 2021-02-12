@@ -20,6 +20,7 @@
 #define _FRAGVIEW_FRAMEBUFFER_H_ 1
 #include"RenderObject.h"
 #include "IRenderer.h"
+#include<vector>
 
 namespace fragcore {
 	/**
@@ -63,6 +64,9 @@ namespace fragcore {
 			eColor0,
 		};
 
+		virtual int attachmentCount();
+		virtual std::vector<Texture *> getColorTargets(void);
+
 		virtual void bind(void);
 
 		virtual void unBind(void);
@@ -90,10 +94,19 @@ namespace fragcore {
 		 */
 		virtual Texture *getStencilAttachment(void);
 
+		/**
+		 *
+		 */
 		virtual int width(void);
 
+		/**
+		 *
+		 */
 		virtual int height(void);
 
+		/**
+		 *
+		 */
 		virtual int layers(void);
 
 		virtual int nrSamples(void);

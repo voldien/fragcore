@@ -418,14 +418,14 @@ void IRenderer::deleteTexture(Texture *texture) {
 	OpenCLCore *core = (OpenCLCore *) this->pdata;
 }
 
-ProgramPipeline* IRenderer::createPipeline(const ProgramPipelineDesc* desc){
+RenderPipeline* IRenderer::createPipeline(const ProgramPipelineDesc* desc){
 	OpenCLCore *core = (OpenCLCore *) this->pdata;
 	unsigned int pipeline;
 
 	return core->back_renderer->createPipeline(desc);
 }
 
-void IRenderer::deletePipeline(ProgramPipeline* obj){
+void IRenderer::deletePipeline(RenderPipeline* obj){
 	OpenCLCore *core = (OpenCLCore *) this->pdata;
 
 	core->back_renderer->deletePipeline(obj);
