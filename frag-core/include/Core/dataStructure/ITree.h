@@ -24,7 +24,7 @@
 namespace fragcore {
 
 	/**
-	 * 
+	 *
 	 */
 	template<class T>	//TODO evoluate.
 	class ITree {
@@ -56,7 +56,7 @@ namespace fragcore {
 		}
 
 		virtual unsigned int getNumChildren(void) const {
-			this->numChildren;
+			return this->numChildren;
 		}
 
 		virtual void addChild(ITree<T> *pchild)
