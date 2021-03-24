@@ -37,9 +37,9 @@ namespace fragcore {
 
 	protected:	/*	Protected virtual methods.	*/
 
-		virtual PVVector3 getCenter();
-		//virtual const PVVector3 &getConter() const;
-		virtual void setCenter(const PVVector3 &center);
+		virtual Vector3 getCenter();
+		//virtual const Vector3 &getConter() const;
+		virtual void setCenter(const Vector3 &center);
 	};
 }
 

@@ -34,7 +34,7 @@ void FrameBuffer::write(void) {
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fraobj->framebuffer);
 }
 
-void FrameBuffer::read(void) {
+void FrameBuffer::read(void) const {
 	GLFrameBufferObject *fraobj = (GLFrameBufferObject *) this->getObject();
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, fraobj->framebuffer);
 }
@@ -58,7 +58,7 @@ Texture *FrameBuffer::getStencilAttachment(void) {
 }
 
 
-int FrameBuffer::width(void) {
+int FrameBuffer::width(void) const {
 	GLFrameBufferObject *fraobj = (GLFrameBufferObject *) this->getObject();
 	int width;
 	if (glGetNamedFramebufferParameteriv) {
@@ -70,7 +70,7 @@ int FrameBuffer::width(void) {
 	return width;
 }
 
-int FrameBuffer::height(void) {
+int FrameBuffer::height(void) const {
 	GLFrameBufferObject *fraobj = (GLFrameBufferObject *) this->getObject();
 	int height;
 	if (glGetNamedFramebufferParameteriv) {

@@ -41,13 +41,13 @@ namespace fragcore {
 		/**
 		 * Set gravity.
 		 */
-		virtual void setGravity(const PVVector3& gravity);
+		virtual void setGravity(const Vector3& gravity);
 
 		/**
 		 *	Get gravity.
 		 *	@return gravity vector.
 		 */
-		virtual PVVector3 getGravity(void) const;
+		virtual Vector3 getGravity(void) const;
 
 		/**
 		 * Add rigidbody to scene.

@@ -21,33 +21,33 @@ void AudioListener::pause(bool pause) {
 	setVolume(0.0f);
 }
 
-void AudioListener::setPosition(const PVVector3 &position) {
-	const PVVector3 *p = &position;
-	PVVector3 prevPos = getPosition();
+void AudioListener::setPosition(const Vector3 &position) {
+	const Vector3 *p = &position;
+	Vector3 prevPos = getPosition();
 	alListenerfv(AL_POSITION, (const ALfloat *)&p[0]);
 	setVelocity(position - prevPos);
 }
 
-const PVVector3 AudioListener::getPosition(void) const {
-    PVVector3 position(0.0f, 0.0f, 0.0f);
+const Vector3 AudioListener::getPosition(void) const {
+    Vector3 position(0.0f, 0.0f, 0.0f);
     alGetListenerfv(AL_POSITION, &position[0]);
     return position;
 }
 
-void AudioListener::setVelocity(const PVVector3 &velocity) {
-	const PVVector3 *v = &velocity;
+void AudioListener::setVelocity(const Vector3 &velocity) {
+	const Vector3 *v = &velocity;
 	alListenerfv(AL_VELOCITY, (const ALfloat *)&v[0]);
 }
 
-const PVVector3 AudioListener::getVelocity(void) const {
-	PVVector3 velocity;
+const Vector3 AudioListener::getVelocity(void) const {
+	Vector3 velocity;
 	alGetListenerfv(AL_VELOCITY, &velocity[0]);
 	return velocity;
 }
 
 void AudioListener::setOrientation(const PVQuaternion &orientation) {
-	PVVector3 forward = orientation.getVector(PVVector3::forward());
-	PVVector3 up = orientation.getVector(PVVector3::up());
+	Vector3 forward = orientation.getVector(Vector3::forward());
+	Vector3 up = orientation.getVector(Vector3::up());
 
 	ALfloat listenerOri[] = { forward.x(), forward.y(), forward.z(),
 							 up.x(), up.y(), up.z() };
@@ -58,7 +58,7 @@ const PVQuaternion AudioListener::getOrientation(void) const {
 	PVQuaternion orientation;
 	ALfloat listenerOri[6];
 	alGetListenerfv(AL_ORIENTATION, listenerOri);
-	return PVQuaternion::lookRotation(PVVector3(listenerOri[0],listenerOri[1],listenerOri[2]), PVVector3::zero(), PVVector3(listenerOri[3],listenerOri[4],listenerOri[5]));
+	return PVQuaternion::lookRotation(Vector3(listenerOri[0],listenerOri[1],listenerOri[2]), Vector3::zero(), Vector3(listenerOri[3],listenerOri[4],listenerOri[5]));
 }
 
 AudioListener::AudioListener(void) {

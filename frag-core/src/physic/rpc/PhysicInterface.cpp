@@ -46,7 +46,7 @@ void PhysicInterface::sync(void){
 	this->dispatcher->send(eSync, sizeof(sync), &sync.header, NULL);
 }
 
-void PhysicInterface::setGravity(const PVVector3& gravity){
+void PhysicInterface::setGravity(const Vector3& gravity){
 
 	PacketGravity pgravity;
 	pgravity.gravity = gravity;
@@ -54,7 +54,7 @@ void PhysicInterface::setGravity(const PVVector3& gravity){
 	this->dispatcher->send(eGravity, sizeof(pgravity), &pgravity.header, NULL);
 }
 
-PVVector3 PhysicInterface::getGravity(void)const{
+Vector3 PhysicInterface::getGravity(void)const{
 
 	PacketRequest request;
 	request.request = eGravity;

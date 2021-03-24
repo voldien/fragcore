@@ -39,7 +39,7 @@ namespace fragcore {
 		 * Get center.
 		 * @return
 		 */
-		inline PVVector3 getCenter(void) {
+		inline Vector3 getCenter(void) {
 			//return getCenter(getMappedObject());
 		}
 
@@ -47,16 +47,16 @@ namespace fragcore {
 		 *
 		 * @param center
 		 */
-		inline void setCenter(const PVVector3 &center) {
+		inline void setCenter(const Vector3 &center) {
 			//setCenter(getMappedObject(), center);
 		}
 
 
 	protected:    /*	Protected virtual methods.	*/
 
-		virtual PVVector3 getCenter(void *pobj);
+		virtual Vector3 getCenter(void *pobj);
 
-		virtual void setCenter(void *pobj, const PVVector3 &center);
+		virtual void setCenter(void *pobj, const Vector3 &center);
 
 	};
 }

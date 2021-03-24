@@ -16,7 +16,7 @@ int main(int argc, const char **argv)
 	Ref<AudioInterface> iaudio = Ref<AudioInterface>(AudioFactory::createAudioInterface(AudioFactory::OpenAL, &config));
 
 	/*  Initialize HPM.  */
-	if (!Hpm::init(Hpm::eHPM_SSE2))
+	if (!LIBHPM::Hpm::init(LIBHPM::Hpm::eHPM_SSE2))
 		throw RuntimeException("Failed to initialize the hpm library.");
 
 	Ref<IScheduler> sch = Ref<IScheduler>(NULL);
@@ -31,12 +31,12 @@ int main(int argc, const char **argv)
 	//printf("Current Device: %s", iaudio->getAudioDevice().getName());
 
 	AudioListenerDesc list_desc = {
-		.position = PVVector3(0, 0, 0),
+		.position = Vector3(0, 0, 0),
 		.rotation = PVQuaternion::identity()};
 	Ref<AudioListener> listener = Ref<AudioListener>(iaudio->createAudioListener(&list_desc));
 	listener->setVolume(1.0f);
 	AudioSourceDesc source_desc = {};
-	source_desc.position = PVVector3::zero();
+	source_desc.position = Vector3::zero();
 	Ref<AudioSource> audioSource = Ref<AudioSource>(iaudio->createAudioSource(&source_desc));
 
 	AudioClipDesc clip_desc = {};

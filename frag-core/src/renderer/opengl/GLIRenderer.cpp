@@ -4,6 +4,7 @@
 #include "Renderer/ViewPort.h"
 #include "Renderer/opengl/GLRenderWindow.h"
 #include "Renderer/opengl/internal_object_type.h"
+#include"Renderer/FrameBuffer.h"
 #include <Exception/InvalidArgumentException.h>
 #include <Exception/NotImplementedException.h>
 #include <Exception/RuntimeException.h>
@@ -2109,7 +2110,7 @@ void IRenderer::execute(CommandList *list){
 
 }
 
-void *IRenderer::getData(void) {
+void *IRenderer::getData(void) const {
 	return this->pdata;
 }
 

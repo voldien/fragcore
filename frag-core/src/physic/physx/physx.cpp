@@ -222,7 +222,7 @@ void PhysicInterface::sync(void)
 	physicore->dynamicsWorld->synchronizeMotionStates();
 }
 
-void PhysicInterface::setGravity(const PVVector3 &gravity)
+void PhysicInterface::setGravity(const Vector3 &gravity)
 {
 	PhysicCore *physicore = (PhysicCore *)this->pdata;
 	assert(physicore);
@@ -231,12 +231,12 @@ void PhysicInterface::setGravity(const PVVector3 &gravity)
 	physicore->dynamicsWorld->setGravity(*(btVector3 *)&gravity);
 }
 
-PVVector3 PhysicInterface::getGravity(void) const
+Vector3 PhysicInterface::getGravity(void) const
 {
 	PhysicCore *physicore = (PhysicCore *)this->pdata;
 
 	btVector3 gr = physicore->dynamicsWorld->getGravity();
-	return PVVector3(gr.x(), gr.y(), gr.z());
+	return Vector3(gr.x(), gr.y(), gr.z());
 }
 
 physx::PxFilterFlags PxCustomFilterShader(

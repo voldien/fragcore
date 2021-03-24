@@ -38,7 +38,7 @@ int main(int argc, const char** argv) {
 	int width, height;
 	window->getSize(&width, &height);
 
-	PVVector3 cameraPos; //= HCVector3(options->width / -2, options->height / -2, 0);
+	Vector3 cameraPos; //= HCVector3(options->width / -2, options->height / -2, 0);
 	PVQuaternion cubeRotation = PVQuaternion::identity();
 	/*  Set init matrix.	*/
 	PVMatrix4x4 proj, scale, translation,view;

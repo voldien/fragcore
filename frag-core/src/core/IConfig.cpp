@@ -24,7 +24,6 @@ IConfig::IConfig(void) {
 
 IConfig::IConfig(const IConfig &other) {
 	//TODO add copy
-
 }
 
 bool IConfig::isSet(const std::string &key) {

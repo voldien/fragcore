@@ -10,7 +10,7 @@
 
 namespace fragcore {
 	/**
-	 * 
+	 *
  	 */
 	class FVDECLSPEC VKRenderWindow : public RendererWindow {
 	public:
@@ -80,7 +80,8 @@ namespace fragcore {
 		virtual void useWindow(void *pdata) override;
 	protected:
 		virtual void createSwapChain(void);
-	private:
+		virtual void cleanSwapChain(void);
+	   private:
 		SDL_Window *window;
 		Ref<IRenderer> renderer;
 	};

@@ -73,7 +73,7 @@ namespace fragcore {
 
 		virtual void write(void);
 
-		virtual void read(void);
+		virtual void read(void) const;
 
 		/**
 		 *	Get texture attached to framebuffer by index.
@@ -97,12 +97,12 @@ namespace fragcore {
 		/**
 		 *
 		 */
-		virtual int width(void);
+		virtual int width(void) const;
 
 		/**
 		 *
 		 */
-		virtual int height(void);
+		virtual int height(void) const;
 
 		/**
 		 *

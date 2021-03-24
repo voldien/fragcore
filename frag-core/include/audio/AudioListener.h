@@ -38,11 +38,11 @@ namespace fragcore {
 
 		//virtual void getOutPutData(void);
 
-		virtual void setPosition(const PVVector3& position);
-		virtual const PVVector3 getPosition(void) const;
+		virtual void setPosition(const Vector3& position);
+		virtual const Vector3 getPosition(void) const;
 
-		virtual void setVelocity(const PVVector3& velocity);
-		virtual const PVVector3 getVelocity(void) const;
+		virtual void setVelocity(const Vector3& velocity);
+		virtual const Vector3 getVelocity(void) const;
 
 		virtual void setOrientation(const PVQuaternion& orientation);
 		virtual const PVQuaternion getOrientation(void) const;

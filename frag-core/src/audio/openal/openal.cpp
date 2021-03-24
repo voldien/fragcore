@@ -244,7 +244,7 @@ AudioListener *AudioInterface::createAudioListener(AudioListenerDesc *desc) {
 
 	/*	*/
 	listener->setPosition(desc->position);
-	listener->setVelocity(PVVector3::zero());
+	listener->setVelocity(Vector3::zero());
 	listener->setOrientation(desc->rotation);
 
 	return listener;

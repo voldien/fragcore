@@ -26,12 +26,12 @@ using namespace fragcore;
 // // 	return VDCASTP(VDGameObject *, this->hitdata.actor->userData)->transform();
 // // }
 
-// PVVector3& RaycastHit::point(void) const
+// Vector3& RaycastHit::point(void) const
 // {
 // //	return *VDCASTP(const VDVector3 *, &this->hitdata.position);
 // }
 
-// PVVector3& RaycastHit::normal(void) const
+// Vector3& RaycastHit::normal(void) const
 // {
 // 	//return *VDCASTP(const VDVector3 *, &this->hitdata.normal);
 // }

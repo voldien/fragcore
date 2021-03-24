@@ -17,7 +17,7 @@ void RigidBody::setMass(float mass){
 	body->getCollisionShape()->calculateLocalInertia(mass, inertia);
 }
 
-PVVector3 RigidBody::getPosition(void){
+Vector3 RigidBody::getPosition(void){
 
 	btRigidBody* body;
 	btTransform trans;
@@ -29,9 +29,9 @@ PVVector3 RigidBody::getPosition(void){
 	mot = body->getMotionState();
 	mot->getWorldTransform(trans);
 
-	return *(PVVector3*)&trans.getOrigin();
+	return *(Vector3*)&trans.getOrigin();
 }
-void RigidBody::setPosition(const PVVector3& position){
+void RigidBody::setPosition(const Vector3& position){
 	btRigidBody* body;
 	body = (btRigidBody *)this->getObject();
 
@@ -58,15 +58,15 @@ void RigidBody::setOrientation(const PVQuaternion& quat){
 }
 
 
-PVVector3 RigidBody::getScale(void){
+Vector3 RigidBody::getScale(void){
 	btRigidBody* body;
 	body = (btRigidBody *)this->getObject();
 
 	const btVector3 scale = body->getCollisionShape()->getLocalScaling();
 
-	return PVVector3(scale.x(),scale.y(),scale.z());
+	return Vector3(scale.x(),scale.y(),scale.z());
 }
-void RigidBody::setScale(const PVVector3& scale){
+void RigidBody::setScale(const Vector3& scale){
 	btRigidBody* body;
 	body = (btRigidBody *)this->getObject();
 
@@ -74,7 +74,7 @@ void RigidBody::setScale(const PVVector3& scale){
 	body->getCollisionShape()->setLocalScaling(sc);
 }
 
-void RigidBody::addForce(const PVVector3& force){
+void RigidBody::addForce(const Vector3& force){
 	btRigidBody* body;
 	body = (btRigidBody *)this->getObject();
 }
@@ -106,11 +106,11 @@ void RigidBody::setAngularDrag(float angularDrag){
 }
 
 
-PVVector3 RigidBody::getVelocity(void){
+Vector3 RigidBody::getVelocity(void){
 	btRigidBody* body;
 	body = (btRigidBody *)this->getObject();
 
 	const btVector3& linear = body->getLinearVelocity();
-	return PVVector3(linear.x(),linear.y(),linear.z());
+	return Vector3(linear.x(),linear.y(),linear.z());
 }
 

@@ -32,7 +32,7 @@ static bool validate_object_memeber(IRenderer *renderer, RenderObject *object) {
 
 
 IRenderer::IRenderer(IConfig *config) {
-    static const std::vector<const char *> instanceExtensionNames = {
+    static std::vector<const char *> instanceExtensionNames = {
 #if defined(FV_LINUX)
         VK_KHR_SURFACE_EXTENSION_NAME,
         VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME,
@@ -116,9 +116,9 @@ IRenderer::IRenderer(IConfig *config) {
 	unsigned int count;
 	if (!SDL_Vulkan_GetInstanceExtensions(tmpWindow, &count, NULL))
 		throw RuntimeException(fvformatf("%s", SDL_GetError()));
-	size_t additional_extension_count = instanceExtensionNames.size();
-	instanceExtensionNames.resize(additional_extension_count + count);
-	if (!SDL_Vulkan_GetInstanceExtensions(tmpWindow, &count, instanceExtensionNames.data() + additional_extension_count))
+	unsigned int additional_extension_count = (unsigned int)instanceExtensionNames.size();
+	instanceExtensionNames.resize((size_t)(additional_extension_count + count));
+	if (!SDL_Vulkan_GetInstanceExtensions(tmpWindow, &count, &instanceExtensionNames[additional_extension_count]))
 		throw RuntimeException(fvformatf("failed SDL_Vulkan_GetInstanceExtensions - %s", SDL_GetError()));
 	SDL_DestroyWindow(tmpWindow);
 
@@ -1638,7 +1638,7 @@ void IRenderer::execute(CommandList *list)
 	
 }
 
-void* IRenderer::getData(void) {
+void* IRenderer::getData(void) const {
 	return this->pdata;
 }
 

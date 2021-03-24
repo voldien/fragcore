@@ -40,7 +40,7 @@ PhysicInterface::PhysicInterface(IConfig* config){
 							physicore->solver,
 							physicore->collisionConfiguration);
 	/*	*/
-	this->setGravity( PVVector3(0.0f,-9.82f,0.0f) );
+	this->setGravity( Vector3(0.0f,-9.82f,0.0f) );
 
 	/*  Set softbody world info.    */
 	physicore->softBodyWorldInfo.m_broadphase = physicore->broadphase;
@@ -90,7 +90,7 @@ void PhysicInterface::sync(void) {
 	physicore->dynamicsWorld->synchronizeMotionStates();
 }
 
-void PhysicInterface::setGravity(const PVVector3 &gravity) {
+void PhysicInterface::setGravity(const Vector3 &gravity) {
 	PhysicCore *physicore = (PhysicCore *) this->pdata;
 	assert(physicore);
 
@@ -98,11 +98,11 @@ void PhysicInterface::setGravity(const PVVector3 &gravity) {
 	physicore->dynamicsWorld->setGravity(*(btVector3 *) &gravity);
 }
 
-PVVector3 PhysicInterface::getGravity(void) const {
+Vector3 PhysicInterface::getGravity(void) const {
 	PhysicCore *physicore = (PhysicCore *) this->pdata;
 
 	btVector3 gr = physicore->dynamicsWorld->getGravity();
-	return PVVector3(gr.x(), gr.y(), gr.z());
+	return Vector3(gr.x(), gr.y(), gr.z());
 }
 
 void PhysicInterface::addRigidBody(RigidBody* body){
@@ -252,7 +252,7 @@ RigidBody *PhysicInterface::createRigibody(const RigidBodyDesc *desc) {
 //	/*	Get world space variables.  */
 ////	Node *node = desc->node;
 ////	PVQuaternion nodeRotation = node->getRotation();
-////	const PVVector3 pos = node->getPosition();
+////	const Vector3 pos = node->getPosition();
 ////	btQuaternion rotation = btQuaternion(nodeRotation.x(), nodeRotation.y(), nodeRotation.z(), nodeRotation.w());
 ////	btVector3 position = btVector3(pos.x(),
 ////	                               pos.y(),

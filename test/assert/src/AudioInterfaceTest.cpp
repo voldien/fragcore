@@ -104,7 +104,7 @@ TEST_F(AudioInterfaceTest, AudioInterface_OpenAL_Create_AudioSource_NoThrow) {
 	ASSERT_TRUE(audio = AudioFactory::createAudioInterface(api, NULL));
 
 	AudioSourceDesc desc = {};
-	desc.position = PVVector3::zero();
+	desc.position = Vector3::zero();
 	AudioSource* source = NULL;
 	ASSERT_NO_THROW(source = audio->createAudioSource(&desc));
 
@@ -118,7 +118,7 @@ TEST_F(AudioInterfaceTest, AudioInterface_OpenAL_Create_AudioSource_InitState) {
 	ASSERT_TRUE(audio = AudioFactory::createAudioInterface(api, NULL));
 
 	AudioSourceDesc desc = {};
-	desc.position = PVVector3::zero();
+	desc.position = Vector3::zero();
 	AudioSource* source = NULL;
 	source = audio->createAudioSource(&desc);
 
@@ -149,7 +149,7 @@ TEST_F(AudioInterfaceTest, AudioInterface_OpenAL_Create_Audio_Listener_Correctly
 
 	AudioListenerDesc desc;
 	AudioListener *list;
-	desc.position = PVVector3::forward();
+	desc.position = Vector3::forward();
 	desc.rotation = PVQuaternion::identity();
 	list = interface->createAudioListener(&desc);
 	ASSERT_EQ(list->getPosition(), desc.position);
@@ -188,7 +188,7 @@ TEST_F(AudioInterfaceTest, AudioInterface_OpenAL_AudioListener_InitVeclocity_Zer
 
 	AudioListenerDesc desc;
 	AudioListener *list = interface->createAudioListener(&desc);
-	ASSERT_EQ(list->getVelocity(), PVVector3::zero());
+	ASSERT_EQ(list->getVelocity(), Vector3::zero());
 	interface->deleteAudioListener(list);
 	delete interface;
 }

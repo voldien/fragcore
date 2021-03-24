@@ -15,8 +15,7 @@ void FrameBuffer::write(void) {
 
 }
 
-void FrameBuffer::read(void) {
-
+void FrameBuffer::read(void) const {
 }
 
 Texture *FrameBuffer::getAttachment(unsigned int index) {
@@ -31,10 +30,13 @@ Texture *FrameBuffer::getStencilAttachment(void) {
 
 }
 
+int FrameBuffer::width(void) const
+{
+}
 
-int FrameBuffer::width(void) {}
-
-int FrameBuffer::height(void) {}
+int FrameBuffer::height(void) const
+{
+}
 int FrameBuffer::layers(void){
 	
 }

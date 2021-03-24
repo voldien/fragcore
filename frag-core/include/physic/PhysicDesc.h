@@ -141,8 +141,8 @@ namespace fragcore {
 
 		/*	transformation	*/
 		//TODO resolve if a pointer to allow for direct affect on the transform for instance.
-		HCVector3 position;                	/*	Position in world space.	*/
-		HCQuaternion quat;                	/*	Oritention in world space.	*/
+		Vector3 position;                	/*	Position in world space.	*/
+		PVQuaternion quat;                	/*	Oritention in world space.	*/
 
 		//Node *node;                        /*	Attached node.	*/
 

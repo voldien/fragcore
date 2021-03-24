@@ -353,7 +353,7 @@ namespace fragcore {
 
 		IRenderer(IConfig *config);
 
-		virtual void *getData(void);
+		virtual void *getData(void) const;
 
 	private:    /*  */
 		void *pdata;

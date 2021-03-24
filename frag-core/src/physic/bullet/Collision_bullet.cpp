@@ -6,12 +6,12 @@ using namespace fragcore;
 
 Collision::~Collision(void){}
 
-PVVector3 Collision::getCenter(void* pobj){
+Vector3 Collision::getCenter(void* pobj){
 
 	btCollisionShape* col = (btCollisionShape*)pobj;
 
 }
-void Collision::setCenter(void* pobj, const PVVector3& center){
+void Collision::setCenter(void* pobj, const Vector3& center){
 
 	btCollisionShape* col = (btCollisionShape*)pobj;
 

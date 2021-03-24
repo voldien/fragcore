@@ -45,18 +45,18 @@
 //TODO relocate.
 //TODO rename to none prefix versions.
 namespace fragcore {
-	typedef HCVector3 PVVector3;
-	typedef HCVector4 PVVector4;
-	typedef HCVector2 PVVector2;
-	typedef HCMatrix4x4 PVMatrix4x4;
-	typedef HCMatrix3x3 PVMatrix3x3;
-	typedef HCQuaternion PVQuaternion;
-	typedef HCPlane PVPlane;
-	typedef HCAABB PVAABB;
-	typedef HCBoundingSphere PVBoundingSphere;
-	typedef HCOBB PVOBB;
-	typedef HCRay PVRay;
-	typedef HCVector4 PVColor;
+	typedef LIBHPM::Vector3 Vector3;
+	typedef LIBHPM::Vector4 PVVector4;
+	typedef LIBHPM::Vector2 PVVector2;
+	typedef LIBHPM::Matrix4x4 PVMatrix4x4;
+	typedef LIBHPM::Matrix3x3 PVMatrix3x3;
+	typedef LIBHPM::Quaternion PVQuaternion;
+	typedef LIBHPM::Plane PVPlane;
+	typedef LIBHPM::AABB PVAABB;
+	typedef LIBHPM::BoundingSphere PVBoundingSphere;
+	typedef LIBHPM::OBB PVOBB;
+	typedef LIBHPM::Ray PVRay;
+	typedef LIBHPM::Vector4 PVColor;
 }
 
 /**
@@ -339,11 +339,11 @@ namespace fragcore {
 
 /*	Optimized branch predictions.	*/
 #if defined(FV_GCC) || defined(FV_CLANG)
-	#define likely(x)      __builtin_expect(!!(x), 1) 
-	#define unlikely(x)    __builtin_expect(!!(x), 0)  
+	#define likely(x)      __builtin_expect(!!(x), 1)
+	#define unlikely(x)    __builtin_expect(!!(x), 0)
 #else
-	#define likely(x)      x 
-	#define unlikely(x)    x 
+	#define likely(x)      x
+	#define unlikely(x)    x
 #endif
 
 

@@ -48,6 +48,7 @@ namespace fragcore {
 			XML = 1,    /*  */
 			YAML = 2,    /*  */
 			JSON = 3,    /*  */
+			Custom = (unsigned int)(-1)
 		};
 
 		/**

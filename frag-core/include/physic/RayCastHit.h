@@ -40,9 +40,9 @@ namespace fragcore {
 
 		//VDTransform*  transform(void) const;
 
-		//PVVector3& point(void) const;
+		//Vector3& point(void) const;
 
-		//PVVector3 &normal(void) const;
+		//Vector3 &normal(void) const;
 
 		//float distance(void) const;
 

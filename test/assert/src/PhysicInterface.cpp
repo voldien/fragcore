@@ -44,7 +44,7 @@ TEST(PhysicInterface, PhysicInteface_Create_ENUM_Bullet3_No_Throw) {
 }
 
 TEST(PhysicInterface, PhysicInterface_Enum_Bullet_Set_Gravity_Has_Affect) {
-	const PVVector3 gravity(0.0f, 9.82f, 0.0f);
+	const Vector3 gravity(0.0f, 9.82f, 0.0f);
 	PhysicInterface *interface =
 		PhysicFactory::createPhysic(PhysicFactory::Bullet, NULL);
 	interface->setGravity(gravity);
@@ -71,14 +71,14 @@ TEST(PhysicInterface, PhysicInterface_Enum_Bullet_RayTest_No_Throw) {
 		PhysicFactory::createPhysic(PhysicFactory::Bullet, NULL);
 	RayCastHit hit;
 	ASSERT_NO_THROW(interface->rayTest(
-		PVRay(PVVector3::zero(), PVVector3::forward()), &hit));
+		PVRay(Vector3::zero(), Vector3::forward()), &hit));
 }
 
 TEST(PhysicInterface, PhysicInterface_Enum_Bullet_RayTest_Fetch_Hit) {
 	PhysicInterface *interface =
 		PhysicFactory::createPhysic(PhysicFactory::Bullet, NULL);
 	RayCastHit hit;
-	interface->rayTest(PVRay(PVVector3::zero(), PVVector3::forward()), &hit);
+	interface->rayTest(PVRay(Vector3::zero(), Vector3::forward()), &hit);
 	// TODO add testing.
 }
 
@@ -87,7 +87,7 @@ TEST(PhysicInterface, PhysicInterface_Enum_Bullet_RaySphereTest_No_Throw) {
 		PhysicFactory::createPhysic(PhysicFactory::Bullet, NULL);
 	RayCastHit hit;
 	ASSERT_NO_THROW(interface->raySphereTest(
-		PVRay(PVVector3::zero(), PVVector3::forward()), &hit));
+		PVRay(Vector3::zero(), Vector3::forward()), &hit));
 }
 
 TEST(PhysicInterface,

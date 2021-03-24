@@ -42,17 +42,17 @@ namespace fragcore {
 
 		//virtual void setInertia(void* pobj);
 
-		virtual PVVector3 getPosition(void);
-		virtual void setPosition(const PVVector3& position);
+		virtual Vector3 getPosition(void);
+		virtual void setPosition(const Vector3& position);
 
 
 		virtual PVQuaternion getOrientation(void);
 		virtual void setOrientation(const PVQuaternion& quat);
 
-		virtual PVVector3 getScale(void);
-		virtual void setScale(const PVVector3& scale);
+		virtual Vector3 getScale(void);
+		virtual void setScale(const Vector3& scale);
 
-		virtual void addForce(const PVVector3& force);
+		virtual void addForce(const Vector3& force);
 
 		/**/
 		virtual float getDrag(void);
@@ -61,7 +61,7 @@ namespace fragcore {
 		virtual float getAngularDrag(void);
 		virtual void setAngularDrag(float angularDrag);
 
-		virtual PVVector3 getVelocity(void);
+		virtual Vector3 getVelocity(void);
 
 		intptr_t getNativePtr(void) const;
 

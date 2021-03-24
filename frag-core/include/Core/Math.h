@@ -163,19 +163,19 @@ namespace fragcore {
 		static void guassian2Df(std::vector<float> &guassian, int height, float theta);
 
 		/**
-		 * 
+		 *
 		 */
 		static float linearToGammaSpace(float linear);
 		static float GameSpaceToLinear(float gamma, float exp);
 		static float gammaCorrection(float linear, float exp);
 
 		/**
-		 * 
+		 *
 		 */
 		static float PerlinNoise(float x, float y);
 		static float PerlinNoise(const PVVector2 &point);
 		static float PerlinNoise(float x, float y, float z);
-		static float PerlinNoise(const PVVector3& point);
+		static float PerlinNoise(const Vector3& point);
 	};
 }
 

@@ -143,7 +143,7 @@ float Math::PerlinNoise(float x, float y, float z)
 	return open_simplex_noise3(ctx, x, y, z);
 }
 
-float Math::PerlinNoise(const PVVector3 &point)
+float Math::PerlinNoise(const Vector3 &point)
 {
 	return Math::PerlinNoise(point.x(), point.y(), point.z());
 }

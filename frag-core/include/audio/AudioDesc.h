@@ -27,7 +27,7 @@ namespace fragcore
 {
 	typedef struct audio_source_desc_t
 	{
-		PVVector3 position;
+		Vector3 position;
 	} AudioSourceDesc;
 
 	class AudioDecoder;
@@ -48,7 +48,7 @@ namespace fragcore
 
 	typedef struct audio_listener_desc_t
 	{
-		PVVector3 position;
+		Vector3 position;
 		PVQuaternion rotation;
 
 	} AudioListenerDesc;
