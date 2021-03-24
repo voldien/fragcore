@@ -10,7 +10,7 @@ void Shader::bind(void) {
 	shadobj->vulkanCore->current_pipeline = shadobj->graphicsPipeline;
 
 	const uint32_t curFrame = vulkanCore->currentFrame;
-	vkCmdBindPipeline(vulkanCore->swapChain->commandBuffers[curFrame], VK_PIPELINE_BIND_POINT_GRAPHICS, shadobj->graphicsPipeline);
+	//vkCmdBindPipeline(vulkanCore->swapChain->commandBuffers[curFrame], VK_PIPELINE_BIND_POINT_GRAPHICS, shadobj->graphicsPipeline);
 }
 
 int Shader::getLocation(const char *cparamname) {
