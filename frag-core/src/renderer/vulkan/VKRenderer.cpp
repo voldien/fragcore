@@ -371,9 +371,9 @@ IRenderer::~IRenderer(void) {
 		vkDestroyCommandPool(vulkanCore->device, vulkanCore->cmd_pool, NULL);
 
 	/*  */
-	if (vulkanCore->swapChain) {
-		vkDestroySwapchainKHR(vulkanCore->device, vulkanCore->swapChain->swapchain, NULL);
-	}
+	// if (vulkanCore->swapChain) {
+	// 	vkDestroySwapchainKHR(vulkanCore->device, vulkanCore->swapChain->swapchain, NULL);
+	// }
 
 	if (vulkanCore->device)
 		vkDestroyDevice(vulkanCore->device, NULL);
@@ -697,7 +697,7 @@ Shader *IRenderer::createShader(ShaderDesc *desc) {
 		throw RuntimeException(fvformatf("failed to create pipeline layout - %d!", result));
 
 	VkAttachmentDescription colorAttachment = {};
-	colorAttachment.format = vulkanCore->swapChain->swapChainImageFormat;
+	//colorAttachment.format = vulkanCore->swapChain->swapChainImageFormat;
 	colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
 
 	colorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
@@ -808,17 +808,17 @@ Shader *IRenderer::createShader(ShaderDesc *desc) {
 
 	/*  */
 	VkViewport viewport = {};
-	viewport.x = 0.0f;
-	viewport.y = 0.0f;
-	viewport.width = (float) vulkanCore->swapChain->chainExtend.width;
-	viewport.height = (float) vulkanCore->swapChain->chainExtend.height;
-	viewport.minDepth = 0.0f;
-	viewport.maxDepth = 1.0f;
+	// viewport.x = 0.0f;
+	// viewport.y = 0.0f;
+	// viewport.width = (float) vulkanCore->swapChain->chainExtend.width;
+	// viewport.height = (float) vulkanCore->swapChain->chainExtend.height;
+	// viewport.minDepth = 0.0f;
+	// viewport.maxDepth = 1.0f;
 
 	/*  */
 	VkRect2D scissor = {};
-	scissor.offset = {0, 0};
-	scissor.extent = vulkanCore->swapChain->chainExtend;
+	// scissor.offset = {0, 0};
+	// scissor.extent = vulkanCore->swapChain->chainExtend;
 
 	/*  */
 	VkPipelineViewportStateCreateInfo viewportState = {};
@@ -1141,9 +1141,9 @@ void IRenderer::clear(unsigned int bitflag) {
 		imageRange.layerCount = 1;
 
 
-		vkCmdClearColorImage(vulkanCore->swapChain->commandBuffers[vulkanCore->currentFrame],
-							 vulkanCore->swapChain->swapChainImages[vulkanCore->currentFrame], VK_IMAGE_LAYOUT_GENERAL,
-							 &clearColor, 1, &imageRange);
+		// vkCmdClearColorImage(vulkanCore->swapChain->commandBuffers[vulkanCore->currentFrame],
+		// 					 vulkanCore->swapChain->swapChainImages[vulkanCore->currentFrame], VK_IMAGE_LAYOUT_GENERAL,
+		// 					 &clearColor, 1, &imageRange);
 	}
 
 	if(bitflag & eDepth || bitflag & eStencil){
@@ -1156,9 +1156,9 @@ void IRenderer::clear(unsigned int bitflag) {
 		imageRange.layerCount = 1;
 
 
-		vkCmdClearDepthStencilImage(vulkanCore->swapChain->commandBuffers[vulkanCore->currentFrame],
-									vulkanCore->swapChain->swapChainImages[vulkanCore->currentFrame], VK_IMAGE_LAYOUT_GENERAL,
-									&depthStencilClear, 1, &imageRange);
+		// vkCmdClearDepthStencilImage(vulkanCore->swapChain->commandBuffers[vulkanCore->currentFrame],
+		// 							vulkanCore->swapChain->swapChainImages[vulkanCore->currentFrame], VK_IMAGE_LAYOUT_GENERAL,
+		// 							&depthStencilClear, 1, &imageRange);
 	}
 
 }
@@ -1274,18 +1274,18 @@ void IRenderer::drawInstance(Geometry *geometry, unsigned int num) {
 		VkDeviceSize offsets[] = {0};
 
 		VKBufferObject* indexBuffer = (VKBufferObject*)glgeo->indicesbuffer->pdata;
-		vkCmdBindVertexBuffers(vulkanCore->swapChain->commandBuffers[curFrame], 0, 1, vertexBuffers, offsets);
-		vkCmdBindIndexBuffer(vulkanCore->swapChain->commandBuffers[curFrame], indexBuffer->buffer, offsets[0], VK_INDEX_TYPE_UINT16);
+		//vkCmdBindVertexBuffers(vulkanCore->swapChain->commandBuffers[curFrame], 0, 1, vertexBuffers, offsets);
+		//vkCmdBindIndexBuffer(vulkanCore->swapChain->commandBuffers[curFrame], indexBuffer->buffer, offsets[0], VK_INDEX_TYPE_UINT16);
 
-		vkCmdDrawIndexed(vulkanCore->swapChain->commandBuffers[curFrame], static_cast<uint32_t>(geometry->getIndicesCount()), 1, 0, 0, 0);
+		//vkCmdDrawIndexed(vulkanCore->swapChain->commandBuffers[curFrame], static_cast<uint32_t>(geometry->getIndicesCount()), 1, 0, 0, 0);
 
 	}else{
 		assert(glgeo->vertexbuffer);
 
 		VkDeviceSize offsets[] = {0};
-		vkCmdBindVertexBuffers(vulkanCore->swapChain->commandBuffers[curFrame], 0, 1, vertexBuffers, offsets);
+		//vkCmdBindVertexBuffers(vulkanCore->swapChain->commandBuffers[curFrame], 0, 1, vertexBuffers, offsets);
 
-		vkCmdDraw(vulkanCore->swapChain->commandBuffers[curFrame], static_cast<uint32_t>(geometry->getVertexCount()), 1, 0, 0);
+		//vkCmdDraw(vulkanCore->swapChain->commandBuffers[curFrame], static_cast<uint32_t>(geometry->getVertexCount()), 1, 0, 0);
 	}
 }
 
@@ -1326,10 +1326,10 @@ void IRenderer::dispatchCompute(unsigned int* global, unsigned int* local, unsig
 
 	/*  */
 	const uint32_t curFrame = vulkanCore->currentFrame;
-	VkCommandBuffer curBuffer = vulkanCore->swapChain->commandBuffers[curFrame];
+//	VkCommandBuffer curBuffer = vulkanCore->swapChain->commandBuffers[curFrame];
 
 	/*  */
-	vkCmdDispatch(curBuffer, local[0], local[1], local[2]);
+	//vkCmdDispatch(curBuffer, local[0], local[1], local[2]);
 }
 
 void IRenderer::memoryBarrier(void){
@@ -1643,6 +1643,4 @@ void* IRenderer::getData(void) const {
 }
 
 
-extern "C" IRenderer *createInternalRenderer(IConfig *config) {
-	return new IRenderer(config);
-}
+

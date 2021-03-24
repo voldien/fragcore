@@ -22,6 +22,7 @@
 #include "../Audio/AudioClip.h"
 #include "../Core/SmartReference.h"
 #include"../Core/TaskScheduler/IScheduler.h"
+#include"VideoDecoder.h"
 
 namespace fragcore {
 	/**
@@ -62,7 +63,7 @@ namespace fragcore {
 		void *pVideoData;
 		Ref<AudioClip> audioClip;
 		Ref<Texture> texture;
-		Ref<AudioDecoder> decoder;
+		Ref<VideoDecoder> decoder;
 	};
 }
 

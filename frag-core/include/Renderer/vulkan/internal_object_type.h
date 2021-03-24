@@ -24,25 +24,25 @@
 #define ArraySize(a) (sizeof(a)/sizeof(*a))
 namespace fragcore {
 
-	typedef struct _SwapchainBuffers {
-		struct SwapChainSupportDetails {
-			VkSurfaceCapabilitiesKHR capabilities;
-			std::vector<VkSurfaceFormatKHR> formats;
-			std::vector<VkPresentModeKHR> presentModes;
-		};
+	// typedef struct _SwapchainBuffers {
+	// 	struct SwapChainSupportDetails {
+	// 		VkSurfaceCapabilitiesKHR capabilities;
+	// 		std::vector<VkSurfaceFormatKHR> formats;
+	// 		std::vector<VkPresentModeKHR> presentModes;
+	// 	};
 
-		SwapChainSupportDetails details;    /*  */
+	// 	SwapChainSupportDetails details;    /*  */
 
-		std::vector<VkImage> swapChainImages;
-		std::vector<VkImageView> swapChainImageViews;
-		std::vector<VkFramebuffer> swapChainFramebuffers;
-		std::vector<VkCommandBuffer> commandBuffers;
-		VkFormat swapChainImageFormat;
-		VkRenderPass renderPass;
-		VkCommandBuffer *currentBuffer;
-		VkSwapchainKHR swapchain;           /*  */
-		VkExtent2D chainExtend;             /*  */
-	} SwapchainBuffers;
+	// 	std::vector<VkImage> swapChainImages;
+	// 	std::vector<VkImageView> swapChainImageViews;
+	// 	std::vector<VkFramebuffer> swapChainFramebuffers;
+	// 	std::vector<VkCommandBuffer> commandBuffers;
+	// 	VkFormat swapChainImageFormat;
+	// 	VkRenderPass renderPass;
+	// 	VkCommandBuffer *currentBuffer;
+	// 	VkSwapchainKHR swapchain;           /*  */
+	// 	VkExtent2D chainExtend;             /*  */
+	// } SwapchainBuffers;
 
 	typedef struct vulkan_core_t {
 		/*	*/
@@ -71,7 +71,7 @@ namespace fragcore {
 		VkSurfaceKHR surface;
 
 		/*  Collection of swap chain variables. */
-		SwapchainBuffers *swapChain;
+		//SwapchainBuffers *swapChain;
 
 		VkCommandPool cmd_pool;
 		VkCommandPool compute_pool;

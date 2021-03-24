@@ -12,7 +12,8 @@
 
 using namespace fragcore;
 
-VKRenderWindow::VKRenderWindow(Ref<IRenderer> &renderer) {
+VKRenderWindow::VKRenderWindow(Ref<VKRenderInterface> &renderer) {
+
 	this->renderer = renderer;
 	VulkanCore *vulkancore = (VulkanCore *)renderer->getData();
 	VkResult result;
@@ -46,10 +47,9 @@ VKRenderWindow::VKRenderWindow(Ref<IRenderer> &renderer) {
 	VkSurfaceFormatKHR surfaceFormat = chooseSwapSurfaceFormat(swapChainSupport.formats);
 	VkPresentModeKHR presentMode = chooseSwapPresentMode(swapChainSupport.presentModes);
 	VkExtent2D extent = chooseSwapExtent(swapChainSupport.capabilities);
+
 	/*  Allocate swapchain. */
-	vulkancore->swapChain = new SwapchainBuffers();
-	assert(vulkancore->swapChain);
-	vulkancore->currentFrame = 0;
+	currentFrame = 0;
 
 	uint32_t imageCount = swapChainSupport.capabilities.minImageCount + 1;
 	if (swapChainSupport.capabilities.maxImageCount > 0 && imageCount > swapChainSupport.capabilities.maxImageCount) {
@@ -91,7 +91,7 @@ VKRenderWindow::VKRenderWindow(Ref<IRenderer> &renderer) {
 
 	/*  Create swapchain.   */
 	if (vkCreateSwapchainKHR(vulkancore->device, &createInfo, NULL,
-								&vulkancore->swapChain->swapchain) != VK_SUCCESS){
+								&swapChain.swapchain) != VK_SUCCESS){
 		throw RuntimeException(
 			fvformatf("vkCreateSwapchainKHR failed - %d", result));
 	}
@@ -99,29 +99,29 @@ VKRenderWindow::VKRenderWindow(Ref<IRenderer> &renderer) {
 	/*  Get the image associated with the swap chain.   */
 	uint32_t nrChainImageCount = 1;
 	result = vkGetSwapchainImagesKHR(vulkancore->device,
-										vulkancore->swapChain->swapchain,
+										swapChain.swapchain,
 										&nrChainImageCount, NULL);
 	if(result != VK_SUCCESS){
 		throw RuntimeException(fvformatf(
 			"vkGetSwapchainImagesKHR failed query count - %d", result));
 	}
-	vulkancore->swapChain->swapChainImages.resize(nrChainImageCount);
-	result = vkGetSwapchainImagesKHR( vulkancore->device, vulkancore->swapChain->swapchain, &nrChainImageCount, vulkancore->swapChain->swapChainImages.data());
+	swapChain.swapChainImages.resize(nrChainImageCount);
+	result = vkGetSwapchainImagesKHR( vulkancore->device, swapChain.swapchain, &nrChainImageCount, swapChain.swapChainImages.data());
 	if (result != VK_SUCCESS)
 		throw RuntimeException(fvformatf(
 			"vkGetSwapchainImagesKHR failed query object - %d", result));
-	vulkancore->swapChain->swapChainImageFormat = surfaceFormat.format;
-	vulkancore->swapChain->chainExtend = extent;
+	swapChain.swapChainImageFormat = surfaceFormat.format;
+	swapChain.chainExtend = extent;
 
 	/*	*/
-	vulkancore->swapChain->swapChainImageViews.resize(vulkancore->swapChain->swapChainImages.size());
+	swapChain.swapChainImageViews.resize(swapChain.swapChainImages.size());
 
-	for (size_t i = 0; i < vulkancore->swapChain->swapChainImages.size(); i++) {
+	for (size_t i = 0; i < swapChain.swapChainImages.size(); i++) {
 		VkImageViewCreateInfo createInfo{};
 		createInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-		createInfo.image = vulkancore->swapChain->swapChainImages[i];
+		createInfo.image = swapChain.swapChainImages[i];
 		createInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
-		createInfo.format = vulkancore->swapChain->swapChainImageFormat;
+		createInfo.format = swapChain.swapChainImageFormat;
 		createInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
 		createInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
 		createInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
@@ -133,13 +133,13 @@ VKRenderWindow::VKRenderWindow(Ref<IRenderer> &renderer) {
 		createInfo.subresourceRange.layerCount = 1;
 
 		if (vkCreateImageView(vulkancore->device, &createInfo, nullptr,
-								&vulkancore->swapChain->swapChainImageViews[i]) != VK_SUCCESS) {
+								&swapChain.swapChainImageViews[i]) != VK_SUCCESS) {
 			throw std::runtime_error("failed to create image views!");
 		}
 	}
 
 	VkAttachmentDescription colorAttachment{};
-	colorAttachment.format = vulkancore->swapChain->swapChainImageFormat;
+	colorAttachment.format = swapChain.swapChainImageFormat;
 	colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
 	colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
 	colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
@@ -174,46 +174,46 @@ VKRenderWindow::VKRenderWindow(Ref<IRenderer> &renderer) {
 	renderPassInfo.dependencyCount = 1;
 	renderPassInfo.pDependencies = &dependency;
 
-	if (vkCreateRenderPass(vulkancore->device, &renderPassInfo, nullptr, &vulkancore->swapChain->renderPass) != VK_SUCCESS) {
+	if (vkCreateRenderPass(vulkancore->device, &renderPassInfo, nullptr, &swapChain.renderPass) != VK_SUCCESS) {
 		throw std::runtime_error("failed to create render pass!");
 	}
 
 	//TODO add support.
-	vulkancore->swapChain->swapChainFramebuffers.resize(vulkancore->swapChain->swapChainImageViews.size());
+	swapChain.swapChainFramebuffers.resize(swapChain.swapChainImageViews.size());
 
-	for (size_t i = 0; i < vulkancore->swapChain->swapChainImageViews.size(); i++) {
+	for (size_t i = 0; i < swapChain.swapChainImageViews.size(); i++) {
 		VkImageView attachments[] = {
-			vulkancore->swapChain->swapChainImageViews[i]
+			swapChain.swapChainImageViews[i]
 		};
 
 		VkFramebufferCreateInfo framebufferInfo{};
 		framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-		framebufferInfo.renderPass = vulkancore->swapChain->renderPass;
+		framebufferInfo.renderPass = swapChain.renderPass;
 		framebufferInfo.attachmentCount = 1;
 		framebufferInfo.pAttachments = attachments;
-		framebufferInfo.width = vulkancore->swapChain->chainExtend.width;
-		framebufferInfo.height = vulkancore->swapChain->chainExtend.height;
+		framebufferInfo.width = swapChain.chainExtend.width;
+		framebufferInfo.height = swapChain.chainExtend.height;
 		framebufferInfo.layers = 1;
 
 		if (vkCreateFramebuffer(vulkancore->device, &framebufferInfo,
-								nullptr, &vulkancore->swapChain->swapChainFramebuffers[i]) != VK_SUCCESS) {
+								nullptr, &swapChain.swapChainFramebuffers[i]) != VK_SUCCESS) {
 			throw std::runtime_error("failed to create framebuffer!");
 		}
 	}
 
 	/*  */
-	vulkancore->swapChain->commandBuffers.resize(vulkancore->swapChain->swapChainFramebuffers.size());
+	swapChain.commandBuffers.resize(swapChain.swapChainFramebuffers.size());
 	VkCommandBufferAllocateInfo cmdBufAllocInfo = {};
 	cmdBufAllocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
 	cmdBufAllocInfo.commandPool = vulkancore->cmd_pool;
-	cmdBufAllocInfo.commandBufferCount = vulkancore->swapChain->swapChainImages.size();
+	cmdBufAllocInfo.commandBufferCount = swapChain.swapChainImages.size();
 	cmdBufAllocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
 
 	/*  */
-	// vulkancore->swapChain->commandBuffers = (VkCommandBuffer *)malloc(
-	// 	vulkancore->swapChain->swapChainImages.size() * sizeof(VkCommandBuffer));
+	// swapChain.commandBuffers = (VkCommandBuffer *)malloc(
+	// 	swapChain.swapChainImages.size() * sizeof(VkCommandBuffer));
 	result = vkAllocateCommandBuffers(vulkancore->device, &cmdBufAllocInfo,
-									  vulkancore->swapChain->commandBuffers.data());
+									  swapChain.commandBuffers.data());
 	if (result != VK_SUCCESS)
 		throw RuntimeException(
 			fvformatf("vkAllocateCommandBuffers failed - %d", result));
@@ -224,21 +224,21 @@ VKRenderWindow::VKRenderWindow(Ref<IRenderer> &renderer) {
 	// beginInfo.flags = VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
 	// /*  */
 	// result = vkBeginCommandBuffer(
-	// 	vulkancore->swapChain->commandBuffers[vulkancore->currentFrame],
+	// 	swapChain.commandBuffers[vulkancore->currentFrame],
 	// 	&beginInfo);
 	// if (result != VK_SUCCESS)
 	// 	throw RuntimeException(
 	// 		fvformatf("vkBeginCommandBuffer failed - %d", result));
-	vulkancore->swapChain->commandBuffers.resize(vulkancore->swapChain->swapChainFramebuffers.size());
+	swapChain.commandBuffers.resize(swapChain.swapChainFramebuffers.size());
 
 	VkCommandBufferAllocateInfo allocInfo{};
 	allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
 	allocInfo.commandPool = vulkancore->cmd_pool;
 	allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-	allocInfo.commandBufferCount = (uint32_t)vulkancore->swapChain->commandBuffers.size();
+	allocInfo.commandBufferCount = (uint32_t)swapChain.commandBuffers.size();
 
 	if (vkAllocateCommandBuffers(vulkancore->device, &allocInfo,
-									vulkancore->swapChain->commandBuffers.data()) != VK_SUCCESS) {
+									swapChain.commandBuffers.data()) != VK_SUCCESS) {
 		throw std::runtime_error("failed to allocate command buffers!");
 	}
 
@@ -247,7 +247,7 @@ VKRenderWindow::VKRenderWindow(Ref<IRenderer> &renderer) {
 	vulkancore->imageAvailableSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
 	vulkancore->renderFinishedSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
 	vulkancore->inFlightFences.resize(MAX_FRAMES_IN_FLIGHT);
-	vulkancore->imagesInFlight.resize(vulkancore->swapChain->swapChainImages.size(), VK_NULL_HANDLE); //TODO resolve vulkancore->swapChainImages.size()
+	vulkancore->imagesInFlight.resize(swapChain.swapChainImages.size(), VK_NULL_HANDLE); //TODO resolve vulkancore->swapChainImages.size()
 
 	VkSemaphoreCreateInfo semaphoreInfo{};
 	semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
@@ -265,11 +265,11 @@ VKRenderWindow::VKRenderWindow(Ref<IRenderer> &renderer) {
 	}
 	
 
-	for (size_t i = 0; i < vulkancore->swapChain->commandBuffers.size(); i++) {
+	for (size_t i = 0; i < swapChain.commandBuffers.size(); i++) {
 		VkCommandBufferBeginInfo beginInfo{};
 		beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 
-		if (vkBeginCommandBuffer(vulkancore->swapChain->commandBuffers[i], &beginInfo) !=
+		if (vkBeginCommandBuffer(swapChain.commandBuffers[i], &beginInfo) !=
 			VK_SUCCESS) {
 			throw std::runtime_error(
 				"failed to begin recording command buffer!");
@@ -277,26 +277,26 @@ VKRenderWindow::VKRenderWindow(Ref<IRenderer> &renderer) {
 
 		VkRenderPassBeginInfo renderPassInfo{};
 		renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-		renderPassInfo.renderPass = vulkancore->swapChain->renderPass;
-		renderPassInfo.framebuffer = vulkancore->swapChain->swapChainFramebuffers[i];
+		renderPassInfo.renderPass = swapChain.renderPass;
+		renderPassInfo.framebuffer = swapChain.swapChainFramebuffers[i];
 		renderPassInfo.renderArea.offset = {0, 0};
-		renderPassInfo.renderArea.extent = vulkancore->swapChain->chainExtend;
+		renderPassInfo.renderArea.extent = swapChain.chainExtend;
 
 		VkClearValue clearColor = {0.0f, 1.0f, 0.0f, 1.0f};
 		renderPassInfo.clearValueCount = 1;
 		renderPassInfo.pClearValues = &clearColor;
 
-		vkCmdBeginRenderPass(vulkancore->swapChain->commandBuffers[i], &renderPassInfo,
+		vkCmdBeginRenderPass(swapChain.commandBuffers[i], &renderPassInfo,
 								VK_SUBPASS_CONTENTS_INLINE);
 
-		// vkCmdBindPipeline(vulkancore->swapChain->cvulkancore->swapChain->ommandBuffers[i],
+		// vkCmdBindPipeline(swapChain.cswapChain.ommandBuffers[i],
 		// 					VK_PIPELINE_BIND_POINT_GRAPHICS,
 		// 					graphicsPipeline);
 
 
-		//vkCmdDraw(vulkancore->swapChain->commandBuffers[i], 3, 1, 0, 0);
+		//vkCmdDraw(swapChain.commandBuffers[i], 3, 1, 0, 0);
 
-		vkCmdEndRenderPass(vulkancore->swapChain->commandBuffers[i]);
+		vkCmdEndRenderPass(swapChain.commandBuffers[i]);
 
 		VkClearColorValue clearColor_ = {1,0,1,1};
 		/*  */
@@ -306,11 +306,11 @@ VKRenderWindow::VKRenderWindow(Ref<IRenderer> &renderer) {
 		imageRange.layerCount = 1;
 
 
-		vkCmdClearColorImage(vulkancore->swapChain->commandBuffers[i],
-		 					 vulkancore->swapChain->swapChainImages[i], VK_IMAGE_LAYOUT_GENERAL,
+		vkCmdClearColorImage(swapChain.commandBuffers[i],
+		 					 swapChain.swapChainImages[i], VK_IMAGE_LAYOUT_GENERAL,
 		 					 &clearColor_, 1, &imageRange);
 
-		if (vkEndCommandBuffer(vulkancore->swapChain->commandBuffers[i]) != VK_SUCCESS) {
+		if (vkEndCommandBuffer(swapChain.commandBuffers[i]) != VK_SUCCESS) {
 			throw std::runtime_error("failed to record command buffer!");
 		}
 	}
@@ -340,14 +340,14 @@ void VKRenderWindow::swapBuffer() {
 
 	VulkanCore *vulkanCore = (VulkanCore *)this->renderer->getData();
 	// result = vkEndCommandBuffer(
-	// 	vulkanCore->swapChain->commandBuffers[vulkanCore->currentFrame]);
+	// 	swapChain.commandBuffers[vulkanCore->currentFrame]);
 	// if (result != VK_SUCCESS) 
 	// 	throw RuntimeException("failed");
 	vkWaitForFences(vulkanCore->device, 1, &vulkanCore->inFlightFences[vulkanCore->currentFrame], VK_TRUE, UINT64_MAX);
 
 	/*  */
 	result = vkAcquireNextImageKHR(
-		vulkanCore->device, vulkanCore->swapChain->swapchain, UINT64_MAX,
+		vulkanCore->device, swapChain.swapchain, UINT64_MAX,
 		vulkanCore->imageAvailableSemaphores[vulkanCore->currentFrame], VK_NULL_HANDLE, &imageIndex);
 	if (result == VK_ERROR_OUT_OF_DATE_KHR) {
 		/*  Recreate.   */
@@ -374,7 +374,7 @@ void VKRenderWindow::swapBuffer() {
 	submitInfo.pWaitDstStageMask = waitStages;
 
 	submitInfo.commandBufferCount = 1;
-	submitInfo.pCommandBuffers = &vulkanCore->swapChain->commandBuffers[imageIndex];
+	submitInfo.pCommandBuffers = &swapChain.commandBuffers[imageIndex];
 
 	VkSemaphore signalSemaphores[] = { vulkanCore->renderFinishedSemaphores[vulkanCore->currentFrame]};
 	submitInfo.signalSemaphoreCount = 1;
@@ -391,7 +391,7 @@ void VKRenderWindow::swapBuffer() {
 	presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
 	/**/
 	presentInfo.swapchainCount = 1;
-	presentInfo.pSwapchains = &vulkanCore->swapChain->swapchain;
+	presentInfo.pSwapchains = &swapChain.swapchain;
 	/*	*/
 	presentInfo.waitSemaphoreCount = 1;
 	presentInfo.pWaitSemaphores = signalSemaphores;
@@ -406,11 +406,11 @@ void VKRenderWindow::swapBuffer() {
 
 	/*  Compute current frame.  */
 	vulkanCore->currentFrame = (vulkanCore->currentFrame + 1) % 2;
-		//vulkanCore->swapChain->swapChainImages.size();
+		//swapChain.swapChainImages.size();
 
 		// /*  Reset command buffer.    */
 	// result = vkResetCommandBuffer(
-	// 	vulkanCore->swapChain->commandBuffers[vulkanCore->currentFrame],
+	// 	swapChain.commandBuffers[vulkanCore->currentFrame],
 	// 	VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT);
 	// if (result != VK_SUCCESS) throw RuntimeException("failed");
 
@@ -421,14 +421,221 @@ void VKRenderWindow::swapBuffer() {
 
 	// /*  */
 	// result = vkBeginCommandBuffer(
-	// 	vulkanCore->swapChain->commandBuffers[vulkanCore->currentFrame],
+	// 	swapChain.commandBuffers[vulkanCore->currentFrame],
 	// 	&beginInfo);
 	// if (result != VK_SUCCESS) throw RuntimeException("Failed to start the ");
 }
 
-void VKRenderWindow::createSwapChain(void){
+void VKRenderWindow::createSwapChain(void) {
+	/*  */
+#ifdef VK_USE_PLATFORM_XLIB_KHR
 
+#elif defined(VK_USE_PLATFORM_WIN32_KHR)
+//	vkCreateWin32SurfaceKHR
+#elif defined(VK_USE_PLATFORM_ANDROID_KHR)
+	//	// vkCreateAndroidSurfaceKHR
+#endif
+	VulkanCore *vulkancore = (VulkanCore *)renderer->getData();
+	SwapChainSupportDetails swapChainSupport = querySwapChainSupport(vulkancore->gpu, this->surface);
+	VkSurfaceFormatKHR surfaceFormat = chooseSwapSurfaceFormat(swapChainSupport.formats);
+	VkPresentModeKHR presentMode = chooseSwapPresentMode(swapChainSupport.presentModes);
+	VkExtent2D extent = chooseSwapExtent(swapChainSupport.capabilities);
+	/*  Allocate swapchain. */
+
+	uint32_t imageCount = swapChainSupport.capabilities.minImageCount + 1;
+	if (swapChainSupport.capabilities.maxImageCount > 0 && imageCount > swapChainSupport.capabilities.maxImageCount) {
+		imageCount = swapChainSupport.capabilities.maxImageCount;
+	}
+
+	QueueFamilyIndices indices = findQueueFamilies(vulkancore->gpu, this->surface);
+	uint32_t queueFamilyIndices[] = {indices.graphicsFamily, indices.presentFamily};
+
+	/*  */
+	VkSwapchainCreateInfoKHR createInfo = {};
+	createInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
+	createInfo.surface = this->surface;
+
+	/*  */
+	createInfo.minImageCount = imageCount;
+	createInfo.imageFormat = surfaceFormat.format;
+	createInfo.imageColorSpace = surfaceFormat.colorSpace;
+	createInfo.imageExtent = extent;
+	createInfo.imageArrayLayers = 1;
+	createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+
+	/*  */
+	if (indices.graphicsFamily != indices.presentFamily) {
+		createInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
+		createInfo.queueFamilyIndexCount = 2;
+		createInfo.pQueueFamilyIndices = queueFamilyIndices;
+	} else {
+		createInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
+	}
+
+	/*  */
+	createInfo.preTransform = swapChainSupport.capabilities.currentTransform;
+	createInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+	createInfo.presentMode = presentMode; //(presentModes);
+	createInfo.clipped = VK_TRUE;
+
+	createInfo.oldSwapchain = VK_NULL_HANDLE;
+
+	/*  Create swapchain.   */
+	vkCreateSwapchainKHR(getDevice(), &createInfo, NULL, &this->swapChain.swapchain);
+
+	/*  Get the image associated with the swap chain.   */
+	uint32_t nrChainImageCount = 1;
+	vkGetSwapchainImagesKHR(getDevice(), this->swapChain.swapchain, &nrChainImageCount, NULL);
+
+	this->swapChain.swapChainImages.resize(nrChainImageCount);
+	vkGetSwapchainImagesKHR(getDevice(), this->swapChain.swapchain, &nrChainImageCount,
+									 this->swapChain.swapChainImages.data());
+	this->swapChain.swapChainImageFormat = surfaceFormat.format;
+	this->swapChain.chainExtend = extent;
+
+	/*	*/
+	this->swapChain.swapChainImageViews.resize(this->swapChain.swapChainImages.size());
+
+	for (size_t i = 0; i < this->swapChain.swapChainImages.size(); i++) {
+		VkImageViewCreateInfo createInfo{};
+		createInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+		createInfo.image = this->swapChain.swapChainImages[i];
+		createInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+		createInfo.format = this->swapChain.swapChainImageFormat;
+		createInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
+		createInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
+		createInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
+		createInfo.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
+		createInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+		createInfo.subresourceRange.baseMipLevel = 0;
+		createInfo.subresourceRange.levelCount = 1;
+		createInfo.subresourceRange.baseArrayLayer = 0;
+		createInfo.subresourceRange.layerCount = 1;
+
+		vkCreateImageView(getDevice(), &createInfo, nullptr, &this->swapChain.swapChainImageViews[i]);
+	}
+
+	/*	Renderpass	*/
+
+	VkAttachmentDescription colorAttachment{};
+	colorAttachment.format = this->swapChain.swapChainImageFormat;
+	colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
+	colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+	colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+	colorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+	colorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+	colorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+	colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+
+	VkAttachmentReference colorAttachmentRef{};
+	colorAttachmentRef.attachment = 0;
+	colorAttachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+
+	VkSubpassDescription subpass{};
+	subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+	subpass.colorAttachmentCount = 1;
+	subpass.pColorAttachments = &colorAttachmentRef;
+
+	VkSubpassDependency dependency{};
+	dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
+	dependency.dstSubpass = 0;
+	dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+	dependency.srcAccessMask = 0;
+	dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+	dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+
+	VkRenderPassCreateInfo renderPassInfo{};
+	renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+	renderPassInfo.attachmentCount = 1;
+	renderPassInfo.pAttachments = &colorAttachment;
+	renderPassInfo.subpassCount = 1;
+	renderPassInfo.pSubpasses = &subpass;
+	renderPassInfo.dependencyCount = 1;
+	renderPassInfo.pDependencies = &dependency;
+
+	vkCreateRenderPass(getDevice(), &renderPassInfo, nullptr, &this->swapChain.renderPass);
+
+	/*	Framebuffer.	*/
+	// TODO add support.
+	this->swapChain.swapChainFramebuffers.resize(this->swapChain.swapChainImageViews.size());
+
+	for (size_t i = 0; i < this->swapChain.swapChainImageViews.size(); i++) {
+		VkImageView attachments[] = {this->swapChain.swapChainImageViews[i]};
+
+		VkFramebufferCreateInfo framebufferInfo{};
+		framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+		framebufferInfo.renderPass = this->swapChain.renderPass;
+		framebufferInfo.attachmentCount = 1;
+		framebufferInfo.pAttachments = attachments;
+		framebufferInfo.width = this->swapChain.chainExtend.width;
+		framebufferInfo.height = this->swapChain.chainExtend.height;
+		framebufferInfo.layers = 1;
+
+		vkCreateFramebuffer(getDevice(), &framebufferInfo, nullptr, &this->swapChain.swapChainFramebuffers[i]);
+	}
+
+	/*	Command buffers*/
+	/*  */
+	this->swapChain.commandBuffers.resize(this->swapChain.swapChainFramebuffers.size());
+	VkCommandBufferAllocateInfo cmdBufAllocInfo = {};
+	cmdBufAllocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+	cmdBufAllocInfo.commandPool = this->cmd_pool;
+	cmdBufAllocInfo.commandBufferCount = this->swapChain.swapChainImages.size();
+	cmdBufAllocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+
+	/*  */
+	// this->swapChain.commandBuffers = (VkCommandBuffer *)malloc(
+	// 	this->swapChain.swapChainImages.size() * sizeof(VkCommandBuffer));
+	vkAllocateCommandBuffers(getDevice(), &cmdBufAllocInfo, this->swapChain.commandBuffers.data());
 }
+
+void VKRenderWindow::recreateSwapChain(void) {
+	vkDeviceWaitIdle(getDevice());
+
+	cleanSwapChain();
+
+	createSwapChain();
+}
+
+void VKRenderWindow::cleanSwapChain(void) {
+	for (auto framebuffer : swapChain.swapChainFramebuffers) {
+		vkDestroyFramebuffer(getDevice(), framebuffer, nullptr);
+	}
+
+	vkFreeCommandBuffers(getDevice(), this->cmd_pool, static_cast<uint32_t>(swapChain.commandBuffers.size()),
+						 swapChain.commandBuffers.data());
+
+	vkDestroyRenderPass(getDevice(), swapChain.renderPass, nullptr);
+
+	for (auto imageView : swapChain.swapChainImageViews) {
+		vkDestroyImageView(getDevice(), imageView, nullptr);
+	}
+
+	vkDestroySwapchainKHR(getDevice(), this->swapChain.swapchain, nullptr);
+}
+
+VkDevice VKRenderWindow::getDevice(void) const { VulkanCore *vulkancore = (VulkanCore *)renderer->getData();
+	return vulkancore->device;
+}
+VkFramebuffer VKRenderWindow::getDefaultFrameBuffer(void) const {
+	return this->swapChain.swapChainFramebuffers[this->swapChain.currentFrame];
+}
+
+VkCommandBuffer VKRenderWindow::getCurrentCommandBuffer(void) const {
+	return this->swapChain.commandBuffers[this->swapChain.currentFrame];
+}
+VkRenderPass VKRenderWindow::getDefaultRenderPass(void) const { return this->swapChain.renderPass; }
+VkCommandPool VKRenderWindow::getGraphicCommadnPool(void) const { return this->cmd_pool; }
+VkImage VKRenderWindow::getDefaultImage(void) const {
+	return this->swapChain.swapChainImages[this->swapChain.currentFrame];
+}
+
+VkPhysicalDevice VKRenderWindow::physicalDevice() const {
+	//return renderer->gpu;
+	// physicalDevices[0];
+	return NULL;
+}
+std::vector<VkPhysicalDevice> VKRenderWindow::getPhyiscalDevices(void) {}
 
 void VKRenderWindow::setPosition(int x, int y) {
 	SDL_SetWindowPosition(this->window, x, y);

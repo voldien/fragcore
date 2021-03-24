@@ -21,6 +21,7 @@
 #include"../Def.h"
 #include"Object.h"
 #include"AtomicRefCount.h"
+#include"NoCopyable.h"
 
 namespace fragcore {
 	/**
@@ -28,8 +29,8 @@ namespace fragcore {
 	 *	data be freed when references
 	 *	to the block of data still exists.
 	 */
-	class FVDECLSPEC SmartReference : public Object {
-	public:
+	class FVDECLSPEC SmartReference : public Object, public NoCopyable {
+	  public:
 
 		SmartReference(void);
 

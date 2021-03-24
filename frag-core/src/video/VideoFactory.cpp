@@ -392,7 +392,7 @@ VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IRenderer *rende
 
 	VideoTexture* videoTexture =  NULL;
 	videoTexture->audioClip = Ref<AudioClip>(*audio);
-	videoTexture->decoder = video_audio_decoder;
+	//videoTexture->decoder = video_audio_decoder;
 	videoTexture->texture = Ref<Texture>(texture);
 	videoTexture->taskcallback = libAVComputeVideoTask;
 

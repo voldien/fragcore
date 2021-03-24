@@ -8,8 +8,6 @@ namespace fragcore {
 		NoCopyable &operator=(const NoCopyable &) = delete; // non copyable
 
 		static NoCopyable *create(void);
-
-	  private:
 		NoCopyable(void);
 	};
 }

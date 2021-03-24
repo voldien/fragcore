@@ -62,7 +62,6 @@ namespace fragcore {
 			//GL_SAMPLE_COVERAGE
 			eSampleAlphaCoverage,       /*    */
 			eDiscardRasterization,      /*  */
-
 		};
 
 		//TODO make it less state machine and allow it to become more modern.
