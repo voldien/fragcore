@@ -5,12 +5,12 @@
 #include "Exception/RuntimeException.h"
 #include "Exception/InvalidPointerException.h"
 #include "Utils/StringUtil.h"
-#include "audio/AudioClip.h"
-#include "audio/AudioInterface.h"
-#include "audio/AudioListener.h"
-#include "audio/AudioPhysicalDevice.h"
-#include "audio/AudioSource.h"
-#include "audio/openal/internal_object_type.h"
+#include "Audio/AudioClip.h"
+#include "Audio/AudioInterface.h"
+#include "Audio/AudioListener.h"
+#include "Audio/AudioPhysicalDevice.h"
+#include "Audio/AudioSource.h"
+#include "Audio/openal/internal_object_type.h"
 
 using namespace fragcore;
 //

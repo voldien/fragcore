@@ -1,10 +1,10 @@
-#include "audio/decoder/AudioDecoderFactory.h"
+#include "Audio/decoder/AudioDecoderFactory.h"
 
 #include "Exception/InvalidArgumentException.h"
 #include "Exception/NotSupportedException.h"
 #include "Utils/StringUtil.h"
-#include "audio/decoder/VorbisDecoder.h"
-#include "audio/decoder/WavDecoder.h"
+#include "Audio/decoder/VorbisDecoder.h"
+#include "Audio/decoder/WavDecoder.h"
 using namespace fragcore;
 
 AudioDecoder *AudioDecoderFactory::createDecoder(AudioDecoderCodec codec,

@@ -18,8 +18,8 @@
 */
 #ifndef _FRAG_CORE_PREREQUISITES_H_
 #define _FRAG_CORE_PREREQUISITES_H_ 1
-#include"audio/Prerequisites.h"
-#include"physic/Prerequisites.h"
+#include"Audio/Prerequisites.h"
+#include"Physic/Prerequisites.h"
 #include"Renderer/Prerequisites.h"
 
 namespace fragcore {

@@ -5,8 +5,8 @@
 
 #include "Core/IO/IO.h"
 #include "Exception/RuntimeException.h"
-#include "audio/decoder/WavDecoder.h"
-#include "audio/decoder/VorbisDecoder.h"
+#include "Audio/decoder/WavDecoder.h"
+#include "Audio/decoder/VorbisDecoder.h"
 using namespace fragcore;
 
 

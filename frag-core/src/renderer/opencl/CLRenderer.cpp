@@ -492,8 +492,8 @@ RendererWindow *IRenderer::createWindow(int x, int y, int width, int height) {
 	clCore->window = clCore->back_renderer->createWindow(x, y, width, height);
 
 	/*  Create OpenCL context.  */
-	clCore->context = (cl_context)createCLContext(&clCore->ndevices, &clCore->devices, clCore->window, NULL);
-	clCore->selectDevice = clCore->devices[0];
+	//clCore->context = (cl_context)createCLContext(&clCore->ndevices, &clCore->devices, clCore->window, NULL);
+	//clCore->selectDevice = clCore->devices[0];
 
 	/*  Create OpenCL command queue.    */
 	clCore->selectqueue = createCommandQueue(clCore->context, clCore->selectDevice);

@@ -1,7 +1,7 @@
 #include <Core/IO/GZFileIO.h>
 #include "AudioInterfaceTest.h"
-#include "audio/decoder/AudioDecoderFactory.h"
-#include <audio/AudioInterface.h>
+#include "Audio/decoder/AudioDecoderFactory.h"
+#include <Audio/AudioInterface.h>
 #include <gtest/gtest.h>
 #include <FragCore.h>
 using namespace fragcore;

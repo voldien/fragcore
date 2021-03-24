@@ -71,6 +71,8 @@ namespace fragcore {
 		static FileSystem *getFileSystem(void);
 		static FileSystem *createFileSystem(Ref<IScheduler> &sch);
 		static FileSystem *createFileSystem(void);	/*	Filesystem without async support.	*/
+
+		FileSystem(const FileSystem &&other);
 		//TODO add remove function.
 	protected:
 		FileSystem(Ref<IScheduler>& sch);

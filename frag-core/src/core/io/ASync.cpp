@@ -287,8 +287,13 @@ ASync::ASync(Ref<IScheduler> &scheduler){
 	this->uidGenerator.getNextLUID();
 }
 
+ASync::ASync(const ASync &&other) {
+	// Move over the things!
+}
+
 ASync::ASync(const ASync &other)
 {
 	this->scheduler = other.scheduler;
 	this->uidGenerator = other.uidGenerator;
 }
+

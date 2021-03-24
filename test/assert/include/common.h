@@ -3,7 +3,7 @@
 #include<gtest/gtest.h>
 #include <Renderer/IRenderer.h>
 #include <Renderer/RendererFactory.h>
-#include<audio/AudioFactory.h>
+#include<Audio/AudioFactory.h>
 #include<cstddef>
 
 class CommonBaseTest : public testing::Test {

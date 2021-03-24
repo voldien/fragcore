@@ -19,14 +19,14 @@
 #ifndef _FRAG_CORE_VIDEOFACTORY_H_
 #define _FRAG_CORE_VIDEOFACTORY_H_ 1
 
-#include "audio/AudioClip.h"
+#include "Audio/AudioClip.h"
 #include "Core/Ref.h"
 #include "VideoTexture.h"
 
 namespace fragcore {
 
 	/**
-	 * 
+	 *
 	 */
 	class FVDECLSPEC VideoFactory {
 	public:

@@ -5,8 +5,8 @@
 #include "Exception/RuntimeException.h"
 #include "Video/VideoFactory.h"
 #include "Core/IO/IO.h"
-#include "audio/AudioInterface.h"
-#include "audio/decoder/AudioDecoder.h"
+#include "Audio/AudioInterface.h"
+#include "Audio/decoder/AudioDecoder.h"
 
 //TODO add support if libav does not support it.
 // #include <theora/theora.h>

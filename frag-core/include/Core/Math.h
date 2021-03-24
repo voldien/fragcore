@@ -31,42 +31,41 @@ namespace fragcore {
 	public:
 
 		template<class T>
-		inline static T clamp(T a, T min, T max){ return Math::max<T>( min , Math::min<T>( max , a ) ); }
-		inline static int clamp(int a, int min, int max){ return Math::clamp<int>(a, min ,max);}
-		inline static float clampf(float a, float min, float max){ return Math::clamp<float>(a, min ,max); }
-		inline static double clampd(double a, double min, double max){ return Math::clamp<double>(a, min ,max); }
+		inline constexpr static T clamp(T a, T min, T max){ return Math::max<T>( min , Math::min<T>( max , a ) ); }
+		inline constexpr static int clamp(int a, int min, int max){ return Math::clamp<int>(a, min ,max);}
+		inline constexpr static float clampf(float a, float min, float max){ return Math::clamp<float>(a, min ,max); }
+		inline constexpr static double clampd(double a, double min, double max){ return Math::clamp<double>(a, min ,max); }
 
 		/**
 		 *	Get max value of a and b.
 		 */
 		template<typename T>
-		inline static T max(T a, T b){ return ( (a) < (b) ) ? (b) : (a);}
-		inline static float maxf(float a, float b){ return ( (a) < (b) ) ? (b) : (a);}
-		inline static float maxd(float a, float b){ return ( (a) < (b) ) ? (b) : (a);}
-		inline static float maxi(float a, float b){ return ( (a) < (b) ) ? (b) : (a);}
+		inline constexpr static T max(T a, T b){ return ( (a) < (b) ) ? (b) : (a);}
+		inline constexpr static float maxf(float a, float b){ return ( (a) < (b) ) ? (b) : (a);}
+		inline constexpr static float maxd(float a, float b){ return ( (a) < (b) ) ? (b) : (a);}
+		inline constexpr static float maxi(float a, float b){ return ( (a) < (b) ) ? (b) : (a);}
 
 		/**
 		 *	Get min value of a and b.
 		 */
 		template<typename T>
-		inline static T min(T a, T b){ return ( (a) > (b) ) ? (b) : (a);}
-		inline static float minf(float a, float b){ return ( (a) > (b) ) ? (b) : (a);}
-		inline static float mind(float a, float b){ return ( (a) > (b) ) ? (b) : (a);}
-		inline static float mini(float a, float b){ return ( (a) > (b) ) ? (b) : (a);}
+		inline constexpr static T min(T a, T b){ return ( (a) > (b) ) ? (b) : (a);}
+		inline constexpr static float minf(float a, float b) { return ((a) > (b)) ? (b) : (a); }
+		inline constexpr static float mind(float a, float b) { return ((a) > (b)) ? (b) : (a); }
+		inline constexpr static float mini(float a, float b) { return ((a) > (b)) ? (b) : (a); }
 
 		/**
 		 *	Get float modular.
 		 */
 		inline static float modf(float a){double part; return ::modf(a, &part);}
 		inline static float modd(double a){ double part; return ::modf(a, &part);}
-		inline static float modi(float a, float b){ return ( (a) < (b) ) ? (a) : (b);}
+		inline static float modi(float a, float b) { return ((a) < (b)) ? (a) : (b); }
 
 		template<typename T>
-		inline static T sum( const std::vector<T>& list){
-			//std::vector<T>::const_iterator it = list.cbegin();
+		constexpr static T sum( const std::vector<T>& list){
 			T sum = 0;
-			// for (; it != list.cend(); it++)
-			// 	sum += (*it);
+			for (int i = 0; i < list.size(); i++)
+				sum += list[i];
 			return sum;
 		}
 
@@ -74,7 +73,7 @@ namespace fragcore {
 		 *	Convert degree to radian.
 		 */
 		template<class T>
-		inline static T deg2Rad(T deg) {
+		inline constexpr static T deg2Rad(T deg) {
 			return (deg * (T)Math::PI) / 180.0f;
 		}
 
@@ -82,7 +81,7 @@ namespace fragcore {
 		 *	Convert radian to degree.
 		 */
 		template<class T>
-		inline static T radToDeg(T deg) {
+		inline constexpr static T radToDeg(T deg) {
 			return (deg * (T)180) / (T)Math::PI;
 		}
 
@@ -90,19 +89,24 @@ namespace fragcore {
 		 * Linear interpolation.
 		 */
 		template <typename T, typename U>
-		inline static T lerp(T a, T b, U t)
+		inline constexpr static T lerp(T a, T b, U t)
 		{
-			return a + (b - a) * clamp(t, 0.0, 1.0);
+			return a + (b - a) * Math::clamp(t, (U)0.0, (U)1.0);
 		}
 
 		template<typename T, typename U>
-		inline static T lerpUnClamped(T a, T b, U t){
+		inline constexpr static T lerpUnClamped(T a, T b, U t){
 			return a + (b - a) * t;
 		}
 
+		/**
+		 *
+		 */
 		static float LerpAngle(float a, float b, float t);
 
-		/*	*/
+		/**
+		 *
+		 */
 		static const float Epsilon;
 		static const float PI;
 		static const float Infinite;
@@ -110,43 +114,34 @@ namespace fragcore {
 		static const float Rad2Deg;
 		static const float NegativeInfinity;
 
-		/*	*/
+		/**
+		 *
+		 */
 		template <typename T>
-		static T NextPowerOfTwo(T v){
+		static constexpr T NextPowerOfTwo(T v) {
 			T res = 1;
 			while (res < v)res <<= 1;
 			return res;
 		}
+
+		/**
+		 *
+		 */
 		template <typename T>
-		static T ClosestPowerOfTwo(T v)
+		static constexpr T ClosestPowerOfTwo(T v)
 		{
 			T n = NextPowerOfTwo(v);
 			T p = 0;
 			return 0;
 		}
+
+		/**
+		 *
+		 */
 		template<typename T>
-		static bool IsPowerOfTwo(T v){
+		static constexpr bool IsPowerOfTwo(T v){
 			return  (v && ((v - 1) & v));
 		}
-
-		// static int sntLog2MutExlusive32(unsigned int a)
-		// {
-
-		// 	int i = 0;
-		// 	int po = 0;
-		// 	const int bitlen = 32;
-
-		// 	if (a == 0)
-		// 		return 0;
-
-		// 	for (; i < bitlen; i++)
-		// 	{
-		// 		if ((a >> i) & 0x1)
-		// 			return (i + 1);
-		// 	}
-
-		// 	assert(0);
-		// }
 
 		static PVColor CorrelatedColorTemperatureToRGB(float kelvin);
 
@@ -170,7 +165,7 @@ namespace fragcore {
 		static float gammaCorrection(float linear, float exp);
 
 		/**
-		 *
+		 *	Generate perlin noise value
 		 */
 		static float PerlinNoise(float x, float y);
 		static float PerlinNoise(const PVVector2 &point);

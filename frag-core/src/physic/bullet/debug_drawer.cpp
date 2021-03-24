@@ -1,6 +1,6 @@
 #include"Core/Log.h"
-#include"physic/bullet/internal_object_type.h"
-#include"physic/bullet/debugDrawer.h"
+#include"Physic/bullet/internal_object_type.h"
+#include"Physic/bullet/debugDrawer.h"
 
 using namespace fragcore;
 

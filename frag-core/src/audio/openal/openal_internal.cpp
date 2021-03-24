@@ -1,5 +1,5 @@
-#include "audio/AudioDesc.h"
-#include "audio/openal/internal_object_type.h"
+#include "Audio/AudioDesc.h"
+#include "Audio/openal/internal_object_type.h"
 
 using namespace fragcore;
 

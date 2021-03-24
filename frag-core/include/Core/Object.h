@@ -32,11 +32,14 @@ namespace fragcore {
 	public:
 
 		inline Object(void) {
+
 		}
 
 		virtual void setName(const std::string &name) {
-//			this->name = name;
 			this->name.assign(name);
+		}
+		virtual void setName(const std::string&& name){
+			this->name = name;
 		}
 
 		virtual std::string getName(void) {

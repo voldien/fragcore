@@ -56,7 +56,7 @@ int main(int argc, const char** argv) {
 		while (SDL_WaitEventTimeout(&event, timeout)) {
 			switch (event.type) {
 				case SDL_QUIT:
-					return; /*  Exit.  */
+					return 0; /*  Exit.  */
 				case SDL_KEYDOWN:
 					break;
 				case SDL_KEYUP:

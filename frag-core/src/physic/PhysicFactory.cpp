@@ -1,6 +1,6 @@
 #include <Core/Log.h>
 #include <Exception/InvalidArgumentException.h>
-#include"physic/PhysicFactory.h"
+#include"Physic/PhysicFactory.h"
 #include"Core/Library.h"
 #include"Utils/StringUtil.h"
 using namespace fragcore;

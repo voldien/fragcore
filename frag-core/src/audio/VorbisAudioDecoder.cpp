@@ -1,4 +1,4 @@
-#include"audio/decoder/VorbisDecoder.h"
+#include"Audio/decoder/VorbisDecoder.h"
 #include"Exception/RuntimeException.h"
 #include"Core/IO/IO.h"
 #include <ogg/ogg.h>

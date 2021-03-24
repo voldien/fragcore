@@ -22,8 +22,9 @@
 #include"SmartReference.h"
 
 namespace fragcore {
+	
 	/**
-	 * 
+	 *
 	 */
 	class FVDECLSPEC Module : public SmartReference {
 	public:

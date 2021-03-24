@@ -19,7 +19,7 @@
 #ifndef _FRAG_CORE_VIDEO_TEXTURE_H_
 #define _FRAG_CORE_VIDEO_TEXTURE_H_ 1
 #include "../Renderer/Texture.h"
-#include "../audio/AudioClip.h"
+#include "../Audio/AudioClip.h"
 #include "../Core/SmartReference.h"
 #include"../Core/TaskScheduler/IScheduler.h"
 

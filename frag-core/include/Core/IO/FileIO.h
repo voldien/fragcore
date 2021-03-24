@@ -58,10 +58,10 @@ namespace fragcore {
 
 	public:
 		FileIO(const char *path, Mode mode);
+		FileIO(std::string &path, Mode mode);
 
 		FileIO(FILE *file);
-
-		FileIO(const FileIO &other);
+		FileIO(const FileIO &&other);
 	};
 
 	// // Default file IO objects.

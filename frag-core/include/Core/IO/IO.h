@@ -76,7 +76,7 @@ namespace fragcore {
 		//TODO determine if needing to add support.
 		enum IOOperation
 		{
-			OP_ALL,
+			OP_ALL = (unsigned int)(-1),
 			OP_READ = 1 << 0,
 			OP_WRITE = 1 << 0,
 			OP_EOF = 1 << 0,
@@ -85,10 +85,11 @@ namespace fragcore {
 			OP_GETPOS = 1 << 0,
 			OP_FLUSH  = 1 << 0,
 		};
-		//virtual isOperationSupported(IOOperation operations);
+		//virtual isOperationSupported(IOOperation operations) = 0;
 
 	protected:  /*  Internal methods.   */
 		virtual void open(const char* path, Mode mode) = 0;
+		virtual void open(std::string &path, Mode mode) { this->open(path.c_str(), mode); }
 	};
 
 }

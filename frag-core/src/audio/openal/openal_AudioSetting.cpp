@@ -1,4 +1,4 @@
-#include"audio/AudioSettings.h"
+#include"Audio/AudioSettings.h"
 using namespace fragcore;
 
 AudioSpeakerMode AudioSettings::getSpeakerMode(void) const

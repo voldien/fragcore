@@ -1,8 +1,8 @@
-#include"physic/Constraints.h"
+#include"Physic/Constraints.h"
 
 #include<bullet/btBulletCollisionCommon.h>
 #include<bullet/btBulletDynamicsCommon.h>
-#include <physic/RigidBody.h>
+#include <Physic/RigidBody.h>
 
 using namespace fragcore;
 

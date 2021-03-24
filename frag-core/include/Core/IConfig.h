@@ -185,10 +185,10 @@ namespace fragcore {
 
 	public:
 		IConfig(void);
-
 		IConfig(const IConfig &other);
+		IConfig(const IConfig &&other);
 
-	protected:    /*	*/
+	  protected: /*	*/
 
 		/*  Config tree hierarchy.  */
 		std::map<std::string, IConfig *> config; /*  */

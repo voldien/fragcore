@@ -1,7 +1,7 @@
-#include"audio/AudioSource.h"
-#include"audio/openal/internal_object_type.h"
+#include"Audio/AudioSource.h"
+#include"Audio/openal/internal_object_type.h"
 #include<AL/al.h>
-#include <audio/AudioClip.h>
+#include <Audio/AudioClip.h>
 #include <Exception/InvalidArgumentException.h>
 #include"Utils/StringUtil.h"
 
@@ -23,7 +23,7 @@ void AudioSource::setClip(AudioClip *clip) {
 	int err = alGetError();
 	if (err != AL_NO_ERROR)
 		throw InvalidArgumentException(fvformatf("%d", alGetError()));
-	source->clip = alClip;
+	//source->clip = alClip;
 }
 
 void AudioSource::play(void) {

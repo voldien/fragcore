@@ -30,8 +30,8 @@ namespace fragcore {
 		Library(void);
 
 		Library(const char *clibrary);
-
-		Library(const Library &library);
+		Library(const Library &other);
+		Library(const Library &&other);
 
 		~Library(void);
 

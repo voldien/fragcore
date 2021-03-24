@@ -1,5 +1,5 @@
 #include <Exception/InvalidArgumentException.h>
-#include"audio/AudioFactory.h"
+#include"Audio/AudioFactory.h"
 #include"Core/Library.h"
 #include"Core/Log.h"
 #include"Utils/StringUtil.h"

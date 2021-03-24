@@ -50,9 +50,9 @@
 #include"Renderer/RendererFactory.h"
 #include"Renderer/CommandList.h"
 /*  */
-#include"audio/AudioFactory.h"
+#include"Audio/AudioFactory.h"
 /*  */
-#include"physic/PhysicFactory.h"
+#include"Physic/PhysicFactory.h"
 /*  */
 #include"Exception/IException.h"
 #include"Exception/RuntimeException.h"

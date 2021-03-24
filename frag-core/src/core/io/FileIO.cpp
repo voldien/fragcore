@@ -21,7 +21,7 @@ FileIO::FileIO(FILE *file) {
 	this->file = file;
 }
 
-FileIO::FileIO(const FileIO &other) {
+FileIO::FileIO(const FileIO &&other) {
 	this->file = other.file;
 }
 
