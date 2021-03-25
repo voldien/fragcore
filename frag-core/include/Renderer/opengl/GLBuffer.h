@@ -16,9 +16,10 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-#ifndef _FV_BUFFER_H_
-#define _FV_BUFFER_H_ 1
+#ifndef _FV_GL_BUFFER_H_
+#define _FV_GL_BUFFER_H_ 1
 #include"../Buffer.h"
+#include"internal_object_type.h"
 
 namespace fragcore {
 	/**
@@ -28,7 +29,7 @@ namespace fragcore {
 		friend class IRenderer;
 
 	  public:
-		inline GLBuffer(Ref<IRenderer>& renderer) : RenderObject(renderer) {}
+		inline GLBuffer(Ref<IRenderer> &renderer) {}
 
 		virtual ~GLBuffer(void);
 
@@ -58,6 +59,11 @@ namespace fragcore {
 		void setName(const std::string &name) override;
 
 		intptr_t getNativePtr(void) const override;
+		protected:
+		  BufferDesc desc;
+		  unsigned int target;
+		  unsigned int buffer;
+		  unsigned int base;
 	};
 } // namespace fragcore
 
