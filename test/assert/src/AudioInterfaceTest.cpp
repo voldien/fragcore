@@ -150,7 +150,7 @@ TEST_F(AudioInterfaceTest, AudioInterface_OpenAL_Create_Audio_Listener_Correctly
 	AudioListenerDesc desc;
 	AudioListener *list;
 	desc.position = Vector3::forward();
-	desc.rotation = PVQuaternion::identity();
+	desc.rotation = Quaternion::identity();
 	list = interface->createAudioListener(&desc);
 	ASSERT_EQ(list->getPosition(), desc.position);
 	ASSERT_EQ(list->getOrientation(), desc.rotation);

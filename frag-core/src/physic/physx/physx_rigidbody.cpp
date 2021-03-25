@@ -43,7 +43,7 @@ void RigidBody::setPosition(const Vector3 &position)
 	/*  Both internal and rigidbody.    */
 }
 
-PVQuaternion RigidBody::getOrientation(void)
+Quaternion RigidBody::getOrientation(void)
 {
 
 	btRigidBody *body;
@@ -52,12 +52,12 @@ PVQuaternion RigidBody::getOrientation(void)
 
 	oritention = body->getOrientation();
 
-	return PVQuaternion(oritention.getW(),
+	return Quaternion(oritention.getW(),
 						oritention.getX(),
 						oritention.getY(),
 						oritention.getZ());
 }
-void RigidBody::setOrientation(const PVQuaternion &quat)
+void RigidBody::setOrientation(const Quaternion &quat)
 {
 	btRigidBody *body;
 	body = (btRigidBody *)this->getObject();

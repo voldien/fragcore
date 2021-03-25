@@ -1,7 +1,7 @@
 #ifndef _FRAG_CORE_VULKAN_WINDOW_H_
 #define _FRAG_CORE_VULKAN_WINDOW_H_ 1
-#include "../IRenderer.h"
 #include "../RendererWindow.h"
+#include "GLRendererInterface.h"
 #if defined(FRAG_CORE_INTERNAL_IMP)  // TODO resolve to a single file or
                                      // something later
 #include <SDL2/SDL_syswm.h>
@@ -13,7 +13,7 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC GLRenderWindow : public RendererWindow {
 	public:
-		GLRenderWindow(Ref<IRenderer> &renderer);
+		GLRenderWindow(Ref<GLRendererInterface> &renderer);
 		~GLRenderWindow(void);
 
 		void close(void) override;
@@ -84,7 +84,7 @@ namespace fragcore {
 
 	private:
 		SDL_Window *window;
-		Ref<IRenderer> renderer;
+		Ref<GLRendererInterface> renderer;
 	};
 }  // namespace fragcore
 

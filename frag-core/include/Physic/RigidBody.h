@@ -46,8 +46,8 @@ namespace fragcore {
 		virtual void setPosition(const Vector3& position);
 
 
-		virtual PVQuaternion getOrientation(void);
-		virtual void setOrientation(const PVQuaternion& quat);
+		virtual Quaternion getOrientation(void);
+		virtual void setOrientation(const Quaternion& quat);
 
 		virtual Vector3 getScale(void);
 		virtual void setScale(const Vector3& scale);

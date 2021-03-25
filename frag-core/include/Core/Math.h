@@ -21,6 +21,7 @@
 #include"../Def.h"
 #include<math.h>
 #include<vector>
+#include<float.h>
 
 namespace fragcore {
 
@@ -107,12 +108,12 @@ namespace fragcore {
 		/**
 		 *
 		 */
-		static const float Epsilon;
-		static const float PI;
-		static const float Infinite;
-		static const float Deg2Rad;
-		static const float Rad2Deg;
-		static const float NegativeInfinity;
+		inline static constexpr float Epsilon = FLT_EPSILON;
+		inline static constexpr float PI = 3.14159265358979323846;
+		inline static constexpr float Infinite = 0;
+		inline static constexpr float Deg2Rad = Math::PI / 180.0f;
+		inline static constexpr float Rad2Deg = 180 / Math::PI;
+		inline static constexpr float NegativeInfinity = 0;
 
 		/**
 		 *
@@ -143,7 +144,7 @@ namespace fragcore {
 			return  (v && ((v - 1) & v));
 		}
 
-		static PVColor CorrelatedColorTemperatureToRGB(float kelvin);
+		static Color CorrelatedColorTemperatureToRGB(float kelvin);
 
 		/**
 		 *	Generate 1D guassian.
@@ -168,7 +169,7 @@ namespace fragcore {
 		 *	Generate perlin noise value
 		 */
 		static float PerlinNoise(float x, float y);
-		static float PerlinNoise(const PVVector2 &point);
+		static float PerlinNoise(const Vector2 &point);
 		static float PerlinNoise(float x, float y, float z);
 		static float PerlinNoise(const Vector3& point);
 	};

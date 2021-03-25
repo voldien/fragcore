@@ -1,11 +1,11 @@
 #include "Renderer/vulkan/VKCommandList.h"
+#include "Renderer/RenderPipeline.h"
 #include "Renderer/vulkan/internal_object_type.h"
 #include <Exception/InvalidArgumentException.h>
-#include"Renderer/RenderPipeline.h"
 #include <GL/glew.h>
 #include <Utils/StringUtil.h>
 #include <stdexcept>
-#include<vulkan/vulkan.h>
+#include <vulkan/vulkan.h>
 
 using namespace fragcore;
 
@@ -13,8 +13,7 @@ PFN_vkCmdDebugMarkerBeginEXT pvkCmdDebugMarkerBeginEXT;
 PFN_vkCmdDebugMarkerEndEXT pvkCmdDebugMarkerEndEXT;
 PFN_vkCmdDebugMarkerInsertEXT pvkCmdDebugMarkerInsertEXT;
 
-VKCommandList::VKCommandList(Ref<IRenderer> &renderer)
-{
+VKCommandList::VKCommandList(Ref<IRenderer> &renderer) {
 	VulkanCore *vulkancore = (VulkanCore *)(*renderer)->getData();
 
 	/*  Create command pool.    */
@@ -34,16 +33,12 @@ VKCommandList::VKCommandList(Ref<IRenderer> &renderer)
 	VkResult result = vkAllocateCommandBuffers(vulkancore->device, &cbAI, &cmdbuffers[0]);
 	checkError(result);
 }
-VKCommandList::VKCommandList(VKCommandList &other){
-	
-}
+VKCommandList::VKCommandList(VKCommandList &other) {}
 
-VKCommandList::~VKCommandList(void)
-{
-
-}
+VKCommandList::~VKCommandList(void) {}
 
 void VKCommandList::begin(void) {
+
 	VkCommandBufferBeginInfo beginInfo = {};
 	beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 	beginInfo.flags = VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
@@ -51,26 +46,16 @@ void VKCommandList::begin(void) {
 	vkBeginCommandBuffer(cmdBuffer, &beginInfo);
 }
 
-void VKCommandList::end(void){
-	vkEndCommandBuffer(cmdBuffer);
-}
+void VKCommandList::end(void) { vkEndCommandBuffer(cmdBuffer); }
 
-void VKCommandList::bindPipeline(RenderPipeline *pipeline)
-{
+void VKCommandList::bindPipeline(RenderPipeline *pipeline) {
 	VKPipelineObject *vkpipeline = (VKPipelineObject *)pipeline->getObject();
 	vkCmdBindPipeline(cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipeline->graphicsPipeline);
-	vkCmdBindDescriptorSets(cmdBuffer,
-							VK_PIPELINE_BIND_POINT_COMPUTE,
-							vkpipeline->pipelineLayout,
-							0,
-							1,
-							&vkpipeline->descriptorSet,
-							0,
-							0);
+	vkCmdBindDescriptorSets(cmdBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, vkpipeline->pipelineLayout, 0, 1,
+							&vkpipeline->descriptorSet, 0, 0);
 }
 
-void VKCommandList::beginCurrentRenderPass()
-{
+void VKCommandList::beginCurrentRenderPass() {
 
 	VkRenderPassBeginInfo renderPassInfo{};
 	renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
@@ -85,39 +70,31 @@ void VKCommandList::beginCurrentRenderPass()
 
 	vkCmdBeginRenderPass(cmdBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 }
-void VKCommandList::endCurrentRenderPass(void)
-{
-	vkCmdEndRenderPass(cmdBuffer);
-}
+void VKCommandList::endCurrentRenderPass(void) { vkCmdEndRenderPass(cmdBuffer); }
 
-void VKCommandList::bindFramebuffer(Ref<FrameBuffer> &framebuffer)
-{
+void VKCommandList::bindFramebuffer(Ref<FrameBuffer> &framebuffer) { beginCurrentRenderPass(); }
 
-}
-
-void VKCommandList::setviewport(int x, int y, int width, int height){
+void VKCommandList::setviewport(int x, int y, int width, int height) {
 	VkViewport vkViewport = {
-			.x = (float)x,
-			.y = (float)y,
-			.width = (float)width,
-			.height = (float)height,
+		.x = (float)x,
+		.y = (float)y,
+		.width = (float)width,
+		.height = (float)height,
 	};
 
 	vkCmdSetViewport(cmdBuffer, 0, 1, &vkViewport);
 }
-void VKCommandList::clearDepth(float depth){
-	//vkCmdClearAttachments
+void VKCommandList::clearDepth(float depth) {
+	//	this->commmands.push
+	// vkCmdClearAttachments
 }
 
-void VKCommandList::clearColorTarget(uint index, const PVColor &color){
+void VKCommandList::clearColorTarget(uint index, const Color &color) {}
 
-}
-
-void VKCommandList::dispatch(uint groupCountX, uint groupCountY, uint groupCountZ)
-{
+void VKCommandList::dispatch(uint groupCountX, uint groupCountY, uint groupCountZ) {
 	uint global[3] = {groupCountX, groupCountY, groupCountZ};
-	//this->compute->dispatchCompute(global, NULL, 0);
-	//vkCmdBindPipeline
+	// this->compute->dispatchCompute(global, NULL, 0);
+	// vkCmdBindPipeline
 	vkCmdDispatch(cmdBuffer, groupCountX, groupCountY, groupCountZ);
 
 	// Add memory barrier to ensure that the computer shader has finished writing to the buffer
@@ -141,31 +118,28 @@ void VKCommandList::dispatch(uint groupCountX, uint groupCountY, uint groupCount
 	// 					 0,
 	// 					 nullptr);
 }
-void VKCommandList::dispatchIndirect(Buffer* buffer, u_int64_t offset)
-{
+void VKCommandList::dispatchIndirect(Buffer *buffer, u_int64_t offset) {
 	VKBufferObject *vkBuffer = (VKBufferObject *)buffer->getObject();
 	vkCmdDispatchIndirect(cmdBuffer, vkBuffer->buffer, offset);
 	// uint global[3] = {groupCountX, groupCountY, groupCountZ};
 	// this->compute->dispatchCompute(global, NULL, 0);
 }
 
- void VKCommandList::pushDebugGroup(const char *name){
-	 VkDebugMarkerMarkerInfoEXT markerinfo = {};
-	 markerinfo.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_MARKER_INFO_EXT;
-	 markerinfo.pMarkerName = name;
-	 markerinfo.pNext = NULL;
+void VKCommandList::pushDebugGroup(const char *name) {
+	VkDebugMarkerMarkerInfoEXT markerinfo = {};
+	markerinfo.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_MARKER_INFO_EXT;
+	markerinfo.pMarkerName = name;
+	markerinfo.pNext = NULL;
 
-	 pvkCmdDebugMarkerBeginEXT(cmdBuffer, &markerinfo);
+	pvkCmdDebugMarkerBeginEXT(cmdBuffer, &markerinfo);
 }
- void VKCommandList::popDebugGroup(void){
-	 pvkCmdDebugMarkerEndEXT(cmdBuffer);
- }
+void VKCommandList::popDebugGroup(void) { pvkCmdDebugMarkerEndEXT(cmdBuffer); }
 
- void VKCommandList::insertDebugMarker(const char *name){
-	 VkDebugMarkerMarkerInfoEXT markerinfo = {};
-	 markerinfo.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_MARKER_INFO_EXT;
-	 markerinfo.pMarkerName = name;
-	 markerinfo.pNext = NULL;
+void VKCommandList::insertDebugMarker(const char *name) {
+	VkDebugMarkerMarkerInfoEXT markerinfo = {};
+	markerinfo.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_MARKER_INFO_EXT;
+	markerinfo.pMarkerName = name;
+	markerinfo.pNext = NULL;
 
-	 pvkCmdDebugMarkerInsertEXT(cmdBuffer, &markerinfo);
- }
+	pvkCmdDebugMarkerInsertEXT(cmdBuffer, &markerinfo);
+}

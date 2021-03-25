@@ -14,7 +14,7 @@
 
 using namespace fragcore;
 
-GLRenderWindow::GLRenderWindow(Ref<IRenderer> &renderer) {
+GLRenderWindow::GLRenderWindow(Ref<GLRendererInterface> &renderer) {
 	this->renderer = renderer;
 	OpenGLCore* core = (OpenGLCore*)renderer->getData();
 

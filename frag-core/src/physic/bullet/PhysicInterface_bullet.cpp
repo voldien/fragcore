@@ -251,7 +251,7 @@ RigidBody *PhysicInterface::createRigibody(const RigidBodyDesc *desc) {
 //
 //	/*	Get world space variables.  */
 ////	Node *node = desc->node;
-////	PVQuaternion nodeRotation = node->getRotation();
+////	Quaternion nodeRotation = node->getRotation();
 ////	const Vector3 pos = node->getPosition();
 ////	btQuaternion rotation = btQuaternion(nodeRotation.x(), nodeRotation.y(), nodeRotation.z(), nodeRotation.w());
 ////	btVector3 position = btVector3(pos.x(),

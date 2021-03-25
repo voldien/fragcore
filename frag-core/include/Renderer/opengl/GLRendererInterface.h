@@ -16,8 +16,8 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-#ifndef _FRAG_CORE_IRENDERER_H_
-#define _FRAG_CORE_IRENDERER_H_ 1
+#ifndef _FRAG_CORE_GL_RENDERER_INTERFACE_H_
+#define _FRAG_CORE_GL_RENDERER_INTERFACE_H_ 1
 #include"../IRenderer.h"
 
 namespace fragcore {
@@ -27,7 +27,6 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC GLRendererInterface : public IRenderer {
 	  public:
-
 
 		// TODO make it less state machine and allow it to become more modern.
 		virtual ~GLRendererInterface();
@@ -321,7 +320,7 @@ namespace fragcore {
 
 		virtual void *getData(void) const;
 
-	  private: /*  */
+	  protected: /*  */
 		void *pdata;
 	};
 } // namespace fragcore

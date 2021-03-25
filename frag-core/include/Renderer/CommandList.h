@@ -18,75 +18,75 @@
 */
 #ifndef _FRAG_CORE_COMMAND_LIST_H_
 #define _FRAG_CORE_COMMAND_LIST_H_ 1
-#include"../Core/NoCopyable.h"
+#include "../Core/NoCopyable.h"
 #include "../Core/Ref.h"
-#include"IRenderer.h"
-
+#include "IRenderer.h"
 
 namespace fragcore {
 	/**
 	 *
 	 */
-	class CommandList : public SmartReference /*: public NoCopyable */{
-	public:
-	 enum CommandBufferFlag { Single, Continuous };
-	 // virtual ~CommandList() = 0;
-	 // virtual void bindPipeline(RenderPipeline *p);
+	class CommandList : public SmartReference /*: public NoCopyable */ {
+	  public:
+		enum CommandBufferFlag { Single, Continuous };
+		virtual ~CommandList(void) = default;
+		// virtual void bindPipeline(RenderPipeline *p);
 
-	 virtual void begin(void) = 0;
-	 virtual void end(void) = 0;
+		virtual void begin(void) = 0;
+		virtual void end(void) = 0;
 
-	 virtual void bindPipeline(RenderPipeline *p) = 0;
-	 virtual void updateBuffer(Ref<Buffer> &buffer, void *p, int size) = 0;
-	 virtual void bindFramebuffer(Ref<FrameBuffer> &framebuffer) = 0;
+		virtual void bindPipeline(RenderPipeline *pipline) = 0;
+		//virtual void updateBuffer(Ref<Buffer> &buffer, void *p, int size) = 0;
+		virtual void bindFramebuffer(Ref<FrameBuffer> &framebuffer) = 0;
 
-	 virtual void setviewport(int x, int y, int width, int height) = 0;
-	 virtual void clearDepth(float depth) = 0;
-	 virtual void clearColorTarget(uint index, const PVColor &color) = 0;
+		//virtual void setviewport(int x, int y, int width, int height) = 0;
+		virtual void clearDepth(float depth) = 0;
+		virtual void clearColorTarget(uint index, const Color &color) = 0;
 
-	 // virtual void setGraphicResourcesSlot(void) = 0;
+		// virtual void setGraphicResourcesSlot(void) = 0;
 
-	 // virtual void draw(void) = 0;
-	 // virtual void draw(void) = 0;
-	 // virtual void drawIndexed(void) = 0;
-	 // virtual void drawIndirect(void) = 0;
-	 // virtual void drawIndexedIndirect(void) = 0;
-	 // TOOD add support for raytracing
-	 //		virtual void generateBVH(void);
-	 //		virtual void setupSecene(void);
-	 //		virtual void
+		// virtual void draw(Ref<Buffer>& buffer ) = 0;
+		// virtual void draw(void) = 0;
+		// virtual void drawIndexed(void) = 0;
+		// virtual void drawIndirect(void) = 0;
+		// virtual void drawIndexedIndirect(void) = 0;
 
-	 /**
-	  *
-	  */
-	 virtual void dispatch(uint groupCountX, uint groupCountY, uint groupCountZ) = 0;
+		// TOOD add support for raytracing
+		//		virtual void generateBVH(void);
+		//		virtual void setupSecene(void);
+		//		virtual void
 
-	 /**
-	  *
-	  */
-	 virtual void dispatchIndirect(Buffer *buffer, u_int64_t offset) = 0;
+		/**
+		 *
+		 */
+		virtual void dispatch(uint groupCountX, uint groupCountY, uint groupCountZ) = 0;
 
-	 /**
-	  *
-	  */
-	 virtual void pushDebugGroup(const char *name) = 0;
+		/**
+		 *
+		 */
+		virtual void dispatchIndirect(Buffer *buffer, u_int64_t offset) = 0;
 
-	 /**
-	  *
-	  */
-	 virtual void popDebugGroup(void) = 0;
+		/**
+		 *
+		 */
+		virtual void pushDebugGroup(const char *name) = 0;
 
-	 /**
-	  *
-	  */
-	 virtual void insertDebugMarker(const char *name) = 0;
+		/**
+		 *
+		 */
+		virtual void popDebugGroup(void) = 0;
 
-	protected:
-	 IRenderer *renderer;
-	 ICompute *compute;
-	 Features *features;
-	 Capability *capability;
+		/**
+		 *
+		 */
+		virtual void insertDebugMarker(const char *name) = 0;
+
+	  protected:
+		IRenderer *renderer;
+		ICompute *compute;
+		Features *features;
+		Capability *capability;
 	};
-}
+} // namespace fragcore
 
 #endif

@@ -44,8 +44,8 @@ namespace fragcore {
 		virtual void setVelocity(const Vector3& velocity);
 		virtual const Vector3 getVelocity(void) const;
 
-		virtual void setOrientation(const PVQuaternion& orientation);
-		virtual const PVQuaternion getOrientation(void) const;
+		virtual void setOrientation(const Quaternion& orientation);
+		virtual const Quaternion getOrientation(void) const;
 
 		virtual intptr_t getNativePtr(void) const override;
 

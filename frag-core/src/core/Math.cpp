@@ -5,12 +5,7 @@
 #include<open-simplex-noise.h>
 using namespace fragcore;
 
-const float Math::Epsilon = FLT_EPSILON;
-const float Math::PI = HPM_PI;
-const float Math::Infinite = 0;
-const float Math::Deg2Rad = Math::PI / 180.0f;
-const float Math::Rad2Deg = 180 / Math::PI;
-const float Math::NegativeInfinity = 0;
+
 static struct osn_context *ctx = NULL;
 
 
@@ -81,7 +76,7 @@ float Math::gammaCorrection(float linear, float exp){
 	return powf(linear, exp);
 }
 
-PVColor Math::CorrelatedColorTemperatureToRGB(float kelvin)
+Color Math::CorrelatedColorTemperatureToRGB(float kelvin)
 {
 	float temp = kelvin / 100;
 
@@ -119,12 +114,12 @@ PVColor Math::CorrelatedColorTemperatureToRGB(float kelvin)
 		blue = 255;
 	}
 
-	return PVColor(clamp(red, 0, 255) / 255.0f,
+	return Color(clamp(red, 0, 255) / 255.0f,
 				   clamp(green, 0, 255) / 255.0f,
 				   clamp(blue, 0, 255) / 255.0f, 1);
 }
 
-float Math::PerlinNoise(const PVVector2 &point){
+float Math::PerlinNoise(const Vector2 &point){
 	return Math::PerlinNoise(point.x(), point.y());
 }
 

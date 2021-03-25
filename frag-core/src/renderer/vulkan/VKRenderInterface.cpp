@@ -31,7 +31,7 @@ static bool validate_object_memeber(VKRenderInterface *renderer, RenderObject *o
 }
 
 
-VKRenderInterface::VKRenderInterface(IConfig *config) : IRenderer(config){
+VKRenderInterface::VKRenderInterface(IConfig *config) {
 
 	std::vector<const char *> instanceExtensionNames = {
 		/*	*/

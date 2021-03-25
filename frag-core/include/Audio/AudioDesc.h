@@ -49,7 +49,7 @@ namespace fragcore
 	typedef struct audio_listener_desc_t
 	{
 		Vector3 position;
-		PVQuaternion rotation;
+		Quaternion rotation;
 
 	} AudioListenerDesc;
 

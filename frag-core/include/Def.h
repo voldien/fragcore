@@ -46,17 +46,17 @@
 //TODO rename to none prefix versions.
 namespace fragcore {
 	typedef LIBHPM::Vector3 Vector3;
-	typedef LIBHPM::Vector4 PVVector4;
-	typedef LIBHPM::Vector2 PVVector2;
-	typedef LIBHPM::Matrix4x4 PVMatrix4x4;
-	typedef LIBHPM::Matrix3x3 PVMatrix3x3;
-	typedef LIBHPM::Quaternion PVQuaternion;
+	typedef LIBHPM::Vector4 Vector4;
+	typedef LIBHPM::Vector2 Vector2;
+	typedef LIBHPM::Matrix4x4 Matrix4x4;
+	typedef LIBHPM::Matrix3x3 Matrix3x3;
+	typedef LIBHPM::Quaternion Quaternion;
 	typedef LIBHPM::Plane PVPlane;
 	typedef LIBHPM::AABB PVAABB;
 	typedef LIBHPM::BoundingSphere PVBoundingSphere;
 	typedef LIBHPM::OBB PVOBB;
 	typedef LIBHPM::Ray PVRay;
-	typedef LIBHPM::Vector4 PVColor;
+	typedef LIBHPM::Vector4 Color;
 }
 
 /**

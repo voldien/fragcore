@@ -1,9 +1,10 @@
 #include "Core/IConfig.h"
-#include "Renderer/IRenderer.h"
+#include "Renderer/opengl/GLRendererInterface.h"
 #include "Renderer/RenderPipeline.h"
 #include "Renderer/ViewPort.h"
 #include "Renderer/opengl/GLRenderWindow.h"
 #include "Renderer/opengl/internal_object_type.h"
+#include"Renderer/opengl/GLCommandList.h"
 #include"Renderer/FrameBuffer.h"
 #include <Exception/InvalidArgumentException.h>
 #include <Exception/NotImplementedException.h>
@@ -51,10 +52,10 @@ static const char* reqConfigKey[] = {
 const unsigned int numReqConfigKeys = sizeof(reqConfigKey) / sizeof(reqConfigKey[0]);
 
 
-void IRenderer::OnInitialization(void) {}
-void IRenderer::OnDestruction(void) {}
+void GLRendererInterface::OnInitialization(void) {}
+void GLRendererInterface::OnDestruction(void) {}
 
-IRenderer::IRenderer(IConfig *config) {
+GLRendererInterface::GLRendererInterface(IConfig *config) {
 
 	OpenGLCore *glcore;
 	SDL_Window *window = NULL;
@@ -304,7 +305,7 @@ IRenderer::IRenderer(IConfig *config) {
 	}
 	this->clearColor(0.2f, 0.2f, 0.2f, 1.0f);
 	if (glcore->gamma)
-		enableState(IRenderer::eSRGB);
+		enableState(GLRendererInterface::eSRGB);
 	//this->setVSync(config->get<bool>("v-sync"));
 	this->setDebug(glcore->debug);
 	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
@@ -313,16 +314,16 @@ IRenderer::IRenderer(IConfig *config) {
 	// TODO, add support for version without viewports.
 	/*  Create default viewport object. */
 	glcore->defaultViewport = new ViewPort();
-	glcore->defaultViewport->iRenderer = this;
+	//glcore->defaultViewport->iRenderer = this;
 	GLViewPort* glViewPort = new GLViewPort();
 	glViewPort->viewport = 0;
-	glcore->defaultViewport->pdata = glViewPort;
+	//glcore->defaultViewport->pdata = glViewPort;
 	for(int i = 0; i < glcore->capability.sMaxViewPorts - 1; i++){
 		ViewPort* virtualView = new ViewPort();
-		virtualView->iRenderer = this;
+		//virtualView->iRenderer = this;
 		GLViewPort* glViewPort = new GLViewPort();
 		glViewPort->viewport = i + 1;
-		virtualView->pdata = glViewPort;
+		//virtualView->pdata = glViewPort;
 		glcore->viewports.push_back(virtualView);
 	}
 
@@ -332,10 +333,10 @@ IRenderer::IRenderer(IConfig *config) {
 	GLFrameBufferObject *frameBufferObject = new GLFrameBufferObject();
 	frameBufferObject->framebuffer = 0;
 	frameBufferObject->numtextures = 1;
-	glcore->defaultFrameBuffer->pdata = frameBufferObject;
-	glcore->defaultFrameBuffer->iRenderer = this;
+	//glcore->defaultFrameBuffer->pdata = frameBufferObject;
+	//glcore->defaultFrameBuffer->iRenderer = this;
 	frameBufferObject->desc.attach[0] = new FrameBufferTexture();
-	frameBufferObject->desc.attach[0]->iRenderer = this;
+	//frameBufferObject->desc.attach[0]->iRenderer = this;
 	GLenum drawbuffers[] = { GL_FRONT, GL_BACK };
 	glNamedFramebufferDrawBuffers(0, 2, drawbuffers);
 
@@ -356,7 +357,7 @@ IRenderer::IRenderer(IConfig *config) {
 	glcore->pboPack = this->createBuffer(&pbo);
 }
 
-IRenderer::~IRenderer(void) {
+GLRendererInterface::~GLRendererInterface(void) {
 	OpenGLCore *glCore = (OpenGLCore *) this->pdata;
 
 	/*  Release PBO.    */
@@ -379,7 +380,7 @@ IRenderer::~IRenderer(void) {
 	free(this->pdata);
 }
 
-Texture *IRenderer::createTexture(TextureDesc *desc) {
+Texture *GLRendererInterface::createTexture(TextureDesc *desc) {
 	OpenGLCore *glCore = (OpenGLCore *) this->pdata;
 
 	if (desc->width < 0 && desc->height < 0 && desc->depth < 0)
@@ -586,19 +587,19 @@ Texture *IRenderer::createTexture(TextureDesc *desc) {
 
 	/*	*/
 	Texture *gltex = new Texture();
-	gltex->pdata = new GLTextureObject();
-	GLTextureObject *glTextureObject = (GLTextureObject *) gltex->pdata;
+	//gltex->pdata = new GLTextureObject();
+	GLTextureObject *glTextureObject = (GLTextureObject *) gltex->getObject();
 	glTextureObject->texture = texture;
 	glTextureObject->target = target;
 	glTextureObject->desc = *desc;
 	glTextureObject->sampler = sampler;
-	gltex->iRenderer = this;
+	//gltex->iRenderer = this;
 
 	/*	Create mapper object.	*/
 	return gltex;
 }
 
-void IRenderer::deleteTexture(Texture *texture) {
+void GLRendererInterface::deleteTexture(Texture *texture) {
 	GLTextureObject* textureObject = (GLTextureObject*)texture->getObject();
 
 	if(glIsTexture(textureObject->texture)){
@@ -609,11 +610,11 @@ void IRenderer::deleteTexture(Texture *texture) {
 	else
 		throw InvalidArgumentException("Invalid texture object.");
 
-	delete texture->pdata;
+	//delete texture->pdata;
 	delete texture;
 }
 
-Sampler *IRenderer::createSampler(SamplerDesc *desc) {
+Sampler *GLRendererInterface::createSampler(SamplerDesc *desc) {
 
 	/*  Validate desc.  */
 	if (desc == NULL)
@@ -670,12 +671,12 @@ Sampler *IRenderer::createSampler(SamplerDesc *desc) {
 	GLSamplerObject *samplerObject = new GLSamplerObject();
 	samplerObject->sampler = sampler;
 	Sampler *samplerI = new Sampler();
-	samplerI->pdata = samplerObject;
-	samplerI->iRenderer = this;
+	//samplerI->pdata = samplerObject;
+	samplerI->setRenderInterface(this);
 	return samplerI;
 }
 
-void IRenderer::deleteSampler(Sampler *sampler) {
+void GLRendererInterface::deleteSampler(Sampler *sampler) {
 	GLSamplerObject *samplerObject;
 	samplerObject = (GLSamplerObject *) sampler->getObject();
 	if(glIsSampler(samplerObject->sampler))
@@ -683,7 +684,7 @@ void IRenderer::deleteSampler(Sampler *sampler) {
 	else
 		throw InvalidArgumentException("Invalid sampler object.");
 
-	delete sampler->pdata;
+	//delete sampler->pdata;
 	delete sampler;
 }
 
@@ -708,7 +709,7 @@ static void checkShaderError(int shader) {
 	}
 }
 
-RenderPipeline *IRenderer::createPipeline(const ProgramPipelineDesc *desc) {
+RenderPipeline *GLRendererInterface::createPipeline(const ProgramPipelineDesc *desc) {
 	unsigned int pipeline;
 	OpenGLCore *glCore = (OpenGLCore *) this->pdata;
 	GLProgramPipeline *pipe = new GLProgramPipeline();
@@ -718,32 +719,32 @@ RenderPipeline *IRenderer::createPipeline(const ProgramPipelineDesc *desc) {
 	checkError();
 
 	if (desc->v) {
-		GLShaderObject *v = (GLShaderObject *) desc->v->pdata;
+		GLShaderObject *v = (GLShaderObject *)desc->v->getObject();
 		glUseProgramStages(pipeline, GL_VERTEX_SHADER_BIT, v->program);
 		pipe->v = desc->v;
 	}
 	if (desc->f) {
-		GLShaderObject *f = (GLShaderObject *) desc->f->pdata;
+		GLShaderObject *f = (GLShaderObject *)desc->f->getObject();
 		glUseProgramStages(pipeline, GL_FRAGMENT_SHADER_BIT, f->program);
 		pipe->f = desc->f;
 	}
 	if (desc->g) {
-		GLShaderObject *g = (GLShaderObject *) desc->g->pdata;
+		GLShaderObject *g = (GLShaderObject *)desc->g->getObject();
 		glUseProgramStages(pipeline, GL_GEOMETRY_SHADER_BIT, g->program);
 		pipe->g = desc->g;
 	}
 	if (desc->tc) {
-		GLShaderObject *tc = (GLShaderObject *) desc->c->pdata;
+		GLShaderObject *tc = (GLShaderObject *)desc->c->getObject();
 		glUseProgramStages(pipeline, GL_TESS_CONTROL_SHADER_BIT, tc->program);
 		pipe->tc = desc->tc;
 	}
 	if (desc->te) {
-		GLShaderObject *te = (GLShaderObject *) desc->te->pdata;
+		GLShaderObject *te = (GLShaderObject *)desc->te->getObject();
 		glUseProgramStages(pipeline, GL_TESS_EVALUATION_SHADER_BIT, te->program);
 		pipe->te = desc->te;
 	}
 	if (desc->c) {
-		GLShaderObject *c = (GLShaderObject *) desc->c->pdata;
+		GLShaderObject *c = (GLShaderObject *) desc->c->getObject();
 		glUseProgramStages(pipeline, GL_COMPUTE_SHADER_BIT, c->program);
 		pipe->c = desc->c;
 	}
@@ -767,24 +768,24 @@ RenderPipeline *IRenderer::createPipeline(const ProgramPipelineDesc *desc) {
 	addMarkerLabel(glCore, GL_PROGRAM_PIPELINE, pipeline, &desc->marker);
 
 	pipe->program = pipeline;
-	programPipeline->pdata = pipe;
-	programPipeline->iRenderer = this;
+	//programPipeline->pdata = pipe;
+	programPipeline->setRenderInterface(this);
 	return programPipeline;
 }
 
-void IRenderer::deletePipeline(RenderPipeline *obj) {
-	GLProgramPipeline *pipeline = (GLProgramPipeline *) obj->pdata;
+void GLRendererInterface::deletePipeline(RenderPipeline *obj) {
+	GLProgramPipeline *pipeline = (GLProgramPipeline *) obj->getObject();
 
 	if (glIsProgramPipeline(pipeline->program))
 		glDeleteProgramPipelines(1, &pipeline->program);
 	else
 		throw InvalidArgumentException("Object is not a valid ProgramPipeline.");
 
-	delete obj->pdata;
+	//delete obj->pdata;
 	delete obj;
 }
 
-Shader *IRenderer::createShader(ShaderDesc *desc) {
+Shader *GLRendererInterface::createShader(ShaderDesc *desc) {
 
 	/*  Validate the argument.  */
 	if(desc == NULL)
@@ -975,25 +976,25 @@ Shader *IRenderer::createShader(ShaderDesc *desc) {
 	/*	*/
 	shaobj = new GLShaderObject();
 	shaobj->program = program;
-	shader->pdata = shaobj;
-	shader->iRenderer = this;
+	//shader->pdata = shaobj;
+	shader->setRenderInterface(this);
 
 	return shader;
 }
 
-void IRenderer::deleteShader(Shader *shader) {
-	GLShaderObject *glShaderObject = (GLShaderObject *) shader->pdata;
+void GLRendererInterface::deleteShader(Shader *shader) {
+	GLShaderObject *glShaderObject = (GLShaderObject *) shader->getObject();
 
 	if(glIsProgramARB(glShaderObject->program))
 		glDeleteProgram(glShaderObject->program);
 	else
 		throw InvalidArgumentException("Not a valid shader object.");
 
-	delete shader->pdata;
+//	delete shader->pdata;
 	delete shader;
 }
 
-Buffer *IRenderer::createBuffer(BufferDesc *desc) {
+Buffer *GLRendererInterface::createBuffer(BufferDesc *desc) {
 
 	OpenGLCore *glCore = (OpenGLCore *) this->pdata;
 
@@ -1067,14 +1068,14 @@ Buffer *IRenderer::createBuffer(BufferDesc *desc) {
 	glbuf->buffer = buf;
 	glbuf->desc = *desc;
 	glbuf->target = target;
-	buffer->pdata = glbuf;
-	buffer->iRenderer = this;
+	//buffer->pdata = glbuf;
+	buffer->setRenderInterface(this);
 	return buffer;
 }
 
-void IRenderer::deleteBuffer(Buffer *object) {
+void GLRendererInterface::deleteBuffer(Buffer *object) {
 
-	GLBufferObject *glbuf = (GLBufferObject *) object->pdata;
+	GLBufferObject *glbuf = (GLBufferObject *)object->getObject();
 
 	if (glIsBufferARB(glbuf->buffer)) {
 		glDeleteBuffersARB(1, &glbuf->buffer);
@@ -1082,11 +1083,11 @@ void IRenderer::deleteBuffer(Buffer *object) {
 		throw std::invalid_argument("Buffer is not a valid buffer object.");
 	}
 
-	delete object->pdata;
+	//delete object->pdata;
 	delete object;
 }
 
-Geometry *IRenderer::createGeometry(GeometryDesc *desc) {
+Geometry *GLRendererInterface::createGeometry(GeometryDesc *desc) {
 
 	/*  Validate the argument.  */
 	if(desc->primitive & ~(GeometryDesc::ePoint | GeometryDesc::eLines | GeometryDesc::eTriangles | GeometryDesc::eTriangleStrips))
@@ -1181,16 +1182,16 @@ Geometry *IRenderer::createGeometry(GeometryDesc *desc) {
 	glgeoobj->vao = vao;
 	glgeoobj->desc = *desc;
 
-	geometryObject->pdata = glgeoobj;
+	//geometryObject->pdata = glgeoobj;
 	return geometryObject;
 }
 
-void IRenderer::deleteGeometry(Geometry *obj) {
+void GLRendererInterface::deleteGeometry(Geometry *obj) {
 
 
 }
 
-FrameBuffer *IRenderer::createFrameBuffer(FrameBufferDesc *desc) {
+FrameBuffer *GLRendererInterface::createFrameBuffer(FrameBufferDesc *desc) {
 
 	unsigned int i;                             /*	*/
 	GLFrameBufferObject *glfraobj = NULL;       /*	*/
@@ -1272,11 +1273,11 @@ FrameBuffer *IRenderer::createFrameBuffer(FrameBufferDesc *desc) {
 	/*  */
 	glfraobj->desc = *desc;
 	FrameBuffer *frameBuffer = new FrameBuffer();
-	frameBuffer->pdata = glfraobj;
-	frameBuffer->iRenderer = this;
+	//frameBuffer->pdata = glfraobj;
+	frameBuffer->setRenderInterface(this);
 }
 
-void IRenderer::deleteFrameBuffer(FrameBuffer *obj) {
+void GLRendererInterface::deleteFrameBuffer(FrameBuffer *obj) {
 	OpenGLCore *glCore = (OpenGLCore *) this->pdata;
 	GLFrameBufferObject *glfraobj = (GLFrameBufferObject*)obj->getObject();
 
@@ -1290,7 +1291,7 @@ void IRenderer::deleteFrameBuffer(FrameBuffer *obj) {
 	delete obj;
 }
 
-QueryObject* IRenderer::createQuery(QueryDesc* desc){
+QueryObject* GLRendererInterface::createQuery(QueryDesc* desc){
 	OpenGLCore *glCore = (OpenGLCore *) this->pdata;
 	QueryObject* queryObject;
 	GLQuery* glQuery;
@@ -1308,21 +1309,21 @@ QueryObject* IRenderer::createQuery(QueryDesc* desc){
 	memcpy(glQuery->query, query, sizeof(query));
 //    glQuery->query = query;
 
-	queryObject->pdata = glQuery;
-	queryObject->iRenderer = this;
+	//queryObject->pdata = glQuery;
+	queryObject->setRenderInterface(this);
 
 	return queryObject;
 }
-void IRenderer::deleteQuery(QueryObject* query){
+void GLRendererInterface::deleteQuery(QueryObject* query){
 	//TODO add.
 	throw NotImplementedException();
 }
 
-RendererWindow* IRenderer::createWindow(int x, int y, int width, int height) {
+RendererWindow* GLRendererInterface::createWindow(int x, int y, int width, int height) {
 	OpenGLCore *glcore = (OpenGLCore *) this->pdata;
 
 	WindowManager::getInstance();
-	Ref<IRenderer> rendRef = Ref<IRenderer>(this);
+	Ref<GLRendererInterface> rendRef = Ref<GLRendererInterface>(this);
 	GLRenderWindow* renderWindow = new GLRenderWindow(rendRef);
 
 		/*	Cleanup.	*/
@@ -1345,9 +1346,9 @@ RendererWindow* IRenderer::createWindow(int x, int y, int width, int height) {
 	//return rendererWindow;
 }
 
-void IRenderer::setCurrentWindow(RendererWindow* window) {
+void GLRendererInterface::setCurrentWindow(RendererWindow* window) {
 	OpenGLCore *glcore = (OpenGLCore *) this->pdata;
-	window->useWindow(glcore->openglcontext);
+	//window->useWindow(glcore->openglcontext);
 	glcore->drawwindow = window;
 
 //	glcore->drawwindow = (SDL_Window *) window;
@@ -1356,11 +1357,11 @@ void IRenderer::setCurrentWindow(RendererWindow* window) {
 //	}
 }
 
-void IRenderer::createSwapChain() {
+void GLRendererInterface::createSwapChain() {
 
 }
 
-FrameBuffer *IRenderer::getDefaultFramebuffer(void *window) {
+FrameBuffer *GLRendererInterface::getDefaultFramebuffer(void *window) {
 	OpenGLCore *glcore = (OpenGLCore *) this->pdata;
 
 	static FrameBuffer *defaultFrambuffer = NULL;
@@ -1370,17 +1371,17 @@ FrameBuffer *IRenderer::getDefaultFramebuffer(void *window) {
 		GLFrameBufferObject *frameBufferObject = new GLFrameBufferObject();
 		frameBufferObject->framebuffer = 0;
 		frameBufferObject->numtextures = 1;
-		defaultFrambuffer->pdata = frameBufferObject;
-		defaultFrambuffer->iRenderer = this;
+		//defaultFrambuffer->pdata = frameBufferObject;
+		defaultFrambuffer->setRenderInterface(this);
 
 		frameBufferObject->desc.attach[0] = new FrameBufferTexture();
-		frameBufferObject->desc.attach[0]->iRenderer = this;
+		//frameBufferObject->desc.attach[0]->iRenderer = this;
 	}
 
 	return defaultFrambuffer;
 }
 
-void IRenderer::clear(unsigned int bitflag) {
+void GLRendererInterface::clear(unsigned int bitflag) {
 	GLbitfield mask = 0;
 	mask |= bitflag & eColor ? GL_COLOR_BUFFER_BIT : 0;
 	mask |= bitflag & eDepth ? GL_DEPTH_BUFFER_BIT : 0;
@@ -1389,11 +1390,11 @@ void IRenderer::clear(unsigned int bitflag) {
 }
 
 
-void IRenderer::clearColor(float r, float g, float b, float a) {
+void GLRendererInterface::clearColor(float r, float g, float b, float a) {
 	glClearColor(r, g, b, a);
 }
 
-ViewPort* IRenderer::getView(unsigned int i){
+ViewPort* GLRendererInterface::getView(unsigned int i){
 	OpenGLCore *glcore = (OpenGLCore *) this->pdata;
 	/*  Validate the index. */
 	if(i >= glcore->capability.sMaxViewPorts)
@@ -1407,27 +1408,27 @@ ViewPort* IRenderer::getView(unsigned int i){
 }
 
 
-void IRenderer::setVSync(int sync) {
+void GLRendererInterface::setVSync(int sync) {
 	SDL_GL_SetSwapInterval(sync);
 }
 
-void IRenderer::setDepthMask(bool flag) {
+void GLRendererInterface::setDepthMask(bool flag) {
 	glDepthMask(flag ? GL_TRUE : GL_FALSE);
 }
 
-void IRenderer::enableState(IRenderer::State state) {
+void GLRendererInterface::enableState(GLRendererInterface::State state) {
 	glEnable(getState(state));
 }
 
-void IRenderer::disableState(IRenderer::State state) {
+void GLRendererInterface::disableState(GLRendererInterface::State state) {
 	glDisable(getState(state));
 }
 
-bool IRenderer::isStateEnabled(IRenderer::State state){
+bool GLRendererInterface::isStateEnabled(GLRendererInterface::State state){
 	return glIsEnabled(getState(state));
 }
 
-void IRenderer::swapBuffer(void) {
+void GLRendererInterface::swapBuffer(void) {
 
 	OpenGLCore *glcore = (OpenGLCore *) this->pdata;
 
@@ -1435,13 +1436,13 @@ void IRenderer::swapBuffer(void) {
 	//SDL_GL_SwapWindow(glcore->drawwindow);
 }
 
-void IRenderer::drawInstance(Geometry *geometry, unsigned int num) {
+void GLRendererInterface::drawInstance(Geometry *geometry, unsigned int num) {
 
 	GLGeometryObject *glgeo;
 	OpenGLCore *glCore = (OpenGLCore *) this->pdata;
 	assert(geometry && num > 0);
 
-	glgeo = (GLGeometryObject *) geometry->pdata;
+	//glgeo = (GLGeometryObject *) geometry->pdata;
 
 	/*  */
 	glBindVertexArray(glgeo->vao);
@@ -1460,21 +1461,21 @@ void IRenderer::drawInstance(Geometry *geometry, unsigned int num) {
 	glBindVertexArray(0);
 }
 
-void IRenderer::drawMultiInstance(Geometry &geometries, const unsigned int *first, const unsigned int *count,
+void GLRendererInterface::drawMultiInstance(Geometry &geometries, const unsigned int *first, const unsigned int *count,
                                   unsigned int num) {
 	throw NotImplementedException();
 }
 
-void IRenderer::drawMultiIndirect(Geometry &geometries, unsigned int offset, unsigned int indirectCount) {
+void GLRendererInterface::drawMultiIndirect(Geometry &geometries, unsigned int offset, unsigned int indirectCount) {
 	throw NotImplementedException();
 }
 
-void IRenderer::drawIndirect(Geometry *geometry) {
+void GLRendererInterface::drawIndirect(Geometry *geometry) {
 	GLGeometryObject *glgeo;
 	OpenGLCore *glCore = (OpenGLCore *) this->pdata;
 	assert(geometry);
 
-	glgeo = (GLGeometryObject *) geometry->pdata;
+	//glgeo = (GLGeometryObject *) geometry->pdata;
 
 	/*  */
 	glBindVertexArray(glgeo->vao);
@@ -1493,11 +1494,11 @@ void IRenderer::drawIndirect(Geometry *geometry) {
 	glBindVertexArray(0);
 }
 
-void IRenderer::setLineWidth(float width) {
+void GLRendererInterface::setLineWidth(float width) {
 	glLineWidth(width);
 }
 
-void IRenderer::blit(const FrameBuffer *source, FrameBuffer *dest, Texture::FilterMode filterMode) {
+void GLRendererInterface::blit(const FrameBuffer *source, FrameBuffer *dest, Texture::FilterMode filterMode) {
 	GLFrameBufferObject *read = (GLFrameBufferObject *) source->getObject();
 	GLFrameBufferObject *write = (GLFrameBufferObject *) dest->getObject();
 
@@ -1516,7 +1517,7 @@ void IRenderer::blit(const FrameBuffer *source, FrameBuffer *dest, Texture::Filt
 	}
 }
 
-void IRenderer::bindTextures(unsigned int firstUnit, const std::vector<Texture*>& textures){
+void GLRendererInterface::bindTextures(unsigned int firstUnit, const std::vector<Texture*>& textures){
 	const int nTextures = textures.size();
 
 	if (glBindTextures) {
@@ -1553,7 +1554,7 @@ void IRenderer::bindTextures(unsigned int firstUnit, const std::vector<Texture*>
 	}
 }
 
-void IRenderer::bindImages(unsigned int firstUnit, const std::vector<Texture *> &textures,
+void GLRendererInterface::bindImages(unsigned int firstUnit, const std::vector<Texture *> &textures,
                            const std::vector<Texture::MapTarget> &mapping,
                            const std::vector<Texture::Format> &formats) {
 	const int nTextures = textures.size();
@@ -1590,7 +1591,7 @@ void IRenderer::bindImages(unsigned int firstUnit, const std::vector<Texture *> 
 		throw RuntimeException("glBindImageTexture not supported,");
 }
 
-void IRenderer::copyTexture(const Texture *source, Texture *target) {
+void GLRendererInterface::copyTexture(const Texture *source, Texture *target) {
 	const GLTextureObject *so = (const GLTextureObject *) source->getObject();
 	GLTextureObject *ta = (GLTextureObject *) target->getObject();
 
@@ -1604,19 +1605,20 @@ void IRenderer::copyTexture(const Texture *source, Texture *target) {
 	}
 }
 
-Sync* IRenderer::createSync(SyncDesc* desc){
+Sync* GLRendererInterface::createSync(SyncDesc* desc){
 	Sync* sync = new Sync();
-	sync->iRenderer = this;
+	//sync->iRenderer = this;
 	GLSync* glSync = new GLSync();
-	sync->pdata = glSync;
+	//sync->pdata = glSync;
 	return sync;
 }
-void IRenderer::deleteSync(Sync* sync){
-	delete sync->pdata;
+
+void GLRendererInterface::deleteSync(Sync* sync){
+	delete sync->getObject();
 	delete sync;
 }
 
-void IRenderer::dispatchCompute(unsigned int *global, unsigned int *local, unsigned int offset) {
+void GLRendererInterface::dispatchCompute(unsigned int *global, unsigned int *local, unsigned int offset) {
 
 	/*  */
 	resetErrorFlag();
@@ -1640,7 +1642,7 @@ void IRenderer::dispatchCompute(unsigned int *global, unsigned int *local, unsig
 	glMemoryBarrier(GL_TEXTURE_UPDATE_BARRIER_BIT);
 }
 
-void IRenderer::memoryBarrier(void){
+void GLRendererInterface::memoryBarrier(void){
 
 }
 
@@ -1748,7 +1750,7 @@ void callback_debug_gl(GLenum source, GLenum type, GLuint id, GLenum severity,
 	printf("\n");
 }
 
-void IRenderer::setDebug(bool enable) {
+void GLRendererInterface::setDebug(bool enable) {
 
 	/*	TODO CLEAN.	*/
 	typedef void (*glDebugMessageCallback)(GLenum source, GLenum type, GLuint id, GLenum severity,
@@ -1787,7 +1789,7 @@ void IRenderer::setDebug(bool enable) {
 //GL_NV_gpu_program4: SM 4.0 or better.
 //GL_NV_vertex_program3: SM 3.0 or better.
 //GL_ARB_fragment_program: SM 2.0 or better
-const char *IRenderer::getShaderVersion(ShaderLanguage language) const {
+const char *GLRendererInterface::getShaderVersion(ShaderLanguage language) const {
 	const char *strcore;
 	OpenGLCore *glcore = (OpenGLCore *) this->getData();
 	bool profile;
@@ -1823,21 +1825,21 @@ const char *IRenderer::getShaderVersion(ShaderLanguage language) const {
 	throw std::invalid_argument("Invalid shader language);");
 }
 
-ShaderLanguage IRenderer::getShaderLanguage(void) const {
+ShaderLanguage GLRendererInterface::getShaderLanguage(void) const {
 	OpenGLCore *glCore = (OpenGLCore *) this->pdata;
 	return glCore->supportedLanguages;
 
 }
 
-const char *IRenderer::getAPIVersion(void) const {
+const char *GLRendererInterface::getAPIVersion(void) const {
 	return (const char *) glGetString(GL_VERSION);
 }
 
-const char *IRenderer::getVersion(void) const {
+const char *GLRendererInterface::getVersion(void) const {
 	return FV_STR_VERSION(1, 0, 0);
 }
 
-void IRenderer::getSupportedTextureCompression(TextureDesc::Compression* pCompressions){
+void GLRendererInterface::getSupportedTextureCompression(TextureDesc::Compression* pCompressions){
 	if (pCompressions == NULL)
 		throw std::invalid_argument("pCompressions may not be a null pointer.");
 
@@ -1869,7 +1871,7 @@ void IRenderer::getSupportedTextureCompression(TextureDesc::Compression* pCompre
 	*pCompressions = (TextureDesc::Compression) compressions;
 }
 
-void IRenderer::getCapability(Capability *capability) {
+void GLRendererInterface::getCapability(Capability *capability) {
 
 	assert(capability);
 
@@ -2069,7 +2071,7 @@ void IRenderer::getCapability(Capability *capability) {
 	//GL_DECODE_EXT;
 }
 
-void IRenderer::getStatus(MemoryInfo *memoryInfo) {
+void GLRendererInterface::getStatus(MemoryInfo *memoryInfo) {
 
 	GLint dedicatedVRMem;
 
@@ -2090,7 +2092,7 @@ void IRenderer::getStatus(MemoryInfo *memoryInfo) {
 
 }
 
-void IRenderer::getFeatures(Features *features) {
+void GLRendererInterface::getFeatures(Features *features) {
 	OpenGLCore *glCore = (OpenGLCore *)this->pdata;
 	memcpy(features, &glCore->features, sizeof(Features));
 
@@ -2098,22 +2100,33 @@ void IRenderer::getFeatures(Features *features) {
 	features->variableRateShading = glewIsExtensionSupported("GL_NV_shading_rate_image");
 }
 
-CommandList *IRenderer::createCommandBuffer(void){
+CommandList *GLRendererInterface::createCommandBuffer(void) { return new GLCommandList(); }
 
+void GLRendererInterface::submittCommand(Ref<CommandList> &list){
+	
 }
 
-void IRenderer::submittCommand(Ref<CommandList> &list){
+void GLRendererInterface::execute(CommandList *list) {
+	GLCommandList *glist = (GLCommandList *)list;
 
+	for (int i = 0; i < glist->commands.size(); i++) {
+		const GLCommandBase *base = glist->commands[i];
+		switch (base->getCommand()) {
+		case ClearColor:{
+			const GLCommandClearColor *clearColor = (const GLCommandClearColor *)base;
+			glClearColor(clearColor->clear.x(), clearColor->clear.x(), clearColor->clear.x(), clearColor->clear.x());
+			//glClearNamedFramebufferfv(fraobj->framebuffer, GL_COLOR, GL_COLOR_ATTACHMENT0 + index, (GLfloat *)color);
+			/* code */
+		} break;
+
+		default:
+			break;
+		}
+	}
 }
 
-void IRenderer::execute(CommandList *list){
-
-}
-
-void *IRenderer::getData(void) const {
+void *GLRendererInterface::getData(void) const {
 	return this->pdata;
 }
 
-extern "C" IRenderer *createInternalRenderer(IConfig *config) {
-	return new IRenderer(config);
-}
+extern "C" IRenderer *createInternalRenderer(IConfig *config) { return new GLRendererInterface(config); }

@@ -28,8 +28,6 @@
 #include "Geometry.h"
 #include "Query.h"
 #include <vector>
-
-
 namespace fragcore {
 	/**
 	 *
@@ -66,77 +64,77 @@ namespace fragcore {
 		};
 
 		//TODO make it less state machine and allow it to become more modern.
-		virtual ~IRenderer();
-
-		virtual void OnInitialization(void);
-		virtual void OnDestruction(void);
+		virtual ~IRenderer(void) = default;
+		IRenderer(void) = default;
+		// IRenderer &operator=(IRenderer &&other);
 
 		/**
 		 *	Create texture.
 		 *
 		 *	@Return non null texture object if succesfully. Null otherwise.
 		 */
-		virtual Texture *createTexture(TextureDesc *desc);
+		virtual Texture *createTexture(TextureDesc *desc) = 0;
 
-		virtual void deleteTexture(Texture *texture);
+		virtual void deleteTexture(Texture *texture) = 0;
 
-		virtual Sampler *createSampler(SamplerDesc *desc);
+		virtual Sampler *createSampler(SamplerDesc *desc) = 0;
 
-		virtual void deleteSampler(Sampler *texture);
+		virtual void deleteSampler(Sampler *texture) = 0;
 
 		/**
 		 *
 		 * @param desc
 		 * @return
 		 */
-		virtual RenderPipeline *createPipeline(const ProgramPipelineDesc *desc);
+		virtual RenderPipeline *createPipeline(const ProgramPipelineDesc *desc) = 0;
 
 		/**
 		 *
 		 * @param obj
 		 * @return
 		 */
-		virtual void deletePipeline(RenderPipeline *obj);
+		virtual void deletePipeline(RenderPipeline *obj) = 0;
 
 		/**
 		 *	Create shader.
 		 *
 		 *	@Return
 		 */
-		virtual Shader *createShader(ShaderDesc *desc);
+		virtual Shader *createShader(ShaderDesc *desc) = 0;
 
-		virtual void deleteShader(Shader *shader);
+		virtual void deleteShader(Shader *shader) = 0;
 
 		/**
 		 *
 		 * @param desc
 		 * @return
 		 */
-		virtual Buffer *createBuffer(BufferDesc *desc);
+		virtual Buffer *createBuffer(BufferDesc *desc) = 0;
 
-		virtual void deleteBuffer(Buffer *object);
+		virtual void deleteBuffer(Buffer *object) = 0;
 
 		/**
 		 *	Create geometry.
 		 *
 		 *	@Return
 		 */
-		virtual Geometry *createGeometry(GeometryDesc *desc);
+		virtual Geometry *createGeometry(GeometryDesc *desc) = 0;
 
-		virtual void deleteGeometry(Geometry *obj);
+		virtual void deleteGeometry(Geometry *obj) = 0;
 
 		/**
 		 *
 		 * @param desc
 		 * @return
 		 */
-		virtual FrameBuffer *createFrameBuffer(
-				FrameBufferDesc *desc);  //TODO determine what to do with the reference objects. Same for all other object using reference object to GPU resources.
-		virtual void deleteFrameBuffer(FrameBuffer *obj);
+		virtual FrameBuffer *
+		createFrameBuffer(FrameBufferDesc *desc) = 0; // TODO determine what to do with the reference objects. Same for
+													  // all other object using reference object to GPU resources.
+		virtual void deleteFrameBuffer(FrameBuffer *obj) = 0;
 
-		virtual QueryObject *createQuery(QueryDesc *desc);
+		virtual QueryObject *createQuery(QueryDesc *desc) = 0;
 
-		virtual void deleteQuery(QueryObject *query);
+		virtual void deleteQuery(QueryObject *query) = 0;
 
 		/**
 		 *
@@ -146,52 +144,47 @@ namespace fragcore {
 		 * @param height
 		 * @return
 		 */
-		virtual RendererWindow *createWindow(int x, int y, int width, int height);
+		virtual RendererWindow *createWindow(int x, int y, int width, int height) = 0;
 
 		/**
 		 *
 		 * @param window
 		 */
-		virtual void setCurrentWindow(RendererWindow *window);
-
-		/**
-		 * Create swapchain.
-		 */
-		virtual void createSwapChain(void);
+		virtual void setCurrentWindow(RendererWindow *window) = 0;
 
 		/**
 		 *
 		 * @return
 		 */
-		virtual FrameBuffer *getDefaultFramebuffer(void *window);
+		virtual FrameBuffer *getDefaultFramebuffer(void *window) = 0;
 
 		//TODO add viewobject for handling as a object
-		virtual ViewPort *getView(unsigned int i);
+		virtual ViewPort *getView(unsigned int i) = 0;
 
-		/**
-		 *
-		 * @param bitflag
-		 */
-		virtual void clear(unsigned int bitflag);   //TODO relocate to the default framebuffer.
+		// /**
+		//  *
+		//  * @param bitflag
+		//  */
+		// virtual void clear(unsigned int bitflag);   //TODO relocate to the default framebuffer.
 
-		/**
-		 * Set clear color RGBA.
-		 * @param r
-		 * @param g
-		 * @param b
-		 * @param a
-		 */
-		virtual void clearColor(float r, float g, float b, float a);    // TODO relocate to the framebuffer.
+		// /**
+		//  * Set clear color RGBA.
+		//  * @param r
+		//  * @param g
+		//  * @param b
+		//  * @param a
+		//  */
+		// virtual void clearColor(float r, float g, float b, float a);    // TODO relocate to the framebuffer.
 
-		/**
-		 *	Enable VSync.
-		 */
-		virtual void setVSync(int sync);	//TODO relocate to the render window.
+		// /**
+		//  *	Enable VSync.
+		//  */
+		// virtual void setVSync(int sync);	//TODO relocate to the render window.
 
 		/**
 		 *	Swap current window buffer.
 		 */
-		virtual void swapBuffer(void);	//TODO relocate to the render window.
+		//virtual void swapBuffer(void);	//TODO relocate to the render window.
 
 		/**
 		 *	Set depth mask.
@@ -350,8 +343,6 @@ namespace fragcore {
 		virtual CommandList *createCommandBuffer(void);
 		virtual void submittCommand(Ref<CommandList> &list);
 		virtual void execute(CommandList *list);
-
-		IRenderer(IConfig *config);
 
 		virtual void *getData(void) const;
 

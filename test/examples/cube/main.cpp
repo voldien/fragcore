@@ -31,7 +31,7 @@ int main(int argc, const char** argv) {
 	CommandList *clc = renderer->createCommandBuffer();
 	Ref<FrameBuffer> defaultFramebuffer = Ref<FrameBuffer>(renderer->getDefaultFramebuffer(NULL));
 	clc->bindFramebuffer(defaultFramebuffer);
-	clc->clearColorTarget(0, PVColor(1, 0, 0, 1));
+	clc->clearColorTarget(0, Color(1, 0, 0, 1));
 	// clc->bindPipeline(NULL);
 	// clc->draw
 

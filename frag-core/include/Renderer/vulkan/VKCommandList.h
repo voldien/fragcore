@@ -9,9 +9,9 @@ namespace fragcore {
 	 *
 	 */
 	class VKCommandList : public CommandList {
-	public:
+	  public:
 		VKCommandList(Ref<IRenderer> &renderer);
-		VKCommandList(VKCommandList& other);
+		VKCommandList(VKCommandList &other);
 		virtual ~VKCommandList(void);
 
 		virtual void begin(void);
@@ -20,10 +20,9 @@ namespace fragcore {
 		virtual void bindPipeline(RenderPipeline *p);
 		virtual void bindFramebuffer(Ref<FrameBuffer> &framebuffer);
 
-
 		virtual void setviewport(int x, int y, int width, int height);
 		virtual void clearDepth(float depth);
-		virtual void clearColorTarget(uint index, const PVColor &color);
+		virtual void clearColorTarget(uint index, const Color &color);
 
 		virtual void dispatch(uint groupCountX, uint groupCountY, uint groupCountZ);
 		virtual void dispatchIndirect(Buffer *buffer, u_int64_t offset);
@@ -32,20 +31,19 @@ namespace fragcore {
 		virtual void popDebugGroup(void);
 		virtual void insertDebugMarker(const char *name);
 
-
-		private:
+	  private:
 		void beginCurrentRenderPass(void);
 		void endCurrentRenderPass(void);
 
-		public:
+	  public:
 		VkCommandBuffer cmdBuffer;
 		VkCommandPool _pool;
 
-		protected:
+	  protected:
 		bool _commandBufferBegun;
 		bool _commandBufferEnded;
 		std::vector<VkCommandBuffer> cmdbuffers;
 	};
-}
+} // namespace fragcore
 
 #endif

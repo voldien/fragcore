@@ -32,7 +32,7 @@ int main(int argc, const char **argv)
 
 	AudioListenerDesc list_desc = {
 		.position = Vector3(0, 0, 0),
-		.rotation = PVQuaternion::identity()};
+		.rotation = Quaternion::identity()};
 	Ref<AudioListener> listener = Ref<AudioListener>(iaudio->createAudioListener(&list_desc));
 	listener->setVolume(1.0f);
 	AudioSourceDesc source_desc = {};
