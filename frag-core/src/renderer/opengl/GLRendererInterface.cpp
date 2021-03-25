@@ -20,6 +20,7 @@
 #include <Window/WindowManager.h>
 #include <exception>
 #include <vector>
+#include"Renderer/opengl/GLBuffer.h"
 using namespace fragcore;
 
 //GL_NV_gpu_program4: SM 4.0 or better.
@@ -1004,8 +1005,8 @@ Buffer *GLRendererInterface::createBuffer(BufferDesc *desc) {
 	if(desc->size < 0)
 		throw InvalidArgumentException("Buffer size must be 0 or greater.");
 
-	Buffer *buffer = NULL;
-	GLBufferObject *glbuf = NULL;
+	GLBuffer *buffer = new GLBuffer();
+	//GLBufferObject *glbuf = NULL;
 	GLenum error;
 
 	GLuint buf = 0;
@@ -1063,11 +1064,11 @@ Buffer *GLRendererInterface::createBuffer(BufferDesc *desc) {
 	addMarkerLabel(glCore, GL_BUFFER, buf, &desc->marker);
 
 	/*	Assign. */
-	buffer = new Buffer();
-	glbuf = new GLBufferObject();
-	glbuf->buffer = buf;
-	glbuf->desc = *desc;
-	glbuf->target = target;
+	//buffer = new Buffer();
+	//glbuf = new GLBufferObject();
+	buffer->buffer = buf;
+	buffer->desc = *desc;
+	buffer->target = target;
 	//buffer->pdata = glbuf;
 	buffer->setRenderInterface(this);
 	return buffer;
@@ -1075,16 +1076,16 @@ Buffer *GLRendererInterface::createBuffer(BufferDesc *desc) {
 
 void GLRendererInterface::deleteBuffer(Buffer *object) {
 
-	GLBufferObject *glbuf = (GLBufferObject *)object->getObject();
+	// GLBufferObject *glbuf = (GLBufferObject *)object->getObject();
 
-	if (glIsBufferARB(glbuf->buffer)) {
-		glDeleteBuffersARB(1, &glbuf->buffer);
-	} else {
-		throw std::invalid_argument("Buffer is not a valid buffer object.");
-	}
+	// if (glIsBufferARB(glbuf->buffer)) {
+	// 	glDeleteBuffersARB(1, &glbuf->buffer);
+	// } else {
+	// 	throw std::invalid_argument("Buffer is not a valid buffer object.");
+	// }
 
-	//delete object->pdata;
-	delete object;
+	// //delete object->pdata;
+	// delete object;
 }
 
 Geometry *GLRendererInterface::createGeometry(GeometryDesc *desc) {

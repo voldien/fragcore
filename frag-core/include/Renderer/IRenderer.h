@@ -66,16 +66,15 @@ namespace fragcore {
 		//TODO make it less state machine and allow it to become more modern.
 		virtual ~IRenderer(void) = default;
 		IRenderer(void) = default;
-		// IRenderer &operator=(IRenderer &&other);
 
 		/**
 		 *	Create texture.
 		 *
 		 *	@Return non null texture object if succesfully. Null otherwise.
 		 */
-		virtual Texture *createTexture(TextureDesc *desc) = 0;
+		virtual Texture *createTexture(TextureDesc *desc) noexcept(false) = 0;
 
-		virtual void deleteTexture(Texture *texture) = 0;
+		virtual void deleteTexture(Texture *texture) noexcept(false) = 0;
 
 		virtual Sampler *createSampler(SamplerDesc *desc) = 0;
 

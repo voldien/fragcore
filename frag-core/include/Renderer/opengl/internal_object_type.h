@@ -69,12 +69,12 @@ namespace fragcore {
 	/**
 	 *
 	 */
-	typedef struct opengl_buffer_object_t {
-		BufferDesc desc;
-		unsigned int target;
-		unsigned int buffer;
-		unsigned int base;
-	} GLBufferObject;
+	// typedef struct opengl_buffer_object_t {
+	// 	BufferDesc desc;
+	// 	unsigned int target;
+	// 	unsigned int buffer;
+	// 	unsigned int base;
+	// } GLBufferObject;
 
 	typedef struct opengl_program_pipeline_t {
 		unsigned int program;

@@ -14,24 +14,24 @@ PFN_vkCmdDebugMarkerEndEXT pvkCmdDebugMarkerEndEXT;
 PFN_vkCmdDebugMarkerInsertEXT pvkCmdDebugMarkerInsertEXT;
 
 VKCommandList::VKCommandList(Ref<IRenderer> &renderer) {
-	VulkanCore *vulkancore = (VulkanCore *)(*renderer)->getData();
+	// VulkanCore *vulkancore = (VulkanCore *)(*renderer)->getData();
 
-	/*  Create command pool.    */
-	VkCommandPoolCreateInfo cmdPoolCreateInfo = {};
-	cmdPoolCreateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-	cmdPoolCreateInfo.queueFamilyIndex = vulkancore->graphics_queue_node_index;
-	cmdPoolCreateInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+	// /*  Create command pool.    */
+	// VkCommandPoolCreateInfo cmdPoolCreateInfo = {};
+	// cmdPoolCreateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+	// cmdPoolCreateInfo.queueFamilyIndex = vulkancore->graphics_queue_node_index;
+	// cmdPoolCreateInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
 
-	/*  Create command pool.    */
-	checkError(vkCreateCommandPool(vulkancore->device, &cmdPoolCreateInfo, NULL, &_pool));
+	// /*  Create command pool.    */
+	// checkError(vkCreateCommandPool(vulkancore->device, &cmdPoolCreateInfo, NULL, &_pool));
 
-	VkCommandBufferAllocateInfo cbAI = {};
-	cbAI.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-	cbAI.commandPool = _pool;
-	cbAI.commandBufferCount = 1;
-	cbAI.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-	VkResult result = vkAllocateCommandBuffers(vulkancore->device, &cbAI, &cmdbuffers[0]);
-	checkError(result);
+	// VkCommandBufferAllocateInfo cbAI = {};
+	// cbAI.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+	// cbAI.commandPool = _pool;
+	// cbAI.commandBufferCount = 1;
+	// cbAI.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+	// VkResult result = vkAllocateCommandBuffers(vulkancore->device, &cbAI, &cmdbuffers[0]);
+	// checkError(result);
 }
 VKCommandList::VKCommandList(VKCommandList &other) {}
 

@@ -26,10 +26,10 @@ namespace fragcore {
 	 *	Primitive buffer.
 	 */
 	class FVDECLSPEC GLBuffer : public Buffer {
-		friend class IRenderer;
+		friend class GLRendererInterface;
 
 	  public:
-		inline GLBuffer(Ref<IRenderer> &renderer) {}
+		inline GLBuffer(void) {}
 
 		virtual ~GLBuffer(void);
 

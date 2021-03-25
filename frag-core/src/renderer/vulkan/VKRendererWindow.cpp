@@ -338,36 +338,32 @@ void VKRenderWindow::swapBuffer() {
 	VkResult result;
 	uint32_t imageIndex;
 
-	VulkanCore *vulkanCore = (VulkanCore *)this->renderer->getData();
-	// result = vkEndCommandBuffer(
-	// 	swapChain.commandBuffers[vulkanCore->currentFrame]);
-	// if (result != VK_SUCCESS) 
-	// 	throw RuntimeException("failed");
-	vkWaitForFences(vulkanCore->device, 1, &vulkanCore->inFlightFences[vulkanCore->currentFrame], VK_TRUE, UINT64_MAX);
+	const VKRenderInterface *core = *this->renderer;
+
+	vkWaitForFences(getDevice(), 1, &this->inFlightFences[swapChain.currentFrame], VK_TRUE, UINT64_MAX);
 
 	/*  */
-	result = vkAcquireNextImageKHR(
-		vulkanCore->device, swapChain.swapchain, UINT64_MAX,
-		vulkanCore->imageAvailableSemaphores[vulkanCore->currentFrame], VK_NULL_HANDLE, &imageIndex);
+	result = vkAcquireNextImageKHR(getDevice(), swapChain.swapchain, UINT64_MAX,
+								   this->imageAvailableSemaphores[swapChain.currentFrame], VK_NULL_HANDLE,
+								   &imageIndex);
 	if (result == VK_ERROR_OUT_OF_DATE_KHR) {
 		/*  Recreate.   */
-//		recreateSwapChain();
-  //          return;
+		recreateSwapChain();
+          return;
 	}
 	else if (result != VK_SUCCESS)
 		throw RuntimeException(
 			fvformatf("Failed to acquire next image - %d", result));
 
-	if (vulkanCore->imagesInFlight[imageIndex] != VK_NULL_HANDLE) {
-		vkWaitForFences(vulkanCore->device, 1, &vulkanCore->imagesInFlight[imageIndex], VK_TRUE, UINT64_MAX);
+	if (this->imagesInFlight[imageIndex] != VK_NULL_HANDLE) {
+		vkWaitForFences(getDevice(), 1, &this->imagesInFlight[imageIndex], VK_TRUE, UINT64_MAX);
 	}
-	vulkanCore->imagesInFlight[imageIndex] = vulkanCore->inFlightFences[vulkanCore->currentFrame];
-
+	this->imagesInFlight[imageIndex] = this->inFlightFences[swapChain.currentFrame];
 
 	VkSubmitInfo submitInfo{};
 	submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 
-	VkSemaphore waitSemaphores[] = {vulkanCore->imageAvailableSemaphores[vulkanCore->currentFrame]};
+	VkSemaphore waitSemaphores[] = {this->imageAvailableSemaphores[swapChain.currentFrame]};
 	VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
 	submitInfo.waitSemaphoreCount = 1;
 	submitInfo.pWaitSemaphores = waitSemaphores;
@@ -376,14 +372,13 @@ void VKRenderWindow::swapBuffer() {
 	submitInfo.commandBufferCount = 1;
 	submitInfo.pCommandBuffers = &swapChain.commandBuffers[imageIndex];
 
-	VkSemaphore signalSemaphores[] = { vulkanCore->renderFinishedSemaphores[vulkanCore->currentFrame]};
+	VkSemaphore signalSemaphores[] = {this->renderFinishedSemaphores[swapChain.currentFrame]};
 	submitInfo.signalSemaphoreCount = 1;
 	submitInfo.pSignalSemaphores = signalSemaphores;
 
-	vkResetFences(vulkanCore->device, 1, &vulkanCore->inFlightFences[vulkanCore->currentFrame]);
+	vkResetFences(getDevice(), 1, &this->inFlightFences[swapChain.currentFrame]);
 
-	if (vkQueueSubmit(vulkanCore->queue, 1, &submitInfo,
-						vulkanCore->inFlightFences[vulkanCore->currentFrame]) != VK_SUCCESS) {
+	if (vkQueueSubmit(queue, 1, &submitInfo, this->inFlightFences[swapChain.currentFrame]) != VK_SUCCESS) {
 		throw std::runtime_error("failed to submit draw command buffer!");
 	}
 
@@ -398,32 +393,17 @@ void VKRenderWindow::swapBuffer() {
 	/*	*/
 	presentInfo.pImageIndices = &imageIndex;
 
-	result = vkQueuePresentKHR(vulkanCore->presentQueue, &presentInfo);
-	if (result != VK_SUCCESS)
-		throw RuntimeException(fvformatf("Failed to present - %d", result));
-
-	//vkQueueWaitIdle(vulkanCore->presentQueue);
+	result = vkQueuePresentKHR(core->presentQueue, &presentInfo);
+	if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR) {
+		// framebufferResized = false;
+		recreateSwapChain();
+	} else if (result != VK_SUCCESS) {
+		throw std::runtime_error("failed to present swap chain image!");
+	}
 
 	/*  Compute current frame.  */
-	vulkanCore->currentFrame = (vulkanCore->currentFrame + 1) % 2;
-		//swapChain.swapChainImages.size();
+	swapChain.currentFrame = (swapChain.currentFrame + 1) % 2;
 
-		// /*  Reset command buffer.    */
-	// result = vkResetCommandBuffer(
-	// 	swapChain.commandBuffers[vulkanCore->currentFrame],
-	// 	VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT);
-	// if (result != VK_SUCCESS) throw RuntimeException("failed");
-
-	// /*  */
-	// VkCommandBufferBeginInfo beginInfo = {};
-	// beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-	// beginInfo.flags = VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
-
-	// /*  */
-	// result = vkBeginCommandBuffer(
-	// 	swapChain.commandBuffers[vulkanCore->currentFrame],
-	// 	&beginInfo);
-	// if (result != VK_SUCCESS) throw RuntimeException("Failed to start the ");
 }
 
 void VKRenderWindow::createSwapChain(void) {
@@ -614,7 +594,8 @@ void VKRenderWindow::cleanSwapChain(void) {
 	vkDestroySwapchainKHR(getDevice(), this->swapChain.swapchain, nullptr);
 }
 
-VkDevice VKRenderWindow::getDevice(void) const { VulkanCore *vulkancore = (VulkanCore *)renderer->getData();
+VkDevice VKRenderWindow::getDevice(void) const {
+	const VKRenderInterface *vulkancore = *this->renderer;
 	return vulkancore->device;
 }
 VkFramebuffer VKRenderWindow::getDefaultFrameBuffer(void) const {

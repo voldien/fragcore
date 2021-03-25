@@ -10,195 +10,172 @@
 namespace fragcore {
 
 	class VKRenderInterface : public IRenderer {
-		friend class VKRendererWindow;
-		public:
-		  VKRenderInterface(const VKRenderInterface&& other);
-		  VKRenderInterface(IConfig* config);
-		  virtual ~VKRenderInterface(void);
+		friend class VKRenderWindow;
 
-		  // TODO make it less state machine and allow it to become more modern.
+	  public:
+		VKRenderInterface(const VKRenderInterface &&other);
+		VKRenderInterface(IConfig *config);
+		virtual ~VKRenderInterface(void);
 
-		  virtual void OnInitialization(void);
-		  virtual void OnDestruction(void);
+		// TODO make it less state machine and allow it to become more modern.
 
+		virtual void OnInitialization(void);
+		virtual void OnDestruction(void);
 
-		  virtual Texture *createTexture(TextureDesc *desc);
+		virtual Texture *createTexture(TextureDesc *desc);
 
-		  virtual void deleteTexture(Texture *texture);
+		virtual void deleteTexture(Texture *texture);
 
-		  virtual Sampler *createSampler(SamplerDesc *desc);
+		virtual Sampler *createSampler(SamplerDesc *desc);
 
-		  virtual void deleteSampler(Sampler *texture);
+		virtual void deleteSampler(Sampler *texture);
 
+		virtual RenderPipeline *createPipeline(const ProgramPipelineDesc *desc);
 
-		  virtual RenderPipeline *createPipeline(const ProgramPipelineDesc *desc);
+		virtual void deletePipeline(RenderPipeline *obj);
 
-		  virtual void deletePipeline(RenderPipeline *obj);
+		virtual Shader *createShader(ShaderDesc *desc);
 
-		  virtual Shader *createShader(ShaderDesc *desc);
+		virtual void deleteShader(Shader *shader);
 
-		  virtual void deleteShader(Shader *shader);
+		virtual Buffer *createBuffer(BufferDesc *desc);
 
+		virtual void deleteBuffer(Buffer *object);
 
-		  virtual Buffer *createBuffer(BufferDesc *desc);
+		virtual Geometry *createGeometry(GeometryDesc *desc);
 
-		  virtual void deleteBuffer(Buffer *object);
+		virtual void deleteGeometry(Geometry *obj);
 
+		virtual FrameBuffer *
+		createFrameBuffer(FrameBufferDesc *desc); // TODO determine what to do with the reference objects. Same for
+												  // all other object using reference object to GPU resources.
+		virtual void deleteFrameBuffer(FrameBuffer *obj);
 
-		  virtual Geometry *createGeometry(GeometryDesc *desc);
+		virtual QueryObject *createQuery(QueryDesc *desc);
 
-		  virtual void deleteGeometry(Geometry *obj);
+		virtual void deleteQuery(QueryObject *query);
 
+		virtual RendererWindow *createWindow(int x, int y, int width, int height);
 
-		  virtual FrameBuffer *
-		  createFrameBuffer(FrameBufferDesc *desc); // TODO determine what to do with the reference objects. Same for
-													// all other object using reference object to GPU resources.
-		  virtual void deleteFrameBuffer(FrameBuffer *obj);
+		virtual void setCurrentWindow(RendererWindow *window);
 
-		  virtual QueryObject *createQuery(QueryDesc *desc);
+		virtual FrameBuffer *getDefaultFramebuffer(void *window);
 
-		  virtual void deleteQuery(QueryObject *query);
+		// TODO add viewobject for handling as a object
+		virtual ViewPort *getView(unsigned int i);
 
-		  virtual RendererWindow *createWindow(int x, int y, int width, int height);
+		virtual void clear(unsigned int bitflag); // TODO relocate to the default framebuffer.
 
+		virtual void clearColor(float r, float g, float b, float a); // TODO relocate to the framebuffer.
 
-		  virtual void setCurrentWindow(RendererWindow *window);
+		virtual void setVSync(int sync); // TODO relocate to the render window.
 
-		  virtual FrameBuffer *getDefaultFramebuffer(void *window);
+		virtual void swapBuffer(void); // TODO relocate to the render window.
 
-		  // TODO add viewobject for handling as a object
-		  virtual ViewPort *getView(unsigned int i);
+		virtual void setDepthMask(bool flag);
 
+		virtual void enableState(IRenderer::State state);
 
-		  virtual void clear(unsigned int bitflag); // TODO relocate to the default framebuffer.
+		virtual void disableState(IRenderer::State state);
 
+		virtual bool isStateEnabled(IRenderer::State state);
 
-		  virtual void clearColor(float r, float g, float b, float a); // TODO relocate to the framebuffer.
+		virtual void drawInstance(Geometry *geometry, unsigned int num);
+		// virtual void drawInstance(Shader* pipeline, GeometryObject* geometry, unsigned int num);
 
-		  virtual void setVSync(int sync); // TODO relocate to the render window.
+		virtual void drawMultiInstance(Geometry &geometries, const unsigned int *first, const unsigned int *count,
+									   unsigned int num);
 
-		  virtual void swapBuffer(void); // TODO relocate to the render window.
+		virtual void drawMultiIndirect(Geometry &geometries, unsigned int offset, unsigned int indirectCount);
 
+		virtual void drawIndirect(Geometry *geometry);
 
-		  virtual void setDepthMask(bool flag);
+		virtual void setLineWidth(float width);
 
+		virtual void
+		blit(const FrameBuffer *source, FrameBuffer *dest,
+			 Texture::FilterMode filterMode); // TODO add filter mode.    /*  TODO add filter and buffer bit.    */
+		// virtual void blit(const FrameBuffer* source, FrameBuffer* dest, int* source, int* dest, Texture::FilterMode
+		// filterMode, FrameBuffer::BufferAttachment attachment);
+		// TODO add additional version of the blit for sub image specifiction.
 
-		  virtual void enableState(IRenderer::State state);
+		virtual void bindTextures(unsigned int firstUnit, const std::vector<Texture *> &textures);
 
+		virtual void bindImages(unsigned int firstUnit, const std::vector<Texture *> &textures,
+								const std::vector<Texture::MapTarget> &mapping,
+								const std::vector<Texture::Format> &formats);
 
-		  virtual void disableState(IRenderer::State state);
+		virtual void copyTexture(const Texture *source, Texture *target);
 
+		virtual void dispatchCompute(unsigned int *global, unsigned int *local, unsigned int offset = 0);
 
-		  virtual bool isStateEnabled(IRenderer::State state);
+		// TODO add memory barrier.
+		virtual void memoryBarrier(void);
 
+		virtual Sync *createSync(SyncDesc *desc);
 
-		  virtual void drawInstance(Geometry *geometry, unsigned int num);
-		  // virtual void drawInstance(Shader* pipeline, GeometryObject* geometry, unsigned int num);
+		virtual void deleteSync(Sync *sync);
 
-		  virtual void drawMultiInstance(Geometry &geometries, const unsigned int *first, const unsigned int *count,
-										 unsigned int num);
+		virtual void setDebug(bool enable);
 
-		  virtual void drawMultiIndirect(Geometry &geometries, unsigned int offset, unsigned int indirectCount);
+		virtual const char *getShaderVersion(ShaderLanguage language) const;
 
+		virtual ShaderLanguage getShaderLanguage(void) const;
 
-		  virtual void drawIndirect(Geometry *geometry);
+		virtual const char *getAPIVersion(void) const;
 
+		virtual const char *getVersion(void) const;
 
-		  virtual void setLineWidth(float width);
+		virtual void getSupportedTextureCompression(TextureDesc::Compression *pCompressions);
+		virtual void getCapability(Capability *capability);
 
-		  virtual void
-		  blit(const FrameBuffer *source, FrameBuffer *dest,
-			   Texture::FilterMode filterMode); // TODO add filter mode.    /*  TODO add filter and buffer bit.    */
-		  // virtual void blit(const FrameBuffer* source, FrameBuffer* dest, int* source, int* dest, Texture::FilterMode
-		  // filterMode, FrameBuffer::BufferAttachment attachment);
-		  // TODO add additional version of the blit for sub image specifiction.
+		virtual void getFeatures(Features *features);
 
-		  virtual void bindTextures(unsigned int firstUnit, const std::vector<Texture *> &textures);
+		virtual void getStatus(MemoryInfo *memoryInfo);
 
-		  virtual void bindImages(unsigned int firstUnit, const std::vector<Texture *> &textures,
-								  const std::vector<Texture::MapTarget> &mapping,
-								  const std::vector<Texture::Format> &formats);
+		virtual CommandList *createCommandBuffer(void);
+		virtual void submittCommand(Ref<CommandList> &list);
+		virtual void execute(CommandList *list);
 
+	  protected:
+		std::vector<RendererWindow *> windows;
+		Capability capabilityCached;
+		/*	*/
+		VkInstance inst;
+		VkDebugUtilsMessengerEXT debugMessenger;
+		VkDebugReportCallbackEXT debugReport;
+		/*  Physical device.    */
+		VkPhysicalDevice gpu;
+		std::vector<VkPhysicalDevice> GPUs;
 
-		  virtual void copyTexture(const Texture *source, Texture *target);
+		/*  */
+		VkDevice device;
+		VkQueue queue; // TODO rename graphicsQueue
+		VkQueue presentQueue;
 
+		/*  */
+		VkPhysicalDeviceProperties gpu_props;
+		VkQueueFamilyProperties *queue_props;
+		uint32_t graphics_queue_node_index;
 
-		  virtual void dispatchCompute(unsigned int *global, unsigned int *local, unsigned int offset = 0);
+		/*  */
+		uint32_t num_physical_devices;
+		VkPhysicalDevice *physical_devices;
+		uint32_t queue_count;
+		uint32_t enabled_extension_count;
+		uint32_t enabled_layer_count;
 
-		  // TODO add memory barrier.
-		  virtual void memoryBarrier(void);
+		std::vector<VkExtensionProperties> extensionsProperties;
+		bool validate;
+		void *device_validation_layers;
+		bool enableValidationLayers;
+		bool enableDebugTracer;
 
-		  virtual Sync *createSync(SyncDesc *desc);
+		bool useGamma;
 
-		  virtual void deleteSync(Sync *sync);
-
-
-
-		  virtual void setDebug(bool enable);
-
-
-		  virtual const char *getShaderVersion(ShaderLanguage language) const;
-
-
-		  virtual ShaderLanguage getShaderLanguage(void) const;
-
-
-		  virtual const char *getAPIVersion(void) const;
-
-		  virtual const char *getVersion(void) const;
-
-
-		  virtual void getSupportedTextureCompression(TextureDesc::Compression *pCompressions);
-		  virtual void getCapability(Capability *capability);
-
-
-		  virtual void getFeatures(Features *features);
-
-		  virtual void getStatus(MemoryInfo *memoryInfo);
-
-		  virtual CommandList *createCommandBuffer(void);
-		  virtual void submittCommand(Ref<CommandList> &list);
-		  virtual void execute(CommandList *list);
-
-		protected:
-		  std::vector<RendererWindow *> windows;
-		  Capability capabilityCached;
-		  /*	*/
-		  VkInstance inst;
-		  VkDebugUtilsMessengerEXT debugMessenger;
-		  VkDebugReportCallbackEXT debugReport;
-		  /*  Physical device.    */
-		  VkPhysicalDevice gpu;
-		  std::vector<VkPhysicalDevice> GPUs;
-
-		  /*  */
-		  VkDevice device;
-		  VkQueue queue; // TODO rename graphicsQueue
-		  VkQueue presentQueue;
-
-		  /*  */
-		  VkPhysicalDeviceProperties gpu_props;
-		  VkQueueFamilyProperties *queue_props;
-		  uint32_t graphics_queue_node_index;
-
-		  /*  */
-		  uint32_t num_physical_devices;
-		  VkPhysicalDevice *physical_devices;
-		  uint32_t queue_count;
-		  uint32_t enabled_extension_count;
-		  uint32_t enabled_layer_count;
-
-		  std::vector<VkExtensionProperties> extensionsProperties;
-		  bool validate;
-		  void *device_validation_layers;
-		  bool enableValidationLayers;
-		  bool enableDebugTracer;
-
-		  bool useGamma;
-
-		  VkPhysicalDeviceMemoryProperties memProperties;
-		  ShaderLanguage languageSupport;
-		  Capability capability;
+		VkPhysicalDeviceMemoryProperties memProperties;
+		ShaderLanguage languageSupport;
+		Capability capability;
 	};
 } // namespace fragcore
 
