@@ -13,8 +13,14 @@ INCLUDE_DIRECTORIES(${OPENAL_INCLUDE_DIR})
 # Source files.
 FILE(GLOB SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
 
+# Get the include directories for the target.
+get_target_property(Fragcore_INCLUDE_DIRS fragcore INCLUDE_DIRECTORIES)
+
 ADD_LIBRARY(fragcore-aal ${SOURCE_FILES} )
 TARGET_LINK_LIBRARIES(fragcore-aal  ${OPENAL_LIBRARY} ${ALUT_LIBRARY} fragcore)
+
+TARGET_INCLUDE_DIRECTORIES(fragcore-aal PRIVATE ${Fragcore_INCLUDE_DIRS})
+
 ADD_DEPENDENCIES(fragcore-aal fragcore)
 
 IF(BUILD_WITH_INSTALL)

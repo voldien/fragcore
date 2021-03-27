@@ -13,8 +13,14 @@ ENDIF()
 # Source files.
 FILE(GLOB SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
 
+# Get the include directories for the target.
+get_target_property(Fragcore_INCLUDE_DIRS fragcore INCLUDE_DIRECTORIES)
+
 ADD_LIBRARY(fragcore-pbu ${SOURCE_FILES})
 TARGET_LINK_LIBRARIES(fragcore-pbu ${BULLET_LIB} fragcore ${BULLET_LIBRARIES} )
+
+TARGET_INCLUDE_DIRECTORIES(fragcore-pbu PRIVATE ${Vulkan_INCLUDE_DIRS} ${Fragcore_INCLUDE_DIRS})
+
 ADD_DEPENDENCIES(fragcore-pbu fragcore)
 TARGET_INCLUDE_DIRECTORIES( fragcore-pbu PUBLIC "${BULLET_INCLUDE_DIRS}" )
 INSTALL(TARGETS fragcore-pbu DESTINATION lib)
