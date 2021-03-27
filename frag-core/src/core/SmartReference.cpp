@@ -5,6 +5,10 @@ SmartReference::SmartReference(void) {
 	this->counter.init(1);
 }
 
+// SmartReference::SmartReference(SmartReference &&other) {
+
+// }
+
 bool SmartReference::increment(void) {
 	return this->counter.ref();
 }

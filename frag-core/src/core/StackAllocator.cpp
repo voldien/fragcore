@@ -1,83 +1,61 @@
 #include "Core/dataStructure/StackAllactor.h"
-#include <malloc.h>
 #include <cstring>
+#include <malloc.h>
 using namespace fragcore;
 
-StackAllocator::StackAllocator(void)
-{
+StackAllocator::StackAllocator(void) {
 	this->mData = NULL;
 	this->mMarker = NULL;
 	this->mSize = 0;
 }
 
-StackAllocator::StackAllocator(const StackAllocator &stack)
-{
+StackAllocator::StackAllocator(const StackAllocator &stack) {
 	this->mSize = 0;
 	*this = stack;
 }
+StackAllocator::StackAllocator(StackAllocator &&other) {}
 
-StackAllocator::StackAllocator(unsigned int stackSizeBytes)
-{
+StackAllocator::StackAllocator(unsigned int stackSizeBytes) {
 	this->mMarker = 0;
 	this->mData = NULL;
 	this->mSize = 0;
 	this->alloc(stackSizeBytes);
 }
 
-StackAllocator::~StackAllocator(void)
-{
-	free(this->mData);
-}
+StackAllocator::~StackAllocator(void) { free(this->mData); }
 
-void *StackAllocator::alloc(unsigned int sizeBytes)
-{
-	//TODO determine if allocaing smaller memory.
-	if(sizeBytes < getSize()){
-
+void *StackAllocator::alloc(unsigned int sizeBytes) {
+	// TODO determine if allocaing smaller memory.
+	if (sizeBytes < getSize()) {
 	}
 	mSize = sizeBytes;
 	mData = realloc(mData, sizeBytes);
-	if(!mData){
-		//VDDebug::errorLog("Failed to allocate %d kb.\n", ( sizeBytes / 1024 ) );
+	if (!mData) {
+		// VDDebug::errorLog("Failed to allocate %d kb.\n", ( sizeBytes / 1024 ) );
 	}
 	return mData;
 }
 
-unsigned int StackAllocator::getSize(void) const
-{
-	return this->mSize;
-}
+unsigned int StackAllocator::getSize(void) const { return this->mSize; }
 
-void *StackAllocator::allocateAligned(unsigned int sizeBytes, int alignment)
-{
+void *StackAllocator::allocateAligned(unsigned int sizeBytes, int alignment) {
 	sizeBytes += (sizeBytes % alignment);
 	return this->alloc(sizeBytes);
 }
 
-void StackAllocator::clear(void)
-{
-	this->mMarker = 0;
-}
+void StackAllocator::clear(void) { this->mMarker = 0; }
 
-unsigned int StackAllocator::getMarker(void) const
-{
-	return this->mMarker;
-}
+unsigned int StackAllocator::getMarker(void) const { return this->mMarker; }
 
-void *StackAllocator::fetch(unsigned int sizeBytes)
-{
-	void* p = this->mData + getMarker();
+void *StackAllocator::fetch(unsigned int sizeBytes) {
+	void *p = ((uint8_t*)this->mData) + getMarker();
 	this->mMarker += sizeBytes;
 	return p;
 }
 
-void StackAllocator::freeToMarker(unsigned int marker)
-{
-	this->mMarker = marker;
-}
+void StackAllocator::freeToMarker(unsigned int marker) { this->mMarker = marker; }
 
-StackAllocator &StackAllocator::operator=(const StackAllocator &alloc)
-{
+StackAllocator &StackAllocator::operator=(const StackAllocator &alloc) {
 	this->alloc(alloc.getSize());
 	memcpy(this->mData, alloc.mData, alloc.getMarker());
 	return *this;

@@ -1,13 +1,12 @@
-#include"Core/Library.h"
-#include<SDL2/SDL.h>
-#include <stdexcept>
+#include "Core/Library.h"
 #include "Exception/RuntimeException.h"
-#include"Utils/StringUtil.h"
+#include "Utils/StringUtil.h"
+#include <SDL2/SDL.h>
+#include <stdexcept>
+#include <utility>
 using namespace fragcore;
 
-Library::Library(void) {
-	this->mlib = NULL;
-}
+Library::Library(void) { this->mlib = NULL; }
 
 Library::Library(const char *clibrary) {
 	this->mlib = NULL;
@@ -21,9 +20,9 @@ Library::Library(const Library &library) {
 	this->name = library.name;
 }
 
-Library::~Library(void) {
-	/*	Nothing to release. Done by the kernel itself.	*/
-}
+Library::Library(Library &&other) { std::exchange(this->mlib, other.mlib); }
+
+Library::~Library(void) { /*	Nothing to release. Done by the kernel itself.	*/ }
 
 bool Library::open(const char *clibrary) {
 	this->mlib = SDL_LoadObject(clibrary);
@@ -38,20 +37,16 @@ bool Library::open(const char *clibrary) {
 	return this->mlib != NULL;
 }
 
-void Library::close(void) {
-	SDL_UnloadObject(this->mlib);
-}
+void Library::close(void) { SDL_UnloadObject(this->mlib); }
 
-bool Library::isValid(void) const {
-	return this->mlib != NULL;
-}
+bool Library::isValid(void) const { return this->mlib != NULL; }
 
 void *Library::getfunc(const char *pProcName) {
 	void *func = SDL_LoadFunction(this->mlib, pProcName);
 
 	if (func == NULL) {
 		std::string sdlerror = fvformatf("Failed to load function %s, %s from library %s.\n", pProcName, SDL_GetError(),
-		                                 this->name.c_str());
+										 this->name.c_str());
 		throw RuntimeException(sdlerror);
 	}
 

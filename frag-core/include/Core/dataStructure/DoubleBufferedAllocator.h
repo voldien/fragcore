@@ -29,6 +29,7 @@ namespace fragcore{
 	public:
 		DoubleBufferedAllocator(void);
 		DoubleBufferedAllocator(const DoubleBufferedAllocator &doublebuffer);
+		DoubleBufferedAllocator(DoubleBufferedAllocator &&other);
 		explicit DoubleBufferedAllocator(unsigned int sizeBytes);
 		~DoubleBufferedAllocator(void);
 

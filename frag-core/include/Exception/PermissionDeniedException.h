@@ -16,8 +16,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-#ifndef _FRAG_CORE_RUNETIMEEXECPTION_H_
-#define _FRAG_CORE_RUNETIMEEXECPTION_H_ 1
+#ifndef _FRAG_CORE_PERMISSION_DENIED_H_
+#define _FRAG_CORE_PERMISSION_DENIED_H_ 1
 #include <stdexcept>
 #include "IException.h"
 
@@ -31,7 +31,7 @@ namespace fragcore {
 
 		PermissionDeniedException(const std::string &arg) : IException(arg) {}
 
-		const char *getName(void) const override {
+		virtual const char *getName(void) const noexcept override {
 			return typeid(this).name();
 		}
 	};

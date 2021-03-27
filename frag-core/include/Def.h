@@ -292,7 +292,7 @@ namespace fragcore {
  */
 #if defined(FV_MSVC)
 #define FV_ALWAYS_INLINE __forceinline
-#elif defined(FV_GNUC)
+#elif defined(FV_GNUC) || defined(FV_CLANG)
 #define FV_ALWAYS_INLINE inline __attribute__((always_inline))
 #elif defined(FV_GNUC) || defined(FV_GHS)
 #define FV_ALWAYS_INLINE inline __attribute__((always_inline))

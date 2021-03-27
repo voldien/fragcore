@@ -29,7 +29,7 @@ namespace fragcore {
 		 InvalidPointerException(void) : IException("Invalid pointer exception") {}
 		 InvalidPointerException(const std::string &arg) : IException(arg) {}
 
-		 const char *getName(void) const override { return typeid(this).name(); }
+		 virtual const char *getName(void) const noexcept override { return typeid(this).name(); }
 	};
 }
 

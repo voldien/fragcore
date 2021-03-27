@@ -32,12 +32,12 @@ namespace fragcore {
 	public:
 
 		NotImplementedException(void) : IException("Not implemented yet!") {}
-
 		NotImplementedException(const std::string &arg) : IException(arg) {}
 
-		const char *getName(void) const override {
+		virtual const char *getName(void) const noexcept override {
 			return typeid(this).name();
 		}
+
 	};
 }
 

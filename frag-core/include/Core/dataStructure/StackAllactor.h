@@ -30,6 +30,7 @@ namespace fragcore {
 
 		StackAllocator(void);
 		StackAllocator(const StackAllocator &stack);
+		StackAllocator(StackAllocator &&other);
 		explicit StackAllocator(unsigned int stackSizeBytes);
 		~StackAllocator(void);
 

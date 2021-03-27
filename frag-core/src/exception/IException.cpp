@@ -54,6 +54,7 @@ IException::IException(const std::string &what) {
 	this->generateStackTrace();
 }
 
+
 const std::string &IException::getBackTrace(void) const {
 	return this->stackTrace;
 }

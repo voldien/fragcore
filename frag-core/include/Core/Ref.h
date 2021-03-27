@@ -94,6 +94,16 @@ namespace fragcore {
 			}
 		}
 
+		Ref(T& p_reference){
+			T* reference = NULL;
+			if (&p_reference != nullptr) {
+				this->reference = &p_reference;
+				ref_pointer(&p_reference);
+			}
+		}
+
+		//Ref(Ref&& other){}
+
 		~Ref(void) {
 			unref();
 		}

@@ -19,19 +19,20 @@
 #ifndef _FRAG_CORE_LIBRARY_H_
 #define _FRAG_CORE_LIBRARY_H_ 1
 #include"../Def.h"
+#include"SmartReference.h"
 #include<string>
 
 namespace fragcore {
 	/**
 	 *	Load dynamic library in runtime.
 	 */
-	class FVDECLSPEC Library {
-	public:
+	class FVDECLSPEC Library : public SmartReference {
+	  public:
 		Library(void);
 
 		Library(const char *clibrary);
 		Library(const Library &other);
-		Library(const Library &&other);
+		Library(Library &&other);
 
 		~Library(void);
 

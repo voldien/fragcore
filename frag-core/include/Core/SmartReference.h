@@ -33,6 +33,7 @@ namespace fragcore {
 	  public:
 
 		SmartReference(void);
+		//SmartReference(SmartReference &&other);
 
 		bool increment(void);
 

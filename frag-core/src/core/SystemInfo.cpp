@@ -1,13 +1,13 @@
-#include <SDL2/SDL_platform.h>
+#include "Core/SystemInfo.h"
+#include "Core/IO/FileIO.h"
+#include "Exception/InvalidArgumentException.h"
+#include "Exception/RuntimeException.h"
+#include <HpmCpp.h>
 #include <SDL2/SDL_cpuinfo.h>
-#include"Core/SystemInfo.h"
-#include"Core/IO/FileIO.h"
-#include"Exception/InvalidArgumentException.h"
-#include"Exception/RuntimeException.h"
-#include <hpm.h>
+#include <SDL2/SDL_platform.h>
 #include <filesystem>
 
-namespace fs = std::filesystem;
+//namespace fs = std::filesystem;
 using namespace fragcore;
 
 SystemInfo::OperatingSystem SystemInfo::getOperatingSystem(void) {
@@ -35,22 +35,22 @@ const char *SystemInfo::getOperatingSystemName(SystemInfo::OperatingSystem os) {
 
 	/*  */
 	switch (os) {
-		case SystemInfo::Linux:
-			return "Linux";
-		case SystemInfo::Window:
-			return "Window";
-		case SystemInfo::Unix:
-			return "Unix";
-		case SystemInfo::Android:
-			return "Android";
-		case SystemInfo::Mac:
-			return "Mac";
-		case SystemInfo::IOS:
-			return "IOS";
-		case SystemInfo::FreeBSD:
-			return "FreeBSD";
-		default:
-			throw InvalidArgumentException("Invalid Operating System Enumerator");
+	case SystemInfo::Linux:
+		return "Linux";
+	case SystemInfo::Window:
+		return "Window";
+	case SystemInfo::Unix:
+		return "Unix";
+	case SystemInfo::Android:
+		return "Android";
+	case SystemInfo::Mac:
+		return "Mac";
+	case SystemInfo::IOS:
+		return "IOS";
+	case SystemInfo::FreeBSD:
+		return "FreeBSD";
+	default:
+		throw InvalidArgumentException("Invalid Operating System Enumerator");
 	}
 }
 
@@ -65,54 +65,41 @@ SystemInfo::SIMD SystemInfo::getSupportedSIMD(void) {
 }
 
 const char *SystemInfo::getAppliationName(void) {
-    return fs::current_path().c_str();
-}
-
-const char *SystemInfo::getUserName(void) {
 	return "";
+	/*fs::current_path().c_str();*/
 }
 
-unsigned int SystemInfo::getPageSize(void) {
-	return 1024;
+const char *SystemInfo::getUserName(void) { return ""; }
+
+unsigned int SystemInfo::getPageSize(void) { return 1024; }
+
+unsigned int SystemInfo::getCPUCoreCount(void) { return SDL_GetCPUCount(); }
+
+unsigned int SystemInfo::getCPUCacheLine(void) { return SDL_GetCPUCacheLineSize(); }
+
+bool SystemInfo::supportsVibration(void) { return false; }
+
+unsigned long int SystemInfo::systemMemorySize(void) { return SDL_GetSystemRAM(); }
+
+const char *SystemInfo::getCurrentDirectory(void) {
+	return "";
+	/*fs::current_path().c_str();*/
 }
 
-unsigned int SystemInfo::getCPUCoreCount(void) {
-	return SDL_GetCPUCount();
-}
-
-unsigned int SystemInfo::getCPUCacheLine(void) {
-	return SDL_GetCPUCacheLineSize();
-}
-
-bool SystemInfo::supportsVibration(void) {
-	return false;
-}
-
-unsigned long int SystemInfo::systemMemorySize(void) {
-	return SDL_GetSystemRAM();
-}
-
-const char *SystemInfo::getCurrentDirectory(void){
-	return fs::current_path().c_str();
-}
-
-//TODO relocate to system or something, since it they are always exist more of the time.
-static FileIO *stdoutIO = new FileIO(stdout);
-static FileIO *stdinIO = new FileIO(stdin);
-static FileIO *stderrIO = new FileIO(stderr);
-static Ref<IO> stdoutRef = Ref<IO>(stdoutIO);
-static Ref<IO> stdinRef = Ref<IO>(stdinIO);
-static Ref<IO> stderrRef = Ref<IO>(stderrIO);
+// TODO relocate to system or something, since it they are always exist more of the time.
+static Ref<IO> stdoutRef = Ref<IO>(new FileIO(stdout));
+static Ref<IO> stdinRef = Ref<IO>(new FileIO(stdin));
+static Ref<IO> stderrRef = Ref<IO>(new FileIO(stderr));
 
 Ref<IO> &SystemInfo::getStdOut(void) {
-    return stdoutRef;
-    //Ref<IO>(stdoutIO);
+	return stdoutRef;
+	// Ref<IO>(stdoutIO);
 }
 Ref<IO> &SystemInfo::getStdIn(void) {
-    return stdoutRef;
-    //Ref<IO>(stdinIO);
+	return stdoutRef;
+	// Ref<IO>(stdinIO);
 }
 Ref<IO> &SystemInfo::getStdErr(void) {
-    return stdoutRef;
-    //Ref<IO>(stderrIO);
+	return stdoutRef;
+	// Ref<IO>(stderrIO);
 }

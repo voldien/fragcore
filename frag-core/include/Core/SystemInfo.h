@@ -80,6 +80,8 @@ namespace fragcore {
 		static Ref<IO>& getStdOut(void);
 		static Ref<IO>& getStdIn(void);
 		static Ref<IO> &getStdErr(void);
+		private:
+
 	};
 }
 
