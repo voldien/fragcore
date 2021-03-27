@@ -132,15 +132,15 @@ IF(BUILD_WITH_EXTERNAL_PROJECT)
 				STEP_TARGETS build
 				COMMENT "Building task-schedular."
 				LOG_DOWNLOAD ON)
+
 		# Include tasksch headers.
 		ADD_LIBRARY(taskSch SHARED IMPORTED)
 		ADD_DEPENDENCIES(taskSch tasksch-external)
 		SET_TARGET_PROPERTIES(taskSch PROPERTIES
 				IMPORTED_LOCATION ${TASKSCH_LIB_DIR}/libtaskSch.so
 				INTERFACE_LINK_LIBRARIES ${TASKSCH_LIB_DIR}/libtaskSch.so
+				INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/extern/task-scheduler/include
 				INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/extern/task-scheduler/include)
-		SET(TASKSCH_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/extern/hpmcpp/include")
-
 
 		# Download the hpm library.
 		SET(HPM_ROOT ${CMAKE_CURRENT_BINARY_DIR}/deps/hpm)
@@ -161,8 +161,8 @@ IF(BUILD_WITH_EXTERNAL_PROJECT)
 		SET_TARGET_PROPERTIES(hpm PROPERTIES
 				IMPORTED_LOCATION ${HPM_LIB_DIR}/libhpm.so
 				INTERFACE_LINK_LIBRARIES ${HPM_LIB_DIR}/libhpm.so
-				INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/extern/hpmcpp/extern/hpm)
-		SET(HPM_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/extern/hpm/include")
+				INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/extern/hpmcpp/extern/hpm/include
+				INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/extern/hpmcpp/extern/hpm/include)
 
 
 		# Download the HPMCPP library.
@@ -178,9 +178,6 @@ IF(BUILD_WITH_EXTERNAL_PROJECT)
 				STEP_TARGETS hpm-external build
 				COMMENT "Building HPM-CPP"
 				LOG_DOWNLOAD ON)
-	
-		SET(HPMCPP_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/extern/hpmcpp/include")
-		SET(HPM_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/extern/hpmcpp/extern/hpm/include")
 
 		# Include HPMCPP headers.
 		ADD_LIBRARY(hpmcpp SHARED IMPORTED)
@@ -188,9 +185,8 @@ IF(BUILD_WITH_EXTERNAL_PROJECT)
 		SET_TARGET_PROPERTIES(hpmcpp PROPERTIES
 				IMPORTED_LOCATION ${HPMCPP_LIB_DIR}/libhpmcpp.so
 				INTERFACE_LINK_LIBRARIES ${HPMCPP_LIB_DIR}/libhpmcpp.so
+				INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/extern/hpmcpp/include
 				INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/extern/hpmcpp/include)
-	
-		INCLUDE_DIRECTORIES(${HPMCPP_INCLUDE_DIRS} ${TASKSCH_INCLUDE_DIRS} ${HPM_INCLUDE_DIRS})
 	ELSE()
 		MESSAGE(FATAL_ERROR "Require Git for loading external projects.")
 	ENDIF()
@@ -205,7 +201,7 @@ ENDIF()
 # 	# https://github.com/google/etc2comp
 
 # 	#https://gitlab.com/libeigen/eigen
-# 	# https://github.com/baldurk/renderdoc.git 
+# 	# https://github.com/baldurk/renderdoc.git
 # 	# https://github.com/ispc/ispc.git
 # 	# https://github.com/mborgerding/kissfft.git
 # 	# https://github.com/NVIDIAGameWorks/PhysX.git
