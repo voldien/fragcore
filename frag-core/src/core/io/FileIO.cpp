@@ -5,6 +5,7 @@
 #include"Exception/InvalidPointerException.h"
 #include "Exception/RuntimeException.h"
 #include"Core/IO/FileIO.h"
+#include<utility>
 using namespace fragcore;
 #include <filesystem>
 
@@ -21,8 +22,9 @@ FileIO::FileIO(FILE *file) {
 	this->file = file;
 }
 
-FileIO::FileIO(const FileIO &&other) {
-	this->file = other.file;
+FileIO::FileIO(FileIO &&other) {
+	this->file =  std::exchange(other.file, nullptr);
+	this->mode = other.mode;
 }
 
 void FileIO::open(const char *path, Mode mode) {

@@ -61,12 +61,7 @@ namespace fragcore {
 		FileIO(std::string &path, Mode mode);
 
 		FileIO(FILE *file);
-		FileIO(const FileIO &&other);
+		FileIO(FileIO &&other);
 	};
-
-	// // Default file IO objects.
-	// extern FileIO *stdoutIO;
-	// extern FileIO *stdinIO;
-	// extern FileIO *stderrIO;
 }
 #endif

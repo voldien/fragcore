@@ -1689,6 +1689,7 @@ void callback_debug_gl(GLenum source, GLenum type, GLuint id, GLenum severity,
 			break;
 		}
 	}/**/
+	//Log::
 	printf(sourceString);
 
 	switch (type) {

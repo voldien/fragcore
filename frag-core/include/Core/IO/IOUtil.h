@@ -28,22 +28,31 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC IOUtil {
 	  public:
+
 		/**
+		 * @brief
 		 *
+		 * @param io
+		 * @param data
+		 * @return long int
 		 */
-		static long int loadFileMem(Ref<IO> &io, char **data);
+		static long int loadFileMem(Ref<IO> &io, char **data) noexcept(noexcept(data != nullptr));
 		static long int loadFile(Ref<IO> &in, Ref<IO> &out);
 
 		/**
+		 * @brief
 		 *
+		 * @param io
+		 * @param data
+		 * @return long int
 		 */
-		static long int loadStringMem(Ref<IO> &io, char **data);
+		static long int loadStringMem(Ref<IO> &io, char **data) noexcept(noexcept(data != nullptr));
 		static long int loadString(Ref<IO> &in, Ref<IO> &out);
 
 		/**
 		 *
 		 */
-		static long int format(Ref<IO> &io, const char *vformat, ...);
+		static long int format(Ref<IO> &io, const char *vformat, ...) noexcept(noexcept(vformat != nullptr));
 	};
 } // namespace fragcore
 

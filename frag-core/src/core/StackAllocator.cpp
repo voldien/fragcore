@@ -1,6 +1,7 @@
 #include "Core/dataStructure/StackAllactor.h"
 #include <cstring>
 #include <malloc.h>
+#include <utility>
 using namespace fragcore;
 
 StackAllocator::StackAllocator(void) {
@@ -13,7 +14,12 @@ StackAllocator::StackAllocator(const StackAllocator &stack) {
 	this->mSize = 0;
 	*this = stack;
 }
-StackAllocator::StackAllocator(StackAllocator &&other) {}
+StackAllocator::StackAllocator(StackAllocator &&other) {
+	this->mData = std::exchange(other.mData, nullptr);
+	this->mMarker = std::exchange(other.mMarker, 0);
+
+	this->mSize = std::exchange(other.mSize, 0);
+}
 
 StackAllocator::StackAllocator(unsigned int stackSizeBytes) {
 	this->mMarker = 0;
@@ -48,7 +54,7 @@ void StackAllocator::clear(void) { this->mMarker = 0; }
 unsigned int StackAllocator::getMarker(void) const { return this->mMarker; }
 
 void *StackAllocator::fetch(unsigned int sizeBytes) {
-	void *p = ((uint8_t*)this->mData) + getMarker();
+	void *p = ((uint8_t *)this->mData) + getMarker();
 	this->mMarker += sizeBytes;
 	return p;
 }

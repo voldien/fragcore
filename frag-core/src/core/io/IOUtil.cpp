@@ -1,11 +1,11 @@
 #include "Core/IO/IOUtil.h"
 #include "Exception/InvalidArgumentException.h"
-#include"Utils/StringUtil.h"
+#include "Utils/StringUtil.h"
+#include"Exception/InvalidPointerException.h"
 
 using namespace fragcore;
 
-long int IOUtil::loadFileMem( Ref<IO> &io, char **data)
-{
+long int IOUtil::loadFileMem(Ref<IO> &io, char **data) noexcept {
 	char *d = NULL;
 	long dataSize = 0;
 
@@ -16,8 +16,7 @@ long int IOUtil::loadFileMem( Ref<IO> &io, char **data)
 	// Page aligned;
 	char buf[1024 * 4];
 	long nbytes;
-	while ((nbytes = io->read(sizeof(buf), buf)) > 0)
-	{
+	while ((nbytes = io->read(sizeof(buf), buf)) > 0) {
 		d = (char *)realloc(d, dataSize + nbytes);
 		memcpy(&d[dataSize], buf, nbytes);
 		dataSize += nbytes;
@@ -27,8 +26,7 @@ long int IOUtil::loadFileMem( Ref<IO> &io, char **data)
 	return dataSize;
 }
 
-long int IOUtil::loadFile(Ref<IO> &in, Ref<IO> &out)
-{
+long int IOUtil::loadFile(Ref<IO> &in, Ref<IO> &out) {
 	if (!in->isReadable())
 		throw InvalidArgumentException(fvformatf("Failed to read from IO: %s", in->getName()));
 	if (!out->isWriteable())
@@ -37,11 +35,9 @@ long int IOUtil::loadFile(Ref<IO> &in, Ref<IO> &out)
 	char buf[1024 * 4];
 	long nbytes;
 	long dataSize = 0;
-	while ((nbytes = in->read(sizeof(buf), buf)) > 0)
-	{
+	while ((nbytes = in->read(sizeof(buf), buf)) > 0) {
 		int outbytes = out->write(nbytes, buf);
-		if (outbytes != nbytes){
-
+		if (outbytes != nbytes) {
 		}
 		dataSize += nbytes;
 	}
@@ -49,8 +45,7 @@ long int IOUtil::loadFile(Ref<IO> &in, Ref<IO> &out)
 	return dataSize;
 }
 
-long int IOUtil::loadStringMem( Ref<IO> &io, char **string)
-{
+long int IOUtil::loadStringMem(Ref<IO> &io, char **string) noexcept {
 	long int nbytes;
 
 	nbytes = loadFileMem(io, string);
@@ -60,7 +55,7 @@ long int IOUtil::loadStringMem( Ref<IO> &io, char **string)
 	return nbytes;
 }
 
-long int IOUtil::loadString( Ref<IO> &in, Ref<IO> &out) {
+long int IOUtil::loadString(Ref<IO> &in, Ref<IO> &out) {
 
 	if (!in->isReadable())
 		throw InvalidArgumentException(fvformatf("Failed to read from IO: %s", in->getName()));
@@ -76,13 +71,15 @@ long int IOUtil::loadString( Ref<IO> &in, Ref<IO> &out) {
 	return nbytes;
 }
 
-long int IOUtil::format( Ref<IO> &io, const char *vformat, ...){
+long int IOUtil::format(Ref<IO> &io, const char *vformat, ...) noexcept {
 	va_list argptr;
 	va_start(argptr, format);
 	char buf[1024]; // Page;
-	
-	//TODO add support for determine if fully or partial written.
+	if(vformat == nullptr)
+		throw InvalidPointerException("vformat invalid");
+
+	// TODO add support for determine if fully or partial written.
 	long int i = vsnprintf(buf, sizeof(buf), vformat, argptr);
-	io->write(i, (const void*)buf);
+	io->write(i, (const void *)buf);
 	va_end(argptr);
 }

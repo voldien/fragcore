@@ -41,7 +41,7 @@ namespace fragcore {
 	class FVDECLSPEC ASync : public SmartReference {
 	public:
 		ASync(Ref<IScheduler> &scheduler);
-		ASync(const ASync &&other); // Move semantics
+		ASync(ASync &&other); // Move semantics
 		~ASync(void);
 
 		typedef struct io_status_t {

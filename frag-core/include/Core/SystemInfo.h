@@ -77,10 +77,11 @@ namespace fragcore {
 		//TODO add memory allocation info.
 
 		//TODO relocate
-		static Ref<IO>& getStdOut(void);
-		static Ref<IO>& getStdIn(void);
-		static Ref<IO> &getStdErr(void);
-		private:
+		static Ref<IO>& getStdOut(void) noexcept;
+		static Ref<IO> &getStdIn(void) noexcept;
+		static Ref<IO> &getStdErr(void) noexcept;
+
+	  private:
 
 	};
 }

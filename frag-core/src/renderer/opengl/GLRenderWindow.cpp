@@ -43,7 +43,7 @@ void GLRenderWindow::hide() { SDL_HideWindow(this->window); }
 
 void GLRenderWindow::close(void) { SDL_DestroyWindow(this->window); }
 
-ViewPort *GLRenderWindow::getViewPort(void) { this->renderer->getView(0); }
+ViewPort *GLRenderWindow::getViewPort(void) { return this->renderer->getView(0); }
 FrameBuffer *GLRenderWindow::getDefaultFrameBuffer() {
 	return this->renderer->getDefaultFramebuffer(NULL);
 	//    throw NotSupportedException();

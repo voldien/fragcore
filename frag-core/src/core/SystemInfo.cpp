@@ -91,15 +91,13 @@ static Ref<IO> stdoutRef = Ref<IO>(new FileIO(stdout));
 static Ref<IO> stdinRef = Ref<IO>(new FileIO(stdin));
 static Ref<IO> stderrRef = Ref<IO>(new FileIO(stderr));
 
-Ref<IO> &SystemInfo::getStdOut(void) {
+Ref<IO> &SystemInfo::getStdOut(void) noexcept {
 	return stdoutRef;
-	// Ref<IO>(stdoutIO);
 }
-Ref<IO> &SystemInfo::getStdIn(void) {
+Ref<IO> &SystemInfo::getStdIn(void) noexcept {
 	return stdoutRef;
-	// Ref<IO>(stdinIO);
+
 }
-Ref<IO> &SystemInfo::getStdErr(void) {
+Ref<IO> &SystemInfo::getStdErr(void) noexcept {
 	return stdoutRef;
-	// Ref<IO>(stderrIO);
 }

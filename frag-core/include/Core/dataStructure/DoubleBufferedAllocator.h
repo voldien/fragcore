@@ -85,8 +85,9 @@ namespace fragcore{
 		 *	@Return
 		*/
 		DoubleBufferedAllocator &operator=(const DoubleBufferedAllocator &alloc);
+		DoubleBufferedAllocator &operator=(DoubleBufferedAllocator &&alloc);
 
-	private:	/*	Attributes.	*/
+	  private: /*	Attributes.	*/
 
 		/*
 		*

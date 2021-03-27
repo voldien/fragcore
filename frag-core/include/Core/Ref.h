@@ -20,6 +20,7 @@
 #define _FRAG_CORE_REF_H_ 1
 #include"../Def.h"
 #include"SmartReference.h"
+#include<utility>
 
 namespace fragcore {
 	/*  TODO fix!   */
@@ -102,7 +103,7 @@ namespace fragcore {
 			}
 		}
 
-		//Ref(Ref&& other){}
+		Ref(T &&other) { this->p_reference = std::exchange(other.p_reference, nullptr); }
 
 		~Ref(void) {
 			unref();

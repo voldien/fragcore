@@ -1,4 +1,5 @@
 #include "Core/dataStructure/DoubleBufferedAllocator.h"
+#include <utility>
 using namespace fragcore;
 
 DoubleBufferedAllocator::DoubleBufferedAllocator(void) {
@@ -9,7 +10,11 @@ DoubleBufferedAllocator::DoubleBufferedAllocator(void) {
 
 DoubleBufferedAllocator::DoubleBufferedAllocator(const DoubleBufferedAllocator &doublebuffer) { *this = doublebuffer; }
 
-DoubleBufferedAllocator::DoubleBufferedAllocator(DoubleBufferedAllocator &&other) {}
+DoubleBufferedAllocator::DoubleBufferedAllocator(DoubleBufferedAllocator &&other) {
+	this->m_stack[0] = std::move(other.m_stack[0]);
+	this->m_stack[1] = std::move(other.m_stack[1]);
+	this->m_curStack = std::exchange(other.m_curStack, 0);
+}
 
 DoubleBufferedAllocator::DoubleBufferedAllocator(unsigned int sizeBytes) {
 	this->m_curStack = 0;
@@ -56,3 +61,5 @@ DoubleBufferedAllocator &DoubleBufferedAllocator::operator=(const DoubleBuffered
 	this->m_curStack = alloc.m_curStack;
 	return *this;
 }
+
+DoubleBufferedAllocator &DoubleBufferedAllocator::operator=(DoubleBufferedAllocator &&alloc) { return *this; }

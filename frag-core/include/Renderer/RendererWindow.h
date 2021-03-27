@@ -19,7 +19,7 @@
 #ifndef _FRAG_CORE_RENDERWINDOW_H_
 #define _FRAG_CORE_RENDERWINDOW_H_ 1
 #include "../Def.h"
-#include "../Window/Display.h""
+#include "../Window/Display.h"
 #include "../Core/Ref.h"
 #include "../Prerequisites.h"
 #include "../Core/SmartReference.h"

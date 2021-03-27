@@ -55,6 +55,7 @@ namespace fragcore {
 		Object& operator=(const Object& object){
 			this->setName(object.getName());
 			this->name = object.name;
+			return *this;
 		}
 
 		unsigned int type;
