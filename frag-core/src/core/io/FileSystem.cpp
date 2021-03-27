@@ -12,9 +12,9 @@
 #include"Exception/InvalidArgumentException.h"
 #include <Core/SystemInfo.h>
 #include"Core/IO/FileSystem.h"
-#include<filesystem>
+// #include<filesystem>
 
-namespace fs = std::filesystem;
+// namespace fs = std::filesystem;
 using namespace fragcore;
 
 IO *FileSystem::openFile(const char *path, IO::Mode mode) {
@@ -91,10 +91,10 @@ bool FileSystem::isWriteable(const char *path) const {
 }
 
 std::string FileSystem::getAbsolutePath(const char *path) {
-	return fs::absolute(path);
-	char resolved_path[PATH_MAX];
-	realpath(path, resolved_path);
-	return resolved_path;
+	// return fs::absolute(path);
+	// char resolved_path[PATH_MAX];
+	// realpath(path, resolved_path);
+	// return resolved_path;
 }
 
 std::string FileSystem::getRelativePath(const char *path)
@@ -110,18 +110,18 @@ const char *FileSystem::getFileExtension(const char *path) {
 
 void FileSystem::createFile(const char *path) {
 	FILE *f = fopen(path, "ab+");
-	if(f == NULL)
+	if(f == nullptr)
 		throw RuntimeException(fvformatf("Failed to open file %s, %s.\n", path, strerror(errno)));
 	fclose(f);
 }
 
 void FileSystem::createDirectory(const char *path) {
-	fs::create_directory(path);
+	//fs::create_directory(path);
 	// mkdir(path);
 }
 
 bool FileSystem::isASyncSupported(void) const{
-	return *this->getScheduler() != NULL;
+	return *this->getScheduler() != nullptr;
 }
 
 bool FileSystem::isDirectory(const char *path){
@@ -137,20 +137,20 @@ std::vector<std::string> FileSystem::listFiles(const char *directory) const {
 }
 
 std::vector<std::string> FileSystem::listDirectories(const char *directory) const {
-	for(auto& p: fs::directory_iterator("sandbox"))
-		std::cout << p.path() << '\n';
-	return std::vector<std::string>();
+	// for(auto& p: fs::directory_iterator("sandbox"))
+	// 	std::cout << p.path() << '\n';
+	// return std::vector<std::string>();
 }
 
 std::vector<std::string> FileSystem::list(const char *directory) const {
-	for(auto& p: fs::directory_iterator("sandbox"))
-		std::cout << p.path() << '\n';
-	return std::vector<std::string>();
+	// for(auto& p: fs::directory_iterator("sandbox"))
+	// 	std::cout << p.path() << '\n';
+	// return std::vector<std::string>();
 }
 
-static FileSystem *fileSystem = NULL;
+static FileSystem *fileSystem = nullptr;
 FileSystem *FileSystem::getFileSystem(void) {
-	if (fileSystem == NULL)
+	if (fileSystem == nullptr)
 		throw RuntimeException("FileSystem must created before utilizing it.");
 	return fileSystem;
 }

@@ -18,7 +18,7 @@ Display* WindowManager::getAssociatedDisplay(Ref<Window>& window) {
 }
 
 Window* WindowManager::createWindow(const std::string& title) { 
-	return NULL; 
+	return nullptr; 
 }
 
 void WindowManager::onCreation(Ref<WindowManager>& instance) {

@@ -21,7 +21,7 @@ public:
 
 ASyncHandle ASync::asyncOpen(Ref<IO> &io) {
 
-	if (*scheduler == NULL)
+	if (*scheduler == nullptr)
 		throw RuntimeException("Async not initialized with a scheduler object");
 	/*  Check parameters.   */
 	if (!*io)
@@ -34,11 +34,11 @@ ASyncHandle ASync::asyncOpen(Ref<IO> &io) {
 	ASyncHandle handle = this->uidGenerator.getNextLUID();
 	AsyncObject *asyncObject = createObject(handle);
 	asyncObject->ref = io;
-	asyncObject->semaphore = NULL;
-	asyncObject->buffer = NULL;
+	asyncObject->semaphore = nullptr;
+	asyncObject->buffer = nullptr;
 	asyncObject->size = 0;
-	asyncObject->userData = NULL;
-	asyncObject->callback = NULL;
+	asyncObject->userData = nullptr;
+	asyncObject->callback = nullptr;
 
 	return handle;
 }
@@ -60,7 +60,7 @@ void ASync::asyncReadFile(ASyncHandle handle, char *buffer, unsigned int size,
 	ao->buffer = buffer;
 	ao->size = size;
 	ao->callback = complete;
-	ao->userData = NULL;
+	ao->userData = nullptr;
 
 	/*  Reset status counter.   */
 	ao->status.nbytes = 0;
@@ -100,7 +100,7 @@ void ASync::asyncWriteFile(ASyncHandle handle, char *buffer, unsigned int size,
 	ao->buffer = buffer;
 	ao->size = size;
 	ao->callback = complete;
-	ao->userData = NULL;
+	ao->userData = nullptr;
 
 	/*  Reset status counter.   */
 	ao->status.nbytes = 0;
@@ -193,7 +193,7 @@ void ASync::async_read(Task *task)
 
 	/*  Finished.   */
 	if(ao->callback)
-		ao->callback(NULL, NULL);
+		ao->callback(nullptr, NULL);
 	/*  Finish and posted for the data is available.  */
 	schSemaphorePost((schSemaphore *) ao->semaphore);
 }
@@ -214,7 +214,7 @@ void ASync::async_read_io(Task *task)
 
 	/*  Finished.   */
 	if(ao->callback)
-		ao->callback(NULL, NULL);
+		ao->callback(nullptr, NULL);
 	/*  Finish and posted for the data is available.  */
 	schSemaphorePost((schSemaphore *) ao->semaphore);
 }
@@ -235,7 +235,7 @@ void ASync::async_write(Task *task)
 
 	io->flush();
 	if(ao->callback)
-		ao->callback(NULL, NULL);
+		ao->callback(nullptr, NULL);
 	/*  Finish and posted for the data is available.  */
 	schSemaphorePost((schSemaphore *) ao->semaphore);
 }
@@ -275,8 +275,8 @@ ASync::~ASync(void) {
 }
 
 ASync::ASync(void){
-	this->scheduler = NULL;
-	//this->sch = NULL;
+	this->scheduler = nullptr;
+	//this->sch = nullptr;
 }
 
 ASync::ASync(Ref<IScheduler> &scheduler){

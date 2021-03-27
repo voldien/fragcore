@@ -89,7 +89,7 @@ Shader *RenderPipeline::getShader(ShaderType type) {
 			assert(0);
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 void RenderPipeline::setShader(ShaderType type, Shader *shader) {

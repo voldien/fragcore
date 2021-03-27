@@ -38,18 +38,18 @@
 
 FMOD_REVERB_PROPERTIES VDAPIENTRY getReverbProperties(void)const{
 	FMOD_REVERB_PROPERTIES reverbproperties;
-	if(this->reverb != NULL){
+	if(this->reverb != nullptr){
 		reverb->getProperties(&reverbproperties);
 	}
 	return reverbproperties;
 }
 
 VDAudioReverb::VDAudioReverb(void) : VDBehavior(){
-	this->reverb = NULL;
+	this->reverb = nullptr;
 }
 
 VDAudioReverb::VDAudioReverb(const VDAudioReverb& audio) : VDBehavior(){
-	this->reverb = NULL;
+	this->reverb = nullptr;
 }
 
 void VDAudioReverb::instanceInitilize(void){
@@ -94,26 +94,26 @@ VDBehavior* VDAudioReverb::copyComponent(unsigned int& dataSize){
 void VDAudioReverb::setMinDistance(float distance){
 	float max;
 	FMOD_VECTOR pos;
-	this->reverb->get3DAttributes(&pos, NULL, &max);
+	this->reverb->get3DAttributes(&pos, nullptr, &max);
 	this->reverb->set3DAttributes(&pos, distance, max);
 }
 
 float VDAudioReverb::getMinDistance(void)const{
 	float min;
-	this->reverb->get3DAttributes(NULL, &min, NULL);
+	this->reverb->get3DAttributes(nullptr, &min, nullptr);
 	return min;
 }
 
 void VDAudioReverb::setMaxDistance(float distance){
 	float min;
 	FMOD_VECTOR pos;
-	this->reverb->get3DAttributes(&pos, &min, NULL);
+	this->reverb->get3DAttributes(&pos, &min, nullptr);
 	this->reverb->set3DAttributes(&pos, min, distance);
 }
 
 float VDAudioReverb::getMaxDistance(void)const{
 	float max;
-	this->reverb->get3DAttributes(NULL, NULL, &max);
+	this->reverb->get3DAttributes(nullptr, nullptr, &max);
 	return max;
 }
 

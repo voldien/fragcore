@@ -41,7 +41,7 @@ void GLBuffer::subData(const void *data, unsigned int offset, unsigned int size)
 
 void *GLBuffer::getData(unsigned int offset, unsigned int size) {
 
-	void *pbuffer = NULL;
+	void *pbuffer = nullptr;
 
 	/*	*/
 	pbuffer = malloc(size);

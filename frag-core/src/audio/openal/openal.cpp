@@ -10,7 +10,7 @@
 #include "Audio/AudioListener.h"
 #include "Audio/AudioPhysicalDevice.h"
 #include "Audio/AudioSource.h"
-#include "Audio/openal/internal_object_type.h"
+#include "Audio/openal/internal_object_type.h"	
 
 using namespace fragcore;
 //
@@ -22,7 +22,7 @@ using namespace fragcore;
 AudioInterface::AudioInterface(IConfig *config) : Module() {
 	this->setName("OpenAL");
 	//IConfig& configSettings;
-	if(config == NULL){
+	if(config == nullptr){
 		/*	TODO construct default configuration.	*/
 	}
 
@@ -36,7 +36,7 @@ AudioInterface::AudioInterface(IConfig *config) : Module() {
 	//TODO add support
 	//const char* device = config->get<const char*>("device");
 
-	const ALchar *defaultDevice = alcGetString(NULL, ALC_DEFAULT_DEVICE_SPECIFIER);
+	const ALchar *defaultDevice = alcGetString(nullptr, ALC_DEFAULT_DEVICE_SPECIFIER);
 	AudioPhysicalDevice audioPhysicalDevices;
 	audioPhysicalDevices.setName(defaultDevice);
 	setAudioDevice(audioPhysicalDevices);
@@ -53,7 +53,7 @@ AudioInterface::~AudioInterface(void) {
 	delete *audio->scheduler;
 
 	/*  Unbind and release context. */
-	alcMakeContextCurrent(NULL);
+	alcMakeContextCurrent(nullptr);
 	alcDestroyContext(audio->context);
 
 	/*  Release device. */
@@ -120,9 +120,9 @@ static const char* openAlErrorToString(int err)
 }
 
 static void validateClipDesc(AudioClipDesc* desc) {
-	if (desc == NULL) 
+	if (desc == nullptr) 
 		throw InvalidPointerException("AudioClipDesc invalid pointer");
-	if (desc->decoder.ptr() == NULL) {
+	if (desc->decoder.ptr() == nullptr) {
 		throw InvalidArgumentException("");
 	}
 
@@ -131,7 +131,7 @@ static void validateClipDesc(AudioClipDesc* desc) {
 	if (desc->datamode < AudioDataMode::LoadedInMemory ||
 		desc->datamode > AudioDataMode::DecompressOnLoad)
 		throw InvalidArgumentException("");
-	if(desc->source != NULL && desc->size <= 0){
+	if(desc->source != nullptr && desc->size <= 0){
 		throw InvalidArgumentException("");
 	}
 }
@@ -180,13 +180,13 @@ void AudioInterface::deleteAudioClip(AudioClip *AudioClip) {
 	OpenALInterfaceObject *audio = (OpenALInterfaceObject *) this->pdata;
 	//ALClip *clip = (ALClip)AudioClip->getObject();
 
-	alDeleteBuffers(1, NULL);
+	alDeleteBuffers(1, nullptr);
 	delete audio;
 	delete AudioClip;
 }
 
 static void validateAudioSourceDesc(AudioSourceDesc* desc){
-    if (desc == NULL)
+    if (desc == nullptr)
         throw InvalidPointerException("AudioSourceDesc invalid pointer");
 }
 
@@ -260,7 +260,7 @@ void AudioInterface::setAudioListener(AudioListener *listener) {
 }
 
 AudioCapture *AudioInterface::createAudioCapture(void) {
-	return NULL;
+	return nullptr;
 }
 
 std::vector<AudioPhysicalDevice> AudioInterface::getDevices(void) const
@@ -270,13 +270,13 @@ std::vector<AudioPhysicalDevice> AudioInterface::getDevices(void) const
 
 	const ALCchar *devices;
 	const ALCchar *mices;
-	if (alcIsExtensionPresent(NULL, "ALC_enumeration_EXT") == AL_TRUE) {
-		if (alcIsExtensionPresent(NULL, "ALC_enumerate_all_EXT") == AL_FALSE)
-			devices = (char *) alcGetString(NULL, ALC_DEVICE_SPECIFIER);
+	if (alcIsExtensionPresent(nullptr, "ALC_enumeration_EXT") == AL_TRUE) {
+		if (alcIsExtensionPresent(nullptr, "ALC_enumerate_all_EXT") == AL_FALSE)
+			devices = (char *) alcGetString(nullptr, ALC_DEVICE_SPECIFIER);
 		else
-			devices = (char *) alcGetString(NULL, ALC_ALL_DEVICES_SPECIFIER);
+			devices = (char *) alcGetString(nullptr, ALC_ALL_DEVICES_SPECIFIER);
 
-		mices = (char *)alcGetString(NULL, ALC_CAPTURE_DEVICE_SPECIFIER);
+		mices = (char *)alcGetString(nullptr, ALC_CAPTURE_DEVICE_SPECIFIER);
 	}
 
 	const ALCchar *device = devices, *next = devices + 1;
@@ -301,7 +301,7 @@ void AudioInterface::setAudioDevice(const AudioPhysicalDevice &device)
 	OpenALInterfaceObject *audio = (OpenALInterfaceObject *) this->pdata;
 	ALint attribs[4] = { 0 };
 
-	if (alcGetCurrentContext() != NULL) {
+	if (alcGetCurrentContext() != nullptr) {
 		ALCcontext *context = alcGetCurrentContext();
 		ALCdevice *curDevice = alcGetContextsDevice(context);
 
@@ -312,7 +312,7 @@ void AudioInterface::setAudioDevice(const AudioPhysicalDevice &device)
 		// Not same device. continue with selecting audio device.
 	}
 
-	if (alcGetCurrentContext() != NULL) {
+	if (alcGetCurrentContext() != nullptr) {
 		/*  */
 		if (!alcCloseDevice(audio->device))
 			throw RuntimeException(fvformatf("Failed to open audio device %s", device.getName().c_str()));

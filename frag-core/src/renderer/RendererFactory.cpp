@@ -17,14 +17,14 @@ IRenderer *RenderingFactory::createRendering(RenderingFactory::RenderingAPI rend
 	return RenderingFactory::createRendering(getInterfaceLibraryPath(renderingapi), config);
 }
 
-IRenderer *RenderingFactory::createRendering(const char *cpathlib, IConfig *config) {
+IRenderer *RenderingFactory::createRendering(const char *cpathlib, IConfig *config) noexcept {
 	Library library;
-	IRenderer *interface = NULL;
+	IRenderer *interface = nullptr;
 	const char *funcsymbol = "createInternalRenderer";
 	pcreateinternalrendering pfunc;
 
 	/*	Validate parameters.	*/
-	if (cpathlib == NULL)
+	if (cpathlib == nullptr)
 		throw InvalidArgumentException("path variable must not be null.");
 
 	/*	Open library and validate.	*/
@@ -71,8 +71,4 @@ const char *RenderingFactory::getInterfaceLibraryPath(RenderingFactory::Renderin
 			throw InvalidArgumentException("Not a valid rendering API enumerator.");
 	}
 #endif
-}
-
-RenderingFactory::RenderingFactory(void) {
-
 }

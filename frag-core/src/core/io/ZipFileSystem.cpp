@@ -77,7 +77,7 @@ IO *ZipFileSystem::openFile(unsigned int index) {
 
 bool ZipFileSystem::isASyncSupported(void) const
 {
-	return *this->getScheduler() != NULL;
+	return *this->getScheduler() != nullptr;
 }
 
 bool ZipFileSystem::isDirectory(const char *path){
@@ -137,7 +137,7 @@ void ZipFileSystem::release(void) {
 		if (this->pzip)
 			zip_close((zip_t *) this->pzip);
 	}
-	this->pzip = NULL;
+	this->pzip = nullptr;
 }
 
 void ZipFileSystem::closeFile(IO *io) {
@@ -163,7 +163,7 @@ void ZipFileSystem::rename(const char *oldPath, const char *newPath) {
 }
 
 void ZipFileSystem::createFile(const char *path) {
-	zip_int64_t error = zip_add((zip_t *) this->pzip, path, NULL);
+	zip_int64_t error = zip_add((zip_t *) this->pzip, path, nullptr);
 }
 
 void ZipFileSystem::createDirectory(const char *path) {
@@ -202,7 +202,7 @@ ZipFileSystem *ZipFileSystem::createZipFileObject(const char *cfilename, Ref<ISc
 
 	/*	Attempt to open the file by file path.	*/
 	zip = zip_open(cfilename, 0, &err);
-	if (zip == NULL) {
+	if (zip == nullptr) {
 		char buf[4096];
 		/*	Display error and return.	*/
 		zip_error_to_str(buf, sizeof(buf), err, errno);
@@ -255,7 +255,7 @@ static zip_int64_t io_callback(void *userdata, void *data, zip_uint64_t len, zip
 
 			st = (zip_stat_t *) data;
 			zip_stat_init(st);
-			st->mtime = time(NULL);
+			st->mtime = time(nullptr);
 			st->size = (*ioRef)->length();
 			st->comp_size = st->size;
 			st->comp_method = ZIP_CM_STORE;
@@ -287,11 +287,11 @@ ZipFileSystem *ZipFileSystem::createZipFileObject(Ref<IO> &ioRef, Ref<IScheduler
 
 	/*	*/
 	ioRef->seek(0, IO::SET);
-	zip_source *zipSource = zip_source_function_create(io_callback, &ioRef, NULL);
+	zip_source *zipSource = zip_source_function_create(io_callback, &ioRef, nullptr);
 	ioRef->increment();
 
 	zip = zip_open_from_source(zipSource, ZIP_RDONLY, &error);
-	if (zip == NULL) {
+	if (zip == nullptr) {
 		char buf[4096];
 
 		/*  Release.    */
@@ -341,7 +341,7 @@ ZipFileSystem::ZipFileSystem(Ref<IScheduler> ref)
 }
 
 ZipFileSystem::ZipFileSystem(const ZipFileSystem &other) {
-	this->pzip = NULL;
+	this->pzip = nullptr;
 }
 
 ZipFileSystem::~ZipFileSystem(void) {

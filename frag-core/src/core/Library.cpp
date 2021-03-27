@@ -6,16 +6,16 @@
 #include <utility>
 using namespace fragcore;
 
-Library::Library(void) { this->mlib = NULL; }
+Library::Library(void) { this->mlib = nullptr; }
 
 Library::Library(const char *clibrary) {
-	this->mlib = NULL;
+	this->mlib = nullptr;
 	this->open(clibrary);
 	this->name = clibrary;
 }
 
 Library::Library(const Library &library) {
-	this->mlib = NULL;
+	this->mlib = nullptr;
 	this->open(library.name.c_str());
 	this->name = library.name;
 }
@@ -28,23 +28,23 @@ bool Library::open(const char *clibrary) {
 	this->mlib = SDL_LoadObject(clibrary);
 
 	/*	Check for error.	*/
-	if (this->mlib == NULL) {
+	if (this->mlib == nullptr) {
 
 		std::string sdlerror = fvformatf("Failed open library : %s\n", SDL_GetError());
 		throw RuntimeException(sdlerror);
 	}
 
-	return this->mlib != NULL;
+	return this->mlib != nullptr;
 }
 
 void Library::close(void) { SDL_UnloadObject(this->mlib); }
 
-bool Library::isValid(void) const { return this->mlib != NULL; }
+bool Library::isValid(void) const { return this->mlib != nullptr; }
 
 void *Library::getfunc(const char *pProcName) {
 	void *func = SDL_LoadFunction(this->mlib, pProcName);
 
-	if (func == NULL) {
+	if (func == nullptr) {
 		std::string sdlerror = fvformatf("Failed to load function %s, %s from library %s.\n", pProcName, SDL_GetError(),
 										 this->name.c_str());
 		throw RuntimeException(sdlerror);

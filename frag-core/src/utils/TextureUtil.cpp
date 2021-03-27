@@ -16,7 +16,7 @@ using namespace fragcore;
 void TextureUtil::loadTexture(const char *path, IRenderer *renderer, Texture **texture) {
 
 	TextureDesc desc = {0};
-	void *pixeldata = NULL;
+	void *pixeldata = nullptr;
 	TextureDesc::Format format;
 	TextureDesc::Format internalformat;
 	unsigned int width;
@@ -75,7 +75,7 @@ void *TextureUtil::loadTextureData(const char *cfilename, unsigned int *pwidth,
                                    TextureDesc::Format *pinternalformat, TextureDesc::Type *ptype,
                                    unsigned long *pixelSize) {
 
-	void *pixeldata = NULL;
+	void *pixeldata = nullptr;
 
 	Ref<IO> f = Ref<IO>(FileSystem::getFileSystem()->openFile(cfilename, IO::READ));
 	long inbytes = IOUtil::loadFileMem(f, (char**)&pixeldata);
@@ -89,12 +89,12 @@ void *TextureUtil::loadTextureData(const char *cfilename, unsigned int *pwidth,
 
 void *TextureUtil::loadTextureData(const char *cfilename, unsigned int *pwidth,
                                    unsigned int *pheight, unsigned long *pixelSize) {
-	return TextureUtil::loadTextureData(cfilename, pwidth, pheight, NULL, NULL, NULL, pixelSize);
+	return TextureUtil::loadTextureData(cfilename, pwidth, pheight, nullptr, nullptr, nullptr, pixelSize);
 }
 
 
 void *TextureUtil::loadTextureData(const void *pbuf, long int size, unsigned int *width, unsigned int *height) {
-	return loadTextureDataFromMem(pbuf, size, width, height, NULL, NULL, NULL, NULL);
+	return loadTextureDataFromMem(pbuf, size, width, height, nullptr, nullptr, nullptr, nullptr);
 }
 
 void *TextureUtil::loadTextureDataFromMem(const void *pbuf, long int size, unsigned int *width, unsigned int *height,
@@ -117,7 +117,7 @@ void *TextureUtil::loadTextureDataFromMem(const void *pbuf, long int size, unsig
 
 	/*	1 byte for the size in order, Because it crash otherwise if set to 0.	*/
 	stream = FreeImage_OpenMemory((BYTE *) pbuf, size);
-	if (stream == NULL)
+	if (stream == nullptr)
 		throw RuntimeException(fvformatf("Failed to open freeimage memory stream. \n"));
 
 	/*	Seek to beginning of the memory stream.	*/
@@ -127,7 +127,7 @@ void *TextureUtil::loadTextureDataFromMem(const void *pbuf, long int size, unsig
 	imgtype = FreeImage_GetFileTypeFromMemory(stream, size);
 	FreeImage_SeekMemory(stream, 0, SEEK_SET);
 	firsbitmap = FreeImage_LoadFromMemory(imgtype, stream, 0);
-	if (firsbitmap == NULL) {
+	if (firsbitmap == nullptr) {
 		FreeImage_CloseMemory(stream);
 		throw RuntimeException(fvformatf("Failed to create free-image from memory.\n"));
 	}
@@ -183,7 +183,7 @@ void *TextureUtil::loadTextureDataFromMem(const void *pbuf, long int size, unsig
 		*ptype = TextureDesc::eUnsignedByte;
 
 	/*	Check error and release resources.	*/
-	if (pixel == NULL || size == 0) {
+	if (pixel == nullptr || size == 0) {
 		FreeImage_Unload(firsbitmap);
 		FreeImage_CloseMemory(stream);
 		throw RuntimeException(fvformatf("Failed getting pixel data from FreeImage.\n"));
@@ -191,7 +191,7 @@ void *TextureUtil::loadTextureDataFromMem(const void *pbuf, long int size, unsig
 
 	/*	Make a copy of pixel data.	*/
 	void *pixels = malloc(*pixelSize);
-	if (pixels == NULL)
+	if (pixels == nullptr)
 		throw RuntimeException(fvformatf("Failed to allocate %d, %s.\n", size, strerror(errno)));
 
 	memcpy(pixels, pixel, *pixelSize);
@@ -205,10 +205,10 @@ void *TextureUtil::loadTextureDataFromMem(const void *pbuf, long int size, unsig
 
 void TextureUtil::saveTexture(const char *filepath, IRenderer *renderer, Texture *texture) {
 
-	void *pixels = NULL;
-	FIMEMORY *fimemory = NULL;
-	FIBITMAP *image = NULL;
-	FIBITMAP *finalImage = NULL;
+	void *pixels = nullptr;
+	FIMEMORY *fimemory = nullptr;
+	FIBITMAP *image = nullptr;
+	FIBITMAP *finalImage = nullptr;
 	FREE_IMAGE_FORMAT image_format = FIF_UNKNOWN;
 
 	assert(renderer && filepath && texture);
@@ -223,7 +223,7 @@ void TextureUtil::saveTexture(const char *filepath, IRenderer *renderer, Texture
 
 	/*  Read current pixels from mandelbrot set.    */
 	pixels = texture->mapTexture(textureformat, 0);
-	if (pixels == NULL)
+	if (pixels == nullptr)
 		throw RuntimeException("Texture pixel mapping failed.");
 
 	FreeImage_Initialise(FALSE);
@@ -241,21 +241,21 @@ void TextureUtil::saveTexture(const char *filepath, IRenderer *renderer, Texture
 	                                     texture->width(), texture->height(),
 	                                     Bpp * texture->width(), Bpp * 8, 0x000000FF, 0x0000FF00,
 	                                     0x00FF0000, FALSE);
-	if (image == NULL) {
+	if (image == nullptr) {
 		FreeImage_DeInitialise();
 		throw RuntimeException(fvformatf("FreeImage_ConvertFromRawBits failed: %s", filepath));
 	}
 
 	/*  */
 	finalImage = FreeImage_ConvertTo32Bits(image);
-	if (finalImage == NULL) {
+	if (finalImage == nullptr) {
 		throw RuntimeException(fvformatf("Failed convert image: %s", filepath));
 	}
 
 	/*  Save to file.   */
 	//FreeImage_SaveToHandle()
 
-	//FIMEMORY* mem = FreeImage_OpenMemory(NULL, FreeImage_GetMemorySize(image));
+	//FIMEMORY* mem = FreeImage_OpenMemory(nullptr, FreeImage_GetMemorySize(image));
 	//FreeImage_SaveToMemory(image_format, image, mem);
 
 	if (!FreeImage_Save(image_format, image, filepath, 0))

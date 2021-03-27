@@ -59,13 +59,13 @@ void GLRendererInterface::OnDestruction(void) {}
 GLRendererInterface::GLRendererInterface(IConfig *config) {
 
 	OpenGLCore *glcore;
-	SDL_Window *window = NULL;
+	SDL_Window *window = nullptr;
 	GLenum status;
 
 	this->setName("OpenGL");
 
 	IConfig setupConfig;
-	if(config == NULL){
+	if(config == nullptr){
 		setupConfig.set("core", true);
 		setupConfig.set("debug", true);
 		setupConfig.set("alpha", true);
@@ -156,14 +156,14 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 			SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN);
 	glcore->tpmwindow = window;
 
-	if (window == NULL) {
+	if (window == nullptr) {
 		throw RuntimeException(fvformatf("Could not create an OpenGL window - %s.", SDL_GetError()));
 	}
 
 	/*	Create OpenGL context.	*///TODO add config attribute for auto or force the version.
 	//config->get<const char*>("version");
 	glcore->openglcontext = SDL_GL_CreateContext(window);
-	if (glcore->openglcontext == NULL) {
+	if (glcore->openglcontext == nullptr) {
 		const unsigned int validGLVersion[][2] = {
 				{4, 6},
 				{4, 5},
@@ -225,7 +225,7 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 			glcore->useCompatibility = false;
 
 			/*  Final check.    */
-			if (glcore->openglcontext == NULL) {
+			if (glcore->openglcontext == nullptr) {
 				SDL_DestroyWindow(window);
 				throw RuntimeException(fvformatf("Failed to create compatibility context: %s.", SDL_GetError()));
 			}
@@ -345,14 +345,14 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 	/*  Create PBO for image transfer. */
 	BufferDesc pbo = {};
 	pbo.size = 0;
-	pbo.data = NULL;
+	pbo.data = nullptr;
 	pbo.hint = (BufferDesc::BufferHint)(BufferDesc::eStream | BufferDesc::eWrite);
 	pbo.type = BufferDesc::ePixelUnpack;
 	glcore->pboUnPack = this->createBuffer(&pbo);
 
 	/*  Create PBO for image transfer. */
 	pbo.size = 0;
-	pbo.data = NULL;
+	pbo.data = nullptr;
 	pbo.hint = (BufferDesc::BufferHint)(BufferDesc::eStream | BufferDesc::eWrite);
 	pbo.type = BufferDesc::ePixelPack;
 	glcore->pboPack = this->createBuffer(&pbo);
@@ -369,7 +369,7 @@ GLRendererInterface::~GLRendererInterface(void) {
 	//TODO release all the viewports.
 
 	/*  Unbind opengl context.  */
-	SDL_GL_MakeCurrent(NULL, NULL);
+	SDL_GL_MakeCurrent(nullptr, nullptr);
 
 	//if (glCore->drawwindow)
 	//	SDL_DestroyWindow(glCore->drawwindow);
@@ -395,7 +395,7 @@ Texture *GLRendererInterface::createTexture(TextureDesc *desc) {
 			throw InvalidArgumentException("sRGB is not supported.");
 	}
 
-	Sampler *sampler = NULL;
+	Sampler *sampler = nullptr;
 	GLuint texture;
 	GLuint target;
 	GLuint format;
@@ -553,7 +553,7 @@ Texture *GLRendererInterface::createTexture(TextureDesc *desc) {
 					break;
 				case GL_TEXTURE_2D:
 					glTexStorage2D(target, 1, internalformat, desc->width,
-					               desc->height); // TODO add only if mipmaps is used with NULL pixel object.
+					               desc->height); // TODO add only if mipmaps is used with nullptr pixel object.
 					break;
 				case GL_TEXTURE_2D_ARRAY:
 					break;
@@ -618,13 +618,13 @@ void GLRendererInterface::deleteTexture(Texture *texture) {
 Sampler *GLRendererInterface::createSampler(SamplerDesc *desc) {
 
 	/*  Validate desc.  */
-	if (desc == NULL)
+	if (desc == nullptr)
 		throw InvalidArgumentException("Invalid sampler description pointer object.");
 	if(desc->anisotropy < 0)
 		throw InvalidArgumentException("Anisotropy can not be negative.");
 
 	/*  Does not support.   */
-	if (glGenSamplers == NULL)
+	if (glGenSamplers == nullptr)
 		throw RuntimeException("OpenGL sampler object not supported.");
 
 	OpenGLCore *glCore = (OpenGLCore *) this->pdata;
@@ -789,7 +789,7 @@ void GLRendererInterface::deletePipeline(RenderPipeline *obj) {
 Shader *GLRendererInterface::createShader(ShaderDesc *desc) {
 
 	/*  Validate the argument.  */
-	if(desc == NULL)
+	if(desc == nullptr)
 		throw InvalidArgumentException("Descriptor object may not be null.");
 
 	OpenGLCore *glCore = (OpenGLCore *) this->pdata;
@@ -832,7 +832,7 @@ Shader *GLRendererInterface::createShader(ShaderDesc *desc) {
 			if (desc->Compute.type == ShaderCodeType::eSourceCode)
 			{
 				compute = glCreateShader(GL_COMPUTE_SHADER);
-				glShaderSourceARB(compute, desc->Compute.numcompute, desc->Compute.computeSource, NULL);
+				glShaderSourceARB(compute, desc->Compute.numcompute, desc->Compute.computeSource, nullptr);
 				glCompileShaderARB(compute);
 				checkShaderError(compute);
 			}
@@ -853,7 +853,7 @@ Shader *GLRendererInterface::createShader(ShaderDesc *desc) {
 			if (desc->vertex.type == ShaderCodeType::eSourceCode)
 			{
 				ver = glCreateShader(GL_VERTEX_SHADER_ARB);
-				glShaderSourceARB(ver, desc->vertex.numvert, desc->vertex.vertexsource, NULL);
+				glShaderSourceARB(ver, desc->vertex.numvert, desc->vertex.vertexsource, nullptr);
 				glCompileShaderARB(ver);
 				checkShaderError(ver);
 			}
@@ -872,7 +872,7 @@ Shader *GLRendererInterface::createShader(ShaderDesc *desc) {
 		if (desc->fragment.language & supportedLanguage) {
 			if (desc->fragment.type == eSourceCode) {
 				fra = glCreateShader(GL_FRAGMENT_SHADER_ARB);
-				glShaderSourceARB(fra, desc->fragment.numfrag, desc->fragment.fragmentsource, NULL);
+				glShaderSourceARB(fra, desc->fragment.numfrag, desc->fragment.fragmentsource, nullptr);
 				glCompileShaderARB(fra);
 				checkShaderError(fra);
 			}
@@ -892,7 +892,7 @@ Shader *GLRendererInterface::createShader(ShaderDesc *desc) {
 		if (desc->geometry.language & supportedLanguage) {
 			if (desc->geometry.type == ShaderCodeType::eSourceCode) {
 				geo = glCreateShader(GL_GEOMETRY_SHADER_ARB);
-				glShaderSourceARB(geo, desc->geometry.numgeo, desc->geometry.geometrysource, NULL);
+				glShaderSourceARB(geo, desc->geometry.numgeo, desc->geometry.geometrysource, nullptr);
 				glCompileShaderARB(geo);
 				checkShaderError(geo);
 			}
@@ -912,7 +912,7 @@ Shader *GLRendererInterface::createShader(ShaderDesc *desc) {
 //
 //	if (desc->geometrysource) {
 //		geo = glCreateShader(GL_GEOMETRY_SHADER_ARB);
-//		glShaderSourceARB(geo, desc->numgeo, desc->geometrysource, NULL);
+//		glShaderSourceARB(geo, desc->numgeo, desc->geometrysource, nullptr);
 //		glCompileShaderARB(geo);
 //		checkShaderError(geo);
 //		glAttachShader(program, geo);
@@ -920,14 +920,14 @@ Shader *GLRendererInterface::createShader(ShaderDesc *desc) {
 //
 //	if (desc->tessellationev) {
 //		tesse = glCreateShader(GL_TESS_EVALUATION_SHADER);
-//		glShaderSourceARB(tesse, desc->numtesev, desc->tessellationev, NULL);
+//		glShaderSourceARB(tesse, desc->numtesev, desc->tessellationev, nullptr);
 //		glCompileShaderARB(tesse);
 //		glAttachShader(program, tesse);
 //	}
 //
 //	if (desc->tessellationco) {
 //		tessc = glCreateShader(GL_TESS_CONTROL_SHADER);
-//		glShaderSourceARB(tessc, desc->numtesco, desc->tessellationco, NULL);
+//		glShaderSourceARB(tessc, desc->numtesco, desc->tessellationco, nullptr);
 //		glCompileShaderARB(tessc);
 //		glAttachShader(program, tessc);
 //
@@ -940,9 +940,9 @@ Shader *GLRendererInterface::createShader(ShaderDesc *desc) {
 	glGetProgramiv(program, GL_LINK_STATUS, &lstatus);
 	if (lstatus != GL_TRUE) {
 		char log[4096];
-		glGetProgramInfoLog(program, sizeof(log), NULL, log);
+		glGetProgramInfoLog(program, sizeof(log), nullptr, log);
 		fprintf(stderr, "%s.\n", log);
-		return NULL;
+		return nullptr;
 	}
 
 	/*	Remove shader resources not needed after linking.	*/
@@ -1000,13 +1000,13 @@ Buffer *GLRendererInterface::createBuffer(BufferDesc *desc) {
 	OpenGLCore *glCore = (OpenGLCore *) this->pdata;
 
 	/*	Verify the arguments.	*/
-	if (desc == NULL)
+	if (desc == nullptr)
 		throw InvalidArgumentException("Invalid buffer description pointer object.");
 	if(desc->size < 0)
 		throw InvalidArgumentException("Buffer size must be 0 or greater.");
 
 	GLBuffer *buffer = new GLBuffer();
-	//GLBufferObject *glbuf = NULL;
+	//GLBufferObject *glbuf = nullptr;
 	GLenum error;
 
 	GLuint buf = 0;
@@ -1098,7 +1098,7 @@ Geometry *GLRendererInterface::createGeometry(GeometryDesc *desc) {
 
 	Geometry *geometryObject;
 	OpenGLCore *glCore = (OpenGLCore *) this->pdata;
-	GLGeometryObject *glgeoobj = NULL;
+	GLGeometryObject *glgeoobj = nullptr;
 	unsigned int vao;
 	unsigned int x;
 
@@ -1195,14 +1195,14 @@ void GLRendererInterface::deleteGeometry(Geometry *obj) {
 FrameBuffer *GLRendererInterface::createFrameBuffer(FrameBufferDesc *desc) {
 
 	unsigned int i;                             /*	*/
-	GLFrameBufferObject *glfraobj = NULL;       /*	*/
+	GLFrameBufferObject *glfraobj = nullptr;       /*	*/
 	GLenum frstat;                              /*	*/
 	GLenum draw[16];                            /*	*/
 	GLuint numatt = 0;                          /*	*/
 	OpenGLCore *glCore = (OpenGLCore *) this->pdata;
 
 	/*  Validate the arguments. */
-	if (desc == NULL)
+	if (desc == nullptr)
 		throw std::invalid_argument("Descriptor object must not be null");
 	if (desc->depth && desc->stencil && desc->depthstencil)
 		throw std::invalid_argument("");
@@ -1239,7 +1239,7 @@ FrameBuffer *GLRendererInterface::createFrameBuffer(FrameBufferDesc *desc) {
 	for (i = 0; i < sizeof(desc->attach) / sizeof(desc->attach[0]); i++) {
 
 		/*  */
-		if (desc->attach[i] != NULL) {
+		if (desc->attach[i] != nullptr) {
 			GLTextureObject *tex = (GLTextureObject *) desc->attach[i]->getObject();
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, tex->target, tex->texture, 0);
 			/*	*/
@@ -1330,7 +1330,7 @@ RendererWindow* GLRendererInterface::createWindow(int x, int y, int width, int h
 		/*	Cleanup.	*/
 	if (glcore->tpmwindow) {
 		SDL_DestroyWindow(glcore->tpmwindow);
-		glcore->tpmwindow = NULL;
+		glcore->tpmwindow = nullptr;
 	}
 
 	return renderWindow;
@@ -1343,7 +1343,7 @@ RendererWindow* GLRendererInterface::createWindow(int x, int y, int width, int h
 
 	/*  */
 	createSwapChain();
-	return NULL;
+	return nullptr;
 	//return rendererWindow;
 }
 
@@ -1365,8 +1365,8 @@ void GLRendererInterface::createSwapChain() {
 FrameBuffer *GLRendererInterface::getDefaultFramebuffer(void *window) {
 	OpenGLCore *glcore = (OpenGLCore *) this->pdata;
 
-	static FrameBuffer *defaultFrambuffer = NULL;
-	if (defaultFrambuffer == NULL) {
+	static FrameBuffer *defaultFrambuffer = nullptr;
+	if (defaultFrambuffer == nullptr) {
 
 		defaultFrambuffer = new FrameBuffer();
 		GLFrameBufferObject *frameBufferObject = new GLFrameBufferObject();
@@ -1449,7 +1449,7 @@ void GLRendererInterface::drawInstance(Geometry *geometry, unsigned int num) {
 	glBindVertexArray(glgeo->vao);
 	resetErrorFlag();
 	if (glgeo->desc.numIndices > 0) {
-		glDrawElementsInstancedARB(glgeo->mode, glgeo->desc.numIndices, glgeo->indicesType, NULL, num);
+		glDrawElementsInstancedARB(glgeo->mode, glgeo->desc.numIndices, glgeo->indicesType, nullptr, num);
 	} else {
 		glDrawArraysInstancedARB(glgeo->mode, 0, glgeo->desc.numVerticecs, num);
 	}
@@ -1482,9 +1482,9 @@ void GLRendererInterface::drawIndirect(Geometry *geometry) {
 	glBindVertexArray(glgeo->vao);
 	resetErrorFlag();
 	if (glgeo->desc.numIndices > 0) {
-		glDrawElementsIndirect(glgeo->mode, glgeo->indicesType, NULL);
+		glDrawElementsIndirect(glgeo->mode, glgeo->indicesType, nullptr);
 	} else {
-		glDrawArraysIndirect(glgeo->mode, NULL);
+		glDrawArraysIndirect(glgeo->mode, nullptr);
 	}
 
 	GLenum errorStatus = glGetError();
@@ -1772,13 +1772,13 @@ void GLRendererInterface::setDebug(bool enable) {
 
 		/*	Set Debug message callback.	*/
 		if (callback) {
-			callback(callback_debug_gl, NULL);
+			callback(callback_debug_gl, nullptr);
 		}
 		if (callbackARB) {
-			callbackARB(callback_debug_gl, NULL);
+			callbackARB(callback_debug_gl, nullptr);
 		}
 		if (callbackAMD) {
-			callbackAMD(callback_debug_gl, NULL);
+			callbackAMD(callback_debug_gl, nullptr);
 		}
 
 		/*	*/
@@ -1841,7 +1841,7 @@ const char *GLRendererInterface::getVersion(void) const {
 }
 
 void GLRendererInterface::getSupportedTextureCompression(TextureDesc::Compression* pCompressions){
-	if (pCompressions == NULL)
+	if (pCompressions == nullptr)
 		throw std::invalid_argument("pCompressions may not be a null pointer.");
 
 	unsigned int compressions = 0;
@@ -1876,7 +1876,7 @@ void GLRendererInterface::getCapability(Capability *capability) {
 
 	assert(capability);
 
-	if (capability == NULL)
+	if (capability == nullptr)
 		throw std::invalid_argument("capability object may not a null pointer.");
 
 	glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &capability->sMaxVertexAttributes);

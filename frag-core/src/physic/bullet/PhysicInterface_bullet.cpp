@@ -165,9 +165,9 @@ Collision *PhysicInterface::createCollision(const CollisionDesc *desc) {
 		case CollisionDesc::eMesh:
 			//btBvhTriangleMeshShape
 //			btTriangleMesh
-			btTriangleMesh
+//			btTriangleMesh
 //			btBvhTriangleMeshShape
-					shape = NULL;//btTriangleMeshShape
+					//shape = nullptr;//btTriangleMeshShape
 			break;
 	}
 
@@ -235,15 +235,15 @@ void PhysicInterface::deleteConstraints(Constraints* constraints){
 
 RigidBody *PhysicInterface::createRigibody(const RigidBodyDesc *desc) {
 
-	RigidBody *body = NULL;            /*	*/
-	btCollisionShape *shape = NULL;    /*	*/
+	RigidBody *body = nullptr;            /*	*/
+	btCollisionShape *shape = nullptr;    /*	*/
 
 	//assert(desc->node && desc->collision);
 
-	// if (desc->node == NULL)
+	// if (desc->node == nullptr)
 	// 	throw RuntimeException("Requires a non-null node reference");
 
-	if (desc->collision == NULL)
+	if (desc->collision == nullptr)
 		throw RuntimeException("Requires a non-null collision reference");
 
 //	/*	Get collsion object.	*/
@@ -296,7 +296,7 @@ RigidBody *PhysicInterface::createRigibody(const RigidBodyDesc *desc) {
 
 void PhysicInterface::deleteRigibody(RigidBody* rigidbody){
 
-	btRigidBody* body = NULL;
+	btRigidBody* body = nullptr;
 
 	/*  */
 	//body = (btRigidBody*)getPointerByIndex(rigidbody);
@@ -356,7 +356,7 @@ void PhysicInterface::deleteTerrain(void* terrain){
 
 CharacterController *PhysicInterface::createCharacterController(CharacterControllerDesc *desc) {
 	PhysicCore *physicore = (PhysicCore *) this->pdata;
-	btPairCachingGhostObject *ghostObject = NULL;//new btPairCachingGhostObject();
+	btPairCachingGhostObject *ghostObject = nullptr;//new btPairCachingGhostObject();
 
 	btCapsuleShape *capsuleShape = new btCapsuleShape(2.0f, 1.0f);
 	btKinematicCharacterController *m_pTommyController = new btKinematicCharacterController(ghostObject, capsuleShape,

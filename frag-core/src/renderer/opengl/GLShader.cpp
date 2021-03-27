@@ -81,7 +81,7 @@ void *Shader::getBinary(long int *size, unsigned int *format) {
 
 	glGetProgramiv(shadobj->program, GL_PROGRAM_BINARY_LENGTH, &pBsize);
 	void *pBinary = malloc(pBsize);
-	glGetProgramBinary(shadobj->program, pBsize, NULL, &pBformat, pBinary);
+	glGetProgramBinary(shadobj->program, pBsize, nullptr, &pBformat, pBinary);
 
 	if (size)
 		*size = pBsize;

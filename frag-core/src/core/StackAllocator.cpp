@@ -4,8 +4,8 @@
 using namespace fragcore;
 
 StackAllocator::StackAllocator(void) {
-	this->mData = NULL;
-	this->mMarker = NULL;
+	this->mData = nullptr;
+	this->mMarker = 0;
 	this->mSize = 0;
 }
 
@@ -17,7 +17,7 @@ StackAllocator::StackAllocator(StackAllocator &&other) {}
 
 StackAllocator::StackAllocator(unsigned int stackSizeBytes) {
 	this->mMarker = 0;
-	this->mData = NULL;
+	this->mData = nullptr;
 	this->mSize = 0;
 	this->alloc(stackSizeBytes);
 }

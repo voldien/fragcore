@@ -35,14 +35,14 @@ void GLCommandList::clearColorTarget(uint index, const Color &color){
 
 void GLCommandList::dispatch(uint groupCountX, uint groupCountY, uint groupCountZ) {
 	uint global[3] = {groupCountX, groupCountY, groupCountZ};
-	this->compute->dispatchCompute(global, NULL, 0);
+	this->compute->dispatchCompute(global, nullptr, 0);
 }
 
 void GLCommandList::dispatchIndirect(Buffer* buffer, u_int64_t offset)
 {
 
 	//uint global[3] = {groupCountX, groupCountY, groupCountZ};
-	//this->compute->dispatchCompute(global, NULL, 0);
+	//this->compute->dispatchCompute(global, nullptr, 0);
 }
 
 void GLCommandList::pushDebugGroup(const char *name)

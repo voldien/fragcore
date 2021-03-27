@@ -23,12 +23,12 @@ PhysicInterface* PhysicFactory::createPhysic(PhysicAPI api,  IConfig* overrideOp
 PhysicInterface* PhysicFactory::createPhysic(const char* libpath, IConfig* config) {
 
 	const char* funcsymbol = "createInternalPhysicInterface";
-	pcreateInternalPhysicInterface pfunc = NULL;
-	PhysicInterface* interface = NULL;
+	pcreateInternalPhysicInterface pfunc = nullptr;
+	PhysicInterface* interface = nullptr;
 	Library library;
 
 	/*	Validate parameters.	*/
-	if(libpath == NULL)
+	if(libpath == nullptr)
 		throw InvalidArgumentException(fvformatf("Invalid filepath do dynamic library: %s", libpath));
 
 	/*	Open dynamicInterface library and create dynamicInterface object.	*/
@@ -46,7 +46,7 @@ PhysicInterface* PhysicFactory::createPhysic(const char* libpath, IConfig* confi
 		Log::error("Failed loading %s library for creating physic dynamicInterface.\n", libpath);
 	}
 
-//	if(connection != NULL){
+//	if(connection != nullptr){
 //
 //		/*	Create RPC physic dynamicInterface.	*/
 //		/*	Assign connection.	*/
@@ -60,9 +60,9 @@ PhysicInterface* PhysicFactory::createPhysic(const char* libpath, IConfig* confi
 //	}else
 
 	/*	Check.	*/
-//	if(interface != NULL){
+//	if(interface != nullptr){
 //		interface->setResource(resources);
-//		if(interface->dispatcher != NULL){
+//		if(interface->dispatcher != nullptr){
 //			interface->dispatcher->connection = connection;
 //		}
 //	}else{

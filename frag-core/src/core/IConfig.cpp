@@ -19,7 +19,7 @@
 using namespace fragcore;
 
 IConfig::IConfig(void) {
-	this->parent = NULL;
+	this->parent = nullptr;
 }
 
 IConfig::IConfig(const IConfig &other) {
@@ -161,7 +161,7 @@ void IConfig::printTable(Ref<IO>& io) const {
 	sti = this->sconfig.begin();
 
 	/*  */
-	if(this->parent == NULL)
+	if(this->parent == nullptr)
 		IOUtil::format(io, "Configuration table:\n");
 
 	/*  Check the depth.    */
@@ -257,7 +257,7 @@ void IConfig::save_xml(Ref<IO>& io){
 
 
 	buf = xmlBufferCreate();
-	if (buf == NULL)
+	if (buf == nullptr)
 		throw RuntimeException(fvformatf("testXmlwriterMemory: Error creating the xml buffer\n"));
 
 	/*	Create write file.	*/
@@ -266,7 +266,7 @@ void IConfig::save_xml(Ref<IO>& io){
 		throw RuntimeException(fvformatf("xmlNewTextWriterFilename failed"));
 
 	/*	*/
-	rc = xmlTextWriterStartDocument(writer, NULL, "utf-8", NULL);
+	rc = xmlTextWriterStartDocument(writer, nullptr, "utf-8", nullptr);
 	if (rc < 0)
 		throw RuntimeException(fvformatf("xmlTextWriterStartDocument failed - %d.", rc));
 
@@ -405,7 +405,7 @@ void IConfig::save_yaml(Ref<IO>& io){
 	yaml_tag_directive_t s, e;
 
 
-	if(!yaml_document_initialize(&document, NULL, &s, &e, 1, 1)){
+	if(!yaml_document_initialize(&document, nullptr, &s, &e, 1, 1)){
 		throw RuntimeException("");
 	}
 
@@ -433,7 +433,7 @@ void IConfig::save_yaml(Ref<IO>& io){
 //
 //    if (!yaml_parser_initialize(&parser))
 //        fputs("Failed to initialize parser!\n", stderr);
-//    if (fh == NULL)
+//    if (fh == nullptr)
 //        fputs("Failed to open file!\n", stderr);
 //    yaml_parser_set_encoding(&parser, YAML_UTF8_ENCODING);
 //    yaml_parser_delete(&parser);
@@ -526,8 +526,8 @@ void IConfig::parse_xml(Ref<IO>& io) {
 	int size = IOUtil::loadFileMem(io, &buffer);
 
 	/*	Load xml file.  */
-	//document = xmlReadFile(path, NULL, 0);
-	document = xmlReadMemory((const char*)buffer, size,  NULL, "UTF-8", 0);
+	//document = xmlReadFile(path, nullptr, 0);
+	document = xmlReadMemory((const char*)buffer, size,  nullptr, "UTF-8", 0);
 	root = xmlDocGetRootElement(document);
 
 	for(rootnode = root; rootnode; rootnode = rootnode->next){
@@ -542,9 +542,9 @@ void IConfig::parse_xml(Ref<IO>& io) {
 
 					/*  Write each xml entry to the config.   */
 					if (strcmp(type, "f") == 0)
-						this->set<float>(name, strtof(value, NULL));
+						this->set<float>(name, strtof(value, nullptr));
 					else if (strcmp(type, "i") == 0)
-						this->set<int>(name, strtol(value, NULL, 10));
+						this->set<int>(name, strtol(value, nullptr, 10));
 					else if (strcmp(type, "PKc") == 0)
 						this->set(name, value);
 					else
@@ -623,7 +623,7 @@ void IConfig::parse_json_recursive_config(IConfig *config, struct json_object *r
 
 		switch (val_type) {
 			case json_type_null:
-				config->set<char*>(key, NULL);
+				config->set<char*>(key, nullptr);
 				break;
 			case json_type_boolean:
 				intvalue = json_object_get_boolean(value);
@@ -681,7 +681,7 @@ void IConfig::parse_json(Ref<IO>& io) {
 			}
 			offbuf += jsonTokener->char_offset;
 
-			if (obj == NULL)
+			if (obj == nullptr)
 				continue;
 			this->parse_json_recursive_config(this, obj);
 

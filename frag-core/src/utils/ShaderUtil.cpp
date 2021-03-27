@@ -19,11 +19,11 @@ void ShaderUtil::loadProgramFromMem(const ShaderObject *vshader, const ShaderObj
 				   const ShaderObject *compute, Ref<IRenderer>& renderer, Shader **pshader) {
 
 //	validateShaderArguments(type, language, codetype);
-	if (pshader == NULL)
+	if (pshader == nullptr)
 		throw InvalidArgumentException("");
 
 	ShaderDesc desc = {0};
-	Shader *shader = NULL;
+	Shader *shader = nullptr;
 	int nsources;
 
 	/*	Source code constants for language supporting preprocessors.*/
@@ -42,9 +42,9 @@ void ShaderUtil::loadProgramFromMem(const ShaderObject *vshader, const ShaderObj
 // 	case GLSL:
 // 		/*  Get GLSL version.   */
 // #if defined(_DEBUG)
-// 		sprintf(glver, "#version %d\n//#pragma debug(on)\n", (int)(strtof(renderer->getShaderVersion(GLSL), NULL)));
+// 		sprintf(glver, "#version %d\n//#pragma debug(on)\n", (int)(strtof(renderer->getShaderVersion(GLSL), nullptr)));
 // #elif defined(NDEBUG)
-// 		sprintf(glver, "#version %d\n //#pragma optimize(on)\n  //#pragma debug(off)\n", (int)(strtof(renderer->getShaderVersion(GLSL), NULL)));
+// 		sprintf(glver, "#version %d\n //#pragma optimize(on)\n  //#pragma debug(off)\n", (int)(strtof(renderer->getShaderVersion(GLSL), nullptr)));
 // #endif
 // 		sources[0] = glver;
 // 		/*  */
@@ -62,16 +62,16 @@ void ShaderUtil::loadProgramFromMem(const ShaderObject *vshader, const ShaderObj
 // 	case HLSL:
 // 	case CG:
 // 	default:
-// 		assert(NULL);
+// 		assert(nullptr);
 // 	}
 
 	char vglver[256];
 	char fglver[256];
 	char gglver[256];
-	const char *vsources[4] = {NULL};
-	const char *fsources[4] = {NULL};
-	const char *gsources[4] = {NULL};
-	const char *csources[4] = {NULL};
+	const char *vsources[4] = {nullptr};
+	const char *fsources[4] = {nullptr};
+	const char *gsources[4] = {nullptr};
+	const char *csources[4] = {nullptr};
 	if (vshader){
 
 
@@ -79,7 +79,7 @@ void ShaderUtil::loadProgramFromMem(const ShaderObject *vshader, const ShaderObj
 			switch (vshader->language)
 			{
 			case GLSL:
-				sprintf(vglver, "#version %d\n", (int)(strtof(renderer->getShaderVersion(GLSL), NULL)));
+				sprintf(vglver, "#version %d\n", (int)(strtof(renderer->getShaderVersion(GLSL), nullptr)));
 				/*  Get GLSL version.   */
 				vsources[0] = vglver;
 				/*  */
@@ -96,7 +96,7 @@ void ShaderUtil::loadProgramFromMem(const ShaderObject *vshader, const ShaderObj
 			case HLSL:
 			case CG:
 			default:
-				assert(NULL);
+				assert(nullptr);
 			}
 		desc.vertex.language = vshader->language;
 		desc.vertex.size = vshader->size;
@@ -115,7 +115,7 @@ void ShaderUtil::loadProgramFromMem(const ShaderObject *vshader, const ShaderObj
 		switch (fshader->language)
 		{
 		case GLSL:
-			sprintf(fglver, "#version %d\n", (int)(strtof(renderer->getShaderVersion(GLSL), NULL)));
+			sprintf(fglver, "#version %d\n", (int)(strtof(renderer->getShaderVersion(GLSL), nullptr)));
 			/*  Get GLSL version.   */
 			fsources[0] = fglver;
 			/*  */
@@ -132,7 +132,7 @@ void ShaderUtil::loadProgramFromMem(const ShaderObject *vshader, const ShaderObj
 		case HLSL:
 		case CG:
 		default:
-			assert(NULL);
+			assert(nullptr);
 		}
 		desc.fragment.language = fshader->language;
 		desc.fragment.size = fshader->size;
@@ -152,7 +152,7 @@ void ShaderUtil::loadProgramFromMem(const ShaderObject *vshader, const ShaderObj
 		switch (gshader->language)
 		{
 		case GLSL:
-			sprintf(fglver, "#version %d\n", (int)(strtof(renderer->getShaderVersion(GLSL), NULL)));
+			sprintf(fglver, "#version %d\n", (int)(strtof(renderer->getShaderVersion(GLSL), nullptr)));
 			/*  Get GLSL version.   */
 			gsources[0] = fglver;
 			/*  */
@@ -169,7 +169,7 @@ void ShaderUtil::loadProgramFromMem(const ShaderObject *vshader, const ShaderObj
 		case HLSL:
 		case CG:
 		default:
-			assert(NULL);
+			assert(nullptr);
 		}
 		desc.geometry.language = gshader->language;
 		desc.geometry.size = gshader->size;
@@ -188,7 +188,7 @@ void ShaderUtil::loadProgramFromMem(const ShaderObject *vshader, const ShaderObj
 		switch (compute->language)
 		{
 		case GLSL:
-			sprintf(gglver, "#version %d\n", (int)(strtof(renderer->getShaderVersion(GLSL), NULL)));
+			sprintf(gglver, "#version %d\n", (int)(strtof(renderer->getShaderVersion(GLSL), nullptr)));
 			/*  Get GLSL version.   */
 			csources[0] = gglver;
 			/*  */
@@ -205,7 +205,7 @@ void ShaderUtil::loadProgramFromMem(const ShaderObject *vshader, const ShaderObj
 		case HLSL:
 		case CG:
 		default:
-			assert(NULL);
+			assert(nullptr);
 		}
 		desc.Compute.language = compute->language;
 		desc.Compute.size = compute->size;
@@ -268,7 +268,7 @@ void ShaderUtil::loadProgramFromMem(const ShaderObject *vshader, const ShaderObj
 		// 	desc.Compute.language = language;
 		// 	break;
 		// default:
-		// 	assert(NULL);
+		// 	assert(nullptr);
 		// 	break;
 		// }
 
@@ -359,21 +359,21 @@ void ShaderUtil::loadShader(Ref<IO> &io, ShaderType type, Ref<IRenderer> &render
 	ShaderUtil::loadShader(&desc, type, renderer, language, codetype, shader);
 
 	long int size = io->length();
-//	ShaderUtil::loadShader(NULL, size, type, renderer, language, shader);
+//	ShaderUtil::loadShader(nullptr, size, type, renderer, language, shader);
 }
 
 void ShaderUtil::loadShader(const char *source, const int size, ShaderType type, Ref<IRenderer> &renderer, ShaderLanguage language, ShaderCodeType codetype, Shader **pshader)
 {
 	validateShaderArguments(type, language, codetype);
-	if(pshader == NULL)
+	if(pshader == nullptr)
 		throw InvalidArgumentException("");
 
 	ShaderDesc desc = {0};
-	Shader *shader = NULL;
+	Shader *shader = nullptr;
 	char *invshad = "";
 	int nsources;
 	char glver[256];
-	const char *sources[4] = {NULL};
+	const char *sources[4] = {nullptr};
 
 	/*	Source code constants for language supporting preprocessors.*/
 	static const char *vconst = "#define FV_VERTEX\n";
@@ -390,9 +390,9 @@ void ShaderUtil::loadShader(const char *source, const int size, ShaderType type,
     	case GLSL:
 		    /*  Get GLSL version.   */
 #if defined(_DEBUG)
-		    sprintf(glver, "#version %d\n//#pragma debug(on)\n", (int) (strtof(renderer->getShaderVersion(GLSL), NULL)));
+		    sprintf(glver, "#version %d\n//#pragma debug(on)\n", (int) (strtof(renderer->getShaderVersion(GLSL), nullptr)));
 #elif defined(NDEBUG)
-		    sprintf(glver, "#version %d\n //#pragma optimize(on)\n  //#pragma debug(off)\n", (int) (strtof(renderer->getShaderVersion(GLSL), NULL)));
+		    sprintf(glver, "#version %d\n //#pragma optimize(on)\n  //#pragma debug(off)\n", (int) (strtof(renderer->getShaderVersion(GLSL), nullptr)));
 #endif
 		    sources[0] = glver;
 		    /*  */
@@ -410,7 +410,7 @@ void ShaderUtil::loadShader(const char *source, const int size, ShaderType type,
     	case HLSL:
     	case CG:
     	default:
-			assert(NULL);
+			assert(nullptr);
 	}
 
     //TODO add support for combo of shaders
@@ -460,7 +460,7 @@ void ShaderUtil::loadShader(const char *source, const int size, ShaderType type,
 			desc.Compute.language = language;
 			break;
 		default:
-			assert(NULL);
+			assert(nullptr);
 			break;
 	}
 
@@ -513,12 +513,12 @@ void ShaderUtil::loadProgram(const void *vertex, const int vsize,
 							 ShaderCodeType codetype, ShaderLanguage language, Ref<IRenderer> &renderer, Shader **pshader)
 {
 	validateShaderArguments(eVertex, language, codetype);
-	if (pshader == NULL)
+	if (pshader == nullptr)
 		throw InvalidArgumentException("");
 
 	ShaderObject v, f, g, tc, te;
 	ShaderObject *pv, *pf, *pg, *ptc, *pte;
-	pv = pf = pg = ptc = pte = NULL;
+	pv = pf = pg = ptc = pte = nullptr;
 	if (vertex)
 	{
 		v.language = language;
@@ -556,7 +556,7 @@ void ShaderUtil::loadProgram(const void *vertex, const int vsize,
 		pte = &te;
 	}
 
-	loadProgramFromMem(pv, pf, pg, ptc, pte, NULL, renderer, pshader);
+	loadProgramFromMem(pv, pf, pg, ptc, pte, nullptr, renderer, pshader);
 }
 
 void ShaderUtil::loadProgram(
@@ -576,7 +576,7 @@ void ShaderUtil::loadComputeProgram(Ref<IO> &computeIO, Ref<IRenderer> &renderer
 	desc.language = language;
 	desc.source.push_back(computeIO);
 	desc.type = codetype;
-	ShaderUtil::loadProgram(NULL, NULL, NULL, NULL, NULL, &desc, renderer, program);
+	ShaderUtil::loadProgram(nullptr, nullptr, nullptr, nullptr, nullptr, &desc, renderer, program);
 }
 
 void ShaderUtil::loadComputeProgram(const char *pData, long int nBytes, ShaderLanguage language, ShaderCodeType codetype, Ref<IRenderer> &renderer, Shader **program)
@@ -586,7 +586,7 @@ void ShaderUtil::loadComputeProgram(const char *pData, long int nBytes, ShaderLa
 	compute.size = nBytes;
 	compute.type = codetype;
 	compute.buf = pData;
-	ShaderUtil::loadProgramFromMem(NULL, NULL, NULL, NULL, NULL, &compute, renderer, program);
+	ShaderUtil::loadProgramFromMem(nullptr, nullptr, nullptr, nullptr, nullptr, &compute, renderer, program);
 }
 
 void ShaderUtil::loadComputeShaderSource(ShaderObject *shaderDesc, IRenderer *renderer,

@@ -10,7 +10,7 @@ using namespace fragcore;
 
 FileIO::FileIO(void) {
 	this->mode = (Mode) 0;
-	this->file = NULL;
+	this->file = nullptr;
 }
 
 FileIO::FileIO(const char *path, Mode mode) {
@@ -27,10 +27,10 @@ FileIO::FileIO(const FileIO &&other) {
 
 void FileIO::open(const char *path, Mode mode) {
 
-	if (path == NULL)
+	if (path == nullptr)
 		throw InvalidPointerException("path must not be null.");
 
-	const char *m = NULL;
+	const char *m = nullptr;
 	switch (mode & ACCESS) {
 		case READ:
 			m = "rb";
@@ -49,7 +49,7 @@ void FileIO::open(const char *path, Mode mode) {
 	}
 
 	file = fopen(path, m);
-	if (file == NULL) {
+	if (file == nullptr) {
 		//TODO check the error
 		switch(errno){
 			case ENOENT:
@@ -68,7 +68,7 @@ void FileIO::open(const char *path, Mode mode) {
 
 void FileIO::close(void) {
 	fclose(this->file);
-	this->file = NULL;
+	this->file = nullptr;
 	this->mode = (Mode) 0;
 }
 

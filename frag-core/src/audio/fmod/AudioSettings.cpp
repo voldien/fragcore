@@ -3,14 +3,14 @@
 #include"VDEngine.h"
 
 bool AudioSetting::isEnable(void){
-	if(engine.audioContext != NULL){
+	if(engine.audioContext != nullptr){
 		return true;
 	}
 	return false;
 }
 
 bool AudioSetting::isDisable(void){
-	return engine.audioContext == NULL;
+	return engine.audioContext == nullptr;
 }
 
 void AudioSetting::setMasterVolume(float volume){
@@ -56,7 +56,7 @@ int AudioSetting::getSampleRate(void){
 		return 0;
 
 	int sampleRate;
-	VDCASTP(FMOD::System*,engine.audioContext)->getSoftwareFormat(&sampleRate, NULL, NULL, NULL, NULL, NULL);
+	VDCASTP(FMOD::System*,engine.audioContext)->getSoftwareFormat(&sampleRate, nullptr, nullptr, nullptr, nullptr, nullptr);
 	return sampleRate;
 }
 
@@ -70,7 +70,7 @@ void AudioSetting::setSampleRate(int samplerate){
 	int maxinputchannels;
 	FMOD_DSP_RESAMPLER resamplemethod;
 
-	if(VDCASTP(FMOD::System*,engine.audioContext)->getSoftwareFormat(&sampleRate,&format,&numoutputchannels,&maxinputchannels,&resamplemethod,NULL) == FMOD_OK){
+	if(VDCASTP(FMOD::System*,engine.audioContext)->getSoftwareFormat(&sampleRate,&format,&numoutputchannels,&maxinputchannels,&resamplemethod,nullptr) == FMOD_OK){
 		if(VDCASTP(FMOD::System*,engine.audioContext)->setSoftwareFormat(samplerate,format,numoutputchannels,maxinputchannels,resamplemethod) != FMOD_OK){
 			/*	Reset sample rate*/
 			VDCASTP(FMOD::System*,engine.audioContext)->setSoftwareFormat(sampleRate,format,numoutputchannels,maxinputchannels,resamplemethod);
@@ -90,7 +90,7 @@ AudioSetting::Format AudioSetting::getFormat(void){
 	FMOD_DSP_RESAMPLER resamplemethod;
 
 
-	if(VDCASTP(FMOD::System*,engine.audioContext)->getSoftwareFormat(&sampleRate,&format,&numoutputchannels,&maxinputchannels,&resamplemethod,NULL) == FMOD_OK){
+	if(VDCASTP(FMOD::System*,engine.audioContext)->getSoftwareFormat(&sampleRate,&format,&numoutputchannels,&maxinputchannels,&resamplemethod,nullptr) == FMOD_OK){
 		return (AudioSetting::Format)format;
 	}
 	return eNone;

@@ -47,7 +47,7 @@ namespace fragcore {
 		 * @param cpathlib valid library path name or library name.
 		 * @return none NULL if successful.
 		 */
-		static IRenderer *createRendering(const char *cpathlib, IConfig *config);
+		static IRenderer *createRendering(const char *cpathlib, IConfig *config) noexcept(noexcept(cpathlib == nullptr));
 
 		/**
 		 * Get rendering interface library path.
@@ -58,9 +58,8 @@ namespace fragcore {
 
 	private:    /*	Prevent one from creating an instance of this class.	*/
 
-		RenderingFactory(void);
-
-		RenderingFactory(const RenderingFactory &other);
+		RenderingFactory(void) = delete;
+		RenderingFactory(const RenderingFactory &other) = delete;
 	};
 }
 
