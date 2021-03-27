@@ -1,4 +1,4 @@
-#define FRAG_CORE_INTERNAL_IMP
+#define FRAG_CORE_INTERNAL_IMP 1
 #include "Renderer/opengl/GLRenderWindow.h"
 #include"Renderer/opengl/internal_object_type.h"
 

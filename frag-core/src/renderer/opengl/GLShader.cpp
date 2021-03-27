@@ -100,7 +100,7 @@ void Shader::setName(const std::string &name) {
 	/*  Update the marker.  */
 	MarkerDebug marker = {};
 	marker.markerName = name.c_str();
-	addMarkerLabel((const OpenGLCore *) getRenderer()->getData(), GL_SHADER, shadobj->shader, &marker);
+	//addMarkerLabel((const OpenGLCore *) getRenderer()->getData(), GL_SHADER, shadobj->shader, &marker);
 }
 
 intptr_t Shader::getNativePtr(void) const {

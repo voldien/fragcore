@@ -23,32 +23,36 @@
 namespace fragcore {
 
 	/**
-	 * 
+	 *
 	 */
 	class FVDECLSPEC Random {
 	public:
+	  Random(void) = default;
+	  Random(const Random &other) = default;
+	  Random(Random &&other) = default;
+	  ~Random(void) = default;
 
-		/**
-		 *	Override the seed.
-		 */
-		void setSeed(unsigned long long seed);
+	  /**
+	   *	Override the seed.
+	   */
+	  void setSeed(unsigned long long seed);
 
-		/**
-		 *	Get next random value.
-		 */
-		unsigned int rand(void);
+	  /**
+	   *	Get next random value.
+	   */
+	  unsigned int rand(void);
 
-		/**
-		 *	Get next normalized random value.
-		 */
-		float randfNormalize(void);
+	  /**
+	   *	Get next normalized random value.
+	   */
+	  float randfNormalize(void);
 
-		/**
-		 *	Get next random float value.
-		 */
-		float randf(void)const;
+	  /**
+	   *	Get next random float value.
+	   */
+	  float randf(void) const;
 
-		float range(float min, float max);
+	  float range(float min, float max);
 
 	private:	/*	Attributes.	*/
 //

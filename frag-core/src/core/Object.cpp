@@ -3,10 +3,9 @@ using namespace fragcore;
 
 UIDGenerator UIDObject::generator = UIDGenerator();
 
-UIDObject::UIDObject(void) {
-	this->setUID(generator.getNextUID());
-}
+UIDObject::UIDObject(void) noexcept { UIDObject(generator); }
 
+UIDObject::UIDObject(UIDGenerator &uidGenerator) noexcept { this->setUID(uidGenerator.getNextUID()); }
 
 void UIDObject::setUID(unsigned int uid) {
 	this->uid = uid;

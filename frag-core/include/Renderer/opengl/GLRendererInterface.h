@@ -18,7 +18,7 @@
 */
 #ifndef _FRAG_CORE_GL_RENDERER_INTERFACE_H_
 #define _FRAG_CORE_GL_RENDERER_INTERFACE_H_ 1
-#include"../IRenderer.h"
+#include "../IRenderer.h"
 
 namespace fragcore {
 
@@ -27,7 +27,6 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC GLRendererInterface : public IRenderer {
 	  public:
-
 		// TODO make it less state machine and allow it to become more modern.
 		virtual ~GLRendererInterface();
 
@@ -322,6 +321,40 @@ namespace fragcore {
 
 	  protected: /*  */
 		void *pdata;
+
+	  private:
+		void *openglcontext;
+		void *tpmwindow;
+		RendererWindow *drawwindow;
+
+		bool useCoreProfile;
+		bool useCompatibility;
+
+		/*  */
+		// TODO determine if to use pool or something .
+		Buffer *pboUnPack;
+		Buffer *pboPack;
+
+		/*  Cached internal capabilities.   */
+		Capability capability;
+		TextureDesc::Compression compression;
+		Features features;
+
+		/*  Context version.    */
+		int majorVersion;
+		int minorVersion;
+		int profile;
+		int cflag;
+
+		bool debug;
+		bool alpha;
+
+		ViewPort *defaultViewport;
+		std::vector<ViewPort *> viewports; // TODO remove pointer.
+		FrameBuffer *defaultFrameBuffer;
+		/*  Texture gamma corrections.  */
+		bool gamma;
+		ShaderLanguage supportedLanguages;
 	};
 } // namespace fragcore
 

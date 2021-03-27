@@ -5,6 +5,7 @@
 #if defined(FRAG_CORE_INTERNAL_IMP)  // TODO resolve to a single file or
                                      // something later
 #include <SDL2/SDL_syswm.h>
+#include<SDL2/SDL_video.h>
 #endif
 
 namespace fragcore {

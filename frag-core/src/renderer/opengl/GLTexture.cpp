@@ -428,5 +428,5 @@ void Texture::setName(const std::string &name) {
 	/*  Update the marker.  */
 	MarkerDebug marker = {};
 	marker.markerName = name.c_str();
-	addMarkerLabel((const OpenGLCore *) getRenderer()->getData(), GL_TEXTURE, texobj->texture, &marker);
+	//addMarkerLabel((const OpenGLCore *) getRenderer()->getData(), GL_TEXTURE, texobj->texture, &marker);
 }

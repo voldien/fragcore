@@ -31,7 +31,7 @@ namespace fragcore {
 	class FVDECLSPEC Object : public UIDObject {
 	public:
 
-		inline Object(void) {
+		inline Object(void) noexcept {
 
 		}
 

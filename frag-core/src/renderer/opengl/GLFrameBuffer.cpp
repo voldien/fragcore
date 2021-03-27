@@ -200,7 +200,7 @@ void FrameBuffer::setName(const std::string &name) {
 	/*  Update the marker.  */
 	MarkerDebug marker = {};
 	marker.markerName = name.c_str();
-	//addMarkerLabel((const OpenGLCore *) getRenderer()->getData(), GL_FRAMEBUFFER, fraobj->framebuffer, &marker);
+	////addMarkerLabel((const OpenGLCore *) getRenderer()->getData(), GL_FRAMEBUFFER, fraobj->framebuffer, &marker);
 }
 
 //glClearBuffer

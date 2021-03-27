@@ -148,13 +148,12 @@ void GLBuffer::unMapBuffer(void) {
 }
 
 void GLBuffer::setName(const std::string &name) {
-
 	Object::setName(name);
 
 	/*  Update the marker.  */
 	//MarkerDebug marker = {};
 	//marker.markerName = name.c_str();
-	//addMarkerLabel((const OpenGLCore *)getRenderer()->getData(), GL_BUFFER, this->buffer, &marker);
+	////addMarkerLabel((const OpenGLCore *)getRenderer()->getData(), GL_BUFFER, this->buffer, &marker);
 }
 
 intptr_t GLBuffer::getNativePtr(void) const { return this->buffer; }

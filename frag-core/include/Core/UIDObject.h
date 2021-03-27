@@ -27,8 +27,8 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC UIDObject {
 	public:
-		UIDObject(void);
-		//UIDObject(UIDGenerator& uidGenerator);
+		UIDObject(void) noexcept;
+		UIDObject(UIDGenerator& uidGenerator) noexcept;
 		//TODO for selecting what UID pool.
 
 		/**
