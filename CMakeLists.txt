@@ -1,5 +1,35 @@
-CMAKE_MINIMUM_REQUIRED( VERSION 3.11.0 FATAL_ERROR )
-PROJECT(fragview VERSION 0.11.1 LANGUAGES CXX C)
+CMAKE_MINIMUM_REQUIRED( VERSION 3.15)
+
+#-----------------------------------------------------------------------------
+# Set policy
+
+# see "cmake --help-policy CMP0003"
+# So library linking is more sane
+cmake_policy(SET CMP0003 NEW)
+
+# So syntax problems are errors
+cmake_policy(SET CMP0010 NEW)
+
+# Input directories must have CMakeLists.txt
+cmake_policy(SET CMP0014 NEW)
+
+# Silence draco warning on macOS, new policy works fine.
+if(POLICY CMP0068)
+  cmake_policy(SET CMP0068 NEW)
+endif()
+
+# find_package() uses <PackageName>_ROOT variables.
+if(POLICY CMP0074)
+  cmake_policy(SET CMP0074 NEW)
+endif()
+
+PROJECT(FragCore)
+
+SET(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin CACHE INTERNAL "" FORCE)
+SET(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib CACHE INTERNAL "" FORCE)
+
+#-----------------------------------------------------------------------------
+# Options
 
 # Build shared/dynamic library option
 OPTION(BUILD_SHARED_LIBS "Build package with shared libraries." ON)
@@ -12,6 +42,10 @@ OPTION(BUILD_WITH_ASAN "Enable AddressSanitizer." OFF )
 OPTION(BUILD_OPT_BUILD_PACKAGES "Set to ON to generate CPack configuration files and packaging targets" OFF)
 OPTION(BUILD_WITH_DEBUG_BOUNDSCHECK "Array/Pointer BoundsChecking, buffer overflow protection. Used in debug only." OFF)
 option(BUILD_INSTALL_RESOURCES "Installs the Resources directory" ON)
+# Debug
+option(WITH_CXX_GUARDEDALLOC "Enable GuardedAlloc for C++ memory allocation tracking (only enable for development)" OFF)
+mark_as_advanced(WITH_CXX_GUARDEDALLOC)
+
 IF(NOT BUILD_SHARED_LIBS)
 	SET(CMAKE_EXE_LINKER_FLAGS "-static")
 	SET(LINK_SEARCH_START_STATIC TRUE)
@@ -20,9 +54,8 @@ ELSE()
 ENDIF(NOT BUILD_SHARED_LIBS)
 
 #
-OPTION(BUILD_WITH_TEST "Enable Testing." ON)
+OPTION(BUILD_WITH_TEST "Enable Testing." OFF)
 OPTION(BUILD_WITH_DOCS "Build documentation." OFF)
-OPTION(BUILD_WITH_CORE "Build Core" ON)
 OPTION(BUILD_WITH_SAMPLES "Build sample codes" ON)
 
 # Build external interface plugin.
@@ -30,6 +63,22 @@ OPTION(BUILD_WITH_EXTERNAL_PLUGINS "" ON)
 OPTION(BUILD_EXTERNAL_RENDERER "Building external renderer libraries" ON)
 OPTION(BUILD_EXTERNAL_AUDIO "Building external audio libraries" ON)
 OPTION(BUILD_EXTERNAL_PHYSIC "Building external physic libraries" ON)
+
+OPTION(WITH_CPU_SSE              "Enable SIMD instruction if they're detected on the host machine" ON)
+MARK_AS_ADVANCED(WITH_CPU_SSE)
+
+# LLVM
+OPTION(WITH_LLVM                    "Use LLVM" OFF)
+IF(APPLE)
+	OPTION(LLVM_STATIC                  "Link with LLVM static libraries" ON) # we prefer static llvm build on Apple, dyn build possible though
+ELSE()
+	OPTION(LLVM_STATIC                  "Link with LLVM static libraries" OFF)
+ENDIF()
+MARK_AS_ADVANCED(LLVM_STATIC)
+
+#
+OPTION(WITH_MEM_JEMALLOC   "Enable malloc replacement (http://www.canonware.com/jemalloc)" ON)
+MARK_AS_ADVANCED(WITH_MEM_JEMALLOC)
 
 IF(MSVC)
   OPTION( BUILD_INSTALL_PDB
@@ -74,25 +123,14 @@ IF(NOT FRAG_IGNORE_GIT_HASH)
   )
 ENDIF()
 
-# CONFIGURE_FILE(
-#   ${CMAKE_CURRENT_LIST_DIR}/revision.h.in
-#   ${CMAKE_CURRENT_BINARY_DIR}/revision.h
-# )
-
 LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake-modules" )
+
 SET(LIBFRAGCORE_COMPONENT "libfragcore{VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_REVISION}")
 SET(LIBFRAGCORE-DEV_COMPONENT "libfragcore{VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_REVISION}-dev")
-SET(LIBFRAGENGINE_COMPONENT "libfragengine{VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_REVISION}")
-SET(LIBFRAGENGINE-DEV_COMPONENT "libfragengine{VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_REVISION}-dev")
 
-SET(FRAGVIEW_COMPONENT "fragview{VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_REVISION}")
-SET(FRAEDITOR_COMPONENT "frageditor{VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_REVISION}")
+SET(CPACK_COMPONENTS_ALL fragview-bin ${LIBFRAGCORE_COMPONENT} ${LIBFRAGCORE-DEV_COMPONENT} )
 
-SET(CPACK_COMPONENTS_ALL fragview-bin ${LIBFRAGCORE_COMPONENT} ${LIBFRAGCORE-DEV_COMPONENT}
-	${LIBFRAGENGINE_COMPONENT} ${LIBFRAGENGINE-DEV_COMPONENT} $FRAGVIEW_COMPONENT} ${FRAGEDITOR_COMPONENT})
-SET(FRAGVIEW_LIBRARY_SUFFIX "" CACHE STRING "Suffix to append to library names")
-
-# macro that sets a default (path) if one wasn't specified
+# Macro that sets a default (path) if one wasn't specified
 MACRO(SET_PATH variable default)
 	IF(NOT ${variable})
 		SET(${variable} ${default})
@@ -113,14 +151,19 @@ SET_PATH( MENU_DIR ${CMAKE_INSTALL_PREFIX} )
 SET_PATH( EXAMPLE_CONF_DIR ${CMAKE_INSTALL_PREFIX} )
 #elseif (${LAYOUT} MATCHES "fhs")
 
-#-std=c++1z
+#C++17
 SET(CMAKE_REQUIRED_FLAGS "-std=c++17 -std=c11 -std=c++1z")
 SET(CMAKE_CXX_STANDARD 17)
 SET(CMAKE_CXX_STANDARD_REQUIRED ON)
 SET(CMAKE_CXX_EXTENSIONS OFF)
-SET(CMAKE_C_STANDARD 11)
-SET(CMAKE_C_STANDARD_REQUIRED ON)
-SET(CMAKE_C_EXTENSIONS OFF)
+
+# Compiler toolchain
+IF(CMAKE_COMPILER_IS_GNUCC)
+	OPTION(WITH_LINKER_GOLD "Use ld.gold linker which is usually faster than ld.bfd" ON)
+	MARK_AS_ADVANCED(WITH_LINKER_GOLD)
+	OPTION(WITH_LINKER_LLD "Use ld.lld linker which is usually faster than ld.gold" OFF)
+	mark_as_advanced(WITH_LINKER_LLD)
+ENDIF()
 
 # GCC compiler flag options.
 IF((CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX) AND NOT CMAKE_COMPILER_IS_MINGW)
@@ -128,9 +171,9 @@ IF((CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX) AND NOT CMAKE_COMPILER_
 		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 	ENDIF()
 
-	# 
-	ADD_DEFINITIONS(-Wall -w -fpermissive) 
-	ADD_DEFINITIONS( -export-dynamic -rdynamic -lstdc++fs -std=c++17 )
+	#
+	ADD_DEFINITIONS(-Wall -w)
+	ADD_DEFINITIONS( -export-dynamic -rdynamic )
 
 	IF (CMAKE_BUILD_TYPE STREQUAL "Release")
 		MESSAGE(STATUS "Compile for release.")
@@ -162,9 +205,20 @@ IF((CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX) AND NOT CMAKE_COMPILER_
 		SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pg")
 		SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -pg")
 	ENDIF()
+
+
+
 ELSEIF ( "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang" )
-  SET(CMAKE_CXX_FLAGS "-fvisibility=hidden -fno-strict-aliasing -Wall -Wno-long-long ${CMAKE_CXX_FLAGS}" )
-  SET(CMAKE_C_FLAGS "-fno-strict-aliasing ${CMAKE_C_FLAGS}")
+	SET(CMAKE_CXX_FLAGS "-fvisibility=hidden -fno-strict-aliasing -Wall -Wno-long-long ${CMAKE_CXX_FLAGS}" )
+	SET(CMAKE_C_FLAGS "-fno-strict-aliasing ${CMAKE_C_FLAGS}")
+
+	#
+	IF (BUILD_WITH_ASAN)
+		MESSAGE(STATUS "AddressSanitizer enabled")
+		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address")
+		SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address")
+	ENDIF()
+
 ELSEIF(MSVC)
 	# Enable multi-core compilation with MSVC
 	IF( "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang" ) # clang-cl
@@ -185,17 +239,31 @@ ELSE()
 
 ENDIF()
 
+IF(WITH_CPU_SSE)
+	INCLUDE(FindSSE)
+	#TEST_SSE_SUPPORT(COMPILER_SSE_FLAG COMPILER_SSE2_FLAG)
+ELSE()
+	MESSAGE(STATUS "SSE and SSE2 optimizations are DISABLED!")
+	SET(COMPILER_SSE_FLAG)
+	SET(COMPILER_SSE2_FLAG)
+ENDIF()
+
+IF(UNIX AND NOT APPLE)
+	IF(NOT WITH_CXX11_ABI)
+		STRING(APPEND PLATFORM_CFLAGS " -D_GLIBCXX_USE_CXX11_ABI=0")
+	ENDIF()
+ENDIF()
 
 #
 IF ( IOS)
-  IF (CMAKE_BUILD_TYPE STREQUAL "Debug")
-	SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fembed-bitcode -Og")
-	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fembed-bitcode -Og")
-  ELSE()
-	SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fembed-bitcode -O3")
-	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fembed-bitcode -O3")
-	# Experimental for pdb generation
-  ENDIF()
+		IF (CMAKE_BUILD_TYPE STREQUAL "Debug")
+		SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fembed-bitcode -Og")
+		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fembed-bitcode -Og")
+	ELSE()
+		SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fembed-bitcode -O3")
+		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fembed-bitcode -O3")
+		# Experimental for pdb generation
+	ENDIF()
 ENDIF()
 
 #
@@ -205,19 +273,14 @@ IF (BUILD_WITH_UBSAN)
 	SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=undefined,shift,shift-exponent,integer-divide-by-zero,unreachable,vla-bound,null,return,signed-integer-overflow,bounds,float-divide-by-zero,float-cast-overflow,nonnull-attribute,returns-nonnull-attribute,bool,enum,vptr,pointer-overflow,builtin -fno-sanitize-recover=all")
 ENDIF()
 
-#
-IF (BUILD_WITH_ASAN)
-	MESSAGE(STATUS "AddressSanitizer enabled")
-	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address")
-	SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address")
-ENDIF()
+
 
 # Cache these to allow the user to override them manually.
-SET( FRAGVIEW_LIB_INSTALL_DIR "lib" CACHE STRING
+SET( FRAGCORE_LIB_INSTALL_DIR "lib" CACHE STRING
 		"Path the built library files are installed to." )
-SET( FRAGVIEW_INCLUDE_INSTALL_DIR "fragview-core" CACHE STRING
+SET( FRAGCORE_INCLUDE_INSTALL_DIR "fragcore-core" CACHE STRING
 		"Path the header files are installed to." )
-SET( FRAGVIEW_BIN_INSTALL_DIR "bin" CACHE STRING
+SET( FRAGCORE_BIN_INSTALL_DIR "bin" CACHE STRING
 		"Path the tool executables are installed to." )
 
 # Find all required libaries for the program.
@@ -229,14 +292,23 @@ FIND_PACKAGE(OpenSSL)
 #TODO relocate to the compute plugin.
 FIND_PACKAGE(CUDA QUIET)
 IF( UNIX )
-  # Use GNUInstallDirs for Unix predefined directories
-  INCLUDE(GNUInstallDirs)
-ENDIF()
-
-IF(CUDA_FOUND)
-
+	# Use GNUInstallDirs for Unix predefined directories
+	INCLUDE(GNUInstallDirs)
+	SET( FRAGCORE_LIB_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR})
+	SET( FRAGCORE_INCLUDE_INSTALL_DIR ${CMAKE_INSTALL_INCLUDEDIR})
+	SET( FRAGCORE_BIN_INSTALL_DIR ${CMAKE_INSTALL_BINDIR})
 ELSE()
+	# Cache these to allow the user to override them on non-Unix platforms
+	SET( FRAGCORE_LIB_INSTALL_DIR "lib" CACHE STRING
+	"Path the built library files are installed to." )
+	SET( FRAGCORE_INCLUDE_INSTALL_DIR "include" CACHE STRING
+	"Path the header files are installed to." )
+	SET( FRAGCORE_BIN_INSTALL_DIR "bin" CACHE STRING
+	"Path the tool executables are installed to." )
 
+	SET(CMAKE_INSTALL_FULL_INCLUDEDIR ${CMAKE_INSTALL_PREFIX}/${FRAGCORE_INCLUDE_INSTALL_DIR})
+	SET(CMAKE_INSTALL_FULL_LIBDIR ${CMAKE_INSTALL_PREFIX}/${FRAGCORE_LIB_INSTALL_DIR})
+	SET(CMAKE_INSTALL_FULL_BINDIR ${CMAKE_INSTALL_PREFIX}/${FRAGCORE_BIN_INSTALL_DIR})
 ENDIF()
 
 IF(GIT_FOUND)
@@ -262,40 +334,7 @@ ENDIF()
 # Inlucde external resources.
 INCLUDE(${CMAKE_CURRENT_SOURCE_DIR}/extern/CMakeLists.txt)
 
-
-# #TODO resolve and add options and etc.
-# # Add platform specific information.
-# IF(Android)
-# 	MESSAGE(STATUS "Hello from Android build!")
-# 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/platforms/android/)
-# ENDIF()
-# IF(${CMAKE_SYSTEM_NAME} MATCHES "Tmp")
-# 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/platforms/windows/)
-# ENDIF()
-# IF(${CMAKE_SYSTEM_NAME} MATCHES "Tmp")
-# 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/platforms/uwp/)
-# ENDIF()
-# IF(UNIX)
-# 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/platforms/unix/)
-# ENDIF()
-# IF(APPLE)
-# #TODO add support for mac and apple platforms.
-# #	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/platforms/unix/)
-# ENDIF()
-
-#TODO Add platform source code
-IF(UNIX)
-
-ELSEIF(APPLE)
-
-ELSEIF(CYGWIN)
-
-ENDIF()
-
-# Build frag-core.
-IF(BUILD_WITH_CORE)
-	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/frag-core)
-ENDIF()
+ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/frag-core)
 
 # Rendering interfaces.
 IF(BUILD_EXTERNAL_RENDERER)
@@ -303,7 +342,7 @@ IF(BUILD_EXTERNAL_RENDERER)
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/frag-core/src/renderer/directx/)
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/frag-core/src/renderer/vulkan/)
 	#TODO changed to a compute base class and module extension.
-	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/frag-core/src/renderer/opencl/)
+	#ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/frag-core/src/renderer/opencl/)
 ENDIF()
 
 # Build FragCore Audio modules
@@ -346,14 +385,14 @@ IF( UNIX )
 	SET( FRAG_INCLUDE_INSTALL_DIR ${CMAKE_INSTALL_INCLUDEDIR})
 	SET( FRAG_BIN_INSTALL_DIR ${CMAKE_INSTALL_BINDIR})
 
-	# 
-	Find_PACKAGE(UnixCommands REQUIRED)
+	#
+	FIND_PACKAGE(UnixCommands REQUIRED)
 
 	FIND_PROGRAM(GLSLLANGVALIDATOR glslangValidator)
 	FIND_PROGRAM(SPIRVDIS spirv-dis)
 	FIND_PROGRAM(SPIRVAS spirv-as)
 	FIND_PROGRAM(SPIRVREMAP spirv-remap)
-	
+
 	IF(GLSLLANGVALIDATOR)
 		MESSAGE(STATUS "glslangValidator found: ${GLSLLANGVALIDATOR}")
 		#TODO add for all shaders.
@@ -385,12 +424,6 @@ IF( UNIX )
 
 	IF(ZIP)
 		MESSAGE(STATUS "zip found: ${ZIP}")
-
-	ENDIF()
-		# Install main icon image.
-		ADD_DEFINITIONS(-DICON_LOCATION="/usr/share/fragview/")
-		IF(BUILD_WITH_INSTALL)
-		INSTALL( FILES ${CMAKE_CURRENT_SOURCE_DIR}/fragview.png DESTINATION /usr/share/fragview/ )
 	ENDIF()
 
 	# Create distribution tarball.
@@ -411,30 +444,6 @@ IF( UNIX )
 			COMMAND ${TAR} cf - ${TARGETDIR} | ${GZIP} -c > ${TARGETDIR}.tar.gz
 			COMMAND ${RM} -r ${TARGETDIR} )
 
-	# Check if desktop icon tools exists.
-	FIND_PROGRAM(INSTALL_DESKTOP install-desktop)
-	FIND_PROGRAM(INSTALL_DESKTOP_FILE_VALIDATE desktop-file-validate)
-	FIND_PROGRAM(DESKTOP_FILE_INSTALL desktop-file-install)
-	FIND_PROGRAM(UPDATE_DESKTOP_DATABASE update-desktop-database)
-
-	# Check that the program exists.
-	IF(INSTALL_DESKTOP AND INSTALL_DESKTOP_FILE_VALIDATE AND DESKTOP_FILE_INSTALL AND UPDATE_DESKTOP_DATABASE)
-		MESSAGE(STATUS "install-desktop: ${INSTALL_DESKTOP}")
-		MESSAGE(STATUS "desktop-file-validate: ${INSTALL_DESKTOP_FILE_VALIDATE}")
-		MESSAGE(STATUS "desktop-file-install: ${DESKTOP_FILE_INSTALL}")
-		MESSAGE(STATUS "update-desktop-database: ${UPDATE_DESKTOP_DATABASE}")
-
-		# Install icons. TODO relocate 
-		ADD_CUSTOM_TARGET(install-desktop
-				COMMENT "Validating and installing desktop entry."
-				COMMAND desktop-file-validate ${CMAKE_CURRENT_SOURCE_DIR}/fragview.desktop
-				COMMAND desktop-file-install --rebuild-mime-info-cache ${CMAKE_CURRENT_SOURCE_DIR}/fragview.desktop
-				COMMAND update-desktop-database
-				DEPENDS INSTALL_DESKTOP INSTALL_DESKTOP_FILE_VALIDATE DESKTOP_FILE_INSTALL UPDATE_DESKTOP_DATABASE)
-	ELSE()
-		MESSAGE(WARNING "Could not find the program tools for installing the icon and its images.")
-	ENDIF()
-
 ELSEIF(WIN32)
 
 ELSE()
@@ -449,17 +458,6 @@ ELSE()
 	SET(CMAKE_INSTALL_FULL_INCLUDEDIR ${CMAKE_INSTALL_PREFIX}/${FRAG_INCLUDE_INSTALL_DIR})
 	SET(CMAKE_INSTALL_FULL_LIBDIR ${CMAKE_INSTALL_PREFIX}/${FRAG_LIB_INSTALL_DIR})
 	SET(CMAKE_INSTALL_FULL_BINDIR ${CMAKE_INSTALL_PREFIX}/${FRAG_BIN_INSTALL_DIR})
-ENDIF()
-
-
-FIND_PACKAGE(PythonInterp REQUIRED)
-IF(PYTHONINTERP_FOUND)
-	#TODO relocate to the fragengine and editor.
-	#TODO add as cmake tool
-	ADD_CUSTOM_TARGET( compile-shader
-			COMMENT "Creating header and source file for display shaders."
-			COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/utils/glsl2CString.py ${CMAKE_CURRENT_SOURCE_DIR}/shaders/glsl/
-			DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/utils/glsl2CString.py)
 ENDIF()
 
 IF(WIN32)
@@ -491,7 +489,7 @@ ENDIF (WIN32)
 IF ( BUILD_WITH_INSTALL )
 	IF(CMAKE_CPACK_COMMAND AND UNIX AND BUILD_OPT_BUILD_PACKAGES)
 		# Packing information
-		SET(CPACK_PACKAGE_NAME                    "frag${FRAG_VERSION_MAJOR}.${VERSION_MINOR}")
+		SET(CPACK_PACKAGE_NAME                    "fragcore${FRAG_VERSION_MAJOR}.${VERSION_MINOR}")
 		SET(CPACK_PACKAGE_CONTACT "" CACHE STRING "Package maintainer and PGP signer.")
 		SET(CPACK_PACKAGE_VENDOR                  "https://github.com/voldien/fragcore")
 		SET(CPACK_PACKAGE_DISPLAY_NAME            "Frag ${VERSION}")
@@ -509,10 +507,10 @@ IF ( BUILD_WITH_INSTALL )
 		#
 		SET(CPACK_COMPONENT_FRAGCORE-BIN_DISPLAY_NAME                       "tools")
 		SET(CPACK_COMPONENT_FRAGCORE-BIN_DEPENDS                            "${LIBFRAGCORE_COMPONENT}" )
-		SET(CPACK_COMPOENTT_${LIBFRAGENGINE_COMPONENT_UPPER}_DISPLAY_NAME "")
-		SET(CPACK_COMPOENTT_${LIBFRAGENGINE-DEV_COMPONENT_UPPER}_DISPLAY_NAME "")
-		SET(CPACK_COMPONENT_${LIBFRAGENGINE-DEV_COMPONENT_UPPER}_DEPENDS $    "{LIBFRAGCORE_COMPONENT}" )
-		SET(CPACK_COMPOENTT_${LIBFRAGENGINE-DEV_COMPONENT_UPPER}_DISPLAY_NAME "")
+		SET(CPACK_COMPOENTT_${LIBFRACORE_COMPONENT_UPPER}_DISPLAY_NAME "")
+		SET(CPACK_COMPOENTT_${LIBFRACORE-DEV_COMPONENT_UPPER}_DISPLAY_NAME "")
+		SET(CPACK_COMPONENT_${LIBFRACORE-DEV_COMPONENT_UPPER}_DEPENDS $    "{LIBFRAGCORE_COMPONENT}" )
+		SET(CPACK_COMPOENTT_${LIBFRACORE-DEV_COMPONENT_UPPER}_DISPLAY_NAME "")
 		SET(CPACK_COMPONENT_${LIBFRAGCORE_COMPONENT_UPPER}_DISPLAY_NAME     "libraries")
 		SET(CPACK_COMPONENT_${LIBFRAGCORE-DEV_COMPONENT_UPPER}_DISPLAY_NAME "common headers and installs")
 		SET(CPACK_COMPONENT_${LIBFRAGCORE-DEV_COMPONENT_UPPER}_DEPENDS $    "{LIBFRAGCORE_COMPONENT}" )
@@ -526,8 +524,8 @@ IF ( BUILD_WITH_INSTALL )
 		SET(CPACK_DEBIAN_PACKAGE_SECTION  "libs" )
 		SET(CPACK_DEBIAN_PACKAGE_DEPENDS  "${CPACK_COMPONENTS_ALL}")
 		SET(CPACK_DEBIAN_PACKAGE_SUGGESTS)
-		SET(cPACK_DEBIAN_PACKAGE_NAME     "fragengine")
-		SET(CPACK_DEBIAN_PACKAGE_REMOVE_SOURCE_FILES build doc obj samples packaging)
+		SET(cPACK_DEBIAN_PACKAGE_NAME     "fragcore")
+		SET(CPACK_DEBIAN_PACKAGE_REMOVE_SOURCE_FILES build doc obj samples packaging utils)
 		SET(CPACK_DEBIAN_PACKAGE_SOURCE_COPY svn export --force)
 		SET(CPACK_DEBIAN_CHANGELOG)
 		execute_process(COMMAND lsb_release -is
@@ -539,6 +537,7 @@ IF ( BUILD_WITH_INSTALL )
 			SET(CPACK_DEBIAN_DISTRIBUTION_RELEASES lucid maverick natty oneiric precise CACHE STRING "Release code-names of the distrubiton release")
 		ENDIF()
 		SET(DPUT_HOST "" CACHE STRING "PPA repository to upload the debian sources")
+
 		INCLUDE(CPack)
 		INCLUDE(DebSourcePPA)
 	ENDIF()
