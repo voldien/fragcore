@@ -22,11 +22,12 @@
 #include"../Renderer/FrameBuffer.h"
 
 namespace fragcore {
-    /**
-     *	Responsible for creating predefined
-    *	framebuffer target.
-    */
+
    //TODO determine if shall be relocated to the engine
+	/**
+	 * @brief Responsible for creating predefined
+	 * framebuffer target.
+	 */
 	class FVDECLSPEC RenderTargetFactory {
 	public:
 
@@ -40,9 +41,10 @@ namespace fragcore {
 
 	private:    /*	Prevent one from creating an instance of this class.	*/
 
-		RenderTargetFactory(void);
-
-		~RenderTargetFactory(void);
+		RenderTargetFactory(void) = delete;
+		RenderTargetFactory(const RenderTargetFactory &other) = delete;
+		RenderTargetFactory(RenderTargetFactory &&other) = delete;
+		~RenderTargetFactory(void) = delete;
 	};
 }
 

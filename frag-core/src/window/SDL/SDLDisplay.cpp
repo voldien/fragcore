@@ -95,6 +95,6 @@ unsigned int SDLDisplay::translateFormat(unsigned int format) {
 	return 0;
 }
 
-int SDLDisplay::getNumDisplays(void){
+int SDLDisplay::getNumDisplays(void) {
 	return SDL_GetNumVideoDisplays();
 }

@@ -1,4 +1,5 @@
 #include "Utils/StringUtil.h"
+#include <fmt/core.h>
 #include <vector>
 
 std::string fvformatf(const std::string &format, ...) {

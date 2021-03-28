@@ -7,12 +7,10 @@
 
 using namespace fragcore;
 
-Display* WindowManager::getDisplay(int index){
-    return new SDLDisplay(index);	//TODO resolve resource manager.
+Display *WindowManager::getDisplay(unsigned int index) noexcept {
+	return new SDLDisplay(index);	//TODO resolve resource manager.
 }
-int WindowManager::getNumDisplays(void) { 
-	SDLDisplay::getNumDisplays(); 
-}
+unsigned int WindowManager::getNumDisplays(void) const noexcept { SDLDisplay::getNumDisplays(); }
 Display* WindowManager::getAssociatedDisplay(Ref<Window>& window) {
     window->getCurrentDisplay();
 }

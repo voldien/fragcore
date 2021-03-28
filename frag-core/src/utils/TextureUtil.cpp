@@ -1,15 +1,15 @@
 
-#include<FreeImage.h>
-#include"Renderer/Texture.h"
-#include"Core/IO/IOUtil.h"
-#include"Utils/TextureUtil.h"
-#include"Utils/StringUtil.h"
-#include<stdio.h>
-#include"Core/Math.h"
-#include<stdexcept>
-#include<Core/IO/FileSystem.h>
-#include <Exception/InvalidArgumentException.h>
+#include "Utils/TextureUtil.h"
+#include "Core/IO/IOUtil.h"
+#include "Core/Math.h"
 #include "Exception/RuntimeException.h"
+#include "Renderer/Texture.h"
+#include "Utils/StringUtil.h"
+#include <Core/IO/FileSystem.h>
+#include <Exception/InvalidArgumentException.h>
+#include <FreeImage.h>
+#include <stdexcept>
+#include <stdio.h>
 
 using namespace fragcore;
 
@@ -25,8 +25,8 @@ void TextureUtil::loadTexture(const char *path, IRenderer *renderer, Texture **t
 	TextureDesc::Type type;
 
 	/*	Load texture.   */
-	if ((pixeldata = TextureUtil::loadTextureData(path, &width, &height, &format, &internalformat, &type,
-	                                              &pixelSize))) {
+	if ((pixeldata =
+			 TextureUtil::loadTextureData(path, &width, &height, &format, &internalformat, &type, &pixelSize))) {
 
 		/*  Texture attributes. */
 		desc.width = width;
@@ -41,7 +41,7 @@ void TextureUtil::loadTexture(const char *path, IRenderer *renderer, Texture **t
 		desc.format = format;
 		desc.pixelFormat = (TextureFormat)format;
 		desc.internalformat = internalformat;
-		desc.graphicFormat = (GraphicFormat )internalformat;
+		desc.graphicFormat = (GraphicFormat)internalformat;
 		desc.type = type;
 		desc.numlevel = 4;
 		desc.usemipmaps = 1;
@@ -65,58 +65,53 @@ void TextureUtil::loadTexture(const char *path, IRenderer *renderer, Texture **t
 	}
 }
 
+void TextureUtil::loadTexture(const void *pbuf, long int size, IRenderer *renderer, Texture **texture) { /*  */ }
 
-void TextureUtil::loadTexture(const void *pbuf, long int size, IRenderer *renderer, Texture **texture) {
-	/*  */
-}
-
-void *TextureUtil::loadTextureData(const char *cfilename, unsigned int *pwidth,
-                                   unsigned int *pheight, TextureDesc::Format *pformat,
-                                   TextureDesc::Format *pinternalformat, TextureDesc::Type *ptype,
-                                   unsigned long *pixelSize) {
+void *TextureUtil::loadTextureData(const char *cfilename, unsigned int *pwidth, unsigned int *pheight,
+								   TextureDesc::Format *pformat, TextureDesc::Format *pinternalformat,
+								   TextureDesc::Type *ptype, unsigned long *pixelSize) {
 
 	void *pixeldata = nullptr;
 
 	Ref<IO> f = Ref<IO>(FileSystem::getFileSystem()->openFile(cfilename, IO::READ));
-	long inbytes = IOUtil::loadFileMem(f, (char**)&pixeldata);
-	void* pixelResult = loadTextureDataFromMem(pixeldata, inbytes, pwidth, pheight, pformat, pinternalformat, ptype, pixelSize);
+	long inbytes = IOUtil::loadFileMem(f, (char **)&pixeldata);
+	void *pixelResult =
+		loadTextureDataFromMem(pixeldata, inbytes, pwidth, pheight, pformat, pinternalformat, ptype, pixelSize);
 	free(pixeldata);
 	f->close();
-//	delete f;
+	//	delete f;
 
 	return pixelResult;
 }
 
-void *TextureUtil::loadTextureData(const char *cfilename, unsigned int *pwidth,
-                                   unsigned int *pheight, unsigned long *pixelSize) {
+void *TextureUtil::loadTextureData(const char *cfilename, unsigned int *pwidth, unsigned int *pheight,
+								   unsigned long *pixelSize) {
 	return TextureUtil::loadTextureData(cfilename, pwidth, pheight, nullptr, nullptr, nullptr, pixelSize);
 }
-
 
 void *TextureUtil::loadTextureData(const void *pbuf, long int size, unsigned int *width, unsigned int *height) {
 	return loadTextureDataFromMem(pbuf, size, width, height, nullptr, nullptr, nullptr, nullptr);
 }
 
 void *TextureUtil::loadTextureDataFromMem(const void *pbuf, long int size, unsigned int *width, unsigned int *height,
-                                          TextureDesc::Format *pformat, TextureDesc::Format *pinternalformat,
-                                          TextureDesc::Type *ptype, unsigned long *pixelSize) {
-
+										  TextureDesc::Format *pformat, TextureDesc::Format *pinternalformat,
+										  TextureDesc::Type *ptype, unsigned long *pixelSize) {
 
 	/*	Free image.	*/
-	FREE_IMAGE_FORMAT imgtype;          /**/
-	FREE_IMAGE_COLOR_TYPE colortype;    /**/
-	FREE_IMAGE_TYPE imgt;               /**/
-	FIMEMORY *stream;                   /**/
-	FIBITMAP *firsbitmap;               /**/
-	void *pixel;                        /**/
+	FREE_IMAGE_FORMAT imgtype;		 /**/
+	FREE_IMAGE_COLOR_TYPE colortype; /**/
+	FREE_IMAGE_TYPE imgt;			 /**/
+	FIMEMORY *stream;				 /**/
+	FIBITMAP *firsbitmap;			 /**/
+	void *pixel;					 /**/
 	unsigned int bpp;
 
 	assert(width && height && pbuf);
-	if(size <= 0)
+	if (size <= 0)
 		throw InvalidArgumentException("Texture data must be greater than 0.");
 
 	/*	1 byte for the size in order, Because it crash otherwise if set to 0.	*/
-	stream = FreeImage_OpenMemory((BYTE *) pbuf, size);
+	stream = FreeImage_OpenMemory((BYTE *)pbuf, size);
 	if (stream == nullptr)
 		throw RuntimeException(fvformatf("Failed to open freeimage memory stream. \n"));
 
@@ -136,37 +131,37 @@ void *TextureUtil::loadTextureDataFromMem(const void *pbuf, long int size, unsig
 	FreeImage_SeekMemory(stream, 0, SEEK_SET);
 	imgt = FreeImage_GetImageType(firsbitmap);
 	colortype = FreeImage_GetColorType(firsbitmap);
-	//imagetype = FreeImage_GetImageType(firsbitmap);
+	// imagetype = FreeImage_GetImageType(firsbitmap);
 
 	switch (colortype) {
-		case FIC_RGB:
-			if (pformat)
-				*pformat = (TextureDesc::Format )TextureFormat::BGR24;//TextureDesc::eBGR;
-			if (pinternalformat)
-				*pinternalformat = (TextureDesc::Format )GraphicFormat::R8G8B8_SRGB;//TextureDesc::eRGB;
-			bpp = 3;
-			break;
-		case FIC_RGBALPHA:
-			if (pformat)
-				*pformat = (TextureDesc::Format )TextureFormat::BGRA32;//TextureDesc::eBGR;
-			if (pinternalformat)
-				*pinternalformat = (TextureDesc::Format )GraphicFormat::R8G8B8A8_SRGB;//TextureDesc::eRGB;
-/*			if (pformat)
-				*pformat = TextureDesc::eBGRA;
-			if (pinternalformat)
-				*pinternalformat = TextureDesc::eRGBA;*/
-			bpp = 4;
-			break;
-		case FIC_MINISWHITE:
-		case FIC_MINISBLACK:
-			if (pformat)
-				*pformat = TextureDesc::eSingleColor;
-			if (pinternalformat)
-				*pinternalformat = TextureDesc::eSingleColor;
-			bpp = 1;
-			break;
-		default:
-			break;
+	case FIC_RGB:
+		if (pformat)
+			*pformat = (TextureDesc::Format)TextureFormat::BGR24; // TextureDesc::eBGR;
+		if (pinternalformat)
+			*pinternalformat = (TextureDesc::Format)GraphicFormat::R8G8B8_SRGB; // TextureDesc::eRGB;
+		bpp = 3;
+		break;
+	case FIC_RGBALPHA:
+		if (pformat)
+			*pformat = (TextureDesc::Format)TextureFormat::BGRA32; // TextureDesc::eBGR;
+		if (pinternalformat)
+			*pinternalformat = (TextureDesc::Format)GraphicFormat::R8G8B8A8_SRGB; // TextureDesc::eRGB;
+		/*			if (pformat)
+						*pformat = TextureDesc::eBGRA;
+					if (pinternalformat)
+						*pinternalformat = TextureDesc::eRGBA;*/
+		bpp = 4;
+		break;
+	case FIC_MINISWHITE:
+	case FIC_MINISBLACK:
+		if (pformat)
+			*pformat = TextureDesc::eSingleColor;
+		if (pinternalformat)
+			*pinternalformat = TextureDesc::eSingleColor;
+		bpp = 1;
+		break;
+	default:
+		break;
 	}
 
 	/*	Get attributes from the image.	*/
@@ -202,7 +197,6 @@ void *TextureUtil::loadTextureDataFromMem(const void *pbuf, long int size, unsig
 	return pixels;
 }
 
-
 void TextureUtil::saveTexture(const char *filepath, IRenderer *renderer, Texture *texture) {
 
 	void *pixels = nullptr;
@@ -235,12 +229,10 @@ void TextureUtil::saveTexture(const char *filepath, IRenderer *renderer, Texture
 		throw InvalidArgumentException(fvformatf("filepath file fvformatf is not supported : %s", filepath));
 	}
 
-	//TODO resolve color swizzle issue.
+	// TODO resolve color swizzle issue.
 	/*  Allocate image buffer.  */
-	image = FreeImage_ConvertFromRawBits((BYTE *) pixels,
-	                                     texture->width(), texture->height(),
-	                                     Bpp * texture->width(), Bpp * 8, 0x000000FF, 0x0000FF00,
-	                                     0x00FF0000, FALSE);
+	image = FreeImage_ConvertFromRawBits((BYTE *)pixels, texture->width(), texture->height(), Bpp * texture->width(),
+										 Bpp * 8, 0x000000FF, 0x0000FF00, 0x00FF0000, FALSE);
 	if (image == nullptr) {
 		FreeImage_DeInitialise();
 		throw RuntimeException(fvformatf("FreeImage_ConvertFromRawBits failed: %s", filepath));
@@ -253,10 +245,10 @@ void TextureUtil::saveTexture(const char *filepath, IRenderer *renderer, Texture
 	}
 
 	/*  Save to file.   */
-	//FreeImage_SaveToHandle()
+	// FreeImage_SaveToHandle()
 
-	//FIMEMORY* mem = FreeImage_OpenMemory(nullptr, FreeImage_GetMemorySize(image));
-	//FreeImage_SaveToMemory(image_format, image, mem);
+	// FIMEMORY* mem = FreeImage_OpenMemory(nullptr, FreeImage_GetMemorySize(image));
+	// FreeImage_SaveToMemory(image_format, image, mem);
 
 	if (!FreeImage_Save(image_format, image, filepath, 0))
 		throw RuntimeException(fvformatf("Failed save image: %s", filepath));
@@ -268,15 +260,13 @@ void TextureUtil::saveTexture(const char *filepath, IRenderer *renderer, Texture
 	FreeImage_DeInitialise();
 }
 
-void TextureUtil::saveTexture(Ref<IO> & io, IRenderer* renderer, Texture* texture){
+void TextureUtil::saveTexture(Ref<IO> &io, IRenderer *renderer, Texture *texture) {}
 
-}
+Texture *TextureUtil::createTexture(IRenderer *renderer, unsigned int width, unsigned int height, const Ref<IO> &io,
+									TextureFormat format, GraphicFormat graphicformat) {}
 
-Texture *TextureUtil::createTexture(IRenderer *renderer, unsigned int width, unsigned int height, const Ref<IO> &io, TextureFormat format, GraphicFormat graphicformat){
-
-}
-
-Texture *TextureUtil::createTexture(IRenderer* renderer, unsigned int width, unsigned int height, const void *pixels, unsigned int size, TextureFormat format, GraphicFormat graphicformat){
+Texture *TextureUtil::createTexture(IRenderer *renderer, unsigned int width, unsigned int height, const void *pixels,
+									unsigned int size, TextureFormat format, GraphicFormat graphicformat) {
 	/*  */
 	TextureDesc desc = {0};
 	desc.width = width;
@@ -294,7 +284,7 @@ Texture *TextureUtil::createTexture(IRenderer* renderer, unsigned int width, uns
 
 	desc.pixelFormat = format;
 	desc.graphicFormat = graphicformat;
-	desc.numlevel = 5;//Math::clamp((int)(log(width),0, 5);
+	desc.numlevel = 5; // Math::clamp((int)(log(width),0, 5);
 	desc.usemipmaps = 1;
 	desc.srgb = 0;
 
@@ -313,8 +303,4 @@ Texture *TextureUtil::createTexture(IRenderer* renderer, unsigned int width, uns
 	return renderer->createTexture(&desc);
 }
 
-TextureUtil::TextureUtil(void) {
-
-}
-
-
+TextureUtil::TextureUtil(void) {}

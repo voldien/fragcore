@@ -29,10 +29,14 @@ namespace fragcore {
 	public:
 		UIDObject(void) noexcept;
 		UIDObject(UIDGenerator& uidGenerator) noexcept;
-		//TODO for selecting what UID pool.
+		UIDObject(UIDObject &&other) = default;
+		UIDObject(const UIDObject &other) = default;
+		// TODO for selecting what UID pool.
 
 		/**
-		 *	Set Unique ID for the object.
+		 * @brief Set Unique ID for the object.
+		 *
+		 * @param uid
 		 */
 		virtual void setUID(unsigned int uid);
 

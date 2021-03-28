@@ -30,15 +30,15 @@ namespace fragcore {
 	class FVDECLSPEC Display : public Object {
 	public:
 
-		virtual unsigned int x(void) const = 0;
+		virtual unsigned int x(void) const  = 0;
 
-		virtual unsigned int y(void) const = 0;
+		virtual unsigned int y(void) const  = 0;
 
-		virtual unsigned int width(void) const = 0;
+		virtual unsigned int width(void) const  = 0;
 
-		virtual unsigned int height(void) const = 0;
+		virtual unsigned int height(void) const  = 0;
 
-		virtual unsigned int refreshRate(void) const = 0;
+		virtual unsigned int refreshRate(void) const  = 0;
 
 		typedef struct mode_t {
 			int x;
@@ -56,7 +56,7 @@ namespace fragcore {
 		} DPI;
 
 		typedef struct lut_t{
-			
+
 		} LUT;
 
 		virtual std::vector<Mode> getModes(void) const = 0;

@@ -9,20 +9,21 @@
 namespace fragcore {
 
 	/**
-	 * 
+	 *
 	 */
 	class FVDECLSPEC WindowManager : public Singleton<WindowManager> {
 	public:
-		Display* getDisplay(int index);
-		int getNumDisplays(void);
-		Display* getAssociatedDisplay(Ref<Window>& window);
-		Window* createWindow(const std::string& title);
-		//Window* createWindow()
-		/*	TODO get the event.	*/
+	  Display *getDisplay(unsigned int index) noexcept(true);
+	  unsigned int getNumDisplays(void) const noexcept;
+	  Display *getAssociatedDisplay(Ref<Window> &window);
+	  Window *createWindow(const std::string &title);
+	  Display *primaryDisplay(void) const noexcept;
+	  // Window* createWindow()
+	  /*	TODO get the event.	*/
 
-	//protected:
-		void onCreation(Ref<WindowManager>& instance) override;
-		WindowManager(void);
+	  // protected:
+	  void onCreation(Ref<WindowManager> &instance) override;
+	  WindowManager(void);
 	};
 }
 

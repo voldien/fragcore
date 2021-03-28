@@ -13,10 +13,9 @@ using namespace fragcore;
 class FVDECLSPEC AsyncTask : public Task
 {
 public:
-	virtual void Execute(void) override {
+	virtual void Execute(void) noexcept override {
 	}
-	virtual void Complete(void) override {
-	}
+	virtual void Complete(void) noexcept override {}
 };
 
 ASyncHandle ASync::asyncOpen(Ref<IO> &io) {

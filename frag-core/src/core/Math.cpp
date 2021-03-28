@@ -1,29 +1,19 @@
 #include "Core/Math.h"
-#include <hpm.h>
 #include <float.h>
+#include <hpm.h>
 #include <math.h>
-#include<open-simplex-noise.h>
+#include <open-simplex-noise.h>
 using namespace fragcore;
-
 
 static struct osn_context *ctx = NULL;
 
+void Math::guassian1Df(float *guassian, int width, double theta) {}
 
-void Math::guassian1Df(float *guassian, int width, double theta) {
-	
-}
+void Math::guassian1Df(std::vector<float> &guassian, int height, float theta) {}
 
-void Math::guassian1Df(std::vector<float> &guassian, int height, float theta) {
-	
-}
+void Math::guassian2Df(std::vector<float> &guassian, int height, float theta) {}
 
-void Math::guassian2Df(std::vector<float> &guassian, int height, float theta) {
-	
-}
-
-void Math::guassian2Df(float *guassian, int height, float theta) {
-
-}
+void Math::guassian2Df(float *guassian, int height, float theta) {}
 
 // void Window::calculateGammaLookupTable(float gamma, ushort *rgbRamp) const
 // {
@@ -68,42 +58,31 @@ float Math::linearToGammaSpace(float linear) {
 	return 0;
 }
 
-float Math::GameSpaceToLinear(float gamma, float exp) {
-	return 0;
-}
+float Math::GameSpaceToLinear(float gamma, float exp) { return 0; }
 
-float Math::gammaCorrection(float linear, float exp){
-	return powf(linear, exp);
-}
+float Math::gammaCorrection(float linear, float exp) { return powf(linear, exp); }
 
-Color Math::CorrelatedColorTemperatureToRGB(float kelvin)
-{
+Color Math::CorrelatedColorTemperatureToRGB(float kelvin) {
 	float temp = kelvin / 100;
 
 	float red, green, blue;
 
-	if (temp <= 66)
-	{
+	if (temp <= 66) {
 
 		red = 255;
 
 		green = temp;
 		green = 99.4708025861 * log(green) - 161.1195681661;
 
-		if (temp <= 19)
-		{
+		if (temp <= 19) {
 
 			blue = 0;
-		}
-		else
-		{
+		} else {
 
 			blue = temp - 10;
 			blue = 138.5177312231 * log(blue) - 305.0447927307;
 		}
-	}
-	else
-	{
+	} else {
 
 		red = temp - 60;
 		red = 329.698727446 * pow(red, -0.1332047592);
@@ -114,31 +93,22 @@ Color Math::CorrelatedColorTemperatureToRGB(float kelvin)
 		blue = 255;
 	}
 
-	return Color(clamp(red, 0, 255) / 255.0f,
-				   clamp(green, 0, 255) / 255.0f,
-				   clamp(blue, 0, 255) / 255.0f, 1);
+	return Color(clamp(red, 0, 255) / 255.0f, clamp(green, 0, 255) / 255.0f, clamp(blue, 0, 255) / 255.0f, 1);
 }
 
-float Math::PerlinNoise(const Vector2 &point){
-	return Math::PerlinNoise(point.x(), point.y());
-}
+float Math::PerlinNoise(const Vector2 &point) noexcept { return Math::PerlinNoise(point.x(), point.y()); }
 
-float Math::PerlinNoise(float x, float y)
-{
+float Math::PerlinNoise(float x, float y) noexcept {
 	if (unlikely(ctx == NULL))
 		open_simplex_noise(0, &ctx);
 	return open_simplex_noise2(ctx, x, y);
 }
 
-float Math::PerlinNoise(float x, float y, float z)
-{
+float Math::PerlinNoise(float x, float y, float z) noexcept {
 	if (unlikely(ctx == NULL))
 		open_simplex_noise(0, &ctx);
-	
+
 	return open_simplex_noise3(ctx, x, y, z);
 }
 
-float Math::PerlinNoise(const Vector3 &point)
-{
-	return Math::PerlinNoise(point.x(), point.y(), point.z());
-}
+float Math::PerlinNoise(const Vector3 &point) noexcept { return Math::PerlinNoise(point.x(), point.y(), point.z()); }

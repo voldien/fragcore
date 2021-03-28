@@ -25,7 +25,9 @@
 #include <zip.h>
 
 namespace fragcore {
+
 	/**
+	 * @brief 
 	 *
 	 */
 	class FVDECLSPEC ZipFileIO : public IO {

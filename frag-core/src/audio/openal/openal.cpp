@@ -283,7 +283,7 @@ std::vector<AudioPhysicalDevice> AudioInterface::getDevices(void) const
 	size_t len = 0;
 
 	while (device && *device != '\0' && next && *next != '\0') {
-		AudioPhysicalDevice audioPhysicalDevices = AudioPhysicalDevice();
+		AudioPhysicalDevice audioPhysicalDevices;
 		audioPhysicalDevices.setName(device);
 		listDevices.push_back(audioPhysicalDevices);
 

@@ -27,6 +27,7 @@ namespace fragcore {
 		 * @param offset offset in indirect buffer in number of bytes.
 		 */
 		//virtual void dispatchCompute(Shaer* shader, unsigned int* global);
+		//TODO remove and let command list!
 		virtual void dispatchCompute(unsigned int *global, unsigned int *local, unsigned int offset = 0) = 0;
 		//TODO add memory barrier.
 		//TODO add enumerator as argumment for all types of barries.
@@ -43,11 +44,30 @@ namespace fragcore {
 		// virtual void getComputeCapabilties(void);
 		//virtual void getDeviceInfo(std::vector<DeviceInfo> &devices);
 
+		/**
+		 * @brief Create a Command Buffer object
+		 *
+		 * @return CommandList*
+		 */
 		virtual CommandList *createCommandBuffer(void);
+
+		/**
+		 * @brief
+		 *
+		 * @param list
+		 */
 		virtual void submittCommand(Ref<CommandList>& list);
+
+		/**
+		 * @brief
+		 *
+		 * @param list
+		 */
 		virtual void execute(CommandList *list);
 
 		ICompute(void) = default;
+		ICompute(const ICompute &other) = delete;
+		ICompute(ICompute &&other) = default;
 		~ICompute(void) = default;
 	};
 }

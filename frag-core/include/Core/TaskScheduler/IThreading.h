@@ -27,7 +27,7 @@ namespace fragcore {
 	 *
 	 */
 	class FVDECLSPEC IThreading : public SmartReference {
-		public:
+	  public:
 	};
 } // namespace fragcore
 

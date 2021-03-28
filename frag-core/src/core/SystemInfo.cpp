@@ -7,7 +7,7 @@
 #include <SDL2/SDL_platform.h>
 #include <filesystem>
 
-//namespace fs = std::filesystem;
+// namespace fs = std::filesystem;
 using namespace fragcore;
 
 SystemInfo::OperatingSystem SystemInfo::getOperatingSystem(void) {
@@ -91,13 +91,6 @@ static Ref<IO> stdoutRef = Ref<IO>(new FileIO(stdout));
 static Ref<IO> stdinRef = Ref<IO>(new FileIO(stdin));
 static Ref<IO> stderrRef = Ref<IO>(new FileIO(stderr));
 
-Ref<IO> &SystemInfo::getStdOut(void) noexcept {
-	return stdoutRef;
-}
-Ref<IO> &SystemInfo::getStdIn(void) noexcept {
-	return stdoutRef;
-
-}
-Ref<IO> &SystemInfo::getStdErr(void) noexcept {
-	return stdoutRef;
-}
+Ref<IO> &SystemInfo::getStdOut(void) noexcept { return stdoutRef; }
+Ref<IO> &SystemInfo::getStdIn(void) noexcept { return stdoutRef; }
+Ref<IO> &SystemInfo::getStdErr(void) noexcept { return stdoutRef; }

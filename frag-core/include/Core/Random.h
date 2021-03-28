@@ -35,24 +35,24 @@ namespace fragcore {
 	  /**
 	   *	Override the seed.
 	   */
-	  void setSeed(unsigned long long seed);
+	  void setSeed(unsigned long long seed) noexcept;
 
 	  /**
 	   *	Get next random value.
 	   */
-	  unsigned int rand(void);
+	  unsigned int rand(void) noexcept;
 
 	  /**
 	   *	Get next normalized random value.
 	   */
-	  float randfNormalize(void);
+	  float randfNormalize(void) noexcept;
 
 	  /**
 	   *	Get next random float value.
 	   */
-	  float randf(void) const;
+	  float randf(void) const noexcept;
 
-	  float range(float min, float max);
+	  float range(float min, float max) noexcept;
 
 	private:	/*	Attributes.	*/
 //

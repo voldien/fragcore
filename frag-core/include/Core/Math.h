@@ -69,6 +69,7 @@ namespace fragcore {
 		inline static float modi(float a, float b) { return ((a) < (b)) ? (a) : (b); }
 
 		template <typename T> constexpr static T sum(const std::vector<T> &list) {
+			static_assert(T::operator+=, "Require");
 			T sum = 0;
 			for (int i = 0; i < list.size(); i++)
 				sum += list[i];
@@ -78,7 +79,7 @@ namespace fragcore {
 		/**
 		 *	Convert degree to radian.
 		 */
-		template <class T> inline constexpr static T deg2Rad(T deg) { return (deg * (T)Math::PI) / 180.0f; }
+		template <class T> inline constexpr static T deg2Rad(T deg) noexcept { return (deg * (T)Math::PI) / 180.0f; }
 
 		/**
 		 *	Convert radian to degree.
@@ -159,10 +160,10 @@ namespace fragcore {
 		/**
 		 *	Generate perlin noise value
 		 */
-		static float PerlinNoise(float x, float y);
-		static float PerlinNoise(const Vector2 &point);
-		static float PerlinNoise(float x, float y, float z);
-		static float PerlinNoise(const Vector3 &point);
+		static float PerlinNoise(float x, float y) noexcept;
+		static float PerlinNoise(const Vector2 &point) noexcept;
+		static float PerlinNoise(float x, float y, float z) noexcept;
+		static float PerlinNoise(const Vector3 &point) noexcept;
 	};
 } // namespace fragcore
 

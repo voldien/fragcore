@@ -32,19 +32,44 @@ namespace fragcore {
 	  public:
 		RenderObject(void) {}
 		RenderObject(IRenderer *renderer) { setRenderInterface(renderer); }
+		RenderObject(RenderObject &&other) {
+			// this->s
+		}
 
-		inline IRenderer *getRenderer(void) const { return this->iRenderer; }
-		// inline Ref<IRenderer> getRef(void) const{
+		/**
+		 * @brief Get the Renderer object
+		 *
+		 * @return T*
+		 */
+		inline IRenderer *getRenderer(void) const noexcept { return this->iRenderer; }
 
-		// }
+		/**
+		 * @brief Get the Object object
+		 *
+		 * @return void*
+		 */
+		inline void *getObject(void) noexcept { return this->pdata; }
 
-		inline void *getObject(void) { return this->pdata; }
+		/**
+		 * @brief Get the Object object
+		 *
+		 * @return void*
+		 */
+		inline void *getObject(void) const noexcept { return this->pdata; }
 
-		inline void *getObject(void) const { return this->pdata; }
-
+		/**
+		 * @brief Get the Native Ptr object
+		 *
+		 * @return intptr_t
+		 */
 		virtual intptr_t getNativePtr(void) const = 0;
 
-		virtual void setRenderInterface(IRenderer *interface) { this->iRenderer = interface; }
+		/**
+		 * @brief Set the Render Interface object
+		 *
+		 * @param interface
+		 */
+		virtual void setRenderInterface(IRenderer *interface) noexcept { this->iRenderer = interface; }
 
 	  protected: /*  */
 		void *pdata;
