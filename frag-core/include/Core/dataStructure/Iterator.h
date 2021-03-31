@@ -103,7 +103,7 @@ namespace fragcore {
 			return *this;
 		}
 		Iterator &operator=(Iterator &&other) {
-			this->iterator = std::exchange(other.iterator, (T)nullptr);
+			this->iterator = std::exchange(other.iterator, nullptr);
 			return *this;
 		}
 

@@ -19,7 +19,9 @@
 #ifndef _FRAG_CORE_STACK_H_
 #define _FRAG_CORE_STACK_H_ 1
 #include "../../Def.h"
+#include "../../Exception/RuntimeException.h"
 #include "Iterator.h"
+#include <utility>
 
 namespace fragcore {
 	/**
@@ -29,29 +31,36 @@ namespace fragcore {
 	template <class T> class Stack : public std::allocator<T> {
 	  public:
 		Stack(void) {
-			this->data = NULL;
-			this->msize = 0;
+			this->data = nullptr;
+			this->nrElements = 0;
 			this->mreserved = 0;
 		}
 
 		Stack(const Stack &stack) {
-			this->data = NULL;
-			this->msize = 0;
+			this->data = nullptr;
+			this->nrElements = 0;
 			this->mreserved = 0;
 			reserve(stack.getReserved());
 			memcpy(this->data, stack.data, stack.getSize() * sizeof(T));
+		}
+		Stack(Stack &&other) { this->data = std::exchange(other.data, nullptr);
+			this->nrElements = std::exchange(other.nrElements, 0);
+			this->mreserved = std::exchange(other.mreserved, 0);
 		}
 
 		~Stack(void) { delete data; }
 
 		void push(const T &p) {
-			this->data[this->msize] = p;
-			this->msize++;
+			//TODO add validate
+			this->data[this->nrElements] = p;
+			this->nrElements++;
 		}
 
-		T &peek(void) const { return data[this->msize - 1]; }
+		T &peek(void) const { return data[this->nrElements - 1]; }
 
-		inline void pop(void) { this->msize--; }
+		inline void pop(void) {
+			//TODO add validate
+			 this->nrElements--; }
 
 		inline T &operator[](int index) { return this->data[index]; }
 
@@ -59,16 +68,17 @@ namespace fragcore {
 
 		void reserve(int nrOfElement) {
 			this->data = realloc(this->data, nrOfElement * sizeof(T));
-			assert(this->data != NULL);
+			if (this->data == nullptr)
+				throw RuntimeException("Out of memory");
 		}
 
-		inline void clear(void) { this->msize = 0; }
+		inline void clear(void) noexcept { this->nrElements = 0; }
 
-		inline bool isEmpty(void) const { return this->msize != 0; }
+		inline bool isEmpty(void) const noexcept { return this->nrElements != 0; }
 
-		inline int getSize(void) const { return this->msize; }
+		inline int getSize(void) const noexcept { return this->nrElements; }
 
-		inline int getReserved(void) const { return this->mreserved; }
+		inline int getReserved(void) const noexcept { return this->mreserved; }
 
 		class StackIterator : public Iterator<T> {};
 
@@ -76,7 +86,7 @@ namespace fragcore {
 		StackIterator end(void) {}
 
 	  private:					/*	Attributes.	*/
-		unsigned int msize;		/*	Number of elements in the stack.	*/
+		unsigned int nrElements;		/*	Number of elements in the stack.	*/
 		unsigned int mreserved; /*	Number of reserved elements in the stack.	*/
 		T *data;
 	};

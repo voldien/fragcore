@@ -22,6 +22,7 @@
 #include "StackAllactor.h"
 
 namespace fragcore {
+	
 	/**
 	 *	DoubleBufferedAllocator is two allocate buffer.
 	 */

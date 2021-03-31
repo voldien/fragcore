@@ -1,74 +1,71 @@
 /**
 	FragEngine, A Two layer Game Engine.
-    Copyright (C) 2018  Valdemar Lindberg
+	Copyright (C) 2018  Valdemar Lindberg
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+	You should have received a copy of the GNU General Public License
+	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-#ifndef _FRAG_CORE_ALLACTOR_H_
-#define _FRAG_CORE_ALLACTOR_H_ 1
-#include<stdio.h>
-#include<string.h>
-#include<malloc.h>
-#include<stdexcept>
-#include<memory>
+#ifndef _FRAG_CORE_POOL_ALLACTOR_H_
+#define _FRAG_CORE_POOL_ALLACTOR_H_ 1
+#include <cassert>
+#include <malloc.h>
+#include <memory>
+#include <stdexcept>
+#include <stdio.h>
+#include <string.h>
 
 /* add support for C++ allocates in order to remove pure function bug, if it's that it's the culprit*/
-//TODO resolve bug.
+// TODO resolve bug.
 /*TODO extract the pool information into a subclass such that the memory consumption can be monitored.*/
-//TODO add
+// TODO add
 namespace fragcore {
 	/**
 	 *	Pool allocate
 	 */
-	template<class T>
-	class PoolAllocator {
-	public:
-
+	template <class T> class PoolAllocator {
+	  public:
 		typedef struct poolallactoritem {
 			T data;
 			poolallactoritem *next;
 
 		} PoolAllactorItem;
 
-	public:
+	  public:
 		PoolAllocator(void) {
 			this->item = NULL;
-			this->numOfElements = 0;
+			this->nrOfElements = 0;
 			this->mReserved = 0;
 			this->setTypeSize(sizeof(T));
 		}
 
 		PoolAllocator(const PoolAllocator &pollallactor) {
 			this->item = NULL;
-			this->numOfElements = 0;
+			this->nrOfElements = 0;
 			this->mReserved = 0;
 			this->setTypeSize(sizeof(T));
 			*this = pollallactor;
 		}
 
-		PoolAllocator(unsigned num) {
+		PoolAllocator(unsigned int num) {
 			this->item = NULL;
-			this->numOfElements = 0;
+			this->nrOfElements = 0;
 			this->mReserved = 0;
 			this->setTypeSize(sizeof(T));
 			this->resize(num);
 		}
 
-		~PoolAllocator(void) {
-			delete[] this->item;
-		}
+		~PoolAllocator(void) { delete[] this->item; }
 
 		/**
 		 *	Get a pointer to next object in pool allocator.
@@ -80,18 +77,18 @@ namespace fragcore {
 
 			/*	if last, resize.    */
 			if (this->isFull()) {
-				this->resize(numOfElements + 256);
+				this->resize(nrOfElements + 256);
 				return this->obtain();
 			}
 
 			/*  Special case.   */
-			if (this->numOfElements == 0)
+			if (this->nrOfElements == 0)
 				alloc = &this->item->data;
 			else
-				alloc = &this->item->next->data;    /*changed.*/
+				alloc = &this->item->next->data; /*changed.*/
 
-			this->item->next = this->item->next->next;    /*	TODO still some bugs in pool allactor.	*/
-			this->numOfElements++;
+			this->item->next = this->item->next->next; /*	TODO still some bugs in pool allactor.	*/
+			this->nrOfElements++;
 			return alloc;
 		}
 
@@ -103,10 +100,10 @@ namespace fragcore {
 			if (!isValidItem(*element))
 				throw std::invalid_argument("invalid pointer returned");
 
-			PoolAllactorItem *alloc = (PoolAllactorItem *) element;
+			PoolAllactorItem *alloc = (PoolAllactorItem *)element;
 			alloc->next = item->next;
 			item->next = alloc;
-			this->numOfElements--;
+			this->nrOfElements--;
 		}
 
 		/**
@@ -117,11 +114,12 @@ namespace fragcore {
 		bool isValidItem(const T &data) const {
 			const T *tmp = &data;
 			/*  If pointer is less than the base pointer.*/
-			if ((void *) tmp < (void *) this->item)
+			if ((void *)tmp < (void *)this->item)
 				return false;
 			/*  Check if pointer is outside the end point*/
-			if (tmp >= (void *) &this->item[this->reserved()])
+			if (tmp >= (void *)&this->item[this->reserved()])
 				return false;
+			/*	Check if memory is a multiple of the size from the base pointer.	*/
 			return true;
 		}
 
@@ -131,36 +129,26 @@ namespace fragcore {
 		void clean(void) {
 			free(this->item);
 			this->mReserved = 0;
-			this->numOfElements = 0;
+			this->nrOfElements = 0;
 		}
 
-		bool isFull(void) const {
-			return this->numOfElements >= (this->reserved() - 1);
-		}
+		bool isFull(void) const { return this->nrOfElements >= (this->reserved() - 1); }
 
-		inline int size(void) const {
-			return this->numOfElements;
-		}
+		inline int size(void) const { return this->nrOfElements; }
 
-		inline int reserved(void) const {
-			return this->mReserved;
-		}
+		inline int reserved(void) const { return this->mReserved; }
 
 		/**
 		 * Get datatype size.
 		 * @param size
 		 */
-		inline void setTypeSize(unsigned int size) {
-			this->typeSize = size;
-		}
+		inline void setTypeSize(unsigned int size) { this->typeSize = size; }
 
 		/**
 		 *
 		 * @return
 		 */
-		inline unsigned int getTypeSize(void) const {
-			return this->typeSize;
-		}
+		inline unsigned int getTypeSize(void) const { return this->typeSize; }
 
 		/**
 		 *
@@ -172,12 +160,10 @@ namespace fragcore {
 
 			assert(size >= 0);
 
-
-
 			/*  No allocation.  */
 			if (this->reserved() == 0) {
-				this->item = (PoolAllactorItem *) realloc(this->item, itemSize * size);
-				void **items = (void **) item;
+				this->item = (PoolAllactorItem *)realloc(this->item, itemSize * size);
+				void **items = (void **)item;
 				for (i = 0; i < size - 1; i++) {
 					item[i].next = &item[i + 1];
 				}
@@ -189,7 +175,7 @@ namespace fragcore {
 
 				/*  Reallocate buffer.  */
 				i = this->reserved();
-				this->item = (PoolAllactorItem *) realloc(this->item, itemSize * size);
+				this->item = (PoolAllactorItem *)realloc(this->item, itemSize * size);
 
 				PoolAllactorItem *lastItem = &this->item[i];
 				PoolAllactorItem *subpool = lastItem;
@@ -210,27 +196,20 @@ namespace fragcore {
 		 *
 		 * @return
 		 */
-		inline T *getLast(void) {
-			return &this->item[this->mReserved - 1].data;
-		}
+		inline T *getLast(void) { return &this->item[this->mReserved - 1].data; }
 
 		/**
 		 *
 		 *	@Return
 		 */
-		inline T &operator[](int index) {
-			return this->item[index].data;
-		}
+		inline T &operator[](int index) { return this->item[index].data; }
 
 		/**
 		 *
 		 * @param index
 		 * @return
 		 */
-		inline T operator[](int index) const {
-			return item[index].data;
-		}
-
+		inline T operator[](int index) const { return item[index].data; }
 
 		/**
 		 *
@@ -239,13 +218,13 @@ namespace fragcore {
 		 */
 		PoolAllocator &operator=(const PoolAllocator &allocator) {
 			this->mReserved = 0;
-			this->numOfElements = 0;
+			this->nrOfElements = 0;
 			this->item = NULL;
 			this->setTypeSize(allocator.getTypeSize());
 
 			/*  */
 			resize(allocator.reserved());
-			this->numOfElements = allocator.numOfElements;
+			this->nrOfElements = allocator.nrOfElements;
 
 			/*  Copy the list.  */
 			memcpy(this->item, allocator.item, allocator.getTypeSize() * allocator.reserved());
@@ -260,25 +239,21 @@ namespace fragcore {
 			return *this;
 		}
 
-	protected:
+		PoolAllocator &operator=(PoolAllocator &&alloctor) { return *this; }
 
+	  protected:
 		/**
 		 *
 		 * @return
 		 */
-		unsigned int getItemSize(void) const {
-			return sizeof(PoolAllactorItem);
-		}
+		unsigned int getItemSize(void) const { return sizeof(PoolAllactorItem); }
 
-	private:    /*	attributes.	*/
-
-		PoolAllactorItem *item;        /*	Pool data.	*/
-		int numOfElements;            /*	number of elements used.	*/
-		int mReserved;                /*	number of allocated elements.	*/
-		unsigned int typeSize;        /*	size of the data type.	*/
-
+	  private:					/*	attributes.	*/
+		PoolAllactorItem *item; /*	Pool data.	*/
+		int nrOfElements;		/*	number of elements used.	*/
+		int mReserved;			/*	number of allocated elements.	*/
+		unsigned int typeSize;	/*	size of the data type.	*/
 	};
-}
-
+} // namespace fragcore
 
 #endif
