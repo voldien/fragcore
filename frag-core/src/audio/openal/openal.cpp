@@ -96,7 +96,7 @@ static inline ALenum to_al_format(short channels, short samples) {
 			else
 				return AL_FORMAT_MONO8;
 		default:
-			throw RuntimeException("Invalid format.");
+			throw RuntimeException("Invalid format. ");
 	}
 }
 
@@ -150,8 +150,12 @@ AudioClip *AudioInterface::createAudioClip(AudioClipDesc *desc){
 		/*	Load all data from the stream.	*/
 		void *data = desc->decoder->getData(&size);
 		/*	*/
-		alBufferData(buffer, to_al_format(desc->format, desc->samples),
-					data, size, desc->sampleRate);
+		ALenum format = to_al_format(desc->format, desc->samples);
+		alBufferData(buffer, format, data, size, desc->sampleRate);
+		int err = alGetError();
+		if (err != ALC_NO_ERROR)
+			throw RuntimeException(fvformatf("Failed load memory to buffer %s", openAlErrorToString(err)));
+
 		free(data);
 		desc->decoder->deincreemnt();
 
@@ -159,9 +163,7 @@ AudioClip *AudioInterface::createAudioClip(AudioClipDesc *desc){
 
 	}
 
-	int err = alGetError();
-	if (err != ALC_NO_ERROR)
-		throw RuntimeException(fvformatf("%s", openAlErrorToString(err)));
+
 
 	AudioClip *audioClip = new AudioClip();
 	ALClip *source = new ALClip();
@@ -261,6 +263,9 @@ void AudioInterface::setAudioListener(AudioListener *listener) {
 
 AudioCapture *AudioInterface::createAudioCapture(void) {
 	return nullptr;
+}
+void AudioInterface::deleteAudioCapture(AudioCapture *capture){
+	
 }
 
 std::vector<AudioPhysicalDevice> AudioInterface::getDevices(void) const

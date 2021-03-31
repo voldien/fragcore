@@ -2,7 +2,7 @@
 #include "Core/IO/FileIO.h"
 #include "Exception/InvalidArgumentException.h"
 #include "Exception/RuntimeException.h"
-#include <HpmCpp.h>
+#include <Hpm.hpp>
 #include <SDL2/SDL_cpuinfo.h>
 #include <SDL2/SDL_platform.h>
 #include <filesystem>

@@ -34,16 +34,25 @@ namespace fragcore {
 	};
 
 	/**
-	 * 
+	 *
 	 */
 	class FVDECLSPEC AudioDecoderFactory {
 		public:
 			//TODO determine if static is enough or a creating a object is required.
+			/**
+			 * @brief Create a Decoder object builtin in the library.
+			 * Override the @see AudioDecoder for adding additional
+			 * audio decoder object.
+			 *
+			 * @param codec
+			 * @param io
+			 * @return AudioDecoder*
+			 */
 			static AudioDecoder *createDecoder(AudioDecoderCodec codec, Ref<IO> &io);
 
 		private: /*	Prevent one from creating an instance of this class.	*/
-			AudioDecoderFactory(void) = default;
-			AudioDecoderFactory(const AudioDecoderFactory &other) = default;
+			AudioDecoderFactory(void) = delete;
+			AudioDecoderFactory(const AudioDecoderFactory &other) = delete;
 	};
 }
 #endif

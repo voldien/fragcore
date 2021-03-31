@@ -35,4 +35,11 @@ AudioFormat WavAudioDecoder::getFormat(void) const {
 }
 unsigned int WavAudioDecoder::getSampleRate(void) const { return 0; }
 
+unsigned int WavAudioDecoder::getNrChannels(void) const{
+	
+}
+unsigned int WavAudioDecoder::getSampleBitResolution(void) const{
+
+}
+
 double WavAudioDecoder::getTotalTime(void) const { return this->length; }

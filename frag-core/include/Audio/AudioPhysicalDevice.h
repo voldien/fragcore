@@ -29,8 +29,10 @@ namespace fragcore {
 		AudioPhysicalDevice(void) {
 
 		}
-		AudioPhysicalDevice(const AudioPhysicalDevice &other) = default;
-		AudioPhysicalDevice(AudioPhysicalDevice &&other) = default;
+		AudioPhysicalDevice(const AudioPhysicalDevice &other){}
+		AudioPhysicalDevice(AudioPhysicalDevice &&other){
+			
+		}
 
 		// TODO perhaps use the audio setting as part of the audio device.
 		// virtual AudioSettings* getAudioSettings(void);
