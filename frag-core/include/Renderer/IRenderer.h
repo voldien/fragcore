@@ -64,8 +64,8 @@ namespace fragcore {
 		};
 
 		//TODO make it less state machine and allow it to become more modern.
+		// IRenderer(void) = default;
 		virtual ~IRenderer(void) = default;
-		IRenderer(void) = default;
 
 		/**
 		 *	Create texture.
@@ -314,12 +314,12 @@ namespace fragcore {
 		 * Get capability of the rendering API.
 		 * @param capability non-null object.
 		 */
-		virtual void getCapability(Capability *capability);
+		virtual void getCapability(Capability *capability) = 0;
 
 		/**
 		 *
 		 */
-		virtual void getFeatures(Features *features);
+		virtual void getFeatures(Features *features) = 0;
 
 		/**
 		 * TODO add for reading status such as memory.
@@ -329,11 +329,11 @@ namespace fragcore {
 		//TODO imporove later
 		virtual void getStatus(MemoryInfo *memoryInfo);
 
-		virtual CommandList *createCommandBuffer(void);
-		virtual void submittCommand(Ref<CommandList> &list);
-		virtual void execute(CommandList *list);
+		virtual CommandList *createCommandBuffer(void) = 0;
+		virtual void submittCommand(Ref<CommandList> &list) = 0;
+		virtual void execute(CommandList *list) = 0;
 
-		virtual void *getData(void) const;
+		virtual void *getData(void) const = 0;
 
 	private:    /*  */
 		void *pdata;
@@ -341,7 +341,7 @@ namespace fragcore {
 }
 
 /**
- * Create internal rendering interface.
+ * @brief Create internal rendering interface.
  * @param config
  * @return non-null renderinginterface object.
  */

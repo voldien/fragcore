@@ -13,6 +13,7 @@ namespace fragcore {
 		friend class VKRenderWindow;
 
 	  public:
+		VKRenderInterface(void) = delete;
 		VKRenderInterface(const VKRenderInterface &&other);
 		VKRenderInterface(IConfig *config);
 		virtual ~VKRenderInterface(void);
@@ -136,6 +137,8 @@ namespace fragcore {
 		virtual CommandList *createCommandBuffer(void);
 		virtual void submittCommand(Ref<CommandList> &list);
 		virtual void execute(CommandList *list);
+
+		virtual void *getData(void) const override;
 
 	  protected:
 		std::vector<RendererWindow *> windows;

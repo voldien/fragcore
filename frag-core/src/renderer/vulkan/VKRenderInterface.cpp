@@ -30,9 +30,9 @@ static bool validate_object_memeber(VKRenderInterface *renderer, RenderObject *o
 	return renderer == object->getRenderer();
 }
 
-
 VKRenderInterface::VKRenderInterface(IConfig *config) {
 
+	/*	Minimun requirements.	*/
 	std::vector<const char *> instanceExtensionNames = {
 		/*	*/
 		VK_KHR_DEVICE_GROUP_CREATION_EXTENSION_NAME,
@@ -354,10 +354,10 @@ VKRenderInterface::~VKRenderInterface(void) {
 	// }
 
 	if (device)
-		vkDestroyDevice(device, NULL);
+		vkDestroyDevice(device, nullptr);
 
 	if (inst)
-		vkDestroyInstance(inst, NULL);
+		vkDestroyInstance(inst, nullptr);
 
 	SDL_QuitSubSystem(SDL_INIT_VIDEO);
 //	free(this->pdata);
@@ -1520,5 +1520,6 @@ void VKRenderInterface::submittCommand(Ref<CommandList> &list) {
 
 void VKRenderInterface::execute(CommandList *list) {}
 
+void *VKRenderInterface::getData(void) const { return nullptr; }
 
 extern "C" IRenderer *createInternalRenderer(IConfig *config) { return new VKRenderInterface(config); }

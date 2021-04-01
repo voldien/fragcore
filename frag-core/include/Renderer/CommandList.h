@@ -35,13 +35,21 @@ namespace fragcore {
 		virtual void begin(void) = 0;
 		virtual void end(void) = 0;
 
+		virtual void copyTexture(const Texture *src, Texture *dst) = 0;
+
 		virtual void bindPipeline(RenderPipeline *pipline) = 0;
-		//virtual void updateBuffer(Ref<Buffer> &buffer, void *p, int size) = 0;
+		//virtual void bindComputePipeline(RenderPipeline *pipeline) = 0;
+
+		// virtual void updateBuffer(Ref<Buffer> &buffer, void *p, int size) = 0;
 		virtual void bindFramebuffer(Ref<FrameBuffer> &framebuffer) = 0;
 
-		//virtual void setviewport(int x, int y, int width, int height) = 0;
+		virtual void setviewport(int x, int y, int width, int height) = 0;
 		virtual void clearDepth(float depth) = 0;
 		virtual void clearColorTarget(uint index, const Color &color) = 0;
+
+		virtual void setDepthBounds(float min, float max) = 0;
+
+		//virtual void executeCommand(CommandList &list);
 
 		// virtual void setGraphicResourcesSlot(void) = 0;
 

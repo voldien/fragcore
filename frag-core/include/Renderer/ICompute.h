@@ -19,7 +19,7 @@ namespace fragcore {
 		/**
 		 *
 		 */
-		virtual bool supportCompute(void);
+		virtual bool supportCompute(void) noexcept;
 		/**
 		 * Dispatch compute program.
 		 * @param global global workgroup.
@@ -29,6 +29,7 @@ namespace fragcore {
 		//virtual void dispatchCompute(Shaer* shader, unsigned int* global);
 		//TODO remove and let command list!
 		virtual void dispatchCompute(unsigned int *global, unsigned int *local, unsigned int offset = 0) = 0;
+		// TODO remove and let command list!
 		//TODO add memory barrier.
 		//TODO add enumerator as argumment for all types of barries.
 		virtual void memoryBarrier(void) = 0;
@@ -68,7 +69,7 @@ namespace fragcore {
 		ICompute(void) = default;
 		ICompute(const ICompute &other) = delete;
 		ICompute(ICompute &&other) = default;
-		~ICompute(void) = default;
+		virtual ~ICompute(void) = default;
 	};
 }
 #endif
