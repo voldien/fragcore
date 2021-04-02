@@ -7,7 +7,7 @@
 using namespace fragcore;
 
 // TODO relocate to its own file that handles all the compute of Vulkan.
-bool ICompute::supportCompute(void) { return true; }
+bool ICompute::supportCompute(void) noexcept { return true; }
 void ICompute::OnInitialization(void) {}
 void ICompute::OnDestruction(void) {}
 
