@@ -36,7 +36,7 @@ jobs:
       # The CMake binaries on the Github Actions machines are (as of this writing) 3.12
       run: |
         cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_WITH_TEST=ON -DBUILD_WITH_UBSAN=ON \
-        -DBUILD_WITH_ASAN=ON -DBUILD_WITH_TEST=ON -DBUILD_WITH_INSTALL=OFF -DBUILD_WITH_COVERAGE=ON
+        -DBUILD_WITH_ASAN=ON -DBUILD_WITH_TEST=ON -DBUILD_WITH_INSTALL=OFF -DBUILD_WITH_COVERAGE=ON -DBUILD_OPT_BUILD_PACKAGES=ON
 
     - name: Build-Core
       working-directory: ${{runner.workspace}}/build
@@ -50,4 +50,14 @@ jobs:
       # Execute tests defined by the CMake configuration.  
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
       run: ctest -C $BUILD_TYPE
-    
+
+    - name: Construct package
+      working-directory: ${{runner.workspace}}/build
+      shell: bash
+      run:  
+        cpack 
+    - name: Upload deb packages
+      uses: actions/upload-artifact@v1
+      with:
+        name: packages
+        path: *.deb
