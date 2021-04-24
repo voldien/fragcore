@@ -54,10 +54,15 @@ jobs:
     - name: Construct package
       working-directory: ${{runner.workspace}}/build
       shell: bash
-      run:  
-        cpack 
+      run: cpack
+
+    - name: Move deb packages
+      working-directory: ${{runner.workspace}}/build
+      run: |
+        mkdir deb && mv -v *.deb deb/
+
     - name: Upload deb packages
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v2
       with:
-        name: packages
-        path: *.deb
+        name: package
+        path: ${{runner.workspace}}/build/deb
