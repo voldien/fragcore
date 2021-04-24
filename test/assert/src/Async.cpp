@@ -35,7 +35,7 @@ TEST(ASync, ASync_ReadIOAsync_ThrowException) {
         Ref<IO> ioRef = SystemInfo::getStdOut();
 	ASyncHandle handle;
 	handle = async.asyncOpen(ioRef);
-	ASSERT_THROW(async.asyncWriteFile(handle, NULL, 0, NULL),
+	ASSERT_THROW(async.asyncWriteFile(handle, nullptr, 0, nullptr),
 					InvalidArgumentException);
 }
 
@@ -47,7 +47,7 @@ TEST(ASync, ASync_Wait_Correctly_NoThrowException) {
 	ASyncHandle handle;
 	handle = async.asyncOpen(ioRef);
 	char buf[32];
-	async.asyncReadFile(handle, buf, sizeof(buf), NULL);
+	async.asyncReadFile(handle, buf, sizeof(buf), nullptr);
 	ASSERT_NO_THROW(async.asyncWait(handle));
 }
 
@@ -98,7 +98,7 @@ TEST(ASync, Async) {
 	// delete zipFileSystemIO;
 
 	// /**/
-	// ZipFileSystem *zipFileSystem = NULL;
+	// ZipFileSystem *zipFileSystem = nullptr;
 	// ASSERT_NO_THROW(zipFileSystem = ZipFileSystem::createZipFileObject(zipFile,
 	// refPtr)); handle = zipFileSystemIO->openASyncFile(zipInFiles[0],
 	// IO::READ); ASSERT_GE(handle, 0);

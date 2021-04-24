@@ -41,7 +41,7 @@ TEST(AudioDecoder, AudioDecoder)
 
 	// 	AudioInterface *audio;
 
-	// 	ASSERT_TRUE(audio = createAudioInterface(api, NULL));
+	// 	ASSERT_TRUE(audio = createAudioInterface(api, nullptr));
 	// 	std::vector<AudioDecoderCodec> codes = {
 	// 		AudioDecoderCodec::Ogg,
 	// 		AudioDecoderCodec::Wav,
