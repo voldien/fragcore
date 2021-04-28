@@ -24,6 +24,7 @@
 
 namespace fragcore {
 	/**
+	 * @brief
 	 *
 	 */
 	class CommandList : public SmartReference /*: public NoCopyable */ {

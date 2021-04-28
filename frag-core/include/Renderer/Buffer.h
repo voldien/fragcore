@@ -23,8 +23,10 @@
 #include "RenderObject.h"
 
 namespace fragcore {
+
 	/**
-	 *	Primitive buffer.
+	 * @brief Primitive buffer.
+	 *
 	 */
 	class FVDECLSPEC Buffer : public RenderObject {
 		friend class IRenderer;
