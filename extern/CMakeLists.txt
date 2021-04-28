@@ -197,6 +197,8 @@ IF(BUILD_WITH_EXTERNAL_PROJECT)
 	ENDIF()
 ENDIF()
 
+ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/extern/backward-cpp)
+
 IF(BUILTIN_JEMALLOC)
 	#https://github.com/jemalloc/jemalloc.git
 ENDIF()
