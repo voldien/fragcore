@@ -3,7 +3,9 @@
 #include "AudioDecoder.h"
 
 namespace fragcore {
+
 	/**
+	 * @brief
 	 *
 	 */
 	class FVDECLSPEC Mp3AudioDecoder : public AudioDecoder {

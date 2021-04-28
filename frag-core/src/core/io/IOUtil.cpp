@@ -6,7 +6,7 @@
 using namespace fragcore;
 
 long int IOUtil::loadFileMem(Ref<IO> &io, char **data) noexcept {
-	char *d = NULL;
+	char *d = nullptr;
 	long dataSize = 0;
 
 	/*  Check if file is readable.  */

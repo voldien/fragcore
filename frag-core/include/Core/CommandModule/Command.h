@@ -18,13 +18,13 @@
 */
 #ifndef _PV_COMMAND_H_
 #define _PV_COMMAND_H_ 1
-#include <PoolAllactor.h>
+#include"../dataStructure/PoolAllocator.h"
 #include"Def.h"
 #include"Prerequisites.h"
 
 
 namespace fragcore {
-	
+
 }
 /**
  *	Single command object. The command is assoicated with

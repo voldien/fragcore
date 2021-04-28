@@ -31,34 +31,39 @@
 // TODO add
 namespace fragcore {
 	/**
-	 *	Pool allocate
+	 * @brief Pool allocate
+	 *
+	 * @tparam T
 	 */
 	template <class T> class PoolAllocator {
 	  public:
+	  	/*	TODO add align and pack .	*/
 		typedef struct poolallactoritem {
 			T data;
 			poolallactoritem *next;
-
 		} PoolAllactorItem;
 
 	  public:
 		PoolAllocator(void) {
-			this->item = NULL;
+			this->item = nullptr;
 			this->nrOfElements = 0;
 			this->mReserved = 0;
 			this->setTypeSize(sizeof(T));
 		}
 
 		PoolAllocator(const PoolAllocator &pollallactor) {
-			this->item = NULL;
+			this->item = nullptr;
 			this->nrOfElements = 0;
 			this->mReserved = 0;
 			this->setTypeSize(sizeof(T));
 			*this = pollallactor;
 		}
+		PoolAllocator(PoolAllocator&& other){
+
+		}
 
 		PoolAllocator(unsigned int num) {
-			this->item = NULL;
+			this->item = nullptr;
 			this->nrOfElements = 0;
 			this->mReserved = 0;
 			this->setTypeSize(sizeof(T));
@@ -70,7 +75,7 @@ namespace fragcore {
 		/**
 		 *	Get a pointer to next object in pool allocator.
 		 *
-		 *	@Return None NULL pointer if successful.
+		 *	@Return None nullptr pointer if successful.
 		 */
 		T *obtain(void) {
 			T *alloc;
@@ -167,7 +172,7 @@ namespace fragcore {
 				for (i = 0; i < size - 1; i++) {
 					item[i].next = &item[i + 1];
 				}
-				item[size - 1].next = NULL;
+				item[size - 1].next = nullptr;
 			} else {
 				/*  */
 				if (size < this->reserved())
@@ -183,7 +188,7 @@ namespace fragcore {
 					lastItem->next = &item[i + 1];
 					lastItem = lastItem->next;
 				}
-				lastItem->next = NULL;
+				lastItem->next = nullptr;
 
 				/*  Bind current next to the next subset.  */
 				this->item->next = subpool;
@@ -219,7 +224,7 @@ namespace fragcore {
 		PoolAllocator &operator=(const PoolAllocator &allocator) {
 			this->mReserved = 0;
 			this->nrOfElements = 0;
-			this->item = NULL;
+			this->item = nullptr;
 			this->setTypeSize(allocator.getTypeSize());
 
 			/*  */
@@ -234,7 +239,7 @@ namespace fragcore {
 			for (int x = 0; x < this->reserved() - 1; x++) {
 				item[x].next = &item[x + 1];
 			}
-			item[this->reserved() - 1].next = NULL;
+			item[this->reserved() - 1].next = nullptr;
 
 			return *this;
 		}

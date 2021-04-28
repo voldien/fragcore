@@ -30,13 +30,13 @@ namespace fragcore {
 	class ITree {
 	public:
 		ITree(void) {
-			this->sibling = NULL;
+			this->sibling = nullptr;
 			this->numChildren = 0;
-			this->child = NULL;
-			this->parent = NULL;
+			this->child = nullptr;
+			this->parent = nullptr;
 		}
 		ITree(ITree&& other){
-			
+
 		}
 
 		virtual ITree<T> *root(void) const {
@@ -88,7 +88,7 @@ namespace fragcore {
 			ITree<T> *sn = getChild(index - 1);
 			ITree<T> *n = sn->sibling;
 			sn->setSibling(n->sibling);
-			n->parent = NULL;
+			n->parent = nullptr;
 		}
 
 		virtual ITree<T> *getChild(int index) const
@@ -175,8 +175,8 @@ namespace fragcore {
 		};
 
 		/*  TODO determine if iterator can be added.    */
-//		virtual TIterator begin(void);
-//		virtual TIterator end(void);
+//		virtual TIterator<T> begin(void);
+//		virtual TIterator<T> end(void);
 
 	protected:  /*  */
 		void setSibling(ITree<T> *sibling) {

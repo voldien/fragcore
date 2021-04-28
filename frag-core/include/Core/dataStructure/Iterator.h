@@ -26,47 +26,52 @@ namespace fragcore {
 	 *	Simple abstract Iterator class for
 	 *	generic classes.
 	 */
+	/**
+	 * @brief
+	 *
+	 * @tparam T
+	 */
 	template <class T> class Iterator {
 	  public:
 		/**
 		 *	@Return
 		 */
-		virtual Iterator &operator++(void);
+		virtual Iterator &operator++(void) = 0;
 
 		/**
 		 *	@Return
 		 */
-		virtual Iterator &operator++(int);
+		virtual Iterator &operator++(int) = 0;
 
 		/**
 		 *	@Return
 		 */
-		virtual Iterator &operator--(void);
+		virtual Iterator &operator--(void) = 0;
 
 		/**
 		 *	@Return
 		 */
-		virtual Iterator &operator+=(int n);
+		virtual Iterator &operator+=(int n) = 0;
 
 		/**
 		 *	@Return
 		 */
-		virtual Iterator &operator-=(int n);
+		virtual Iterator &operator-=(int n) = 0;
 
 		/**
 		 *	@Return
 		 */
-		virtual Iterator &operator+(int n);
+		virtual Iterator &operator+(int n) = 0;
 
 		/**
 		 *	@Return
 		 */
-		virtual Iterator &operator-(int n);
+		virtual Iterator &operator-(int n) = 0;
 
 		/**
 		 *	@Return
 		 */
-		virtual Iterator &operator[](int index) const;
+		virtual Iterator &operator[](int index) const = 0;
 
 		/**
 		 *	@Return
@@ -102,6 +107,12 @@ namespace fragcore {
 			this->iterator = iterator.iterator;
 			return *this;
 		}
+		/**
+		 * @brief
+		 *
+		 * @param other
+		 * @return Iterator&
+		 */
 		Iterator &operator=(Iterator &&other) {
 			this->iterator = std::exchange(other.iterator, nullptr);
 			return *this;

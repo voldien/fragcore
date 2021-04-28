@@ -34,6 +34,7 @@ namespace fragcore {
 	};
 
 	/**
+	 * @brief 
 	 *
 	 */
 	class FVDECLSPEC AudioDecoderFactory {
