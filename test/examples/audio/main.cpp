@@ -31,7 +31,7 @@ class AudioPlayback {
 		std::vector<AudioPhysicalDevice>::iterator it = devices.begin();
 
 		for (; it != devices.end(); it++) {
-			printf(fvformatf("%s\n", (*it).getName().c_str()).c_str());
+			printf(fmt::format("%s\n", (*it).getName().c_str()).c_str());
 		}
 		// printf("Current Device: %s", iaudio->getAudioDevice().getName());
 
