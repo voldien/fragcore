@@ -3,7 +3,7 @@
 #include <Exception/InvalidArgumentException.h>
 #include <Exception/NotSupportedException.h>
 #include <openssl/md5.h>
-
+#include<fmt/core.h>
 using namespace fragcore;
 
 Hash::Hash(Hash::ALGORITHM algorithm) {
@@ -17,7 +17,7 @@ Hash::Hash(Hash::ALGORITHM algorithm) {
 	case SHA512:
 		throw NotSupportedException();
 	default:
-		throw InvalidArgumentException(fvformatf("Invalid hash enumerator - %d", algorithm));
+		throw InvalidArgumentException(fmt::format("Invalid hash enumerator - %d", algorithm));
 	}
 
 	/*      */

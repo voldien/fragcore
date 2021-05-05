@@ -1,29 +1,25 @@
-#include <stdexcept>
 #include "Core/IO/FileIO.h"
-#include "Utils/StringUtil.h"
 #include "Exception/InvalidArgumentException.h"
-#include"Exception/InvalidPointerException.h"
+#include "Exception/InvalidPointerException.h"
 #include "Exception/RuntimeException.h"
-#include"Core/IO/FileIO.h"
-#include<utility>
+#include "Utils/StringUtil.h"
+#include <stdexcept>
+#include<fmt/core.h>
+#include <utility>
 using namespace fragcore;
 #include <filesystem>
 
 FileIO::FileIO(void) {
-	this->mode = (Mode) 0;
+	this->mode = (Mode)0;
 	this->file = nullptr;
 }
 
-FileIO::FileIO(const char *path, Mode mode) {
-	this->open(path, mode);
-}
+FileIO::FileIO(const char *path, Mode mode) { this->open(path, mode); }
 
-FileIO::FileIO(FILE *file) {
-	this->file = file;
-}
+FileIO::FileIO(FILE *file) { this->file = file; }
 
 FileIO::FileIO(FileIO &&other) {
-	this->file =  std::exchange(other.file, nullptr);
+	this->file = std::exchange(other.file, nullptr);
 	this->mode = other.mode;
 }
 
@@ -34,32 +30,32 @@ void FileIO::open(const char *path, Mode mode) {
 
 	const char *m = nullptr;
 	switch (mode & ACCESS) {
-		case READ:
-			m = "rb";
-			break;
-		case WRITE:
-			if (mode & IO::Mode::APPEND)
-				m = "wb+";
-			else
-				m = "wb";
-			break;
-		case ACCESS:
-			m = "ab+";
-			break;
-		default:
-			throw InvalidArgumentException("Invalid IO mode.");
+	case READ:
+		m = "rb";
+		break;
+	case WRITE:
+		if (mode & IO::Mode::APPEND)
+			m = "wb+";
+		else
+			m = "wb";
+		break;
+	case ACCESS:
+		m = "ab+";
+		break;
+	default:
+		throw InvalidArgumentException("Invalid IO mode.");
 	}
 
 	file = fopen(path, m);
 	if (file == nullptr) {
-		//TODO check the error
-		switch(errno){
-			case ENOENT:
-				throw InvalidArgumentException(fvformatf("Failed to open file %s, %s.\n", path,strerror(errno)));
-			case EPERM://TODO add support for exception for permission.
-			case EACCES://TODO add support for exception for permission.
-			default:
-				throw RuntimeException(fvformatf("Failed to open file %s, %s.\n", path, strerror(errno)));
+		// TODO check the error
+		switch (errno) {
+		case ENOENT:
+			throw InvalidArgumentException(fmt::format("Failed to open file %s, %s.\n", path, strerror(errno)));
+		case EPERM:	 // TODO add support for exception for permission.
+		case EACCES: // TODO add support for exception for permission.
+		default:
+			throw RuntimeException(fmt::format("Failed to open file %s, %s.\n", path, strerror(errno)));
 		}
 	}
 
@@ -71,20 +67,20 @@ void FileIO::open(const char *path, Mode mode) {
 void FileIO::close(void) {
 	fclose(this->file);
 	this->file = nullptr;
-	this->mode = (Mode) 0;
+	this->mode = (Mode)0;
 }
 
 long FileIO::read(long int nbytes, void *pbuffer) {
 	long int nreadBytes;
-	nreadBytes = fread((char *) pbuffer, 1, nbytes, this->file);
+	nreadBytes = fread((char *)pbuffer, 1, nbytes, this->file);
 	return nreadBytes;
 }
 
 long FileIO::write(long int nbytes, const void *pbuffer) {
 	long int nreadBytes;
-	nreadBytes = fwrite((char *) pbuffer, 1, nbytes, this->file);
+	nreadBytes = fwrite((char *)pbuffer, 1, nbytes, this->file);
 	if (nreadBytes != nbytes && ferror(this->file) != 0)
-		throw RuntimeException(fvformatf("Failed to write to file, %s.\n", strerror(errno)));
+		throw RuntimeException(fmt::format("Failed to write to file, %s.\n", strerror(errno)));
 	return nreadBytes;
 }
 
@@ -100,29 +96,27 @@ long FileIO::length(void) {
 	return flen;
 }
 
-bool FileIO::eof(void) const {
-	return feof(this->file) != 0;
-}
+bool FileIO::eof(void) const { return feof(this->file) != 0; }
 
 void FileIO::seek(long int nbytes, Seek seek) {
 	int whence;
 	switch (seek) {
-		case SET:
-                        whence = SEEK_SET;
-			break;
-		case CUR:
-			whence = SEEK_CUR;
-			break;
-		case END:
-			whence = SEEK_END;
-			break;
-		default:
-			throw InvalidArgumentException("Invalid seek enumerator.");
+	case SET:
+		whence = SEEK_SET;
+		break;
+	case CUR:
+		whence = SEEK_CUR;
+		break;
+	case END:
+		whence = SEEK_END;
+		break;
+	default:
+		throw InvalidArgumentException("Invalid seek enumerator.");
 	}
 
 	if (fseek(this->file, nbytes, whence) != 0) {
 		if (ferror(this->file))
-			throw RuntimeException(fvformatf("%s", strerror(errno)));
+			throw RuntimeException(fmt::format("%s", strerror(errno)));
 	}
 }
 
@@ -132,14 +126,8 @@ unsigned long FileIO::getPos(void) {
 	return pos.__pos;
 }
 
-bool FileIO::isWriteable(void) const {
-	return this->mode & WRITE;
-}
+bool FileIO::isWriteable(void) const { return this->mode & WRITE; }
 
-bool FileIO::isReadable(void) const {
-	return this->mode & READ;
-}
+bool FileIO::isReadable(void) const { return this->mode & READ; }
 
-bool FileIO::flush(void) {
-	return fflush(this->file) == 0;
-}
+bool FileIO::flush(void) { return fflush(this->file) == 0; }

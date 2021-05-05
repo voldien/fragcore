@@ -3,7 +3,7 @@
 #include "Core/dataStructure/StackAllactor.h"
 #include "Utils/ShaderUtil.h"
 #include "Utils/StringUtil.h"
-
+#include<fmt/core.h>
 using namespace fragcore;
 
 std::map<long int, ShaderCompiler::ShaderResult>
@@ -26,7 +26,7 @@ ShaderCompiler::CompilePermutation(Ref<IRenderer> &renderer, CompilerSources *re
 		std::vector<CompilerOption>::const_iterator eit = optionset.option.cbegin();
 		for (; eit != optionset.option.cend(); eit++) {
 
-			std::string macro = fvformatf("#define %s %s", (*eit).name, (*eit).value);
+			std::string macro = fmt::format("#define %s %s", (*eit).name, (*eit).value);
 			bufferIO.write(macro.size() + 1, macro.c_str());
 		}
 

@@ -3,6 +3,7 @@
 #include "Utils/StringUtil.h"
 #include <SDL2/SDL.h>
 #include <stdexcept>
+#include<fmt/core.h>
 #include <utility>
 using namespace fragcore;
 
@@ -22,7 +23,8 @@ Library::Library(const Library &library) {
 
 Library::Library(Library &&other) { std::exchange(this->mlib, other.mlib); }
 
-Library::~Library(void) { /*	Nothing to release. Done by the kernel itself.	*/ }
+Library::~Library(void) { /*	Nothing to release. Done by the kernel itself.	*/
+}
 
 bool Library::open(const char *clibrary) {
 	this->mlib = SDL_LoadObject(clibrary);
@@ -30,7 +32,7 @@ bool Library::open(const char *clibrary) {
 	/*	Check for error.	*/
 	if (this->mlib == nullptr) {
 
-		std::string sdlerror = fvformatf("Failed open library : %s\n", SDL_GetError());
+		std::string sdlerror = fmt::format("Failed open library : %s\n", SDL_GetError());
 		throw RuntimeException(sdlerror);
 	}
 
@@ -45,8 +47,8 @@ void *Library::getfunc(const char *pProcName) {
 	void *func = SDL_LoadFunction(this->mlib, pProcName);
 
 	if (func == nullptr) {
-		std::string sdlerror = fvformatf("Failed to load function %s, %s from library %s.\n", pProcName, SDL_GetError(),
-										 this->name.c_str());
+		std::string sdlerror = fmt::format("Failed to load function %s, %s from library %s.\n", pProcName,
+										   SDL_GetError(), this->name.c_str());
 		throw RuntimeException(sdlerror);
 	}
 

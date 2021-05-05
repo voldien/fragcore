@@ -1,55 +1,54 @@
+#include "Window/Display.h"
 #include <SDL2/SDL_video.h>
-#include <stdexcept>
 #include <Utils/StringUtil.h>
-#include"Window/Display.h"
-
+#include <stdexcept>
 
 ////SDL_ShowSimpleMessageBox
 ////SDL_ShowMessageBox
 ////SDL_GetNumVideoDisplays
-//using namespace fragview;
+// using namespace fragview;
 //
-//unsigned int Display::x(void) const {
+// unsigned int Display::x(void) const {
 //	SDL_Rect bound;
 //	int err = SDL_GetDisplayBounds(this->index, &bound);
 //	if (err != 0)
-//		throw RuntimeException(fvformatf("Failed getting display %d bounds, %s.", this->index, SDL_GetError()));
+//		throw RuntimeException(fmt::format("Failed getting display %d bounds, %s.", this->index, SDL_GetError()));
 //	return bound.x;
 //}
 //
-//unsigned int Display::y(void) const {
+// unsigned int Display::y(void) const {
 //	SDL_Rect bound;
 //	int err = SDL_GetDisplayBounds(this->index, &bound);
 //	if (err != 0)
-//		throw RuntimeException(fvformatf("Failed getting display %d bounds, %s.", this->index, SDL_GetError()));
+//		throw RuntimeException(fmt::format("Failed getting display %d bounds, %s.", this->index, SDL_GetError()));
 //	return bound.y;
 //}
 //
-//unsigned int Display::width(void) const {
+// unsigned int Display::width(void) const {
 //	SDL_Rect bound;
 //	int err = SDL_GetDisplayBounds(this->index, &bound);
 //	if (err != 0)
-//		throw RuntimeException(fvformatf("Failed getting display %d bounds, %s.", this->index, SDL_GetError()));
+//		throw RuntimeException(fmt::format("Failed getting display %d bounds, %s.", this->index, SDL_GetError()));
 //	return bound.w;
 //}
 //
-//unsigned int Display::height(void) const {
+// unsigned int Display::height(void) const {
 //	SDL_Rect bound;
 //	int err = SDL_GetDisplayBounds(this->index, &bound);
 //	if (err != 0)
-//		throw RuntimeException(fvformatf("Failed getting display %d bounds, %s.", this->index, SDL_GetError()));
+//		throw RuntimeException(fmt::format("Failed getting display %d bounds, %s.", this->index, SDL_GetError()));
 //	return bound.h;
 //}
 //
-//unsigned int Display::refreshRate(void) const {
+// unsigned int Display::refreshRate(void) const {
 //	SDL_DisplayMode mode;
 //	int err = SDL_GetCurrentDisplayMode(this->index, &mode);
 //	if (err != 0)
-//		throw RuntimeException(fvformatf("Failed getting display %d refresh rate, %s.", this->index, SDL_GetError()));
+//		throw RuntimeException(fmt::format("Failed getting display %d refresh rate, %s.", this->index, SDL_GetError()));
 //	return mode.refresh_rate;
 //}
 //
-//std::vector<Display::Mode> Display::getModes(void) const {
+// std::vector<Display::Mode> Display::getModes(void) const {
 //	int n = SDL_GetNumDisplayModes(this->index);
 //	SDL_DisplayMode mode;
 //
@@ -91,23 +90,23 @@
 ////	//SDL_SetWindowGammaRamp()
 ////}
 //
-//void Display::getDPI(Display::DPI *dpi) {
+// void Display::getDPI(Display::DPI *dpi) {
 //	int err = SDL_GetDisplayDPI(this->index, &dpi->ddpi, &dpi->hdpi, &dpi->vdpi);
 //	if (err != 0)
-//		throw RuntimeException(fvformatf("Failed to retrieve display %d DPI, %s", this->index, SDL_GetError()));
+//		throw RuntimeException(fmt::format("Failed to retrieve display %d DPI, %s", this->index, SDL_GetError()));
 //}
 //
-//float Display::getFormat(void) {
+// float Display::getFormat(void) {
 //	return 0;
 //}
 
-//int Display::getNumDisplays(void) {
+// int Display::getNumDisplays(void) {
 //	int n = SDL_GetNumVideoDisplays();
 //	if (n <= 0)
-//		throw RuntimeException(fvformatf("Failed to retrieve number of displays, %s", SDL_GetError()));
+//		throw RuntimeException(fmt::format("Failed to retrieve number of displays, %s", SDL_GetError()));
 //}
 //
-//Display Display::getDisplay(unsigned int index) {
+// Display Display::getDisplay(unsigned int index) {
 //	Display display;
 //	display.setName(SDL_GetDisplayName(index));
 //	display.index = index;

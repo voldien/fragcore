@@ -18,7 +18,7 @@
 #include <climits>
 #include <iostream>
 #include <vector>
-
+#include<fmt/core.h>
 using namespace fragcore;
 
 #define RENDER_VULKAN_MAJOR 0
@@ -56,7 +56,7 @@ VKRenderInterface::VKRenderInterface(IConfig *config) {
 
 	/*  Initialize video support.   */
 	if (SDL_InitSubSystem(SDL_INIT_VIDEO) != 0) {
-		throw RuntimeException(fvformatf("SDL_InitSubSystem failed, %s.\n", SDL_GetError()));
+		throw RuntimeException(fmt::format("SDL_InitSubSystem failed, %s.\n", SDL_GetError()));
 	}
 
 	/*	Allocate private data structure for the renderer interface. */
@@ -65,7 +65,7 @@ VKRenderInterface::VKRenderInterface(IConfig *config) {
 		throw RuntimeException();
 
 	/*  Store reference with the object. */
-	//this->pdata = vulkancore;
+	// this->pdata = vulkancore;
 
 	/*  Determine layer validation. */
 	vulkancore->enableValidationLayers = setupConfig.get<bool>("debug");
@@ -106,21 +106,21 @@ VKRenderInterface::VKRenderInterface(IConfig *config) {
 	/*  Create Vulkan window.   */
 	SDL_Window *tmpWindow = SDL_CreateWindow("", 0, 0, 1, 1, SDL_WINDOW_VULKAN);
 	if (tmpWindow == NULL)
-		throw RuntimeException(fvformatf("failed create window - %s", SDL_GetError()));
+		throw RuntimeException(fmt::format("failed create window - %s", SDL_GetError()));
 	unsigned int count;
 	if (!SDL_Vulkan_GetInstanceExtensions(tmpWindow, &count, NULL))
-		throw RuntimeException(fvformatf("%s", SDL_GetError()));
+		throw RuntimeException(fmt::format("%s", SDL_GetError()));
 	unsigned int additional_extension_count = (unsigned int)instanceExtensionNames.size();
 	instanceExtensionNames.resize((size_t)(additional_extension_count + count));
 	if (!SDL_Vulkan_GetInstanceExtensions(tmpWindow, &count, &instanceExtensionNames[additional_extension_count]))
-		throw RuntimeException(fvformatf("failed SDL_Vulkan_GetInstanceExtensions - %s", SDL_GetError()));
+		throw RuntimeException(fmt::format("failed SDL_Vulkan_GetInstanceExtensions - %s", SDL_GetError()));
 	SDL_DestroyWindow(tmpWindow);
 
 	/*  Get Vulkan version. */
 	uint32_t version;
 	result = vkEnumerateInstanceVersion(&version);
 	if (result != VK_SUCCESS)
-		throw RuntimeException(fvformatf("Failed to enumerate instance version - %d", result));
+		throw RuntimeException(fmt::format("Failed to enumerate instance version - %d", result));
 
 	/*	Primary Vulkan instance Object. */
 	VkApplicationInfo ai = {};
@@ -172,7 +172,7 @@ VKRenderInterface::VKRenderInterface(IConfig *config) {
 	/*	Create Vulkan instance.	*/
 	result = vkCreateInstance(&ici, NULL, &vulkancore->inst);
 	if (result != VK_SUCCESS)
-		throw RuntimeException(fvformatf("vkCreateInstance - %d.", result));
+		throw RuntimeException(fmt::format("vkCreateInstance - %d.", result));
 
 	/*  Set debug mode.  */
 	this->setDebug(setupConfig.get<bool>("debug"));
@@ -181,7 +181,7 @@ VKRenderInterface::VKRenderInterface(IConfig *config) {
 	int num_physica_devices;
 	result = vkEnumeratePhysicalDevices(vulkancore->inst, &vulkancore->num_physical_devices, NULL);
 	if (result != VK_SUCCESS) {
-		throw RuntimeException(fvformatf("Failed to get number physical devices - %d", result));
+		throw RuntimeException(fmt::format("Failed to get number physical devices - %d", result));
 	}
 	/*  Get all physical devices.    */
 	vulkancore->physical_devices =
@@ -191,18 +191,18 @@ VKRenderInterface::VKRenderInterface(IConfig *config) {
 	result =
 		vkEnumeratePhysicalDevices(vulkancore->inst, &vulkancore->num_physical_devices, vulkancore->physical_devices);
 	if (result != VK_SUCCESS)
-		throw RuntimeException(fvformatf("Failed to enumerate physical devices - %d.", result));
+		throw RuntimeException(fmt::format("Failed to enumerate physical devices - %d.", result));
 
 	/*	*/
 	uint32_t pPhysicalDeviceGroupCount;
 	result = vkEnumeratePhysicalDeviceGroups(vulkancore->inst, &pPhysicalDeviceGroupCount, NULL);
 	if (result != VK_SUCCESS)
-		throw RuntimeException(fvformatf("vkEnumeratePhysicalDeviceGroups failed query - %d.", result));
+		throw RuntimeException(fmt::format("vkEnumeratePhysicalDeviceGroups failed query - %d.", result));
 	std::vector<VkPhysicalDeviceGroupProperties> phyiscalDevices;
 	phyiscalDevices.resize(pPhysicalDeviceGroupCount);
 	result = vkEnumeratePhysicalDeviceGroups(vulkancore->inst, &pPhysicalDeviceGroupCount, phyiscalDevices.data());
 	if (result != VK_SUCCESS)
-		throw RuntimeException(fvformatf("vkEnumeratePhysicalDeviceGroups failed fetching groups - %d.", result));
+		throw RuntimeException(fmt::format("vkEnumeratePhysicalDeviceGroups failed fetching groups - %d.", result));
 
 	/*  TODO add selection function. */
 	std::vector<VkPhysicalDevice> gpucandiates;
@@ -317,7 +317,7 @@ VKRenderInterface::VKRenderInterface(IConfig *config) {
 	/*  Create device.  */
 	result = vkCreateDevice(vulkancore->gpu, &device, NULL, &vulkancore->device);
 	if (result != VK_SUCCESS)
-		throw RuntimeException(fvformatf("Failed to create logical Device - %d", result));
+		throw RuntimeException(fmt::format("Failed to create logical Device - %d", result));
 
 	/*  Get all queues.    */
 	vkGetDeviceQueue(vulkancore->device, vulkancore->graphics_queue_node_index, 0, &vulkancore->queue);
@@ -332,7 +332,7 @@ VKRenderInterface::VKRenderInterface(IConfig *config) {
 	/*  Create command pool.    */
 	result = vkCreateCommandPool(vulkancore->device, &cmdPoolCreateInfo, NULL, &vulkancore->cmd_pool);
 	if (result != VK_SUCCESS)
-		throw RuntimeException(fvformatf("failed to create command pool %d", result));
+		throw RuntimeException(fmt::format("failed to create command pool %d", result));
 
 	/*  TODO determine which languages are supported.   */
 	//    uint32_t nExtensions;
@@ -360,7 +360,7 @@ VKRenderInterface::~VKRenderInterface(void) {
 		vkDestroyInstance(inst, nullptr);
 
 	SDL_QuitSubSystem(SDL_INIT_VIDEO);
-//	free(this->pdata);
+	//	free(this->pdata);
 }
 
 void VKRenderInterface::OnInitialization(void) {}
@@ -419,7 +419,7 @@ Texture *VKRenderInterface::createTexture(TextureDesc *desc) {
 	// /*  Create image.   */
 	// VkResult result = vkCreateImage(device, &imageInfo, NULL, &vktex->texture);
 	// if (result != VK_SUCCESS) {
-	// 	throw RuntimeException(fvformatf("Failed creating texture image - %d", result));
+	// 	throw RuntimeException(fmt::format("Failed creating texture image - %d", result));
 	// }
 
 	// /*  */
@@ -511,8 +511,8 @@ Shader *VKRenderInterface::createShader(ShaderDesc *desc) {
 	/*  Create shader interface object. */
 	Shader *shader = new Shader();
 	VKShaderObject *shaobj = new VKShaderObject();
-//	shader->pdata = shaobj;
-	//shaobj->vulkanCore = vulkanCore;
+	//	shader->pdata = shaobj;
+	// shaobj->vulkanCore = vulkanCore;
 
 	VkResult result;
 	VkShaderModule vertShaderModule = NULL;
@@ -650,7 +650,7 @@ Shader *VKRenderInterface::createShader(ShaderDesc *desc) {
 	VkDescriptorSetLayout setLayout;
 	result = vkCreateDescriptorSetLayout(device, &layoutInfo, NULL, &setLayout);
 	if (result != VK_SUCCESS)
-		throw RuntimeException(fvformatf("Failed to create descriptor set layout - %d", result));
+		throw RuntimeException(fmt::format("Failed to create descriptor set layout - %d", result));
 
 	/*  */
 	VkPipelineLayoutCreateInfo pipelineLayoutInfo = {};
@@ -662,7 +662,7 @@ Shader *VKRenderInterface::createShader(ShaderDesc *desc) {
 
 	result = vkCreatePipelineLayout(device, &pipelineLayoutInfo, NULL, &shaobj->pipelineLayout);
 	if (result != VK_SUCCESS)
-		throw RuntimeException(fvformatf("failed to create pipeline layout - %d!", result));
+		throw RuntimeException(fmt::format("failed to create pipeline layout - %d!", result));
 
 	VkAttachmentDescription colorAttachment = {};
 	// colorAttachment.format = swapChain->swapChainImageFormat;
@@ -693,7 +693,7 @@ Shader *VKRenderInterface::createShader(ShaderDesc *desc) {
 	renderPassInfo.pSubpasses = &subpass;
 
 	if (vkCreateRenderPass(device, &renderPassInfo, NULL, &renderPass) != VK_SUCCESS)
-		throw RuntimeException(fvformatf("failed to create render pass - %d", result));
+		throw RuntimeException(fmt::format("failed to create render pass - %d", result));
 
 	/*  */
 	VkVertexInputBindingDescription bindingDescription = {};
@@ -813,10 +813,9 @@ Shader *VKRenderInterface::createShader(ShaderDesc *desc) {
 	pipelineInfo.basePipelineIndex = -1;			  // Optional
 
 	/*  Create graphic pipeline.    */
-	result = vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, &pipelineInfo, NULL,
-									   &shaobj->graphicsPipeline);
+	result = vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, &pipelineInfo, NULL, &shaobj->graphicsPipeline);
 	if (result != VK_SUCCESS)
-		throw RuntimeException(fvformatf("vkCreateGraphicsPipelines failed - %d", result));
+		throw RuntimeException(fmt::format("vkCreateGraphicsPipelines failed - %d", result));
 
 	/*  Release shader moudles once used.  */
 	if (vertShaderModule)
@@ -857,9 +856,9 @@ Buffer *VKRenderInterface::createBuffer(BufferDesc *desc) {
 	VkResult result;
 	Buffer *buffer;
 	VKBufferObject *vkBufferObject = new VKBufferObject();
-//	vkBufferObject->vulkanCore = (VulkanCore *)this->pdata;
+	//	vkBufferObject->vulkanCore = (VulkanCore *)this->pdata;
 	buffer = new Buffer();
-	//buffer->pdata = vkBufferObject;
+	// buffer->pdata = vkBufferObject;
 
 	/*  Buffer description. */
 	VkBufferCreateInfo bufferInfo = {};
@@ -871,7 +870,7 @@ Buffer *VKRenderInterface::createBuffer(BufferDesc *desc) {
 	/*  Create buffer.  */
 	result = vkCreateBuffer(device, &bufferInfo, NULL, &vkBufferObject->buffer);
 	if (result != VK_SUCCESS) {
-		throw RuntimeException(fvformatf("failed to create vertex buffer %d", result));
+		throw RuntimeException(fmt::format("failed to create vertex buffer %d", result));
 	}
 
 	/*  */
@@ -892,13 +891,13 @@ Buffer *VKRenderInterface::createBuffer(BufferDesc *desc) {
 
 	/*  */
 	if (vkAllocateMemory(device, &allocInfo, nullptr, &vkBufferObject->vertexBufferMemory) != VK_SUCCESS) {
-		throw RuntimeException(fvformatf("failed to allocate vertex buffer memory!"));
+		throw RuntimeException(fmt::format("failed to allocate vertex buffer memory!"));
 	}
 
 	/*  */
 	result = vkBindBufferMemory(device, vkBufferObject->buffer, vkBufferObject->vertexBufferMemory, 0);
 	if (result != VK_SUCCESS)
-		throw RuntimeException(fvformatf("failed to allocate vertex buffer memory!"));
+		throw RuntimeException(fmt::format("failed to allocate vertex buffer memory!"));
 
 	return buffer;
 }
@@ -972,7 +971,7 @@ Geometry *VKRenderInterface::createGeometry(GeometryDesc *desc) {
 	glgeoobj->mode = getPrimitive((GeometryDesc::Primitive)desc->primitive);
 	glgeoobj->desc = *desc;
 
-//	geometryObject->pdata = glgeoobj;
+	//	geometryObject->pdata = glgeoobj;
 	return geometryObject;
 }
 
@@ -984,7 +983,7 @@ void VKRenderInterface::deleteGeometry(Geometry *obj) {
 	// deleteBuffer(glgeoobj->indicesbuffer);
 
 	/*  Release objects.    */
-//	delete obj->pdata;
+	//	delete obj->pdata;
 	delete obj;
 }
 
@@ -1014,7 +1013,7 @@ ViewPort *VKRenderInterface::getView(unsigned int i) {
 	/*  Validate the index. */
 	if (i >= capability.sMaxViewPorts)
 		throw InvalidArgumentException(
-			fvformatf("Does not support viewport index %d, max index %d.", i, capability.sMaxViewPorts));
+			fmt::format("Does not support viewport index %d, max index %d.", i, capability.sMaxViewPorts));
 
 	//	// If the view does not exits. Create it.
 	//	if(i == 0)
@@ -1039,7 +1038,6 @@ RendererWindow *VKRenderInterface::createWindow(int x, int y, int width, int hei
 	windows.push_back(window);
 	return window;
 }
-
 
 void VKRenderInterface::setCurrentWindow(RendererWindow *window) { /*  */
 }
@@ -1127,7 +1125,7 @@ void VKRenderInterface::swapBuffer(void) {
 	// 	/*  Recreate.   */
 	// }
 	// if(result != VK_SUCCESS)
-	// 	throw RuntimeException(fvformatf("Failed to acquire next image - %d", result));
+	// 	throw RuntimeException(fmt::format("Failed to acquire next image - %d", result));
 
 	// VkSubmitInfo submitInfo = {};
 	// submitInfo.sType                = VK_STRUCTURE_TYPE_SUBMIT_INFO;
@@ -1146,7 +1144,7 @@ void VKRenderInterface::swapBuffer(void) {
 
 	// result = vkQueuePresentKHR(queue, &presentInfo);
 	// if(result != VK_SUCCESS)
-	// 	throw RuntimeException(fvformatf("Failed to present - %d", result));
+	// 	throw RuntimeException(fmt::format("Failed to present - %d", result));
 
 	// vkQueueWaitIdle(queue);
 
@@ -1174,8 +1172,8 @@ void VKRenderInterface::drawInstance(Geometry *geometry, unsigned int num) {
 	assert(geometry && num > 0);
 
 	/*  */
-//	const uint32_t curFrame = currentFrame;
-//	glgeo = (VKGeometryObject *)geometry->pdata;
+	//	const uint32_t curFrame = currentFrame;
+	//	glgeo = (VKGeometryObject *)geometry->pdata;
 
 	// /*  */
 	// VKBufferObject *vertexBuffer = (VKBufferObject *)glgeo->vertexbuffer->pdata;
@@ -1186,7 +1184,7 @@ void VKRenderInterface::drawInstance(Geometry *geometry, unsigned int num) {
 		assert(glgeo->vertexbuffer && glgeo->indicesbuffer);
 		VkDeviceSize offsets[] = {0};
 
-		//VKBufferObject *indexBuffer = (VKBufferObject *)glgeo->indicesbuffer->pdata;
+		// VKBufferObject *indexBuffer = (VKBufferObject *)glgeo->indicesbuffer->pdata;
 		// vkCmdBindVertexBuffers(swapChain->commandBuffers[curFrame], 0, 1, vertexBuffers, offsets);
 		// vkCmdBindIndexBuffer(swapChain->commandBuffers[curFrame], indexBuffer->buffer, offsets[0],
 		// VK_INDEX_TYPE_UINT16);
@@ -1211,7 +1209,7 @@ void VKRenderInterface::drawMultiIndirect(Geometry &geometries, unsigned int off
 
 void VKRenderInterface::drawIndirect(Geometry *geometry) {}
 
-void VKRenderInterface::setLineWidth(float width) {  }
+void VKRenderInterface::setLineWidth(float width) {}
 
 void VKRenderInterface::blit(const FrameBuffer *source, FrameBuffer *dest,
 							 Texture::FilterMode filterMode) { /*  TODO add filter.    */
@@ -1232,7 +1230,7 @@ void VKRenderInterface::copyTexture(const Texture *source, Texture *target) {
 void VKRenderInterface::dispatchCompute(unsigned int *global, unsigned int *local, unsigned int offset) {
 
 	/*  */
-	//const uint32_t curFrame = currentFrame;
+	// const uint32_t curFrame = currentFrame;
 	//	VkCommandBuffer curBuffer = swapChain->commandBuffers[curFrame];
 
 	/*  */
@@ -1269,7 +1267,7 @@ void VKRenderInterface::setDebug(bool enable) {
 
 		// result = vkCreateDebugReportCallbackEXT(inst, &createInfo, NULL, &debugReport);
 		// if(result != VK_SUCCESS)
-		// 	throw RuntimeException(fvformatf("Failed to create debug report callback - %d", result));
+		// 	throw RuntimeException(fmt::format("Failed to create debug report callback - %d", result));
 	}
 
 	PFN_vkCreateDebugUtilsMessengerEXT CreateDebugUtilsMessengerEXT =
@@ -1285,8 +1283,7 @@ void VKRenderInterface::setDebug(bool enable) {
 								 VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
 		createInfo.pfnUserCallback = debugCallback;
 
-		if (CreateDebugUtilsMessengerEXT(inst, &createInfo, nullptr, &debugMessenger) !=
-			VK_SUCCESS) {
+		if (CreateDebugUtilsMessengerEXT(inst, &createInfo, nullptr, &debugMessenger) != VK_SUCCESS) {
 			throw std::runtime_error("failed to set up debug messenger!");
 		} else {
 			// return VK_ERROR_EXTENSION_NOT_PRESENT;

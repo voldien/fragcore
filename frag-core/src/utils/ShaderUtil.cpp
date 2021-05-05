@@ -9,6 +9,7 @@
 #include <Utils/StringUtil.h>
 #include <assert.h>
 #include <stdexcept>
+#include<fmt/core.h>
 
 using namespace fragcore;
 
@@ -309,13 +310,13 @@ static void validateShaderArguments(ShaderType type, ShaderLanguage language, Sh
 	// Validate the arguments.
 	if (type < eVertex || type > eCompute)
 		throw InvalidArgumentException(
-			fvformatf("Invalid shader type - %d", type)); // TODO add enumerator to string for shader type.
+			fmt::format("Invalid shader type - %d", type)); // TODO add enumerator to string for shader type.
 	if (language & ~(GLSL | SPIRV | HLSL | CLC))
-		throw InvalidArgumentException(fvformatf("None supported shader language by the application - %d",
-												 language)); // TODO add enumerator to string for shader language.
+		throw InvalidArgumentException(fmt::format("None supported shader language by the application - %d",
+												   language)); // TODO add enumerator to string for shader language.
 	if (codetype <= ShaderCodeType::eNoShaderType || codetype > ShaderCodeType::eBinary)
-		throw InvalidArgumentException(fvformatf("None supported shader code format - %d",
-												 codetype)); // TODO add enumerator to string for shader language.
+		throw InvalidArgumentException(fmt::format("None supported shader code format - %d",
+												   codetype)); // TODO add enumerator to string for shader language.
 }
 
 void ShaderUtil::loadShader(Ref<IO> &io, ShaderType type, Ref<IRenderer> &renderer, ShaderLanguage language,

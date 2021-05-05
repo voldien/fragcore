@@ -3,6 +3,7 @@
 #include <cxxabi.h>
 #include <sstream>
 #include"Exception/IException.h"
+#include<backward.hpp>
 using namespace fragcore;
 using namespace backward;
 
