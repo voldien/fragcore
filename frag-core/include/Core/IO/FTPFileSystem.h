@@ -25,8 +25,10 @@
 #include <curl/curl.h>
 
 namespace fragcore {
+
 	/**
-	 * IO operations.
+	 * @brief
+	 *
 	 */
 	class FVDECLSPEC FTPFileSystem : public IFileSystem {
 	  public:
@@ -74,14 +76,14 @@ namespace fragcore {
 		FTPFileSystem(FTPFileSystem &&other);
 		// TODO add remove function.
 	  protected:
-		FTPFileSystem(const char *ip, int port, const char* username, const char* password, Ref<IScheduler> &sch);
-		FTPFileSystem(const char *ip, int port, const char* username, const char* password);
+		FTPFileSystem(const char *ip, int port, const char *username, const char *password, Ref<IScheduler> &sch);
+		FTPFileSystem(const char *ip, int port, const char *username, const char *password);
 		~FTPFileSystem(void);
 
 	  private:
 		CURL *handle;
-        char* URL;
-        int port;
+		char *URL;
+		int port;
 	};
 } // namespace fragcore
 
