@@ -20,6 +20,9 @@
 #define _FRAG_CORE_FTP_FILE_H_ 1
 #include "FileIO.h"
 #include "IO.h"
+#if defined(FRAG_CORE_INTERNAL_IMP) // TODO resolve to a single file or something later
+#include <curl/curl.h>
+#endif
 
 namespace fragcore {
 	/**
@@ -59,7 +62,12 @@ namespace fragcore {
 		//};
 	  public:
 		FTPFileIO(const char *path, Mode mode); // TODO remove filepath
-												// GZFileIO(Ref<IO> &io);
+	  private:
+#if defined(FRAG_CORE_INTERNAL_IMP) // TODO resolve to a single file or something later
+		FTPFileIO(CURL *handle, const char *path, Mode mode);
+		CURL *handle;
+#endif
+		// GZFileIO(Ref<IO> &io);
 	};
 } // namespace fragcore
 

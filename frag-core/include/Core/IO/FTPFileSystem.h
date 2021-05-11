@@ -82,6 +82,7 @@ namespace fragcore {
 
 	  private:
 		CURL *handle;
+		CURL* multi;
 		char *URL;
 		int port;
 	};

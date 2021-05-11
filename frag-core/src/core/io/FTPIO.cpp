@@ -6,62 +6,32 @@
 #include "Exception/RuntimeException.h"
 #include "Utils/StringUtil.h"
 #include <curl/curl.h>
+#include <curl/multi.h>
 #include <fmt/core.h>
-#include <stdexcept>
 using namespace fragcore;
 
 void FTPFileIO::open(const char *path, Mode mode) {
-	// TODO change.
-	// FileIO::open(path, mode);
 
-	// // TODO add other access modes.
-	// const char *m = NULL;
-	// switch (mode & ACCESS) {
-	// case READ:
-	// 	m = "rb";
-	// 	break;
-	// case WRITE:
-	// 	m = "wb";
-	// 	break;
-	// default:
-	// 	throw InvalidArgumentException("Invalid IO mode.");
-	// }
-
-	// /*  */
-	// this->gzFi = gzdopen(fileno(this->file), m);
-	// if (this->gzFi == NULL) {
-	// 	int error;
-	// 	const char *errMsg = gzerror(this->gzFi, &error);
-	// 	throw RuntimeException(fmt::format("Failed to open %s - error: %d | %s", path, error, errMsg));
-	// }
-
-	// /*  Set buffer size.    */
-	// gzbuffer(this->gzFi, 8192);
-	// if (mode & WRITE) {
-	// 	// gzsetparams
-	// }
 }
 
-void FTPFileIO::close(void) {
-	// int error;
-	// error = gzclose(this->gzFi);
-	// if (error != Z_OK) {
-	// 	FileIO::close();
-	// 	throw RuntimeException(fmt::format("Failed to close gzfile %s", zError(error)));
-	// }
-	// FileIO::close();
-}
+void FTPFileIO::close(void) { curl_easy_cleanup(this->handle); }
 
 long FTPFileIO::read(long int nbytes, void *pbuffer) {
-	// long int nreadBytes = gzfread(pbuffer, 1, nbytes, this->gzFi);
-	// return nreadBytes;
+	size_t nRecv;
+	if (curl_easy_recv(this->handle, pbuffer, nbytes, &nRecv) == CURLE_OK)
+		return nRecv;
+	else {
+		return 0;
+	}
 }
 
 long FTPFileIO::write(long int nbytes, const void *pbuffer) {
-	// long int nWrittenBytes = gzfwrite(pbuffer, 1, nbytes, this->gzFi);
-	// if (nWrittenBytes == 0)
-	// 	throw RuntimeException(fmt::format("Failed to write to  gz file %s", gzerror(this->gzFi, NULL)));
-	// return nWrittenBytes;
+	size_t nRecv;
+	if (curl_easy_send(this->handle, pbuffer, nbytes, &nRecv) == CURLE_OK)
+		return nRecv;
+	else {
+		return 0;
+	}
 }
 
 long FTPFileIO::length(void) {
@@ -75,6 +45,7 @@ long FTPFileIO::length(void) {
 bool FTPFileIO::eof(void) const { return 0; }
 
 void FTPFileIO::seek(long int nbytes, Seek seek) {
+	// curl_easy_setopt(SEEK_CO)
 	// gzrewind
 	//	FileIO::seek(nbytes, seek);
 }
@@ -115,7 +86,7 @@ static size_t my_fwrite(void *buffer, size_t size, size_t nmemb, void *stream) {
 FTPFileIO::FTPFileIO(const char *path, Mode mode) {
 	//   curl_easy_setopt(CURL *handle, CURLOPT_SEEKFUNCTION, seek_cb);
 	//   curl_easy_setopt(CURL *handle, CURLOPT_SEEKDATA, &seek_data);
-    CURL *curl;
+	CURL *curl;
 	curl = curl_easy_init();
 	if (curl) {
 		curl_easy_setopt(curl, CURLOPT_URL,
@@ -127,6 +98,40 @@ FTPFileIO::FTPFileIO(const char *path, Mode mode) {
 
 		/* Switch on full protocol/debug output */
 		curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+	}
+}
+
+FTPFileIO::FTPFileIO(CURL *handle, const char *path, Mode mode) {
+	if (handle == nullptr)
+		throw InvalidArgumentException("");
+
+	if (handle) {
+		curl_easy_setopt(handle, CURLOPT_URL,
+						 path); // "ftp://ftp.example.com/curl/curl-7.9.2.tar.gz");
+		/* Define our callback to get called when there's data to be written */
+		switch (mode) {
+		case Mode::READ:
+			/* code */
+			break;
+		case Mode::WRITE:
+			break;
+		case Mode::ACCESS:
+			break;
+		default:
+			break;
+		}
+		curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, my_fwrite);
+		/* Set a pointer to our struct to pass to the callback */
+		curl_easy_setopt(handle, CURLOPT_WRITEDATA, this);
+
+		curl_easy_setopt(handle, CURLOPT_READFUNCTION, my_fwrite);
+		/* Set a pointer to our struct to pass to the callback */
+		curl_easy_setopt(handle, CURLOPT_READDATA, this);
+
+		// curl_easy_setopt(handle, CURLOPT_CONT, this);
+
+		/* Switch on full protocol/debug output */
+		curl_easy_setopt(handle, CURLOPT_VERBOSE, 1L);
 	}
 }
 
