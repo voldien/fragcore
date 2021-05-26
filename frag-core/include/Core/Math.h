@@ -105,6 +105,7 @@ namespace fragcore {
 		/**
 		 *
 		 */
+		inline static constexpr float E = 2.718281828459045235;
 		inline static constexpr float Epsilon = FLT_EPSILON;
 		inline static constexpr float PI = 3.14159265358979323846;
 		inline static constexpr float Infinite = 0;
