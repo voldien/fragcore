@@ -1,18 +1,18 @@
-#include"FontFactory.h"
-#include"Core/IO/IOUtil.h"
-#include<ft2build.h>
-#include<cassert>
-#include<cmath>
-#include "Core/Math.h"
-#include "Utils/TextureUtil.h"
-#include "Utils/StringUtil.h"
+#include "FontFactory.h"
 #include "Core/IO/FileSystem.h"
+#include "Core/IO/IOUtil.h"
+#include "Core/Math.h"
 #include "Exception/InvalidArgumentException.h"
+#include "Utils/StringUtil.h"
+#include "Utils/TextureUtil.h"
+#include <cassert>
+#include <cmath>
+#include<fmt/core.h>
+#include <ft2build.h>
 #include FT_FREETYPE_H
 using namespace fragcore;
 
-Font *FontFactory::createFont(Ref<IRenderer> &renderer, Ref<IO> &io, float size, Encoding encoding)
-{
+Font *FontFactory::createFont(Ref<IRenderer> &renderer, Ref<IO> &io, float size, Encoding encoding) {
 	Font *object;
 	Texture *fontTexture;
 
@@ -26,8 +26,8 @@ Font *FontFactory::createFont(Ref<IRenderer> &renderer, Ref<IO> &io, float size,
 	FT_Glyph_Metrics *metrics;
 	FT_Face face;
 	FT_GlyphSlot slot;
-	FT_Matrix matrix;                 /* transformation matrix */
-	FT_Vector pen;                    /* untransformed origin  */
+	FT_Matrix matrix; /* transformation matrix */
+	FT_Vector pen;	  /* untransformed origin  */
 	FT_Bitmap *bmp;
 	int glyph_width;
 	int glyph_height;
@@ -48,19 +48,19 @@ Font *FontFactory::createFont(Ref<IRenderer> &renderer, Ref<IO> &io, float size,
 	/*  Init library.   */
 	ftError = FT_Init_FreeType(&ft);
 	if (ftError != FT_Err_Ok)
-		throw InvalidArgumentException(fvformatf("Failed to initialize FreeType - %d.\n", ftError));
+		throw InvalidArgumentException(fmt::format("Failed to initialize FreeType - %d.\n", ftError));
 
-	//TODO add support for IO object.
+	// TODO add support for IO object.
 	/*  Load font face by the path. */
-	char* buf;
+	char *buf;
 	long int nBytes = IOUtil::loadFileMem(io, &buf);
-	ftError = FT_New_Memory_Face(ft, (const FT_Byte*)buf, nBytes, 0, &face);
+	ftError = FT_New_Memory_Face(ft, (const FT_Byte *)buf, nBytes, 0, &face);
 	if (ftError != FT_Err_Ok) {
 		FT_Done_FreeType(ft);
-		throw InvalidArgumentException(fvformatf("Failed to load font - %d.\n", ftError));
+		throw InvalidArgumentException(fmt::format("Failed to load font - %d.\n", ftError));
 	}
 
-	FT_Encoding ft_encoding = FT_ENCODING_NONE; //TODO determine the default enum value.
+	FT_Encoding ft_encoding = FT_ENCODING_NONE; // TODO determine the default enum value.
 	if (encoding == Encoding::UTF8 || encoding == Encoding::UTF16)
 		ft_encoding = FT_ENCODING_UNICODE;
 	else
@@ -68,19 +68,17 @@ Font *FontFactory::createFont(Ref<IRenderer> &renderer, Ref<IO> &io, float size,
 
 	/*	*/
 	ftError = FT_Select_Charmap(face, ft_encoding);
-	if (ftError != FT_Err_Ok)
-	{
+	if (ftError != FT_Err_Ok) {
 		FT_Done_FreeType(ft);
-		throw InvalidArgumentException(fvformatf("Failed to load font - %d.\n", ftError));
+		throw InvalidArgumentException(fmt::format("Failed to load font - %d.\n", ftError));
 	}
 
-
 	/*  Set the size of the font.   */
-	ftError = FT_Set_Char_Size(face, 0, (int)size << 6, 96, 96);   //TODO get the DPI
+	ftError = FT_Set_Char_Size(face, 0, (int)size << 6, 96, 96); // TODO get the DPI
 	if (ftError != FT_Err_Ok) {
 		FT_Done_Face(face);
 		FT_Done_FreeType(ft);
-		throw InvalidArgumentException(fvformatf("Failed to set character size - %d.\n", ftError));
+		throw InvalidArgumentException(fmt::format("Failed to set character size - %d.\n", ftError));
 	}
 
 	/*	First calculate the max width and height of a character in a passed font	*/
@@ -91,7 +89,7 @@ Font *FontFactory::createFont(Ref<IRenderer> &renderer, Ref<IO> &io, float size,
 		if (ftError != FT_Err_Ok) {
 			FT_Done_Face(face);
 			FT_Done_FreeType(ft);
-			throw InvalidArgumentException(fvformatf("FT_Load_Char failed - %d.\n", ftError));
+			throw InvalidArgumentException(fmt::format("FT_Load_Char failed - %d.\n", ftError));
 		}
 
 		/*  */
@@ -118,15 +116,15 @@ Font *FontFactory::createFont(Ref<IRenderer> &renderer, Ref<IO> &io, float size,
 
 	int max_dim = (1 + (face->size->metrics.height >> 6)) * ceilf(sqrtf(numChar));
 	font_tex_width = 1;
-	while (font_tex_width < max_dim){
-		 font_tex_width <<= 1;
+	while (font_tex_width < max_dim) {
+		font_tex_width <<= 1;
 	}
 	font_tex_height = font_tex_width;
 
 	/*	Allocate pixel data.    */
 	const unsigned int fontPixelSize = sizeof(char) * font_tex_width * font_tex_height;
-	char *font_texture_data = (char *) malloc(fontPixelSize);
-	memset((void *) font_texture_data, 0, fontPixelSize);
+	char *font_texture_data = (char *)malloc(fontPixelSize);
+	memset((void *)font_texture_data, 0, fontPixelSize);
 
 	int pen_x = 0, pen_y = 0;
 
@@ -141,12 +139,12 @@ Font *FontFactory::createFont(Ref<IRenderer> &renderer, Ref<IO> &io, float size,
 			FT_Done_Face(face);
 			FT_Done_FreeType(ft);
 			free(font_texture_data);
-			throw InvalidArgumentException(fvformatf("FT_Load_Char failed - %d.\n", ftError));
+			throw InvalidArgumentException(fmt::format("FT_Load_Char failed - %d.\n", ftError));
 		}
 		FT_Bitmap *bmp = &face->glyph->bitmap;
 
 		/*  Rotate the face.    */
-		matrix.xx = (FT_Fixed) (-cos(Math::PI) * 0x10000L);
+		matrix.xx = (FT_Fixed)(-cos(Math::PI) * 0x10000L);
 		matrix.xy = (FT_Fixed)(-sin(Math::PI) * 0x10000L);
 		matrix.yx = (FT_Fixed)(sin(Math::PI) * 0x10000L);
 		matrix.yy = (FT_Fixed)(cos(Math::PI) * 0x10000L);
@@ -182,15 +180,15 @@ Font *FontFactory::createFont(Ref<IRenderer> &renderer, Ref<IO> &io, float size,
 
 		/*  Set character properties.   */
 		Font::Character character;
-		character.Advance = (float) (slot->advance.x >> 6);
-		character.tex_x1 = (float) bitmap_offset_x / (float) font_tex_width;
-		character.tex_x2 = (float) (bitmap_offset_x + bmp->width) / (float) font_tex_width;
-		character.tex_y1 = (float) bitmap_offset_y / (float) font_tex_height;
-		character.tex_y2 = (float) (bitmap_offset_y + bmp->rows) / (float) font_tex_height;
+		character.Advance = (float)(slot->advance.x >> 6);
+		character.tex_x1 = (float)bitmap_offset_x / (float)font_tex_width;
+		character.tex_x2 = (float)(bitmap_offset_x + bmp->width) / (float)font_tex_width;
+		character.tex_y1 = (float)bitmap_offset_y / (float)font_tex_height;
+		character.tex_y2 = (float)(bitmap_offset_y + bmp->rows) / (float)font_tex_height;
 		character.width = bmp->width;
 		character.height = bmp->rows;
-		character.offset_x = (float) slot->bitmap_left;
-		character.offset_y = (float) ((slot->metrics.horiBearingY - face->glyph->metrics.height) >> 6);
+		character.offset_x = (float)slot->bitmap_left;
+		character.offset_y = (float)((slot->metrics.horiBearingY - face->glyph->metrics.height) >> 6);
 		characters[i] = character;
 	}
 
@@ -233,11 +231,11 @@ Font *FontFactory::createFont(Ref<IRenderer> &renderer, Ref<IO> &io, float size,
 
 	fontTexture = renderer->createTexture(&desc);
 
-	//TODO remove
+	// TODO remove
 	TextureUtil::saveTexture("test.png", *renderer, fontTexture);
 
 	/*  Free resources. */
-	//free(signedTexture);
+	// free(signedTexture);
 	free(font_texture_data);
 
 	/*  Create texture object.  */
@@ -247,8 +245,7 @@ Font *FontFactory::createFont(Ref<IRenderer> &renderer, Ref<IO> &io, float size,
 	return object;
 }
 
-Font *FontFactory::createSDFFont(Ref<IRenderer>& renderer, Ref<IO>& io, float size, Encoding encoding)
-{
+Font *FontFactory::createSDFFont(Ref<IRenderer> &renderer, Ref<IO> &io, float size, Encoding encoding) {
 	Font *object;
 	Texture *fontTexture;
 
@@ -284,47 +281,42 @@ Font *FontFactory::createSDFFont(Ref<IRenderer>& renderer, Ref<IO>& io, float si
 	/*  Init library.   */
 	ftError = FT_Init_FreeType(&ft);
 	if (ftError != FT_Err_Ok)
-		throw InvalidArgumentException(fvformatf("Failed to initialize FreeType - %d.\n", ftError));
+		throw InvalidArgumentException(fmt::format("Failed to initialize FreeType - %d.\n", ftError));
 
-	//TODO add support for IO object.
+	// TODO add support for IO object.
 	/*  Load font face by the path. */
 	char *buf;
 	long int nBytes = IOUtil::loadFileMem(io, &buf);
 	ftError = FT_New_Memory_Face(ft, (const FT_Byte *)buf, nBytes, 0, &face);
-	if (ftError != FT_Err_Ok)
-	{
+	if (ftError != FT_Err_Ok) {
 		FT_Done_FreeType(ft);
-		throw InvalidArgumentException(fvformatf("Failed to load font - %d.\n", ftError));
+		throw InvalidArgumentException(fmt::format("Failed to load font - %d.\n", ftError));
 	}
 
 	ftError = FT_Select_Charmap(face, FT_ENCODING_UNICODE);
-	if (ftError != FT_Err_Ok)
-	{
+	if (ftError != FT_Err_Ok) {
 		FT_Done_FreeType(ft);
-		throw InvalidArgumentException(fvformatf("Failed to load font - %d.\n", ftError));
+		throw InvalidArgumentException(fmt::format("Failed to load font - %d.\n", ftError));
 	}
 
 	/*  Set the size of the font.   */
-	//ftError = FT_Set_Char_Size(face, 0, size, 96, 96);   //TODO get the DPI
+	// ftError = FT_Set_Char_Size(face, 0, size, 96, 96);   //TODO get the DPI
 	ftError = FT_Set_Pixel_Sizes(face, 96, 96);
-	if (ftError != FT_Err_Ok)
-	{
+	if (ftError != FT_Err_Ok) {
 		FT_Done_Face(face);
 		FT_Done_FreeType(ft);
-		throw InvalidArgumentException(fvformatf("Failed to set character size - %d.\n", ftError));
+		throw InvalidArgumentException(fmt::format("Failed to set character size - %d.\n", ftError));
 	}
 
 	/*	First calculate the max width and height of a character in a passed font	*/
-	for (i = 0; i < numChar; i++)
-	{
+	for (i = 0; i < numChar; i++) {
 
 		/*  Load character. */
 		ftError = FT_Load_Char(face, i, FT_LOAD_RENDER | FT_LOAD_FORCE_AUTOHINT | FT_LOAD_TARGET_LIGHT);
-		if (ftError != FT_Err_Ok)
-		{
+		if (ftError != FT_Err_Ok) {
 			FT_Done_Face(face);
 			FT_Done_FreeType(ft);
-			throw InvalidArgumentException(fvformatf("FT_Load_Char failed - %d.\n", ftError));
+			throw InvalidArgumentException(fmt::format("FT_Load_Char failed - %d.\n", ftError));
 		}
 
 		/*  */
@@ -336,13 +328,11 @@ Font *FontFactory::createSDFFont(Ref<IRenderer>& renderer, Ref<IO>& io, float si
 		glyph_height = bmp->rows;
 
 		/*  Compute max width and height.   */
-		if (glyph_width > segment_size_x)
-		{
+		if (glyph_width > segment_size_x) {
 			segment_size_x = glyph_width;
 		}
 
-		if (glyph_height > segment_size_y)
-		{
+		if (glyph_height > segment_size_y) {
 			segment_size_y = glyph_height;
 		}
 	}
@@ -369,19 +359,17 @@ Font *FontFactory::createSDFFont(Ref<IRenderer>& renderer, Ref<IO>& io, float si
 	int pen_x = 0, pen_y = 0;
 
 	/*  Iterate through each character. */
-	for (i = 0; i < numChar; i++)
-	{
+	for (i = 0; i < numChar; i++) {
 
 		/*  Load character. */
 		ftError = FT_Load_Char(face, i, FT_LOAD_RENDER);
-		if (ftError != FT_Err_Ok)
-		{
+		if (ftError != FT_Err_Ok) {
 
 			/*  Release all resources.    */
 			FT_Done_Face(face);
 			FT_Done_FreeType(ft);
 			free(font_texture_data);
-			throw InvalidArgumentException(fvformatf("FT_Load_Char failed - %d.\n", ftError));
+			throw InvalidArgumentException(fmt::format("FT_Load_Char failed - %d.\n", ftError));
 		}
 		FT_Bitmap *bmp = &face->glyph->bitmap;
 
@@ -411,42 +399,35 @@ Font *FontFactory::createSDFFont(Ref<IRenderer>& renderer, Ref<IO>& io, float si
 		int font_sdf_width = glyph_width / sdf_div;
 		int font_sdf_height = glyph_height / sdf_div;
 
-		if (bmp->buffer)
-		{
+		if (bmp->buffer) {
 
 			/*	*/
-			if (pen_x + font_sdf_width >= font_tex_width)
-			{
+			if (pen_x + font_sdf_width >= font_tex_width) {
 				pen_x = 0;
 				pen_y += ((face->size->metrics.height >> 6) + 1);
 			}
 
-			for (int sdf_x = 0; sdf_x < font_sdf_width; sdf_x++)
-			{
-				for (int sdf_y = 0; sdf_y < font_sdf_height; sdf_y++)
-				{
+			for (int sdf_x = 0; sdf_x < font_sdf_width; sdf_x++) {
+				for (int sdf_y = 0; sdf_y < font_sdf_height; sdf_y++) {
 					int bitmap_x = ((float)sdf_x / (float)font_sdf_width) * glyph_width;
 					int bitmap_y = ((float)sdf_y / (float)font_sdf_height) * glyph_height;
 					int fg = bmp->buffer[bitmap_y * bmp->pitch + bitmap_x] == 0;
 					int distance = 100000000;
 
 					/*	*/
-					for (int row = 0; row < glyph_height; ++row)
-					{
-						for (int col = 0; col < glyph_width; ++col)
-						{
+					for (int row = 0; row < glyph_height; ++row) {
+						for (int col = 0; col < glyph_width; ++col) {
 							int p = bmp->buffer[row * bmp->pitch + col];
 
-							if(fg == p){
+							if (fg == p) {
 								float dx = (col - bitmap_x) * 0.01f;
 								dx *= dx;
 								float dy = (row - bitmap_y) * 0.01f;
 								dy *= dy;
 								float t = sqrt(dx + dy);
-								if(t < distance)
+								if (t < distance)
 									distance = (int)t;
-							}
-							else{
+							} else {
 								float dx = (col - bitmap_x) * 0.01f;
 								dx *= dx;
 								float dy = (row - bitmap_y) * 0.01f;
@@ -500,7 +481,6 @@ Font *FontFactory::createSDFFont(Ref<IRenderer>& renderer, Ref<IO>& io, float si
 	desc.format = TextureDesc::eSingleColor;
 	desc.internalformat = TextureDesc::eRGBA;
 
-	
 	desc.pixelFormat = TextureFormat::R8;
 	desc.graphicFormat = GraphicFormat::R8G8B8_SRGB;
 	desc.numlevel = 3;
@@ -518,10 +498,10 @@ Font *FontFactory::createSDFFont(Ref<IRenderer>& renderer, Ref<IO>& io, float si
 	desc.sampler.maxLOD = 0;
 	desc.sampler.minLOD = 0;
 	desc.sampler.biasLOD = 0;
-	
+
 	fontTexture = renderer->createTexture(&desc);
 
-	//TODO remove
+	// TODO remove
 	TextureUtil::saveTexture("test-font-sdf.png", *renderer, fontTexture);
 
 	/*  Create texture object.  */

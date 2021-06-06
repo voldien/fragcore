@@ -1,7 +1,8 @@
 #include "Core/IO/IOUtil.h"
 #include "Exception/InvalidArgumentException.h"
+#include "Exception/InvalidPointerException.h"
 #include "Utils/StringUtil.h"
-#include"Exception/InvalidPointerException.h"
+#include<fmt/core.h>
 
 using namespace fragcore;
 
@@ -11,7 +12,7 @@ long int IOUtil::loadFileMem(Ref<IO> &io, char **data) noexcept {
 
 	/*  Check if file is readable.  */
 	if (!io->isReadable())
-		throw InvalidArgumentException(fvformatf("Failed to read from IO: %s", io->getName()));
+		throw InvalidArgumentException(fmt::format("Failed to read from IO: %s", io->getName()));
 
 	// Page aligned;
 	char buf[1024 * 4];
@@ -28,9 +29,9 @@ long int IOUtil::loadFileMem(Ref<IO> &io, char **data) noexcept {
 
 long int IOUtil::loadFile(Ref<IO> &in, Ref<IO> &out) {
 	if (!in->isReadable())
-		throw InvalidArgumentException(fvformatf("Failed to read from IO: %s", in->getName()));
+		throw InvalidArgumentException(fmt::format("Failed to read from IO: %s", in->getName()));
 	if (!out->isWriteable())
-		throw InvalidArgumentException(fvformatf("Failed to write to IO: %s", out->getName()));
+		throw InvalidArgumentException(fmt::format("Failed to write to IO: %s", out->getName()));
 
 	char buf[1024 * 4];
 	long nbytes;
@@ -58,9 +59,9 @@ long int IOUtil::loadStringMem(Ref<IO> &io, char **string) noexcept {
 long int IOUtil::loadString(Ref<IO> &in, Ref<IO> &out) {
 
 	if (!in->isReadable())
-		throw InvalidArgumentException(fvformatf("Failed to read from IO: %s", in->getName()));
+		throw InvalidArgumentException(fmt::format("Failed to read from IO: %s", in->getName()));
 	if (!out->isWriteable())
-		throw InvalidArgumentException(fvformatf("Failed to write to IO: %s", out->getName()));
+		throw InvalidArgumentException(fmt::format("Failed to write to IO: %s", out->getName()));
 
 	long int nbytes;
 
@@ -75,7 +76,7 @@ long int IOUtil::format(Ref<IO> &io, const char *vformat, ...) noexcept {
 	va_list argptr;
 	va_start(argptr, format);
 	char buf[1024]; // Page;
-	if(vformat == nullptr)
+	if (vformat == nullptr)
 		throw InvalidPointerException("vformat invalid");
 
 	// TODO add support for determine if fully or partial written.

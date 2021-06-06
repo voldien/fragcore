@@ -1,6 +1,6 @@
 #define FRAG_CORE_INTERNAL_IMP 1
 #include "Renderer/opengl/GLRenderWindow.h"
-#include"Renderer/opengl/internal_object_type.h"
+#include "Renderer/opengl/internal_object_type.h"
 
 #include <Exception/NotImplementedException.h>
 #include <Exception/NotSupportedException.h>
@@ -9,26 +9,24 @@
 #include <SDL2/SDL_opengl.h>
 #include <SDL2/SDL_syswm.h>
 #include <Utils/StringUtil.h>
-
+#include<fmt/core.h>
 #include "Window/WindowManager.h"
 
 using namespace fragcore;
 
 GLRenderWindow::GLRenderWindow(Ref<GLRendererInterface> &renderer) {
 	this->renderer = renderer;
-	OpenGLCore* core = (OpenGLCore*)renderer->getData();
+	OpenGLCore *core = (OpenGLCore *)renderer->getData();
 
-	this->window = SDL_CreateWindow("", 0, 0, 800, 600,
-							  SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN);
+	this->window = SDL_CreateWindow("", 0, 0, 800, 600, SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN);
 
 	/*  */
 	if (window == NULL)
-		throw RuntimeException(fvformatf(
-			"Failed to create window %s for API %s", SDL_GetError(), api));
+		throw RuntimeException(fmt::format("Failed to create window %s for API %s", SDL_GetError(), api));
 
-	//TODO make it part of the framebuffer bind
+	// TODO make it part of the framebuffer bind
 	if (SDL_GL_MakeCurrent(this->window, (SDL_GLContext *)core->openglcontext) != 0) {
-		throw RuntimeException(::fvformatf("%s", SDL_GetError()));
+		throw RuntimeException(::fmt::format("%s", SDL_GetError()));
 	}
 }
 
@@ -51,9 +49,7 @@ FrameBuffer *GLRenderWindow::getDefaultFrameBuffer() {
 
 void GLRenderWindow::swapBuffer() { SDL_GL_SwapWindow(this->window); }
 
-void GLRenderWindow::setPosition(int x, int y) {
-	SDL_SetWindowPosition(this->window, x, y);
-}
+void GLRenderWindow::setPosition(int x, int y) { SDL_SetWindowPosition(this->window, x, y); }
 
 void GLRenderWindow::setSize(int width, int height) {
 	/*	TODO determine if it shall update framebuffera as well.	*/
@@ -62,15 +58,13 @@ void GLRenderWindow::setSize(int width, int height) {
 
 void GLRenderWindow::vsync(bool state) { SDL_GL_SetSwapInterval(state); }
 
-bool GLRenderWindow::assertConfigAttributes(const fragcore::IConfig *iConfig) {
-	return false;
-}
+bool GLRenderWindow::assertConfigAttributes(const fragcore::IConfig *iConfig) { return false; }
 
 float GLRenderWindow::getGamma(void) const {
 	ushort ramp[256 * 3];
-	int err = SDL_GetWindowGammaRamp(this->window, &ramp[256 * 0],
-									 &ramp[256 * 1], &ramp[256 * 2]);
-	if (err == -1) throw NotSupportedException(SDL_GetError());
+	int err = SDL_GetWindowGammaRamp(this->window, &ramp[256 * 0], &ramp[256 * 1], &ramp[256 * 2]);
+	if (err == -1)
+		throw NotSupportedException(SDL_GetError());
 
 	return this->computeGammaExponent(ramp);
 }
@@ -79,22 +73,16 @@ void GLRenderWindow::setGamma(float gamma) {
 	Uint16 ramp[256 * 3] = {0};
 
 	this->calculateGammaLookupTable(gamma, ramp);
-	int err = SDL_SetWindowGammaRamp(this->window, &ramp[256 * 0],
-									 &ramp[256 * 1], &ramp[256 * 2]);
+	int err = SDL_SetWindowGammaRamp(this->window, &ramp[256 * 0], &ramp[256 * 1], &ramp[256 * 2]);
 	if (err == -1)
-		throw NotSupportedException(fvformatf(
-			"Failed to set window gamma %f: %s", gamma, SDL_GetError()));
+		throw NotSupportedException(fmt::format("Failed to set window gamma %f: %s", gamma, SDL_GetError()));
 }
 
 // GLRenderWindow::~RendererWindow(void) {}
 
-void GLRenderWindow::getPosition(int *x, int *y) const {
-	SDL_GetWindowPosition(this->window, x, y);
-}
+void GLRenderWindow::getPosition(int *x, int *y) const { SDL_GetWindowPosition(this->window, x, y); }
 
-void GLRenderWindow::getSize(int *width, int *height) const {
-	SDL_GetWindowSize(this->window, width, height);
-}
+void GLRenderWindow::getSize(int *width, int *height) const { SDL_GetWindowSize(this->window, width, height); }
 
 fragcore::Display *GLRenderWindow::getCurrentDisplay(void) const {
 	int index;
@@ -102,31 +90,22 @@ fragcore::Display *GLRenderWindow::getCurrentDisplay(void) const {
 	return WindowManager::getInstance()->getDisplay(index);
 }
 
-void GLRenderWindow::createWindow(int x, int y, int width, int height,
-								  const char *api) {
-	window = SDL_CreateWindow("", x, y, width, height,
-							  SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN);
+void GLRenderWindow::createWindow(int x, int y, int width, int height, const char *api) {
+	window = SDL_CreateWindow("", x, y, width, height, SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN);
 
 	/*  */
 	if (window == NULL)
-		throw RuntimeException(fvformatf(
-			"Failed to create window %s for API %s", SDL_GetError(), api));
+		throw RuntimeException(fmt::format("Failed to create window %s for API %s", SDL_GetError(), api));
 	// this->api = api;
 }
 
 void GLRenderWindow::useWindow(void *pdata) {}
 
-void GLRenderWindow::setTitle(const char *title) {
-	SDL_SetWindowTitle(this->window, title);
-}
+void GLRenderWindow::setTitle(const char *title) { SDL_SetWindowTitle(this->window, title); }
 
-const char *GLRenderWindow::getTitle(void) const {
-	return SDL_GetWindowTitle(this->window);
-}
+const char *GLRenderWindow::getTitle(void) const { return SDL_GetWindowTitle(this->window); }
 
-void GLRenderWindow::resizable(bool resizable) {
-	SDL_SetWindowResizable(this->window, (SDL_bool)resizable);
-}
+void GLRenderWindow::resizable(bool resizable) { SDL_SetWindowResizable(this->window, (SDL_bool)resizable); }
 
 void GLRenderWindow::setFullScreen(bool fullscreen) {
 	// TODO add option for using either of the modes.
@@ -140,18 +119,12 @@ void GLRenderWindow::setFullScreen(Display &display) {}
 
 bool GLRenderWindow::isFullScreen(void) const {}
 
-void GLRenderWindow::setBordered(bool bordered) {
-	SDL_SetWindowBordered(this->window, (SDL_bool)bordered);
-}
+void GLRenderWindow::setBordered(bool bordered) { SDL_SetWindowBordered(this->window, (SDL_bool)bordered); }
 
-void GLRenderWindow::setMinimumSize(int width, int height) {
-	SDL_SetWindowMinimumSize(this->window, width, height);
-}
+void GLRenderWindow::setMinimumSize(int width, int height) { SDL_SetWindowMinimumSize(this->window, width, height); }
 void GLRenderWindow::getMinimumSize(int *width, int *height) {}
 
-void GLRenderWindow::setMaximumSize(int width, int height) {
-	SDL_SetWindowMaximumSize(this->window, width, height);
-}
+void GLRenderWindow::setMaximumSize(int width, int height) { SDL_SetWindowMaximumSize(this->window, width, height); }
 void GLRenderWindow::getMaximumSize(int *width, int *height) {}
 
 void GLRenderWindow::focus(void) { SDL_SetWindowInputFocus(this->window); }
@@ -209,7 +182,7 @@ intptr_t GLRenderWindow::getNativePtr(void) const {
 	// #endif
 	//         }
 	//     } else
-	//         throw RuntimeException(fvformatf("%s", SDL_GetError()));
+	//         throw RuntimeException(fmt::format("%s", SDL_GetError()));
 	//     throw NotImplementedException("Window format not implemented");
 }
 
@@ -217,6 +190,4 @@ void GLRenderWindow::setIcon(void *pVoid) {}
 
 void *GLRenderWindow::getIcon(void) const { return nullptr; }
 
-void GLRenderWindow::createSwapChain(void){
-	
-}
+void GLRenderWindow::createSwapChain(void) {}

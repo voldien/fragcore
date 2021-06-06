@@ -1,40 +1,40 @@
-#include "Core/Math.h"
-#include "Core/SystemInfo.h"
-#include "Core/TaskScheduler/TaskScheduler.h"
-#include "Exception/InvalidArgumentException.h"
-#include "Exception/RuntimeException.h"
-#include "Exception/InvalidPointerException.h"
-#include "Utils/StringUtil.h"
 #include "Audio/AudioClip.h"
 #include "Audio/AudioInterface.h"
 #include "Audio/AudioListener.h"
 #include "Audio/AudioPhysicalDevice.h"
 #include "Audio/AudioSource.h"
-#include "Audio/openal/internal_object_type.h"	
-
+#include "Audio/openal/internal_object_type.h"
+#include "Core/Math.h"
+#include "Core/SystemInfo.h"
+#include "Core/TaskScheduler/TaskScheduler.h"
+#include "Exception/InvalidArgumentException.h"
+#include "Exception/InvalidPointerException.h"
+#include "Exception/RuntimeException.h"
+#include "Utils/StringUtil.h"
+#include<fmt/core.h>
 using namespace fragcore;
 //
-//void AudioInterface::initAllocate(InitAllocateTableInfo *table) {
+// void AudioInterface::initAllocate(InitAllocateTableInfo *table) {
 //	table->interfacetype = eAudio;
 //
 //}
 
 AudioInterface::AudioInterface(IConfig *config) : Module() {
 	this->setName("OpenAL");
-	//IConfig& configSettings;
-	if(config == nullptr){
+	// IConfig& configSettings;
+	if (config == nullptr) {
 		/*	TODO construct default configuration.	*/
 	}
 
 	/*	*/
-	OpenALInterfaceObject *alDevice = (OpenALInterfaceObject *) malloc(sizeof(OpenALInterfaceObject));
+	OpenALInterfaceObject *alDevice = (OpenALInterfaceObject *)malloc(sizeof(OpenALInterfaceObject));
 	assert(alDevice);
 	this->pdata = alDevice;
 	memset(alDevice, 0, sizeof(OpenALInterfaceObject));
 
-	//AL_SOURCE_TYPE
-	//TODO add support
-	//const char* device = config->get<const char*>("device");
+	// AL_SOURCE_TYPE
+	// TODO add support
+	// const char* device = config->get<const char*>("device");
 
 	const ALchar *defaultDevice = alcGetString(nullptr, ALC_DEFAULT_DEVICE_SPECIFIER);
 	AudioPhysicalDevice audioPhysicalDevices;
@@ -45,9 +45,8 @@ AudioInterface::AudioInterface(IConfig *config) : Module() {
 	alDevice->scheduler = Ref<IScheduler>(new TaskScheduler(Math::clamp(SystemInfo::getCPUCoreCount(), 1, 2), 48));
 }
 
-
 AudioInterface::~AudioInterface(void) {
-	OpenALInterfaceObject *audio = (OpenALInterfaceObject *) this->pdata;
+	OpenALInterfaceObject *audio = (OpenALInterfaceObject *)this->pdata;
 
 	/*	Release all the object associated.	*/
 	delete *audio->scheduler;
@@ -62,48 +61,44 @@ AudioInterface::~AudioInterface(void) {
 }
 
 void AudioInterface::OnInitialization(void) {
-    OpenALInterfaceObject *audio = (OpenALInterfaceObject *)this->pdata;
+	OpenALInterfaceObject *audio = (OpenALInterfaceObject *)this->pdata;
 
 	/*	Allocate data.	*/
-    audio->source.resize(32);
-    audio->clips.resize(32);
-    audio->reverbs.resize(32);
+	audio->source.resize(32);
+	audio->clips.resize(32);
+	audio->reverbs.resize(32);
 }
 
-void AudioInterface::OnDestruction(void) {
+void AudioInterface::OnDestruction(void) {}
 
-}
-
-//TODO perhaps move to a helper header file and etc.
-#include<AL/alext.h>
+// TODO perhaps move to a helper header file and etc.
+#include <AL/alext.h>
 static inline ALenum to_al_format(short channels, short samples) {
 	bool stereo = (channels > 1);
-//	AL_FORMAT_STER
+	//	AL_FORMAT_STER
 	switch (samples) {
-		case 32:
-			if(stereo)
-				return AL_FORMAT_STEREO_FLOAT32;
-			else
-				return AL_FORMAT_MONO_FLOAT32;
-		case 16:
-			if (stereo)
-				return AL_FORMAT_STEREO16;
-			else
-				return AL_FORMAT_MONO16;
-		case 8:
-			if (stereo)
-				return AL_FORMAT_STEREO8;
-			else
-				return AL_FORMAT_MONO8;
-		default:
-			throw RuntimeException("Invalid format. ");
+	case 32:
+		if (stereo)
+			return AL_FORMAT_STEREO_FLOAT32;
+		else
+			return AL_FORMAT_MONO_FLOAT32;
+	case 16:
+		if (stereo)
+			return AL_FORMAT_STEREO16;
+		else
+			return AL_FORMAT_MONO16;
+	case 8:
+		if (stereo)
+			return AL_FORMAT_STEREO8;
+		else
+			return AL_FORMAT_MONO8;
+	default:
+		throw RuntimeException("Invalid format. ");
 	}
 }
 
-static const char* openAlErrorToString(int err)
-{
-	switch (err)
-	{
+static const char *openAlErrorToString(int err) {
+	switch (err) {
 	case AL_NO_ERROR:
 		return "AL_NO_ERROR";
 	case AL_INVALID_ENUM:
@@ -119,8 +114,8 @@ static const char* openAlErrorToString(int err)
 	}
 }
 
-static void validateClipDesc(AudioClipDesc* desc) {
-	if (desc == nullptr) 
+static void validateClipDesc(AudioClipDesc *desc) {
+	if (desc == nullptr)
 		throw InvalidPointerException("AudioClipDesc invalid pointer");
 	if (desc->decoder.ptr() == nullptr) {
 		throw InvalidArgumentException("");
@@ -128,15 +123,14 @@ static void validateClipDesc(AudioClipDesc* desc) {
 
 	if (desc->format < eMono || desc->format > eStero)
 		throw InvalidArgumentException("");
-	if (desc->datamode < AudioDataMode::LoadedInMemory ||
-		desc->datamode > AudioDataMode::DecompressOnLoad)
+	if (desc->datamode < AudioDataMode::LoadedInMemory || desc->datamode > AudioDataMode::DecompressOnLoad)
 		throw InvalidArgumentException("");
-	if(desc->source != nullptr && desc->size <= 0){
+	if (desc->source != nullptr && desc->size <= 0) {
 		throw InvalidArgumentException("");
 	}
 }
 
-AudioClip *AudioInterface::createAudioClip(AudioClipDesc *desc){
+AudioClip *AudioInterface::createAudioClip(AudioClipDesc *desc) {
 	OpenALInterfaceObject *audio = (OpenALInterfaceObject *)this->pdata;
 	validateClipDesc(desc);
 
@@ -145,7 +139,7 @@ AudioClip *AudioInterface::createAudioClip(AudioClipDesc *desc){
 	alGenBuffers((ALuint)1, &buffer);
 
 	/*	TODO based on the loading type.	*/
-	if(desc->datamode == AudioDataMode::LoadedInMemory){
+	if (desc->datamode == AudioDataMode::LoadedInMemory) {
 		long int size;
 		/*	Load all data from the stream.	*/
 		void *data = desc->decoder->getData(&size);
@@ -154,16 +148,13 @@ AudioClip *AudioInterface::createAudioClip(AudioClipDesc *desc){
 		alBufferData(buffer, format, data, size, desc->sampleRate);
 		int err = alGetError();
 		if (err != ALC_NO_ERROR)
-			throw RuntimeException(fvformatf("Failed load memory to buffer %s", openAlErrorToString(err)));
+			throw RuntimeException(fmt::format("Failed load memory to buffer %s", openAlErrorToString(err)));
 
 		free(data);
 		desc->decoder->deincreemnt();
 
 	} else {
-
 	}
-
-
 
 	AudioClip *audioClip = new AudioClip();
 	ALClip *source = new ALClip();
@@ -179,70 +170,64 @@ AudioClip *AudioInterface::createAudioClip(AudioClipDesc *desc){
 }
 
 void AudioInterface::deleteAudioClip(AudioClip *AudioClip) {
-	OpenALInterfaceObject *audio = (OpenALInterfaceObject *) this->pdata;
-	//ALClip *clip = (ALClip)AudioClip->getObject();
+	OpenALInterfaceObject *audio = (OpenALInterfaceObject *)this->pdata;
+	// ALClip *clip = (ALClip)AudioClip->getObject();
 
 	alDeleteBuffers(1, nullptr);
 	delete audio;
 	delete AudioClip;
 }
 
-static void validateAudioSourceDesc(AudioSourceDesc* desc){
-    if (desc == nullptr)
-        throw InvalidPointerException("AudioSourceDesc invalid pointer");
+static void validateAudioSourceDesc(AudioSourceDesc *desc) {
+	if (desc == nullptr)
+		throw InvalidPointerException("AudioSourceDesc invalid pointer");
 }
 
 AudioSource *AudioInterface::createAudioSource(AudioSourceDesc *desc) {
-    validateAudioSourceDesc(desc);
+	validateAudioSourceDesc(desc);
 
-    ALuint source;
-    alGenSources(1, &source);
+	ALuint source;
+	alGenSources(1, &source);
 
-    alSourcef(source, AL_PITCH, 1);
-    // check for errors
-    alSourcef(source, AL_GAIN, 1);
-    // check for errors
-    alSource3f(source, AL_POSITION, 0, 0, 0);
-    // check for errors
-    alSource3f(source, AL_VELOCITY, 0, 0, 0);
-    // check for errors
-    alSourcei(source, AL_LOOPING, AL_FALSE);
+	alSourcef(source, AL_PITCH, 1);
+	// check for errors
+	alSourcef(source, AL_GAIN, 1);
+	// check for errors
+	alSource3f(source, AL_POSITION, 0, 0, 0);
+	// check for errors
+	alSource3f(source, AL_VELOCITY, 0, 0, 0);
+	// check for errors
+	alSourcei(source, AL_LOOPING, AL_FALSE);
 
-    AudioSource *audioSource = new AudioSource();
-    ALSource *alSource = new ALSource();
-    audioSource->pdata = alSource;
-    alSource->source = source;
+	AudioSource *audioSource = new AudioSource();
+	ALSource *alSource = new ALSource();
+	audioSource->pdata = alSource;
+	alSource->source = source;
 
-    return audioSource;
+	return audioSource;
 }
 
-void AudioInterface::deleteAudioSource(AudioSource *audioSource) {
-    delete audioSource;
-}
+void AudioInterface::deleteAudioSource(AudioSource *audioSource) { delete audioSource; }
 
-static void validateAudioReverbDesc(AudioReverbDesc* desc){
-
-}
+static void validateAudioReverbDesc(AudioReverbDesc *desc) {}
 
 AudioReverb *AudioInterface::createAudioReverb(AudioReverbDesc *desc) {
-	OpenALInterfaceObject *audio = (OpenALInterfaceObject *) this->pdata;
+	OpenALInterfaceObject *audio = (OpenALInterfaceObject *)this->pdata;
 	validateAudioReverbDesc(desc);
 
 	/*	Validate the system.	*/
-	if(!audio->supportEffects)
+	if (!audio->supportEffects)
 		throw RuntimeException("");
 
 	return nullptr;
 }
 
-void AudioInterface::deleteAudioReverb(AudioReverb *reverb) {
-	delete reverb;
-}
+void AudioInterface::deleteAudioReverb(AudioReverb *reverb) { delete reverb; }
 
 AudioListener *AudioInterface::createAudioListener(AudioListenerDesc *desc) {
 
-	OpenALInterfaceObject *audio = (OpenALInterfaceObject *) this->pdata;
-	AudioListener* listener = new AudioListener();
+	OpenALInterfaceObject *audio = (OpenALInterfaceObject *)this->pdata;
+	AudioListener *listener = new AudioListener();
 
 	/*	*/
 	listener->setPosition(desc->position);
@@ -252,34 +237,27 @@ AudioListener *AudioInterface::createAudioListener(AudioListenerDesc *desc) {
 	return listener;
 }
 
-void AudioInterface::deleteAudioListener(AudioListener *listener) {
-	delete listener;
-}
+void AudioInterface::deleteAudioListener(AudioListener *listener) { delete listener; }
 
 void AudioInterface::setAudioListener(AudioListener *listener) {
-    OpenALInterfaceObject *audio = (OpenALInterfaceObject *)this->pdata;
-	//audio->
+	OpenALInterfaceObject *audio = (OpenALInterfaceObject *)this->pdata;
+	// audio->
 }
 
-AudioCapture *AudioInterface::createAudioCapture(void) {
-	return nullptr;
-}
-void AudioInterface::deleteAudioCapture(AudioCapture *capture){
-	
-}
+AudioCapture *AudioInterface::createAudioCapture(void) { return nullptr; }
+void AudioInterface::deleteAudioCapture(AudioCapture *capture) {}
 
-std::vector<AudioPhysicalDevice> AudioInterface::getDevices(void) const
-{
-	OpenALInterfaceObject *audio = (OpenALInterfaceObject *) this->pdata;
+std::vector<AudioPhysicalDevice> AudioInterface::getDevices(void) const {
+	OpenALInterfaceObject *audio = (OpenALInterfaceObject *)this->pdata;
 	std::vector<AudioPhysicalDevice> listDevices;
 
 	const ALCchar *devices;
 	const ALCchar *mices;
 	if (alcIsExtensionPresent(nullptr, "ALC_enumeration_EXT") == AL_TRUE) {
 		if (alcIsExtensionPresent(nullptr, "ALC_enumerate_all_EXT") == AL_FALSE)
-			devices = (char *) alcGetString(nullptr, ALC_DEVICE_SPECIFIER);
+			devices = (char *)alcGetString(nullptr, ALC_DEVICE_SPECIFIER);
 		else
-			devices = (char *) alcGetString(nullptr, ALC_ALL_DEVICES_SPECIFIER);
+			devices = (char *)alcGetString(nullptr, ALC_ALL_DEVICES_SPECIFIER);
 
 		mices = (char *)alcGetString(nullptr, ALC_CAPTURE_DEVICE_SPECIFIER);
 	}
@@ -301,10 +279,9 @@ std::vector<AudioPhysicalDevice> AudioInterface::getDevices(void) const
 	return listDevices;
 }
 
-void AudioInterface::setAudioDevice(const AudioPhysicalDevice &device)
-{
-	OpenALInterfaceObject *audio = (OpenALInterfaceObject *) this->pdata;
-	ALint attribs[4] = { 0 };
+void AudioInterface::setAudioDevice(const AudioPhysicalDevice &device) {
+	OpenALInterfaceObject *audio = (OpenALInterfaceObject *)this->pdata;
+	ALint attribs[4] = {0};
 
 	if (alcGetCurrentContext() != nullptr) {
 		ALCcontext *context = alcGetCurrentContext();
@@ -320,20 +297,19 @@ void AudioInterface::setAudioDevice(const AudioPhysicalDevice &device)
 	if (alcGetCurrentContext() != nullptr) {
 		/*  */
 		if (!alcCloseDevice(audio->device))
-			throw RuntimeException(fvformatf("Failed to open audio device %s", device.getName().c_str()));
+			throw RuntimeException(fmt::format("Failed to open audio device %s", device.getName().c_str()));
 	}
 
 	/*  */
 	audio->device = alcOpenDevice(device.getName().c_str());
 	if (!audio->device)
-		throw RuntimeException(fvformatf("Failed to open audio device %s", device.getName().c_str()));
+		throw RuntimeException(fmt::format("Failed to open audio device %s", device.getName().c_str()));
 
+	if (alcIsExtensionPresent(audio->device, ALC_EXT_EFX_NAME)) {
 
-	if(alcIsExtensionPresent(audio->device, ALC_EXT_EFX_NAME)){
-
-		audio->alGenEffects=(LPALGENEFFECTS)       alGetProcAddress("alGenEffects");
-		audio->alDeleteEffects=(LPALDELETEEFFECTS)      alGetProcAddress("alDeleteEffects");
-		audio->alIsEffect=(LPALISEFFECT)       alGetProcAddress("alIsEffect");
+		audio->alGenEffects = (LPALGENEFFECTS)alGetProcAddress("alGenEffects");
+		audio->alDeleteEffects = (LPALDELETEEFFECTS)alGetProcAddress("alDeleteEffects");
+		audio->alIsEffect = (LPALISEFFECT)alGetProcAddress("alIsEffect");
 
 		if (!(audio->alGenEffects && audio->alDeleteEffects && audio->alIsEffect))
 			audio->supportEffects = false;
@@ -348,26 +324,21 @@ void AudioInterface::setAudioDevice(const AudioPhysicalDevice &device)
 	/*  Create context. */
 	audio->context = alcCreateContext(audio->device, attribs);
 	if (!audio->context)
-		throw RuntimeException(fvformatf("Failed to create audio context for device %s", device.getName().c_str()));
+		throw RuntimeException(fmt::format("Failed to create audio context for device %s", device.getName().c_str()));
 
 	if (!alcMakeContextCurrent(audio->context))
-		throw RuntimeException(fvformatf("Failed to make current audio device %s", device.getName().c_str()));
+		throw RuntimeException(fmt::format("Failed to make current audio device %s", device.getName().c_str()));
 
-	//alcGetIntegerv(audio->device, ALC_MAX_AUXILIARY_SENDS, 1, &iSends);
+	// alcGetIntegerv(audio->device, ALC_MAX_AUXILIARY_SENDS, 1, &iSends);
 }
 
-const char *AudioInterface::getVersion(void) const {
-	return FV_STR_VERSION(1,0,0);
-}
+const char *AudioInterface::getVersion(void) const { return FV_STR_VERSION(1, 0, 0); }
 
-const AudioPhysicalDevice &AudioInterface::getAudioDevice(void) const
-{
-	ALCdevice* dv = alcGetContextsDevice(alcGetCurrentContext());
+const AudioPhysicalDevice &AudioInterface::getAudioDevice(void) const {
+	ALCdevice *dv = alcGetContextsDevice(alcGetCurrentContext());
 	AudioPhysicalDevice device = AudioPhysicalDevice();
 	device.setName(alcGetString(dv, ALC_DEVICE_SPECIFIER));
 	return device;
 }
 
-extern "C" AudioInterface *createInternalAudioInterface(IConfig *config) {
-	return new AudioInterface(config);
-}
+extern "C" AudioInterface *createInternalAudioInterface(IConfig *config) { return new AudioInterface(config); }

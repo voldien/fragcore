@@ -1,12 +1,11 @@
+#include "Audio/AudioFactory.h"
+#include "Core/Library.h"
+#include "Core/Log.h"
+#include "Utils/StringUtil.h"
 #include <Exception/InvalidArgumentException.h>
-#include"Audio/AudioFactory.h"
-#include"Core/Library.h"
-#include"Core/Log.h"
-#include"Utils/StringUtil.h"
 using namespace fragcore;
 
 typedef AudioInterface *(*pcreateinternalaudio)(IConfig *config);
-
 
 AudioInterface *AudioFactory::createAudioInterface(AudioAPI api, IConfig *config) {
 	return AudioFactory::createAudioInterface(getInterfaceLibraryPath(api), config);
@@ -18,22 +17,21 @@ AudioInterface *AudioFactory::createAudioInterface(const char *cpathlib, IConfig
 	const char *funcsymbol = "createInternalAudioInterface";
 	pcreateinternalaudio pfunc;
 
-	if(cpathlib == NULL)
-		throw InvalidArgumentException(fvformatf("Invalid filepath do dynamic library: %s", cpathlib));
+	if (cpathlib == NULL)
+		throw InvalidArgumentException(fmt::format("Invalid filepath do dynamic library: %s", cpathlib));
 
-	//TODO allow for the plugin to have a default state.
-
+	// TODO allow for the plugin to have a default state.
 
 	/*	Open library and validate.	*/
 	library.open(cpathlib);
 	if (library.isValid()) {
 
 		/*	Get factory function for creating rendering dynamicInterface instance.	*/
-		pfunc = (pcreateinternalaudio) library.getfunc(funcsymbol);
+		pfunc = (pcreateinternalaudio)library.getfunc(funcsymbol);
 		interface = pfunc(config);
 
 		/*	Assign resource object in order to work.	*/
-		//interface->setResource(resources);
+		// interface->setResource(resources);
 	} else {
 		Log::error("Failed loading: %s, library for creating audio interface.\n", cpathlib);
 	}
@@ -43,14 +41,14 @@ AudioInterface *AudioFactory::createAudioInterface(const char *cpathlib, IConfig
 
 const char *AudioFactory::getInterfaceLibraryPath(AudioAPI api) {
 #ifdef FV_UNIX
-	//TODO add info string for the exception of what api value.
+	// TODO add info string for the exception of what api value.
 	switch (api) {
-		case AudioFactory::OpenAL:
-			return "libfragcore-aal.so";
-		case AudioFactory::FMOD:
-			return "libfragcore-afm.so";
-		default:
-			throw InvalidArgumentException("");
+	case AudioFactory::OpenAL:
+		return "libfragcore-aal.so";
+	case AudioFactory::FMOD:
+		return "libfragcore-afm.so";
+	default:
+		throw InvalidArgumentException("");
 	}
 #else
 	assert(0);

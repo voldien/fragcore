@@ -1,14 +1,14 @@
-#include <Renderer/RenderDesc.h>
-#include <Utils/TextureUtil.h>
-#include <Utils/StringUtil.h>
-#include <Exception/InvalidArgumentException.h>
-#include "Exception/RuntimeException.h"
 #include "Video/VideoFactory.h"
-#include "Core/IO/IO.h"
 #include "Audio/AudioInterface.h"
 #include "Audio/decoder/AudioDecoder.h"
-
-//TODO add support if libav does not support it.
+#include "Core/IO/IO.h"
+#include "Exception/RuntimeException.h"
+#include <Exception/InvalidArgumentException.h>
+#include <Renderer/RenderDesc.h>
+#include <Utils/StringUtil.h>
+#include <Utils/TextureUtil.h>
+#include<fmt/core.h>
+// TODO add support if libav does not support it.
 // #include <theora/theora.h>
 // #include<theora/theoradec.h>
 
@@ -37,8 +37,7 @@ extern "C" {
 
 extern void libAVComputeVideoTask(Task *task);
 
-typedef struct fv_libav_video_header_t
-{
+typedef struct fv_libav_video_header_t {
 
 	/*  */
 	struct AVFormatContext *pformatCtx;
@@ -57,7 +56,6 @@ typedef struct fv_libav_video_header_t
 	Ref<VideoTexture> refVideo;
 	Ref<Texture> texture;
 	/*  TODO add audio reference object.    */
-
 
 	unsigned int flag;
 	double video_clock;
@@ -83,7 +81,7 @@ int64_t SeekFunc(void *ptr, int64_t pos, int whence) {
 	unsigned long in = pos;
 	if (whence == AVSEEK_SIZE)
 		return (*pStream)->length();
-	(*pStream)->seek(in, (IO::Seek) whence);
+	(*pStream)->seek(in, (IO::Seek)whence);
 	// Return the new position:
 	return (*pStream)->getPos();
 }
@@ -98,8 +96,8 @@ static enum AVPixelFormat get_format(struct AVCodecContext *s, const enum AVPixe
 	return AV_PIX_FMT_YUV420P;
 }
 
-VideoTexture *
-VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IRenderer *renderer, AudioInterface *audioInterface) {
+VideoTexture *VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IRenderer *renderer,
+											 AudioInterface *audioInterface) {
 	int result;
 	FVAVLibVideoHeader header = {};
 
@@ -110,11 +108,11 @@ VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IRenderer *rende
 	uint8_t *pBuffer = new uint8_t[iBufSize];
 
 	// Allocate the AVIOContext:
-	AVIOContext *pIOCtx = avio_alloc_context(pBuffer, iBufSize,  // internal Buffer and its size
-	                                         0,                  // bWriteable (1=true,0=false)
-	                                         &ref,          // user data ; will be passed to our callback functions
+	AVIOContext *pIOCtx = avio_alloc_context(pBuffer, iBufSize, // internal Buffer and its size
+											 0,					// bWriteable (1=true,0=false)
+											 &ref,				// user data ; will be passed to our callback functions
 	                                         ReadFunc,
-	                                         0,                  // Write callback function (not used in this example)
+											 0, // Write callback function (not used in this example)
 	                                         SeekFunc);
 	header.pformatCtx = avformat_alloc_context();
 	header.pformatCtx->pb = pIOCtx;
@@ -137,7 +135,7 @@ VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IRenderer *rende
 	if (result != 0) {
 		char buf[AV_ERROR_MAX_STRING_SIZE];
 		av_strerror(result, buf, sizeof(buf));
-		throw RuntimeException(fvformatf("Failed to open input : %s", buf));
+		throw RuntimeException(fmt::format("Failed to open input : %s", buf));
 	}
 
 	if ((result = avformat_find_stream_info(header.pformatCtx, NULL)) < 0) {
@@ -174,7 +172,6 @@ VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IRenderer *rende
 	if (!video_st)
 		throw RuntimeException("Failed to find video stream.");
 
-
 	if (audio && audioInterface && audio_st) {
 		AVCodecParameters *pAudioCodecParam = audio_st->codecpar;
 
@@ -183,7 +180,6 @@ VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IRenderer *rende
 		header.pAudioCtx = avcodec_alloc_context3(audioCodec);
 		if (!header.pAudioCtx)
 			throw RuntimeException("Failed to create audio decode context");
-
 
 		result = avcodec_parameters_to_context(header.pAudioCtx, pAudioCodecParam);
 		if (result < 0) {
@@ -210,10 +206,9 @@ VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IRenderer *rende
 	if (header.pVideoCtx == NULL)
 		throw RuntimeException("Failed to allocate video decoder context");
 
-
-	//AV_PIX_FMT_FLAG_RGB
+	// AV_PIX_FMT_FLAG_RGB
 	/*  Modify the target pixel format. */
-	//header.pVideoCtx->get_format = get_format;
+	// header.pVideoCtx->get_format = get_format;
 //	pVideoCodecParam->format = AV_PIX_FMT_BGR24;
 //	pVideoCodecParam->codec_tag = avcodec_pix_fmt_to_codec_tag(AV_PIX_FMT_BGR24);
 //	pVideoCodecParam->color_space = AVCOL_SPC_RGB;
@@ -223,8 +218,8 @@ VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IRenderer *rende
 		av_strerror(result, buf, sizeof(buf));
 		throw RuntimeException(fvformatf("Failed to set codec parameters : %s", buf));
 	}
-	//av_find_best_pix_fmt_of_2
-	//avcodec_default_get_format()
+	// av_find_best_pix_fmt_of_2
+	// avcodec_default_get_format()
 
 	if ((result = avcodec_open2(header.pVideoCtx, pVideoCodec, NULL)) != 0) {
 		char buf[AV_ERROR_MAX_STRING_SIZE];
@@ -242,6 +237,8 @@ VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IRenderer *rende
 	if (header.frame == NULL)
 		throw RuntimeException(fvformatf("Failed to allocate frame"));
 
+	// m_bufferSize = avpicture_get_size(PIX_FMT_RGB24, width, height);
+	// m_buffer = (uint8_t *)av_malloc(m_bufferSize);
 
 	//m_bufferSize = avpicture_get_size(PIX_FMT_RGB24, width, height);
 	//m_buffer = (uint8_t *)av_malloc(m_bufferSize);
@@ -260,9 +257,8 @@ VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IRenderer *rende
 
 	header.frame_timer = av_gettime() / 1000000.0;
 
-
-	//TODO relocate.
-	//TODO add audio decoder.
+	// TODO relocate.
+	// TODO add audio decoder.
 	struct AVPacket packet;
 	int res;
 	res = av_seek_frame(header.pformatCtx, header.videoStream, 60000, AVSEEK_FLAG_FRAME);
@@ -310,11 +306,8 @@ VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IRenderer *rende
 							          header.frameoutput->data,
 							          header.frameoutput->linesize);
 						}
-
 					}
 				}
-
-
 			}
 			if (packet.stream_index == header.audioStream) {
 				result = avcodec_send_packet(header.pAudioCtx, &packet);
@@ -337,14 +330,14 @@ VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IRenderer *rende
 					av_get_channel_layout_nb_channels(header.frame->channel_layout);
 					header.frame->format != AV_SAMPLE_FMT_S16P;
 					header.frame->channel_layout;
-					AudioClip* clip;
+					AudioClip *clip;
 					clip->setData(header.frame->extended_data[0], header.frame->linesize[0], 0);
 				}
 			}
 
-			printf("duration %f\n", (float) packet.duration);
+			printf("duration %f\n", (float)packet.duration);
 		}
-		//av_packet_free(&packet);
+		// av_packet_free(&packet);
 	}
 
 
@@ -364,7 +357,7 @@ VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IRenderer *rende
 	desc.width = header.frame->width;
 	desc.height = header.frame->height;
 	desc.depth = 1;
-	//av_read_image_line2()
+	// av_read_image_line2()
 	desc.pixel = header.frameoutput->data[0];
 	desc.pixelSize = 0;
 	desc.compression = TextureDesc::eNoCompression;
@@ -390,9 +383,9 @@ VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IRenderer *rende
 	desc.marker.markerName = ref->getName().c_str();
 	Texture *texture = renderer->createTexture(&desc);
 
-	VideoTexture* videoTexture =  NULL;
+	VideoTexture *videoTexture = NULL;
 	videoTexture->audioClip = Ref<AudioClip>(*audio);
-	//videoTexture->decoder = video_audio_decoder;
+	// videoTexture->decoder = video_audio_decoder;
 	videoTexture->texture = Ref<Texture>(texture);
 	videoTexture->taskcallback = libAVComputeVideoTask;
 
@@ -404,41 +397,34 @@ VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IRenderer *rende
 	return videoTexture;
 }
 
-//TODO determine where it shall be relocated and what class.
-void libAVComputeVideoTask(Task *task)
-{
+// TODO determine where it shall be relocated and what class.
+void libAVComputeVideoTask(Task *task) {
 	VideoTexture *texture = (VideoTexture *)task->userData;
-	FVAVLibVideoHeader header = {};	//TODO change to reference.
-	//FVAVLibVideoHeader
-	//TODO relocate.
-	//TODO add audio decoder.
+	FVAVLibVideoHeader header = {}; // TODO change to reference.
+	// FVAVLibVideoHeader
+	// TODO relocate.
+	// TODO add audio decoder.
 	struct AVPacket packet;
 	int res;
 	int result;
 	res = av_seek_frame(header.pformatCtx, header.videoStream, 60000, AVSEEK_FLAG_FRAME);
-	while (true)
-	{
+	while (true) {
 
 		res = av_read_frame(header.pformatCtx, &packet);
-		if (res == 0)
-		{
-			if (packet.stream_index == header.videoStream)
-			{
+		if (res == 0) {
+			if (packet.stream_index == header.videoStream) {
 				result = avcodec_send_packet(header.pVideoCtx, &packet);
-				if (result < 0)
-				{
+				if (result < 0) {
 					char buf[AV_ERROR_MAX_STRING_SIZE];
 					av_strerror(result, buf, sizeof(buf));
 					throw RuntimeException(fvformatf("Failed to send packet for decoding picture frame : %s", buf));
 				}
 
-				while (result >= 0)
-				{
+				while (result >= 0) {
 					result = avcodec_receive_frame(header.pVideoCtx, header.frame);
 					if (result == AVERROR(EAGAIN) || result == AVERROR_EOF)
 						break;
-					if (result < 0)
-					{
+					if (result < 0) {
 						char buf[AV_ERROR_MAX_STRING_SIZE];
 						av_strerror(result, buf, sizeof(buf));
 						throw RuntimeException(fvformatf(" : %s", buf));

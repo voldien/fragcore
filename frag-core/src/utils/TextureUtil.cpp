@@ -10,7 +10,7 @@
 #include <FreeImage.h>
 #include <stdexcept>
 #include <stdio.h>
-
+#include<fmt/core.h>
 using namespace fragcore;
 
 void TextureUtil::loadTexture(const char *path, IRenderer *renderer, Texture **texture) {
@@ -65,7 +65,8 @@ void TextureUtil::loadTexture(const char *path, IRenderer *renderer, Texture **t
 	}
 }
 
-void TextureUtil::loadTexture(const void *pbuf, long int size, IRenderer *renderer, Texture **texture) { /*  */ }
+void TextureUtil::loadTexture(const void *pbuf, long int size, IRenderer *renderer, Texture **texture) { /*  */
+}
 
 void *TextureUtil::loadTextureData(const char *cfilename, unsigned int *pwidth, unsigned int *pheight,
 								   TextureDesc::Format *pformat, TextureDesc::Format *pinternalformat,
@@ -113,7 +114,7 @@ void *TextureUtil::loadTextureDataFromMem(const void *pbuf, long int size, unsig
 	/*	1 byte for the size in order, Because it crash otherwise if set to 0.	*/
 	stream = FreeImage_OpenMemory((BYTE *)pbuf, size);
 	if (stream == nullptr)
-		throw RuntimeException(fvformatf("Failed to open freeimage memory stream. \n"));
+		throw RuntimeException(fmt::format("Failed to open freeimage memory stream. \n"));
 
 	/*	Seek to beginning of the memory stream.	*/
 	FreeImage_SeekMemory(stream, 0, SEEK_SET);
@@ -124,7 +125,7 @@ void *TextureUtil::loadTextureDataFromMem(const void *pbuf, long int size, unsig
 	firsbitmap = FreeImage_LoadFromMemory(imgtype, stream, 0);
 	if (firsbitmap == nullptr) {
 		FreeImage_CloseMemory(stream);
-		throw RuntimeException(fvformatf("Failed to create free-image from memory.\n"));
+		throw RuntimeException(fmt::format("Failed to create free-image from memory.\n"));
 	}
 
 	/*	Reset to beginning of stream.	*/
@@ -181,13 +182,13 @@ void *TextureUtil::loadTextureDataFromMem(const void *pbuf, long int size, unsig
 	if (pixel == nullptr || size == 0) {
 		FreeImage_Unload(firsbitmap);
 		FreeImage_CloseMemory(stream);
-		throw RuntimeException(fvformatf("Failed getting pixel data from FreeImage.\n"));
+		throw RuntimeException(fmt::format("Failed getting pixel data from FreeImage.\n"));
 	}
 
 	/*	Make a copy of pixel data.	*/
 	void *pixels = malloc(*pixelSize);
 	if (pixels == nullptr)
-		throw RuntimeException(fvformatf("Failed to allocate %d, %s.\n", size, strerror(errno)));
+		throw RuntimeException(fmt::format("Failed to allocate %d, %s.\n", size, strerror(errno)));
 
 	memcpy(pixels, pixel, *pixelSize);
 
@@ -222,11 +223,11 @@ void TextureUtil::saveTexture(const char *filepath, IRenderer *renderer, Texture
 
 	FreeImage_Initialise(FALSE);
 
-	/*  Get file fvformatf.    */
+	/*  Get file fmt::format.    */
 	image_format = FreeImage_GetFIFFromFilename(filepath);
 	if (image_format == FIF_UNKNOWN) {
 		texture->unMapTexture();
-		throw InvalidArgumentException(fvformatf("filepath file fvformatf is not supported : %s", filepath));
+		throw InvalidArgumentException(fmt::format("filepath file fmt::format is not supported : %s", filepath));
 	}
 
 	// TODO resolve color swizzle issue.
@@ -235,13 +236,13 @@ void TextureUtil::saveTexture(const char *filepath, IRenderer *renderer, Texture
 										 Bpp * 8, 0x000000FF, 0x0000FF00, 0x00FF0000, FALSE);
 	if (image == nullptr) {
 		FreeImage_DeInitialise();
-		throw RuntimeException(fvformatf("FreeImage_ConvertFromRawBits failed: %s", filepath));
+		throw RuntimeException(fmt::format("FreeImage_ConvertFromRawBits failed: %s", filepath));
 	}
 
 	/*  */
 	finalImage = FreeImage_ConvertTo32Bits(image);
 	if (finalImage == nullptr) {
-		throw RuntimeException(fvformatf("Failed convert image: %s", filepath));
+		throw RuntimeException(fmt::format("Failed convert image: %s", filepath));
 	}
 
 	/*  Save to file.   */
@@ -251,7 +252,7 @@ void TextureUtil::saveTexture(const char *filepath, IRenderer *renderer, Texture
 	// FreeImage_SaveToMemory(image_format, image, mem);
 
 	if (!FreeImage_Save(image_format, image, filepath, 0))
-		throw RuntimeException(fvformatf("Failed save image: %s", filepath));
+		throw RuntimeException(fmt::format("Failed save image: %s", filepath));
 
 	/*  */
 	FreeImage_CloseMemory(fimemory);

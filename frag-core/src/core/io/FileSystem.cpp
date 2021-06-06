@@ -1,19 +1,19 @@
-#include <cstdio>
-#include <cassert>
-#include <malloc.h>
-#include <cerrno>
-#include <cstring>
-#include <stdexcept>
-#include <Utils/StringUtil.h>
+#include "Core/IO/FileSystem.h"
+#include "Exception/InvalidArgumentException.h"
+#include "Exception/NotImplementedException.h"
+#include "Exception/RuntimeException.h"
 #include <Core/IO/FileSystem.h>
 #include <Core/IO/GZFileIO.h>
-#include "Exception/RuntimeException.h"
-#include"Exception/NotImplementedException.h"
-#include"Exception/InvalidArgumentException.h"
 #include <Core/SystemInfo.h>
-#include"Core/IO/FileSystem.h"
+#include <Utils/StringUtil.h>
+#include <cassert>
+#include <cerrno>
+#include <cstdio>
+#include <cstring>
+#include <malloc.h>
+#include <stdexcept>
 // #include<filesystem>
-
+#include<fmt/core.h>
 // namespace fs = std::filesystem;
 using namespace fragcore;
 
@@ -29,48 +29,45 @@ IO *FileSystem::openFile(const char *path, IO::Mode mode) {
 
 void FileSystem::closeFile(IO *io) {
 	io->close();
-	//TODO determine what shall be done more.
-	//TODO determine how it can be released in a proper manner.
+	// TODO determine what shall be done more.
+	// TODO determine how it can be released in a proper manner.
 }
 const char *FileSystem::getBaseName(const char *path) {
-	return basename(path);  //TODO relocate to the OS IO table lookup.
+	return basename(path); // TODO relocate to the OS IO table lookup.
 }
 
-
 void FileSystem::remove(const char *path) {
-	#if __cplusplus >= 201703L
-	fs::remove(path);	
-	#else
+#if __cplusplus >= 201703L
+	fs::remove(path);
+#else
 	throw NotImplementedException();
-	// if (::remove(path) != 0)
-	// throw RuntimeException(fvformatf("%s", strerror(errno)));
-	#endif
-
+// if (::remove(path) != 0)
+// throw RuntimeException(fmt::format("%s", strerror(errno)));
+#endif
 }
 
 void FileSystem::rename(const char *oldPath, const char *newPath) {
-	#if __cplusplus >= 201703L
-		return fs::rename(oldPath,newPath);
-	#else
+#if __cplusplus >= 201703L
+	return fs::rename(oldPath, newPath);
+#else
 	throw NotImplementedException();
-	// if (::rename(oldPath, newPath) != 0)
-	//     throw RuntimeException(fvformatf("%s", strerror(errno)));
-	#endif
+// if (::rename(oldPath, newPath) != 0)
+//     throw RuntimeException(fmt::format("%s", strerror(errno)));
+#endif
 }
 
 bool FileSystem::exists(const char *path) const {
-	#if __cplusplus >= 201703L
+#if __cplusplus >= 201703L
 	return fs::exists(path);
-	#else
+#else
 	FILE *f = fopen(path, "r+");
 	if (f) {
 		fclose(f);
 		return true;
 	}
 	return false;
-	#endif
+#endif
 }
-
 
 bool FileSystem::isReadable(const char *path) const {
 	FILE *f = fopen(path, "r+");
@@ -97,44 +94,33 @@ std::string FileSystem::getAbsolutePath(const char *path) {
 	// return resolved_path;
 }
 
-std::string FileSystem::getRelativePath(const char *path)
-{
-	
-}
+std::string FileSystem::getRelativePath(const char *path) {}
 
 const char *FileSystem::getFileExtension(const char *path) {
 	const char *dot = strrchr(path, '.');
-	if (!dot || dot == path) return "";
+	if (!dot || dot == path)
+		return "";
 	return dot + 1;
 }
 
 void FileSystem::createFile(const char *path) {
 	FILE *f = fopen(path, "ab+");
-	if(f == nullptr)
-		throw RuntimeException(fvformatf("Failed to open file %s, %s.\n", path, strerror(errno)));
+	if (f == nullptr)
+		throw RuntimeException(fmt::format("Failed to open file %s, %s.\n", path, strerror(errno)));
 	fclose(f);
 }
 
 void FileSystem::createDirectory(const char *path) {
-	//fs::create_directory(path);
+	// fs::create_directory(path);
 	// mkdir(path);
 }
 
-bool FileSystem::isASyncSupported(void) const{
-	return *this->getScheduler() != nullptr;
-}
+bool FileSystem::isASyncSupported(void) const { return *this->getScheduler() != nullptr; }
 
-bool FileSystem::isDirectory(const char *path){
+bool FileSystem::isDirectory(const char *path) {}
+bool FileSystem::isFile(const char *path) {}
 
-}
-bool FileSystem::isFile(const char *path){
-	
-}
-
-std::vector<std::string> FileSystem::listFiles(const char *directory) const {
-
-	return std::vector<std::string>();
-}
+std::vector<std::string> FileSystem::listFiles(const char *directory) const { return std::vector<std::string>(); }
 
 std::vector<std::string> FileSystem::listDirectories(const char *directory) const {
 	// for(auto& p: fs::directory_iterator("sandbox"))
@@ -155,36 +141,29 @@ FileSystem *FileSystem::getFileSystem(void) {
 	return fileSystem;
 }
 
-FileSystem *FileSystem::createFileSystem(Ref<IScheduler> &ref)
-{
+FileSystem *FileSystem::createFileSystem(Ref<IScheduler> &ref) {
 	fileSystem = new FileSystem(ref);
 	return fileSystem;
 }
 
-FileSystem *FileSystem::createFileSystem(void){
+FileSystem *FileSystem::createFileSystem(void) {
 	fileSystem = new FileSystem();
 	return fileSystem;
 }
 
-FileSystem::FileSystem(Ref<IScheduler> &ref) : IFileSystem()
-{
+FileSystem::FileSystem(Ref<IScheduler> &ref) : IFileSystem() {
 
 	/*  Lookup system io functions.  */
-	//TODO add support for adding lookup table for how to access VFS functions.
-	switch(SystemInfo::getOperatingSystem()){
-		default:
-			break;
+	// TODO add support for adding lookup table for how to access VFS functions.
+	switch (SystemInfo::getOperatingSystem()) {
+	default:
+		break;
 	}
 
 	this->setScheduleReference(ref);
 }
 
-FileSystem::FileSystem(void){
-	
+FileSystem::FileSystem(void) {}
+
+FileSystem::~FileSystem(void) { /*  Release all resources.  */
 }
-
-FileSystem::~FileSystem(void) {
-	/*  Release all resources.  */
-}
-
-

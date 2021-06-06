@@ -25,6 +25,7 @@
 namespace fragcore {
 
 	/**
+	 * @brief
 	 *
 	 */
 	class FVDECLSPEC IFileSystem : public ASync {

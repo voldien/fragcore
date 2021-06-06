@@ -10,3 +10,6 @@
 [submodule "extern/backward-cpp"]
 	path = extern/backward-cpp
 	url = https://github.com/bombela/backward-cpp.git
+[submodule "extern/infoware"]
+	path = extern/infoware
+	url = https://github.com/ThePhD/infoware.git

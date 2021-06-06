@@ -20,6 +20,7 @@
 #include <Utils/StringUtil.h>
 #include <Window/WindowManager.h>
 #include <exception>
+#include <fmt/core.h>
 #include <vector>
 using namespace fragcore;
 
@@ -69,7 +70,8 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 	// Check all required config variables.
 	for (int i = 0; i < numReqConfigKeys; i++) {
 		if (!setupConfig.isSet(reqConfigKey[i]))
-			throw RuntimeException(fvformatf("None valid configuration node - missing attribute %s", reqConfigKey[i]));
+			throw RuntimeException(
+				fmt::format("None valid configuration node - missing attribute %s", reqConfigKey[i]));
 	}
 
 	/*  Allocate Opengl internal.	*/
@@ -78,7 +80,7 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 	this->pdata = glcore;
 
 	if (SDL_InitSubSystem(SDL_INIT_VIDEO) != 0)
-		throw RuntimeException(fvformatf("SDL_InitSubSystem failed, %s.\n", SDL_GetError()));
+		throw RuntimeException(fmt::format("SDL_InitSubSystem failed, %s.\n", SDL_GetError()));
 
 	/*  */
 	bool useCoreProfile = setupConfig.get<bool>("core");
@@ -145,7 +147,7 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 	glcore->tpmwindow = window;
 
 	if (window == nullptr) {
-		throw RuntimeException(fvformatf("Could not create an OpenGL window - %s.", SDL_GetError()));
+		throw RuntimeException(fmt::format("Could not create an OpenGL window - %s.", SDL_GetError()));
 	}
 
 	/*	Create OpenGL context.	*/ // TODO add config attribute for auto or force the version.
@@ -200,7 +202,7 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 			/*  Final check.    */
 			if (glcore->openglcontext == nullptr) {
 				SDL_DestroyWindow(window);
-				throw RuntimeException(fvformatf("Failed to create compatibility context: %s.", SDL_GetError()));
+				throw RuntimeException(fmt::format("Failed to create compatibility context: %s.", SDL_GetError()));
 			}
 		}
 	}
@@ -239,15 +241,15 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 	if (status != GLEW_OK) {
 		SDL_GL_DeleteContext(glcore->openglcontext);
 		SDL_DestroyWindow(window);
-		throw RuntimeException(fvformatf("Could not Initialize GLEW - %s.", glewGetErrorString(status)));
+		throw RuntimeException(fmt::format("Could not Initialize GLEW - %s.", glewGetErrorString(status)));
 	}
 
 	/*  TODO add function for checking if context is supported. */
 	for (int i = 0; i < numMinReqExtensions; i++) {
 		const char *extension = minRequiredExtensions[i];
 		if (!glewIsExtensionSupported(extension)) {
-			throw RuntimeException(fvformatf("Non supported GPU - %s using OpenGL version: %s\nGLSL: %s", extension,
-											 getVersion(), glGetString(GL_SHADING_LANGUAGE_VERSION)));
+			throw RuntimeException(fmt::format("Non supported GPU - %s using OpenGL version: %s\nGLSL: %s", extension,
+											   getVersion(), glGetString(GL_SHADING_LANGUAGE_VERSION)));
 		}
 	}
 
@@ -359,7 +361,7 @@ Texture *GLRendererInterface::createTexture(TextureDesc *desc) {
 	if (desc->numlevel < 0 && desc->usemipmaps)
 		throw InvalidArgumentException("Mips number count must be greater than or equal to 0.");
 	if (desc->compression & ~this->compression)
-		throw InvalidArgumentException(fvformatf("Invalid compression format - %d.", desc->compression));
+		throw InvalidArgumentException(fmt::format("Invalid compression format - %d.", desc->compression));
 	if (desc->srgb) {
 		if (!this->capability.sSRGB)
 			throw InvalidArgumentException("sRGB is not supported.");
@@ -451,7 +453,7 @@ Texture *GLRendererInterface::createTexture(TextureDesc *desc) {
 			glTexParameteri(target, GL_TEXTURE_SWIZZLE_A, getTextureSwizzle(desc->Swizzlea));
 
 		// if (errorStatus != GL_NO_ERROR)
-		// 	throw RuntimeException(::fvformatf("Error when setting texture parameters - %d, %s", errorStatus,
+		// 	throw RuntimeException(::fmt::format("Error when setting texture parameters - %d, %s", errorStatus,
 		// 	                                   gluErrorString(errorStatus)));
 
 		/*	assign data.	*/
@@ -541,7 +543,7 @@ Texture *GLRendererInterface::createTexture(TextureDesc *desc) {
 	if (errorStatus != GL_NO_ERROR) {
 		glDeleteTextures(1, &texture);
 		throw RuntimeException(
-			::fvformatf("Error when allocating the texture - %d, %s", errorStatus, gluErrorString(errorStatus)));
+			::fmt::format("Error when allocating the texture - %d, %s", errorStatus, gluErrorString(errorStatus)));
 	}
 
 	// Unbound texture.
@@ -549,7 +551,7 @@ Texture *GLRendererInterface::createTexture(TextureDesc *desc) {
 	checkError();
 
 	// Add debug marker information.
-	//addMarkerLabel(this, GL_TEXTURE, texture, &desc->marker);
+	// addMarkerLabel(this, GL_TEXTURE, texture, &desc->marker);
 
 	/*	*/
 	Texture *gltex = new Texture();
@@ -629,7 +631,7 @@ Sampler *GLRendererInterface::createSampler(SamplerDesc *desc) {
 	glSamplerParameteri(sampler, GL_TEXTURE_BASE_LEVEL, 0);
 
 	// Add debug marker information.
-	//addMarkerLabel(this, GL_SAMPLER, sampler, &desc->marker);
+	// addMarkerLabel(this, GL_SAMPLER, sampler, &desc->marker);
 
 	/*  */
 	GLSamplerObject *samplerObject = new GLSamplerObject();
@@ -669,7 +671,7 @@ static void checkShaderError(int shader) {
 		char log[maxLength];
 		glGetShaderInfoLog(shader, sizeof(log), &maxLength, log);
 		checkError();
-		throw RuntimeException(fvformatf("Shader compilation error\n%s", log));
+		//		throw RuntimeException(fmt::format("Shader compilation error\n%s", log));
 	}
 }
 
@@ -723,13 +725,13 @@ RenderPipeline *GLRendererInterface::createPipeline(const ProgramPipelineDesc *d
 			char log[logLength];
 			glGetProgramPipelineInfoLog(pipeline, logLength, 0, log);
 			glDeleteProgramPipelines(1, &pipeline);
-			throw RuntimeException(fvformatf("Shader pipeline not valid:\n%s\n", log));
+			// throw RuntimeException(fmt::format("Shader pipeline not valid:\n{}\n", log));
 		}
 	}
 
 	// GL_ARB_pipeline_statistics_query
 	// Add debug marker information.
-	//addMarkerLabel(this, GL_PROGRAM_PIPELINE, pipeline, &desc->marker);
+	// addMarkerLabel(this, GL_PROGRAM_PIPELINE, pipeline, &desc->marker);
 
 	pipe->program = pipeline;
 	// programPipeline->pdata = pipe;
@@ -778,7 +780,7 @@ Shader *GLRendererInterface::createShader(ShaderDesc *desc) {
 		throw RuntimeException("Internal error, could not create shader program.");
 	/*	Checking for error.	*/
 
-	// TODO determine if validate shader binary fvformatf.
+	// TODO determine if validate shader binary fmt::format.
 	// TODO resolve
 	if (desc->separatetable)
 		glProgramParameteri(program, GL_PROGRAM_SEPARABLE, GL_TRUE);
@@ -934,7 +936,7 @@ finished:
 	}
 
 	// Add debug marker information.
-	//addMarkerLabel(this, GL_PROGRAM, program, &desc->marker);
+	// addMarkerLabel(this, GL_PROGRAM, program, &desc->marker);
 
 	/*	*/
 	shaobj = new GLShaderObject();
@@ -994,7 +996,7 @@ Buffer *GLRendererInterface::createBuffer(BufferDesc *desc) {
 		if (error != GL_NO_ERROR) {
 			glDeleteBuffers(1, &buf);
 			checkError();
-			throw RuntimeException(fvformatf("Failed to create buffer - %s", glewGetErrorString(error)));
+			throw RuntimeException(fmt::format("Failed to create buffer - %s", glewGetErrorString(error)));
 		}
 
 		glBindBufferARB(target, 0);
@@ -1013,7 +1015,7 @@ Buffer *GLRendererInterface::createBuffer(BufferDesc *desc) {
 		error = glGetError();
 		if (error != GL_NO_ERROR) {
 			glDeleteBuffers(1, &buf);
-			throw RuntimeException(fvformatf("Failed to create buffer - %s", glewGetErrorString(error)));
+			throw RuntimeException(fmt::format("Failed to create buffer - %s", glewGetErrorString(error)));
 		}
 
 		glBindBuffer(target, 0);
@@ -1021,7 +1023,7 @@ Buffer *GLRendererInterface::createBuffer(BufferDesc *desc) {
 	}
 
 	// Add debug marker information.
-	//addMarkerLabel(this, GL_BUFFER, buf, &desc->marker);
+	// addMarkerLabel(this, GL_BUFFER, buf, &desc->marker);
 
 	/*	Assign. */
 	// buffer = new Buffer();
@@ -1131,7 +1133,7 @@ Geometry *GLRendererInterface::createGeometry(GeometryDesc *desc) {
 	glBindVertexArray(0);
 
 	// Add debug marker information.
-	//addMarkerLabel(this, GL_VERTEX_ARRAY, vao, &desc->marker);
+	// addMarkerLabel(this, GL_VERTEX_ARRAY, vao, &desc->marker);
 
 	glgeoobj->mode = getPrimitive((GeometryDesc::Primitive)desc->primitive);
 	glgeoobj->vao = vao;
@@ -1212,13 +1214,13 @@ FrameBuffer *GLRendererInterface::createFrameBuffer(FrameBufferDesc *desc) {
 		/*  Delete  */
 		glDeleteFramebuffers(1, &glfraobj->framebuffer);
 		delete glfraobj;
-		throw RuntimeException(fvformatf("Failed to create framebuffer, 0x%x.\n", frstat));
+		throw RuntimeException(fmt::format("Failed to create framebuffer, 0x%x.\n", frstat));
 	}
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	// Add debug marker information.
-	//addMarkerLabel(this, GL_FRAMEBUFFER, glfraobj->framebuffer, &desc->marker);
+	// addMarkerLabel(this, GL_FRAMEBUFFER, glfraobj->framebuffer, &desc->marker);
 
 	/*  */
 	glfraobj->desc = *desc;
@@ -1249,7 +1251,7 @@ QueryObject *GLRendererInterface::createQuery(QueryDesc *desc) {
 
 	// TODO determine if index is supported or not
 	glGenQueries(8, &query[0]);
-	//addMarkerLabel(this, GL_QUERY, query[0], &desc->marker);
+	// addMarkerLabel(this, GL_QUERY, query[0], &desc->marker);
 
 	/*  */
 	queryObject = new QueryObject();
@@ -1301,7 +1303,7 @@ void GLRendererInterface::setCurrentWindow(RendererWindow *window) {
 
 	//	glcore->drawwindow = (SDL_Window *) window;
 	//	if (SDL_GL_MakeCurrent(glcore->drawwindow, glcore->openglcontext) != 0) {
-	//		throw RuntimeException(fvformatf(""));
+	//		throw RuntimeException(fmt::format(""));
 	//	}
 }
 
@@ -1342,7 +1344,7 @@ ViewPort *GLRendererInterface::getView(unsigned int i) {
 	/*  Validate the index. */
 	if (i >= glcore->capability.sMaxViewPorts)
 		throw std::invalid_argument(
-			fvformatf("Does not support viewport index %d, max index %d.", i, glcore->capability.sMaxViewPorts));
+			fmt::format("Does not support viewport index %d, max index %d.", i, glcore->capability.sMaxViewPorts));
 
 	// If the view does not exits. Create it.
 	if (i == 0)
@@ -1388,7 +1390,7 @@ void GLRendererInterface::drawInstance(Geometry *geometry, unsigned int num) {
 	GLenum errorStatus = glGetError();
 	if (errorStatus != GL_NO_ERROR)
 		throw RuntimeException(
-			::fvformatf("Error when dispatching compute - %d, %s", errorStatus, gluErrorString(errorStatus)));
+			::fmt::format("Error when dispatching compute - %d, %s", errorStatus, gluErrorString(errorStatus)));
 
 	glBindVertexArray(0);
 }
@@ -1421,7 +1423,7 @@ void GLRendererInterface::drawIndirect(Geometry *geometry) {
 	GLenum errorStatus = glGetError();
 	if (errorStatus != GL_NO_ERROR)
 		throw RuntimeException(
-			::fvformatf("Error when dispatching compute - %d, %s", errorStatus, gluErrorString(errorStatus)));
+			::fmt::format("Error when dispatching compute - %d, %s", errorStatus, gluErrorString(errorStatus)));
 
 	glBindVertexArray(0);
 }
@@ -1505,7 +1507,7 @@ void GLRendererInterface::bindImages(unsigned int firstUnit, const std::vector<T
 		for (int i = 0; i < nTextures; i++) {
 			Texture *texture = textures[i];
 			if (texture) {
-				//				GLenum gformat = getImageInternalFormat(fvformatf);
+				//				GLenum gformat = getImageInternalFormat(fmt::format);
 				//				glBindImageTexture(index, texobj->texture, level, GL_FALSE, 0, access, gformat);
 				//				GLenum access = getAccess(target);
 			}
@@ -1513,7 +1515,7 @@ void GLRendererInterface::bindImages(unsigned int firstUnit, const std::vector<T
 		//
 		//		//TODO relocate to seperate function
 		//		GLenum access = getAccess(target);
-		//		GLenum gformat = getImageInternalFormat(fvformatf);
+		//		GLenum gformat = getImageInternalFormat(fmt::format);
 		//
 		//		glBindImageTexture(index, texobj->texture, level, GL_FALSE, 0, access, gformat);
 		throw NotImplementedException();
@@ -1564,7 +1566,7 @@ void GLRendererInterface::dispatchCompute(unsigned int *global, unsigned int *lo
 	GLenum errorStatus = glGetError();
 	if (errorStatus != GL_NO_ERROR)
 		throw RuntimeException(
-			::fvformatf("Error when dispatching compute - %d, %s", errorStatus, gluErrorString(errorStatus)));
+			::fmt::format("Error when dispatching compute - %d, %s", errorStatus, gluErrorString(errorStatus)));
 
 	// TODO relocate
 	glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
@@ -1752,7 +1754,7 @@ const char *GLRendererInterface::getShaderVersion(ShaderLanguage language) const
 			return "460";
 		// Add the rest of the mapping as each new version is released.
 		default:
-			throw RuntimeException(fvformatf("OpenGL version %d is not supported", glVersion));
+			throw RuntimeException(fmt::format("OpenGL version %d is not supported", glVersion));
 		}
 		// TODO add core and compatibility on the name.
 		profile = glcore->useCoreProfile;
@@ -1795,7 +1797,7 @@ void GLRendererInterface::getSupportedTextureCompression(TextureDesc::Compressio
 	if (glewIsExtensionSupported("GL_KHR_texture_compression_astc_ldr"))
 		compressions |= TextureDesc::Compression::eASTC_LDR;
 
-	// Add support for default compression fvformatf.
+	// Add support for default compression fmt::format.
 	if (compressions != 0)
 		compressions |= TextureDesc::eCompression;
 
