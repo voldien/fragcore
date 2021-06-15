@@ -79,12 +79,16 @@ namespace fragcore {
 		/**
 		 *	Convert degree to radian.
 		 */
-		template <class T> inline constexpr static T deg2Rad(T deg) noexcept { return (deg * (T)Math::PI) / 180.0f; }
+		template <typename T> inline constexpr static T deg2Rad(T deg) noexcept {
+			return deg * static_cast<T>(Deg2Rad);
+		}
 
 		/**
 		 *	Convert radian to degree.
 		 */
-		template <class T> inline constexpr static T radToDeg(T deg) { return (deg * (T)180) / (T)Math::PI; }
+		template <typename T> inline constexpr static T radToDeg(T deg) noexcept {
+			return deg * static_cast<T>(Rad2Deg);
+		}
 
 		/**
 		 * Linear interpolation.
@@ -107,7 +111,7 @@ namespace fragcore {
 		 */
 		inline static constexpr float E = 2.718281828459045235;
 		inline static constexpr float Epsilon = FLT_EPSILON;
-		inline static constexpr float PI = 3.14159265358979323846;
+		inline static constexpr double PI = 3.141592653589793238462643383279502884;
 		inline static constexpr float Infinite = 0;
 		inline static constexpr float Deg2Rad = Math::PI / 180.0f;
 		inline static constexpr float Rad2Deg = 180 / Math::PI;
