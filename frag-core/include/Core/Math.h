@@ -31,6 +31,8 @@ namespace fragcore {
 	class FVDECLSPEC Math {
 	  public:
 		template <class T> inline constexpr static T clamp(T a, T min, T max) {
+			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
+						  "Must be a decimal type(float/double/half) or integar.");
 			return Math::max<T>(min, Math::min<T>(max, a));
 		}
 		inline constexpr static int clamp(int a, int min, int max) { return Math::clamp<int>(a, min, max); }
@@ -80,6 +82,7 @@ namespace fragcore {
 		 *	Convert degree to radian.
 		 */
 		template <typename T> inline constexpr static T deg2Rad(T deg) noexcept {
+			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
 			return deg * static_cast<T>(Deg2Rad);
 		}
 
@@ -87,14 +90,16 @@ namespace fragcore {
 		 *	Convert radian to degree.
 		 */
 		template <typename T> inline constexpr static T radToDeg(T deg) noexcept {
+			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
 			return deg * static_cast<T>(Rad2Deg);
 		}
 
 		/**
 		 * Linear interpolation.
 		 */
-		template <typename T, typename U> inline constexpr static T lerp(T a, T b, U t) {
-			return a + (b - a) * Math::clamp(t, (U)0.0, (U)1.0);
+		template <typename T> inline constexpr static T lerp(T a, T b, T t) noexcept {
+			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
+			return (a + (b - a) * t);
 		}
 
 		template <typename T, typename U> inline constexpr static T lerpUnClamped(T a, T b, U t) {
