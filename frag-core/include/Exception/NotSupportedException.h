@@ -31,7 +31,8 @@ namespace fragcore {
 		NotSupportedException(void) : IException("Functionality not supported") {}
 
 		NotSupportedException(const std::string &arg) : IException(arg) {}
-
+		template <typename... Args>
+		NotSupportedException(const std::string &format, Args &&... args) : IException(format, args...) {}
 		virtual const char *getName(void) const noexcept override {
 			return typeid(this).name();
 		}

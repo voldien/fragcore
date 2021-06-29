@@ -25,12 +25,13 @@ namespace fragcore {
 	 *
 	 */
 	class InvalidPointerException : public IException {
-	public:
-		 InvalidPointerException(void) : IException("Invalid pointer exception") {}
-		 InvalidPointerException(const std::string &arg) : IException(arg) {}
-
-		 virtual const char *getName(void) const noexcept override { return typeid(this).name(); }
+	  public:
+		InvalidPointerException(void) : IException("Invalid pointer exception") {}
+		InvalidPointerException(const std::string &arg) : IException(arg) {}
+		template <typename... Args>
+		InvalidPointerException(const std::string &format, Args &&... args) : IException(format, args...) {}
+		virtual const char *getName(void) const noexcept override { return typeid(this).name(); }
 	};
-}
+} // namespace fragcore
 
 #endif

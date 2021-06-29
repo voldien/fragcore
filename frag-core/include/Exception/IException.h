@@ -1,25 +1,26 @@
 /**
 	FragEngine, A Two layer Game Engine.
-    Copyright (C) 2018  Valdemar Lindberg
+	Copyright (C) 2018  Valdemar Lindberg
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+	You should have received a copy of the GNU General Public License
+	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 #ifndef _FRAG_CORE_IEXCEPTION_H_
 #define _FRAG_CORE_IEXCEPTION_H_ 1
-#include<stdexcept>
-#include"../Def.h"
+#include "../Def.h"
+#include <fmt/format.h>
+#include <stdexcept>
 
 namespace fragcore {
 
@@ -27,10 +28,13 @@ namespace fragcore {
 	 *
 	 */
 	class FVDECLSPEC IException : public std::exception {
-	public:
+	  public:
 		IException(void);
 		IException(const char *what);
 		IException(const std::string &what);
+		template <typename... Args> IException(const std::string &format, Args &&... args) {
+			this->mwhat = fmt::format(format, args...);
+		}
 
 		const std::string &getBackTrace(void) const;
 
@@ -41,10 +45,10 @@ namespace fragcore {
 	  protected:
 		void generateStackTrace(void);
 
-	private:
+	  private:
 		std::string stackTrace;
 		std::string mwhat;
 	};
-}
+} // namespace fragcore
 
 #endif

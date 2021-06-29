@@ -30,7 +30,8 @@ namespace fragcore {
 		PermissionDeniedException(void) : IException("PermissionDeniedException!") {}
 
 		PermissionDeniedException(const std::string &arg) : IException(arg) {}
-
+		template <typename... Args>
+		PermissionDeniedException(const std::string &format, Args &&... args) : IException(format, args...) {}
 		virtual const char *getName(void) const noexcept override {
 			return typeid(this).name();
 		}
