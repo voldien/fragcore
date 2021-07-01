@@ -7,7 +7,7 @@
 #include <Renderer/RenderDesc.h>
 #include <Utils/StringUtil.h>
 #include <Utils/TextureUtil.h>
-#include<fmt/core.h>
+#include <fmt/core.h>
 // TODO add support if libav does not support it.
 // #include <theora/theora.h>
 // #include<theora/theoradec.h>
@@ -17,15 +17,15 @@ using namespace fragcore;
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include<libavcodec/avcodec.h>
-#include<libavformat/avformat.h>
-#include<libswscale/swscale.h>
-#include<libavutil/time.h>
-#include<libavutil/imgutils.h>
-#include<libavcodec/vdpau.h>
-#include<libavutil/channel_layout.h>
-#include<libavutil/samplefmt.h>
-#include<libavutil/frame.h>
+#include <libavcodec/avcodec.h>
+#include <libavcodec/vdpau.h>
+#include <libavformat/avformat.h>
+#include <libavutil/channel_layout.h>
+#include <libavutil/frame.h>
+#include <libavutil/imgutils.h>
+#include <libavutil/samplefmt.h>
+#include <libavutil/time.h>
+#include <libswscale/swscale.h>
 #ifdef __cplusplus
 }
 #endif
@@ -111,9 +111,9 @@ VideoTexture *VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IR
 	AVIOContext *pIOCtx = avio_alloc_context(pBuffer, iBufSize, // internal Buffer and its size
 											 0,					// bWriteable (1=true,0=false)
 											 &ref,				// user data ; will be passed to our callback functions
-	                                         ReadFunc,
+											 ReadFunc,
 											 0, // Write callback function (not used in this example)
-	                                         SeekFunc);
+											 SeekFunc);
 	header.pformatCtx = avformat_alloc_context();
 	header.pformatCtx->pb = pIOCtx;
 
@@ -155,16 +155,16 @@ VideoTexture *VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IR
 			continue;
 
 		switch (stream->codecpar->codec_type) {
-			case AVMEDIA_TYPE_AUDIO:
-				header.audioStream = x;
-				audio_st = stream;
-				break;
-			case AVMEDIA_TYPE_SUBTITLE:
-				break;
-			case AVMEDIA_TYPE_VIDEO:
-				header.videoStream = x;
-				video_st = stream;
-				break;
+		case AVMEDIA_TYPE_AUDIO:
+			header.audioStream = x;
+			audio_st = stream;
+			break;
+		case AVMEDIA_TYPE_SUBTITLE:
+			break;
+		case AVMEDIA_TYPE_VIDEO:
+			header.videoStream = x;
+			video_st = stream;
+			break;
 		}
 	}
 
@@ -194,7 +194,6 @@ VideoTexture *VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IR
 			av_strerror(result, buf, sizeof(buf));
 			throw RuntimeException(fvformatf("Failed to retrieve info from stream info : %s", buf));
 		}
-
 	}
 
 	AVCodecParameters *pVideoCodecParam = video_st->codecpar;
@@ -209,9 +208,9 @@ VideoTexture *VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IR
 	// AV_PIX_FMT_FLAG_RGB
 	/*  Modify the target pixel format. */
 	// header.pVideoCtx->get_format = get_format;
-//	pVideoCodecParam->format = AV_PIX_FMT_BGR24;
-//	pVideoCodecParam->codec_tag = avcodec_pix_fmt_to_codec_tag(AV_PIX_FMT_BGR24);
-//	pVideoCodecParam->color_space = AVCOL_SPC_RGB;
+	//	pVideoCodecParam->format = AV_PIX_FMT_BGR24;
+	//	pVideoCodecParam->codec_tag = avcodec_pix_fmt_to_codec_tag(AV_PIX_FMT_BGR24);
+	//	pVideoCodecParam->color_space = AVCOL_SPC_RGB;
 	result = avcodec_parameters_to_context(header.pVideoCtx, pVideoCodecParam);
 	if (result < 0) {
 		char buf[AV_ERROR_MAX_STRING_SIZE];
@@ -230,9 +229,9 @@ VideoTexture *VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IR
 	header.frame = av_frame_alloc();
 	header.frameoutput = av_frame_alloc();
 	int m_bufferSize = av_image_get_buffer_size(AV_PIX_FMT_BGRA, header.pVideoCtx->width, header.pVideoCtx->height, 4);
-	void *m_buffer = (uint8_t *) av_malloc(m_bufferSize);
-	av_image_alloc(header.frameoutput->data, header.frameoutput->linesize,
-	               header.pVideoCtx->width, header.pVideoCtx->height, AV_PIX_FMT_BGRA, 4);
+	void *m_buffer = (uint8_t *)av_malloc(m_bufferSize);
+	av_image_alloc(header.frameoutput->data, header.frameoutput->linesize, header.pVideoCtx->width,
+				   header.pVideoCtx->height, AV_PIX_FMT_BGRA, 4);
 
 	if (header.frame == NULL)
 		throw RuntimeException(fvformatf("Failed to allocate frame"));
@@ -240,20 +239,13 @@ VideoTexture *VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IR
 	// m_bufferSize = avpicture_get_size(PIX_FMT_RGB24, width, height);
 	// m_buffer = (uint8_t *)av_malloc(m_bufferSize);
 
-	//m_bufferSize = avpicture_get_size(PIX_FMT_RGB24, width, height);
-	//m_buffer = (uint8_t *)av_malloc(m_bufferSize);
+	// m_bufferSize = avpicture_get_size(PIX_FMT_RGB24, width, height);
+	// m_buffer = (uint8_t *)av_malloc(m_bufferSize);
 
-	//AVPacket *pPacket = av_packet_alloc();
-	header.sws_ctx = sws_getContext(header.pVideoCtx->width,
-	                                header.pVideoCtx->height,
-	                                header.pVideoCtx->pix_fmt,
-	                                header.pVideoCtx->width,
-	                                header.pVideoCtx->height,
-	                                AV_PIX_FMT_BGRA,
-	                                SWS_BICUBIC,
-	                                NULL,
-	                                NULL,
-	                                NULL);
+	// AVPacket *pPacket = av_packet_alloc();
+	header.sws_ctx = sws_getContext(header.pVideoCtx->width, header.pVideoCtx->height, header.pVideoCtx->pix_fmt,
+									header.pVideoCtx->width, header.pVideoCtx->height, AV_PIX_FMT_BGRA, SWS_BICUBIC,
+									NULL, NULL, NULL);
 
 	header.frame_timer = av_gettime() / 1000000.0;
 
@@ -287,24 +279,17 @@ VideoTexture *VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IR
 
 						if (header.frame->format == AV_PIX_FMT_YUV420P) {
 							header.frame->data[0] =
-									header.frame->data[0] + header.frame->linesize[0] * (header.pVideoCtx->height - 1);
+								header.frame->data[0] + header.frame->linesize[0] * (header.pVideoCtx->height - 1);
 							header.frame->data[1] =
-									header.frame->data[1] + header.frame->linesize[0] * header.pVideoCtx->height / 4 -
-									1;
+								header.frame->data[1] + header.frame->linesize[0] * header.pVideoCtx->height / 4 - 1;
 							header.frame->data[2] =
-									header.frame->data[2] + header.frame->linesize[0] * header.pVideoCtx->height / 4 -
-									1;
+								header.frame->data[2] + header.frame->linesize[0] * header.pVideoCtx->height / 4 - 1;
 
 							header.frame->linesize[0] *= -1;
 							header.frame->linesize[1] *= -1;
 							header.frame->linesize[2] *= -1;
-							sws_scale(header.sws_ctx,
-							          header.frame->data,
-							          header.frame->linesize,
-							          0,
-							          header.frame->height,
-							          header.frameoutput->data,
-							          header.frameoutput->linesize);
+							sws_scale(header.sws_ctx, header.frame->data, header.frame->linesize, 0,
+									  header.frame->height, header.frameoutput->data, header.frameoutput->linesize);
 						}
 					}
 				}
@@ -340,7 +325,6 @@ VideoTexture *VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IR
 		// av_packet_free(&packet);
 	}
 
-
 	/*	Create Audio clip.	*/
 	Ref<AudioDecoder> video_audio_decoder;
 	AudioClipDesc clip_desc = {};
@@ -349,7 +333,6 @@ VideoTexture *VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IR
 	clip_desc.sampleRate = header.pVideoCtx->channels * header.pVideoCtx->sample_rate;
 	clip_desc.format = (AudioFormat)header.pVideoCtx->channels;
 	*audio = audioInterface->createAudioClip(&clip_desc);
-
 
 	TextureDesc desc = {};
 
@@ -391,7 +374,7 @@ VideoTexture *VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IR
 
 	header.io = ref;
 	header.texture = Ref<Texture>(texture);
-//	header.refVideo = Ref<VideoTexture>(videoTexture);
+	//	header.refVideo = Ref<VideoTexture>(videoTexture);
 	ref->increment();
 
 	return videoTexture;
@@ -429,51 +412,38 @@ void libAVComputeVideoTask(Task *task) {
 						av_strerror(result, buf, sizeof(buf));
 						throw RuntimeException(fvformatf(" : %s", buf));
 					}
-					if (header.frame->format != AV_PIX_FMT_BGRA)
-					{
+					if (header.frame->format != AV_PIX_FMT_BGRA) {
 
-						if (header.frame->format == AV_PIX_FMT_YUV420P)
-						{
+						if (header.frame->format == AV_PIX_FMT_YUV420P) {
 							header.frame->data[0] =
 								header.frame->data[0] + header.frame->linesize[0] * (header.pVideoCtx->height - 1);
 							header.frame->data[1] =
-								header.frame->data[1] + header.frame->linesize[0] * header.pVideoCtx->height / 4 -
-								1;
+								header.frame->data[1] + header.frame->linesize[0] * header.pVideoCtx->height / 4 - 1;
 							header.frame->data[2] =
-								header.frame->data[2] + header.frame->linesize[0] * header.pVideoCtx->height / 4 -
-								1;
+								header.frame->data[2] + header.frame->linesize[0] * header.pVideoCtx->height / 4 - 1;
 
 							header.frame->linesize[0] *= -1;
 							header.frame->linesize[1] *= -1;
 							header.frame->linesize[2] *= -1;
-							sws_scale(header.sws_ctx,
-									  header.frame->data,
-									  header.frame->linesize,
-									  0,
-									  header.frame->height,
-									  header.frameoutput->data,
-									  header.frameoutput->linesize);
+							sws_scale(header.sws_ctx, header.frame->data, header.frame->linesize, 0,
+									  header.frame->height, header.frameoutput->data, header.frameoutput->linesize);
 						}
 					}
 				}
 			}
-			if (packet.stream_index == header.audioStream)
-			{
+			if (packet.stream_index == header.audioStream) {
 				result = avcodec_send_packet(header.pAudioCtx, &packet);
-				if (result < 0)
-				{
+				if (result < 0) {
 					char buf[AV_ERROR_MAX_STRING_SIZE];
 					av_strerror(result, buf, sizeof(buf));
 					throw RuntimeException(fvformatf("Failed to send packet for decoding audio frame : %s", buf));
 				}
 
-				while (result >= 0)
-				{
+				while (result >= 0) {
 					result = avcodec_receive_frame(header.pAudioCtx, header.frame);
 					if (result == AVERROR(EAGAIN) || result == AVERROR_EOF)
 						break;
-					if (result < 0)
-					{
+					if (result < 0) {
 						char buf[AV_ERROR_MAX_STRING_SIZE];
 						av_strerror(result, buf, sizeof(buf));
 						throw RuntimeException(fvformatf(" : %s", buf));
@@ -489,7 +459,7 @@ void libAVComputeVideoTask(Task *task) {
 
 			printf("duration %f\n", (float)packet.duration);
 		}
-		//av_packet_free(&packet);
+		// av_packet_free(&packet);
 	}
 }
 
