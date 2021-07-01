@@ -28,6 +28,6 @@
  * @param ...
  * @return
  */
-extern FVDECLSPEC std::string fvformatf(const std::string &format, ...);
+extern FVDECLSPEC std::string fmt::formatconst std::string &format, ...);
 
 #endif

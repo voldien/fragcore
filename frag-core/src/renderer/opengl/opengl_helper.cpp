@@ -438,7 +438,7 @@ unsigned int getInternalTextureFormat(TextureDesc::Format format, bool sRGB, Tex
 			}
 		}
 	}
-	throw InvalidArgumentException(::fvformatf("Invalid texture fvformatf %d.", format));
+	throw InvalidArgumentException(::fmt::format"Invalid texture fvformatf %d.", format));
 }
 
 unsigned int getTextureTarget(TextureDesc::Target target, int nrSamples) {
@@ -462,7 +462,7 @@ unsigned int getTextureTarget(TextureDesc::Target target, int nrSamples) {
 	case TextureDesc::eCubeMapArray:
 		return GL_TEXTURE_CUBE_MAP_ARRAY;
 	default:
-		throw InvalidArgumentException(fvformatf("Invalid texture target %d.", target));
+		throw InvalidArgumentException(fmt::format"Invalid texture target %d.", target));
 	}
 }
 
@@ -479,7 +479,7 @@ unsigned int getTextureType(TextureDesc::Type type) {
 	case TextureDesc::eUnsigned24_8:
 		return GL_UNSIGNED_INT_24_8;
 	default:
-		throw InvalidArgumentException(fvformatf("Invalid texture type %d.", type));
+		throw InvalidArgumentException(fmt::format"Invalid texture type %d.", type));
 	}
 }
 
@@ -525,7 +525,7 @@ unsigned int getBufferType(BufferDesc::BufferType type) {
 	case BufferDesc::eIndirectDispatch:
 		return GL_DISPATCH_INDIRECT_BUFFER;
 	default:
-		throw InvalidArgumentException(fvformatf("Invalid buffer type %d.", type));
+		throw InvalidArgumentException(fmt::format"Invalid buffer type %d.", type));
 	}
 }
 
@@ -559,7 +559,7 @@ unsigned int getBufferHint(BufferDesc::BufferHint hint) {
 		}
 	}
 	assert(0);
-	throw InvalidArgumentException(fvformatf("None matching buffer hint - %d", hint));
+	throw InvalidArgumentException(fmt::format"None matching buffer hint - %d", hint));
 }
 
 unsigned int getPrimitive(GeometryDesc::Primitive primitive) {
@@ -574,7 +574,7 @@ unsigned int getPrimitive(GeometryDesc::Primitive primitive) {
 	case GeometryDesc::eTriangleStrips:
 		return GL_TRIANGLE_STRIP;
 	default:
-		throw InvalidArgumentException(fvformatf("None matching primitive type - %d.", primitive));
+		throw InvalidArgumentException(fmt::format"None matching primitive type - %d.", primitive));
 	}
 }
 
@@ -589,7 +589,7 @@ unsigned int getAttributeDataType(GeometryDesc::AttributeType type) {
 	case GeometryDesc::eHalf:
 		return GL_HALF_FLOAT;
 	default:
-		throw InvalidArgumentException(fvformatf("Invalid attribute type- %d.", type));
+		throw InvalidArgumentException(fmt::format"Invalid attribute type- %d.", type));
 	}
 }
 
@@ -620,7 +620,7 @@ unsigned int getState(IRenderer::State state) {
 	case IRenderer::eSampleAlphaCoverage:
 		return GL_SAMPLE_ALPHA_TO_COVERAGE;
 	default:
-		throw InvalidArgumentException(fvformatf("Invalid state - %d.", state));
+		throw InvalidArgumentException(fmt::format"Invalid state - %d.", state));
 	}
 }
 unsigned int getTextureFilterModeNoMip(Texture::FilterMode format) {

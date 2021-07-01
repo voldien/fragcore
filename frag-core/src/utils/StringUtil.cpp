@@ -2,7 +2,7 @@
 #include <fmt/core.h>
 #include <vector>
 
-std::string fvformatf(const std::string &format, ...) {
+std::string fmt::formatconst std::string &format, ...) {
 	va_list args;
 	va_start(args, format);
 	size_t len = std::vsnprintf(nullptr, 0, format.c_str(), args);
