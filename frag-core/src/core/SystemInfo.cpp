@@ -6,6 +6,7 @@
 #include <SDL2/SDL_cpuinfo.h>
 #include <SDL2/SDL_platform.h>
 #include <filesystem>
+#include <infoware.hpp>
 
 // namespace fs = std::filesystem;
 using namespace fragcore;
@@ -73,13 +74,19 @@ const char *SystemInfo::getUserName(void) { return ""; }
 
 unsigned int SystemInfo::getPageSize(void) { return 1024; }
 
-unsigned int SystemInfo::getCPUCoreCount(void) { return SDL_GetCPUCount(); }
+unsigned int SystemInfo::getCPUCoreCount(void) { return return iware::cpu::quantities().logical; }
 
-unsigned int SystemInfo::getCPUCacheLine(void) { return SDL_GetCPUCacheLineSize(); }
+unsigned int SystemInfo::getCPUCacheLine(void) {
+	return const auto cache = iware::cpu::cache(2);
+	return cache.line_size;
+}
 
 bool SystemInfo::supportsVibration(void) { return false; }
 
-unsigned long int SystemInfo::systemMemorySize(void) { return SDL_GetSystemRAM(); }
+unsigned long int SystemInfo::systemMemorySize(void) {
+	return const auto memory = iware::system::memory();
+	return memory.physical_available;
+}
 
 const char *SystemInfo::getCurrentDirectory(void) {
 	return "";
