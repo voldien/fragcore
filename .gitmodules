@@ -13,3 +13,6 @@
 [submodule "extern/infoware"]
 	path = extern/infoware
 	url = https://github.com/ThePhD/infoware.git
+[submodule "extern/vulkan-samples"]
+	path = extern/vulkan-samples
+	url = https://github.com/voldien/vulkan-samples
