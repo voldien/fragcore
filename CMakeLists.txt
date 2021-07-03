@@ -338,7 +338,7 @@ ELSE()
 ENDIF()
 
 # Inlucde external resources.
-INCLUDE(${CMAKE_CURRENT_SOURCE_DIR}/extern/CMakeLists.txt)
+ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/extern)
 
 ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/frag-core)
 

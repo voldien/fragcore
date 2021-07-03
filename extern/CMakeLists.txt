@@ -124,7 +124,7 @@ IF(BUILD_WITH_EXTERNAL_PROJECT)
 		SET(TASKSCH_INCLUDE_DIR ${TASKSCH_ROOT}/include)
 
 		ExternalProject_Add(tasksch-external
-				URL ${CMAKE_CURRENT_SOURCE_DIR}/extern/task-scheduler
+				URL ${CMAKE_CURRENT_SOURCE_DIR}/task-scheduler
 				SOURCE_DIR ${TASKSCH_ROOT}/src/tasksch
 				BINARY_DIR ${TASKSCH_ROOT}/src/tasksch-build
 				INSTALL_DIR ${TASKSCH_ROOT}
@@ -147,7 +147,7 @@ IF(BUILD_WITH_EXTERNAL_PROJECT)
 		SET(HPM_LIB_DIR ${HPM_ROOT}/lib)
 		SET(HPM_INCLUDE_DIR ${HPM_ROOT}/include)
 		ExternalProject_Add(hpm-external
-				URL ${CMAKE_CURRENT_SOURCE_DIR}/extern/hpmcpp/extern/hpm
+				URL ${CMAKE_CURRENT_SOURCE_DIR}/hpmcpp/extern/hpm
 				SOURCE_DIR ${HPM_ROOT}/src/hpm
 				BINARY_DIR ${HPM_ROOT}/src/hpm-build
 				INSTALL_DIR ${HPM_ROOT}
@@ -169,7 +169,7 @@ IF(BUILD_WITH_EXTERNAL_PROJECT)
 		SET(HPMCPP_LIB_DIR ${HPMCPP_ROOT}/lib)
 		SET(HPMCPP_INCLUDE_DIR ${HPMCPP_ROOT}/include)
 		ExternalProject_Add(hpmcpp-external
-				URL ${CMAKE_CURRENT_SOURCE_DIR}/extern/hpmcpp
+				URL ${CMAKE_CURRENT_SOURCE_DIR}/hpmcpp
 				SOURCE_DIR ${HPMCPP_ROOT}/src/hpmcpp
 				BINARY_DIR ${HPMCPP_ROOT}/src/hpmcpp-build
 				INSTALL_DIR ${HPMCPP_ROOT}
@@ -197,7 +197,8 @@ IF(BUILD_WITH_EXTERNAL_PROJECT)
 	ENDIF()
 ENDIF()
 
-ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/extern/backward-cpp)
+ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/backward-cpp)
+ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/vulkan-samples EXCLUDE_FROM_ALL)
 
 IF(BUILTIN_JEMALLOC)
 	#https://github.com/jemalloc/jemalloc.git

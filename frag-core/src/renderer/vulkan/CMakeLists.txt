@@ -20,8 +20,8 @@ TARGET_LINK_LIBRARIES(fragcore-rvk ${Vulkan_LIBRARIES} fragcore) #
 TARGET_COMPILE_DEFINITIONS(fragcore-rvk PRIVATE FRAG_CORE_INTERNAL_IMP=1)
 
 #
-TARGET_INCLUDE_DIRECTORIES(fragcore-rvk PRIVATE ${Vulkan_INCLUDE_DIRS} ${Fragcore_INCLUDE_DIRS})
-ADD_DEPENDENCIES(fragcore-rvk fragcore)
+TARGET_INCLUDE_DIRECTORIES(fragcore-rvk PRIVATE ${Vulkan_INCLUDE_DIRS} ${Fragcore_INCLUDE_DIRS} vkcommon)
+ADD_DEPENDENCIES(fragcore-rvk fragcore vkcommon)
 
 #
 IF(BUILD_WITH_INSTALL)
