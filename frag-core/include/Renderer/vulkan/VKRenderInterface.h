@@ -5,6 +5,7 @@
 #include "../IRenderer.h"
 #include "../RenderDesc.h"
 #include "../Sampler.h"
+#include "VKDevice.h"
 #include <vulkan/vulkan.h>
 
 namespace fragcore {
@@ -141,8 +142,9 @@ namespace fragcore {
 		virtual void *getData(void) const override;
 
 	  protected:
-		std::vector<RendererWindow *> windows;
-		Capability capabilityCached;
+		std::shared_ptr<VKDevice> device;
+		std::shared_ptr<VulkanCore> core;
+
 		/*	*/
 		VkInstance inst;
 		VkDebugUtilsMessengerEXT debugMessenger;
@@ -150,6 +152,9 @@ namespace fragcore {
 		/*  Physical device.    */
 		VkPhysicalDevice gpu;
 		std::vector<VkPhysicalDevice> GPUs;
+
+		std::vector<RendererWindow *> windows;
+		Capability capabilityCached;
 
 		/*  */
 		VkDevice device;
