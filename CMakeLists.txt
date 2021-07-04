@@ -340,6 +340,7 @@ ENDIF()
 # Inlucde external resources.
 ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/extern)
 
+# Main core library.
 ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/frag-core)
 
 # Rendering interfaces.
