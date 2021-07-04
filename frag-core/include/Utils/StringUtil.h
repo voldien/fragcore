@@ -22,12 +22,4 @@
 #include<string>
 #include<cstdarg>
 
-/**
- * Create C++ string formated string.
- * @param format
- * @param ...
- * @return
- */
-extern FVDECLSPEC std::string fmt::formatconst std::string &format, ...);
-
 #endif
