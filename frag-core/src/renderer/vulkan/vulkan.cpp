@@ -85,7 +85,7 @@ void createBuffer(VulkanCore *vulkanCore, VkDeviceSize size, VkBufferUsageFlags 
 	bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
 	/**/
-	if (vkCreateBuffer(vulkanCore->device, &bufferInfo, NULL, &buffer) != VK_SUCCESS) {
+	if (vkCreateBuffer(vulkanCore->device, &bufferInfo, nullptr, &buffer) != VK_SUCCESS) {
 		throw RuntimeException("failed to create buffer!");
 	}
 
@@ -99,7 +99,7 @@ void createBuffer(VulkanCore *vulkanCore, VkDeviceSize size, VkBufferUsageFlags 
 	allocInfo.memoryTypeIndex = findMemoryType(vulkanCore, memRequirements.memoryTypeBits, properties);
 
 	/**/
-	if (vkAllocateMemory(vulkanCore->device, &allocInfo, NULL, &bufferMemory) != VK_SUCCESS) {
+	if (vkAllocateMemory(vulkanCore->device, &allocInfo, nullptr, &bufferMemory) != VK_SUCCESS) {
 		throw RuntimeException("failed to allocate buffer memory!");
 	}
 
@@ -139,7 +139,7 @@ VkShaderModule createShaderModule(VkDevice device, const char *pdata, size_t siz
 	createInfo.codeSize = size;
 
 	/**/
-	result = vkCreateShaderModule(device, &createInfo, NULL, &module);
+	result = vkCreateShaderModule(device, &createInfo, nullptr, &module);
 	if (result != VK_SUCCESS)
 		throw RuntimeException(fmt::format("Failed to create shader module - %d", result));
 
@@ -159,13 +159,13 @@ bool isDeviceSuitable(VkPhysicalDevice device) {
 	//	vkGetPhysicalDeviceMemoryProperties()
 	//	vkGetPhysicalDeviceQueueFamilyProperties()
 	//  vkGetPhysicalDeviceQueueFamilyProperties(vulkancore->gpu,
-	//  &vulkancore->queue_count, NULL);
+	//  &vulkancore->queue_count, nullptr);
 	/*  Check if device is good enough as a GPU candidates.  */
 
 	// TODO determine, since it adds the requirement of a display in order to use the device.
 	uint32_t displayCount;
 	std::vector<VkDisplayPropertiesKHR> displayProperties;
-	vkGetPhysicalDeviceDisplayPropertiesKHR(device, &displayCount, NULL);
+	vkGetPhysicalDeviceDisplayPropertiesKHR(device, &displayCount, nullptr);
 	/*  */
 
 	return (deviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU ||
@@ -187,7 +187,7 @@ void selectDefaultDevices(std::vector<VkPhysicalDevice> &devices, std::vector<Vk
 
 		uint32_t count;
 		std::vector<VkDisplayPropertiesKHR> displayProperties;
-		vkGetPhysicalDeviceDisplayPropertiesKHR(device, &count, NULL);
+		vkGetPhysicalDeviceDisplayPropertiesKHR(device, &count, nullptr);
 		displayProperties.resize(count);
 		vkGetPhysicalDeviceDisplayPropertiesKHR(device, &count, displayProperties.data());
 

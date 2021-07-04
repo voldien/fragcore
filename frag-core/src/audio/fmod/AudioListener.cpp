@@ -39,7 +39,7 @@
 using namespace std;
 using namespace FMOD;
 
-VDAudioListener* gListener = NULL;
+VDAudioListener* gListener = nullptr;
 
 VDAudioListener::VDAudioListener(void) : VDBehavior(){
 
@@ -59,11 +59,11 @@ void VDAudioListener::onEnable(void){
 }
 
 void VDAudioListener::onDisable(void){
-	engine.scene.gListener = NULL;
+	engine.scene.gListener = nullptr;
 }
 
 void VDAudioListener::onDestroy(void){
-	engine.scene.gListener = NULL;
+	engine.scene.gListener = nullptr;
 }
 
 void VDAudioListener::initializeComponent(void){
@@ -82,14 +82,14 @@ VDBehavior* VDAudioListener::copyComponent(unsigned int& dataSize){
 
 
 void VDAudioListener::updateAudioListener(VDDoubleBufferedAllocator* allocator){
-	if(engine.scene.gListener == NULL)
+	if(engine.scene.gListener == nullptr)
 		return;
 
 	VDAudioSource::AudioMechanicUpdate(allocator);
 	VDAudioListener* gListener = engine.scene.gListener;
 
 	VDVector3 prePos;
-	VDCASTP(FMOD::System*,engine.audioContext)->get3DListenerAttributes(0, (FMOD_VECTOR*)&prePos,NULL ,NULL, NULL);
+	VDCASTP(FMOD::System*,engine.audioContext)->get3DListenerAttributes(0, (FMOD_VECTOR*)&prePos,nullptr ,nullptr, nullptr);
 	VDVector3 listener_vel = prePos - gListener->transform()->postion;
 	VDCASTP(FMOD::System*,engine.audioContext)->set3DListenerAttributes(0,
 		(FMOD_VECTOR*)&gListener->transform()->postion,

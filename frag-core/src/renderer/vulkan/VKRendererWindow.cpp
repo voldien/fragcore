@@ -22,7 +22,7 @@ VKRenderWindow::VKRenderWindow(Ref<VKRenderInterface> &renderer) {
 	/*  Create Vulkan window.   */
 	WindowManager::getInstance();
 	SDL_Window *windowp = SDL_CreateWindow("", 1, 1, 800, 600, SDL_WINDOW_VULKAN);
-	if (windowp == NULL)
+	if (windowp == nullptr)
 		throw RuntimeException(fmt::format("failed create window - %s", SDL_GetError()));
 	this->window = windowp;
 
@@ -86,13 +86,13 @@ VKRenderWindow::VKRenderWindow(Ref<VKRenderInterface> &renderer) {
 	createInfo.oldSwapchain = VK_NULL_HANDLE;
 
 	/*  Create swapchain.   */
-	if (vkCreateSwapchainKHR(vulkancore->device, &createInfo, NULL, &swapChain.swapchain) != VK_SUCCESS) {
+	if (vkCreateSwapchainKHR(vulkancore->device, &createInfo, nullptr, &swapChain.swapchain) != VK_SUCCESS) {
 		throw RuntimeException(fmt::format("vkCreateSwapchainKHR failed - %d", result));
 	}
 
 	/*  Get the image associated with the swap chain.   */
 	uint32_t nrChainImageCount = 1;
-	result = vkGetSwapchainImagesKHR(vulkancore->device, swapChain.swapchain, &nrChainImageCount, NULL);
+	result = vkGetSwapchainImagesKHR(vulkancore->device, swapChain.swapchain, &nrChainImageCount, nullptr);
 	if (result != VK_SUCCESS) {
 		throw RuntimeException(fmt::format("vkGetSwapchainImagesKHR failed query count - %d", result));
 	}
@@ -435,11 +435,11 @@ void VKRenderWindow::createSwapChain(void) {
 	createInfo.oldSwapchain = VK_NULL_HANDLE;
 
 	/*  Create swapchain.   */
-	vkCreateSwapchainKHR(getDevice(), &createInfo, NULL, &this->swapChain.swapchain);
+	vkCreateSwapchainKHR(getDevice(), &createInfo, nullptr, &this->swapChain.swapchain);
 
 	/*  Get the image associated with the swap chain.   */
 	uint32_t nrChainImageCount = 1;
-	vkGetSwapchainImagesKHR(getDevice(), this->swapChain.swapchain, &nrChainImageCount, NULL);
+	vkGetSwapchainImagesKHR(getDevice(), this->swapChain.swapchain, &nrChainImageCount, nullptr);
 
 	this->swapChain.swapChainImages.resize(nrChainImageCount);
 	vkGetSwapchainImagesKHR(getDevice(), this->swapChain.swapchain, &nrChainImageCount,
@@ -588,7 +588,7 @@ VkImage VKRenderWindow::getDefaultImage(void) const {
 VkPhysicalDevice VKRenderWindow::physicalDevice() const {
 	// return renderer->gpu;
 	// physicalDevices[0];
-	return NULL;
+	return nullptr;
 }
 std::vector<VkPhysicalDevice> VKRenderWindow::getPhyiscalDevices(void) {}
 
@@ -637,7 +637,7 @@ void VKRenderWindow::createWindow(int x, int y, int width, int height, const cha
 	window = SDL_CreateWindow("", x, y, width, height, SDL_WINDOW_VULKAN | SDL_WINDOW_HIDDEN);
 
 	/*  */
-	if (window == NULL)
+	if (window == nullptr)
 		throw RuntimeException(fmt::format("Failed to create window %s for API %s", SDL_GetError(), api));
 	this->api = api;
 }

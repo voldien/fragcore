@@ -9,11 +9,11 @@ FrameBuffer* RenderTargetFactory::createShadow(IRenderer* render, int width, int
 
 	FrameBufferDesc desc = {};
 	TextureDesc depthdesc;
-	FrameBuffer* frame = NULL;
-	Texture* shadowtex = NULL;
+	FrameBuffer* frame = nullptr;
+	Texture* shadowtex = nullptr;
 
 	assert(render);
-	if(render == NULL)
+	if(render == nullptr)
 		throw InvalidArgumentException("renderer interface must not be null!");
 
 
@@ -32,7 +32,7 @@ FrameBuffer* RenderTargetFactory::createShadow(IRenderer* render, int width, int
 	depthdesc.sampler.magFilter = SamplerDesc::eLinear;
 	depthdesc.sampler.mipmapFilter = SamplerDesc::eLinear;
 	depthdesc.sampler.anisotropy = 1.0f;
-	depthdesc.pixel = NULL;
+	depthdesc.pixel = nullptr;
 
 	/*	*/
 	shadowtex = render->createTexture(&depthdesc);
@@ -45,17 +45,17 @@ FrameBuffer* RenderTargetFactory::createShadow(IRenderer* render, int width, int
 
 FrameBuffer* RenderTargetFactory::createDeffered(IRenderer* render, int width, int height, unsigned int options){
 
-	Texture* depthstencil = NULL;
-	Texture* color1 = NULL;
-	Texture* color2 = NULL;
-	Texture* color3 = NULL;
-	Texture* color4 = NULL;
-	Texture* color5 = NULL;
+	Texture* depthstencil = nullptr;
+	Texture* color1 = nullptr;
+	Texture* color2 = nullptr;
+	Texture* color3 = nullptr;
+	Texture* color4 = nullptr;
+	Texture* color5 = nullptr;
 	TextureDesc texdesc;
 	FrameBufferDesc desc;
-	FrameBuffer* frame = NULL;
+	FrameBuffer* frame = nullptr;
 
-	if(render == NULL)
+	if(render == nullptr)
 		throw InvalidArgumentException("renderer interface must not be null!");
 
 	memset(&texdesc, 0, sizeof(texdesc));
@@ -127,7 +127,7 @@ FrameBuffer *RenderTargetFactory::createColor(IRenderer *render, int width, int 
 	FrameBufferDesc desc;
 
 	assert(render);
-	if (render == NULL)
+	if (render == nullptr)
 		throw InvalidArgumentException("renderer interface must not be null!");
 
 	/*	Zero out descriptor.	*/
@@ -174,7 +174,7 @@ FrameBuffer* RenderTargetFactory::createHDR(IRenderer* renderer, int width, int 
 	FrameBufferDesc desc;
 
 	assert(renderer);
-	if(renderer == NULL)
+	if(renderer == nullptr)
 		throw InvalidArgumentException("renderer interface must not be null!");
 
 	/*	Zero out descriptor.	*/

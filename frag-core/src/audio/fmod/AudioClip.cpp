@@ -8,7 +8,7 @@ using namespace FMOD;
 map<const char*, VDAudioClip*> audioClipCollection;
 
 VDAudioClip::VDAudioClip(void) : VDAssetObject() {
-	this->soundTrack = NULL;
+	this->soundTrack = nullptr;
 }
 
 VDAudioClip::VDAudioClip(const VDAudioClip& clip){
@@ -16,7 +16,7 @@ VDAudioClip::VDAudioClip(const VDAudioClip& clip){
 }
 
 VDAudioClip::VDAudioClip(const char* path, Format format) : VDAssetObject() {
-	this->soundTrack = NULL;
+	this->soundTrack = nullptr;
 	this->load(path, format);
 }
 
@@ -28,8 +28,8 @@ void VDAudioClip::release(void){
 	if(!this->soundTrack)
 		this->soundTrack->release();
 
-	this->soundTrack = NULL;
-	this->setName(NULL);
+	this->soundTrack = nullptr;
+	this->setName(nullptr);
 }
 
 bool VDAudioClip::is3D(void){
@@ -53,10 +53,10 @@ int VDAudioClip::load(const char* path, unsigned int dataBitFlag){
 	this->setName(path);
 
 	if( dataBitFlag & eCompressed ){
-		results = ((FMOD::System*)engine.audioContext)->createSound(path, dimAudio,NULL, &this->soundTrack);
+		results = ((FMOD::System*)engine.audioContext)->createSound(path, dimAudio,nullptr, &this->soundTrack);
 	}
 	else if( dataBitFlag & eStream ){
-		results = ((FMOD::System*)engine.audioContext)->createStream(path, dimAudio, NULL, &this->soundTrack);
+		results = ((FMOD::System*)engine.audioContext)->createStream(path, dimAudio, nullptr, &this->soundTrack);
 	}
 	else if(dataBitFlag & eStreamSource){
 		memset(&exinfo,0,sizeof(exinfo));
@@ -65,7 +65,7 @@ int VDAudioClip::load(const char* path, unsigned int dataBitFlag){
 		exinfo.format           = (FMOD_SOUND_FORMAT)VDAudioSetting::getFormat();
 		exinfo.defaultfrequency = VDAudioSetting::getSampleRate();
 		exinfo.length           = exinfo.defaultfrequency * sizeof(short) * exinfo.numchannels * 5;
-		results = ((FMOD::System*)engine.audioContext)->createStream(NULL, dimAudio, &exinfo, &soundTrack);
+		results = ((FMOD::System*)engine.audioContext)->createStream(nullptr, dimAudio, &exinfo, &soundTrack);
 	}
 	else if( dataBitFlag & eDecompressed ){
 
@@ -91,7 +91,7 @@ void VDAudioClip::write(void* buffer, int rSize){
 
 void* VDAudioClip::read(int rSize){
 	void* alloc = malloc(rSize);
-	soundTrack->readData(alloc, rSize, NULL);
+	soundTrack->readData(alloc, rSize, nullptr);
 	return alloc;
 }
 

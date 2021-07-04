@@ -14,7 +14,7 @@ void GZFileIO::open(const char *path, Mode mode) {
 	FileIO::open(path, mode);
 
 	// TODO add other access modes.
-	const char *m = NULL;
+	const char *m = nullptr;
 	switch (mode & ACCESS) {
 	case READ:
 		m = "rb";
@@ -28,7 +28,7 @@ void GZFileIO::open(const char *path, Mode mode) {
 
 	/*  */
 	this->gzFi = gzdopen(fileno(this->file), m);
-	if (this->gzFi == NULL) {
+	if (this->gzFi == nullptr) {
 		int error;
 		const char *errMsg = gzerror(this->gzFi, &error);
 		throw RuntimeException(fmt::format("Failed to open %s - error: %d | %s", path, error, errMsg));
@@ -59,7 +59,7 @@ long GZFileIO::read(long int nbytes, void *pbuffer) {
 long GZFileIO::write(long int nbytes, const void *pbuffer) {
 	long int nWrittenBytes = gzfwrite(pbuffer, 1, nbytes, this->gzFi);
 	if (nWrittenBytes == 0)
-		throw RuntimeException(fmt::format("Failed to write to  gz file %s", gzerror(this->gzFi, NULL)));
+		throw RuntimeException(fmt::format("Failed to write to  gz file %s", gzerror(this->gzFi, nullptr)));
 	return nWrittenBytes;
 }
 

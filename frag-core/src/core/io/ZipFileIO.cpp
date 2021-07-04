@@ -17,7 +17,7 @@ ZipFileIO::ZipFileIO(zip_file_t *file, zip_int64_t index, Ref<ZipFileSystem> ref
 	this->zipfile->increment();
 }
 
-ZipFileIO::ZipFileIO(void) { this->file = NULL; }
+ZipFileIO::ZipFileIO(void) { this->file = nullptr; }
 
 ZipFileIO::ZipFileIO(const ZipFileIO &other) { this->file = other.file; }
 
@@ -109,7 +109,7 @@ unsigned long ZipFileIO::getPos(void) {
 
 bool ZipFileIO::isWriteable(void) const {
 	zip_uint32_t attr;
-	// int err = zip_file_get_external_attributes((zip_t*)this->zipfile->getZipObject(), 0, ZIP_OPSYS_UNIX, NULL,
+	// int err = zip_file_get_external_attributes((zip_t*)this->zipfile->getZipObject(), 0, ZIP_OPSYS_UNIX, nullptr,
 	// &attr);
 
 	return true;

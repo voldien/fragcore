@@ -51,18 +51,18 @@ ShaderCompiler::CompilePermutation(Ref<IRenderer> &renderer, CompilerSources *re
 
 void CompileCrossShader(Ref<IO> &io, Ref<IO> &out) {
 
-	// const SpvId *spirv = NULL;
+	// const SpvId *spirv = nullptr;
 	// //get_spirv_data();
 	// size_t word_count = 0;
 	// //get_spirv_word_count();
 
-	// spvc_context context = NULL;
-	// spvc_parsed_ir ir = NULL;
-	// spvc_compiler compiler_glsl = NULL;
-	// spvc_compiler_options options = NULL;
-	// spvc_resources resources = NULL;
-	// const spvc_reflected_resource *list = NULL;
-	// const char *result = NULL;
+	// spvc_context context = nullptr;
+	// spvc_parsed_ir ir = nullptr;
+	// spvc_compiler compiler_glsl = nullptr;
+	// spvc_compiler_options options = nullptr;
+	// spvc_resources resources = nullptr;
+	// const spvc_reflected_resource *list = nullptr;
+	// const char *result = nullptr;
 	// size_t count;
 	// size_t i;
 
@@ -70,7 +70,7 @@ void CompileCrossShader(Ref<IO> &io, Ref<IO> &out) {
 	// spvc_context_create(&context);
 
 	// // Set debug callback.
-	// spvc_context_set_error_callback(context, NULL, NULL);
+	// spvc_context_set_error_callback(context, nullptr, nullptr);
 
 	// // Parse the SPIR-V.
 	// spvc_context_parse_spirv(context, spirv, word_count, &ir);

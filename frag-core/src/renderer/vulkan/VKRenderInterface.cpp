@@ -44,9 +44,9 @@ VKRenderInterface::VKRenderInterface(IConfig *config) {
 		"VK_LAYER_LUNARG_standard_validation",
 	};
 
-	VulkanCore *vulkancore = NULL;
+	VulkanCore *vulkancore = nullptr;
 	IConfig setupConfig;
-	if (config == NULL) {
+	if (config == nullptr) {
 		setupConfig.set("debug", true);
 		setupConfig.set("debug-tracer", true);
 		setupConfig.set("gamma-correction", true);
@@ -61,7 +61,7 @@ VKRenderInterface::VKRenderInterface(IConfig *config) {
 
 	/*	Allocate private data structure for the renderer interface. */
 	vulkancore = new VulkanCore();
-	if (vulkancore == NULL)
+	if (vulkancore == nullptr)
 		throw RuntimeException();
 
 	/*  Store reference with the object. */
@@ -78,18 +78,18 @@ VKRenderInterface::VKRenderInterface(IConfig *config) {
 
 	/*  Check for supported extensions.*/
 	uint32_t extensionCount = 0;
-	if (vkEnumerateInstanceExtensionProperties(NULL, &extensionCount, NULL) != VK_SUCCESS) {
+	if (vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr) != VK_SUCCESS) {
 		throw RuntimeException("Failed enumerate Vulkan extension properties");
 	}
 	vulkancore->extension_names = (VkExtensionProperties *)(malloc(sizeof(VkExtensionProperties) * extensionCount));
-	if (vkEnumerateInstanceExtensionProperties(NULL, &extensionCount,
+	if (vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount,
 											   (VkExtensionProperties *)vulkancore->extension_names) != VK_SUCCESS) {
 		throw RuntimeException("Failed enumerate Vulkan extension properties");
 	}
 
 	/*  Check for supported validation layers.  */
 	uint32_t layerCount;
-	if (vkEnumerateInstanceLayerProperties(&layerCount, NULL) != VK_SUCCESS)
+	if (vkEnumerateInstanceLayerProperties(&layerCount, nullptr) != VK_SUCCESS)
 		throw RuntimeException("Failed enumerate Vulkan extension properties");
 	std::vector<VkLayerProperties> availableLayers(layerCount);
 	if (vulkancore->enableValidationLayers) {
@@ -105,10 +105,10 @@ VKRenderInterface::VKRenderInterface(IConfig *config) {
 	// TODO improve later.
 	/*  Create Vulkan window.   */
 	SDL_Window *tmpWindow = SDL_CreateWindow("", 0, 0, 1, 1, SDL_WINDOW_VULKAN);
-	if (tmpWindow == NULL)
+	if (tmpWindow == nullptr)
 		throw RuntimeException(fmt::format("failed create window - %s", SDL_GetError()));
 	unsigned int count;
-	if (!SDL_Vulkan_GetInstanceExtensions(tmpWindow, &count, NULL))
+	if (!SDL_Vulkan_GetInstanceExtensions(tmpWindow, &count, nullptr))
 		throw RuntimeException(fmt::format("%s", SDL_GetError()));
 	unsigned int additional_extension_count = (unsigned int)instanceExtensionNames.size();
 	instanceExtensionNames.resize((size_t)(additional_extension_count + count));
@@ -125,7 +125,7 @@ VKRenderInterface::VKRenderInterface(IConfig *config) {
 	/*	Primary Vulkan instance Object. */
 	VkApplicationInfo ai = {};
 	ai.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-	ai.pNext = NULL;
+	ai.pNext = nullptr;
 	ai.pApplicationName = "FragCore";
 	ai.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
 	ai.pEngineName = "FragCore-Engine";
@@ -134,11 +134,11 @@ VKRenderInterface::VKRenderInterface(IConfig *config) {
 
 	VkDebugReportCallbackCreateInfoEXT callbackCreateInfoExt = {
 		VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT, // sType
-		NULL,													 // pNext
+		nullptr,													 // pNext
 		VK_DEBUG_REPORT_ERROR_BIT_EXT |							 // flags
 			VK_DEBUG_REPORT_WARNING_BIT_EXT,
-		NULL, // myOutputDebugString,                                        // pfnCallback
-		NULL  // pUserData
+		nullptr, // myOutputDebugString,                                        // pfnCallback
+		nullptr  // pUserData
 	};
 	VkDebugUtilsMessengerCreateInfoEXT debugUtilsMessengerCreateInfoExt = {
 		.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT,
@@ -146,7 +146,7 @@ VKRenderInterface::VKRenderInterface(IConfig *config) {
 	};
 	VkValidationCheckEXT validationCheckExt[] = {VK_VALIDATION_CHECK_ALL_EXT};
 	VkValidationFlagsEXT validationFlagsExt = {.sType = VK_STRUCTURE_TYPE_VALIDATION_FLAGS_EXT,
-											   .pNext = NULL, //&debugUtilsMessengerCreateInfoExt,
+											   .pNext = nullptr, //&debugUtilsMessengerCreateInfoExt,
 											   .disabledValidationCheckCount = 1,
 											   .pDisabledValidationChecks = validationCheckExt};
 
@@ -154,9 +154,9 @@ VKRenderInterface::VKRenderInterface(IConfig *config) {
 	VkInstanceCreateInfo ici = {};
 	ici.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
 	if (vulkancore->enableValidationLayers)
-		ici.pNext = NULL;
+		ici.pNext = nullptr;
 	else
-		ici.pNext = NULL;
+		ici.pNext = nullptr;
 	ici.flags = 0;
 	ici.pApplicationInfo = &ai;
 	if (vulkancore->enableValidationLayers) {
@@ -164,13 +164,13 @@ VKRenderInterface::VKRenderInterface(IConfig *config) {
 		ici.ppEnabledLayerNames = validationLayers.data();
 	} else {
 		ici.enabledLayerCount = 0;
-		ici.ppEnabledLayerNames = NULL;
+		ici.ppEnabledLayerNames = nullptr;
 	}
 	ici.enabledExtensionCount = instanceExtensionNames.size();
 	ici.ppEnabledExtensionNames = instanceExtensionNames.data();
 
 	/*	Create Vulkan instance.	*/
-	result = vkCreateInstance(&ici, NULL, &vulkancore->inst);
+	result = vkCreateInstance(&ici, nullptr, &vulkancore->inst);
 	if (result != VK_SUCCESS)
 		throw RuntimeException(fmt::format("vkCreateInstance - %d.", result));
 
@@ -179,7 +179,7 @@ VKRenderInterface::VKRenderInterface(IConfig *config) {
 
 	/*	Get number of physical devices. */
 	int num_physica_devices;
-	result = vkEnumeratePhysicalDevices(vulkancore->inst, &vulkancore->num_physical_devices, NULL);
+	result = vkEnumeratePhysicalDevices(vulkancore->inst, &vulkancore->num_physical_devices, nullptr);
 	if (result != VK_SUCCESS) {
 		throw RuntimeException(fmt::format("Failed to get number physical devices - %d", result));
 	}
@@ -195,7 +195,7 @@ VKRenderInterface::VKRenderInterface(IConfig *config) {
 
 	/*	*/
 	uint32_t pPhysicalDeviceGroupCount;
-	result = vkEnumeratePhysicalDeviceGroups(vulkancore->inst, &pPhysicalDeviceGroupCount, NULL);
+	result = vkEnumeratePhysicalDeviceGroups(vulkancore->inst, &pPhysicalDeviceGroupCount, nullptr);
 	if (result != VK_SUCCESS)
 		throw RuntimeException(fmt::format("vkEnumeratePhysicalDeviceGroups failed query - %d.", result));
 	std::vector<VkPhysicalDeviceGroupProperties> phyiscalDevices;
@@ -225,7 +225,7 @@ VKRenderInterface::VKRenderInterface(IConfig *config) {
 
 	/*  Select queue family.    */
 	/*  TODO improve queue selection.   */
-	vkGetPhysicalDeviceQueueFamilyProperties(vulkancore->gpu, &vulkancore->queue_count, NULL);
+	vkGetPhysicalDeviceQueueFamilyProperties(vulkancore->gpu, &vulkancore->queue_count, nullptr);
 
 	vulkancore->queue_props =
 		(VkQueueFamilyProperties *)malloc(sizeof(VkQueueFamilyProperties) * vulkancore->queue_count);
@@ -247,7 +247,7 @@ VKRenderInterface::VKRenderInterface(IConfig *config) {
 
 	float queue_priorities[1] = {1.0};
 	const VkDeviceQueueCreateInfo queue = {.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO,
-										   .pNext = NULL,
+										   .pNext = nullptr,
 										   .flags = 0,
 										   .queueFamilyIndex = vulkancore->graphics_queue_node_index,
 										   .queueCount = 1,
@@ -278,7 +278,7 @@ VKRenderInterface::VKRenderInterface(IConfig *config) {
 
 	VkPhysicalDeviceShaderDrawParameterFeatures deviceShaderDrawParametersFeatures = {
 		.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_DRAW_PARAMETER_FEATURES,
-		.pNext = NULL,
+		.pNext = nullptr,
 		.shaderDrawParameters = VK_TRUE};
 	VkPhysicalDeviceMultiviewFeatures deviceMultiviewFeatures = {
 		.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MULTIVIEW_FEATURES,
@@ -301,7 +301,7 @@ VKRenderInterface::VKRenderInterface(IConfig *config) {
 	if (vulkancore->enableValidationLayers) {
 		device.enabledLayerCount = vulkancore->enabled_layer_count;
 		device.ppEnabledLayerNames =
-			(const char *const *)((vulkancore->validate) ? vulkancore->device_validation_layers : NULL);
+			(const char *const *)((vulkancore->validate) ? vulkancore->device_validation_layers : nullptr);
 	} else {
 		device.enabledLayerCount = 0;
 	}
@@ -315,7 +315,7 @@ VKRenderInterface::VKRenderInterface(IConfig *config) {
 	device.pEnabledFeatures = &deviceFeatures;
 
 	/*  Create device.  */
-	result = vkCreateDevice(vulkancore->gpu, &device, NULL, &vulkancore->device);
+	result = vkCreateDevice(vulkancore->gpu, &device, nullptr, &vulkancore->device);
 	if (result != VK_SUCCESS)
 		throw RuntimeException(fmt::format("Failed to create logical Device - %d", result));
 
@@ -330,13 +330,13 @@ VKRenderInterface::VKRenderInterface(IConfig *config) {
 	cmdPoolCreateInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
 
 	/*  Create command pool.    */
-	result = vkCreateCommandPool(vulkancore->device, &cmdPoolCreateInfo, NULL, &vulkancore->cmd_pool);
+	result = vkCreateCommandPool(vulkancore->device, &cmdPoolCreateInfo, nullptr, &vulkancore->cmd_pool);
 	if (result != VK_SUCCESS)
 		throw RuntimeException(fmt::format("failed to create command pool %d", result));
 
 	/*  TODO determine which languages are supported.   */
 	//    uint32_t nExtensions;
-	//    result = vkEnumerateDeviceExtensionProperties(vulkancore->device , NULL, &nExtensions, NULL);
+	//    result = vkEnumerateDeviceExtensionProperties(vulkancore->device , nullptr, &nExtensions, nullptr);
 	vulkancore->languageSupport = SPIRV;
 	this->getCapability(&vulkancore->capability);
 }
@@ -346,11 +346,11 @@ VKRenderInterface::~VKRenderInterface(void) {
 
 	/*  */
 	// if (cmd_pool)
-	// 	vkDestroyCommandPool(device, cmd_pool, NULL);
+	// 	vkDestroyCommandPool(device, cmd_pool, nullptr);
 
 	/*  */
 	// if (swapChain) {
-	// 	vkDestroySwapchainKHR(device, swapChain->swapchain, NULL);
+	// 	vkDestroySwapchainKHR(device, swapChain->swapchain, nullptr);
 	// }
 
 	if (device)
@@ -417,7 +417,7 @@ Texture *VKRenderInterface::createTexture(TextureDesc *desc) {
 	// imageInfo.flags = 0; // Optional
 
 	// /*  Create image.   */
-	// VkResult result = vkCreateImage(device, &imageInfo, NULL, &vktex->texture);
+	// VkResult result = vkCreateImage(device, &imageInfo, nullptr, &vktex->texture);
 	// if (result != VK_SUCCESS) {
 	// 	throw RuntimeException(fmt::format("Failed creating texture image - %d", result));
 	// }
@@ -432,7 +432,7 @@ Texture *VKRenderInterface::createTexture(TextureDesc *desc) {
 	// allocInfo.memoryTypeIndex = findMemoryType(vulkanCore, memRequirements.memoryTypeBits, properties);
 
 	// /*  Allocate memory for the texture.    */
-	// result = vkAllocateMemory(device, &allocInfo, NULL, &stagingBufferMemory);
+	// result = vkAllocateMemory(device, &allocInfo, nullptr, &stagingBufferMemory);
 	// if (result != VK_SUCCESS) {
 	// 	throw RuntimeException("failed to allocate image memory!");
 	// }
@@ -463,7 +463,7 @@ Texture *VKRenderInterface::createTexture(TextureDesc *desc) {
 	// samplerInfo.minLod = 0.0f;
 	// samplerInfo.maxLod = 0.0f;
 
-	// result = vkCreateSampler(device, &samplerInfo, NULL, &vktex->sampler);
+	// result = vkCreateSampler(device, &samplerInfo, nullptr, &vktex->sampler);
 	// if (result != VK_SUCCESS) {
 	// 	throw RuntimeException("failed to create texture sampler!");
 	// }
@@ -477,9 +477,9 @@ void VKRenderInterface::deleteTexture(Texture *texture) {
 
 	// /*  Release resources.  */
 	// if (vkTextureObject->texture)
-	// 	vkDestroyImage(device, vkTextureObject->texture, NULL);
+	// 	vkDestroyImage(device, vkTextureObject->texture, nullptr);
 	// if (vkTextureObject->sampler)
-	// 	vkDestroySampler(device, vkTextureObject->sampler, NULL);
+	// 	vkDestroySampler(device, vkTextureObject->sampler, nullptr);
 
 	// /*  Release objects.    */
 	// //delete texture->pdata;
@@ -488,7 +488,7 @@ void VKRenderInterface::deleteTexture(Texture *texture) {
 
 Sampler *VKRenderInterface::createSampler(SamplerDesc *desc) {
 
-	if (desc == NULL)
+	if (desc == nullptr)
 		throw InvalidArgumentException("Invalid sampler description pointer object.");
 
 	/*  */
@@ -515,11 +515,11 @@ Shader *VKRenderInterface::createShader(ShaderDesc *desc) {
 	// shaobj->vulkanCore = vulkanCore;
 
 	VkResult result;
-	VkShaderModule vertShaderModule = NULL;
-	VkShaderModule fragShaderModule = NULL;
-	VkShaderModule geomShaderModule = NULL;
-	VkShaderModule tessCShaderModule = NULL;
-	VkShaderModule tessEShaderModule = NULL;
+	VkShaderModule vertShaderModule = nullptr;
+	VkShaderModule fragShaderModule = nullptr;
+	VkShaderModule geomShaderModule = nullptr;
+	VkShaderModule tessCShaderModule = nullptr;
+	VkShaderModule tessEShaderModule = nullptr;
 
 	/*  */
 	VkPipelineShaderStageCreateInfo vertShaderStageInfo = {};
@@ -552,7 +552,7 @@ Shader *VKRenderInterface::createShader(ShaderDesc *desc) {
 	if (1) {
 		// vertShaderModule = createShaderModule(device, (const char*)desc->vertex.vertexBinary,
 		// desc->vertex.size);
-		vertShaderModule = createShaderModule(device, (const char *)NULL, 0); // FIXME
+		vertShaderModule = createShaderModule(device, (const char *)nullptr, 0); // FIXME
 
 		/*  */
 		vertShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
@@ -566,7 +566,7 @@ Shader *VKRenderInterface::createShader(ShaderDesc *desc) {
 	if (1) {
 		// fragShaderModule = createShaderModule(device,  (const char*)desc->fragment.fragmentBinary,
 		// desc->fragment.size);
-		fragShaderModule = createShaderModule(device, (const char *)NULL, 0); // FIXME
+		fragShaderModule = createShaderModule(device, (const char *)nullptr, 0); // FIXME
 
 		fragShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
 		fragShaderStageInfo.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
@@ -630,7 +630,7 @@ Shader *VKRenderInterface::createShader(ShaderDesc *desc) {
 		//        info.layout = computePipeline.pipelineLayout;
 
 		VkComputePipelineCreateInfo computePipelineCreateInfo = {};
-		// result = vkCreateComputePipelines(gpu, NULL, 1, &computePipelineCreateInfo, NULL,
+		// result = vkCreateComputePipelines(gpu, nullptr, 1, &computePipelineCreateInfo, nullptr,
 		// &shaobj->graphicsPipeline);
 	}
 
@@ -639,7 +639,7 @@ Shader *VKRenderInterface::createShader(ShaderDesc *desc) {
 	samplerLayoutBinding.binding = 1;
 	samplerLayoutBinding.descriptorCount = 1;
 	samplerLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-	samplerLayoutBinding.pImmutableSamplers = NULL;
+	samplerLayoutBinding.pImmutableSamplers = nullptr;
 	samplerLayoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
 
 	VkDescriptorSetLayoutCreateInfo layoutInfo = {};
@@ -648,7 +648,7 @@ Shader *VKRenderInterface::createShader(ShaderDesc *desc) {
 	layoutInfo.pBindings = &samplerLayoutBinding;
 
 	VkDescriptorSetLayout setLayout;
-	result = vkCreateDescriptorSetLayout(device, &layoutInfo, NULL, &setLayout);
+	result = vkCreateDescriptorSetLayout(device, &layoutInfo, nullptr, &setLayout);
 	if (result != VK_SUCCESS)
 		throw RuntimeException(fmt::format("Failed to create descriptor set layout - %d", result));
 
@@ -658,9 +658,9 @@ Shader *VKRenderInterface::createShader(ShaderDesc *desc) {
 	pipelineLayoutInfo.setLayoutCount = 1;		   // Optional
 	pipelineLayoutInfo.pSetLayouts = &setLayout;   // Optional
 	pipelineLayoutInfo.pushConstantRangeCount = 0; // Optional
-	pipelineLayoutInfo.pPushConstantRanges = NULL; // Optional
+	pipelineLayoutInfo.pPushConstantRanges = nullptr; // Optional
 
-	result = vkCreatePipelineLayout(device, &pipelineLayoutInfo, NULL, &shaobj->pipelineLayout);
+	result = vkCreatePipelineLayout(device, &pipelineLayoutInfo, nullptr, &shaobj->pipelineLayout);
 	if (result != VK_SUCCESS)
 		throw RuntimeException(fmt::format("failed to create pipeline layout - %d!", result));
 
@@ -692,7 +692,7 @@ Shader *VKRenderInterface::createShader(ShaderDesc *desc) {
 	renderPassInfo.subpassCount = 1;
 	renderPassInfo.pSubpasses = &subpass;
 
-	if (vkCreateRenderPass(device, &renderPassInfo, NULL, &renderPass) != VK_SUCCESS)
+	if (vkCreateRenderPass(device, &renderPassInfo, nullptr, &renderPass) != VK_SUCCESS)
 		throw RuntimeException(fmt::format("failed to create render pass - %d", result));
 
 	/*  */
@@ -803,7 +803,7 @@ Shader *VKRenderInterface::createShader(ShaderDesc *desc) {
 	pipelineInfo.pViewportState = &viewportState;
 	pipelineInfo.pRasterizationState = &rasterizer;
 	pipelineInfo.pMultisampleState = &multisampling;
-	pipelineInfo.pDepthStencilState = NULL; // Optional
+	pipelineInfo.pDepthStencilState = nullptr; // Optional
 	pipelineInfo.pColorBlendState = &colorBlending;
 	pipelineInfo.pDynamicState = &dynamicState; // Optional
 	pipelineInfo.layout = shaobj->pipelineLayout;
@@ -813,21 +813,21 @@ Shader *VKRenderInterface::createShader(ShaderDesc *desc) {
 	pipelineInfo.basePipelineIndex = -1;			  // Optional
 
 	/*  Create graphic pipeline.    */
-	result = vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, &pipelineInfo, NULL, &shaobj->graphicsPipeline);
+	result = vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &shaobj->graphicsPipeline);
 	if (result != VK_SUCCESS)
 		throw RuntimeException(fmt::format("vkCreateGraphicsPipelines failed - %d", result));
 
 	/*  Release shader moudles once used.  */
 	if (vertShaderModule)
-		vkDestroyShaderModule(device, vertShaderModule, NULL);
+		vkDestroyShaderModule(device, vertShaderModule, nullptr);
 	if (fragShaderModule)
-		vkDestroyShaderModule(device, fragShaderModule, NULL);
+		vkDestroyShaderModule(device, fragShaderModule, nullptr);
 	if (geomShaderModule)
-		vkDestroyShaderModule(device, geomShaderModule, NULL);
+		vkDestroyShaderModule(device, geomShaderModule, nullptr);
 	if (tessCShaderModule)
-		vkDestroyShaderModule(device, tessCShaderModule, NULL);
+		vkDestroyShaderModule(device, tessCShaderModule, nullptr);
 	if (tessEShaderModule)
-		vkDestroyShaderModule(device, tessEShaderModule, NULL);
+		vkDestroyShaderModule(device, tessEShaderModule, nullptr);
 
 	return shader;
 }
@@ -868,7 +868,7 @@ Buffer *VKRenderInterface::createBuffer(BufferDesc *desc) {
 	bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
 	/*  Create buffer.  */
-	result = vkCreateBuffer(device, &bufferInfo, NULL, &vkBufferObject->buffer);
+	result = vkCreateBuffer(device, &bufferInfo, nullptr, &vkBufferObject->buffer);
 	if (result != VK_SUCCESS) {
 		throw RuntimeException(fmt::format("failed to create vertex buffer %d", result));
 	}
@@ -908,7 +908,7 @@ void VKRenderInterface::deleteBuffer(Buffer *object) {
 
 	// // vkFreeMemory(device, vertexBufferMemory, nullptr);
 	// if (bufferObject->buffer)
-	// 	vkDestroyBuffer(device, bufferObject->buffer, NULL);
+	// 	vkDestroyBuffer(device, bufferObject->buffer, nullptr);
 
 	// /*  Release objects.    */
 	// //delete object->pdata;
@@ -917,7 +917,7 @@ void VKRenderInterface::deleteBuffer(Buffer *object) {
 
 Geometry *VKRenderInterface::createGeometry(GeometryDesc *desc) {
 	Geometry *geometryObject;
-	VKGeometryObject *glgeoobj = NULL;
+	VKGeometryObject *glgeoobj = nullptr;
 	unsigned int x;
 
 	/*	*/
@@ -1043,9 +1043,9 @@ void VKRenderInterface::setCurrentWindow(RendererWindow *window) { /*  */
 }
 
 FrameBuffer *VKRenderInterface::getDefaultFramebuffer(void *window) {
-	static FrameBuffer *defaultFrambuffer = NULL;
+	static FrameBuffer *defaultFrambuffer = nullptr;
 	/*  TODO add support.   */
-	if (defaultFrambuffer == NULL) {
+	if (defaultFrambuffer == nullptr) {
 		// FrameBuffer *frameBuffer = new FrameBuffer();
 	}
 
@@ -1132,7 +1132,7 @@ void VKRenderInterface::swapBuffer(void) {
 	// submitInfo.commandBufferCount   = 1;
 	// submitInfo.pCommandBuffers      = &swapChain->commandBuffers[imageIndex];
 
-	// result = vkQueueSubmit(queue, 1, &submitInfo, NULL);
+	// result = vkQueueSubmit(queue, 1, &submitInfo, nullptr);
 	// if(result != VK_SUCCESS)
 	// 	throw RuntimeException("Failed to submit to queue.");
 
@@ -1263,9 +1263,9 @@ void VKRenderInterface::setDebug(bool enable) {
 		createInfo.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT;
 		createInfo.flags = VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT;
 		createInfo.pfnCallback = (PFN_vkDebugReportCallbackEXT)debugCallback;
-		createInfo.pUserData = NULL;
+		createInfo.pUserData = nullptr;
 
-		// result = vkCreateDebugReportCallbackEXT(inst, &createInfo, NULL, &debugReport);
+		// result = vkCreateDebugReportCallbackEXT(inst, &createInfo, nullptr, &debugReport);
 		// if(result != VK_SUCCESS)
 		// 	throw RuntimeException(fmt::format("Failed to create debug report callback - %d", result));
 	}
@@ -1292,7 +1292,7 @@ void VKRenderInterface::setDebug(bool enable) {
 }
 
 void VKRenderInterface::getSupportedTextureCompression(TextureDesc::Compression *pCompressions) {
-	if (pCompressions == NULL)
+	if (pCompressions == nullptr)
 		throw InvalidArgumentException("pCompressions may not be a null pointer.");
 
 	unsigned int compressions = 0;
@@ -1318,7 +1318,7 @@ void VKRenderInterface::getCapability(Capability *capability) {
 
 	assert(capability);
 
-	if (capability == NULL)
+	if (capability == nullptr)
 		throw InvalidArgumentException("Must not be a null pointer.");
 
 	/*  */
@@ -1327,7 +1327,7 @@ void VKRenderInterface::getCapability(Capability *capability) {
 	/*  Propertie set.  */
 	VkPhysicalDeviceRayTracingPropertiesNV deviceRayTracingPropertiesNv = {
 		.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PROPERTIES_NV,
-		.pNext = NULL,
+		.pNext = nullptr,
 	};
 	VkPhysicalDeviceBlendOperationAdvancedPropertiesEXT advancedPropertiesExt = {
 		.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BLEND_OPERATION_ADVANCED_PROPERTIES_EXT,
@@ -1365,7 +1365,7 @@ void VKRenderInterface::getCapability(Capability *capability) {
 	/*  Feature set.    */
 	VkPhysicalDeviceMultiviewFeatures deviceMultiviewFeatures = {
 		.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MULTIVIEW_FEATURES,
-		.pNext = NULL,
+		.pNext = nullptr,
 	};
 	VkPhysicalDeviceTransformFeedbackFeaturesEXT deviceTransformFeedbackFeaturesExt = {
 		.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_TRANSFORM_FEEDBACK_FEATURES_EXT,
@@ -1466,7 +1466,7 @@ void VKRenderInterface::getFeatures(Features *features) {
 
 	assert(features);
 
-	if (features == NULL)
+	if (features == nullptr)
 		throw InvalidArgumentException("Must not be a null pointer.");
 }
 
@@ -1510,7 +1510,7 @@ void VKRenderInterface::submittCommand(Ref<CommandList> &list) {
 	submitInfo.commandBufferCount = 1;
 	submitInfo.pCommandBuffers = &l->cmdBuffer;
 
-	VkResult result = vkQueueSubmit(queue, 1, &submitInfo, NULL);
+	VkResult result = vkQueueSubmit(queue, 1, &submitInfo, nullptr);
 	if (result != VK_SUCCESS)
 		throw RuntimeException("Failed to submit to queue.");
 }

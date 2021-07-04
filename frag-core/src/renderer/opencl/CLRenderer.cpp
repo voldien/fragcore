@@ -88,7 +88,7 @@ const char *get_cl_error_str(unsigned int errorcode) {
 
 const char *getCLStringError(unsigned int errorcode) { return get_cl_error_str(errorcode); }
 
-int supportgl(char *extenions) { return strstr(extenions, "cl_khr_gl_sharing") != NULL; }
+int supportgl(char *extenions) { return strstr(extenions, "cl_khr_gl_sharing") != nullptr; }
 
 cl_context createCLContext(unsigned int *ndevices, cl_device_id **devices, SDL_Window *window,
 						   SDL_GLContext glcontext) {
@@ -116,31 +116,31 @@ cl_context createCLContext(unsigned int *ndevices, cl_device_id **devices, SDL_W
 	/*  Context properties.	*/
 	cl_context_properties props[] = {
 		CL_CONTEXT_PLATFORM,
-		(cl_context_properties)NULL,
+		(cl_context_properties)nullptr,
 #ifndef MDHEADLESS
 		glcontext ? CL_GL_CONTEXT_KHR : 0,
 		(cl_context_properties)glcontext,
 #ifdef SDL_VIDEO_DRIVER_X11
 		glcontext ? CL_GLX_DISPLAY_KHR : 0,
-		glcontext ? (cl_context_properties)sysinfo.info.x11.display : NULL,
+		glcontext ? (cl_context_properties)sysinfo.info.x11.display : nullptr,
 #endif
 #endif
-		(cl_context_properties)NULL,
-		NULL,
+		(cl_context_properties)nullptr,
+		nullptr,
 	};
 
 	unsigned int x, y;
 	unsigned int nPlatforms;
 
 	/*	Get Number of platform ids.	*/
-	ciErrNum = clGetPlatformIDs(0, NULL, &nPlatforms);
+	ciErrNum = clGetPlatformIDs(0, nullptr, &nPlatforms);
 	if (ciErrNum != CL_SUCCESS)
 		throw RuntimeException(
 			fmt::format("failed to get number of OpenCL platforms - %s\n", getCLStringError(ciErrNum)));
 
 	/*  Get platform IDs.	*/
 	platforms = (cl_platform_id *)malloc(sizeof(*platforms) * nPlatforms);
-	ciErrNum = clGetPlatformIDs(nPlatforms, platforms, NULL);
+	ciErrNum = clGetPlatformIDs(nPlatforms, platforms, nullptr);
 	if (ciErrNum != CL_SUCCESS)
 		throw RuntimeException(fmt::format("failed to get OpenCL platforms - %s\n", getCLStringError(ciErrNum)));
 
@@ -157,7 +157,7 @@ cl_context createCLContext(unsigned int *ndevices, cl_device_id **devices, SDL_W
 		ciErrNum = clGetPlatformInfo(platforms[x], CL_PLATFORM_EXTENSIONS, sizeof(extenions), &extenions, &pvar);
 		if(ciErrNum != CL_SUCCESS){
 			fprintf(stderr, "clGetPlatformInfo failed: %s\n", getCLStringError(ciErrNum));
-			return NULL;
+			return nullptr;
 		}
 		*/
 
@@ -167,9 +167,9 @@ cl_context createCLContext(unsigned int *ndevices, cl_device_id **devices, SDL_W
 			/*	Get extension function from the platform.	*/
 			clGetGLContextInfoKHR = (clGetGLContextInfoKHR_fn)clGetExtensionFunctionAddressForPlatform(
 				platforms[x], "clGetGLContextInfoKHR");
-			if (clGetGLContextInfoKHR == NULL) {
+			if (clGetGLContextInfoKHR == nullptr) {
 				throw RuntimeException(fmt::format("clGetExtensionFunctionAddressForPlatform failed\n"));
-				return NULL;
+				return nullptr;
 			}
 
 			pvar = 0;
@@ -178,15 +178,15 @@ cl_context createCLContext(unsigned int *ndevices, cl_device_id **devices, SDL_W
 			if (ciErrNum != CL_SUCCESS) {
 				throw RuntimeException(
 					fmt::format("failed to get OpenGL context info - %s\n", getCLStringError(ciErrNum)));
-				return NULL;
+				return nullptr;
 			}
 		} else {
 			/*	get device ids for the GPUS.	*/
-			ciErrNum = clGetDeviceIDs(platforms[x], CL_DEVICE_TYPE_GPU, 0, NULL, ndevices);
+			ciErrNum = clGetDeviceIDs(platforms[x], CL_DEVICE_TYPE_GPU, 0, nullptr, ndevices);
 			if (ciErrNum != CL_SUCCESS) {
 				throw RuntimeException(
 					fmt::format("failed to get Device ID number - %s\n", getCLStringError(ciErrNum)));
-				return NULL;
+				return nullptr;
 			}
 
 			*devices = (cl_device_id *)malloc(sizeof(cl_device_id) * *ndevices);
@@ -194,13 +194,13 @@ cl_context createCLContext(unsigned int *ndevices, cl_device_id **devices, SDL_W
 			if (ciErrNum != CL_SUCCESS) {
 				throw RuntimeException(
 					fmt::format("failed to get Device ID poiners - %s\n", getCLStringError(ciErrNum)));
-				return NULL;
+				return nullptr;
 			}
 
 			/*  Check which devices support image. */
 			for (y = 0; y < *ndevices; y++) {
 				cl_bool imageSupport;
-				clGetDeviceInfo(*devices[y], CL_DEVICE_IMAGE_SUPPORT, sizeof(cl_bool), &imageSupport, NULL);
+				clGetDeviceInfo(*devices[y], CL_DEVICE_IMAGE_SUPPORT, sizeof(cl_bool), &imageSupport, nullptr);
 				if (imageSupport == CL_TRUE) {
 
 				} else {
@@ -214,12 +214,12 @@ cl_context createCLContext(unsigned int *ndevices, cl_device_id **devices, SDL_W
 
 	/*	Create context.	*/
 	assert(props[1] && props[0]);
-	context = clCreateContext(props, *ndevices, *devices, NULL, NULL, &ciErrNum);
+	context = clCreateContext(props, *ndevices, *devices, nullptr, nullptr, &ciErrNum);
 
 	/*  Error check.    */
-	if (context == NULL || ciErrNum != CL_SUCCESS) {
+	if (context == nullptr || ciErrNum != CL_SUCCESS) {
 		throw RuntimeException(fmt::format("failed to create OpenCL context - %s\n", getCLStringError(ciErrNum)));
-		return NULL;
+		return nullptr;
 	}
 
 	free(platforms);
@@ -233,18 +233,18 @@ cl_program createProgram(cl_context context, unsigned int nDevices, cl_device_id
 
 	assert(context);
 	/*  TODO add exception. */
-	if (device == NULL || nDevices < 1) {
+	if (device == nullptr || nDevices < 1) {
 		throw RuntimeException(fmt::format("Failed to create program CL shader - \n %s", getCLStringError(ciErrNum)));
 	}
 
 	/*	*/
-	program = clCreateProgramWithSource(context, 1, (const char **)&source, NULL, &ciErrNum);
-	if (program == NULL || ciErrNum != CL_SUCCESS) {
+	program = clCreateProgramWithSource(context, 1, (const char **)&source, nullptr, &ciErrNum);
+	if (program == nullptr || ciErrNum != CL_SUCCESS) {
 		throw RuntimeException(fmt::format("Failed to create program CL shader - \n %s", getCLStringError(ciErrNum)));
 	}
 
 	/*	Compile and build CL program.   */
-	ciErrNum = clBuildProgram(program, nDevices, device, "", NULL, NULL);
+	ciErrNum = clBuildProgram(program, nDevices, device, "", nullptr, nullptr);
 	if (ciErrNum != CL_SUCCESS) {
 		if (ciErrNum == CL_BUILD_PROGRAM_FAILURE) {
 			char build_log[900];
@@ -280,7 +280,7 @@ cl_kernel createKernel(cl_program program, const char *name) {
 	if (ciErrNum != CL_SUCCESS || !kernel) {
 		throw RuntimeException(
 			fmt::format("failed to create OpeNCL kernel from program - %s\n", getCLStringError(ciErrNum)));
-		return NULL;
+		return nullptr;
 	}
 	return kernel;
 }
@@ -306,13 +306,13 @@ cl_command_queue createCommandQueue(cl_context context, cl_device_id device) {
 //
 //#ifndef MDHEADLESS
 //	if (!glIsTexture(texture->texture))
-//		return NULL;
+//		return nullptr;
 //#endif
 //
 //	mem = clCreateFromGLTexture(context, CL_MEM_READ_WRITE, texture->target, 0, texture->texture, &ciErrNum);
 //	if (ciErrNum != CL_SUCCESS) {
 //		fprintf(stderr, "clCreateFromGLTexture failed: %s\n", getCLStringError(ciErrNum));
-//		return NULL;
+//		return nullptr;
 //	}
 //
 //	return mem;
@@ -333,14 +333,14 @@ cl_mem createWTextureMem(cl_context context, int width, int height) {
 	desc.image_slice_pitch = 0;
 	desc.num_mip_levels = 0;
 	desc.num_samples = 0;
-	desc.buffer = NULL;
+	desc.buffer = nullptr;
 
 	/*  Format. */
 	form.image_channel_order = CL_RGBA;
 	form.image_channel_data_type = CL_UNSIGNED_INT8;
 
 	/*  */
-	cl_mem mem = clCreateImage(context, CL_MEM_WRITE_ONLY, &form, &desc, NULL, &ciErrNum);
+	cl_mem mem = clCreateImage(context, CL_MEM_WRITE_ONLY, &form, &desc, nullptr, &ciErrNum);
 	if (ciErrNum != CL_SUCCESS)
 		throw RuntimeException(fmt::format("clCreateImage failed: %s\n", getCLStringError(ciErrNum)));
 
@@ -352,7 +352,7 @@ void aquireGLObject(cl_command_queue queue, cl_mem mem) {
 	cl_int ciErrNum;
 
 	/*	*/
-	ciErrNum = clEnqueueAcquireGLObjects(queue, 1, (const cl_mem *)&mem, 0, NULL, NULL);
+	ciErrNum = clEnqueueAcquireGLObjects(queue, 1, (const cl_mem *)&mem, 0, nullptr, nullptr);
 
 	if (ciErrNum != CL_SUCCESS) {
 		fprintf(stderr, "failed to aquire OpenCL/GL buffer object - %s\n", getCLStringError(ciErrNum));
@@ -363,7 +363,7 @@ void releaseGLObject(cl_command_queue queue, cl_mem mem) {
 
 	cl_int ciErrNum;
 
-	ciErrNum = clEnqueueReleaseGLObjects(queue, 1, (const cl_mem *)&mem, 0, NULL, NULL);
+	ciErrNum = clEnqueueReleaseGLObjects(queue, 1, (const cl_mem *)&mem, 0, nullptr, nullptr);
 
 	if (ciErrNum != CL_SUCCESS) {
 		fprintf(stderr, "failed to release OpenCL/GL buffer object - %s\n", getCLStringError(ciErrNum));
@@ -382,18 +382,18 @@ IRenderer::IRenderer(IConfig *config) {
 	clCore->anInterface = eOpenGL;
 	clCore->back_renderer = RenderingFactory::createRendering(RenderingFactory::OpenGL, (IConfig *)config);
 	/*  */
-	if (clCore->back_renderer == NULL) {
+	if (clCore->back_renderer == nullptr) {
 		clCore->anInterface = eVulkan;
 		clCore->back_renderer = RenderingFactory::createRendering(RenderingFactory::Vulkan, (IConfig *)config);
 	}
 
 	/*  */
-	if (clCore->back_renderer == NULL) {
+	if (clCore->back_renderer == nullptr) {
 		clCore->anInterface = eDirectX;
 		clCore->back_renderer = RenderingFactory::createRendering(RenderingFactory::DirectX, (IConfig *)config);
 	}
 
-	if (this->pdata == NULL)
+	if (this->pdata == nullptr)
 		throw RuntimeException("No valid back renderer for the OpenCL Rendering interface.");
 }
 
@@ -466,7 +466,7 @@ void IRenderer::deleteGeometry(Geometry *obj) {
 
 FrameBuffer *IRenderer::createFrameBuffer(FrameBufferDesc *desc) {
 	OpenCLCore *core = (OpenCLCore *)this->pdata;
-	return NULL;
+	return nullptr;
 }
 
 void IRenderer::deleteFrameBuffer(FrameBuffer *obj) { OpenCLCore *core = (OpenCLCore *)this->pdata; }
@@ -478,13 +478,13 @@ RendererWindow *IRenderer::createWindow(int x, int y, int width, int height) {
 	clCore->window = clCore->back_renderer->createWindow(x, y, width, height);
 
 	/*  Create OpenCL context.  */
-	// clCore->context = (cl_context)createCLContext(&clCore->ndevices, &clCore->devices, clCore->window, NULL);
+	// clCore->context = (cl_context)createCLContext(&clCore->ndevices, &clCore->devices, clCore->window, nullptr);
 	// clCore->selectDevice = clCore->devices[0];
 
 	/*  Create OpenCL command queue.    */
 	clCore->selectqueue = createCommandQueue(clCore->context, clCore->selectDevice);
 
-	return NULL; // clCore->window;
+	return nullptr; // clCore->window;
 }
 
 void IRenderer::createSwapChain() {
@@ -548,7 +548,7 @@ const char *IRenderer::getShaderVersion(ShaderLanguage language) const {
 	if (language != ShaderLanguage::CLC)
 		return core->back_renderer->getShaderVersion(language);
 	else {
-		clGetDeviceInfo(core->selectDevice, CL_DEVICE_OPENCL_C_VERSION, sizeof(shaderversion), &shaderversion, NULL);
+		clGetDeviceInfo(core->selectDevice, CL_DEVICE_OPENCL_C_VERSION, sizeof(shaderversion), &shaderversion, nullptr);
 		return shaderversion;
 	}
 }
@@ -562,7 +562,7 @@ const char *IRenderer::getAPIVersion(void) const {
 	OpenCLCore *core = (OpenCLCore *)this->pdata;
 	const char *v;
 
-	clGetDeviceInfo(core->selectDevice, CL_DEVICE_VERSION, sizeof(v), &v, NULL);
+	clGetDeviceInfo(core->selectDevice, CL_DEVICE_VERSION, sizeof(v), &v, nullptr);
 	return v;
 }
 

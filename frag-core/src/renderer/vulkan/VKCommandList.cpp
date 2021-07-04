@@ -23,7 +23,7 @@ VKCommandList::VKCommandList(Ref<IRenderer> &renderer) {
 	// cmdPoolCreateInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
 
 	// /*  Create command pool.    */
-	// checkError(vkCreateCommandPool(vulkancore->device, &cmdPoolCreateInfo, NULL, &_pool));
+	// checkError(vkCreateCommandPool(vulkancore->device, &cmdPoolCreateInfo, nullptr, &_pool));
 
 	// VkCommandBufferAllocateInfo cbAI = {};
 	// cbAI.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -93,7 +93,7 @@ void VKCommandList::clearColorTarget(uint index, const Color &color) {}
 
 void VKCommandList::dispatch(uint groupCountX, uint groupCountY, uint groupCountZ) {
 	uint global[3] = {groupCountX, groupCountY, groupCountZ};
-	// this->compute->dispatchCompute(global, NULL, 0);
+	// this->compute->dispatchCompute(global, nullptr, 0);
 	// vkCmdBindPipeline
 	vkCmdDispatch(cmdBuffer, groupCountX, groupCountY, groupCountZ);
 
@@ -122,14 +122,14 @@ void VKCommandList::dispatchIndirect(Buffer *buffer, u_int64_t offset) {
 	VKBufferObject *vkBuffer = (VKBufferObject *)buffer->getObject();
 	vkCmdDispatchIndirect(cmdBuffer, vkBuffer->buffer, offset);
 	// uint global[3] = {groupCountX, groupCountY, groupCountZ};
-	// this->compute->dispatchCompute(global, NULL, 0);
+	// this->compute->dispatchCompute(global, nullptr, 0);
 }
 
 void VKCommandList::pushDebugGroup(const char *name) {
 	VkDebugMarkerMarkerInfoEXT markerinfo = {};
 	markerinfo.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_MARKER_INFO_EXT;
 	markerinfo.pMarkerName = name;
-	markerinfo.pNext = NULL;
+	markerinfo.pNext = nullptr;
 
 	pvkCmdDebugMarkerBeginEXT(cmdBuffer, &markerinfo);
 }
@@ -139,7 +139,7 @@ void VKCommandList::insertDebugMarker(const char *name) {
 	VkDebugMarkerMarkerInfoEXT markerinfo = {};
 	markerinfo.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_MARKER_INFO_EXT;
 	markerinfo.pMarkerName = name;
-	markerinfo.pNext = NULL;
+	markerinfo.pNext = nullptr;
 
 	pvkCmdDebugMarkerInsertEXT(cmdBuffer, &markerinfo);
 }

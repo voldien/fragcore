@@ -83,12 +83,12 @@ namespace fragcore {
 		}
 	public:
 		Ref(void) {
-			reference = NULL;
+			reference = nullptr;
 		}
 
 		Ref(T *p_reference) {
 
-			reference = NULL;
+			reference = nullptr;
 			if (p_reference) {
 				this->reference = p_reference;
 				ref_pointer(p_reference);
@@ -96,7 +96,7 @@ namespace fragcore {
 		}
 
 		Ref(T& p_reference){
-			T* reference = NULL;
+			T* reference = nullptr;
 			if (&p_reference != nullptr) {
 				this->reference = &p_reference;
 				ref_pointer(&p_reference);
@@ -125,7 +125,7 @@ namespace fragcore {
 			}
 
 			/*	*/
-			this->reference = NULL;
+			this->reference = nullptr;
 		}
 	};
 }

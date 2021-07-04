@@ -13,11 +13,11 @@ AudioInterface *AudioFactory::createAudioInterface(AudioAPI api, IConfig *config
 
 AudioInterface *AudioFactory::createAudioInterface(const char *cpathlib, IConfig *config) {
 	Library library;
-	AudioInterface *interface = NULL;
+	AudioInterface *interface = nullptr;
 	const char *funcsymbol = "createInternalAudioInterface";
 	pcreateinternalaudio pfunc;
 
-	if (cpathlib == NULL)
+	if (cpathlib == nullptr)
 		throw InvalidArgumentException(fmt::format("Invalid filepath do dynamic library: %s", cpathlib));
 
 	// TODO allow for the plugin to have a default state.

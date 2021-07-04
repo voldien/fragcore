@@ -30,7 +30,7 @@ namespace fragcore {
 
 	public:
 		Octree(void) {
-			nodes = NULL;
+			nodes = nullptr;
 			nrOfElements = 0;
 			reserved = 0;
 		}

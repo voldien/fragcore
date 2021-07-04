@@ -63,7 +63,7 @@ namespace fragcore {
 	public:
 
 		FV_ALWAYS_INLINE RefPtr(void) {
-			this->ref = NULL;
+			this->ref = nullptr;
 		}
 
 		FV_ALWAYS_INLINE RefPtr(T *ref) {

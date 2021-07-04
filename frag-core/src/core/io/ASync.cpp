@@ -177,7 +177,7 @@ void ASync::async_read(Task *task) {
 
 	/*  Finished.   */
 	if (ao->callback)
-		ao->callback(nullptr, NULL);
+		ao->callback(nullptr, nullptr);
 	/*  Finish and posted for the data is available.  */
 	schSemaphorePost((schSemaphore *)ao->semaphore);
 }
@@ -197,7 +197,7 @@ void ASync::async_read_io(Task *task) {
 
 	/*  Finished.   */
 	if (ao->callback)
-		ao->callback(nullptr, NULL);
+		ao->callback(nullptr, nullptr);
 	/*  Finish and posted for the data is available.  */
 	schSemaphorePost((schSemaphore *)ao->semaphore);
 }
@@ -217,7 +217,7 @@ void ASync::async_write(Task *task) {
 
 	io->flush();
 	if (ao->callback)
-		ao->callback(nullptr, NULL);
+		ao->callback(nullptr, nullptr);
 	/*  Finish and posted for the data is available.  */
 	schSemaphorePost((schSemaphore *)ao->semaphore);
 }

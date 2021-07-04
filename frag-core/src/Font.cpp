@@ -2,7 +2,7 @@
 using namespace fragcore;
 
 Font::Font(void) {
-	this->texture = NULL;
+	this->texture = nullptr;
 }
 
 Font::~Font(void) {

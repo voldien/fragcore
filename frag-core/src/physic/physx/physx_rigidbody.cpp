@@ -133,7 +133,7 @@ Vector3 RigidBody::getVelocity(void)
 
 VDRigidBody::VDRigidBody(void) : VDPhysicActor()
 {
-	this->actor = NULL;
+	this->actor = nullptr;
 }
 
 void VDRigidBody::instanceInitilize(void)
@@ -148,7 +148,7 @@ void VDRigidBody::instanceInitilize(void)
 void VDRigidBody::initializeComponent(void)
 {
 	VDPhysicActor::initializeComponent();
-	this->initVDPhysicObject((this->collider() != NULL) ? true : false, true);
+	this->initVDPhysicObject((this->collider() != nullptr) ? true : false, true);
 	this->kinect(false);
 	this->useGraivity(true);
 	this->setMass(1.0f);

@@ -29,7 +29,7 @@ namespace fragcore {
 	template <class T, int U = 0> class Queue : public std::allocator<T> {
 	  public:
 		Queue(void) {
-			this->mdata = NULL;
+			this->mdata = nullptr;
 			this->reserved = 0;
 			this->nrElements = 0;
 			clear();
@@ -39,7 +39,7 @@ namespace fragcore {
 		Queue(unsigned int nrOfElements) {
 			if (nrOfElements <= 0)
 				throw InvalidArgumentException("");
-			this->mdata = NULL;
+			this->mdata = nullptr;
 			this->reserved = 0;
 			this->nrElements = 0;
 			clear();
@@ -97,7 +97,7 @@ namespace fragcore {
 		 *	Resize queue.
 		 */
 		void resize(unsigned int size) {
-			if (this->mdata == NULL) {
+			if (this->mdata == nullptr) {
 				this->mdata = (T *)malloc(this->getTypeSize() * size);
 			} else {
 				this->mdata = (T *)realloc(this->mdata, this->getTypeSize() * size);

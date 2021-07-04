@@ -14,8 +14,8 @@ using namespace std;
 VDVector<AudioSource *> audioSources;
 
 AudioSource::AudioSource(void) {
-	this->Clip = NULL;
-	this->channel = NULL;
+	this->Clip = nullptr;
+	this->channel = nullptr;
 }
 
 void AudioSource::instanceInitilize(void) {
@@ -36,8 +36,8 @@ void AudioSource::onDestroy(void) {
 }
 
 void AudioSource::initializeComponent(void) {
-	this->channel = NULL;
-	this->Clip = NULL;
+	this->channel = nullptr;
+	this->Clip = nullptr;
 	audioSources.push_back(this);
 }
 
@@ -130,7 +130,7 @@ void AudioSource::setMaxDistance(float maxDistance) {
 
 float AudioSource::getMaxDistance(void) const {
 	float max;
-	this->channel->get3DMinMaxDistance(NULL, &max);
+	this->channel->get3DMinMaxDistance(nullptr, &max);
 	return max;
 }
 
@@ -140,7 +140,7 @@ void AudioSource::setMinDistance(float Mindistance) {
 
 float AudioSource::getMinDistance(void) const {
 	float min;
-	this->channel->get3DMinMaxDistance(&min, NULL);
+	this->channel->get3DMinMaxDistance(&min, nullptr);
 	return min;
 }
 
@@ -178,7 +178,7 @@ void AudioSource::AudioMechanicUpdate(VDDoubleBufferedAllocator *allocator) {
 		if ((audioSources[x])->Clip->is3D()) {
 			VDVector3 prePos;
 			VDVector3 vel;
-			audioSources[x]->channel->get3DAttributes((FMOD_VECTOR * ) & prePos, NULL);
+			audioSources[x]->channel->get3DAttributes((FMOD_VECTOR * ) & prePos, nullptr);
 			vel = prePos - audioSources[x]->transform()->postion;
 			results = audioSources[x]->channel->set3DAttributes(
 					(FMOD_VECTOR * ) & audioSources[x]->transform()->postion,

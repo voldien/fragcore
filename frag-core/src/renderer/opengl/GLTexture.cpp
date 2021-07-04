@@ -267,9 +267,9 @@ void Texture::resize(int width, int height, Texture::Format format, bool hasMipM
 	// this->bind(0);
 
 	// GL_TEXTURE_IMMUTABLE_FORMAT'
-	glTexImage2D(texobj->target, 0, getImageInternalFormat(format), width, height, 0, GL_RED, GL_UNSIGNED_BYTE, NULL);
+	glTexImage2D(texobj->target, 0, getImageInternalFormat(format), width, height, 0, GL_RED, GL_UNSIGNED_BYTE, nullptr);
 	// glTextureStorage2D(texobj->texture, 1, getImageInternalFormat(Texture::Format::eR8G8B8A8), width,
-	//               height); // TODO add only if mipmaps is used with NULL pixel object.
+	//               height); // TODO add only if mipmaps is used with nullptr pixel object.
 
 	texobj->desc.width = width;
 	texobj->desc.height = height;
@@ -290,14 +290,14 @@ void *Texture::mapTexture(Format format, unsigned int level) {
 
 	glGenBuffersARB(1, &texobj->pbo);
 	glBindBufferARB(GL_PIXEL_PACK_BUFFER, texobj->pbo);
-	glBufferDataARB(GL_PIXEL_PACK_BUFFER, bufferSize, NULL, GL_DYNAMIC_COPY);
+	glBufferDataARB(GL_PIXEL_PACK_BUFFER, bufferSize, nullptr, GL_DYNAMIC_COPY);
 
 	if (glGetTextureImage) {
-		glGetTextureImage(texobj->texture, level, _format, _type, bufferSize, NULL);
+		glGetTextureImage(texobj->texture, level, _format, _type, bufferSize, nullptr);
 	} else {
 		/* TODO resolve texture type.   */
 		glBindTexture(texobj->target, texobj->texture);
-		glGetTexImage(texobj->target, level, _format, _type, NULL);
+		glGetTexImage(texobj->target, level, _format, _type, nullptr);
 	}
 
 	// TODO add PBO buffer array in the OpenGL object.
@@ -380,7 +380,7 @@ void Texture::clear(void) {
 	GLTextureObject *texobj = (GLTextureObject *)this->pdata;
 
 	if (glClearTexImage)
-		glClearTexImage(texobj->texture, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+		glClearTexImage(texobj->texture, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
 	else {
 	}
 }

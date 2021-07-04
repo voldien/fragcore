@@ -73,13 +73,13 @@ namespace fragcore {
 
 	  public:
 		DisjointSet(void) {
-			this->set = NULL;
+			this->set = nullptr;
 			this->reserved = 0;
 			this->size = 0;
 		}
 
 		DisjointSet(int size) {
-			this->set = NULL;
+			this->set = nullptr;
 			this->size = 0;
 			this->reserved = 0;
 			this->resize(size);

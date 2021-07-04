@@ -15,7 +15,7 @@ namespace fragcore {
 
 	public:
 		DynamicObjects(void) {
-			this->attachment = NULL;
+			this->attachment = nullptr;
 		}
 
 		/**
@@ -23,7 +23,7 @@ namespace fragcore {
 		 * @return
 		 */
 		bool isAttached(void) const {
-			return attachment != NULL;
+			return attachment != nullptr;
 		}
 
 		/*  */

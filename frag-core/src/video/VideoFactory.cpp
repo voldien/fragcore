@@ -138,20 +138,20 @@ VideoTexture *VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IR
 		throw RuntimeException(fmt::format("Failed to open input : %s", buf));
 	}
 
-	if ((result = avformat_find_stream_info(header.pformatCtx, NULL)) < 0) {
+	if ((result = avformat_find_stream_info(header.pformatCtx, nullptr)) < 0) {
 		char buf[AV_ERROR_MAX_STRING_SIZE];
 		av_strerror(result, buf, sizeof(buf));
 		throw RuntimeException(fmt::format"Failed to retrieve info from stream info : %s", buf));
 	}
-	struct AVStream *video_st = NULL;
-	struct AVStream *audio_st = NULL;
+	struct AVStream *video_st = nullptr;
+	struct AVStream *audio_st = nullptr;
 
 	/*	Get video codecs.	*/
 	for (int x = 0; x < header.pformatCtx->nb_streams; x++) {
 		AVStream *stream = header.pformatCtx->streams[x];
 
 		/*  */
-		if (stream->codecpar == NULL)
+		if (stream->codecpar == nullptr)
 			continue;
 
 		switch (stream->codecpar->codec_type) {
@@ -188,7 +188,7 @@ VideoTexture *VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IR
 			throw RuntimeException(fmt::format"Failed to set codec parameters : %s", buf));
 		}
 
-		result = avcodec_open2(header.pAudioCtx, audioCodec, NULL);
+		result = avcodec_open2(header.pAudioCtx, audioCodec, nullptr);
 		if (result < 0) {
 			char buf[AV_ERROR_MAX_STRING_SIZE];
 			av_strerror(result, buf, sizeof(buf));
@@ -199,10 +199,10 @@ VideoTexture *VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IR
 	AVCodecParameters *pVideoCodecParam = video_st->codecpar;
 
 	AVCodec *pVideoCodec = avcodec_find_decoder(pVideoCodecParam->codec_id);
-	if (pVideoCodec == NULL)
+	if (pVideoCodec == nullptr)
 		throw RuntimeException("failed to find decoder");
 	header.pVideoCtx = avcodec_alloc_context3(pVideoCodec);
-	if (header.pVideoCtx == NULL)
+	if (header.pVideoCtx == nullptr)
 		throw RuntimeException("Failed to allocate video decoder context");
 
 	// AV_PIX_FMT_FLAG_RGB
@@ -220,7 +220,7 @@ VideoTexture *VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IR
 	// av_find_best_pix_fmt_of_2
 	// avcodec_default_get_format()
 
-	if ((result = avcodec_open2(header.pVideoCtx, pVideoCodec, NULL)) != 0) {
+	if ((result = avcodec_open2(header.pVideoCtx, pVideoCodec, nullptr)) != 0) {
 		char buf[AV_ERROR_MAX_STRING_SIZE];
 		av_strerror(result, buf, sizeof(buf));
 		throw RuntimeException(fmt::format"Failed to retrieve info from stream info : %s", buf));
@@ -233,7 +233,7 @@ VideoTexture *VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IR
 	av_image_alloc(header.frameoutput->data, header.frameoutput->linesize, header.pVideoCtx->width,
 				   header.pVideoCtx->height, AV_PIX_FMT_BGRA, 4);
 
-	if (header.frame == NULL)
+	if (header.frame == nullptr)
 		throw RuntimeException(fmt::format"Failed to allocate frame"));
 
 	// m_bufferSize = avpicture_get_size(PIX_FMT_RGB24, width, height);
@@ -245,7 +245,7 @@ VideoTexture *VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IR
 	// AVPacket *pPacket = av_packet_alloc();
 	header.sws_ctx = sws_getContext(header.pVideoCtx->width, header.pVideoCtx->height, header.pVideoCtx->pix_fmt,
 									header.pVideoCtx->width, header.pVideoCtx->height, AV_PIX_FMT_BGRA, SWS_BICUBIC,
-									NULL, NULL, NULL);
+									nullptr, nullptr, nullptr);
 
 	header.frame_timer = av_gettime() / 1000000.0;
 
@@ -366,7 +366,7 @@ VideoTexture *VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IR
 	desc.marker.markerName = ref->getName().c_str();
 	Texture *texture = renderer->createTexture(&desc);
 
-	VideoTexture *videoTexture = NULL;
+	VideoTexture *videoTexture = nullptr;
 	videoTexture->audioClip = Ref<AudioClip>(*audio);
 	// videoTexture->decoder = video_audio_decoder;
 	videoTexture->texture = Ref<Texture>(texture);

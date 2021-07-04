@@ -40,7 +40,7 @@ Font *FontFactory::createFont(Ref<IRenderer> &renderer, Ref<IO> &io, float size,
 	int bitmap_offset_x = 0, bitmap_offset_y = 0;
 
 	/*  Validate arguments. */
-	if (renderer == NULL)
+	if (renderer == nullptr)
 		throw InvalidArgumentException("Requires none-null renderer object.");
 	if (size <= 0.0f)
 		throw InvalidArgumentException("Requires size to be greater than 0.");
@@ -273,7 +273,7 @@ Font *FontFactory::createSDFFont(Ref<IRenderer> &renderer, Ref<IO> &io, float si
 	int bitmap_offset_x = 0, bitmap_offset_y = 0;
 
 	/*  Validate arguments. */
-	if (renderer == NULL)
+	if (renderer == nullptr)
 		throw InvalidArgumentException("Requires none-null renderer object.");
 	if (size <= 0.0f)
 		throw InvalidArgumentException("Requires size to be greater than 0.");

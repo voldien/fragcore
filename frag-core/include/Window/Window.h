@@ -94,7 +94,7 @@ namespace fragcore {
 		virtual float computeGammaExponent(const ushort *rgbRamp) const;			/*  */
 
 	  protected:
-		void *userData = NULL;
+		void *userData = nullptr;
 	};
 } // namespace fragcore
 

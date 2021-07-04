@@ -66,7 +66,7 @@ VorbisAudioDecoder::VorbisAudioDecoder(Ref<IO> &io) : AudioDecoder(io) {
 	callbacks.tell_func = AR_tellOgg;
 
 	io->seek(0, IO::SET);
-	int ret = ov_open_callbacks((void *)t, ov, NULL, 0, callbacks);
+	int ret = ov_open_callbacks((void *)t, ov, nullptr, 0, callbacks);
 
 	if (ov_seekable(ov)) {
 		// TODO remove

@@ -28,7 +28,7 @@ Texture* TextureFactory::createPerlinNoise(IRenderer *renderer, int width, int h
 	int pixelSize = width * height * 1;
 
 	assert(renderer && width > 0 && height > 0);
-	if(renderer == NULL)
+	if(renderer == nullptr)
 		throw InvalidArgumentException();
 
 	for (int x = 0; x < width; x)

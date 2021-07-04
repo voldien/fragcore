@@ -15,7 +15,7 @@ FrameBufferTexture::FrameBufferTexture(void) {
 	glGenBuffersARB(1, &this->pbo);
 	glBindBufferARB(GL_PIXEL_PACK_BUFFER, pbo);
 	// TODO improve
-	glBufferDataARB(GL_PIXEL_PACK_BUFFER, 4147200 * 4, NULL, GL_DYNAMIC_COPY); // TODO deal with the allocation and etc.
+	glBufferDataARB(GL_PIXEL_PACK_BUFFER, 4147200 * 4, nullptr, GL_DYNAMIC_COPY); // TODO deal with the allocation and etc.
 }
 
 void *FrameBufferTexture::mapTexture(Format format, unsigned int level) {
@@ -30,7 +30,7 @@ void *FrameBufferTexture::mapTexture(Format format, unsigned int level) {
 	glBindBuffer(GL_PIXEL_PACK_BUFFER, this->pbo);
 
 	/*  */
-	glReadPixels(0, 0, width(), height(), _format, GL_UNSIGNED_BYTE, NULL);
+	glReadPixels(0, 0, width(), height(), _format, GL_UNSIGNED_BYTE, nullptr);
 	return glMapBufferARB(GL_PIXEL_PACK_BUFFER_ARB, GL_READ_ONLY_ARB);
 }
 
@@ -71,8 +71,8 @@ void *FrameBufferTexture::getPixels(Format format, unsigned int level, unsigned 
 	// TODO add support.
 	// if PBO supported, otherwise, the slow versino.
 	GLenum glformat = getTextureGLFormat(format);
-	glReadPixels(0, 0, this->width(), this->height(), glformat, GL_UNSIGNED_BYTE, NULL);
-	return NULL; // Texture::getPixels(mipmap, nBytes);
+	glReadPixels(0, 0, this->width(), this->height(), glformat, GL_UNSIGNED_BYTE, nullptr);
+	return nullptr; // Texture::getPixels(mipmap, nBytes);
 }
 
 unsigned int FrameBufferTexture::width(void) {

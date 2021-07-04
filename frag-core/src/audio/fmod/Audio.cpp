@@ -3,11 +3,11 @@
 
 
 using namespace fmod;
-FMOD* fmodSystem = NULL;
+FMOD* fmodSystem = nullptr;
 
 int VDAudio::init(void){
 
-	if(fmodSystem != NULL){
+	if(fmodSystem != nullptr){
 		return 1;
 	}
 
@@ -73,15 +73,15 @@ int VDAudio::init(void){
 	}
 	#ifdef EX_DEBUG
 	#   ifndef __cplusplus
-	    FMOD_System_Init(fmodSystem,200,FMOD_INIT_NORMAL | FMOD_INIT_ENABLE_PROFILE, NULL);
+	    FMOD_System_Init(fmodSystem,200,FMOD_INIT_NORMAL | FMOD_INIT_ENABLE_PROFILE, nullptr);
 	#   else
-	    result = fmodSystem->init(200, FMOD_INIT_NORMAL | FMOD_INIT_ENABLE_PROFILE, NULL);
+	    result = fmodSystem->init(200, FMOD_INIT_NORMAL | FMOD_INIT_ENABLE_PROFILE, nullptr);
 	#   endif
 	#else
 	#   ifndef __cplusplus
-	    FMOD_System_Init(fmodSystem, 200, FMOD_INIT_NORMAL, NULL);
+	    FMOD_System_Init(fmodSystem, 200, FMOD_INIT_NORMAL, nullptr);
 	#   else
-		result = fmodSystem->init(200, FMOD_INIT_NORMAL, NULL);
+		result = fmodSystem->init(200, FMOD_INIT_NORMAL, nullptr);
 	#   endif
 	#endif
 	if(result != FMOD_OK){

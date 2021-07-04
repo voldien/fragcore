@@ -152,28 +152,28 @@ PhysicInterface::~PhysicInterface(void)
 	if (VDPhysic::getPhysicHandle())
 	{
 		delete VDPhysic::getPhysicHandle();
-		engine.physic.gPhysic = NULL;
+		engine.physic.gPhysic = nullptr;
 	}
 
 	if (engine.physic.gControlManager)
 	{
 		engine.physic.gControlManager->release();
-		engine.physic.gControlManager = NULL;
+		engine.physic.gControlManager = nullptr;
 	}
 	if (engine.physic.gPhysxScene)
 	{
 		engine.physic.gPhysxScene->release();
-		engine.physic.gPhysxScene = NULL;
+		engine.physic.gPhysxScene = nullptr;
 	}
 	if (engine.physic.gCooking)
 	{
 		engine.physic.gCooking->release();
-		engine.physic.gCooking = NULL;
+		engine.physic.gCooking = nullptr;
 	}
 	if (engine.physic.gFoundation)
 	{
 		engine.physic.gFoundation->release();
-		engine.physic.gFoundation = NULL;
+		engine.physic.gFoundation = nullptr;
 	}
 	if (engine.physic.gCudaContextManager)
 	{
@@ -291,7 +291,7 @@ class SimulationEventCallback : public physx::PxSimulationEventCallback {
 	void VDAPIENTRY EventonTrigger(void);
 };
 // extern VDDECLSPEC SimulationEventCallback* m_simulationEventcallBack;
-SimulationEventCallback* m_simulationEventcallBack = NULL;
+SimulationEventCallback* m_simulationEventcallBack = nullptr;
 
 std::vector<VDPhysicMaterial*> gPhysicMaterialCollection;
 
@@ -365,24 +365,24 @@ void VDPhysic::release(void) {
 
 	if (VDPhysic::getPhysicHandle()) {
 		delete VDPhysic::getPhysicHandle();
-		engine.physic.gPhysic = NULL;
+		engine.physic.gPhysic = nullptr;
 	}
 
 	if (engine.physic.gControlManager) {
 		engine.physic.gControlManager->release();
-		engine.physic.gControlManager = NULL;
+		engine.physic.gControlManager = nullptr;
 	}
 	if (engine.physic.gPhysxScene) {
 		engine.physic.gPhysxScene->release();
-		engine.physic.gPhysxScene = NULL;
+		engine.physic.gPhysxScene = nullptr;
 	}
 	if (engine.physic.gCooking) {
 		engine.physic.gCooking->release();
-		engine.physic.gCooking = NULL;
+		engine.physic.gCooking = nullptr;
 	}
 	if (engine.physic.gFoundation) {
 		engine.physic.gFoundation->release();
-		engine.physic.gFoundation = NULL;
+		engine.physic.gFoundation = nullptr;
 	}
 	if (engine.physic.gCudaContextManager) {
 		engine.physic.gCudaContextManager->releaseContext();
@@ -631,7 +631,7 @@ int VDPhysic::overlapSphere(const VDVector3& position, float radius,
 }
 
 VDPhysicMaterial* VDPhysic::createMaterial(unsigned int materialtemplate) {
-	if (!VDPhysic::getPhysicHandle() || !materialtemplate) return NULL;
+	if (!VDPhysic::getPhysicHandle() || !materialtemplate) return nullptr;
 
 	// does the requested Template Material exist?
 	if (VDPhysic::findMaterial(materialtemplate)) {  // exists current
@@ -700,11 +700,11 @@ VDPhysicMaterial* VDPhysic::findMaterial(double staticFriction,
 					  // consider as a same Object ??
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 PxRigidStatic* VDPhysic::createRigidStatic(VDCollider* collider) {
-	if (!VDPhysic::getPhysicHandle()) return NULL;
+	if (!VDPhysic::getPhysicHandle()) return nullptr;
 
 	if (collider->getActor()) {
 		// convert it to requesed Rigidid
@@ -722,7 +722,7 @@ PxRigidStatic* VDPhysic::createRigidStatic(VDCollider* collider) {
 }
 
 PxRigidDynamic* VDPhysic::createRigidDynamic(VDRigidBody* rigidBody) {
-	if (!engine.physic.gPhysic) return NULL;
+	if (!engine.physic.gPhysic) return nullptr;
 
 	if (rigidBody->getActor()) {
 		// convert it to requesed Rigidid
@@ -780,7 +780,7 @@ PxRigidActor* VDPhysic::copyInstanceActor(VDPhysicActor* origonalActor,
 
 PxCloth* VDPhysic::createClothActor(VDCloth* cloth,
 									const HandleMeshEx* meshHandler) {
-	if (!cloth || !meshHandler) return NULL;
+	if (!cloth || !meshHandler) return nullptr;
 
 	PxClothFabric* fabric = genClothFabric(*meshHandler);
 
@@ -814,9 +814,9 @@ int VDPhysic::initlizeRigidBody(VDRigidBody* rigidBody) {
 
 PxShape* VDPhysic::createShape(VDCollider* collider, unsigned int collisionFlag,
 							   HandleMeshEx* handleMesh) {
-	if (engine.physic.gPhysic == NULL || collider == NULL ||
+	if (engine.physic.gPhysic == nullptr || collider == nullptr ||
 		collisionFlag == VDCollider::eUnknown) {
-		return NULL;
+		return nullptr;
 	}
 
 	// return out of function. if some of data is useless.
@@ -830,7 +830,7 @@ PxShape* VDPhysic::createShape(VDCollider* collider, unsigned int collisionFlag,
 	switch (collisionFlag) {
 		case VDCollider::eBox: {
 			PxBoxGeometry boxGeomtry;
-			if (handleMesh != NULL)  // has if
+			if (handleMesh != nullptr)  // has if
 				boxGeomtry =
 					PxBoxGeometry(*(PxVec3*)&(handleMesh->bounds.getSize()));
 			if (!boxGeomtry.isValid()) boxGeomtry.halfExtents = PxVec3(1, 1, 1);
@@ -851,7 +851,7 @@ PxShape* VDPhysic::createShape(VDCollider* collider, unsigned int collisionFlag,
 		case VDCollider::eTerrain: {
 			PxHeightField* heightmap = VDPhysic::genHeightCollision(
 				collider->getComponent<VDTerrain>());
-			if (heightmap != NULL) {
+			if (heightmap != nullptr) {
 				PxHeightFieldGeometry hfGem(heightmap, PxMeshGeometryFlags(),
 											1.0f, 1.0f, 1.0f);
 				if (!hfGem.isValid()) {
@@ -868,7 +868,7 @@ PxShape* VDPhysic::createShape(VDCollider* collider, unsigned int collisionFlag,
 				PxTriangleMeshGeometry meshgeometry(meshCollision);
 				meshgeometry.scale.scale =
 					*(PxVec3*)&collider->transform()->getScale();
-				if (lrigidbody != NULL) {
+				if (lrigidbody != nullptr) {
 					lrigidbody->kinect(true);
 					pxShape = lrigidbody->GetDynamicActor()->createShape(
 						meshgeometry,
@@ -918,13 +918,13 @@ PxShape* VDPhysic::createShape(VDCollider* collider, unsigned int collisionFlag,
 		case VDCollider::eWheel: {
 		} break;
 		default:
-			return NULL;
+			return nullptr;
 	}
 	if (!pxShape) {
-		return NULL;
+		return nullptr;
 		// failed to crate some shape.
 	}
-	if (lrigidbody != NULL) {
+	if (lrigidbody != nullptr) {
 		// lrigidbody->useGraivity(true);
 	}
 
@@ -950,11 +950,11 @@ void VDPhysic::setupFiltering(PxShape* shape, unsigned int filterGroup,
 
 PxShape* VDPhysic::createShape(VDCollider* collider,
 							   unsigned int collisionFlag) {
-	if (engine.physic.gPhysic == NULL || collider == NULL ||
+	if (engine.physic.gPhysic == nullptr || collider == nullptr ||
 		collisionFlag == VDCollider::eUnknown)
-		return NULL;  // return out of function. if some of data is useless.
+		return nullptr;  // return out of function. if some of data is useless.
 
-	PxShape* shape = NULL;
+	PxShape* shape = nullptr;
 	HandleMeshEx meshhandle;
 
 	switch (collisionFlag) {
@@ -975,13 +975,13 @@ PxShape* VDPhysic::createShape(VDCollider* collider,
 			return VDPhysic::createShape(collider, collisionFlag, &meshhandle);
 		case VDCollider::eMesh:
 		case VDCollider::eConvex: {
-			if (!collider->renderer()) return NULL;  // check render
+			if (!collider->renderer()) return nullptr;  // check render
 
 			if (!collider->renderer()->getMesh())
-				return NULL;  // check mesh filter
+				return nullptr;  // check mesh filter
 
 			if (collider->renderer()->getMesh()->getVertexCount() > (1 << 2))
-				return NULL;
+				return nullptr;
 
 			meshhandle =
 				collider->renderer()->getMesh()->createMeshDescription();
@@ -990,7 +990,7 @@ PxShape* VDPhysic::createShape(VDCollider* collider,
 		} break;
 		case VDCollider::eTerrain: {
 			if (collider->getComponent<VDTerrain>()) {
-				shape = VDPhysic::createShape(collider, collisionFlag, NULL);
+				shape = VDPhysic::createShape(collider, collisionFlag, nullptr);
 			}
 			break;
 		}
@@ -1000,7 +1000,7 @@ PxShape* VDPhysic::createShape(VDCollider* collider,
 }
 
 PxController* VDPhysic::createCharacterController(VDTransform* transform) {
-	if (engine.physic.gPhysic == NULL || transform == NULL) return NULL;
+	if (engine.physic.gPhysic == nullptr || transform == nullptr) return nullptr;
 
 	PxCapsuleControllerDesc chDesc;
 	chDesc.height = 1.0f;
@@ -1015,7 +1015,7 @@ PxController* VDPhysic::createCharacterController(VDTransform* transform) {
 
 	PxController* characterController =
 		engine.physic.gControlManager->createController(chDesc);
-	assert(characterController != NULL);
+	assert(characterController != nullptr);
 	// assigne the gameObject
 	PxShape* shape;
 	characterController->getActor()->getShapes(&shape, sizeof(PxShape));
@@ -1029,7 +1029,7 @@ PxController* VDPhysic::createCharacterController(VDTransform* transform) {
 }
 
 PxTriangleMesh* VDPhysic::genMeshCollision(VDMesh* mesh) {
-	if (!mesh) return NULL;
+	if (!mesh) return nullptr;
 
 	HandleMeshEx lmesh = mesh->createMeshDescription();
 	PxTriangleMesh* phMesh = VDPhysic::genMeshCollision(lmesh);
@@ -1038,16 +1038,16 @@ PxTriangleMesh* VDPhysic::genMeshCollision(VDMesh* mesh) {
 }
 
 PxTriangleMesh* VDPhysic::genMeshCollision(const HandleMeshEx& meshHandler) {
-	if (!meshHandler.indicesData || !meshHandler.vertexData) return NULL;
+	if (!meshHandler.indicesData || !meshHandler.vertexData) return nullptr;
 
-	if (meshHandler.vertexCount > (1 << 12)) return NULL;
+	if (meshHandler.vertexCount > (1 << 12)) return nullptr;
 
 	PxTriangleMeshDesc meshDesc;
 	// vertex Point
 	meshDesc.points.count = meshHandler.vertexCount;
 	meshDesc.points.stride = meshHandler.meshDescription.vertexSize();
 	meshDesc.points.data = meshHandler.vertexData;
-	void* indicesData = NULL;
+	void* indicesData = nullptr;
 
 	// indices Data
 	meshDesc.flags = PxMeshFlag::e16_BIT_INDICES;
@@ -1077,7 +1077,7 @@ PxTriangleMesh* VDPhysic::genMeshCollision(const HandleMeshEx& meshHandler) {
 	if (!cookSucess) {
 		free(indicesData);
 		throw RuntimeException("Failed to Cook Mesh Collision\n");
-		return NULL;
+		return nullptr;
 	}
 
 	PxDefaultMemoryInputData readBuffer(writebuffer.getData(),
@@ -1100,7 +1100,7 @@ PxConvexMesh* VDPhysic::genConvexCollision(const HandleMeshEx& meshHandler) {
 	convexDesc.vertexLimit = 256;
 
 	// initilize structor of mesh data
-	unsigned short* indicesData = NULL;
+	unsigned short* indicesData = nullptr;
 	if (meshHandler.vertexCount > UCHAR_MAX &&
 		meshHandler.vertexCount < USHRT_MAX) {
 		convexDesc.indices.count = meshHandler.indicesCount / 3;
@@ -1126,7 +1126,7 @@ PxConvexMesh* VDPhysic::genConvexCollision(const HandleMeshEx& meshHandler) {
 		if (!engine.physic.gCooking->cookConvexMesh(convexDesc, writebuffer)) {
 			throw RuntimeException("Failed to CookMesh Description\n");
 			free(indicesData);
-			return NULL;
+			return nullptr;
 		}
 	}
 	PxDefaultMemoryInputData readBuffer(writebuffer.getData(),
@@ -1138,7 +1138,7 @@ PxConvexMesh* VDPhysic::genConvexCollision(const HandleMeshEx& meshHandler) {
 }
 
 PxConvexMesh* VDPhysic::genConvexCollision(VDMesh* mesh) {
-	if (mesh == NULL) return NULL;
+	if (mesh == nullptr) return nullptr;
 
 	HandleMeshEx exhandle = mesh->createMeshDescription();
 	PxConvexMesh* convex = VDPhysic::genConvexCollision(exhandle);
@@ -1168,7 +1168,7 @@ PxClothParticle* VDPhysic::genClothParticle(const HandleMeshEx& meshHandler) {
 PxClothFabric* VDPhysic::genClothFabric(const HandleMeshEx& meshHandler) {
 	PxClothMeshDesc Clothdesc;
 
-	void* indicesData = NULL;
+	void* indicesData = nullptr;
 	Clothdesc.points.count = meshHandler.vertexCount;
 	Clothdesc.points.stride = meshHandler.meshDescription.vertexSize();
 	Clothdesc.points.data = meshHandler.vertexData;
@@ -1205,7 +1205,7 @@ PxClothFabric* VDPhysic::genClothFabric(const HandleMeshEx& meshHandler) {
 }
 
 PxClothFabric* VDPhysic::genClothFabric(VDMesh* mesh) {
-	if (!mesh) return NULL;
+	if (!mesh) return nullptr;
 	HandleMeshEx meshHandler = mesh->createMeshDescription();
 	PxClothFabric* fabric = VDPhysic::genClothFabric(meshHandler);
 	ExFreeMeshHandler(&meshHandler);
@@ -1213,7 +1213,7 @@ PxClothFabric* VDPhysic::genClothFabric(VDMesh* mesh) {
 }
 
 PxParticleSystem* VDPhysic::genParticleSystem(unsigned int maxParticleCount) {
-	if (!engine.physic.gPhysic) return NULL;
+	if (!engine.physic.gPhysic) return nullptr;
 
 	PxParticleSystem* p_particleSystem =
 		engine.physic.gPhysic->createParticleSystem(maxParticleCount);
@@ -1221,7 +1221,7 @@ PxParticleSystem* VDPhysic::genParticleSystem(unsigned int maxParticleCount) {
 }
 
 PxParticleFluid* VDPhysic::genParticleFluid(unsigned int maxParticleCount) {
-	if (!engine.physic.gPhysic) return NULL;
+	if (!engine.physic.gPhysic) return nullptr;
 
 	PxParticleFluid* p_particleFluid =
 		engine.physic.gPhysic->createParticleFluid(maxParticleCount);
@@ -1251,7 +1251,7 @@ PxHeightFieldSample* VDPhysic::createHeightFieldSample(VDTerrain* terrain) {
 }
 
 PxHeightField* VDPhysic::genHeightCollision(VDTerrain* terrain) {
-	if (!terrain) return NULL;
+	if (!terrain) return nullptr;
 
 	PxHeightFieldSample* heightField =
 		VDPhysic::createHeightFieldSample(terrain);
@@ -1309,7 +1309,7 @@ PxVisualDebugger* VDPhysic::getVisualDebugger(void) {
 	if (engine.physic.gPhysic)
 		return engine.physic.gPhysic->getVisualDebugger();
 	else
-		return NULL;
+		return nullptr;
 }
 
 PxCudaContextManager* VDPhysic::getCudaContextManager(void) {

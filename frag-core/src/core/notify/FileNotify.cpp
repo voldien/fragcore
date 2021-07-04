@@ -11,7 +11,7 @@ using namespace fragcore;
 
 FileNotify::FileNotify(Ref<IScheduler> &sch) {
 
-	if (sch == NULL)
+	if (sch == nullptr)
 		throw InvalidArgumentException("Requires scheduler object.");
 
 	/*	Initilize the notification library.	*/
@@ -19,7 +19,7 @@ FileNotify::FileNotify(Ref<IScheduler> &sch) {
 	if (ret != FSW_OK)
 		throw RuntimeException(fmt::format("Failed to initialize the Filesystem watch: %d.", ret));
 	this->session = fsw_init_session(system_default_monitor_type);
-	if (this->session == NULL)
+	if (this->session == nullptr)
 		throw RuntimeException(fmt::format("Failed to create session for Filesystem watch: %d.", fsw_last_error()));
 	ret = fsw_set_follow_symlinks(this->session, true);
 	if (ret != FSW_OK)
@@ -126,7 +126,7 @@ void FileNotify::fileFetchTask(Task *package) {
 	// fileEvent->path = path->c_str();
 	// fileEvent->type = entry->type;
 	// fileEvent->size = 0;
-	// fileEvent->data = NULL;
+	// fileEvent->data = nullptr;
 	// fileEvent->timestamp = SDL_GetPerformanceCounter();
 
 	// /*  */
@@ -144,7 +144,7 @@ void FileNotify::fileFetchTask(Task *package) {
 	// 	SDL_PushEvent(&event);
 	// 	delete io;
 	// } catch (RuntimeException &ex) {
-	// 	fileEvent->data = NULL;
+	// 	fileEvent->data = nullptr;
 	// 	fileEvent->size = 0;
 	// 	fileNotify->eventDone(fileEvent);
 	// }
@@ -194,7 +194,7 @@ void FileNotify::callback(fsw_cevent const *const events, const unsigned int eve
 
 				notify->scheduler->AddTask(&task);
 				notify->scheduler->wait();
-				// int status = schSubmitTask(notify->sch, &package, NULL);
+				// int status = schSubmitTask(notify->sch, &package, nullptr);
 				// if (status != SCH_OK) {
 
 				// }

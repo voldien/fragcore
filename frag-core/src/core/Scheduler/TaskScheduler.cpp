@@ -54,9 +54,9 @@ void TaskScheduler::AddTask(Task *task)
 	packageTask.callback = internal_schCallback;
 	packageTask.begin = task;
 	packageTask.end = this;
-	packageTask.puser = NULL;
+	packageTask.puser = nullptr;
 
-	int status = schSubmitTask((schTaskSch *)this->sch, &packageTask, NULL);
+	int status = schSubmitTask((schTaskSch *)this->sch, &packageTask, nullptr);
 	if (status != SCH_OK)
 		throw RuntimeException(schErrorMsg(status));
 }

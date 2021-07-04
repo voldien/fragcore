@@ -2,7 +2,7 @@
 #include"VDEngine.h"
 
 VDAudioGeometry::VDAudioGeometry(void): VDBehavior(){
-	audioGeometry = NULL;
+	audioGeometry = nullptr;
 }
 
 VDAudioGeometry::VDAudioGeometry(const VDAudioGeometry& audioGeometry) : VDBehavior(){
@@ -10,7 +10,7 @@ VDAudioGeometry::VDAudioGeometry(const VDAudioGeometry& audioGeometry) : VDBehav
 }
 
 VDAudioGeometry::VDAudioGeometry(const VDMesh* mesh) : VDBehavior(){
-	this->audioGeometry = NULL;
+	this->audioGeometry = nullptr;
 }
 
 void VDAudioGeometry::instanceInitilize(void){

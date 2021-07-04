@@ -21,7 +21,7 @@ GLRenderWindow::GLRenderWindow(Ref<GLRendererInterface> &renderer) {
 	this->window = SDL_CreateWindow("", 0, 0, 800, 600, SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN);
 
 	/*  */
-	if (window == NULL)
+	if (window == nullptr)
 		throw RuntimeException(fmt::format("Failed to create window %s for API %s", SDL_GetError(), api));
 
 	// TODO make it part of the framebuffer bind
@@ -43,7 +43,7 @@ void GLRenderWindow::close(void) { SDL_DestroyWindow(this->window); }
 
 ViewPort *GLRenderWindow::getViewPort(void) { return this->renderer->getView(0); }
 FrameBuffer *GLRenderWindow::getDefaultFrameBuffer() {
-	return this->renderer->getDefaultFramebuffer(NULL);
+	return this->renderer->getDefaultFramebuffer(nullptr);
 	//    throw NotSupportedException();
 }
 
@@ -94,7 +94,7 @@ void GLRenderWindow::createWindow(int x, int y, int width, int height, const cha
 	window = SDL_CreateWindow("", x, y, width, height, SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN);
 
 	/*  */
-	if (window == NULL)
+	if (window == nullptr)
 		throw RuntimeException(fmt::format("Failed to create window %s for API %s", SDL_GetError(), api));
 	// this->api = api;
 }

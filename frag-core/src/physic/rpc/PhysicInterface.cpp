@@ -12,12 +12,12 @@ void PhysicInterface::initAllocate(InitAllocateTableInfo* table){
 }
 
 PhysicInterface::PhysicInterface(Config* config){
-	this->resources = NULL;
+	this->resources = nullptr;
 	this->dispatcher = new PhysicDispatcher();
 	this->interpreter = new PhysicInterpreter();
 }
 PhysicInterface::PhysicInterface(const PhysicInterface& other){
-	this->resources = NULL;
+	this->resources = nullptr;
 	this->dispatcher = new PhysicDispatcher();
 	this->interpreter = new PhysicInterpreter();
 }
@@ -35,7 +35,7 @@ void PhysicInterface::simulate(float timeStep, int maxSubSteps, float fixedTimeS
 	simulate.maxSubSteps = maxSubSteps;
 	simulate.fixedTimeStep = fixedTimeStep;
 
-	this->dispatcher->send(eSimulate, sizeof(simulate), &simulate.header, NULL);
+	this->dispatcher->send(eSimulate, sizeof(simulate), &simulate.header, nullptr);
 }
 
 void PhysicInterface::sync(void){
@@ -43,7 +43,7 @@ void PhysicInterface::sync(void){
 	PacketSync sync;
 	sync.num = 0;
 
-	this->dispatcher->send(eSync, sizeof(sync), &sync.header, NULL);
+	this->dispatcher->send(eSync, sizeof(sync), &sync.header, nullptr);
 }
 
 void PhysicInterface::setGravity(const Vector3& gravity){
@@ -51,7 +51,7 @@ void PhysicInterface::setGravity(const Vector3& gravity){
 	PacketGravity pgravity;
 	pgravity.gravity = gravity;
 
-	this->dispatcher->send(eGravity, sizeof(pgravity), &pgravity.header, NULL);
+	this->dispatcher->send(eGravity, sizeof(pgravity), &pgravity.header, nullptr);
 }
 
 Vector3 PhysicInterface::getGravity(void)const{
@@ -59,7 +59,7 @@ Vector3 PhysicInterface::getGravity(void)const{
 	PacketRequest request;
 	request.request = eGravity;
 
-	this->dispatcher->send(eRequest, sizeof(request), &request.header, NULL);
+	this->dispatcher->send(eRequest, sizeof(request), &request.header, nullptr);
 
 	/*	TODO resolve for the connection.	*/
 	PacketHeader header;
@@ -70,10 +70,10 @@ Vector3 PhysicInterface::getGravity(void)const{
 }
 
 void PhysicInterface::addRigidBody(RigidBody* body){
-	//this->dispatcher->send(eAddRigidBody, sizeof(RigidBody), body, NULL);
+	//this->dispatcher->send(eAddRigidBody, sizeof(RigidBody), body, nullptr);
 }
 void PhysicInterface::removeRigidBody(RigidBody* body){
-	//this->dispatcher->send(eRemoveRidigBody, sizeof(RigidBody), body, NULL);
+	//this->dispatcher->send(eRemoveRidigBody, sizeof(RigidBody), body, nullptr);
 }
 
 void PhysicInterface::addConstraints(Constraints* constraints){}
@@ -85,11 +85,11 @@ Collision* PhysicInterface::createCollision(const CollisionDesc* desc){
 	//this->dispatcher->send(eCreateCollision, sizeof(*desc), desc, desc);
 
 
-	return this->obtainMappedObject<Collision>(NULL);
+	return this->obtainMappedObject<Collision>(nullptr);
 }
 void PhysicInterface::deleteCollision(Collision* collision){
 
-	//this->dispatcher->send(eDeleteCollision, sizeof(Collision), collision, NULL);
+	//this->dispatcher->send(eDeleteCollision, sizeof(Collision), collision, nullptr);
 }
 
 
@@ -105,19 +105,19 @@ void PhysicInterface::deleteConstraints(Constraints* constraints){
 
 RigidBody* PhysicInterface::createRigibody(const RigidBodyDesc* desc){
 	RigidBody* rigbody;
-	this->dispatcher->send(eCreateRigidbody, 0, NULL);
+	this->dispatcher->send(eCreateRigidbody, 0, nullptr);
 	return rigbody;
 }
 void PhysicInterface::deleteRigibody(RigidBody* collision){
-	this->dispatcher->send(eDeleteRigidbody, sizeof(*collision), NULL);
+	this->dispatcher->send(eDeleteRigidbody, sizeof(*collision), nullptr);
 }
 
 
 bool PhysicInterface::rayTest(const PVRay& ray, RayCastHit* hit){
-	this->dispatcher->send(eRayTest, 0, NULL);
+	this->dispatcher->send(eRayTest, 0, nullptr);
 }
 bool PhysicInterface::raySphereTest(const PVRay& ray, RayCastHit* hit){
-	this->dispatcher->send(eRayTest, 0, NULL);
+	this->dispatcher->send(eRayTest, 0, nullptr);
 }
 
 
@@ -126,7 +126,7 @@ bool PhysicInterface::raySphereTest(const PVRay& ray, RayCastHit* hit){
 
 
 void* PhysicInterface::getState(unsigned int* len){
-	return NULL;
+	return nullptr;
 }
 
 

@@ -4,7 +4,7 @@
 using namespace fragcore;
 
 PhysicDispatcher::PhysicDispatcher(void){
-	this->connection = NULL;
+	this->connection = nullptr;
 }
 PhysicDispatcher::PhysicDispatcher(const PhysicDispatcher& other){
 	*this = other;
@@ -32,7 +32,7 @@ void PhysicDispatcher::send(unsigned int sType, unsigned int len, PacketHeader* 
 	/*	send.	*/
 	this->connection->send(packet, len);
 
-	while((pva = va_arg(vl, void*)) != NULL){
+	while((pva = va_arg(vl, void*)) != nullptr){
 		this->connection->send(pva, len);
 	}
 
