@@ -35,28 +35,20 @@ namespace fragcore {
 						  "Must be a decimal type(float/double/half) or integar.");
 			return Math::max<T>(min, Math::min<T>(max, a));
 		}
-		inline constexpr static int clamp(int a, int min, int max) { return Math::clamp<int>(a, min, max); }
-		inline constexpr static float clampf(float a, float min, float max) { return Math::clamp<float>(a, min, max); }
-		inline constexpr static double clampd(double a, double min, double max) {
-			return Math::clamp<double>(a, min, max);
-		}
 
 		/**
 		 *	Get max value of a and b.
 		 */
-		template <typename T> inline constexpr static T max(T a, T b) { return ((a) < (b)) ? (b) : (a); }
-		inline constexpr static float maxf(float a, float b) { return ((a) < (b)) ? (b) : (a); }
-		inline constexpr static float maxd(float a, float b) { return ((a) < (b)) ? (b) : (a); }
-		inline constexpr static float maxi(float a, float b) { return ((a) < (b)) ? (b) : (a); }
+		template <typename T> inline constexpr static T max(T a, T b) {
+			return (static_cast<T>(a) < static_cast<T>(b)) ? static_cast<T>(b) : static_cast<T>(a);
+		}
 
 		/**
 		 *	Get min value of a and b.
 		 */
-		template <typename T> inline constexpr static T min(T a, T b) noexcept { return ((a) > (b)) ? (b) : (a); }
-		inline constexpr static float minf(float a, float b) noexcept { return ((a) > (b)) ? (b) : (a); }
-		inline constexpr static float mind(float a, float b) noexcept { return ((a) > (b)) ? (b) : (a); }
-		inline constexpr static float mini(float a, float b) noexcept { return ((a) > (b)) ? (b) : (a); }
-
+		template <typename T> inline constexpr static T min(T a, T b) noexcept {
+			return (static_cast<T>(b) < static_cast<T>(a)) ? static_cast<T>(b) : static_cast<T>(a);
+		}
 		/**
 		 *	Get float modular.
 		 */
@@ -114,18 +106,17 @@ namespace fragcore {
 		/**
 		 *
 		 */
-		inline static constexpr float E = 2.718281828459045235;
-		inline static constexpr float Epsilon = FLT_EPSILON;
+		inline static constexpr double E = 2.718281828459045235;
 		inline static constexpr double PI = 3.141592653589793238462643383279502884;
-		inline static constexpr float Infinite = 0;
+		inline static constexpr double PI_half = PI / 2.0;
+		inline static constexpr double PI_2 = PI * 2.0;
+		inline static constexpr float Epsilon = FLT_EPSILON;
 		inline static constexpr float Deg2Rad = Math::PI / 180.0f;
 		inline static constexpr float Rad2Deg = 180 / Math::PI;
 		inline static constexpr float NegativeInfinity = 0;
 
-		/**
-		 *
-		 */
 		template <typename T> static constexpr T NextPowerOfTwo(T v) {
+			static_assert(std::is_integral<T>::value, "Must be a integer type.");
 			T res = 1;
 			while (res < v)
 				res <<= 1;
@@ -144,8 +135,10 @@ namespace fragcore {
 		/**
 		 *
 		 */
-		template <typename T> static constexpr bool IsPowerOfTwo(T v) { return (v && ((v - 1) & v)); }
-
+		template <typename T> static constexpr bool IsPowerOfTwo(T v) {
+			static_assert(std::is_integral<T>::value, "Must be a integer type.");
+			return (v && ((v - 1) & v));
+		}
 		static Color CorrelatedColorTemperatureToRGB(float kelvin);
 
 		/**
