@@ -33,7 +33,7 @@ namespace fragcore {
 		  this->nextLUID = 0;
 	  }
 
-	  UIDGenerator(const UIDGenerator &other) noexcept { *this = other; }
+	UIDGenerator(const UIDGenerator &other) = default;
 
 	  /**
 	   *	@Return next unique id.

@@ -467,7 +467,7 @@ Font *FontFactory::createSDFFont(Ref<IRenderer> &renderer, Ref<IO> &io, float si
 	FT_Done_FreeType(ft);
 	/*  Allocate texture.   */
 	/*  Texture attributes. */
-	TextureDesc desc = {0};
+	TextureDesc desc = {};
 	desc.width = font_tex_width;
 	desc.height = font_tex_height;
 	desc.depth = 1;

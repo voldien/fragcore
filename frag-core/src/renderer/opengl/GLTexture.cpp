@@ -128,6 +128,7 @@ void Texture::setWrapMode(Texture::WrapMode mode) {
 		glTexParameteri(texobj->target, GL_TEXTURE_WRAP_S, wrapMode);
 		glTexParameteri(texobj->target, GL_TEXTURE_WRAP_T, wrapMode);
 		glTexParameteri(texobj->target, GL_TEXTURE_WRAP_R, wrapMode);
+		this->bind(c);
 	}
 }
 

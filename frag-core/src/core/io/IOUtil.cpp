@@ -72,7 +72,7 @@ long int IOUtil::loadString(Ref<IO> &in, Ref<IO> &out) {
 	return nbytes;
 }
 
-long int IOUtil::format(Ref<IO> &io, const char *vformat, ...) noexcept {
+long int IOUtil::format(Ref<IO> &io, const char *vformat, ...) noexcept(noexcept(vformat != nullptr)) {
 	va_list argptr;
 	va_start(argptr, format);
 	char buf[1024]; // Page;
@@ -81,6 +81,7 @@ long int IOUtil::format(Ref<IO> &io, const char *vformat, ...) noexcept {
 
 	// TODO add support for determine if fully or partial written.
 	long int i = vsnprintf(buf, sizeof(buf), vformat, argptr);
-	io->write(i, (const void *)buf);
+	long nrBytes = io->write(i, (const void *)buf);
 	va_end(argptr);
+	return nrBytes;
 }

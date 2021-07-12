@@ -115,7 +115,7 @@ void *VorbisAudioDecoder::getData(long int *size) {
 	// 0 is endianess, 0 for little, 1 for big
 	// 2 is the data type short's size, mine is 2
 	// 1 is the signedness you want, I want short not unsigned short (for openal) so 1
-	for (size_t size = 0, offset = 0, sel = 0;
+	for (long size = 0, offset = 0, sel = 0;
 		 (size = ov_read(ov, (char *)pcmout1 + offset, 4096, 0, 2, 1, (int *)&sel)) != 0; offset += size) {
 		if (size < 0)
 			throw RuntimeException("");

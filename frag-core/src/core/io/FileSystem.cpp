@@ -12,7 +12,7 @@
 #include <cstring>
 #include <malloc.h>
 #include <stdexcept>
-// #include<filesystem>
+#include <fstream>
 #include<fmt/core.h>
 // namespace fs = std::filesystem;
 using namespace fragcore;
@@ -118,7 +118,11 @@ void FileSystem::createDirectory(const char *path) {
 bool FileSystem::isASyncSupported(void) const { return *this->getScheduler() != nullptr; }
 
 bool FileSystem::isDirectory(const char *path) {}
-bool FileSystem::isFile(const char *path) {}
+bool FileSystem::isFile(const char *path) {
+	//TODO improve!
+	std::ifstream ifs(path);
+	return ifs.good();
+}
 
 std::vector<std::string> FileSystem::listFiles(const char *directory) const { return std::vector<std::string>(); }
 

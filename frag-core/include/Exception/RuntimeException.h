@@ -28,7 +28,7 @@ namespace fragcore {
 	class FVDECLSPEC RuntimeException : public IException {
 	  public:
 		RuntimeException(void) : IException("Not implemented yet!") {}
-		RuntimeException(RuntimeException &&other) {}
+		RuntimeException(RuntimeException &&other) = default;
 		RuntimeException(const std::string &arg) : IException(arg) {}
 		template <typename... Args>
 		RuntimeException(const std::string &format, Args &&... args) : IException(format, args...) {}
