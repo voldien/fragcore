@@ -93,7 +93,7 @@ Color Math::CorrelatedColorTemperatureToRGB(float kelvin) {
 		blue = 255;
 	}
 
-	return Color(clamp(red, 0, 255) / 255.0f, clamp(green, 0, 255) / 255.0f, clamp(blue, 0, 255) / 255.0f, 1);
+	return Color(clamp<float>(red, 0, 255) / 255.0f, clamp<float>(green, 0, 255) / 255.0f, clamp<float>(blue, 0, 255) / 255.0f, 1);
 }
 
 float Math::PerlinNoise(const Vector2 &point) noexcept { return Math::PerlinNoise(point.x(), point.y()); }

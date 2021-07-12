@@ -101,6 +101,7 @@ namespace fragcore {
 		/**
 		 *
 		 */
+		//template<typename T>
 		static float LerpAngle(float a, float b, float t);
 
 		/**
@@ -110,10 +111,10 @@ namespace fragcore {
 		inline static constexpr double PI = 3.141592653589793238462643383279502884;
 		inline static constexpr double PI_half = PI / 2.0;
 		inline static constexpr double PI_2 = PI * 2.0;
-		inline static constexpr float Epsilon = FLT_EPSILON;
-		inline static constexpr float Deg2Rad = Math::PI / 180.0f;
-		inline static constexpr float Rad2Deg = 180 / Math::PI;
-		inline static constexpr float NegativeInfinity = 0;
+		inline static constexpr double Epsilon = FLT_EPSILON;
+		inline static constexpr double Deg2Rad = Math::PI / 180.0f;
+		inline static constexpr double Rad2Deg = 180 / Math::PI;
+		inline static constexpr double NegativeInfinity = 0;
 
 		template <typename T> static constexpr T NextPowerOfTwo(T v) {
 			static_assert(std::is_integral<T>::value, "Must be a integer type.");
