@@ -13,7 +13,7 @@ FILE(GLOB SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
 
 # Get the include directories for the target.
 get_target_property(Fragcore_INCLUDE_DIRS fragcore INCLUDE_DIRECTORIES)
-get_target_property(VKCommon_INCLUDE_DIRS vkcommon INCLUDE_DIRECTORIES)
+get_target_property(VKCommon_INCLUDE_DIRS vkcommon-core INCLUDE_DIRECTORIES)
 
 
 # Library target.
@@ -23,7 +23,7 @@ TARGET_COMPILE_DEFINITIONS(fragcore-rvk PRIVATE FRAG_CORE_INTERNAL_IMP=1)
 
 #
 TARGET_INCLUDE_DIRECTORIES(fragcore-rvk PRIVATE ${Vulkan_INCLUDE_DIRS} ${Fragcore_INCLUDE_DIRS} ${VKCommon_INCLUDE_DIRS})
-ADD_DEPENDENCIES(fragcore-rvk fragcore vkcommon)
+ADD_DEPENDENCIES(fragcore-rvk fragcore vkcommon-core)
 
 #
 IF(BUILD_WITH_INSTALL)
