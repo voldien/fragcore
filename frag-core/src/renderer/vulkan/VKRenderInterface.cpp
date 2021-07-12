@@ -353,8 +353,8 @@ VKRenderInterface::~VKRenderInterface(void) {
 	// 	vkDestroySwapchainKHR(device, swapChain->swapchain, nullptr);
 	// }
 
-	if (device)
-		vkDestroyDevice(device, nullptr);
+	// if (device)
+	// 	vkDestroyDevice(device, nullptr);
 
 	if (inst)
 		vkDestroyInstance(inst, nullptr);
@@ -388,9 +388,9 @@ Texture *VKRenderInterface::createTexture(TextureDesc *desc) {
 	// 			   stagingBufferMemory);
 
 	// void *data;
-	// vkMapMemory(device, stagingBufferMemory, 0, imageSize, 0, &data);
+	// vkMapMemory(device->getHandle(), stagingBufferMemory, 0, imageSize, 0, &data);
 	// memcpy(data, desc->pixel, static_cast<size_t>(imageSize));
-	// vkUnmapMemory(device, stagingBufferMemory);
+	// vkUnmapMemory(device->getHandle(), stagingBufferMemory);
 
 	// /*-------------Create Image --------*/
 	// VkMemoryPropertyFlags properties = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
@@ -417,14 +417,14 @@ Texture *VKRenderInterface::createTexture(TextureDesc *desc) {
 	// imageInfo.flags = 0; // Optional
 
 	// /*  Create image.   */
-	// VkResult result = vkCreateImage(device, &imageInfo, nullptr, &vktex->texture);
+	// VkResult result = vkCreateImage(device->getHandle(), &imageInfo, nullptr, &vktex->texture);
 	// if (result != VK_SUCCESS) {
 	// 	throw RuntimeException(fmt::format("Failed creating texture image - %d", result));
 	// }
 
 	// /*  */
 	// VkMemoryRequirements memRequirements;
-	// vkGetImageMemoryRequirements(device, vktex->texture, &memRequirements);
+	// vkGetImageMemoryRequirements(device->getHandle(), vktex->texture, &memRequirements);
 
 	// VkMemoryAllocateInfo allocInfo = {};
 	// allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
@@ -432,14 +432,14 @@ Texture *VKRenderInterface::createTexture(TextureDesc *desc) {
 	// allocInfo.memoryTypeIndex = findMemoryType(vulkanCore, memRequirements.memoryTypeBits, properties);
 
 	// /*  Allocate memory for the texture.    */
-	// result = vkAllocateMemory(device, &allocInfo, nullptr, &stagingBufferMemory);
+	// result = vkAllocateMemory(device->getHandle(), &allocInfo, nullptr, &stagingBufferMemory);
 	// if (result != VK_SUCCESS) {
 	// 	throw RuntimeException("failed to allocate image memory!");
 	// }
 	// vktex->imageMemory = stagingBufferMemory;
 
 	// /*  Bind texture and memory.*/
-	// result = vkBindImageMemory(device, vktex->texture, vktex->imageMemory, 0);
+	// result = vkBindImageMemory(device->getHandle(), vktex->texture, vktex->imageMemory, 0);
 	// if (result != VK_SUCCESS) {
 	// 	throw RuntimeException("Failed to create ");
 	// }
@@ -463,7 +463,7 @@ Texture *VKRenderInterface::createTexture(TextureDesc *desc) {
 	// samplerInfo.minLod = 0.0f;
 	// samplerInfo.maxLod = 0.0f;
 
-	// result = vkCreateSampler(device, &samplerInfo, nullptr, &vktex->sampler);
+	// result = vkCreateSampler(device->getHandle(), &samplerInfo, nullptr, &vktex->sampler);
 	// if (result != VK_SUCCESS) {
 	// 	throw RuntimeException("failed to create texture sampler!");
 	// }
@@ -477,9 +477,9 @@ void VKRenderInterface::deleteTexture(Texture *texture) {
 
 	// /*  Release resources.  */
 	// if (vkTextureObject->texture)
-	// 	vkDestroyImage(device, vkTextureObject->texture, nullptr);
+	// 	vkDestroyImage(device->getHandle(), vkTextureObject->texture, nullptr);
 	// if (vkTextureObject->sampler)
-	// 	vkDestroySampler(device, vkTextureObject->sampler, nullptr);
+	// 	vkDestroySampler(device->getHandle(), vkTextureObject->sampler, nullptr);
 
 	// /*  Release objects.    */
 	// //delete texture->pdata;
@@ -550,9 +550,9 @@ Shader *VKRenderInterface::createShader(ShaderDesc *desc) {
 	// TODO fix the code for the shader desc.
 	//	if(desc->vertex.vertexBinary && desc->vertex.language == SPIRV){
 	if (1) {
-		// vertShaderModule = createShaderModule(device, (const char*)desc->vertex.vertexBinary,
+		// vertShaderModule = createShaderModule(device->getHandle(), (const char*)desc->vertex.vertexBinary,
 		// desc->vertex.size);
-		vertShaderModule = createShaderModule(device, (const char *)nullptr, 0); // FIXME
+		vertShaderModule = createShaderModule(device->getHandle(), (const char *)nullptr, 0); // FIXME
 
 		/*  */
 		vertShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
@@ -564,9 +564,9 @@ Shader *VKRenderInterface::createShader(ShaderDesc *desc) {
 	}
 	//	if(desc->fragment.fragmentBinary && desc->fragment.language == SPIRV){
 	if (1) {
-		// fragShaderModule = createShaderModule(device,  (const char*)desc->fragment.fragmentBinary,
+		// fragShaderModule = createShaderModule(device->getHandle(),  (const char*)desc->fragment.fragmentBinary,
 		// desc->fragment.size);
-		fragShaderModule = createShaderModule(device, (const char *)nullptr, 0); // FIXME
+		fragShaderModule = createShaderModule(device->getHandle(), (const char *)nullptr, 0); // FIXME
 
 		fragShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
 		fragShaderStageInfo.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
@@ -576,7 +576,7 @@ Shader *VKRenderInterface::createShader(ShaderDesc *desc) {
 		shaderStages.push_back(fragShaderStageInfo);
 	}
 	//	if(desc->geometry.geometryBinary && desc->geometry.language == SPIRV){
-	//		geomShaderModule = createShaderModule(device, desc->vertexsource[0],
+	//		geomShaderModule = createShaderModule(device->getHandle(), desc->vertexsource[0],
 	// strlen(desc->vertexsource[0]));
 	//
 	//		geomShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
@@ -587,7 +587,7 @@ Shader *VKRenderInterface::createShader(ShaderDesc *desc) {
 	//		shaderStages.push_back(geomShaderStageInfo);
 	//	}
 	//	if(desc->numtesco > 0){
-	//		tessCShaderModule = createShaderModule(device, desc->vertexsource[0],
+	//		tessCShaderModule = createShaderModule(device->getHandle(), desc->vertexsource[0],
 	// strlen(desc->vertexsource[0]));
 	//
 	//		tessChaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
@@ -598,7 +598,7 @@ Shader *VKRenderInterface::createShader(ShaderDesc *desc) {
 	//		shaderStages.push_back(tessChaderStageInfo);
 	//	}
 	//	if(desc->numtesev> 0){
-	//		tessEShaderModule = createShaderModule(device, desc->vertexsource[0],
+	//		tessEShaderModule = createShaderModule(device->getHandle(), desc->vertexsource[0],
 	// strlen(desc->vertexsource[0]));
 	//
 	//		tessEShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
@@ -625,7 +625,7 @@ Shader *VKRenderInterface::createShader(ShaderDesc *desc) {
 		//        VkComputePipelineCreateInfo info = { VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO };
 		//        info.stage.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
 		//        info.stage.stage = VK_SHADER_STAGE_COMPUTE_BIT;
-		//        info.stage.module = loadShaderModule(device, "shaders/particle.comp.spv");
+		//        info.stage.module = loadShaderModule(device->getHandle(), "shaders/particle.comp.spv");
 		//        info.stage.pName = "main";
 		//        info.layout = computePipeline.pipelineLayout;
 
@@ -648,7 +648,7 @@ Shader *VKRenderInterface::createShader(ShaderDesc *desc) {
 	layoutInfo.pBindings = &samplerLayoutBinding;
 
 	VkDescriptorSetLayout setLayout;
-	result = vkCreateDescriptorSetLayout(device, &layoutInfo, nullptr, &setLayout);
+	result = vkCreateDescriptorSetLayout(device->getHandle(), &layoutInfo, nullptr, &setLayout);
 	if (result != VK_SUCCESS)
 		throw RuntimeException(fmt::format("Failed to create descriptor set layout - %d", result));
 
@@ -660,7 +660,7 @@ Shader *VKRenderInterface::createShader(ShaderDesc *desc) {
 	pipelineLayoutInfo.pushConstantRangeCount = 0; // Optional
 	pipelineLayoutInfo.pPushConstantRanges = nullptr; // Optional
 
-	result = vkCreatePipelineLayout(device, &pipelineLayoutInfo, nullptr, &shaobj->pipelineLayout);
+	result = vkCreatePipelineLayout(device->getHandle(), &pipelineLayoutInfo, nullptr, &shaobj->pipelineLayout);
 	if (result != VK_SUCCESS)
 		throw RuntimeException(fmt::format("failed to create pipeline layout - %d!", result));
 
@@ -692,7 +692,7 @@ Shader *VKRenderInterface::createShader(ShaderDesc *desc) {
 	renderPassInfo.subpassCount = 1;
 	renderPassInfo.pSubpasses = &subpass;
 
-	if (vkCreateRenderPass(device, &renderPassInfo, nullptr, &renderPass) != VK_SUCCESS)
+	if (vkCreateRenderPass(device->getHandle(), &renderPassInfo, nullptr, &renderPass) != VK_SUCCESS)
 		throw RuntimeException(fmt::format("failed to create render pass - %d", result));
 
 	/*  */
@@ -813,21 +813,21 @@ Shader *VKRenderInterface::createShader(ShaderDesc *desc) {
 	pipelineInfo.basePipelineIndex = -1;			  // Optional
 
 	/*  Create graphic pipeline.    */
-	result = vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &shaobj->graphicsPipeline);
+	result = vkCreateGraphicsPipelines(device->getHandle(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &shaobj->graphicsPipeline);
 	if (result != VK_SUCCESS)
 		throw RuntimeException(fmt::format("vkCreateGraphicsPipelines failed - %d", result));
 
 	/*  Release shader moudles once used.  */
 	if (vertShaderModule)
-		vkDestroyShaderModule(device, vertShaderModule, nullptr);
+		vkDestroyShaderModule(device->getHandle(), vertShaderModule, nullptr);
 	if (fragShaderModule)
-		vkDestroyShaderModule(device, fragShaderModule, nullptr);
+		vkDestroyShaderModule(device->getHandle(), fragShaderModule, nullptr);
 	if (geomShaderModule)
-		vkDestroyShaderModule(device, geomShaderModule, nullptr);
+		vkDestroyShaderModule(device->getHandle(), geomShaderModule, nullptr);
 	if (tessCShaderModule)
-		vkDestroyShaderModule(device, tessCShaderModule, nullptr);
+		vkDestroyShaderModule(device->getHandle(), tessCShaderModule, nullptr);
 	if (tessEShaderModule)
-		vkDestroyShaderModule(device, tessEShaderModule, nullptr);
+		vkDestroyShaderModule(device->getHandle(), tessEShaderModule, nullptr);
 
 	return shader;
 }
@@ -841,9 +841,9 @@ void VKRenderInterface::deleteShader(Shader *shader) {
 	// 	throw InvalidArgumentException("");
 
 	// if (shaobj->graphicsPipeline) {
-	// 	// vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
+	// 	// vkDestroyPipelineLayout(device->getHandle(), pipelineLayout, nullptr);
 	// 	/*  Release all resources.  */
-	// 	vkDestroyPipeline(device, shaobj->graphicsPipeline, nullptr);
+	// 	vkDestroyPipeline(device->getHandle(), shaobj->graphicsPipeline, nullptr);
 	// } else
 	// 	throw RuntimeException("");
 
@@ -868,14 +868,14 @@ Buffer *VKRenderInterface::createBuffer(BufferDesc *desc) {
 	bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
 	/*  Create buffer.  */
-	result = vkCreateBuffer(device, &bufferInfo, nullptr, &vkBufferObject->buffer);
+	result = vkCreateBuffer(device->getHandle(), &bufferInfo, nullptr, &vkBufferObject->buffer);
 	if (result != VK_SUCCESS) {
 		throw RuntimeException(fmt::format("failed to create vertex buffer %d", result));
 	}
 
 	/*  */
 	VkMemoryRequirements memRequirements;
-	vkGetBufferMemoryRequirements(device, vkBufferObject->buffer, &memRequirements);
+	vkGetBufferMemoryRequirements(device->getHandle(), vkBufferObject->buffer, &memRequirements);
 
 	/*  */
 	VkPhysicalDeviceMemoryProperties memProperties;
@@ -890,12 +890,12 @@ Buffer *VKRenderInterface::createBuffer(BufferDesc *desc) {
 	// 				   VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
 	/*  */
-	if (vkAllocateMemory(device, &allocInfo, nullptr, &vkBufferObject->vertexBufferMemory) != VK_SUCCESS) {
+	if (vkAllocateMemory(device->getHandle(), &allocInfo, nullptr, &vkBufferObject->vertexBufferMemory) != VK_SUCCESS) {
 		throw RuntimeException(fmt::format("failed to allocate vertex buffer memory!"));
 	}
 
 	/*  */
-	result = vkBindBufferMemory(device, vkBufferObject->buffer, vkBufferObject->vertexBufferMemory, 0);
+	result = vkBindBufferMemory(device->getHandle(), vkBufferObject->buffer, vkBufferObject->vertexBufferMemory, 0);
 	if (result != VK_SUCCESS)
 		throw RuntimeException(fmt::format("failed to allocate vertex buffer memory!"));
 
@@ -906,9 +906,9 @@ void VKRenderInterface::deleteBuffer(Buffer *object) {
 
 	// VKBufferObject *bufferObject = (VKBufferObject *)object->pdata;
 
-	// // vkFreeMemory(device, vertexBufferMemory, nullptr);
+	// // vkFreeMemory(device->getHandle(), vertexBufferMemory, nullptr);
 	// if (bufferObject->buffer)
-	// 	vkDestroyBuffer(device, bufferObject->buffer, nullptr);
+	// 	vkDestroyBuffer(device->getHandle(), bufferObject->buffer, nullptr);
 
 	// /*  Release objects.    */
 	// //delete object->pdata;
@@ -1119,7 +1119,7 @@ void VKRenderInterface::swapBuffer(void) {
 	// 	throw RuntimeException("failed");
 
 	// /*  */
-	// result = vkAcquireNextImageKHR(device, swapChain->swapchain, UINT64_MAX,
+	// result = vkAcquireNextImageKHR(device->getHandle(), swapChain->swapchain, UINT64_MAX,
 	// 							   renderFinishedSemaphore, VK_NULL_HANDLE, &imageIndex);
 	// if(result == VK_ERROR_OUT_OF_DATE_KHR){
 	// 	/*  Recreate.   */

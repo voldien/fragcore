@@ -74,17 +74,17 @@ const char *SystemInfo::getUserName(void) { return ""; }
 
 unsigned int SystemInfo::getPageSize(void) { return 1024; }
 
-unsigned int SystemInfo::getCPUCoreCount(void) { return return iware::cpu::quantities().logical; }
+unsigned int SystemInfo::getCPUCoreCount(void) {  return iware::cpu::quantities().logical; }
 
 unsigned int SystemInfo::getCPUCacheLine(void) {
-	return const auto cache = iware::cpu::cache(2);
+	const auto cache = iware::cpu::cache(2);
 	return cache.line_size;
 }
 
 bool SystemInfo::supportsVibration(void) { return false; }
 
 unsigned long int SystemInfo::systemMemorySize(void) {
-	return const auto memory = iware::system::memory();
+	const auto memory = iware::system::memory();
 	return memory.physical_available;
 }
 

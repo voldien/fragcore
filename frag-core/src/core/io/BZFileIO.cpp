@@ -57,7 +57,7 @@ void BZFileIO::open(const char *path, IO::Mode mode) {
 	int bzerror;
 	switch (mode & IO::ACCESS) {
 	case IO::READ:
-		this->bzFile = BZ2_bzReadOpen(&bzerror, this->file, 0, nullptr, nullptr, 0);
+		this->bzFile = BZ2_bzReadOpen(&bzerror, this->file, 0, 0, nullptr, 0);
 		break;
 	case IO::WRITE:
 		this->bzFile = BZ2_bzWriteOpen(&bzerror, this->file, 0, 0, 0);

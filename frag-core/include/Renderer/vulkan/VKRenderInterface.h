@@ -157,7 +157,7 @@ namespace fragcore {
 		Capability capabilityCached;
 
 		/*  */
-		VkDevice device;
+		//VkDevice device;
 		VkQueue queue; // TODO rename graphicsQueue
 		VkQueue presentQueue;
 

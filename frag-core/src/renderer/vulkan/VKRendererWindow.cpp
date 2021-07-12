@@ -570,7 +570,7 @@ void VKRenderWindow::cleanSwapChain(void) {
 
 VkDevice VKRenderWindow::getDevice(void) const {
 	const VKRenderInterface *vulkancore = *this->renderer;
-	return vulkancore->device;
+	return vulkancore->device->getHandle();
 }
 VkFramebuffer VKRenderWindow::getDefaultFrameBuffer(void) const {
 	return this->swapChain.swapChainFramebuffers[this->swapChain.currentFrame];
