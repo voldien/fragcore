@@ -42,7 +42,7 @@ AudioInterface::AudioInterface(IConfig *config) : Module() {
 	setAudioDevice(audioPhysicalDevices);
 
 	/*	Internal.	*/
-	alDevice->scheduler = Ref<IScheduler>(new TaskScheduler(Math::clamp(SystemInfo::getCPUCoreCount(), 1, 2), 48));
+	alDevice->scheduler = Ref<IScheduler>(new TaskScheduler(Math::clamp<int>(SystemInfo::getCPUCoreCount(), 1, 2), 48));
 }
 
 AudioInterface::~AudioInterface(void) {
