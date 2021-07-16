@@ -84,19 +84,19 @@ namespace fragcore {
 			}
 		}
 
-		virtual void removeChild(int index) {
+		virtual void removeChild(unsigned int index) {
 			ITree<T> *sn = getChild(index - 1);
 			ITree<T> *n = sn->sibling;
 			sn->setSibling(n->sibling);
 			n->parent = nullptr;
 		}
 
-		virtual ITree<T> *getChild(int index) const
+		virtual ITree<T> *getChild(unsigned int index) const
 		{
 			if(index < 0 || index >= this->getNumChildren())
 				throw InvalidArgumentException("");
 			ITree<T> *chi = this->child;
-			for (int x = 0; x <= index; x++) {
+			for (unsigned int x = 0; x <= index; x++) {
 				chi = chi->sibling;
 			}
 			return chi;
