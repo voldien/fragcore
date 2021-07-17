@@ -67,7 +67,7 @@ void Buffer::flush(unsigned long int offset, unsigned long int length) {}
 void Buffer::unMapBuffer(void) {
 	VKBufferObject *bufobj = (VKBufferObject *) this->pdata;
 
-	vkUnmapMemory(bufobj->vulkanCore->device, bufobj->vertexBufferMemory);
+	vkUnmapMemory(bufobj->vulkanCore->device->getHandle(), bufobj->vertexBufferMemory);
 }
 
 void Buffer::setName(const std::string &name) {

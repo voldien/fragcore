@@ -60,12 +60,16 @@ VKRenderInterface::VKRenderInterface(IConfig *config) {
 	}
 
 	/*	Allocate private data structure for the renderer interface. */
-	vulkancore = new VulkanCore();
-	if (vulkancore == nullptr)
-		throw RuntimeException();
+	// vulkancore = new VulkanCore();
+	// if (vulkancore == nullptr)
+	// 	throw RuntimeException();
 
 	/*  Store reference with the object. */
 	// this->pdata = vulkancore;
+	const std::unordered_map<const char *, bool> &requested_extensions {};
+
+	this->core = std::shared_ptr<VulkanCore>(requested_extensions);
+	this->device = std::shared_ptr<VKDevice>(core, core->getPhysicalDevices(0));
 
 	/*  Determine layer validation. */
 	vulkancore->enableValidationLayers = setupConfig.get<bool>("debug");
@@ -73,266 +77,266 @@ VKRenderInterface::VKRenderInterface(IConfig *config) {
 	vulkancore->enableDebugTracer = setupConfig.get<bool>("debug-tracer");
 	vulkancore->useGamma = setupConfig.get<bool>("gamma-correction");
 
-	/*  Vulkan variables.   */
-	VkResult result;
+	// /*  Vulkan variables.   */
+	// VkResult result;
 
-	/*  Check for supported extensions.*/
-	uint32_t extensionCount = 0;
-	if (vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr) != VK_SUCCESS) {
-		throw RuntimeException("Failed enumerate Vulkan extension properties");
-	}
-	vulkancore->extension_names = (VkExtensionProperties *)(malloc(sizeof(VkExtensionProperties) * extensionCount));
-	if (vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount,
-											   (VkExtensionProperties *)vulkancore->extension_names) != VK_SUCCESS) {
-		throw RuntimeException("Failed enumerate Vulkan extension properties");
-	}
+	// /*  Check for supported extensions.*/
+	// uint32_t extensionCount = 0;
+	// if (vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr) != VK_SUCCESS) {
+	// 	throw RuntimeException("Failed enumerate Vulkan extension properties");
+	// }
+	// vulkancore->extension_names = (VkExtensionProperties *)(malloc(sizeof(VkExtensionProperties) * extensionCount));
+	// if (vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount,
+	// 										   (VkExtensionProperties *)vulkancore->extension_names) != VK_SUCCESS) {
+	// 	throw RuntimeException("Failed enumerate Vulkan extension properties");
+	// }
 
-	/*  Check for supported validation layers.  */
-	uint32_t layerCount;
-	if (vkEnumerateInstanceLayerProperties(&layerCount, nullptr) != VK_SUCCESS)
-		throw RuntimeException("Failed enumerate Vulkan extension properties");
-	std::vector<VkLayerProperties> availableLayers(layerCount);
-	if (vulkancore->enableValidationLayers) {
-		if (vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data()) != VK_SUCCESS)
-			throw RuntimeException("Failed enumerate Vulkan extension properties");
+	// /*  Check for supported validation layers.  */
+	// uint32_t layerCount;
+	// if (vkEnumerateInstanceLayerProperties(&layerCount, nullptr) != VK_SUCCESS)
+	// 	throw RuntimeException("Failed enumerate Vulkan extension properties");
+	// std::vector<VkLayerProperties> availableLayers(layerCount);
+	// if (vulkancore->enableValidationLayers) {
+	// 	if (vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data()) != VK_SUCCESS)
+	// 		throw RuntimeException("Failed enumerate Vulkan extension properties");
 
-		/*  Check if exists.    */
-		for (uint32_t i = 0; i < availableLayers.size(); i++) {
-		}
-	}
+	// 	/*  Check if exists.    */
+	// 	for (uint32_t i = 0; i < availableLayers.size(); i++) {
+	// 	}
+	// }
 
-	/*  TODO add support for loading requried extensions.   */
-	// TODO improve later.
-	/*  Create Vulkan window.   */
-	SDL_Window *tmpWindow = SDL_CreateWindow("", 0, 0, 1, 1, SDL_WINDOW_VULKAN);
-	if (tmpWindow == nullptr)
-		throw RuntimeException(fmt::format("failed create window - %s", SDL_GetError()));
-	unsigned int count;
-	if (!SDL_Vulkan_GetInstanceExtensions(tmpWindow, &count, nullptr))
-		throw RuntimeException(fmt::format("%s", SDL_GetError()));
-	unsigned int additional_extension_count = (unsigned int)instanceExtensionNames.size();
-	instanceExtensionNames.resize((size_t)(additional_extension_count + count));
-	if (!SDL_Vulkan_GetInstanceExtensions(tmpWindow, &count, &instanceExtensionNames[additional_extension_count]))
-		throw RuntimeException(fmt::format("failed SDL_Vulkan_GetInstanceExtensions - %s", SDL_GetError()));
-	SDL_DestroyWindow(tmpWindow);
+	// /*  TODO add support for loading requried extensions.   */
+	// // TODO improve later.
+	// /*  Create Vulkan window.   */
+	// SDL_Window *tmpWindow = SDL_CreateWindow("", 0, 0, 1, 1, SDL_WINDOW_VULKAN);
+	// if (tmpWindow == nullptr)
+	// 	throw RuntimeException(fmt::format("failed create window - %s", SDL_GetError()));
+	// unsigned int count;
+	// if (!SDL_Vulkan_GetInstanceExtensions(tmpWindow, &count, nullptr))
+	// 	throw RuntimeException(fmt::format("%s", SDL_GetError()));
+	// unsigned int additional_extension_count = (unsigned int)instanceExtensionNames.size();
+	// instanceExtensionNames.resize((size_t)(additional_extension_count + count));
+	// if (!SDL_Vulkan_GetInstanceExtensions(tmpWindow, &count, &instanceExtensionNames[additional_extension_count]))
+	// 	throw RuntimeException(fmt::format("failed SDL_Vulkan_GetInstanceExtensions - %s", SDL_GetError()));
+	// SDL_DestroyWindow(tmpWindow);
 
-	/*  Get Vulkan version. */
-	uint32_t version;
-	result = vkEnumerateInstanceVersion(&version);
-	if (result != VK_SUCCESS)
-		throw RuntimeException(fmt::format("Failed to enumerate instance version - %d", result));
+	// /*  Get Vulkan version. */
+	// uint32_t version;
+	// result = vkEnumerateInstanceVersion(&version);
+	// if (result != VK_SUCCESS)
+	// 	throw RuntimeException(fmt::format("Failed to enumerate instance version - %d", result));
 
-	/*	Primary Vulkan instance Object. */
-	VkApplicationInfo ai = {};
-	ai.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-	ai.pNext = nullptr;
-	ai.pApplicationName = "FragCore";
-	ai.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
-	ai.pEngineName = "FragCore-Engine";
-	ai.engineVersion = VK_MAKE_VERSION(1, 0, 0);
-	ai.apiVersion = version;
+	// /*	Primary Vulkan instance Object. */
+	// VkApplicationInfo ai = {};
+	// ai.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
+	// ai.pNext = nullptr;
+	// ai.pApplicationName = "FragCore";
+	// ai.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
+	// ai.pEngineName = "FragCore-Engine";
+	// ai.engineVersion = VK_MAKE_VERSION(1, 0, 0);
+	// ai.apiVersion = version;
 
-	VkDebugReportCallbackCreateInfoEXT callbackCreateInfoExt = {
-		VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT, // sType
-		nullptr,													 // pNext
-		VK_DEBUG_REPORT_ERROR_BIT_EXT |							 // flags
-			VK_DEBUG_REPORT_WARNING_BIT_EXT,
-		nullptr, // myOutputDebugString,                                        // pfnCallback
-		nullptr  // pUserData
-	};
-	VkDebugUtilsMessengerCreateInfoEXT debugUtilsMessengerCreateInfoExt = {
-		.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT,
-		.pNext = &callbackCreateInfoExt,
-	};
-	VkValidationCheckEXT validationCheckExt[] = {VK_VALIDATION_CHECK_ALL_EXT};
-	VkValidationFlagsEXT validationFlagsExt = {.sType = VK_STRUCTURE_TYPE_VALIDATION_FLAGS_EXT,
-											   .pNext = nullptr, //&debugUtilsMessengerCreateInfoExt,
-											   .disabledValidationCheckCount = 1,
-											   .pDisabledValidationChecks = validationCheckExt};
+	// VkDebugReportCallbackCreateInfoEXT callbackCreateInfoExt = {
+	// 	VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT, // sType
+	// 	nullptr,													 // pNext
+	// 	VK_DEBUG_REPORT_ERROR_BIT_EXT |							 // flags
+	// 		VK_DEBUG_REPORT_WARNING_BIT_EXT,
+	// 	nullptr, // myOutputDebugString,                                        // pfnCallback
+	// 	nullptr  // pUserData
+	// };
+	// VkDebugUtilsMessengerCreateInfoEXT debugUtilsMessengerCreateInfoExt = {
+	// 	.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT,
+	// 	.pNext = &callbackCreateInfoExt,
+	// };
+	// VkValidationCheckEXT validationCheckExt[] = {VK_VALIDATION_CHECK_ALL_EXT};
+	// VkValidationFlagsEXT validationFlagsExt = {.sType = VK_STRUCTURE_TYPE_VALIDATION_FLAGS_EXT,
+	// 										   .pNext = nullptr, //&debugUtilsMessengerCreateInfoExt,
+	// 										   .disabledValidationCheckCount = 1,
+	// 										   .pDisabledValidationChecks = validationCheckExt};
 
-	/*	Prepare the instance object. */
-	VkInstanceCreateInfo ici = {};
-	ici.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-	if (vulkancore->enableValidationLayers)
-		ici.pNext = nullptr;
-	else
-		ici.pNext = nullptr;
-	ici.flags = 0;
-	ici.pApplicationInfo = &ai;
-	if (vulkancore->enableValidationLayers) {
-		ici.enabledLayerCount = validationLayers.size();
-		ici.ppEnabledLayerNames = validationLayers.data();
-	} else {
-		ici.enabledLayerCount = 0;
-		ici.ppEnabledLayerNames = nullptr;
-	}
-	ici.enabledExtensionCount = instanceExtensionNames.size();
-	ici.ppEnabledExtensionNames = instanceExtensionNames.data();
+	// /*	Prepare the instance object. */
+	// VkInstanceCreateInfo ici = {};
+	// ici.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+	// if (vulkancore->enableValidationLayers)
+	// 	ici.pNext = nullptr;
+	// else
+	// 	ici.pNext = nullptr;
+	// ici.flags = 0;
+	// ici.pApplicationInfo = &ai;
+	// if (vulkancore->enableValidationLayers) {
+	// 	ici.enabledLayerCount = validationLayers.size();
+	// 	ici.ppEnabledLayerNames = validationLayers.data();
+	// } else {
+	// 	ici.enabledLayerCount = 0;
+	// 	ici.ppEnabledLayerNames = nullptr;
+	// }
+	// ici.enabledExtensionCount = instanceExtensionNames.size();
+	// ici.ppEnabledExtensionNames = instanceExtensionNames.data();
 
-	/*	Create Vulkan instance.	*/
-	result = vkCreateInstance(&ici, nullptr, &vulkancore->inst);
-	if (result != VK_SUCCESS)
-		throw RuntimeException(fmt::format("vkCreateInstance - %d.", result));
+	// /*	Create Vulkan instance.	*/
+	// result = vkCreateInstance(&ici, nullptr, &vulkancore->inst);
+	// if (result != VK_SUCCESS)
+	// 	throw RuntimeException(fmt::format("vkCreateInstance - %d.", result));
 
-	/*  Set debug mode.  */
-	this->setDebug(setupConfig.get<bool>("debug"));
+	// /*  Set debug mode.  */
+	// this->setDebug(setupConfig.get<bool>("debug"));
 
-	/*	Get number of physical devices. */
-	int num_physica_devices;
-	result = vkEnumeratePhysicalDevices(vulkancore->inst, &vulkancore->num_physical_devices, nullptr);
-	if (result != VK_SUCCESS) {
-		throw RuntimeException(fmt::format("Failed to get number physical devices - %d", result));
-	}
-	/*  Get all physical devices.    */
-	vulkancore->physical_devices =
-		(VkPhysicalDevice *)malloc(sizeof(VkPhysicalDevice) * vulkancore->num_physical_devices);
-	assert(vulkancore->physical_devices);
-	vulkancore->GPUs.resize(vulkancore->num_physical_devices);
-	result =
-		vkEnumeratePhysicalDevices(vulkancore->inst, &vulkancore->num_physical_devices, vulkancore->physical_devices);
-	if (result != VK_SUCCESS)
-		throw RuntimeException(fmt::format("Failed to enumerate physical devices - %d.", result));
+	// /*	Get number of physical devices. */
+	// int num_physica_devices;
+	// result = vkEnumeratePhysicalDevices(vulkancore->inst, &vulkancore->num_physical_devices, nullptr);
+	// if (result != VK_SUCCESS) {
+	// 	throw RuntimeException(fmt::format("Failed to get number physical devices - %d", result));
+	// }
+	// /*  Get all physical devices.    */
+	// vulkancore->physical_devices =
+	// 	(VkPhysicalDevice *)malloc(sizeof(VkPhysicalDevice) * vulkancore->num_physical_devices);
+	// assert(vulkancore->physical_devices);
+	// vulkancore->GPUs.resize(vulkancore->num_physical_devices);
+	// result =
+	// 	vkEnumeratePhysicalDevices(vulkancore->inst, &vulkancore->num_physical_devices, vulkancore->physical_devices);
+	// if (result != VK_SUCCESS)
+	// 	throw RuntimeException(fmt::format("Failed to enumerate physical devices - %d.", result));
 
-	/*	*/
-	uint32_t pPhysicalDeviceGroupCount;
-	result = vkEnumeratePhysicalDeviceGroups(vulkancore->inst, &pPhysicalDeviceGroupCount, nullptr);
-	if (result != VK_SUCCESS)
-		throw RuntimeException(fmt::format("vkEnumeratePhysicalDeviceGroups failed query - %d.", result));
-	std::vector<VkPhysicalDeviceGroupProperties> phyiscalDevices;
-	phyiscalDevices.resize(pPhysicalDeviceGroupCount);
-	result = vkEnumeratePhysicalDeviceGroups(vulkancore->inst, &pPhysicalDeviceGroupCount, phyiscalDevices.data());
-	if (result != VK_SUCCESS)
-		throw RuntimeException(fmt::format("vkEnumeratePhysicalDeviceGroups failed fetching groups - %d.", result));
+	// /*	*/
+	// uint32_t pPhysicalDeviceGroupCount;
+	// result = vkEnumeratePhysicalDeviceGroups(vulkancore->inst, &pPhysicalDeviceGroupCount, nullptr);
+	// if (result != VK_SUCCESS)
+	// 	throw RuntimeException(fmt::format("vkEnumeratePhysicalDeviceGroups failed query - %d.", result));
+	// std::vector<VkPhysicalDeviceGroupProperties> phyiscalDevices;
+	// phyiscalDevices.resize(pPhysicalDeviceGroupCount);
+	// result = vkEnumeratePhysicalDeviceGroups(vulkancore->inst, &pPhysicalDeviceGroupCount, phyiscalDevices.data());
+	// if (result != VK_SUCCESS)
+	// 	throw RuntimeException(fmt::format("vkEnumeratePhysicalDeviceGroups failed fetching groups - %d.", result));
 
-	/*  TODO add selection function. */
-	std::vector<VkPhysicalDevice> gpucandiates;
-	for (int i = 0; i < vulkancore->num_physical_devices; i++) {
-		if (isDeviceSuitable(vulkancore->physical_devices[i])) {
-			vulkancore->gpu = vulkancore->physical_devices[i];
-			gpucandiates.push_back(vulkancore->physical_devices[i]);
-			break;
-		}
-	}
+	// /*  TODO add selection function. */
+	// std::vector<VkPhysicalDevice> gpucandiates;
+	// for (int i = 0; i < vulkancore->num_physical_devices; i++) {
+	// 	if (isDeviceSuitable(vulkancore->physical_devices[i])) {
+	// 		vulkancore->gpu = vulkancore->physical_devices[i];
+	// 		gpucandiates.push_back(vulkancore->physical_devices[i]);
+	// 		break;
+	// 	}
+	// }
 
-	std::vector<VkPhysicalDevice> selectedDevices;
-	selectDefaultDevices(gpucandiates, selectedDevices);
+	// std::vector<VkPhysicalDevice> selectedDevices;
+	// selectDefaultDevices(gpucandiates, selectedDevices);
 
-	/*  */
-	VkPhysicalDeviceFeatures supportedFeatures;
-	vkGetPhysicalDeviceFeatures(vulkancore->gpu, &supportedFeatures);
-	/*  Fetch memory properties.   */
-	vkGetPhysicalDeviceMemoryProperties(vulkancore->gpu, &vulkancore->memProperties);
+	// /*  */
+	// VkPhysicalDeviceFeatures supportedFeatures;
+	// vkGetPhysicalDeviceFeatures(vulkancore->gpu, &supportedFeatures);
+	// /*  Fetch memory properties.   */
+	// vkGetPhysicalDeviceMemoryProperties(vulkancore->gpu, &vulkancore->memProperties);
 
-	/*  Select queue family.    */
-	/*  TODO improve queue selection.   */
-	vkGetPhysicalDeviceQueueFamilyProperties(vulkancore->gpu, &vulkancore->queue_count, nullptr);
+	// /*  Select queue family.    */
+	// /*  TODO improve queue selection.   */
+	// vkGetPhysicalDeviceQueueFamilyProperties(vulkancore->gpu, &vulkancore->queue_count, nullptr);
 
-	vulkancore->queue_props =
-		(VkQueueFamilyProperties *)malloc(sizeof(VkQueueFamilyProperties) * vulkancore->queue_count);
-	vkGetPhysicalDeviceQueueFamilyProperties(vulkancore->gpu, &vulkancore->queue_count, vulkancore->queue_props);
-	assert(vulkancore->queue_count >= 1);
+	// vulkancore->queue_props =
+	// 	(VkQueueFamilyProperties *)malloc(sizeof(VkQueueFamilyProperties) * vulkancore->queue_count);
+	// vkGetPhysicalDeviceQueueFamilyProperties(vulkancore->gpu, &vulkancore->queue_count, vulkancore->queue_props);
+	// assert(vulkancore->queue_count >= 1);
 
-	VkPhysicalDeviceFeatures features;
-	vkGetPhysicalDeviceFeatures(vulkancore->gpu, &features);
+	// VkPhysicalDeviceFeatures features;
+	// vkGetPhysicalDeviceFeatures(vulkancore->gpu, &features);
 
-	/*  Select queue with graphic.  */ // TODO add queue for compute and etc.
-	uint32_t graphicsQueueNodeIndex = UINT32_MAX;
-	for (uint32_t i = 0; i < vulkancore->queue_count; i++) {
-		if ((vulkancore->queue_props[i].queueFlags & VK_QUEUE_GRAPHICS_BIT) != 0) {
-			if (graphicsQueueNodeIndex == UINT32_MAX)
-				graphicsQueueNodeIndex = i;
-		}
-	}
-	vulkancore->graphics_queue_node_index = graphicsQueueNodeIndex;
+	// /*  Select queue with graphic.  */ // TODO add queue for compute and etc.
+	// uint32_t graphicsQueueNodeIndex = UINT32_MAX;
+	// for (uint32_t i = 0; i < vulkancore->queue_count; i++) {
+	// 	if ((vulkancore->queue_props[i].queueFlags & VK_QUEUE_GRAPHICS_BIT) != 0) {
+	// 		if (graphicsQueueNodeIndex == UINT32_MAX)
+	// 			graphicsQueueNodeIndex = i;
+	// 	}
+	// }
+	// vulkancore->graphics_queue_node_index = graphicsQueueNodeIndex;
 
-	float queue_priorities[1] = {1.0};
-	const VkDeviceQueueCreateInfo queue = {.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO,
-										   .pNext = nullptr,
-										   .flags = 0,
-										   .queueFamilyIndex = vulkancore->graphics_queue_node_index,
-										   .queueCount = 1,
-										   .pQueuePriorities = queue_priorities};
+	// float queue_priorities[1] = {1.0};
+	// const VkDeviceQueueCreateInfo queue = {.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO,
+	// 									   .pNext = nullptr,
+	// 									   .flags = 0,
+	// 									   .queueFamilyIndex = vulkancore->graphics_queue_node_index,
+	// 									   .queueCount = 1,
+	// 									   .pQueuePriorities = queue_priorities};
 
-	/*  Required extensions.    */
-	std::vector<const char *> deviceExtensions = {
-		VK_KHR_SWAPCHAIN_EXTENSION_NAME, VK_EXT_CONDITIONAL_RENDERING_EXTENSION_NAME,
-		// VK_NV_RAY_TRACING_EXTENSION_NAME
-		// VK_KHR_GET_MEMORY_REQUIREMENTS_2_EXTENSION_NAME
-		// VK_NV_GLSL_SHADER_EXTENSION_NAME
-	};
-	if (vulkancore->enableValidationLayers) {
-		// TODO determine
-		deviceExtensions.push_back(VK_EXT_DEBUG_MARKER_EXTENSION_NAME);
-		// deviceExtensions.push_back(VK_EXT_DEBUG_REPORT_EXTENSION_NAME);
-	}
+	// /*  Required extensions.    */
+	// std::vector<const char *> deviceExtensions = {
+	// 	VK_KHR_SWAPCHAIN_EXTENSION_NAME, VK_EXT_CONDITIONAL_RENDERING_EXTENSION_NAME,
+	// 	// VK_NV_RAY_TRACING_EXTENSION_NAME
+	// 	// VK_KHR_GET_MEMORY_REQUIREMENTS_2_EXTENSION_NAME
+	// 	// VK_NV_GLSL_SHADER_EXTENSION_NAME
+	// };
+	// if (vulkancore->enableValidationLayers) {
+	// 	// TODO determine
+	// 	deviceExtensions.push_back(VK_EXT_DEBUG_MARKER_EXTENSION_NAME);
+	// 	// deviceExtensions.push_back(VK_EXT_DEBUG_REPORT_EXTENSION_NAME);
+	// }
 
-	VkDeviceGroupDeviceCreateInfo deviceGroupDeviceCreateInfo = {
-		.sType = VK_STRUCTURE_TYPE_DEVICE_GROUP_DEVICE_CREATE_INFO,
-	};
-	if (phyiscalDevices.size() > 0) {
-		if (phyiscalDevices[0].physicalDeviceCount > 1) {
-			deviceGroupDeviceCreateInfo.physicalDeviceCount = phyiscalDevices[0].physicalDeviceCount;
-			deviceGroupDeviceCreateInfo.pPhysicalDevices = phyiscalDevices[0].physicalDevices;
-		}
-	}
+	// VkDeviceGroupDeviceCreateInfo deviceGroupDeviceCreateInfo = {
+	// 	.sType = VK_STRUCTURE_TYPE_DEVICE_GROUP_DEVICE_CREATE_INFO,
+	// };
+	// if (phyiscalDevices.size() > 0) {
+	// 	if (phyiscalDevices[0].physicalDeviceCount > 1) {
+	// 		deviceGroupDeviceCreateInfo.physicalDeviceCount = phyiscalDevices[0].physicalDeviceCount;
+	// 		deviceGroupDeviceCreateInfo.pPhysicalDevices = phyiscalDevices[0].physicalDevices;
+	// 	}
+	// }
 
-	VkPhysicalDeviceShaderDrawParameterFeatures deviceShaderDrawParametersFeatures = {
-		.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_DRAW_PARAMETER_FEATURES,
-		.pNext = nullptr,
-		.shaderDrawParameters = VK_TRUE};
-	VkPhysicalDeviceMultiviewFeatures deviceMultiviewFeatures = {
-		.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MULTIVIEW_FEATURES,
-		.pNext = &deviceShaderDrawParametersFeatures,
-		.multiview = VK_TRUE,
-		.multiviewGeometryShader = VK_TRUE,
-		.multiviewTessellationShader = VK_TRUE};
-	VkPhysicalDeviceConditionalRenderingFeaturesEXT conditionalRenderingFeaturesExt = {
-		.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_CONDITIONAL_RENDERING_FEATURES_EXT,
-		.pNext = &deviceMultiviewFeatures,
-		.conditionalRendering = VK_TRUE,
-		.inheritedConditionalRendering = VK_TRUE};
+	// VkPhysicalDeviceShaderDrawParameterFeatures deviceShaderDrawParametersFeatures = {
+	// 	.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_DRAW_PARAMETER_FEATURES,
+	// 	.pNext = nullptr,
+	// 	.shaderDrawParameters = VK_TRUE};
+	// VkPhysicalDeviceMultiviewFeatures deviceMultiviewFeatures = {
+	// 	.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MULTIVIEW_FEATURES,
+	// 	.pNext = &deviceShaderDrawParametersFeatures,
+	// 	.multiview = VK_TRUE,
+	// 	.multiviewGeometryShader = VK_TRUE,
+	// 	.multiviewTessellationShader = VK_TRUE};
+	// VkPhysicalDeviceConditionalRenderingFeaturesEXT conditionalRenderingFeaturesExt = {
+	// 	.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_CONDITIONAL_RENDERING_FEATURES_EXT,
+	// 	.pNext = &deviceMultiviewFeatures,
+	// 	.conditionalRendering = VK_TRUE,
+	// 	.inheritedConditionalRendering = VK_TRUE};
 
-	VkDeviceCreateInfo device = {};
-	VkPhysicalDeviceFeatures deviceFeatures{};
-	device.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-	device.pNext = &conditionalRenderingFeaturesExt;
-	device.queueCreateInfoCount = 1;
-	device.pQueueCreateInfos = &queue;
-	if (vulkancore->enableValidationLayers) {
-		device.enabledLayerCount = vulkancore->enabled_layer_count;
-		device.ppEnabledLayerNames =
-			(const char *const *)((vulkancore->validate) ? vulkancore->device_validation_layers : nullptr);
-	} else {
-		device.enabledLayerCount = 0;
-	}
+	// VkDeviceCreateInfo device = {};
+	// VkPhysicalDeviceFeatures deviceFeatures{};
+	// device.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+	// device.pNext = &conditionalRenderingFeaturesExt;
+	// device.queueCreateInfoCount = 1;
+	// device.pQueueCreateInfos = &queue;
+	// if (vulkancore->enableValidationLayers) {
+	// 	device.enabledLayerCount = vulkancore->enabled_layer_count;
+	// 	device.ppEnabledLayerNames =
+	// 		(const char *const *)((vulkancore->validate) ? vulkancore->device_validation_layers : nullptr);
+	// } else {
+	// 	device.enabledLayerCount = 0;
+	// }
 
-	/*	Enable group.	*/
-	if (deviceGroupDeviceCreateInfo.physicalDeviceCount > 1) {
-		deviceShaderDrawParametersFeatures.pNext = &deviceGroupDeviceCreateInfo;
-	}
-	device.enabledExtensionCount = deviceExtensions.size();
-	device.ppEnabledExtensionNames = deviceExtensions.data();
-	device.pEnabledFeatures = &deviceFeatures;
+	// /*	Enable group.	*/
+	// if (deviceGroupDeviceCreateInfo.physicalDeviceCount > 1) {
+	// 	deviceShaderDrawParametersFeatures.pNext = &deviceGroupDeviceCreateInfo;
+	// }
+	// device.enabledExtensionCount = deviceExtensions.size();
+	// device.ppEnabledExtensionNames = deviceExtensions.data();
+	// device.pEnabledFeatures = &deviceFeatures;
 
-	/*  Create device.  */
-	result = vkCreateDevice(vulkancore->gpu, &device, nullptr, &vulkancore->device);
-	if (result != VK_SUCCESS)
-		throw RuntimeException(fmt::format("Failed to create logical Device - %d", result));
+	// /*  Create device.  */
+	// result = vkCreateDevice(vulkancore->gpu, &device, nullptr, &vulkancore->device);
+	// if (result != VK_SUCCESS)
+	// 	throw RuntimeException(fmt::format("Failed to create logical Device - %d", result));
 
-	/*  Get all queues.    */
-	vkGetDeviceQueue(vulkancore->device, vulkancore->graphics_queue_node_index, 0, &vulkancore->queue);
-	vkGetDeviceQueue(vulkancore->device, vulkancore->graphics_queue_node_index, 0, &vulkancore->presentQueue);
+	// /*  Get all queues.    */
+	// vkGetDeviceQueue(vulkancore->device, vulkancore->graphics_queue_node_index, 0, &vulkancore->queue);
+	// vkGetDeviceQueue(vulkancore->device, vulkancore->graphics_queue_node_index, 0, &vulkancore->presentQueue);
 
-	/*  Create command pool.    */
-	VkCommandPoolCreateInfo cmdPoolCreateInfo = {};
-	cmdPoolCreateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-	cmdPoolCreateInfo.queueFamilyIndex = vulkancore->graphics_queue_node_index;
-	cmdPoolCreateInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+	// /*  Create command pool.    */
+	// VkCommandPoolCreateInfo cmdPoolCreateInfo = {};
+	// cmdPoolCreateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+	// cmdPoolCreateInfo.queueFamilyIndex = vulkancore->graphics_queue_node_index;
+	// cmdPoolCreateInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
 
-	/*  Create command pool.    */
-	result = vkCreateCommandPool(vulkancore->device, &cmdPoolCreateInfo, nullptr, &vulkancore->cmd_pool);
-	if (result != VK_SUCCESS)
-		throw RuntimeException(fmt::format("failed to create command pool %d", result));
+	// /*  Create command pool.    */
+	// result = vkCreateCommandPool(vulkancore->device, &cmdPoolCreateInfo, nullptr, &vulkancore->cmd_pool);
+	// if (result != VK_SUCCESS)
+	// 	throw RuntimeException(fmt::format("failed to create command pool %d", result));
 
 	/*  TODO determine which languages are supported.   */
 	//    uint32_t nExtensions;

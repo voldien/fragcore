@@ -18,6 +18,7 @@
 #include"Renderer/Buffer.h"
 #include"Renderer/Sampler.h"
 #include<vulkan/vulkan.h>
+#include<VKDevice.h>
 #include<SDL2/SDL.h>
 #include<vector>
 
@@ -44,79 +45,79 @@ namespace fragcore {
 	// 	VkExtent2D chainExtend;             /*  */
 	// } SwapchainBuffers;
 
-	typedef struct vulkan_core_t {
-		/*	*/
-		std::vector<RendererWindow*> windows;
-		SDL_Window *window;	//TODO remove
-		Capability capabilityCached;
-		/*	*/
-		VkInstance inst;
-		VkDebugUtilsMessengerEXT debugMessenger;
-		VkDebugReportCallbackEXT debugReport;
-		/*  Physical device.    */
-		VkPhysicalDevice gpu;
-		std::vector<VkPhysicalDevice> GPUs;
+	// typedef struct vulkan_core_t {
+	// 	/*	*/
+	// 	std::vector<RendererWindow*> windows;
+	// 	SDL_Window *window;	//TODO remove
+	// 	Capability capabilityCached;
+	// 	/*	*/
+	// 	VkInstance inst;
+	// 	VkDebugUtilsMessengerEXT debugMessenger;
+	// 	VkDebugReportCallbackEXT debugReport;
+	// 	/*  Physical device.    */
+	// 	VkPhysicalDevice gpu;
+	// 	std::vector<VkPhysicalDevice> GPUs;
 
 
-		/*  */
-		VkDevice device;
-		VkQueue queue;	//TODO rename graphicsQueue
-		VkQueue presentQueue;
+	// 	/*  */
+	// 	VkDevice device;
+	// 	VkQueue queue;	//TODO rename graphicsQueue
+	// 	VkQueue presentQueue;
 
-		/*  */
-		VkPhysicalDeviceProperties gpu_props;
-		VkQueueFamilyProperties *queue_props;
-		uint32_t graphics_queue_node_index;
+	// 	/*  */
+	// 	VkPhysicalDeviceProperties gpu_props;
+	// 	VkQueueFamilyProperties *queue_props;
+	// 	uint32_t graphics_queue_node_index;
 
-		VkSurfaceKHR surface;
+	// 	VkSurfaceKHR surface;
 
-		/*  Collection of swap chain variables. */
-		//SwapchainBuffers *swapChain;
+	// 	/*  Collection of swap chain variables. */
+	// 	//SwapchainBuffers *swapChain;
 
-		VkCommandPool cmd_pool;
-		VkCommandPool compute_pool;
-		VkCommandPool transfer_pool;
+	// 	VkCommandPool cmd_pool;
+	// 	VkCommandPool compute_pool;
+	// 	VkCommandPool transfer_pool;
 
-		VkCommandBuffer setup_cmd;            /* Command Buffer for initialization commands	*/
-		VkCommandBuffer draw_cmd;            /* Command Buffer for drawing commands			*/
+	// 	VkCommandBuffer setup_cmd;            /* Command Buffer for initialization commands	*/
+	// 	VkCommandBuffer draw_cmd;            /* Command Buffer for drawing commands			*/
 
-		VkPipelineLayout pipeline_layout;
-		VkDescriptorSetLayout desc_layout;
+	// 	VkPipelineLayout pipeline_layout;
+	// 	VkDescriptorSetLayout desc_layout;
 
-		VkPipelineCache pipelineCache;
-		VkRenderPass render_pass;
+	// 	VkPipelineCache pipelineCache;
+	// 	VkRenderPass render_pass;
 
-		/*  */
-		VkPipeline current_pipeline;
+	// 	/*  */
+	// 	VkPipeline current_pipeline;
 
-		/*  */
-		//VkSemaphore imageAvailableSemaphore;
-		//VkSemaphore renderFinishedSemaphore;
-		std::vector<VkSemaphore> imageAvailableSemaphores;
-		std::vector<VkSemaphore> renderFinishedSemaphores;
-		std::vector<VkFence> inFlightFences;
-		std::vector<VkFence> imagesInFlight;
-		//VkQueueFamilyIndices indices
+	// 	/*  */
+	// 	//VkSemaphore imageAvailableSemaphore;
+	// 	//VkSemaphore renderFinishedSemaphore;
+	// 	std::vector<VkSemaphore> imageAvailableSemaphores;
+	// 	std::vector<VkSemaphore> renderFinishedSemaphores;
+	// 	std::vector<VkFence> inFlightFences;
+	// 	std::vector<VkFence> imagesInFlight;
+	// 	//VkQueueFamilyIndices indices
 
-		/*  */
-		uint32_t num_physical_devices;
-		VkPhysicalDevice *physical_devices;
-		uint32_t queue_count;
-		uint32_t enabled_extension_count;
-		uint32_t enabled_layer_count;
-		VkExtensionProperties *extension_names;
-		bool validate;
-		void *device_validation_layers;
-		bool enableValidationLayers;
-		bool enableDebugTracer;
-		uint32_t currentFrame;
-		uint32_t numBackBufferFrames;
-		float color[4];             /*  Clear color.    */
-		bool useGamma;
-		VkPhysicalDeviceMemoryProperties memProperties;
-		ShaderLanguage languageSupport;
-		Capability capability;
-	} VulkanCore;
+	// 	/*  */
+	// 	uint32_t num_physical_devices;
+	// 	VkPhysicalDevice *physical_devices;
+	// 	uint32_t queue_count;
+	// 	uint32_t enabled_extension_count;
+	// 	uint32_t enabled_layer_count;
+	// 	VkExtensionProperties *extension_names;
+	// 	bool validate;
+	// 	void *device_validation_layers;
+	// 	bool enableValidationLayers;
+	// 	bool enableDebugTracer;
+	// 	uint32_t currentFrame;
+	// 	uint32_t numBackBufferFrames;
+	// 	float color[4];             /*  Clear color.    */
+	// 	bool useGamma;
+	// 	VkPhysicalDeviceMemoryProperties memProperties;
+	// 	ShaderLanguage languageSupport;
+	// 	Capability capability;
+	// } VulkanCore;
 
 	typedef struct opengl_viewport_t {
 		unsigned int viewport;
@@ -126,7 +127,8 @@ namespace fragcore {
 	 *
 	 */
 	typedef struct vulkan_texture_object_t {
-		VulkanCore *vulkanCore;
+		std::shared_ptr<VKDevice> device;
+		//VulkanCore *vulkanCore;
 		TextureDesc desc;
 		unsigned int target;
 		VkImage texture;
@@ -139,7 +141,8 @@ namespace fragcore {
 	 *
 	 */
 	typedef struct vulkan_shader_object_t {
-		VulkanCore *vulkanCore;
+		std::shared_ptr<VKDevice> device;
+		//VulkanCore *vulkanCore;
 		VkPipeline graphicsPipeline;
 		VkPipelineLayout pipelineLayout;
 		unsigned int ver;
@@ -150,7 +153,8 @@ namespace fragcore {
 	} VKShaderObject;
 
 	typedef struct vulkan_pipeline_object_t{
-		VulkanCore *vulkanCore;
+		std::shared_ptr<VKDevice> device;
+		//VulkanCore *vulkanCore;
 		VkPipeline graphicsPipeline;
 		VkPipelineLayout pipelineLayout;
 		VkDescriptorSet descriptorSet;
