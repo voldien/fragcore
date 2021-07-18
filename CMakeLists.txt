@@ -1,4 +1,4 @@
-CMAKE_MINIMUM_REQUIRED( VERSION 3.15)
+CMAKE_MINIMUM_REQUIRED( VERSION 3.12)
 
 #-----------------------------------------------------------------------------
 # Set policy
@@ -156,7 +156,7 @@ SET_PATH( SVG_DIR ${CMAKE_INSTALL_PREFIX} )
 SET_PATH( MENU_DIR ${CMAKE_INSTALL_PREFIX} )
 SET_PATH( EXAMPLE_CONF_DIR ${CMAKE_INSTALL_PREFIX} )
 
-# C++17
+# Project uses C++17
 SET(CMAKE_CXX_STANDARD 17)
 SET(CMAKE_CXX_STANDARD_REQUIRED ON)
 SET(CMAKE_CXX_EXTENSIONS OFF)
@@ -177,7 +177,7 @@ IF((CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX) AND NOT CMAKE_COMPILER_
 
 	#
 #	ADD_DEFINITIONS(-Wall -w)
-		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -Wpedantic -Wextra  -Wall -Wno-attributes")
+		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -Wpedantic -Wextra  -Wall -Wno-attributes -std=c++17")
 
 	ADD_DEFINITIONS( -export-dynamic -rdynamic )
 
