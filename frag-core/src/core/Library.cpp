@@ -2,8 +2,8 @@
 #include "Exception/RuntimeException.h"
 #include "Utils/StringUtil.h"
 #include <SDL2/SDL.h>
+#include <fmt/core.h>
 #include <stdexcept>
-#include<fmt/core.h>
 #include <utility>
 using namespace fragcore;
 
@@ -32,8 +32,7 @@ bool Library::open(const char *clibrary) {
 	/*	Check for error.	*/
 	if (this->mlib == nullptr) {
 
-		std::string sdlerror = fmt::format("Failed open library : %s\n", SDL_GetError());
-		throw RuntimeException(sdlerror);
+		throw RuntimeException("Failed open library : {}\n", SDL_GetError());
 	}
 
 	return this->mlib != nullptr;
@@ -47,7 +46,7 @@ void *Library::getfunc(const char *pProcName) {
 	void *func = SDL_LoadFunction(this->mlib, pProcName);
 
 	if (func == nullptr) {
-		std::string sdlerror = fmt::format("Failed to load function %s, %s from library %s.\n", pProcName,
+		std::string sdlerror = fmt::format("Failed to load function {}, {} from library {}.\n", pProcName,
 										   SDL_GetError(), this->name.c_str());
 		throw RuntimeException(sdlerror);
 	}

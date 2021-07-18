@@ -17,7 +17,7 @@ Hash::Hash(Hash::ALGORITHM algorithm) {
 	case SHA512:
 		throw NotSupportedException();
 	default:
-		throw InvalidArgumentException(fmt::format("Invalid hash enumerator - %d", algorithm));
+		throw InvalidArgumentException(fmt::format("Invalid hash enumerator - {}", algorithm));
 	}
 
 	/*      */
