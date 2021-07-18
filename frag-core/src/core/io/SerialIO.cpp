@@ -20,13 +20,13 @@ long int SerialIO::write(long int nbytes, const void *pbuffer) {
 	sp_drain(serialPort);
 	return nbytes;
 }
-bool SerialIO::eof(void) const {}
-long int SerialIO::length(void) {}
-void SerialIO::seek(long int nbytes, Seek seek) {}
-unsigned long SerialIO::getPos(void) {}
-bool SerialIO::isWriteable(void) const {}
-bool SerialIO::isReadable(void) const {}
-bool SerialIO::flush(void) {}
+bool SerialIO::eof(void) const { return false; }
+long int SerialIO::length(void) { return 0; }
+void SerialIO::seek(long int nbytes, Seek seek) { return; }
+unsigned long SerialIO::getPos(void) { return 0; }
+bool SerialIO::isWriteable(void) const { return true; }
+bool SerialIO::isReadable(void) const { return true; }
+bool SerialIO::flush(void) { return sp_flush(this->port, SP_BUF_BOTH) == SP_OK; }
 
 SerialIO::SerialIO(const std::string &path, Mode mode) {
 	const int baudRate = 115200;
@@ -50,6 +50,7 @@ SerialIO::SerialIO(const std::string &path, Mode mode) {
 	if (res != SP_OK)
 		throw RuntimeException("Failed to disable xonoff {} - {}", path, sp_last_error_message());
 }
+
 std::optional<std::vector<std::string>> SerialIO::getSerialPorts(void) noexcept {
 	int i;
 	struct sp_port **ports;
