@@ -30,12 +30,6 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC Buffer : public RenderObject {
 		friend class IRenderer;
-
-	  public:
-		inline Buffer(void) {}
-
-		virtual ~Buffer(void);
-
 	  public:
 		enum MapTarget {
 			eRead = 0x1,		   /*  */

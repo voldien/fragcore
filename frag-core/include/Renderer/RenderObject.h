@@ -30,17 +30,19 @@ namespace fragcore {
 		friend class IRenderer;
 
 	  public:
-		RenderObject(void) {}
+		RenderObject(void) = default;
 		RenderObject(IRenderer *renderer) { setRenderInterface(renderer); }
 		RenderObject(RenderObject &&other) = default;
+		virtual ~RenderObject(void) = default;
 
 		/**
 		 * @brief Get the Renderer object
 		 *
 		 * @return T*
 		 */
-		template<class T = IRenderer>
-		inline T *getRenderer(void) const noexcept { return static_cast<T*>(this->iRenderer); }
+		template <class T = IRenderer> inline T *getRenderer(void) const noexcept {
+			return static_cast<T *>(this->iRenderer);
+		}
 
 		/**
 		 * @brief Get the Object object

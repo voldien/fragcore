@@ -4,6 +4,7 @@
 #include "Exception/RuntimeException.h"
 #include "Renderer/RenderDesc.h"
 #include "Utils/StringUtil.h"
+#include "VKBuffer.h"
 #include "VKCommandList.h"
 #include "VKRenderWindow.h"
 #include "Window/WindowManager.h"
@@ -363,6 +364,8 @@ Texture *VKRenderInterface::createTexture(TextureDesc *desc) {
 	// vktex->vulkanCore = vulkanCore;
 	// vktex->desc = *desc;
 	// texture->pdata = vktex;
+
+	//VKHelper::createImage()
 
 	// VkDeviceMemory stagingBufferMemory;
 	// VkDeviceSize imageSize = desc->pixelSize;
@@ -844,15 +847,12 @@ void VKRenderInterface::deleteShader(Shader *shader) {
 Buffer *VKRenderInterface::createBuffer(BufferDesc *desc) {
 
 	VkResult result;
-	Buffer *buffer;
-	VKBufferObject *vkBufferObject = new VKBufferObject();
-	//	vkBufferObject->vulkanCore = (VulkanCore *)this->pdata;
-	buffer = new Buffer();
-	// buffer->pdata = vkBufferObject;
+	VKBuffer *vkBufferObject = new VKBuffer();
 
-	VKHelper::createBuffer(device->getHandle(), desc->size, device->getPhysicalDevice(0)->getMemoryProperties(),
-						   (VkBufferUsageFlags)getBufferType(desc->type), VK_MEMORY_PROPERTY_HOST_CACHED_BIT, vkBufferObject->buffer,
-						   vkBufferObject->vertexBufferMemory);
+	// VKHelper::createBuffer(device->getHandle(), desc->size, device->getPhysicalDevice(0)->getMemoryProperties(),
+	// 					   (VkBufferUsageFlags)getBufferType((unsigned int)desc->type),
+	// 					   VK_MEMORY_PROPERTY_HOST_CACHED_BIT, vkBufferObject->buffer,
+	// 					   vkBufferObject->vertexBufferMemory);
 
 	// /*  Buffer description. */
 	// VkBufferCreateInfo bufferInfo = {};
@@ -884,8 +884,8 @@ Buffer *VKRenderInterface::createBuffer(BufferDesc *desc) {
 	// // 				   VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
 	// /*  */
-	// if (vkAllocateMemory(device->getHandle(), &allocInfo, nullptr, &vkBufferObject->vertexBufferMemory) != VK_SUCCESS) {
-	// 	throw RuntimeException(fmt::format("failed to allocate vertex buffer memory!"));
+	// if (vkAllocateMemory(device->getHandle(), &allocInfo, nullptr, &vkBufferObject->vertexBufferMemory) !=
+	// VK_SUCCESS) { 	throw RuntimeException(fmt::format("failed to allocate vertex buffer memory!"));
 	// }
 
 	// /*  */
@@ -893,7 +893,7 @@ Buffer *VKRenderInterface::createBuffer(BufferDesc *desc) {
 	// if (result != VK_SUCCESS)
 	// 	throw RuntimeException(fmt::format("failed to allocate vertex buffer memory!"));
 
-	return buffer;
+	return vkBufferObject;
 }
 
 void VKRenderInterface::deleteBuffer(Buffer *object) {
@@ -1015,12 +1015,7 @@ ViewPort *VKRenderInterface::getView(unsigned int i) {
 	//	return glcore->viewports[i - 1];
 }
 
-FrameBuffer *VKRenderInterface::createFrameBuffer(FrameBufferDesc *desc) {
-	
-
-	 return nullptr; 
-	 
-}
+FrameBuffer *VKRenderInterface::createFrameBuffer(FrameBufferDesc *desc) { return nullptr; }
 
 void VKRenderInterface::deleteFrameBuffer(FrameBuffer *obj) {}
 
