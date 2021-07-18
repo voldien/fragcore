@@ -148,7 +148,7 @@ AudioClip *AudioInterface::createAudioClip(AudioClipDesc *desc) {
 		alBufferData(buffer, format, data, size, desc->sampleRate);
 		int err = alGetError();
 		if (err != ALC_NO_ERROR)
-			throw RuntimeException(fmt::format("Failed load memory to buffer %s", openAlErrorToString(err)));
+			throw RuntimeException(fmt::format("Failed load memory to buffer {}", openAlErrorToString(err)));
 
 		free(data);
 		desc->decoder->deincreemnt();
@@ -297,13 +297,13 @@ void AudioInterface::setAudioDevice(const AudioPhysicalDevice &device) {
 	if (alcGetCurrentContext() != nullptr) {
 		/*  */
 		if (!alcCloseDevice(audio->device))
-			throw RuntimeException(fmt::format("Failed to open audio device %s", device.getName().c_str()));
+			throw RuntimeException(fmt::format("Failed to open audio device {}", device.getName().c_str()));
 	}
 
 	/*  */
 	audio->device = alcOpenDevice(device.getName().c_str());
 	if (!audio->device)
-		throw RuntimeException(fmt::format("Failed to open audio device %s", device.getName().c_str()));
+		throw RuntimeException(fmt::format("Failed to open audio device {}", device.getName().c_str()));
 
 	if (alcIsExtensionPresent(audio->device, ALC_EXT_EFX_NAME)) {
 
@@ -324,10 +324,10 @@ void AudioInterface::setAudioDevice(const AudioPhysicalDevice &device) {
 	/*  Create context. */
 	audio->context = alcCreateContext(audio->device, attribs);
 	if (!audio->context)
-		throw RuntimeException(fmt::format("Failed to create audio context for device %s", device.getName().c_str()));
+		throw RuntimeException(fmt::format("Failed to create audio context for device {}", device.getName().c_str()));
 
 	if (!alcMakeContextCurrent(audio->context))
-		throw RuntimeException(fmt::format("Failed to make current audio device %s", device.getName().c_str()));
+		throw RuntimeException(fmt::format("Failed to make current audio device {}", device.getName().c_str()));
 
 	// alcGetIntegerv(audio->device, ALC_MAX_AUXILIARY_SENDS, 1, &iSends);
 }

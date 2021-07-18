@@ -31,7 +31,7 @@ void GZFileIO::open(const char *path, Mode mode) {
 	if (this->gzFi == nullptr) {
 		int error;
 		const char *errMsg = gzerror(this->gzFi, &error);
-		throw RuntimeException(fmt::format("Failed to open %s - error: %d | %s", path, error, errMsg));
+		throw RuntimeException(fmt::format("Failed to open %s - error: {} | %s", path, error, errMsg));
 	}
 
 	/*  Set buffer size.    */

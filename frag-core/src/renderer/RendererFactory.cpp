@@ -8,8 +8,8 @@
 #include <cassert>
 #include <cstdio>
 #include <exception>
+#include <fmt/core.h>
 #include <stdexcept>
-#include<fmt/core.h>
 
 using namespace fragcore;
 typedef IRenderer *(*pcreateinternalrendering)(IConfig *config);
@@ -37,7 +37,7 @@ IRenderer *RenderingFactory::createRendering(const char *cpathlib, IConfig *conf
 		interface = pfunc(config);
 
 	} else {
-		throw RuntimeException(fmt::format("Failed loading %s library for creating renderer.", cpathlib));
+		throw RuntimeException("Failed loading {} library for creating renderer.", cpathlib);
 	}
 
 	return interface;

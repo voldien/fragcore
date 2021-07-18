@@ -17,16 +17,16 @@ FileNotify::FileNotify(Ref<IScheduler> &sch) {
 	/*	Initilize the notification library.	*/
 	FSW_STATUS ret = fsw_init_library();
 	if (ret != FSW_OK)
-		throw RuntimeException(fmt::format("Failed to initialize the Filesystem watch: %d.", ret));
+		throw RuntimeException(fmt::format("Failed to initialize the Filesystem watch: {}.", ret));
 	this->session = fsw_init_session(system_default_monitor_type);
 	if (this->session == nullptr)
-		throw RuntimeException(fmt::format("Failed to create session for Filesystem watch: %d.", fsw_last_error()));
+		throw RuntimeException(fmt::format("Failed to create session for Filesystem watch: {}.", fsw_last_error()));
 	ret = fsw_set_follow_symlinks(this->session, true);
 	if (ret != FSW_OK)
-		throw RuntimeException(fmt::format("Failed to enable follow symlinks with Filesystem watch: %d.", ret));
+		throw RuntimeException(fmt::format("Failed to enable follow symlinks with Filesystem watch: {}.", ret));
 	ret = fsw_set_allow_overflow(this->session, false);
 	if (ret != FSW_OK)
-		throw RuntimeException(fmt::format("Failed to disable overflow with Filesystem watch: %d.", ret));
+		throw RuntimeException(fmt::format("Failed to disable overflow with Filesystem watch: {}.", ret));
 	fsw_set_verbose(false);
 
 	/*	*/
@@ -55,10 +55,10 @@ void FileNotify::registerAsset(const char *filepath, Object *object) {
 	FSW_STATUS ret;
 	ret = fsw_add_path(this->session, filepath);
 	if (ret != FSW_OK)
-		throw RuntimeException(fmt::format("Failed to initialize the Filesystem watch: %d.", ret));
+		throw RuntimeException(fmt::format("Failed to initialize the Filesystem watch: {}.", ret));
 	ret = fsw_set_callback(this->session, FileNotify::callback, this);
 	if (ret != FSW_OK)
-		throw RuntimeException(fmt::format("Failed to initialize the Filesystem watch: %d.", ret));
+		throw RuntimeException(fmt::format("Failed to initialize the Filesystem watch: {}.", ret));
 
 	/*  Create file notification entry.  */
 	FileNoticationEntry entry;
@@ -84,7 +84,7 @@ void FileNotify::unregisterAsset(Object *object) {
 		removeFilePath(entry->filepath.c_str(), object);
 		list->erase(key);
 	} else {
-		throw RuntimeException(fmt::format("Could not find object with GID: %d", key));
+		throw RuntimeException(fmt::format("Could not find object with GID: {}", key));
 	}
 }
 
@@ -226,7 +226,7 @@ void *FileNotify::fswatch(const void *psession) {
 
 	FSW_STATUS ret = fsw_start_monitor(session);
 	if (ret != FSW_OK)
-		throw RuntimeException(fmt::format("Error on starting monitoring with the Filesystem watch: %d.", ret));
+		throw RuntimeException(fmt::format("Error on starting monitoring with the Filesystem watch: {}.", ret));
 }
 
 void FileNotify::start(void) {
@@ -242,6 +242,6 @@ void FileNotify::stop(void) {
 	if (fsw_is_running(this->session)) {
 		ret = fsw_stop_monitor(this->session);
 		if (ret != FSW_OK)
-			throw RuntimeException(fmt::format("Error on stopping monitoring with the Filesystem watch: %d.", ret));
+			throw RuntimeException(fmt::format("Error on stopping monitoring with the Filesystem watch: {}.", ret));
 	}
 }

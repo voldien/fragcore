@@ -11,7 +11,7 @@ unsigned int SDLDisplay::x(void) const {
 	SDL_Rect bound;
 	int err = SDL_GetDisplayBounds(this->index, &bound);
 	if (err != 0)
-		throw RuntimeException(fmt::format("Failed getting display %d bounds, %s.", this->index, SDL_GetError()));
+		throw RuntimeException(fmt::format("Failed getting display {} bounds, %s.", this->index, SDL_GetError()));
 	return bound.x;
 }
 
@@ -19,7 +19,7 @@ unsigned int SDLDisplay::y(void) const {
 	SDL_Rect bound;
 	int err = SDL_GetDisplayBounds(this->index, &bound);
 	if (err != 0)
-		throw RuntimeException(fmt::format("Failed getting display %d bounds, %s.", this->index, SDL_GetError()));
+		throw RuntimeException(fmt::format("Failed getting display {} bounds, %s.", this->index, SDL_GetError()));
 	return bound.y;
 }
 
@@ -27,7 +27,7 @@ unsigned int SDLDisplay::width(void) const {
 	SDL_Rect bound;
 	int err = SDL_GetDisplayBounds(this->index, &bound);
 	if (err != 0)
-		throw RuntimeException(fmt::format("Failed getting display %d bounds, %s.", this->index, SDL_GetError()));
+		throw RuntimeException(fmt::format("Failed getting display {} bounds, %s.", this->index, SDL_GetError()));
 	return bound.w;
 }
 
@@ -35,7 +35,7 @@ unsigned int SDLDisplay::height(void) const {
 	SDL_Rect bound;
 	int err = SDL_GetDisplayBounds(this->index, &bound);
 	if (err != 0)
-		throw RuntimeException(fmt::format("Failed getting display %d bounds, %s.", this->index, SDL_GetError()));
+		throw RuntimeException(fmt::format("Failed getting display {} bounds, %s.", this->index, SDL_GetError()));
 	return bound.h;
 }
 
@@ -43,7 +43,7 @@ unsigned int SDLDisplay::refreshRate(void) const {
 	SDL_DisplayMode mode;
 	int err = SDL_GetCurrentDisplayMode(this->index, &mode);
 	if (err != 0)
-		throw RuntimeException(fmt::format("Failed getting display %d refresh rate, %s.", this->index, SDL_GetError()));
+		throw RuntimeException(fmt::format("Failed getting display {} refresh rate, %s.", this->index, SDL_GetError()));
 	return mode.refresh_rate;
 }
 
@@ -67,7 +67,7 @@ std::vector<Display::Mode> SDLDisplay::getModes(void) const {
 void SDLDisplay::getDPI(Display::DPI *dpi) {
 	int err = SDL_GetDisplayDPI(this->index, &dpi->ddpi, &dpi->hdpi, &dpi->vdpi);
 	if (err != 0)
-		throw RuntimeException(fmt::format("Failed to retrieve display %d DPI, %s", this->index, SDL_GetError()));
+		throw RuntimeException(fmt::format("Failed to retrieve display {} DPI, %s", this->index, SDL_GetError()));
 }
 
 TextureFormat SDLDisplay::getFormat(void) {

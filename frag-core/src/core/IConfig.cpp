@@ -224,7 +224,7 @@ void IConfig::save(Ref<IO> &io, ConfigFormat format) {
 		save_json(io);
 		break;
 	default:
-		throw InvalidArgumentException(::fmt::format("Invalid configuration file fmt::format - %d", format));
+		throw InvalidArgumentException(::fmt::format("Invalid configuration file fmt::format - {}", format));
 	}
 }
 
@@ -257,13 +257,13 @@ void IConfig::save_xml(Ref<IO> &io) {
 	/*	*/
 	rc = xmlTextWriterStartDocument(writer, nullptr, "utf-8", nullptr);
 	if (rc < 0)
-		throw RuntimeException(fmt::format("xmlTextWriterStartDocument failed - %d.", rc));
+		throw RuntimeException(fmt::format("xmlTextWriterStartDocument failed - {}.", rc));
 
 	/*  */
 	rc = xmlTextWriterStartElement(writer, BAD_CAST "Configuration");
 	if (rc < 0) {
 		xmlFreeTextWriter(writer);
-		throw RuntimeException(fmt::format("xmlTextWriterStartElement failed - %d.", rc));
+		throw RuntimeException(fmt::format("xmlTextWriterStartElement failed - {}.", rc));
 	}
 
 	// TODO add subconfig.
@@ -500,7 +500,7 @@ void IConfig::parseConfigFile(Ref<IO> &io, ConfigFormat format) {
 		parse_json(io);
 		break;
 	default:
-		throw InvalidArgumentException(fmt::format("Invalid configuration file format - %d", format));
+		throw InvalidArgumentException(fmt::format("Invalid configuration file format - {}", format));
 	}
 }
 

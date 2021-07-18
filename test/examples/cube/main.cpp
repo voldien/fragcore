@@ -12,7 +12,7 @@ int main(int argc, const char **argv) {
 	// Config* config = Config::createConfig(argc, argv,
 	// Config::getConfigFilePath(argc, argv));
 
-	SDL_Init(SDL_INIT_EVERYTHING);
+//	SDL_Init(SDL_INIT_EVERYTHING);
 	Display *primaryDisplay = WindowManager::getInstance()->getDisplay(0);
 
 	Ref<IRenderer> renderer =
@@ -20,7 +20,7 @@ int main(int argc, const char **argv) {
 	RendererWindow *window = renderer->createWindow(primaryDisplay->width() / 4, primaryDisplay->height() / 4,
 													primaryDisplay->width() / 2, primaryDisplay->width() / 2);
 	window->vsync(true);
-	window->setTitle(fmt::format("Cube Example: %s", renderer->getName()).c_str());
+	window->setTitle(fmt::format("Cube Example: {}", renderer->getName()).c_str());
 	window->show();
 
 	// ShaderUtil::loadProgram()

@@ -15,12 +15,12 @@ void AudioSource::setClip(AudioClip *clip) {
 
 	// Verify the clio
 	if (!alIsBuffer(alClip->source))
-		throw InvalidArgumentException(fmt::format("%d", alGetError()));
+		throw InvalidArgumentException(fmt::format("{}", alGetError()));
 
 	alSourcei(source->source, AL_BUFFER, alClip->source);
 	int err = alGetError();
 	if (err != AL_NO_ERROR)
-		throw InvalidArgumentException(fmt::format("%d", alGetError()));
+		throw InvalidArgumentException(fmt::format("{}", alGetError()));
 	// source->clip = alClip;
 }
 
@@ -29,7 +29,7 @@ void AudioSource::play(void) {
 	alSourcePlay(source->source);
 	int err = alGetError();
 	if (err != AL_NO_ERROR)
-		throw InvalidArgumentException(fmt::format("%d", alGetError()));
+		throw InvalidArgumentException(fmt::format("{}", alGetError()));
 	if (source->clip->mode == Streaming) {
 		// alSourceQueueBuffers
 	}
@@ -40,7 +40,7 @@ void AudioSource::stop(void) {
 	alSourceStop(source->source);
 	int err = alGetError();
 	if (err != AL_NO_ERROR)
-		throw InvalidArgumentException(fmt::format("%d", alGetError()));
+		throw InvalidArgumentException(fmt::format("{}", alGetError()));
 }
 
 void AudioSource::pause(void) {

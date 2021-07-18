@@ -188,7 +188,7 @@ void *TextureUtil::loadTextureDataFromMem(const void *pbuf, long int size, unsig
 	/*	Make a copy of pixel data.	*/
 	void *pixels = malloc(*pixelSize);
 	if (pixels == nullptr)
-		throw RuntimeException(fmt::format("Failed to allocate %d, %s.\n", size, strerror(errno)));
+		throw RuntimeException(fmt::format("Failed to allocate {}, %s.\n", size, strerror(errno)));
 
 	memcpy(pixels, pixel, *pixelSize);
 

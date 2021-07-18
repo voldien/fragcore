@@ -48,7 +48,7 @@ Font *FontFactory::createFont(Ref<IRenderer> &renderer, Ref<IO> &io, float size,
 	/*  Init library.   */
 	ftError = FT_Init_FreeType(&ft);
 	if (ftError != FT_Err_Ok)
-		throw InvalidArgumentException(fmt::format("Failed to initialize FreeType - %d.\n", ftError));
+		throw InvalidArgumentException(fmt::format("Failed to initialize FreeType - {}.\n", ftError));
 
 	// TODO add support for IO object.
 	/*  Load font face by the path. */
@@ -57,7 +57,7 @@ Font *FontFactory::createFont(Ref<IRenderer> &renderer, Ref<IO> &io, float size,
 	ftError = FT_New_Memory_Face(ft, (const FT_Byte *)buf, nBytes, 0, &face);
 	if (ftError != FT_Err_Ok) {
 		FT_Done_FreeType(ft);
-		throw InvalidArgumentException(fmt::format("Failed to load font - %d.\n", ftError));
+		throw InvalidArgumentException(fmt::format("Failed to load font - {}.\n", ftError));
 	}
 
 	FT_Encoding ft_encoding = FT_ENCODING_NONE; // TODO determine the default enum value.
@@ -70,7 +70,7 @@ Font *FontFactory::createFont(Ref<IRenderer> &renderer, Ref<IO> &io, float size,
 	ftError = FT_Select_Charmap(face, ft_encoding);
 	if (ftError != FT_Err_Ok) {
 		FT_Done_FreeType(ft);
-		throw InvalidArgumentException(fmt::format("Failed to load font - %d.\n", ftError));
+		throw InvalidArgumentException(fmt::format("Failed to load font - {}.\n", ftError));
 	}
 
 	/*  Set the size of the font.   */
@@ -78,7 +78,7 @@ Font *FontFactory::createFont(Ref<IRenderer> &renderer, Ref<IO> &io, float size,
 	if (ftError != FT_Err_Ok) {
 		FT_Done_Face(face);
 		FT_Done_FreeType(ft);
-		throw InvalidArgumentException(fmt::format("Failed to set character size - %d.\n", ftError));
+		throw InvalidArgumentException(fmt::format("Failed to set character size - {}.\n", ftError));
 	}
 
 	/*	First calculate the max width and height of a character in a passed font	*/
@@ -89,7 +89,7 @@ Font *FontFactory::createFont(Ref<IRenderer> &renderer, Ref<IO> &io, float size,
 		if (ftError != FT_Err_Ok) {
 			FT_Done_Face(face);
 			FT_Done_FreeType(ft);
-			throw InvalidArgumentException(fmt::format("FT_Load_Char failed - %d.\n", ftError));
+			throw InvalidArgumentException(fmt::format("FT_Load_Char failed - {}.\n", ftError));
 		}
 
 		/*  */
@@ -139,7 +139,7 @@ Font *FontFactory::createFont(Ref<IRenderer> &renderer, Ref<IO> &io, float size,
 			FT_Done_Face(face);
 			FT_Done_FreeType(ft);
 			free(font_texture_data);
-			throw InvalidArgumentException(fmt::format("FT_Load_Char failed - %d.\n", ftError));
+			throw InvalidArgumentException("FT_Load_Char failed - {}.\n", ftError);
 		}
 		FT_Bitmap *bmp = &face->glyph->bitmap;
 
@@ -281,7 +281,7 @@ Font *FontFactory::createSDFFont(Ref<IRenderer> &renderer, Ref<IO> &io, float si
 	/*  Init library.   */
 	ftError = FT_Init_FreeType(&ft);
 	if (ftError != FT_Err_Ok)
-		throw InvalidArgumentException(fmt::format("Failed to initialize FreeType - %d.\n", ftError));
+		throw InvalidArgumentException(fmt::format("Failed to initialize FreeType - {}.\n", ftError));
 
 	// TODO add support for IO object.
 	/*  Load font face by the path. */
@@ -290,13 +290,13 @@ Font *FontFactory::createSDFFont(Ref<IRenderer> &renderer, Ref<IO> &io, float si
 	ftError = FT_New_Memory_Face(ft, (const FT_Byte *)buf, nBytes, 0, &face);
 	if (ftError != FT_Err_Ok) {
 		FT_Done_FreeType(ft);
-		throw InvalidArgumentException(fmt::format("Failed to load font - %d.\n", ftError));
+		throw InvalidArgumentException(fmt::format("Failed to load font - {}.\n", ftError));
 	}
 
 	ftError = FT_Select_Charmap(face, FT_ENCODING_UNICODE);
 	if (ftError != FT_Err_Ok) {
 		FT_Done_FreeType(ft);
-		throw InvalidArgumentException(fmt::format("Failed to load font - %d.\n", ftError));
+		throw InvalidArgumentException(fmt::format("Failed to load font - {}.\n", ftError));
 	}
 
 	/*  Set the size of the font.   */
@@ -305,7 +305,7 @@ Font *FontFactory::createSDFFont(Ref<IRenderer> &renderer, Ref<IO> &io, float si
 	if (ftError != FT_Err_Ok) {
 		FT_Done_Face(face);
 		FT_Done_FreeType(ft);
-		throw InvalidArgumentException(fmt::format("Failed to set character size - %d.\n", ftError));
+		throw InvalidArgumentException(fmt::format("Failed to set character size - {}.\n", ftError));
 	}
 
 	/*	First calculate the max width and height of a character in a passed font	*/
@@ -316,7 +316,7 @@ Font *FontFactory::createSDFFont(Ref<IRenderer> &renderer, Ref<IO> &io, float si
 		if (ftError != FT_Err_Ok) {
 			FT_Done_Face(face);
 			FT_Done_FreeType(ft);
-			throw InvalidArgumentException(fmt::format("FT_Load_Char failed - %d.\n", ftError));
+			throw InvalidArgumentException(fmt::format("FT_Load_Char failed - {}.\n", ftError));
 		}
 
 		/*  */
@@ -369,7 +369,7 @@ Font *FontFactory::createSDFFont(Ref<IRenderer> &renderer, Ref<IO> &io, float si
 			FT_Done_Face(face);
 			FT_Done_FreeType(ft);
 			free(font_texture_data);
-			throw InvalidArgumentException(fmt::format("FT_Load_Char failed - %d.\n", ftError));
+			throw InvalidArgumentException(fmt::format("FT_Load_Char failed - {}.\n", ftError));
 		}
 		FT_Bitmap *bmp = &face->glyph->bitmap;
 

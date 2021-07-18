@@ -78,7 +78,7 @@ VorbisAudioDecoder::VorbisAudioDecoder(Ref<IO> &io) : AudioDecoder(io) {
 	vorbis_info *vi = ov_info(ov, -1);
 	vorbis_comment *comment = ov_comment(ov, 0);
 	vorbis_info *info = ov_info(ov, 0);
-	printf("%d\n", info->channels);
+	printf("{}\n", info->channels);
 	assert(vi);
 
 	for (int i = 0; i < ov_streams(ov); i++) {

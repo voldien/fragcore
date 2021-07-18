@@ -62,14 +62,14 @@ IO *ZipFileSystem::openFile(unsigned int index) {
 	err = zip_stat_index((struct zip *)this->pzip, index, 0, &stat);
 	if (err != 0) {
 		zip_error_to_str(buf, sizeof(buf), err, errno);
-		throw InvalidArgumentException(fmt::format("can't open `%d':\n\t%s\n", index, buf));
+		throw InvalidArgumentException(fmt::format("can't open `{}':\n\t%s\n", index, buf));
 	}
 
 	zfile = zip_fopen_index((struct zip *)this->pzip, index, 0);
 	if (!zfile) {
 		err = zip_get_error((struct zip *)this->pzip)->zip_err;
 		zip_error_to_str(buf, sizeof(buf), err, errno);
-		throw InvalidArgumentException(fmt::format("can't open index `%d':\n\t%s\n", index, buf));
+		throw InvalidArgumentException(fmt::format("can't open index `{}':\n\t%s\n", index, buf));
 	}
 
 	return new ZipFileIO(zfile, index, Ref<ZipFileSystem>(this));
