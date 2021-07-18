@@ -3,33 +3,46 @@
 #include "Exception/InvalidArgumentException.h"
 #include "Exception/RuntimeException.h"
 #include <Hpm.hpp>
-#include <SDL2/SDL_cpuinfo.h>
-#include <SDL2/SDL_platform.h>
-#include <filesystem>
 #include <infoware.hpp>
 
-// namespace fs = std::filesystem;
 using namespace fragcore;
+static iware::system::OS_info_t info;
 
-SystemInfo::OperatingSystem SystemInfo::getOperatingSystem(void) {
-	/*  */
-	const char *os = SDL_GetPlatform();
+SystemInfo::KernelSystem SystemInfo::getSystemKernel(void) noexcept {
+	switch (iware::system::kernel_info().variant) {
+	default:
+		return SystemInfo::UnKnownKernel;
+	}
+	// iware::system::OS_
+}
+
+SystemInfo::OperatingSystem SystemInfo::getOperatingSystem(void) noexcept {
+
+	// iware::system::OS_info().full_name
+	if (info.major == 0)
+		info = iware::system::OS_info();
 
 	/*  */
-	if (strcmp(os, "Linux") == 0)
+	if (strcmp(info.name.c_str(), "Linux") == 0)
 		return SystemInfo::Linux;
-	if (strcmp(os, "Windows") == 0)
+	if (strcmp(info.name.c_str(), "Windows") == 0)
 		return SystemInfo::Window;
-	if (strcmp(os, "Android") == 0)
+	if (strcmp(info.name.c_str(), "Android") == 0)
 		return SystemInfo::Android;
-	if (strcmp(os, "unix") == 0)
+	if (strcmp(info.name.c_str(), "unix") == 0)
 		return SystemInfo::Unix;
-	if (strcmp(os, "iOS") == 0)
+	if (strcmp(info.name.c_str(), "iOS") == 0)
 		return SystemInfo::IOS;
-	if (strcmp(os, "Mac OS X") == 0)
+	if (strcmp(info.name.c_str(), "Mac OS X") == 0)
 		return SystemInfo::Mac;
 
 	return SystemInfo::Unknown;
+}
+
+const std::string &SystemInfo::getOperatingSystemName(void) noexcept {
+	if (info.major == 0)
+		info = iware::system::OS_info();
+	return info.full_name;
 }
 
 const char *SystemInfo::getOperatingSystemName(SystemInfo::OperatingSystem os) {
@@ -55,8 +68,30 @@ const char *SystemInfo::getOperatingSystemName(SystemInfo::OperatingSystem os) {
 	}
 }
 
+const char *SystemInfo::getCPUName(void) noexcept { return iware::cpu::model_name().c_str(); }
+
+const char *SystemInfo::getCPUArchitecture(void) noexcept {
+	switch (iware::cpu::architecture()) {
+	case iware::cpu::architecture_t::x64:
+		return "x64";
+	case iware::cpu::architecture_t::arm:
+		return "ARM";
+	case iware::cpu::architecture_t::itanium:
+		return "Itanium";
+	case iware::cpu::architecture_t::x86:
+		return "X86";
+	default:
+		return "Unknown";
+	}
+}
+
+unsigned long SystemInfo::getCPUFrequence(void) noexcept { return iware::cpu::frequency(); }
+
 SystemInfo::SIMD SystemInfo::getSupportedSIMD(void) {
 	unsigned int supportedSIMD = HPM_NONE;
+
+	/**/
+	// iware::cpu::instruction_set_supported()
 
 	for (int i = 1; i < 11; i++) {
 		if (hpm_support_cpu_feat(1 << i))
@@ -74,7 +109,7 @@ const char *SystemInfo::getUserName(void) { return ""; }
 
 unsigned int SystemInfo::getPageSize(void) { return 1024; }
 
-unsigned int SystemInfo::getCPUCoreCount(void) {  return iware::cpu::quantities().logical; }
+unsigned int SystemInfo::getCPUCoreCount(void) { return iware::cpu::quantities().logical; }
 
 unsigned int SystemInfo::getCPUCacheLine(void) {
 	const auto cache = iware::cpu::cache(2);
