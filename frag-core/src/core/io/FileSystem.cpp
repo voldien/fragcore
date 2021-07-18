@@ -38,7 +38,7 @@ const char *FileSystem::getBaseName(const char *path) {
 
 void FileSystem::remove(const char *path) {
 #if __cplusplus >= 201703L
-	fs::remove(path);
+//	fs::remove(path);
 #else
 	throw NotImplementedException();
 // if (::remove(path) != 0)
@@ -48,7 +48,7 @@ void FileSystem::remove(const char *path) {
 
 void FileSystem::rename(const char *oldPath, const char *newPath) {
 #if __cplusplus >= 201703L
-	return fs::rename(oldPath, newPath);
+	//return fs::rename(oldPath, newPath);
 #else
 	throw NotImplementedException();
 // if (::rename(oldPath, newPath) != 0)
@@ -58,7 +58,7 @@ void FileSystem::rename(const char *oldPath, const char *newPath) {
 
 bool FileSystem::exists(const char *path) const {
 #if __cplusplus >= 201703L
-	return fs::exists(path);
+	//return fs::exists(path);
 #else
 	FILE *f = fopen(path, "r+");
 	if (f) {

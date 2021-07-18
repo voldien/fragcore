@@ -1,8 +1,8 @@
 #include "Core/Math.h"
+#include "open-simplex-noise.h"
 #include <float.h>
 #include <hpm.h>
 #include <math.h>
-#include <open-simplex-noise.h>
 using namespace fragcore;
 
 static struct osn_context *ctx = nullptr;
@@ -93,7 +93,8 @@ Color Math::CorrelatedColorTemperatureToRGB(float kelvin) {
 		blue = 255;
 	}
 
-	return Color(clamp<float>(red, 0, 255) / 255.0f, clamp<float>(green, 0, 255) / 255.0f, clamp<float>(blue, 0, 255) / 255.0f, 1);
+	return Color(clamp<float>(red, 0, 255) / 255.0f, clamp<float>(green, 0, 255) / 255.0f,
+				 clamp<float>(blue, 0, 255) / 255.0f, 1);
 }
 
 float Math::PerlinNoise(const Vector2 &point) noexcept { return Math::PerlinNoise(point.x(), point.y()); }

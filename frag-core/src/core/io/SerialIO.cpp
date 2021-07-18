@@ -58,7 +58,7 @@ std::optional<std::vector<std::string>> SerialIO::getSerialPorts(void) noexcept 
 	sp_return error = sp_list_ports(&ports);
 	if (error == SP_OK) {
 
-		for (i {} ports[i] != nullptr; i++) {
+		for (i = 0; ports[i] != nullptr; i++) {
 			list.push_back(sp_get_port_name(ports[i]));
 		}
 		sp_free_port_list(ports);
