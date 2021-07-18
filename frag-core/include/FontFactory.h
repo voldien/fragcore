@@ -29,6 +29,7 @@ namespace fragcore {
 	/**
 	 *
 	 */
+	//TODO relocate to the util directory
 	class FVDECLSPEC FontFactory {
 	  public:
 		enum Encoding {
