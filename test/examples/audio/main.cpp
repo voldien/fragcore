@@ -4,8 +4,6 @@
 #include <Audio/decoder/AudioDecoder.h>
 #include <Audio/decoder/VorbisDecoder.h>
 #include <FragCore.h>
-// #include <ogg/ogg.h>
-// #include <opus/opus.h>
 
 using namespace fragcore;
 
@@ -15,11 +13,12 @@ class AudioPlayback {
 		IConfig config;
 
 		if (argc < 2)
-			throw InvalidArgumentException("Required path to a audio file");
+			throw InvalidArgumentException("Required path to an audio file");
 
 		Ref<AudioInterface> iaudio =
 			Ref<AudioInterface>(AudioFactory::createAudioInterface(AudioFactory::OpenAL, &config));
 
+		
 		/*  Initialize HPM.  */
 		if (!LIBHPM::Hpm::init(LIBHPM::Hpm::eHPM_SSE2))
 			throw RuntimeException("Failed to initialize the hpm library.");

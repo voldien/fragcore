@@ -59,7 +59,7 @@ namespace fragcore {
 		 */
 		virtual unsigned int getSampleRate(void) const = 0;
 		virtual unsigned int getNrChannels(void) const = 0;
-		//virtual unsigned long getBitRate(void) const noexcept = 0;
+		// virtual unsigned long getBitRate(void) const noexcept = 0;
 		virtual unsigned int getSampleBitResolution(void) const = 0;
 
 		// TODO add method for checking if stream or not.

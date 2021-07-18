@@ -19,46 +19,46 @@
 //TOOD rename to match the library tier layer name.
 #ifndef _FRAG_CORE_FRAGVIEWCORE_H_
 #define _FRAG_CORE_FRAGVIEWCORE_H_ 1
-#include"Prerequisites.h"
-#include"Utils/StringUtil.h"
+#include "Prerequisites.h"
+#include "Utils/StringUtil.h"
 /*  */
-#include"Core/SystemInfo.h"
-#include"Core/IConfig.h"
+#include "Core/IConfig.h"
+#include "Core/SystemInfo.h"
 /*  */
-#include"Core/SmartReference.h"
-#include"Core/Ref.h"
-#include"Core/RefPtr.h"
+#include "Core/Ref.h"
+#include "Core/RefPtr.h"
+#include "Core/SmartReference.h"
 /*  */
-#include"Core/IO/FileSystem.h"
-#include"Core/IO/ZipFileSystem.h"
-#include"Core/IO/GZFileIO.h"
-#include"Core/IO/BufferIO.h"
+#include "Core/IO/BufferIO.h"
+#include "Core/IO/FileSystem.h"
+#include "Core/IO/GZFileIO.h"
+#include "Core/IO/ZipFileSystem.h"
 /*  */
 #include "Core/dataStructure/DoubleBufferedAllocator.h"
 /*  */
-#include"Core/Log.h"
-#include"Core/Library.h"
+#include "Core/Library.h"
+#include "Core/Log.h"
 /*  */
-#include"Core/TaskScheduler/IScheduler.h"
+#include "Core/TaskScheduler/IScheduler.h"
 #include "Core/TaskScheduler/TaskScheduler.h"
 /*  */
-#include"Video/VideoManager.h"
-#include"Window/WindowFactory.h"
+#include "Video/VideoManager.h"
+#include "Window/WindowFactory.h"
 /*  */
-#include"Core/Network/NetSocket.h"
+#include "Core/Network/NetSocket.h"
 /*  */
-#include"Renderer/RendererFactory.h"
-#include"Renderer/CommandList.h"
+#include "Renderer/CommandList.h"
+#include "Renderer/RendererFactory.h"
 /*  */
-#include"Audio/AudioFactory.h"
+#include "Audio/AudioFactory.h"
 /*  */
-#include"Physic/PhysicFactory.h"
+#include "Physic/PhysicFactory.h"
 /*  */
-#include"Exception/IException.h"
-#include"Exception/RuntimeException.h"
-#include"Exception/InvalidArgumentException.h"
-#include"Exception/NotImplementedException.h"
-#include"Exception/NotSupportedException.h"
-#include"Exception/PermissionDeniedException.h"
-#include"Exception/InvalidPointerException.h"
+#include "Exception/IException.h"
+#include "Exception/InvalidArgumentException.h"
+#include "Exception/InvalidPointerException.h"
+#include "Exception/NotImplementedException.h"
+#include "Exception/NotSupportedException.h"
+#include "Exception/PermissionDeniedException.h"
+#include "Exception/RuntimeException.h"
 #endif
