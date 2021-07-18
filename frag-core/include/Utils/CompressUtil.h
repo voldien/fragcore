@@ -22,6 +22,9 @@
 
 namespace fragcore {
 
+	/**
+	 * 
+	 */
 	class FVDECLSPEC CompressUtil {
 		public:
 

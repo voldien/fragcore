@@ -18,16 +18,15 @@
 */
 #ifndef _FRAG_CORE_IBASE_H_
 #define _FRAG_CORE_IBASE_H_ 1
-#include"IO/IO.h"
-#include"Ref.h"
+#include "IO/IO.h"
+#include "Ref.h"
 
-namespace fragcore
-{
+namespace fragcore {
 	class FVDECLSPEC IBase {
-	public:
+	  public:
 		virtual ~IBase(void) = 0;
-		virtual void encode(Ref<IO>& raw, Ref<IO>& encoded) = 0;
-		virtual void decode(Ref<IO>& encoded, Ref<IO>& raw) = 0;
+		virtual void encode(Ref<IO> &raw, Ref<IO> &encoded) = 0;
+		virtual void decode(Ref<IO> &encoded, Ref<IO> &raw) = 0;
 	};
-}
+} // namespace fragcore
 #endif

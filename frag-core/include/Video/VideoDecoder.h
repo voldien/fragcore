@@ -34,8 +34,9 @@ namespace fragcore {
 		void seekFrame(void);
 
 		Ref<AudioDecoder> &getAudioDecoder(void) const;
-
 		virtual double getTotalTime(void) const = 0;
+
+		// TODO add dedcode a frame
 
 	  private: /*	Prevent one from creating an instance of this class.	*/
 		VideoDecoder(void);

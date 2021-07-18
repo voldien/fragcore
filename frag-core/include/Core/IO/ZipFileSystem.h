@@ -76,7 +76,8 @@ namespace fragcore {
 	  public: /*	Factory method.	*/
 		/*  Create zip filesystem object.   */
 		static ZipFileSystem *createZipFileObject(Ref<IO> &ioRef, Ref<IScheduler> ref = Ref<IScheduler>(nullptr));
-		static ZipFileSystem *createZipFileObject(void *source, int size, Ref<IScheduler> ref = Ref<IScheduler>(nullptr));
+		static ZipFileSystem *createZipFileObject(void *source, int size,
+												  Ref<IScheduler> ref = Ref<IScheduler>(nullptr));
 		static ZipFileSystem *
 		createZipFileObject(const char *cfilename,
 							Ref<IScheduler> ref = Ref<IScheduler>(nullptr)); /*	Will call the IO method */

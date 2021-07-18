@@ -101,7 +101,7 @@ namespace fragcore {
 		/**
 		 *
 		 */
-		//template<typename T>
+		// template<typename T>
 		static float LerpAngle(float a, float b, float t);
 
 		/**

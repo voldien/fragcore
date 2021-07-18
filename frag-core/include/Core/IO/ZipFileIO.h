@@ -27,7 +27,7 @@
 namespace fragcore {
 
 	/**
-	 * @brief 
+	 * @brief
 	 *
 	 */
 	class FVDECLSPEC ZipFileIO : public IO {

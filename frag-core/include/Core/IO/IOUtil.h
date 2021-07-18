@@ -28,7 +28,6 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC IOUtil {
 	  public:
-
 		/**
 		 * @brief
 		 *
@@ -50,12 +49,12 @@ namespace fragcore {
 		static long int loadString(Ref<IO> &in, Ref<IO> &out);
 
 		/**
-		 * @brief 
-		 * 
-		 * @param io 
-		 * @param vformat 
-		 * @param ... 
-		 * @return long int 
+		 * @brief
+		 *
+		 * @param io
+		 * @param vformat
+		 * @param ...
+		 * @return long int
 		 */
 		static long int format(Ref<IO> &io, const char *vformat, ...) noexcept(noexcept(vformat != nullptr));
 	};

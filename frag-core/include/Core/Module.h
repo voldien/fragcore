@@ -19,21 +19,21 @@
 */
 #ifndef _FRAG_CORE_MODULE_H_
 #define _FRAG_CORE_MODULE_H_ 1
-#include"SmartReference.h"
+#include "SmartReference.h"
 
 namespace fragcore {
-	
+
 	/**
 	 *
 	 */
 	class FVDECLSPEC Module : public SmartReference {
-	public:
-		Module(void){}
-		~Module(void) {}
+	  public:
+		Module(void) = default;
+		~Module(void) = default;
 		virtual void OnInitialization(void) = 0;
 		virtual void OnDestruction(void) = 0;
 		/**/
 	};
-}
+} // namespace fragcore
 
 #endif

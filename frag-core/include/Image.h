@@ -25,19 +25,19 @@ namespace fragcore {
 	/**
 	 *
 	 */
-	 //System memory bound texture data.
+	// System memory bound texture data.
 	class FVDECLSPEC Image : public Texture {
-	public:
-		//TODO determine of Image or surface or both classes will be used.
+	  public:
+		// TODO determine of Image or surface or both classes will be used.
 		Image(int width, int height, TextureFormat format);
-		
-		//TODO set const for the width and height
+
+		// TODO set const for the width and height
 		// virtual unsigned int width(void);
 
 		// virtual unsigned int height(void);
 
 		// virtual unsigned int layers(void) const;
 	};
-}
+} // namespace fragcore
 
 #endif
