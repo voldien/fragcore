@@ -322,8 +322,8 @@ IF(GIT_FOUND)
 ENDIF()
 IF(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
 	# Update submodules as needed
-	OPTION(GIT_SUBMODULE "Check submodules during build" ON)
-	IF(GIT_SUBMODULE)
+	OPTION(FRAGCORE_GIT_SUBMODULE "Check submodules during build" OFF)
+	IF(FRAGCORE_GIT_SUBMODULE)
 		MESSAGE(STATUS "Submodule update --recursive")
 		EXECUTE_PROCESS(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive
 						WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
