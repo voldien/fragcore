@@ -1,4 +1,5 @@
 #include "DefaultFrameBufferTexture.h"
+#include "GLRendererInterface.h"
 #include "Renderer/IRenderer.h"
 #include "Renderer/RenderObject.h"
 #include "Renderer/RendererWindow.h"
@@ -79,7 +80,7 @@ void *FrameBufferTexture::getPixels(Format format, unsigned int level, unsigned 
 unsigned int FrameBufferTexture::width(void) {
 	int width;
 	int height;
-	OpenGLCore *glcore = (OpenGLCore *)this->getRenderer()->getData();
+	OpenGLCore *glcore = (OpenGLCore *)this->getRenderer<GLRendererInterface>()->getData();
 	fragcore::Window *window = (fragcore::Window *)glcore->drawwindow;
 	window->getSize(&width, &height);
 	// SDL_GetWindowSize(glcore->drawwindow, &width, &height);

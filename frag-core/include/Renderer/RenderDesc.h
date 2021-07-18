@@ -595,6 +595,10 @@ namespace fragcore {
 			eStream = 0x10,     /*  */
 		};
 
+		enum BufferLoc{
+
+		};
+
 		/**
 		 *
 		 */

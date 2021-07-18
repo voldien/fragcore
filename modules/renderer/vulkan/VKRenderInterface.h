@@ -1,5 +1,6 @@
-#ifndef _FRAG_CORE_VK_RENDERER_INTERFACE_H_
-#define _FRAG_CORE_VK_RENDERER_INTERFACE_H_ 1
+#ifndef _LIB_FRAG_CORE_VK_RENDERER_INTERFACE_H_
+#define _LIB_FRAG_CORE_VK_RENDERER_INTERFACE_H_ 1
+#include"Prerequisites.h"
 #include <Core/Ref.h>
 #include <Renderer/Buffer.h>
 #include <Renderer/IRenderer.h>
@@ -15,7 +16,7 @@ namespace fragcore {
 
 	  public:
 		VKRenderInterface(void) = delete;
-		VKRenderInterface(const VKRenderInterface &&other);
+		VKRenderInterface(const VKRenderInterface &other) = default;
 		VKRenderInterface(IConfig *config);
 		virtual ~VKRenderInterface(void);
 
@@ -140,6 +141,8 @@ namespace fragcore {
 		virtual void execute(CommandList *list);
 
 		virtual void *getData(void) const override;
+
+		std::shared_ptr<VKDevice>& getDevice(void){return this->device;};
 
 	  protected:
 		std::shared_ptr<VKDevice> device;

@@ -1,4 +1,3 @@
-
 /**
 	FragEngine, A Two layer Game Engine.
 	Copyright (C) 2018  Valdemar Lindberg
@@ -17,23 +16,15 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-#ifndef _FRAG_CORE_MODULE_H_
-#define _FRAG_CORE_MODULE_H_ 1
-#include "SmartReference.h"
+#ifndef _FRAG_CORE_VULKAN_RENDERER_PREREQUISITES_H_
+#define _FRAG_CORE_VULKAN_RENDERER_PREREQUISITES_H_ 1
 
 namespace fragcore {
-
-	/**
-	 *
-	 */
-	class FVDECLSPEC Module : public SmartReference {
-	  public:
-		Module(void) = default;
-		virtual ~Module(void) = default;
-		virtual void OnInitialization(void) = 0;
-		virtual void OnDestruction(void) = 0;
-		/**/
-	};
+	class VKBuffer;
+	class VKTexture;
+	class VKSampler;
+	class VKShader;
+	class VKRenderInterface;
 } // namespace fragcore
 
 #endif

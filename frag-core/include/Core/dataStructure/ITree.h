@@ -26,44 +26,33 @@ namespace fragcore {
 	/**
 	 *
 	 */
-	template<class T>	//TODO evoluate.
+	template <class T> // TODO evoluate.
 	class ITree {
-	public:
+	  public:
 		ITree(void) {
 			this->sibling = nullptr;
 			this->numChildren = 0;
 			this->child = nullptr;
 			this->parent = nullptr;
 		}
-		ITree(ITree&& other){
-
-		}
+		ITree(ITree &&other) {}
 
 		virtual ITree<T> *root(void) const {
 			if (this->getParent())
-				return (ITree<T>*)this;
+				return (ITree<T> *)this;
 			else
 				return this->getParent()->root();
 		}
 
-		virtual bool isEmpty(void) const {
-			return this->getNumChildren() == 0;
-		}
+		virtual bool isEmpty(void) const { return this->getNumChildren() == 0; }
 
-		virtual ITree<T> *getParent(void) const {
-			return this->parent;
-		}
+		virtual ITree<T> *getParent(void) const { return this->parent; }
 
-		virtual void setParent(ITree<T> *parent) {
-			this->parent = parent;
-		}
+		virtual void setParent(ITree<T> *parent) { this->parent = parent; }
 
-		virtual unsigned int getNumChildren(void) const {
-			return this->numChildren;
-		}
+		virtual unsigned int getNumChildren(void) const { return this->numChildren; }
 
-		virtual void addChild(ITree<T> *pchild)
-		{
+		virtual void addChild(ITree<T> *pchild) {
 			ITree<T> *find;
 			assert(pchild);
 
@@ -77,7 +66,8 @@ namespace fragcore {
 				while (find) {
 					if (find->sibling)
 						find = find->sibling;
-					else break;
+					else
+						break;
 				}
 				find->sibling = pchild;
 				find->sibling->setParent(this);
@@ -91,10 +81,9 @@ namespace fragcore {
 			n->parent = nullptr;
 		}
 
-		virtual ITree<T> *getChild(unsigned int index) const
-		{
-			if(index < 0 || index >= this->getNumChildren())
-				throw InvalidArgumentException("");
+		virtual ITree<T> *getChild(unsigned int index) const {
+			if (index >= this->getNumChildren())
+				throw InvalidArgumentException("Exceeded {} has {}", index, this->getNumChildren());
 			ITree<T> *chi = this->child;
 			for (unsigned int x = 0; x <= index; x++) {
 				chi = chi->sibling;
@@ -115,83 +104,79 @@ namespace fragcore {
 			return -1;
 		}
 
-		class TIterator : public Iterator<T>{
-		public:
-/*			TIterator &operator++(void) override {
-				return Iterator::operator++();
-			}
+		class TIterator : public Iterator<T> {
+		  public:
+			/*			TIterator &operator++(void) override {
+							return Iterator::operator++();
+						}
 
-			TIterator &operator++(int i) override {
-				return Iterator::operator++(i);
-			}
+						TIterator &operator++(int i) override {
+							return Iterator::operator++(i);
+						}
 
-			TIterator &operator--(void) override {
-				return Iterator::operator--();
-			}
+						TIterator &operator--(void) override {
+							return Iterator::operator--();
+						}
 
-			TIterator &operator+=(int n) override {
-				return Iterator::operator+=(n);
-			}
+						TIterator &operator+=(int n) override {
+							return Iterator::operator+=(n);
+						}
 
-			TIterator &operator-=(int n) override {
-				return Iterator::operator-=(n);
-			}
+						TIterator &operator-=(int n) override {
+							return Iterator::operator-=(n);
+						}
 
-			TIterator &operator+(int n) override {
-				return Iterator::operator+(n);
-			}
+						TIterator &operator+(int n) override {
+							return Iterator::operator+(n);
+						}
 
-			TIterator &operator-(int n) override {
-				return Iterator::operator-(n);
-			}
+						TIterator &operator-(int n) override {
+							return Iterator::operator-(n);
+						}
 
-			TIterator &operator[](int index) const override {
-				return Iterator::operator[](index);
-			}
+						TIterator &operator[](int index) const override {
+							return Iterator::operator[](index);
+						}
 
-			T &operator->(void) const override {
-				return Iterator::operator->();
-			}
+						T &operator->(void) const override {
+							return Iterator::operator->();
+						}
 
-			T &operator*(void) const override {
-				return Iterator::operator*();
-			}
+						T &operator*(void) const override {
+							return Iterator::operator*();
+						}
 
-			T &operator*(void) override {
-				return Iterator::operator*();
-			}
+						T &operator*(void) override {
+							return Iterator::operator*();
+						}
 
-			bool operator==(const TIterator &iterator) override {
-				return Iterator::operator==(iterator);
-			}
+						bool operator==(const TIterator &iterator) override {
+							return Iterator::operator==(iterator);
+						}
 
-			bool operator!=(const TIterator &iterator) override {
-				return Iterator::operator!=(iterator);
-			}
+						bool operator!=(const TIterator &iterator) override {
+							return Iterator::operator!=(iterator);
+						}
 
-			Iterator<T> &operator=(const TIterator &iterator) override {
-				return Iterator::operator=(iterator);
-			}*/
+						Iterator<T> &operator=(const TIterator &iterator) override {
+							return Iterator::operator=(iterator);
+						}*/
 		};
 
 		/*  TODO determine if iterator can be added.    */
-//		virtual TIterator<T> begin(void);
-//		virtual TIterator<T> end(void);
+		//		virtual TIterator<T> begin(void);
+		//		virtual TIterator<T> end(void);
 
-	protected:  /*  */
-		void setSibling(ITree<T> *sibling) {
-			this->sibling = sibling;
-		}
+	  protected: /*  */
+		void setSibling(ITree<T> *sibling) { this->sibling = sibling; }
 
-		void setChild(ITree<T> *child) {
-			this->child = child;
-		}
+		void setChild(ITree<T> *child) { this->child = child; }
 
-	private:    /*  */
-		ITree<T> *parent;				/*	parent node.	*/
-		ITree<T> *sibling;				/*	sibling node.	*/
-		ITree<T> *child;					/*	child node.	*/
-		unsigned int numChildren;   /*	number of children node attached.	*/
+	  private:					  /*  */
+		ITree<T> *parent;		  /*	parent node.	*/
+		ITree<T> *sibling;		  /*	sibling node.	*/
+		ITree<T> *child;		  /*	child node.	*/
+		unsigned int numChildren; /*	number of children node attached.	*/
 	};
-}
+} // namespace fragcore
 #endif

@@ -93,9 +93,9 @@ namespace fragcore {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
 			return (a + (b - a) * t);
 		}
-
-		template <typename T, typename U> inline constexpr static T lerpUnClamped(T a, T b, U t) {
-			return a + (b - a) * t;
+		template <typename T> inline constexpr static T lerpClamped(T a, T b, T t) noexcept {
+			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
+			return (a + (b - a) * Math::clamp<T>(t, static_cast<T>(0.0), static_cast<T>(1.0)));
 		}
 
 		/**

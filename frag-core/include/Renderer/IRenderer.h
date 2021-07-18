@@ -64,7 +64,9 @@ namespace fragcore {
 		};
 
 		//TODO make it less state machine and allow it to become more modern.
-		// IRenderer(void) = default;
+		IRenderer(void) = default;
+		IRenderer(const IRenderer& other) = default;
+		IRenderer(IRenderer&& other) = default;
 		virtual ~IRenderer(void) = default;
 
 		/**

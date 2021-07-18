@@ -1,41 +1,45 @@
-#include "Renderer/Buffer.h"
+
 #include "Renderer/IRenderer.h"
+#include "VKBuffer.h"
+#include "VKRenderInterface.h"
 #include "internal_object_type.h"
 #include <FragCore.h>
+
 using namespace fragcore;
 
-Buffer::~Buffer(void) {}
+VKBuffer::~VKBuffer(void) {}
 
-void Buffer::bind() {
+void VKBuffer::bind() {
 	VKBufferObject *bufobj = (VKBufferObject *)this->pdata;
-	//vkBindBufferMemory(bufobj->vulkanCore->device, bufobj->buffer, bufobj->vertexBufferMemory, 0);
+
+	// vkBindBufferMemory(bufobj->vulkanCore->device, bufobj->buffer, bufobj->vertexBufferMemory, 0);
 }
 
-void Buffer::bind(unsigned int offset, unsigned int size) {
+void VKBuffer::bind(unsigned int offset, unsigned int size) {
 	VKBufferObject *bufobj = (VKBufferObject *)this->pdata;
-	//vkBindBufferMemory(bufobj->vulkanCore->device, bufobj->buffer, bufobj->vertexBufferMemory, offset);
+	// vkBindBufferMemory(bufobj->vulkanCore->device, bufobj->buffer, bufobj->vertexBufferMemory, offset);
 }
 
-void Buffer::bindBase(unsigned int base) { VKBufferObject *bufobj = (VKBufferObject *)this->pdata; }
+void VKBuffer::bindBase(unsigned int base) { VKBufferObject *bufobj = (VKBufferObject *)this->pdata; }
 
-void Buffer::subData(const void *data, unsigned int offset, unsigned int size) {
-	VKBufferObject *bufobj = (VKBufferObject *)this->pdata;
-}
-
-void *Buffer::getData(unsigned int offset, unsigned int size) {
+void VKBuffer::subData(const void *data, unsigned int offset, unsigned int size) {
 	VKBufferObject *bufobj = (VKBufferObject *)this->pdata;
 }
 
-bool Buffer::isValid(void) { VKBufferObject *bufobj = (VKBufferObject *)this->pdata; }
+void *VKBuffer::getData(unsigned int offset, unsigned int size) {
+	VKBufferObject *bufobj = (VKBufferObject *)this->pdata;
+}
 
-long int Buffer::getSize(void) {
+bool VKBuffer::isValid(void) { VKBufferObject *bufobj = (VKBufferObject *)this->pdata; }
+
+long int VKBuffer::getSize(void) {
 	VKBufferObject *bufobj = (VKBufferObject *)this->pdata;
 	VkMemoryRequirements requirements;
 	// vkGetBufferMemoryRequirements(bufobj->vulkanCore->device, bufobj->buffer, &requirements);
 	return requirements.size;
 }
 
-void *Buffer::mapBuffer(Buffer::MapTarget target) {
+void *VKBuffer::mapBuffer(VKBuffer::MapTarget target) {
 	void *pbuf;
 	VkResult result;
 	VkMemoryRequirements memRequirements;
@@ -55,16 +59,16 @@ void *Buffer::mapBuffer(Buffer::MapTarget target) {
 	return pbuf;
 }
 
-void *Buffer::mapBuffer(MapTarget target, unsigned long int offset, unsigned long int length) {}
+void *VKBuffer::mapBuffer(MapTarget target, unsigned long int offset, unsigned long int length) {}
 
-void Buffer::flush(unsigned long int offset, unsigned long int length) {}
+void VKBuffer::flush(unsigned long int offset, unsigned long int length) {}
 
-void Buffer::unMapBuffer(void) {
+void VKBuffer::unMapBuffer(void) {
 	VKBufferObject *bufobj = (VKBufferObject *)this->pdata;
 
-	//	vkUnmapMemory(bufobj->vulkanCore->device->getHandle(), bufobj->vertexBufferMemory);
+	vkUnmapMemory(this->getRenderer<VKRenderInterface>()->getDevice()->getHandle(), bufobj->vertexBufferMemory);
 }
 
-void Buffer::setName(const std::string &name) { Object::setName(name); }
+void VKBuffer::setName(const std::string &name) { Object::setName(name); }
 
-intptr_t Buffer::getNativePtr(void) const { return 0; }
+intptr_t VKBuffer::getNativePtr(void) const { return 0; }

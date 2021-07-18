@@ -1,5 +1,9 @@
 #include "VKRenderInterface.h"
 #include "Core/IConfig.h"
+#include "Exception/InvalidArgumentException.h"
+#include "Exception/RuntimeException.h"
+#include "Renderer/RenderDesc.h"
+#include "Utils/StringUtil.h"
 #include "VKCommandList.h"
 #include "VKRenderWindow.h"
 #include "Window/WindowManager.h"
@@ -9,12 +13,9 @@
 #include <SDL2/SDL_syswm.h>
 #include <SDL2/SDL_video.h>
 #include <SDL2/SDL_vulkan.h>
-
-#include "Exception/InvalidArgumentException.h"
-#include "Exception/RuntimeException.h"
-#include "Renderer/RenderDesc.h"
-#include "Utils/StringUtil.h"
 #include <Utils/StringUtil.h>
+#include <VKHelper.h>
+#include <VKUtil.h>
 #include <climits>
 #include <fmt/core.h>
 #include <iostream>
@@ -76,7 +77,7 @@ VKRenderInterface::VKRenderInterface(IConfig *config) {
 	// vulkancore->enableValidationLayers = setupConfig.get<bool>("debug");
 	// vulkancore->enableValidationLayers = 1;
 	// vulkancore->enableDebugTracer = setupConfig.get<bool>("debug-tracer");
-	//vulkancore->useGamma = setupConfig.get<bool>("gamma-correction");
+	// vulkancore->useGamma = setupConfig.get<bool>("gamma-correction");
 
 	// /*  Vulkan variables.   */
 	// VkResult result;
@@ -348,24 +349,7 @@ VKRenderInterface::VKRenderInterface(IConfig *config) {
 
 VKRenderInterface::~VKRenderInterface(void) {
 	/*  Release all vulkan resources.   */
-
-	/*  */
-	// if (cmd_pool)
-	// 	vkDestroyCommandPool(device, cmd_pool, nullptr);
-
-	/*  */
-	// if (swapChain) {
-	// 	vkDestroySwapchainKHR(device, swapChain->swapchain, nullptr);
-	// }
-
-	// if (device)
-	// 	vkDestroyDevice(device, nullptr);
-
-	if (inst)
-		vkDestroyInstance(inst, nullptr);
-
 	SDL_QuitSubSystem(SDL_INIT_VIDEO);
-	//	free(this->pdata);
 }
 
 void VKRenderInterface::OnInitialization(void) {}
@@ -557,7 +541,7 @@ Shader *VKRenderInterface::createShader(ShaderDesc *desc) {
 	if (1) {
 		// vertShaderModule = createShaderModule(device->getHandle(), (const char*)desc->vertex.vertexBinary,
 		// desc->vertex.size);
-		//vertShaderModule = createShaderModule(device->getHandle(), (const char *)nullptr, 0); // FIXME
+		// vertShaderModule = createShaderModule(device->getHandle(), (const char *)nullptr, 0); // FIXME
 
 		/*  */
 		vertShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
@@ -571,7 +555,7 @@ Shader *VKRenderInterface::createShader(ShaderDesc *desc) {
 	if (1) {
 		// fragShaderModule = createShaderModule(device->getHandle(),  (const char*)desc->fragment.fragmentBinary,
 		// desc->fragment.size);
-		//fragShaderModule = createShaderModule(device->getHandle(), (const char *)nullptr, 0); // FIXME
+		// fragShaderModule = createShaderModule(device->getHandle(), (const char *)nullptr, 0); // FIXME
 
 		fragShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
 		fragShaderStageInfo.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
@@ -866,44 +850,48 @@ Buffer *VKRenderInterface::createBuffer(BufferDesc *desc) {
 	buffer = new Buffer();
 	// buffer->pdata = vkBufferObject;
 
-	/*  Buffer description. */
-	VkBufferCreateInfo bufferInfo = {};
-	bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-	bufferInfo.size = desc->size;
-	//bufferInfo.usage = (VkBufferUsageFlags)getBufferType((BufferDesc::BufferType)desc->type);
-	bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+	VKHelper::createBuffer(device->getHandle(), desc->size, device->getPhysicalDevice(0)->getMemoryProperties(),
+						   (VkBufferUsageFlags)getBufferType(desc->type), VK_MEMORY_PROPERTY_HOST_CACHED_BIT, vkBufferObject->buffer,
+						   vkBufferObject->vertexBufferMemory);
 
-	/*  Create buffer.  */
-	result = vkCreateBuffer(device->getHandle(), &bufferInfo, nullptr, &vkBufferObject->buffer);
-	if (result != VK_SUCCESS) {
-		throw RuntimeException(fmt::format("failed to create vertex buffer %d", result));
-	}
+	// /*  Buffer description. */
+	// VkBufferCreateInfo bufferInfo = {};
+	// bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+	// bufferInfo.size = desc->size;
+	// // bufferInfo.usage = (VkBufferUsageFlags)getBufferType((BufferDesc::BufferType)desc->type);
+	// bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
-	/*  */
-	VkMemoryRequirements memRequirements;
-	vkGetBufferMemoryRequirements(device->getHandle(), vkBufferObject->buffer, &memRequirements);
+	// /*  Create buffer.  */
+	// result = vkCreateBuffer(device->getHandle(), &bufferInfo, nullptr, &vkBufferObject->buffer);
+	// if (result != VK_SUCCESS) {
+	// 	throw RuntimeException(fmt::format("failed to create vertex buffer %d", result));
+	// }
 
-	/*  */
-	VkPhysicalDeviceMemoryProperties memProperties;
-	vkGetPhysicalDeviceMemoryProperties(gpu, &memProperties);
+	// /*  */
+	// VkMemoryRequirements memRequirements;
+	// vkGetBufferMemoryRequirements(device->getHandle(), vkBufferObject->buffer, &memRequirements);
 
-	/*  Allocate memory.    */
-	VkMemoryAllocateInfo allocInfo = {};
-	allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-	allocInfo.allocationSize = memRequirements.size;
-	// allocInfo.memoryTypeIndex =
-	// 	findMemoryType(physical_devices[0], memRequirements.memoryTypeBits,
-	// 				   VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+	// /*  */
+	// VkPhysicalDeviceMemoryProperties memProperties;
+	// vkGetPhysicalDeviceMemoryProperties(gpu, &memProperties);
 
-	/*  */
-	if (vkAllocateMemory(device->getHandle(), &allocInfo, nullptr, &vkBufferObject->vertexBufferMemory) != VK_SUCCESS) {
-		throw RuntimeException(fmt::format("failed to allocate vertex buffer memory!"));
-	}
+	// /*  Allocate memory.    */
+	// VkMemoryAllocateInfo allocInfo = {};
+	// allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+	// allocInfo.allocationSize = memRequirements.size;
+	// // allocInfo.memoryTypeIndex =
+	// // 	findMemoryType(physical_devices[0], memRequirements.memoryTypeBits,
+	// // 				   VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
-	/*  */
-	result = vkBindBufferMemory(device->getHandle(), vkBufferObject->buffer, vkBufferObject->vertexBufferMemory, 0);
-	if (result != VK_SUCCESS)
-		throw RuntimeException(fmt::format("failed to allocate vertex buffer memory!"));
+	// /*  */
+	// if (vkAllocateMemory(device->getHandle(), &allocInfo, nullptr, &vkBufferObject->vertexBufferMemory) != VK_SUCCESS) {
+	// 	throw RuntimeException(fmt::format("failed to allocate vertex buffer memory!"));
+	// }
+
+	// /*  */
+	// result = vkBindBufferMemory(device->getHandle(), vkBufferObject->buffer, vkBufferObject->vertexBufferMemory, 0);
+	// if (result != VK_SUCCESS)
+	// 	throw RuntimeException(fmt::format("failed to allocate vertex buffer memory!"));
 
 	return buffer;
 }
@@ -974,7 +962,7 @@ Geometry *VKRenderInterface::createGeometry(GeometryDesc *desc) {
 	//		                      (const void*)desc->vertexattribute[x].offset);
 	//	}
 
-	//glgeoobj->mode = getPrimitive((GeometryDesc::Primitive)desc->primitive);
+	// glgeoobj->mode = getPrimitive((GeometryDesc::Primitive)desc->primitive);
 	glgeoobj->desc = *desc;
 
 	//	geometryObject->pdata = glgeoobj;
@@ -1027,7 +1015,12 @@ ViewPort *VKRenderInterface::getView(unsigned int i) {
 	//	return glcore->viewports[i - 1];
 }
 
-FrameBuffer *VKRenderInterface::createFrameBuffer(FrameBufferDesc *desc) { return nullptr; }
+FrameBuffer *VKRenderInterface::createFrameBuffer(FrameBufferDesc *desc) {
+	
+
+	 return nullptr; 
+	 
+}
 
 void VKRenderInterface::deleteFrameBuffer(FrameBuffer *obj) {}
 

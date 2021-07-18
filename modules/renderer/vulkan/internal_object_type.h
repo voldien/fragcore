@@ -1,6 +1,5 @@
 #ifndef _FRAGVIEW_INTERNAL_OBJECT_TYPE_H_
 #define _FRAGVIEW_INTERNAL_OBJECT_TYPE_H_ 1
-
 /*	Expose the correct platform specific surface creation functions.	*/
 #if defined(FV_UNIX)
 	#define VK_USE_PLATFORM_XLIB_KHR
@@ -201,19 +200,6 @@ namespace fragcore {
 // extern void createInstance(fragcore::VulkanCore *vulkanCore, IConfig *config);
 // extern void createDebugMessenger(fragcore::VulkanCore *vulkanCore, IConfig  *config);
 // extern void createSurface(fragcore::VulkanCore *vulkanCore, IConfig *config);
-
-#ifdef _DEBUG
-
-// #define checkError(result)	\
-// 	if(result != VK_SUCCESS) \
-// 		printf(__LINE__)	\
-// 		checkError(result);	\
-
-extern void checkError(VkResult result);
-#else
-extern void checkError(VkResult result);
-#endif
-
 
 // /*  Helper functions.   */
 // extern uint32_t findMemoryType(fragcore::VulkanCore *vulkanCore, uint32_t typeFilter, VkMemoryPropertyFlags properties);
