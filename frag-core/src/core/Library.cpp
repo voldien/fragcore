@@ -38,7 +38,10 @@ bool Library::open(const char *clibrary) {
 	return this->mlib != nullptr;
 }
 
-void Library::close(void) { SDL_UnloadObject(this->mlib); }
+void Library::close(void) {
+	SDL_UnloadObject(this->mlib);
+	this->mlib = nullptr;
+}
 
 bool Library::isValid(void) const { return this->mlib != nullptr; }
 
