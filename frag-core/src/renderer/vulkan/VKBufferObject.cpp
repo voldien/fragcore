@@ -37,7 +37,7 @@ bool Buffer::isValid(void) {
 long int Buffer::getSize(void) {
 	VKBufferObject *bufobj = (VKBufferObject *) this->pdata;
 	VkMemoryRequirements requirements;
-	vkGetBufferMemoryRequirements(bufobj->vulkanCore->device, bufobj->buffer, &requirements);
+	//vkGetBufferMemoryRequirements(bufobj->vulkanCore->device, bufobj->buffer, &requirements);
 	return requirements.size;
 }
 
@@ -50,11 +50,11 @@ void *Buffer::mapBuffer(Buffer::MapTarget target) {
 	VKBufferObject *bufobj = (VKBufferObject *) this->pdata;
 
 	/*  */
-	vkGetBufferMemoryRequirements(bufobj->vulkanCore->device, bufobj->buffer, &memRequirements);
+	//vkGetBufferMemoryRequirements(bufobj->vulkanCore->device, bufobj->buffer, &memRequirements);
 
 	/*  */
-	result = vkMapMemory(bufobj->vulkanCore->device, bufobj->vertexBufferMemory, 0, (VkDeviceSize) memRequirements.size,
-	                     mapTarget, &pbuf);
+	// result = vkMapMemory(bufobj->vulkanCore->device, bufobj->vertexBufferMemory, 0, (VkDeviceSize) memRequirements.size,
+	//                      mapTarget, &pbuf);
 	if (result != VK_SUCCESS)
 		throw RuntimeException("");
 	return pbuf;
@@ -67,7 +67,7 @@ void Buffer::flush(unsigned long int offset, unsigned long int length) {}
 void Buffer::unMapBuffer(void) {
 	VKBufferObject *bufobj = (VKBufferObject *) this->pdata;
 
-	vkUnmapMemory(bufobj->vulkanCore->device->getHandle(), bufobj->vertexBufferMemory);
+//	vkUnmapMemory(bufobj->vulkanCore->device->getHandle(), bufobj->vertexBufferMemory);
 }
 
 void Buffer::setName(const std::string &name) {
