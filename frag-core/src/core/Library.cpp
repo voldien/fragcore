@@ -15,11 +15,7 @@ Library::Library(const char *clibrary) {
 	this->name = clibrary;
 }
 
-Library::Library(const Library &library) {
-	this->mlib = nullptr;
-	this->open(library.name.c_str());
-	this->name = library.name;
-}
+Library::Library(const Library &library) : Library(library.name.c_str()) {}
 
 Library::Library(Library &&other) { std::exchange(this->mlib, other.mlib); }
 
