@@ -17,8 +17,8 @@ get_target_property(VKCommonCore_INCLUDE_DIRS vkcommon-core INCLUDE_DIRECTORIES)
 
 
 # Library target.
-ADD_LIBRARY(fragcore-rvk ${SOURCE_FILES})
-TARGET_LINK_LIBRARIES(fragcore-rvk ${Vulkan_LIBRARIES} fragcore) #
+ADD_LIBRARY(fragcore-rvk MODULE ${SOURCE_FILES})
+TARGET_LINK_LIBRARIES(fragcore-rvk ${Vulkan_LIBRARIES} vkcommon-core fragcore) #
 TARGET_COMPILE_DEFINITIONS(fragcore-rvk PRIVATE FRAG_CORE_INTERNAL_IMP=1)
 
 #

@@ -217,9 +217,9 @@ ADD_BACKWARD(fragcore)
 
 # 
 TARGET_COMPILE_DEFINITIONS(fragcore PRIVATE FRAG_CORE_INTERNAL_IMP=1)
-TARGET_COMPILE_FEATURES(fragcore PUBLIC
-	cxx_std_17
-	cxx_constexpr)
+# TARGET_COMPILE_FEATURES(fragcore PUBLIC
+# 	cxx_std_17
+# 	cxx_constexpr)
 
 # 
 SET_TARGET_PROPERTIES(fragcore PROPERTIES

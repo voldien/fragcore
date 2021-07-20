@@ -48,9 +48,10 @@ mark_as_advanced(WITH_CXX_GUARDEDALLOC)
 
 IF(NOT BUILD_SHARED_LIBS)
 	SET(CMAKE_EXE_LINKER_FLAGS "-static")
+	MESSAGE(STATUS "Static libraries enabled.")
 	SET(LINK_SEARCH_START_STATIC TRUE)
 ELSE()
-	MESSAGE(STATUS "Shared libraries enabled")
+	MESSAGE(STATUS "Shared libraries enabled.")
 ENDIF(NOT BUILD_SHARED_LIBS)
 
 #
@@ -175,11 +176,7 @@ IF((CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX) AND NOT CMAKE_COMPILER_
 		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 	ENDIF()
 
-	#
-#	ADD_DEFINITIONS(-Wall -w)
-		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -Wpedantic -Wextra  -Wall -Wno-attributes -std=c++17")
-
-	ADD_DEFINITIONS( -export-dynamic -rdynamic )
+	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -Wpedantic -Wextra  -Wall -Wno-attributes -std=c++17")
 
 	IF (CMAKE_BUILD_TYPE STREQUAL "Release")
 		MESSAGE(STATUS "Compile for release.")
