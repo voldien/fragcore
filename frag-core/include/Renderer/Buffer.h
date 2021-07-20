@@ -30,6 +30,7 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC Buffer : public RenderObject {
 		friend class IRenderer;
+
 	  public:
 		enum MapTarget {
 			eRead = 0x1,		   /*  */
@@ -41,32 +42,29 @@ namespace fragcore {
 			eFlushExplicit = 0x40, /*  */
 		};
 
-		virtual void bind(void);
+		virtual ~Buffer(void) = default;
 
-		virtual void bind(unsigned int offset, unsigned int size);
+		virtual void bind(void) = 0;
 
-		virtual void bindBase(unsigned int base);
+		virtual void bind(unsigned int offset, unsigned int size) = 0;
 
-		virtual void subData(const void *data, unsigned int offset, unsigned int size);
+		virtual void bindBase(unsigned int base) = 0;
 
-		virtual void *getData(unsigned int offset, unsigned int size);
+		virtual void subData(const void *data, unsigned int offset, unsigned int size) = 0;
 
-		virtual bool isValid(void);
+		virtual void *getData(unsigned int offset, unsigned int size) = 0;
 
-		virtual long int getSize(void);
+		virtual bool isValid(void) = 0;
 
-		virtual void *mapBuffer(MapTarget target);
+		virtual long int getSize(void) = 0;
 
-		virtual void *mapBuffer(MapTarget target, unsigned long int offset, unsigned long int length);
+		virtual void *mapBuffer(MapTarget target) = 0;
 
-		virtual void flush(unsigned long int offset, unsigned long int length);
+		virtual void *mapBuffer(MapTarget target, unsigned long int offset, unsigned long int length) = 0;
 
-		virtual void unMapBuffer(void);
+		virtual void flush(unsigned long int offset, unsigned long int length) = 0;
 
-		// virtual void clear(uint32_t i);
-		void setName(const std::string &name) override;
-
-		intptr_t getNativePtr(void) const override;
+		virtual void unMapBuffer(void) = 0;
 	};
 } // namespace fragcore
 

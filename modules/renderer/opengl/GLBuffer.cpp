@@ -4,7 +4,6 @@
 using namespace fragcore;
 
 //TODO add for retaining current binded buffer.
-GLBuffer::~GLBuffer(void) {}
 
 void GLBuffer::bind() {
 

@@ -4,9 +4,10 @@
 #include"Renderer/RenderDesc.h"
 #include"Renderer/Buffer.h"
 #include"Renderer/IRenderer.h"
+#include<GL/glew.h>
 #include<SDL2/SDL.h>
 #include <Renderer/RendererWindow.h>
-#include<GL/glew.h>
+
 
 namespace fragcore {
 
