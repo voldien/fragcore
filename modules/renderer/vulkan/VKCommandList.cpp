@@ -33,7 +33,7 @@ VKCommandList::VKCommandList(Ref<IRenderer> &renderer) {
 	// VkResult result = vkAllocateCommandBuffers(vulkancore->device, &cbAI, &cmdbuffers[0]);
 	// checkError(result);
 }
-VKCommandList::VKCommandList(VKCommandList &other) {}
+VKCommandList::VKCommandList(const VKCommandList &other) {}
 
 VKCommandList::~VKCommandList(void) {}
 

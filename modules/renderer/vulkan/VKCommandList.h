@@ -11,7 +11,7 @@ namespace fragcore {
 	class VKCommandList : public CommandList {
 	  public:
 		VKCommandList(Ref<IRenderer> &renderer);
-		VKCommandList(VKCommandList &other);
+		VKCommandList(const VKCommandList &other);
 		virtual ~VKCommandList(void);
 
 		virtual void begin(void);

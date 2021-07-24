@@ -3,6 +3,7 @@
 #include <Renderer/ViewPort.h>
 #include <SDL2/SDL.h>
 #include <Window/WindowManager.h>
+#include<hpmcpp/Hpm.hpp>
 //#include"Config.h"
 
 using namespace fragcore;
@@ -23,6 +24,7 @@ int main(int argc, const char **argv) {
 	window->setTitle(fmt::format("Cube Example: {}", renderer->getName()).c_str());
 	window->show();
 
+	LIBHPM::Hpm::init(LIBHPM::Hpm::eHPM_NOSIMD);
 	// ShaderUtil::loadProgram()
 	// Shader* shader = renderer->createShader(NULL);
 	// Geometry* obj= renderer->createGeometry(NULL);

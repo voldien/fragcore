@@ -365,7 +365,7 @@ Texture *VKRenderInterface::createTexture(TextureDesc *desc) {
 	// vktex->desc = *desc;
 	// texture->pdata = vktex;
 
-	//VKHelper::createImage()
+	// VKHelper::createImage()
 
 	// VkDeviceMemory stagingBufferMemory;
 	// VkDeviceSize imageSize = desc->pixelSize;
@@ -1013,6 +1013,7 @@ ViewPort *VKRenderInterface::getView(unsigned int i) {
 	//	if(i == 0)
 	//		return glcore->defaultViewport;
 	//	return glcore->viewports[i - 1];
+	return nullptr;
 }
 
 FrameBuffer *VKRenderInterface::createFrameBuffer(FrameBufferDesc *desc) { return nullptr; }
@@ -1374,18 +1375,14 @@ void VKRenderInterface::getCapability(Capability *capability) {
 		.pNext = &deviceRepresentativeFragmentTestFeaturesNv,
 	};
 
-	// VkPhysicalDevicePointClippingProperties
-	vkGetPhysicalDeviceProperties(gpu, &properties);
-
 	VkPhysicalDeviceProperties2 deviceProperties2 = {
 		.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2, .pNext = &deviceMultiviewProperties, .properties = {}};
 	VkPhysicalDeviceFeatures2 deviceFeatures2 = {
 		.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2,
 		.pNext = &conditionalRenderingFeaturesExt,
 	};
-
-	vkGetPhysicalDeviceProperties2(gpu, &deviceProperties2);
-	vkGetPhysicalDeviceFeatures2(gpu, &deviceFeatures2);
+	this->device->getPhysicalDevice(0)->checkFeature<VkPhysicalDeviceConditionalRenderingFeaturesEXT>(
+		VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_CONDITIONAL_RENDERING_FEATURES_EXT, conditionalRenderingFeaturesExt);
 
 	capability->sDepthStencil = true;
 	capability->sFramebuffer = true;
@@ -1487,13 +1484,13 @@ const char *VKRenderInterface::getVersion(void) const {
 	return FV_STR_VERSION(RENDER_VULKAN_MAJOR, RENDER_VULKAN_MINOR, RENDER_VULKAN_PATCH);
 }
 
-/*const char *VKRenderInterface::getName(void) const {
-	return "Vulkan";
-}*/
-
 void VKRenderInterface::getStatus(MemoryInfo *memoryInfo) {}
 
-CommandList *VKRenderInterface::createCommandBuffer(void) {}
+CommandList *VKRenderInterface::createCommandBuffer(void) {
+	Ref<IRenderer> ref = Ref<IRenderer>(this);
+
+	return new VKCommandList(ref);
+}
 
 void VKRenderInterface::submittCommand(Ref<CommandList> &list) {
 
