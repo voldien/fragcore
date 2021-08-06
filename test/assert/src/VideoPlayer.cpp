@@ -1,16 +1,18 @@
-#include<gtest/gtest.h>
-#include <Renderer/RendererFactory.h>
 #include <Core/IO/BufferIO.h>
-#include <Video/VideoFactory.h>
-#include<Core/IO/FileSystem.h>
+#include <Core/IO/FileSystem.h>
+#include<Core/SystemInfo.h>
+#include <Renderer/RendererFactory.h>
 #include <RenderingInterfaceTest.h>
+#include <Video/VideoFactory.h>
+#include <gtest/gtest.h>
 using namespace fragcore;
 
-TEST(VideoPlayer, VideoPlayer_Load_Mp4_Default_No_Throw){
-//	VideoFactory::loadVideoTexture();
+TEST(VideoPlayer, VideoPlayer_Load_Mp4_Default_No_Throw) {
+	//	VideoFactory::loadVideoTexture();
 }
 
 TEST(VideoPlayer, VideoPlayer_Load_Invalid_IO_Throw_Exception) {
+	VideoFactory::loadVideoTexture(SystemInfo::getStdIn(), nullptr, nullptr, nullptr);
 }
 
 TEST(VideoPlayer, loadFile) {

@@ -1,28 +1,22 @@
-#include "Core/Ref.h"
 #include "Core/Object.h"
-#include <gtest/gtest.h>
+#include "Core/Ref.h"
 #include <Renderer/Texture.h>
+#include <gtest/gtest.h>
 using namespace fragcore;
 
-TEST(SmartReference, SmartReference_Init_State_One_Reference_Count)
-{
+TEST(SmartReference, SmartReference_Init_State_One_Reference_Count) {
 	SmartReference smartReference;
 	ASSERT_EQ(smartReference.getIndexCount(), 1);
 }
 
-TEST(SmartReference, SmartReference_Increment_Success)
-{
+TEST(SmartReference, SmartReference_Increment_Success) {
 	SmartReference smartReference;
 	ASSERT_TRUE(smartReference.increment());
 }
 
-TEST(SmartReference, SmartReference_Deincreemnt_Success)
-{
+TEST(SmartReference, SmartReference_Deincreemnt_Success) {
 	SmartReference smartReference;
 	ASSERT_TRUE(smartReference.deincreemnt());
 }
 
-TEST(SmartReference, SmartReference_On_DeConstructor)
-{
-	SmartReference *smart = new SmartReference();
-}
+TEST(SmartReference, SmartReference_On_DeConstructor) { SmartReference *smart = new SmartReference(); }

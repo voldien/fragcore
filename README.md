@@ -17,6 +17,15 @@ cmake --build .
 make install
 ```
 
+
+## Development Build
+```
+mkdir build && cd build
+cmake ..  -DCMAKE_BUILD_TYPE=Debug  -DBUILD_WITH_COVERAGE=ON -DBUILD_WITH_TEST=ON -DBUILD_WITH_UBSAN=ON -DBUILD_WITH_ASAN=ON 
+cmake --build .
+make install
+```
+
 # Dependencies #
 In order to compile the program, the following Debian packages is required. 
 

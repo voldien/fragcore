@@ -14,39 +14,18 @@
 
 using namespace fragcore;
 
+class HashMD5Test : public ::testing::TestWithParam<std::tuple<std::string, unsigned long int>> {};
 
-TEST(Hash, Hash_MD5_Compute_No_Throw){
+TEST_P(HashMD5Test, Values) {
+	auto [x, expected] = GetParam();
 	Hash hash(Hash::ALGORITHM::MD5);
-	const char *data = "Hello World!";
 
-	EXPECT_NO_THROW(hash.update(data, sizeof(data)));
+	EXPECT_NO_THROW(hash.update(x.data(), x.size()));
 	std::vector<unsigned char> md5;
 	EXPECT_NO_THROW(hash.final(md5));
+
+	// TODO Check the value
 }
 
-TEST(Hash, Hash_MD5_Compute_Correct_Value){
-	Hash hash(Hash::ALGORITHM::MD5);
-	const char *data = "Hello World!";
-	const char *md5 = "";
-	std::vector<unsigned char> result;
-
-	hash.update(data, sizeof(data));
-	hash.final(result);
-
-	/*	TODO compare the value.	*/
-}
-
-TEST(Hash, Hash){
-	Hash hash(Hash::ALGORITHM::MD5);
-	const char *data = "Hello World!";
-	EXPECT_NO_THROW (hash.update(data, sizeof(data)));
-	ASSERT_EQ(hash.getByteRead(), sizeof(data));
-	std::vector<unsigned char> md5;
-	EXPECT_NO_THROW(hash.final(md5));
-	//TODO add assertion that the value is correct.
-
-	ASSERT_ANY_THROW(Hash badhashType((Hash::ALGORITHM)100));
-
-}
-
+INSTANTIATE_TEST_SUITE_P(Hash, HashMD5Test, ::testing::Values(std::make_tuple("Hello World!", 128)));
 

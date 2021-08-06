@@ -25,6 +25,9 @@ endif()
 
 PROJECT(FragCore)
 
+# Use GNUInstallDirs for Unix predefined directories
+INCLUDE(GNUInstallDirs)
+
 SET(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin CACHE INTERNAL "" FORCE)
 SET(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib CACHE INTERNAL "" FORCE)
 
@@ -42,6 +45,7 @@ OPTION(BUILD_WITH_ASAN "Enable AddressSanitizer." OFF )
 OPTION(BUILD_OPT_BUILD_PACKAGES "Set to ON to generate CPack configuration files and packaging targets" OFF)
 OPTION(BUILD_WITH_DEBUG_BOUNDSCHECK "Array/Pointer BoundsChecking, buffer overflow protection. Used in debug only." OFF)
 option(BUILD_INSTALL_RESOURCES "Installs the Resources directory" ON)
+
 # Debug
 option(WITH_CXX_GUARDEDALLOC "Enable GuardedAlloc for C++ memory allocation tracking (only enable for development)" OFF)
 mark_as_advanced(WITH_CXX_GUARDEDALLOC)
@@ -55,7 +59,7 @@ ELSE()
 ENDIF(NOT BUILD_SHARED_LIBS)
 
 #
-OPTION(BUILD_WITH_TEST "Enable Testing." OFF)
+OPTION(BUILD_WITH_TEST "Enable Testing." ON)
 OPTION(BUILD_WITH_DOCS "Build documentation." OFF)
 OPTION(BUILD_WITH_SAMPLES "Build sample codes" ON)
 
@@ -295,8 +299,7 @@ FIND_PACKAGE(OpenSSL)
 #TODO relocate to the compute plugin.
 FIND_PACKAGE(CUDA QUIET)
 IF( UNIX )
-	# Use GNUInstallDirs for Unix predefined directories
-	INCLUDE(GNUInstallDirs)
+
 	SET( FRAGCORE_LIB_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR})
 	SET( FRAGCORE_INCLUDE_INSTALL_DIR ${CMAKE_INSTALL_INCLUDEDIR})
 	SET( FRAGCORE_BIN_INSTALL_DIR ${CMAKE_INSTALL_BINDIR})

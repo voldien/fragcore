@@ -23,9 +23,9 @@
 namespace fragcore {
 
 	/**
-	 * 
+	 *
 	 */
-	class FVDECLSPEC AudioCapture : AudioObject{
+	class FVDECLSPEC AudioCapture : AudioObject {
 		public:
 	};
 }

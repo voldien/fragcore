@@ -22,8 +22,8 @@ TEST(ASync, ASync_Open_IO_Async_Handle_No_Throw) {
 	Ref<IScheduler> sche = Ref<IScheduler>(new TaskScheduler());
 	ASync async(sche);
 
-        Ref<IO> ioRef = SystemInfo::getStdOut();
-        ASyncHandle handle;
+	Ref<IO> ioRef = SystemInfo::getStdOut();
+	ASyncHandle handle;
 	ASSERT_NO_THROW(handle = async.asyncOpen(ioRef));
 	async.asyncClose(handle);
 }
@@ -32,18 +32,17 @@ TEST(ASync, ASync_ReadIOAsync_ThrowException) {
 	Ref<IScheduler> sche = Ref<IScheduler>(new TaskScheduler());
 	ASync async(sche);
 
-        Ref<IO> ioRef = SystemInfo::getStdOut();
+	Ref<IO> ioRef = SystemInfo::getStdOut();
 	ASyncHandle handle;
 	handle = async.asyncOpen(ioRef);
-	ASSERT_THROW(async.asyncWriteFile(handle, nullptr, 0, nullptr),
-					InvalidArgumentException);
+	ASSERT_THROW(async.asyncWriteFile(handle, nullptr, 0, nullptr), InvalidArgumentException);
 }
 
 TEST(ASync, ASync_Wait_Correctly_NoThrowException) {
 	Ref<IScheduler> sche = Ref<IScheduler>(new TaskScheduler());
 	ASync async(sche);
 
-        Ref<IO> ioRef = SystemInfo::getStdOut();
+	Ref<IO> ioRef = SystemInfo::getStdOut();
 	ASyncHandle handle;
 	handle = async.asyncOpen(ioRef);
 	char buf[32];

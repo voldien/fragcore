@@ -2,8 +2,8 @@
 #include <Core/IO/FileIO.h>
 #include <Core/IO/FileSystem.h>
 #include <Core/IO/GZFileIO.h>
-#include <Core/IO/ZipFileSystem.h>
 #include <Core/IO/ZipFileIO.h>
+#include <Core/IO/ZipFileSystem.h>
 #include <Core/RefPtr.h>
 #include <FragCore.h>
 #include <SDL2/SDL.h>
@@ -12,7 +12,7 @@
 using namespace fragcore;
 
 class IOTest : public testing::Test {
-protected:
+  protected:
 	void SetUp() override {
 		files.push_back("Makefile");
 		files.push_back("CMakeLists.txt");
@@ -31,13 +31,9 @@ protected:
 		zipFile = "zipfile.zip";
 	}
 
-	static void readcallback(ASync* async, ASyncHandle handle) {
-		
-	}
+	static void readcallback(ASync *async, ASyncHandle handle) {}
 
-	static void writecallback(ASync* aSync, ASyncHandle handle){
-
-	}
+	static void writecallback(ASync *aSync, ASyncHandle handle) {}
 
 	std::vector<char *> files;
 	char *FileWrite;
@@ -47,26 +43,26 @@ protected:
 	char *zipFile;
 };
 
-TEST_F(IOTest, IO_File_Invalid_Path_Throw_Exception){
+TEST_F(IOTest, IO_File_Invalid_Path_Throw_Exception) {
 	ASSERT_THROW(FileSystem::getFileSystem()->openFile("", IO::READ), InvalidArgumentException);
 }
-TEST_F(IOTest, IO_File_Invalid_Mode_Throw_Exception){
+TEST_F(IOTest, IO_File_Invalid_Mode_Throw_Exception) {
 	ASSERT_THROW(FileSystem::getFileSystem()->openFile(__FILE__, (IO::Mode)-1), InvalidArgumentException);
 }
-TEST_F(IOTest, IO_File_Open_Read_File_No_Throw){
+TEST_F(IOTest, IO_File_Open_Read_File_No_Throw) {
 	ASSERT_NO_THROW(FileSystem::getFileSystem()->openFile(__FILE__, IO::READ));
 }
 
-TEST_F(IOTest, IO_File_Open_Read_No_Exception){
+TEST_F(IOTest, IO_File_Open_Read_No_Exception) {
 	char buf[512];
 	IO *io = FileSystem::getFileSystem()->openFile(__FILE__, IO::READ);
 
-	//ASSERT_NO_THROW(io->read(buf, sizeof(buf)));
+	// ASSERT_NO_THROW(io->read(buf, sizeof(buf)));
 
 	FileSystem::getFileSystem()->closeFile(io);
 }
 
-TEST_F(IOTest, IO_File_Write_In_ReadOnly_Throw_Exception){
+TEST_F(IOTest, IO_File_Write_In_ReadOnly_Throw_Exception) {
 	char buf[512];
 	IO *io = FileSystem::getFileSystem()->openFile(__FILE__, IO::READ);
 	ASSERT_THROW(io->write(0, buf), RuntimeException);
@@ -74,8 +70,7 @@ TEST_F(IOTest, IO_File_Write_In_ReadOnly_Throw_Exception){
 	FileSystem::getFileSystem()->closeFile(io);
 }
 
-TEST_F(IOTest, IOFile)
-{
+TEST_F(IOTest, IOFile) {
 	char buf[512];
 	long size;
 
@@ -87,16 +82,14 @@ TEST_F(IOTest, IOFile)
 	ASSERT_TRUE(write.isWriteable());
 
 	std::vector<char *>::const_iterator it = files.cbegin();
-	for (; it != files.cend(); it++)
-	{
+	for (; it != files.cend(); it++) {
 		FileIO *fileIo;
 		ASSERT_NO_THROW(fileIo = new FileIO((*it), IO::Mode::READ));
 		ASSERT_TRUE(fileIo->isReadable());
 		ASSERT_FALSE(fileIo->isWriteable());
 
 		/*  */
-		while ((size = fileIo->read(512, buf)) > 0)
-		{
+		while ((size = fileIo->read(512, buf)) > 0) {
 			EXPECT_EQ(SystemInfo::getStdOut()->write(size, buf), size);
 			EXPECT_EQ(write.write(size, buf), size);
 		}
@@ -107,18 +100,10 @@ TEST_F(IOTest, IOFile)
 	ASSERT_NO_THROW(write.close());
 }
 
-TEST_F(IOTest, IO_STD_STDOUT_ReadOnly){
-
-}
-TEST_F(IOTest, IO_STD_STDIN_WriteOnly){
-
-}
-TEST_F(IOTest, IO_STD_Read_No_Throw){
-
-}
-TEST_F(IOTest, IO_STD_Write_STDIN_Throw_Exception){
-
-}
+TEST_F(IOTest, IO_STD_STDOUT_ReadOnly) {}
+TEST_F(IOTest, IO_STD_STDIN_WriteOnly) {}
+TEST_F(IOTest, IO_STD_Read_No_Throw) {}
+TEST_F(IOTest, IO_STD_Write_STDIN_Throw_Exception) {}
 
 TEST_F(IOTest, Std) {
 	// char buf[] = {'h', 'e', 'l', 'l', 'o', '\n'};
@@ -148,15 +133,14 @@ TEST_F(IOTest, Std) {
 	// EXPECT_NO_THROW(stdoutIO->close());
 }
 
-
 /*	TODO relocate to its own source file.	*/
-TEST_F(IOTest, IO_Buffer_Create_No_Execption){
+TEST_F(IOTest, IO_Buffer_Create_No_Execption) {
 	const char *buffer = "hello world!";
 	const unsigned int bufLen = strlen(buffer);
 	EXPECT_NO_THROW(BufferIO(buffer, bufLen));
 }
 
-TEST_F(IOTest, IO_Buffer_Create_Correct_Buffer_Size){
+TEST_F(IOTest, IO_Buffer_Create_Correct_Buffer_Size) {
 	const char *buffer = "hello world!";
 	const unsigned int bufLen = strlen(buffer);
 	BufferIO bufferIO(buffer, bufLen);
@@ -164,7 +148,7 @@ TEST_F(IOTest, IO_Buffer_Create_Correct_Buffer_Size){
 	ASSERT_EQ(bufferIO.length(), bufLen);
 }
 
-TEST_F(IOTest, IO_Buffer_Create_Constant_Read_Only){
+TEST_F(IOTest, IO_Buffer_Create_Constant_Read_Only) {
 	const char *buffer = "hello world!";
 	const unsigned int bufLen = strlen(buffer);
 	BufferIO bufferIO(buffer, bufLen);
@@ -172,15 +156,15 @@ TEST_F(IOTest, IO_Buffer_Create_Constant_Read_Only){
 	ASSERT_FALSE(bufferIO.isWriteable());
 }
 
-TEST_F(IOTest, IO_Buffer_Created_Constant_Read_Only_Write_Throw_Exception){
+TEST_F(IOTest, IO_Buffer_Created_Constant_Read_Only_Write_Throw_Exception) {
 	const char *buffer = "hello world!";
 	const unsigned int bufLen = strlen(buffer);
 	BufferIO bufferIO(buffer, bufLen);
 
-	//ASSERT_THROW(bufferIO.write(1, {1}), RuntimeException);
+	// ASSERT_THROW(bufferIO.write(1, {1}), RuntimeException);
 }
 
-//TODO disolve to each own function.
+// TODO disolve to each own function.
 TEST_F(IOTest, Buffer) {
 	const char *buffer = "hello world!";
 	unsigned int bufLen = strlen(buffer);
@@ -205,7 +189,6 @@ TEST_F(IOTest, Buffer) {
 	delete bIO;
 }
 
-
 TEST_F(IOTest, IOGzFile) {
 	char buf[512];
 	long size;
@@ -213,7 +196,7 @@ TEST_F(IOTest, IOGzFile) {
 	// Validate the argument.
 	ASSERT_THROW(GZFileIO(NULL, IO::READ), std::invalid_argument);
 	ASSERT_THROW(GZFileIO("", IO::READ), RuntimeException);
-	ASSERT_THROW(GZFileIO("", (IO::Mode) 33213123), std::invalid_argument);
+	ASSERT_THROW(GZFileIO("", (IO::Mode)33213123), std::invalid_argument);
 
 	GZFileIO write = GZFileIO(gzFileWrite, IO::WRITE);
 	ASSERT_FALSE(write.isReadable());
@@ -242,7 +225,7 @@ TEST_F(IOTest, IOGZipFile) {
 	ASSERT_THROW(zipFile = ZipFileSystem::createZipFileObject(""), std::invalid_argument);
 	ASSERT_NO_THROW(zipFile = ZipFileSystem::createZipFileObject(this->zipFile));
 
-	//TODO add listing of files.
+	// TODO add listing of files.
 	std::vector<std::string> baseDir = zipFile->listDirectories("");
 	std::vector<std::string>::const_iterator listIt = baseDir.cbegin();
 	for (; listIt != baseDir.cend(); listIt++) {
@@ -250,8 +233,8 @@ TEST_F(IOTest, IOGZipFile) {
 		files.size();
 	}
 
-	//TODO check the references.
-	ZipFileIO *zileFileIo = (ZipFileIO *) zipFile->openFile(zipInFiles[0], IO::READ);
+	// TODO check the references.
+	ZipFileIO *zileFileIo = (ZipFileIO *)zipFile->openFile(zipInFiles[0], IO::READ);
 	delete zipFile;
 	zileFileIo->close();
 
@@ -263,7 +246,6 @@ TEST_F(IOTest, IOGZipFile) {
 	for (; it != zipInFiles.cend(); it++) {
 		char *path = (*it);
 
-		ZipFileIO *zileFileIo = (ZipFileIO *) zipFile->openFile(path, IO::READ);
+		ZipFileIO *zileFileIo = (ZipFileIO *)zipFile->openFile(path, IO::READ);
 	}
 }
-

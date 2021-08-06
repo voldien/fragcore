@@ -63,7 +63,8 @@ namespace fragcore {
 		inline static float modi(float a, float b) { return ((a) < (b)) ? (a) : (b); }
 
 		template <typename T> constexpr static T sum(const std::vector<T> &list) {
-			static_assert(T::operator+=, "Require");
+			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
+						  "Must Suppot additiona operation.");
 			T sum = 0;
 			for (int i = 0; i < list.size(); i++)
 				sum += list[i];

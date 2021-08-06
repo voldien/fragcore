@@ -1,12 +1,12 @@
-#include <Core/IO/GZFileIO.h>
-#include "AudioInterfaceTest.h"
 #include "Audio/decoder/AudioDecoderFactory.h"
+#include "AudioInterfaceTest.h"
 #include <Audio/AudioInterface.h>
-#include <gtest/gtest.h>
+#include <Core/IO/GZFileIO.h>
 #include <FragCore.h>
+#include <gtest/gtest.h>
 using namespace fragcore;
 
-TEST(AudioDecoder, AudioDecoderFactory_Invalid_Enum_Throw_Exception){
+TEST(AudioDecoder, AudioDecoderFactory_Invalid_Enum_Throw_Exception) {
 	Ref<IO> ref = Ref<IO>(SystemInfo::getStdOut());
 	ASSERT_THROW(AudioDecoderFactory::createDecoder((AudioDecoderCodec)-1, ref), InvalidArgumentException);
 }
@@ -26,13 +26,12 @@ TEST(AudioDecoder, AudioDecoder_Create_Wav_No_Throw) {
 	ASSERT_THROW(AudioDecoderFactory::createDecoder(AudioDecoderCodec::Wav, ref), RuntimeException);
 }
 
-TEST(AudioDecoder, AudioDecoder_Create_MP3_No_Throw){
+TEST(AudioDecoder, AudioDecoder_Create_MP3_No_Throw) {
 	Ref<IO> ref = SystemInfo::getStdOut();
 	ASSERT_THROW(AudioDecoderFactory::createDecoder(AudioDecoderCodec::Mp3, ref), RuntimeException);
 }
 
-TEST(AudioDecoder, AudioDecoder)
-{
+TEST(AudioDecoder, AudioDecoder) {
 	// std::vector<AudioFactory::AudioAPI>::const_iterator it = this->apis.cbegin();
 
 	// for (; it != this->apis.end(); it++)

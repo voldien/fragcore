@@ -119,6 +119,8 @@ namespace fragcore {
 			eReadWrite = 3,     /*  */
 		};
 
+		Texture(void) = default;
+
 		/**
 		 *
 		 * @param index

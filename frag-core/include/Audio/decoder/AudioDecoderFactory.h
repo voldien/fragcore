@@ -31,10 +31,11 @@ namespace fragcore {
 		Ogg,
 		Mp3,
 		Wav,
+		maxAudioDecoderDecodec
 	};
 
 	/**
-	 * @brief 
+	 * @brief
 	 *
 	 */
 	class FVDECLSPEC AudioDecoderFactory {

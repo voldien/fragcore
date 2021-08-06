@@ -1470,10 +1470,8 @@ const char *VKRenderInterface::getShaderVersion(ShaderLanguage language) const {
 ShaderLanguage VKRenderInterface::getShaderLanguage(void) const { return languageSupport; }
 
 const char *VKRenderInterface::getAPIVersion(void) const {
-	VkPhysicalDeviceProperties devicePropertie;
-
+	const VkPhysicalDeviceProperties &devicePropertie = this->device->getPhysicalDevice(0)->getProperties();
 	/*	Get API version.	*/
-	vkGetPhysicalDeviceProperties(gpu, &devicePropertie);
 	static char apiversion[64];
 	sprintf(apiversion, "%d.%d.%d", VK_VERSION_MAJOR(devicePropertie.apiVersion),
 			VK_VERSION_MINOR(devicePropertie.apiVersion), VK_VERSION_PATCH(devicePropertie.apiVersion));
@@ -1487,9 +1485,9 @@ const char *VKRenderInterface::getVersion(void) const {
 void VKRenderInterface::getStatus(MemoryInfo *memoryInfo) {}
 
 CommandList *VKRenderInterface::createCommandBuffer(void) {
-	Ref<IRenderer> ref = Ref<IRenderer>(this);
+	// Ref<IRenderer> ref = Ref<IRenderer>(this);
 
-	return new VKCommandList(ref);
+	// return new VKCommandList(ref);
 }
 
 void VKRenderInterface::submittCommand(Ref<CommandList> &list) {

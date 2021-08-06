@@ -1,12 +1,10 @@
-#include"Core/Ref.h"
-#include"Core/Object.h"
-#include<gtest/gtest.h>
-#include<Renderer/Texture.h>
+#include "Core/Ref.h"
+#include "Core/Object.h"
+#include <Renderer/Texture.h>
+#include <gtest/gtest.h>
 using namespace fragcore;
 
-
-TEST(References, SmartReference)
-{
+TEST(References, SmartReference) {
 
 	SmartReference smartReference;
 
@@ -20,32 +18,27 @@ TEST(References, SmartReference)
 	ASSERT_EQ(smartReference.getIndexCount(), 0);
 }
 
-
-TEST(Ref, Ref_Added_First_Object_Increment2_1){
+TEST(Ref, Ref_Added_First_Object_Increment2_1) {
 	Ref<SmartReference> ref = Ref<SmartReference>(new SmartReference());
 	ASSERT_EQ(ref->getIndexCount(), 1);
 }
 
-TEST(Ref, Ref_On_No_Reference)
-{
+TEST(Ref, Ref_On_No_Reference) {
 	Ref<SmartReference> ref = Ref<SmartReference>(new SmartReference());
 	ref->increment();
 	ref->deincreemnt();
 	ASSERT_NO_THROW(ref->deincreemnt());
 }
 
-TEST(Ref, Ref_Operator_Pointer){
-	SmartReference* obj = new SmartReference();
+TEST(Ref, Ref_Operator_Pointer) {
+	SmartReference *obj = new SmartReference();
 	Ref<SmartReference> ref = Ref<SmartReference>(obj);
 	ASSERT_EQ(ref.ptr(), obj);
 }
 
-TEST(Ref, Ref_OnAllReferenceRemoved_ReleaseResources_No_Throw){
-	
-}
+TEST(Ref, Ref_OnAllReferenceRemoved_ReleaseResources_No_Throw) {}
 
-TEST(References, RefCounter)
-{
+TEST(References, RefCounter) {
 
 	//	Ref<Object> ref;
 
