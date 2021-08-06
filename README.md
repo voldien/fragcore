@@ -1,12 +1,8 @@
-# FragCore
-[![Actions Build Status](https://github.com/voldien/fragcore/workflows/fragcore/badge.svg?branch=master)](https://github.com/voldien/fragcore/actions)
+# FragCore - Work in Progress
+[![Linux Build](https://github.com/voldien/fragcore/actions/workflows/linux-build.yml/badge.svg)](https://github.com/voldien/fragcore/actions/workflows/linux-build.yml)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![GitHub release](https://img.shields.io/github/release/voldien/fragcore.svg)](https://github.com/voldien/fragcore/releases)
-<!-- TODO, LGMT, version  -->
-
-[image]
-
-# Work in Progress
+[![Language grade: C/C++](https://img.shields.io/lgtm/grade/cpp/g/voldien/fragcore.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/voldien/fragcore/context:cpp)
 
 ## Installation
 The software can be easily installed with invoking the following command.
@@ -40,7 +36,7 @@ apt install libyaml-dev libjson-c-dev libxml2-dev libsdl2-dev libglew-dev libvul
 apt install libopenal-dev libalut-dev libbullet-dev
 ```
 
-### Assert ###
+## Assert
 Tool dependencies.
 ```bash
 apt install zip gzip libgtest-dev 
