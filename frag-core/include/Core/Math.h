@@ -49,24 +49,19 @@ namespace fragcore {
 		template <typename T> inline constexpr static T min(T a, T b) noexcept {
 			return (static_cast<T>(b) < static_cast<T>(a)) ? static_cast<T>(b) : static_cast<T>(a);
 		}
-		/**
-		 *	Get float modular.
-		 */
-		inline static float modf(float a) {
-			double part;
-			return ::modf(a, &part);
-		}
-		inline static float modd(double a) {
-			double part;
-			return ::modf(a, &part);
-		}
-		inline static float modi(float a, float b) { return ((a) < (b)) ? (a) : (b); }
 
-		template <typename T> constexpr static T sum(const std::vector<T> &list) {
+		template <typename T> inline constexpr static T frac(T a) noexcept {
+			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
+			T part;
+			std::modf(a, &part);
+			return part;
+		}
+
+		template <typename T> constexpr static T sum(const std::vector<T> &list) noexcept {
 			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
 						  "Must Suppot additiona operation.");
 			T sum = 0;
-			for (int i = 0; i < list.size(); i++)
+			for (unsigned int i = 0; i < list.size(); i++)
 				sum += list[i];
 			return sum;
 		}
@@ -102,8 +97,7 @@ namespace fragcore {
 		/**
 		 *
 		 */
-		// template<typename T>
-		static float LerpAngle(float a, float b, float t);
+		template <typename T> static T wrapAngle(T angle) {}
 
 		/**
 		 *
@@ -141,26 +135,84 @@ namespace fragcore {
 			static_assert(std::is_integral<T>::value, "Must be a integer type.");
 			return (v && ((v - 1) & v));
 		}
-		static Color CorrelatedColorTemperatureToRGB(float kelvin);
+
+		template <typename T> static Color CorrelatedColorTemperatureToRGB(T kelvin) {
+			T temp = kelvin / static_cast<T>(100.0);
+
+			T red, green, blue;
+
+			if (temp <= 66) {
+
+				red = 255;
+
+				green = temp;
+				green = 99.4708025861 * log(green) - 161.1195681661;
+
+				if (temp <= 19) {
+
+					blue = 0;
+				} else {
+
+					blue = temp - 10;
+					blue = 138.5177312231 * log(blue) - 305.0447927307;
+				}
+			} else {
+
+				red = temp - 60;
+				red = 329.698727446 * pow(red, -0.1332047592);
+
+				green = temp - 60;
+				green = 288.1221695283 * pow(green, -0.0755148492);
+
+				blue = 255;
+			}
+
+			return Color(clamp<T>(red, 0, 255) / 255.0f, clamp<T>(green, 0, 255) / 255.0f,
+						 clamp<T>(blue, 0, 255) / 255.0f, 1);
+		}
 
 		/**
 		 *	Generate 1D guassian.
 		 */
-		static void guassian1Df(float *guassian, int width, double theta);
-		static void guassian1Df(std::vector<float> &guassian, int height, float theta);
+		template <typename T>
+		static void guassian(std::vector<T> &guassian, unsigned int height, T theta, T standard_deviation) {
+			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
+			const T a = (1.0f / (standard_deviation * static_cast<T>(std::sqrt(2.0f * Math::PI))));
+
+			for (unsigned int i = 0; i < height; i++) {
+				const T b = (-1.0f / 2.0f) * std::pow<T>(((i - standard_deviation) / theta), 2.0f);
+				guassian[i] = a * std::pow<T>(Math::E, b);
+			}
+		}
+		template <typename T>
+		static void guassian(T &guassian, unsigned int height, T theta, T standard_deviation) noexcept {
+			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
+		}
 
 		/**
 		 *	Generate 2D guassian.
 		 */
-		static void guassian2Df(float *guassian, int height, float theta);
-		static void guassian2Df(std::vector<float> &guassian, int height, float theta);
+		template <typename T>
+		static void guassian(std::vector<T> &guassian, unsigned int width, unsigned int height, T theta,
+							 T standard_deviation) noexcept {
+			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
+			for (unsigned int i = 0; i < height; i++) {
+				// guassian(guassian[i * width],)
+			}
+		}
 
-		/**
-		 *
-		 */
-		static float linearToGammaSpace(float linear);
-		static float GameSpaceToLinear(float gamma, float exp);
-		static float gammaCorrection(float linear, float exp);
+		template <typename T>
+		static void guassian(T &guassian, unsigned int width, unsigned int height, T theta,
+							 T standard_deviation) noexcept {
+			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
+		}
+
+		template <typename T> static T gammaCorrection(T x, T gamma) noexcept {
+			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
+			return static_cast<T>(std::pow(x, gamma));
+		}
+
+		template <typename T> static T gameSpaceToLinear(T gamma, T exp) noexcept {}
 
 		/**
 		 *	Generate perlin noise value

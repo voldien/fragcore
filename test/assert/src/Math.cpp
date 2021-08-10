@@ -52,7 +52,7 @@ TEST(Math, PowerOf2_Found) {
 
 TEST(Math, PowerOf2_Next_Found) {
 
-	for (int i = 0; i < 31; i++) {
+	for (unsigned int i = 0; i < 31; i++) {
 		auto p2 = Math::NextPowerOfTwo<unsigned long int>(1 << i);
 		ASSERT_TRUE(Math::IsPowerOfTwo(p2));
 		ASSERT_TRUE(p2 == (1 << (i + 1)));
@@ -68,12 +68,10 @@ TEST_P(SumTest, Values) {
 	EXPECT_NEAR(sum, expected, 10e-8);
 }
 
-INSTANTIATE_TEST_SUITE_P(Math, SumTest, ::testing::Values(std::make_tuple(std::vector<float>{1, 2, 3, 4, 5}, 15)));
+INSTANTIATE_TEST_SUITE_P(Math, SumTest,
+						 ::testing::Values(std::make_tuple(std::vector<float>{1, 2, 3, 4, 5}, 15),
+										   std::make_tuple(std::vector<float>{5, 5, 5, 5, 5}, 25)));
 
-TEST(Math, Sum_Float_EQ) {
-	std::vector<float> seq = {1, 2, 3, 4, 5};
-	ASSERT_EQ(Math::sum(seq), 15);
-}
 
 TEST(Math, Distrubtion) {
 
@@ -93,10 +91,10 @@ TEST(Math, Distrubtion) {
 	const int num_guass = 5;
 	const int num_total_guass = num_guass * 2 + 1;
 	std::vector<float> guassian;
-	Math::guassian1Df(guassian, num_guass, theta);
+	Math::guassian(guassian, num_guass, theta, 0.1f);
 	ASSERT_EQ(guassian.size(), num_total_guass);
 	float sum = Math::sum(guassian);
 	ASSERT_FLOAT_EQ(sum, 1.0f);
 
-	Math::guassian2Df(guassian, num_guass, theta);
+	Math::guassian(guassian, num_guass, theta, 0.1f);
 }
