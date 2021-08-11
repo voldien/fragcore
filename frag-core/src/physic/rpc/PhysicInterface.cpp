@@ -113,10 +113,10 @@ void PhysicInterface::deleteRigibody(RigidBody* collision){
 }
 
 
-bool PhysicInterface::rayTest(const PVRay& ray, RayCastHit* hit){
+bool PhysicInterface::rayTest(const Ray& ray, RayCastHit* hit){
 	this->dispatcher->send(eRayTest, 0, nullptr);
 }
-bool PhysicInterface::raySphereTest(const PVRay& ray, RayCastHit* hit){
+bool PhysicInterface::raySphereTest(const Ray& ray, RayCastHit* hit){
 	this->dispatcher->send(eRayTest, 0, nullptr);
 }
 

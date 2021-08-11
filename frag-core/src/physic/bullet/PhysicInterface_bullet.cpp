@@ -400,7 +400,7 @@ void* PhysicInterface::getState(unsigned int* len){
 	return (void*)serializer->getBufferPointer();
 }
 
-bool PhysicInterface::rayTest(const PVRay& ray, RayCastHit* hit){
+bool PhysicInterface::rayTest(const Ray& ray, RayCastHit* hit){
 	/*	*/
 	PhysicCore* physicore = (PhysicCore*)this->pdata;
 	btSoftRigidDynamicsWorld* world = physicore->dynamicsWorld;
@@ -447,7 +447,7 @@ bool PhysicInterface::rayTest(const PVRay& ray, RayCastHit* hit){
 
 	return result.hasHit();
 }
-bool PhysicInterface::raySphereTest(const PVRay& ray, RayCastHit* hit){
+bool PhysicInterface::raySphereTest(const Ray& ray, RayCastHit* hit){
 	PhysicCore* physicore = (PhysicCore*)this->pdata;
 	btSoftRigidDynamicsWorld* world = physicore->dynamicsWorld;
 

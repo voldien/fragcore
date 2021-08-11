@@ -32,7 +32,7 @@ namespace fragcore {
 	  public:
 		template <class T> inline constexpr static T clamp(T a, T min, T max) {
 			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
-						  "Must be a decimal type(float/double/half) or integar.");
+						  "Must be a decimal type(float/double/half) or integer.");
 			return Math::max<T>(min, Math::min<T>(max, a));
 		}
 
@@ -40,6 +40,8 @@ namespace fragcore {
 		 *	Get max value of a and b.
 		 */
 		template <typename T> inline constexpr static T max(T a, T b) {
+			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
+						  "Must be a decimal type(float/double/half) or integer.");
 			return (static_cast<T>(a) < static_cast<T>(b)) ? static_cast<T>(b) : static_cast<T>(a);
 		}
 
@@ -47,6 +49,8 @@ namespace fragcore {
 		 *	Get min value of a and b.
 		 */
 		template <typename T> inline constexpr static T min(T a, T b) noexcept {
+			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
+						  "Must be a decimal type(float/double/half) or integer.");
 			return (static_cast<T>(b) < static_cast<T>(a)) ? static_cast<T>(b) : static_cast<T>(a);
 		}
 
@@ -134,41 +138,6 @@ namespace fragcore {
 		template <typename T> static constexpr bool IsPowerOfTwo(T v) {
 			static_assert(std::is_integral<T>::value, "Must be a integer type.");
 			return (v && ((v - 1) & v));
-		}
-
-		template <typename T> static Color CorrelatedColorTemperatureToRGB(T kelvin) {
-			T temp = kelvin / static_cast<T>(100.0);
-
-			T red, green, blue;
-
-			if (temp <= 66) {
-
-				red = 255;
-
-				green = temp;
-				green = 99.4708025861 * log(green) - 161.1195681661;
-
-				if (temp <= 19) {
-
-					blue = 0;
-				} else {
-
-					blue = temp - 10;
-					blue = 138.5177312231 * log(blue) - 305.0447927307;
-				}
-			} else {
-
-				red = temp - 60;
-				red = 329.698727446 * pow(red, -0.1332047592);
-
-				green = temp - 60;
-				green = 288.1221695283 * pow(green, -0.0755148492);
-
-				blue = 255;
-			}
-
-			return Color(clamp<T>(red, 0, 255) / 255.0f, clamp<T>(green, 0, 255) / 255.0f,
-						 clamp<T>(blue, 0, 255) / 255.0f, 1);
 		}
 
 		/**

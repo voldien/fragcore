@@ -1,13 +1,13 @@
 
 #ifndef _FRAG_CORE_PHYSIC_INTERFACE_H_
 #define _FRAG_CORE_PHYSIC_INTERFACE_H_ 1
-#include"../Core/SmartReference.h"
-#include"../Core/IConfig.h"
-#include"../Core/Ref.h"
-#include"../Def.h"
-#include"../Core/Module.h"
-#include"PhysicDesc.h"
-#include"Prerequisites.h"
+#include "../Core/IConfig.h"
+#include "../Core/Module.h"
+#include "../Core/Ref.h"
+#include "../Core/SmartReference.h"
+#include "../Def.h"
+#include "PhysicDesc.h"
+#include "Prerequisites.h"
 
 namespace fragcore {
 
@@ -15,11 +15,11 @@ namespace fragcore {
 	 *	Physic interface.
 	 *
 	 */
-	class FVDECLSPEC PhysicInterface : public Module {	//TODO add a base object for all plugin based.
+	class FVDECLSPEC PhysicInterface : public Module { // TODO add a base object for all plugin based.
 		friend class PhysicFactory;
-	public:
 
-		PhysicInterface(IConfig* config);
+	  public:
+		PhysicInterface(IConfig *config);
 		virtual ~PhysicInterface(void);
 
 		virtual void OnInitialization(void);
@@ -41,7 +41,7 @@ namespace fragcore {
 		/**
 		 * Set gravity.
 		 */
-		virtual void setGravity(const Vector3& gravity);
+		virtual void setGravity(const Vector3 &gravity);
 
 		/**
 		 *	Get gravity.
@@ -53,115 +53,114 @@ namespace fragcore {
 		 * Add rigidbody to scene.
 		 * @param body
 		 */
-		virtual void addRigidBody(RigidBody* body);
+		virtual void addRigidBody(RigidBody *body);
 
-		 /**
-		  *
-		  * @param body
-		  */
-		virtual void removeRigidBody(RigidBody* body);
+		/**
+		 *
+		 * @param body
+		 */
+		virtual void removeRigidBody(RigidBody *body);
 
 		/**
 		 * Add constraint to scene.
 		 * @param constraints
 		 */
-		virtual void addConstraints(Constraints* constraints);
+		virtual void addConstraints(Constraints *constraints);
 
 		/**
 		 *
 		 * @param constraints
 		 */
-		virtual void removeConstraints(Constraints* constraints);
+		virtual void removeConstraints(Constraints *constraints);
 
 		/**
 		 *	Create collision object.
 		 *
 		 *	@Return
 		 */
-		virtual Collision* createCollision(const CollisionDesc* desc);
+		virtual Collision *createCollision(const CollisionDesc *desc);
 
 		/**
 		 *
 		 */
-		virtual void deleteCollision(Collision* collision);
+		virtual void deleteCollision(Collision *collision);
 
 		/**
 		 *	Create constraint object.
 		 *
 		 *	@Return
 		 */
-		virtual Constraints* createConstraints(const ConstraintsDesc* desc);
+		virtual Constraints *createConstraints(const ConstraintsDesc *desc);
 
 		/**
 		 *
 		 */
-		virtual void deleteConstraints(Constraints* constraints);
+		virtual void deleteConstraints(Constraints *constraints);
 
 		/**
 		 * Create rigidbody.
 		 * @param desc
 		 * @return
 		 */
-		virtual RigidBody* createRigibody(const RigidBodyDesc* desc);
+		virtual RigidBody *createRigibody(const RigidBodyDesc *desc);
 
 		/**
 		 * Delete rigidbody.
 		 * @param rigidbody
 		 */
-		virtual void deleteRigibody(RigidBody* rigidbody);
-
+		virtual void deleteRigibody(RigidBody *rigidbody);
 
 		/**
 		 *
 		 * @param softbodyDesc
 		 * @return
 		 */
-		virtual void* createSoftBody(SoftbodyDesc* softbodyDesc);
-		virtual void deleteSoftBody(void* softbody);
+		virtual void *createSoftBody(SoftbodyDesc *softbodyDesc);
+		virtual void deleteSoftBody(void *softbody);
 
-		virtual void* createCloth(ClothDesc* clothDesc);
-		virtual void deleteCloth(void* cloth);
-
-		/**
-		 *
-		 * @param desc
-		 * @return
-		 */
-		virtual void* createTerrain(const TerrainDesc* desc);
-		virtual void deleteTerrain(void* terrain);
+		virtual void *createCloth(ClothDesc *clothDesc);
+		virtual void deleteCloth(void *cloth);
 
 		/**
 		 *
 		 * @param desc
 		 * @return
 		 */
-		virtual CharacterController* createCharacterController(CharacterControllerDesc* desc);
+		virtual void *createTerrain(const TerrainDesc *desc);
+		virtual void deleteTerrain(void *terrain);
+
+		/**
+		 *
+		 * @param desc
+		 * @return
+		 */
+		virtual CharacterController *createCharacterController(CharacterControllerDesc *desc);
 
 		/**
 		 *
 		 * @param characterController
 		 */
-		virtual void deleteCharacterController(CharacterController* characterController);
+		virtual void deleteCharacterController(CharacterController *characterController);
 
 		/**
 		 *
 		 * @param controller
 		 */
-		virtual void addCharacterController(CharacterController* controller);
+		virtual void addCharacterController(CharacterController *controller);
 
 		/**
 		 *
 		 * @param controller
 		 */
-		virtual void removeCharacterController(CharacterController* controller);
+		virtual void removeCharacterController(CharacterController *controller);
 
-		 /**
-		  * Perform ray test.
-		  * @param ray
-		  * @param hit
-		  * @return
-		  */
-		virtual bool rayTest(const PVRay& ray, RayCastHit* hit);
+		/**
+		 * Perform ray test.
+		 * @param ray
+		 * @param hit
+		 * @return
+		 */
+		virtual bool rayTest(const Ray &ray, RayCastHit *hit);
 
 		/**
 		 *
@@ -169,19 +168,19 @@ namespace fragcore {
 		 * @param hit
 		 * @return
 		 */
-		virtual bool raySphereTest(const PVRay& ray, RayCastHit* hit);
+		virtual bool raySphereTest(const Ray &ray, RayCastHit *hit);
 
 		/**
 		 *
 		 *	@Return
 		 */
-		virtual void* getState(unsigned int* len);
+		virtual void *getState(unsigned int *len);
 
 		/**
 		 *
 		 * @param renderer
 		 */
-		virtual void setDebugRenderer(Ref<IRenderer>& renderer);
+		virtual void setDebugRenderer(Ref<IRenderer> &renderer);
 
 		/**
 		 *	Get version of the interface.
@@ -189,20 +188,18 @@ namespace fragcore {
 		 */
 		virtual const char *getVersion(void) const;
 
-		//virtual intptr_t getNativePtr() const;
+		// virtual intptr_t getNativePtr() const;
 
-	protected:	/*	*/
+	  protected: /*	*/
+				 /**
+				  *	Initialize Allocation.
+				  *	Can be used for resources to allocate.
+				  */
+				 // virtual void initAllocate(InitAllocateTableInfo* table);
 
-		/**
-		 *	Initialize Allocation.
-		 *	Can be used for resources to allocate.
-		 */
-		//virtual void initAllocate(InitAllocateTableInfo* table);
-
-	protected:	/*	*/
-		PhysicInterface(const PhysicInterface& other);
-		void* pdata;
-
+	  protected: /*	*/
+		PhysicInterface(const PhysicInterface &other);
+		void *pdata;
 	};
 
 	/**
@@ -211,7 +208,7 @@ namespace fragcore {
 	 *
 	 *	@Return non-null physic interface object.
 	 */
-	extern "C" PhysicInterface* createInternalPhysicInterface(IConfig* config);
-}
+	extern "C" PhysicInterface *createInternalPhysicInterface(IConfig *config);
+} // namespace fragcore
 
 #endif

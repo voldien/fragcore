@@ -18,6 +18,7 @@
 */
 #ifndef _FRAG_CORE_COMMAND_LIST_H_
 #define _FRAG_CORE_COMMAND_LIST_H_ 1
+#include "../Core/Color.h"
 #include "../Core/NoCopyable.h"
 #include "../Core/Ref.h"
 #include "IRenderer.h"
@@ -39,7 +40,7 @@ namespace fragcore {
 		virtual void copyTexture(const Texture *src, Texture *dst) = 0;
 
 		virtual void bindPipeline(RenderPipeline *pipline) = 0;
-		//virtual void bindComputePipeline(RenderPipeline *pipeline) = 0;
+		// virtual void bindComputePipeline(RenderPipeline *pipeline) = 0;
 
 		// virtual void updateBuffer(Ref<Buffer> &buffer, void *p, int size) = 0;
 		virtual void bindFramebuffer(Ref<FrameBuffer> &framebuffer) = 0;
@@ -50,7 +51,7 @@ namespace fragcore {
 
 		virtual void setDepthBounds(float min, float max) = 0;
 
-		//virtual void executeCommand(CommandList &list);
+		// virtual void executeCommand(CommandList &list);
 
 		// virtual void setGraphicResourcesSlot(void) = 0;
 

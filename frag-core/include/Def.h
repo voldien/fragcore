@@ -51,12 +51,12 @@ namespace fragcore {
 	typedef LIBHPM::Matrix4x4 Matrix4x4;
 	typedef LIBHPM::Matrix3x3 Matrix3x3;
 	typedef LIBHPM::Quaternion Quaternion;
-	typedef LIBHPM::Plane PVPlane;
-	typedef LIBHPM::AABB PVAABB;
-	typedef LIBHPM::BoundingSphere PVBoundingSphere;
-	typedef LIBHPM::OBB PVOBB;
-	typedef LIBHPM::Ray PVRay;
-	typedef LIBHPM::Vector4 Color;
+	typedef LIBHPM::Plane Plane;
+	typedef LIBHPM::AABB AABB;
+	typedef LIBHPM::BoundingSphere BoundingSphere;
+	typedef LIBHPM::OBB OBB;
+	typedef LIBHPM::Ray Ray;
+	//typedef LIBHPM::Vector4 Color;
 }
 
 /**

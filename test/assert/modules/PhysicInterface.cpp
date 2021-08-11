@@ -64,13 +64,13 @@ TEST(PhysicInterface, PhysicInterface_Enum_Bullet_RayTest_No_Throw) {
 	PhysicInterface *interface = PhysicFactory::createPhysic(PhysicFactory::Bullet, NULL);
 	RayCastHit hit;
 	// ASSERT_NO_THROW(interface->rayTest(
-	// 	PVRay(Vector3::zero(), Vector3::forward()), &hit));
+	// 	Ray(Vector3::zero(), Vector3::forward()), &hit));
 }
 
 TEST(PhysicInterface, PhysicInterface_Enum_Bullet_RayTest_Fetch_Hit) {
 	PhysicInterface *interface = PhysicFactory::createPhysic(PhysicFactory::Bullet, NULL);
 	RayCastHit hit;
-	// interface->rayTest(PVRay(Vector3::zero(), Vector3::forward()), &hit);
+	// interface->rayTest(Ray(Vector3::zero(), Vector3::forward()), &hit);
 	// TODO add testing.
 }
 
@@ -78,7 +78,7 @@ TEST(PhysicInterface, PhysicInterface_Enum_Bullet_RaySphereTest_No_Throw) {
 	PhysicInterface *interface = PhysicFactory::createPhysic(PhysicFactory::Bullet, NULL);
 	RayCastHit hit;
 	// ASSERT_NO_THROW(interface->raySphereTest(
-	// 	PVRay(Vector3::zero(), Vector3::forward()), &hit));
+	// 	Ray(Vector3::zero(), Vector3::forward()), &hit));
 }
 
 TEST(PhysicInterface, PhysicInterface_Enum_Bullet_Create_Box_Collision_No_Throw) {
