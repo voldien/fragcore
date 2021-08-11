@@ -34,6 +34,7 @@ namespace fragcore {
 		enum ALGORITHM {
 			MD5,	/*  */
 			SHA128, /*  */
+			SHA224, /*  */
 			SHA256, /*  */
 			SHA512, /*  */
 		};
@@ -47,18 +48,22 @@ namespace fragcore {
 		void update(Ref<IO> &io);
 		/*  Get the final hash value.   */
 		void final(std::vector<unsigned char> &hash);
+		void reset(void) noexcept;
 		unsigned int getResultSize(void) const;
 		long int getByteRead(void) const;
 
-		ALGORITHM getAlgorithm(void) const;
+		ALGORITHM getAlgorithm(void) const noexcept;
+
+	  protected:
+		void initHash(ALGORITHM algorithm);
 
 	  private:
 		void *context;
 		ALGORITHM algorithm; /**/
 		long int nbytes;
 
-		Hash(const Hash &other); // TODO determine
-		Hash(void);
+		Hash(const Hash &other) = default;
+		Hash(void) = default;
 	};
 
 } // namespace fragcore

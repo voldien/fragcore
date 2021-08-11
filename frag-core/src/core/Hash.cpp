@@ -2,30 +2,22 @@
 #include "Utils/StringUtil.h"
 #include <Exception/InvalidArgumentException.h>
 #include <Exception/NotSupportedException.h>
+#include <fmt/core.h>
 #include <openssl/md5.h>
-#include<fmt/core.h>
+#include <openssl/sha.h>
 using namespace fragcore;
 
 Hash::Hash(Hash::ALGORITHM algorithm) {
-	switch (algorithm) {
-	case MD5:
-		this->context = malloc(sizeof(MD5_CTX));
-		MD5_Init((MD5_CTX *)this->context);
-		break;
-	case SHA128:
-	case SHA256:
-	case SHA512:
-		throw NotSupportedException();
-	default:
-		throw InvalidArgumentException(fmt::format("Invalid hash enumerator - {}", algorithm));
-	}
 
+	initHash(algorithm);
 	/*      */
 	this->algorithm = algorithm;
 	this->nbytes = 0;
 }
 
-Hash::Hash(Hash &&other) {}
+Hash::Hash(Hash &&other) {
+	// std::swap(other.context);
+}
 
 Hash::~Hash(void) { free(this->context); }
 
@@ -35,11 +27,19 @@ void Hash::update(const void *pdata, size_t nbytes) {
 		nbytes += MD5_Update((MD5_CTX *)this->context, pdata, nbytes);
 		break;
 	case SHA128:
+		nbytes += SHA1_Update((SHA_CTX *)this->context, pdata, nbytes);
+		break;
 	case SHA256:
+		nbytes += SHA256_Update((SHA256_CTX *)this->context, pdata, nbytes);
+		break;
 	case SHA512:
+		nbytes += SHA512_Update((SHA512_CTX *)this->context, pdata, nbytes);
+		break;
 	default:
+		assert(0);
 		throw NotSupportedException("Not supported");
 	}
+	this->nbytes += nbytes;
 }
 
 void Hash::update(Ref<IO> &io) {
@@ -66,6 +66,12 @@ void Hash::final(std::vector<unsigned char> &hash) {
 	default:
 		throw NotSupportedException("Not supported");
 	}
+
+	/**/
+}
+void Hash::reset(void) noexcept {
+	this->nbytes = 0;
+	initHash(getAlgorithm());
 }
 
 unsigned int Hash::getResultSize(void) const {
@@ -82,8 +88,29 @@ unsigned int Hash::getResultSize(void) const {
 
 long int Hash::getByteRead(void) const { return this->nbytes; }
 
-Hash::ALGORITHM Hash::getAlgorithm(void) const { return this->algorithm; }
+Hash::ALGORITHM Hash::getAlgorithm(void) const noexcept { return this->algorithm; }
 
-Hash::Hash(const Hash &other) {}
+void Hash::initHash(ALGORITHM algorithm) {
 
-Hash::Hash(void) {}
+	/*	*/
+	switch (algorithm) {
+	case MD5:
+		this->context = malloc(sizeof(MD5_CTX));
+		MD5_Init((MD5_CTX *)this->context);
+		break;
+	case SHA128:
+		this->context = malloc(sizeof(SHA_CTX));
+		SHA1_Init((SHA_CTX *)this->context);
+		break;
+	case SHA224:
+		throw NotSupportedException();
+	case SHA256:
+		this->context = malloc(sizeof(SHA256_CTX));
+		SHA256_Init((SHA256_CTX *)this->context);
+		break;
+	case SHA512:
+		throw NotSupportedException();
+	default:
+		throw InvalidArgumentException("Invalid hash algorithm - {}", algorithm);
+	}
+}
