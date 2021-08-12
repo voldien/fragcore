@@ -83,8 +83,6 @@ namespace fragcore {
 
 		static const char *getUserName(void);
 
-
-
 		static bool supportsVibration(void);
 
 		static const char *getCurrentDirectory(void);

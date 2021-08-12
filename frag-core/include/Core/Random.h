@@ -18,49 +18,50 @@
 */
 #ifndef _FRAG_CORE_RANDOM_H_
 #define _FRAG_CORE_RANDOM_H_ 1
-#include"../Def.h"
+#include "../Def.h"
 
 namespace fragcore {
 
 	/**
+	 * @brief
 	 *
 	 */
 	class FVDECLSPEC Random {
-	public:
-	  Random(void) = default;
-	  Random(const Random &other) = default;
-	  Random(Random &&other) = default;
-	  ~Random(void) = default;
+	  public:
+		Random(void) = default;
+		Random(const Random &other) = default;
+		Random(Random &&other) = default;
+		~Random(void) = default;
 
-	  /**
-	   *	Override the seed.
-	   */
-	  void setSeed(unsigned long long seed) noexcept;
+		/**
+		 *	Override the seed.
+		 */
+		void setSeed(unsigned long long seed) noexcept;
 
-	  /**
-	   *	Get next random value.
-	   */
-	  unsigned int rand(void) noexcept;
+		/**
+		 *	Get next random value.
+		 */
+		unsigned int rand(void) noexcept;
 
-	  /**
-	   *	Get next normalized random value.
-	   */
-	  float randfNormalize(void) noexcept;
+		/**
+		 *	Get next normalized random value.
+		 */
+		float randfNormalize(void) noexcept;
 
-	  /**
-	   *	Get next random float value.
-	   */
-	  float randf(void) const noexcept;
+		/**
+		 *	Get next random float value.
+		 */
+		float randf(void) const noexcept;
 
-	  float range(float min, float max) noexcept;
+		float range(float min, float max) noexcept;
 
-	private:	/*	Attributes.	*/
-//
-//		unsigned long long seed;	/*	*/
-//		unsigned long long mult;	/*	*/
-//		unsigned long long llong_max;	/*	*/
-//		float float_max;		/*	*/
+	  private: /*	Attributes.	*/
+			   //
+			   //		unsigned long long seed;	/*	*/
+			   //		unsigned long long mult;	/*	*/
+			   //		unsigned long long llong_max;	/*	*/
+			   //		float float_max;		/*	*/
 	};
-}
+} // namespace fragcore
 
 #endif

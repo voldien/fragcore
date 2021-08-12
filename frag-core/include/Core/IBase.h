@@ -22,6 +22,10 @@
 #include "Ref.h"
 
 namespace fragcore {
+	/**
+	 * @brief 
+	 *
+	 */
 	class FVDECLSPEC IBase {
 	  public:
 		virtual ~IBase(void) = 0;

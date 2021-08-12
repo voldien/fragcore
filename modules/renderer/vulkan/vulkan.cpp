@@ -21,7 +21,6 @@ using namespace fragcore;
 //     return extensions;
 // }
 
-
 // TODO move to the helper file.
 unsigned int getTextureFormat(TextureDesc::Format format) {
 	switch (format) {

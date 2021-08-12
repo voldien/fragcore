@@ -18,7 +18,7 @@
 */
 #ifndef _FRAG_CORE_UID_GENERATOR_H_
 #define _FRAG_CORE_UID_GENERATOR_H_ 1
-#include"../Def.h"
+#include "../Def.h"
 
 namespace fragcore {
 	/**
@@ -27,34 +27,33 @@ namespace fragcore {
 	 *	Each next will be an increment of previosuly.
 	 */
 	class FVDECLSPEC UIDGenerator /*: public UIDObject*/ {
-	public:
-	  UIDGenerator(void) noexcept {
-		  this->nextUID = 0;
-		  this->nextLUID = 0;
-	  }
+	  public:
+		UIDGenerator(void) noexcept {
+			this->nextUID = 0;
+			this->nextLUID = 0;
+		}
 
-	UIDGenerator(const UIDGenerator &other) = default;
+		UIDGenerator(const UIDGenerator &other) = default;
 
-	  /**
-	   *	@Return next unique id.
-	   */
-	  unsigned int getNextUID(void) noexcept { return this->nextUID++; }
+		/**
+		 *	@Return next unique id.
+		 */
+		unsigned int getNextUID(void) noexcept { return this->nextUID++; }
 
-	  /**
-	   *	@Return next long uniqie id.
-	   */
-	  unsigned long int getNextLUID(void) noexcept { return this->nextLUID++; }
+		/**
+		 *	@Return next long uniqie id.
+		 */
+		unsigned long int getNextLUID(void) noexcept { return this->nextLUID++; }
 
-	  virtual bool operator==(const UIDGenerator &o1) noexcept { return uid == o1.uid; }
-	  virtual bool operator!=(const UIDGenerator &o1) noexcept { return uid != o1.uid; }
+		virtual bool operator==(const UIDGenerator &o1) noexcept { return uid == o1.uid; }
+		virtual bool operator!=(const UIDGenerator &o1) noexcept { return uid != o1.uid; }
 
-	private:    /*	Attributes.	*/
-
-		unsigned int nextUID;       /*	*/
+	  private:						/*	Attributes.	*/
+		unsigned int nextUID;		/*	*/
 		unsigned long int nextLUID; /*	*/
-		unsigned int uid;   //TODO resolve.
+		unsigned int uid;			// TODO resolve.
 	};
 
-}
+} // namespace fragcore
 
 #endif

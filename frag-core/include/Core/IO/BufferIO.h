@@ -22,7 +22,9 @@
 #include "IO.h"
 
 namespace fragcore {
+
 	/**
+	 * @brief
 	 *
 	 */
 	class FVDECLSPEC BufferIO : public IO { // TODO rename so that it understood it is a system memory IO object.

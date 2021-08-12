@@ -63,6 +63,7 @@ namespace fragcore {
 	  public:
 		GZFileIO(const char *path, Mode mode); // TODO remove filepath
 		// GZFileIO(Ref<IO> &io);
+		virtual ~GZFileIO(void) = default;
 	};
 } // namespace fragcore
 

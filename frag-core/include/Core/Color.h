@@ -26,7 +26,7 @@ namespace fragcore {
 						 Math::gammaCorrection(b(), gamma), Math::gammaCorrection(a(), gamma));
 		}
 
-		template <typename T> static Color CorrelatedColorTemperatureToRGB(T kelvin) {
+		template <typename T> static Color CorrelatedColorTemperatureToRGB(T kelvin) noexcept {
 			T temp = kelvin / static_cast<T>(100.0);
 
 			T red, green, blue;
