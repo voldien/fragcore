@@ -44,7 +44,7 @@ static int internal_schCallback(struct sch_task_package_t *package)
 	/*	Release task resources.	*/
 }
 
-void TaskScheduler::AddTask(Task *task)
+void TaskScheduler::addTask(Task *task)
 {
 	schTaskPackage packageTask = {0};
 	//TODO IMPROVE
@@ -87,5 +87,5 @@ void TaskScheduler::wait(void)
 {
 	schWaitTask((schTaskSch*)this->sch);
 }
-void TaskScheduler::Lock(void)  {}
-void TaskScheduler::UnLock(void)  {}
+void TaskScheduler::lock(void)  {}
+void TaskScheduler::unLock(void)  {}

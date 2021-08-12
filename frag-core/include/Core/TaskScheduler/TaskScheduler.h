@@ -36,14 +36,14 @@ namespace fragcore {
 		TaskScheduler(int cores, unsigned int maxPackagesPool);
 		~TaskScheduler(void);
 
-		virtual void AddTask(Task *task) override;
+		virtual void addTask(Task *task) override;
 		virtual void setUserData(const void *data) override;
 		virtual const void *getUserData(void) override;
 		virtual void run(void) override;
 		virtual void terminate(void) override;
 		virtual void wait(void) override;
-		virtual void Lock(void) override;
-		virtual void UnLock(void) override;
+		virtual void lock(void) override;
+		virtual void unLock(void) override;
 
 	  private:
 #ifdef FRAGVIEW_CORE_INTERNAL_IMP
