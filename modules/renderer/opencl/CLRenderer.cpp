@@ -116,7 +116,7 @@ cl_context createCLContext(unsigned int *ndevices, cl_device_id **devices, SDL_W
 	/*  Context properties.	*/
 	cl_context_properties props[] = {
 		CL_CONTEXT_PLATFORM,
-		(cl_context_properties)nullptr,
+		(cl_context_properties) nullptr,
 #ifndef MDHEADLESS
 		glcontext ? CL_GL_CONTEXT_KHR : 0,
 		(cl_context_properties)glcontext,
@@ -125,7 +125,7 @@ cl_context createCLContext(unsigned int *ndevices, cl_device_id **devices, SDL_W
 		glcontext ? (cl_context_properties)sysinfo.info.x11.display : nullptr,
 #endif
 #endif
-		(cl_context_properties)nullptr,
+		(cl_context_properties) nullptr,
 		nullptr,
 	};
 

@@ -18,16 +18,15 @@
 */
 #ifndef _FRAG_CORE_FILE_IO_H_
 #define _FRAG_CORE_FILE_IO_H_ 1
-#include <cstdio>
 #include "IO.h"
+#include <cstdio>
 
 namespace fragcore {
 	/**
 	 *
 	 */
 	class FVDECLSPEC FileIO : public IO {
-	public:
-
+	  public:
 		long read(long int nbytes, void *pbuffer) override;
 
 		long write(long int nbytes, const void *pbuffer) override;
@@ -50,18 +49,19 @@ namespace fragcore {
 
 		bool flush(void) override;
 
-	protected:
+	  protected:
 		FILE *file;
 		Mode mode;
 
 		FileIO(void);
 
-	public:
+	  public:
 		FileIO(const char *path, Mode mode);
 		FileIO(std::string &path, Mode mode);
+		virtual ~FileIO(void) = default;
 
 		FileIO(FILE *file);
 		FileIO(FileIO &&other);
 	};
-}
+} // namespace fragcore
 #endif

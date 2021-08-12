@@ -1,8 +1,8 @@
 #ifndef _FRAG_CORE_GL_COMMAND_LIST_H_
 #define _FRAG_CORE_GL_COMMAND_LIST_H_ 1
-#include"Renderer/CommandList.h"
-#include"GLCommandListCommands.h"
-#include<vector>
+#include "GLCommandListCommands.h"
+#include "Renderer/CommandList.h"
+#include <vector>
 
 namespace fragcore {
 	/**
@@ -39,6 +39,6 @@ namespace fragcore {
 	  private:
 		std::vector<GLCommandBase *> commands;
 	};
-}
+} // namespace fragcore
 
 #endif

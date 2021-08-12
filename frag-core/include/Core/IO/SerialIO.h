@@ -35,6 +35,7 @@ namespace fragcore {
 	class SerialIO : public IO {
 	  public:
 		SerialIO(const std::string &path, Mode mode);
+		virtual ~SerialIO(void) = default;
 
 		virtual void close(void) = 0;
 

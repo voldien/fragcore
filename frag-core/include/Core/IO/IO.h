@@ -42,7 +42,7 @@ namespace fragcore {
 		};
 
 	  public:
-		// virtual ~IO(void);
+		virtual ~IO(void) = default;
 
 		virtual void close(void) = 0;
 

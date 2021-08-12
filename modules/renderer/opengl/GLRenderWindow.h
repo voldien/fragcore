@@ -1,11 +1,11 @@
 #ifndef _FRAG_CORE_VULKAN_WINDOW_H_
 #define _FRAG_CORE_VULKAN_WINDOW_H_ 1
-#include "Renderer/RendererWindow.h"
 #include "GLRendererInterface.h"
-#if defined(FRAG_CORE_INTERNAL_IMP)  // TODO resolve to a single file or
-                                     // something later
+#include "Renderer/RendererWindow.h"
+#if defined(FRAG_CORE_INTERNAL_IMP) // TODO resolve to a single file or
+									// something later
 #include <SDL2/SDL_syswm.h>
-#include<SDL2/SDL_video.h>
+#include <SDL2/SDL_video.h>
 #endif
 
 namespace fragcore {
@@ -13,7 +13,7 @@ namespace fragcore {
 	 *
 	 */
 	class FVDECLSPEC GLRenderWindow : public RendererWindow {
-	public:
+	  public:
 		GLRenderWindow(Ref<GLRendererInterface> &renderer);
 		~GLRenderWindow(void);
 
@@ -75,18 +75,17 @@ namespace fragcore {
 		virtual ViewPort *getViewPort(void) override;
 		virtual FrameBuffer *getDefaultFrameBuffer() override;
 
-		virtual void createWindow(int x, int y, int width, int height,
-								const char *api) override;
+		virtual void createWindow(int x, int y, int width, int height, const char *api) override;
 		virtual bool assertConfigAttributes(const IConfig *iConfig) override;
 		virtual void useWindow(void *pdata) override;
 
-	protected:
+	  protected:
 		virtual void createSwapChain(void);
 
-	private:
+	  private:
 		SDL_Window *window;
 		Ref<GLRendererInterface> renderer;
 	};
-}  // namespace fragcore
+} // namespace fragcore
 
 #endif

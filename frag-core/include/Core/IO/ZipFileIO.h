@@ -69,7 +69,7 @@ namespace fragcore {
 
 		ZipFileIO(const ZipFileIO &other);
 		ZipFileIO(const ZipFileIO &&other);
-		~ZipFileIO(void);
+		virtual ~ZipFileIO(void);
 	};
 } // namespace fragcore
 

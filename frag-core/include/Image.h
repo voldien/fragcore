@@ -18,6 +18,7 @@
 */
 #ifndef _FRAG_CORE_IMAGE_H_
 #define _FRAG_CORE_IMAGE_H_ 1
+#include "Core/Color.h"
 #include "Renderer/Texture.h"
 
 namespace fragcore {
@@ -32,11 +33,17 @@ namespace fragcore {
 		Image(int width, int height, TextureFormat format);
 
 		// TODO set const for the width and height
-		// virtual unsigned int width(void);
+		virtual unsigned int width(void) noexcept { return this->w; }
 
-		// virtual unsigned int height(void);
+		virtual unsigned int height(void) noexcept { return this->h; }
 
 		// virtual unsigned int layers(void) const;
+		Color operator[](unsigned int index) { return Color::black(); }
+
+	  private:
+		unsigned int w, h, depth;
+		TextureFormat format;
+		// Color color;
 	};
 } // namespace fragcore
 

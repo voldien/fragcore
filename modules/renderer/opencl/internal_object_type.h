@@ -1,12 +1,13 @@
-#ifndef _FRAGVIEW_INTERNAL_OBJECT_TYPE_H_
-#define _FRAGVIEW_INTERNAL_OBJECT_TYPE_H_ 1
-#include"Renderer/RenderDesc.h"
-#include"Renderer/IRenderer.h"
-#include"Renderer/Buffer.h"
-#include<CL/opencl.h>
-#include<SDL2/SDL.h>
+#ifndef _FRAGCORE_INTERNAL_OPENCL_OBJECT_TYPE_H_
+#define _FRAGCORE_INTERNAL_OPENCL_OBJECT_TYPE_H_ 1
+#include "Renderer/Buffer.h"
+#include "Renderer/IRenderer.h"
+#include "Renderer/RenderDesc.h"
+#include <CL/opencl.h>
+#include <SDL2/SDL.h>
 
 namespace fragcore {
+
 	enum CLRendererInterface {
 		eNone,
 		eVulkan,
@@ -17,7 +18,7 @@ namespace fragcore {
 
 	typedef struct opencl_core_t {
 		IRenderer *back_renderer;
-		void *window;	//TODO evoluate.
+		void *window; // TODO evoluate.
 		cl_context context;
 		cl_command_queue *queues;
 		uint32_t num_queues;
@@ -48,7 +49,6 @@ namespace fragcore {
 		cl_program program;
 	} CLShaderObject;
 
-
 	/**
 	 *
 	 */
@@ -59,7 +59,6 @@ namespace fragcore {
 		unsigned int base;
 		Buffer *interp;
 	} CLBufferObject;
-
 
 	/**
 	 *
@@ -73,7 +72,6 @@ namespace fragcore {
 		Buffer *vertexbuffer;
 	} CLGeometryObject;
 
-
 	/**
 	 *
 	 */
@@ -81,6 +79,6 @@ namespace fragcore {
 		FrameBufferDesc desc;
 		unsigned int framebuffer;
 	} CLFrameBufferObject;
-}
+} // namespace fragcore
 
 #endif
