@@ -27,8 +27,8 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC Base64 : public IBase {
 	public:
-
-
+	  virtual void encode(Ref<IO> &raw, Ref<IO> &encoded);
+	  virtual void decode(Ref<IO> &encoded, Ref<IO> &raw);
 	};
 }
 

@@ -65,8 +65,8 @@ namespace fragcore {
 		virtual bool flush(void) = 0;
 
 		//		virtual String get_path() const { return ""; } /// returns the path for the current open file
-		//		virtual String get_path_absolute() const { return ""; } /// returns the absolute path for the current open
-		//file
+		//		virtual String get_path_absolute() const { return ""; } /// returns the absolute path for the current
+		// open file
 
 		//		virtual void set_endian_swap(bool p_swap) { endian_swap = p_swap; }
 		//		inline bool get_endian_swap() const { return endian_swap; }
@@ -74,18 +74,18 @@ namespace fragcore {
 		// TODO determine first how its behaviour before determine if it shall be included.
 		// virtual IFileSystem* getFileSystem(void) = 0;
 
-		// TODO determine if needing to add support.
 		enum IOOperation {
 			OP_ALL = (unsigned int)(-1),
 			OP_READ = 1 << 0,
-			OP_WRITE = 1 << 0,
-			OP_EOF = 1 << 0,
-			OP_LENGTH = 1 << 0,
-			OP_SEEK = 1 << 0,
-			OP_GETPOS = 1 << 0,
-			OP_FLUSH = 1 << 0,
+			OP_WRITE = 1 << 1,
+			OP_EOF = 1 << 2,
+			OP_LENGTH = 1 << 3,
+			OP_SEEK = 1 << 4,
+			OP_GETPOS = 1 << 5,
+			OP_FLUSH = 1 << 6,
 		};
-		// virtual isOperationSupported(IOOperation operations) = 0;
+
+		virtual bool isOperationSupported(IOOperation operations) const noexcept {};
 
 	  protected: /*  Internal methods.   */
 		virtual void open(const char *path, Mode mode) = 0;
