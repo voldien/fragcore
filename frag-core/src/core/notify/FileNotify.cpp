@@ -192,7 +192,7 @@ void FileNotify::callback(fsw_cevent const *const events, const unsigned int eve
 				// package.end = entry;
 				//				package.callback = FileNotify::fileFetchTask;
 
-				notify->scheduler->AddTask(&task);
+				notify->scheduler->addTask(&task);
 				notify->scheduler->wait();
 				// int status = schSubmitTask(notify->sch, &package, nullptr);
 				// if (status != SCH_OK) {

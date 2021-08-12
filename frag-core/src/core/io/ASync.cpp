@@ -66,7 +66,7 @@ void ASync::asyncReadFile(ASyncHandle handle, char *buffer, unsigned int size, A
 	readTask.callback = async_read;
 	readTask.userData = ao;
 
-	this->scheduler->AddTask(&readTask);
+	this->scheduler->addTask(&readTask);
 }
 
 void ASync::asyncReadFile(ASyncHandle handle, Ref<IO> &writeIO, AsyncComplete complete) {
@@ -104,7 +104,7 @@ void ASync::asyncWriteFile(ASyncHandle handle, char *buffer, unsigned int size, 
 	AsyncTask readTask;
 	readTask.callback = async_write;
 	readTask.userData = ao;
-	this->scheduler->AddTask(&readTask);
+	this->scheduler->addTask(&readTask);
 }
 
 void ASync::asyncWriteFile(ASyncHandle handle, Ref<IO> &io, AsyncComplete complete) {}
