@@ -29,9 +29,6 @@ INSTANTIATE_TEST_SUITE_P(Math, MaxTest,
 						 ::testing::Values(std::make_tuple(5, 3, 5), std::make_tuple(5, 3, 5),
 										   std::make_tuple(5, 3, 5)));
 
-TEST(Math, Min_Min_Value) { ASSERT_EQ(Math::min(5, 3), 3); }
-TEST(Math, Max_Max_Value) { ASSERT_EQ(Math::max(1, 3), 3); }
-
 class MinTest : public ::testing::TestWithParam<std::tuple<double, double, double>> {};
 
 TEST_P(MinTest, Values) {
