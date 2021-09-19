@@ -35,27 +35,27 @@ namespace fragcore {
 	class SerialIO : public IO {
 	  public:
 		SerialIO(const std::string &path, Mode mode);
-		virtual ~SerialIO(void) = default;
+		virtual ~SerialIO(void);
 
-		virtual void close(void) = 0;
+		virtual void close(void) override;
 
-		virtual long int read(long int nbytes, void *pbuffer) = 0;
+		virtual long int read(long int nbytes, void *pbuffer) override;
 
-		virtual long int write(long int nbytes, const void *pbuffer) = 0;
+		virtual long int write(long int nbytes, const void *pbuffer) override;
 
-		virtual bool eof(void) const = 0;
+		virtual bool eof(void) const override;
 
-		virtual long int length(void) = 0;
+		virtual long int length(void) override;
 
-		virtual void seek(long int nbytes, Seek seek) = 0;
+		virtual void seek(long int nbytes, Seek seek) override;
 
-		virtual unsigned long getPos(void) = 0;
+		virtual unsigned long getPos(void) override;
 
-		virtual bool isWriteable(void) const = 0;
+		virtual bool isWriteable(void) const override;
 
-		virtual bool isReadable(void) const = 0;
+		virtual bool isReadable(void) const override;
 
-		virtual bool flush(void) = 0;
+		virtual bool flush(void) override;
 
 		/**
 		 *
@@ -63,6 +63,8 @@ namespace fragcore {
 		static std::optional<std::vector<std::string>> getSerialPorts(void) noexcept;
 
 	  private:
+		virtual void open(const char *path, Mode mode) override {}
+
 		struct sp_port *port;
 		Mode mode;
 	};

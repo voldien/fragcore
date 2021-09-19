@@ -51,6 +51,8 @@ SerialIO::SerialIO(const std::string &path, Mode mode) {
 		throw RuntimeException("Failed to disable xonoff {} - {}", path, sp_last_error_message());
 }
 
+SerialIO ::~SerialIO(void) {}
+
 std::optional<std::vector<std::string>> SerialIO::getSerialPorts(void) noexcept {
 	int i;
 	struct sp_port **ports;
