@@ -1,7 +1,7 @@
 #include "Core/IO/ZipFileSystem.h"
 #include "Core/IO/ZipFileIO.h"
 #include "Exception/RuntimeException.h"
-#include "Utils/StringUtil.h"
+
 #include <Exception/InvalidArgumentException.h>
 #include <cassert>
 #include <vector>

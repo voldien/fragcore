@@ -4,7 +4,7 @@
 #include "Core/Math.h"
 #include "Exception/RuntimeException.h"
 #include "Renderer/Texture.h"
-#include "Utils/StringUtil.h"
+
 #include <Core/IO/FileSystem.h>
 #include <Exception/InvalidArgumentException.h>
 #include <FreeImage.h>

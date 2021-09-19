@@ -1,4 +1,4 @@
-#include "Utils/StringUtil.h"
+
 #include "internal_object_type.h"
 #include <Exception/RuntimeException.h>
 #include <Renderer/IRenderer.h>

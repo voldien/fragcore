@@ -425,29 +425,6 @@ IF( UNIX )
 		MESSAGE(WARNING "Could not find the glslangValidator program for creating spirv shaders.")
 	ENDIF()
 
-	FIND_PROGRAM(ZIP zip)
-
-	IF(ZIP)
-		MESSAGE(STATUS "zip found: ${ZIP}")
-	ENDIF()
-
-	# Create distribution tarball.
-	SET( TARGETDIR "${PROJECT_NAME}-${VERSION}")
-	ADD_CUSTOM_TARGET(	distribution
-			COMMENT "Creating distrubtion file."
-			COMMAND mkdir -p ${TARGETDIR}
-			COMMAND ${CP} -r   ${CMAKE_CURRENT_SOURCE_DIR}/src
-			${CMAKE_CURRENT_SOURCE_DIR}/frag-core
-
-			${CMAKE_CURRENT_SOURCE_DIR}/utils
-			${CMAKE_CURRENT_SOURCE_DIR}/test
-			${CMAKE_CURRENT_SOURCE_DIR}/images
-			${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt
-			${CMAKE_CURRENT_SOURCE_DIR}/.gitignore
-			${CMAKE_CURRENT_SOURCE_DIR}/LICENSE
-			${TARGETDIR}
-			COMMAND ${TAR} cf - ${TARGETDIR} | ${GZIP} -c > ${TARGETDIR}.tar.gz
-			COMMAND ${RM} -r ${TARGETDIR} )
 
 ELSEIF(WIN32)
 

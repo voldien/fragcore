@@ -4,7 +4,7 @@
 #include "Core/IO/GZFileIO.h"
 #include "Exception/InvalidArgumentException.h"
 #include "Exception/RuntimeException.h"
-#include "Utils/StringUtil.h"
+
 #include <curl/curl.h>
 #include <curl/multi.h>
 #include <fmt/core.h>

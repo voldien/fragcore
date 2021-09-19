@@ -45,17 +45,27 @@ namespace fragcore {
 
 		/*  Add additional data to be used for computing.   .*/
 		void update(const void *pdata, size_t nbytes);
+		/**
+		 * @brief
+		 *
+		 * @param io
+		 */
 		void update(Ref<IO> &io);
 		/*  Get the final hash value.   */
+
 		void final(std::vector<unsigned char> &hash);
+
 		void reset(void) noexcept;
+
 		unsigned int getResultSize(void) const;
-		long int getByteRead(void) const;
+		unsigned long int getByteRead(void) const;
 
 		ALGORITHM getAlgorithm(void) const noexcept;
 
 	  protected:
 		void initHash(ALGORITHM algorithm);
+
+		void getHashResult(const void *pData, const size_t nrBytes);
 
 	  private:
 		void *context;

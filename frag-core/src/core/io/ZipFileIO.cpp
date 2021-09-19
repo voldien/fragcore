@@ -3,7 +3,7 @@
 #include "Exception/RuntimeException.h"
 #include <Exception/InvalidArgumentException.h>
 #include <Exception/NotImplementedException.h>
-#include <Utils/StringUtil.h>
+
 #include <stdexcept>
 #include <zip.h>
 #include <zlib.h>

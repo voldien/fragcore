@@ -5,7 +5,7 @@
 #include "Exception/RuntimeException.h"
 #include <Exception/InvalidArgumentException.h>
 #include <Renderer/RenderDesc.h>
-#include <Utils/StringUtil.h>
+
 #include <Utils/TextureUtil.h>
 #include <fmt/core.h>
 // TODO add support if libav does not support it.

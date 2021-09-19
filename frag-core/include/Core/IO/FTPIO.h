@@ -16,8 +16,8 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-#ifndef _FRAG_CORE_FTP_FILE_H_
-#define _FRAG_CORE_FTP_FILE_H_ 1
+#ifndef _FRAG_CORE_FTP_IO_H_
+#define _FRAG_CORE_FTP_IO_H_ 1
 #include "FileIO.h"
 #include "IO.h"
 #if defined(FRAG_CORE_INTERNAL_IMP) // TODO resolve to a single file or something later
@@ -25,7 +25,9 @@
 #endif
 
 namespace fragcore {
+
 	/**
+	 * @brief
 	 *
 	 */
 	class FVDECLSPEC FTPFileIO : public IO { // TODO determine how to handle with the FileIO dep.
@@ -53,13 +55,10 @@ namespace fragcore {
 		void open(const char *path, Mode mode) override;
 
 	  private:
-		// union {
 #if defined(FRAG_CORE_INTERNAL_IMP)
-//		gzFile gzFi;
 #else
 		void *data;
 #endif
-		//};
 	  public:
 		FTPFileIO(const char *path, Mode mode); // TODO remove filepath
 	  private:

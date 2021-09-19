@@ -5,7 +5,7 @@
 #include <Core/IO/FileSystem.h>
 #include <Core/IO/GZFileIO.h>
 #include <Core/SystemInfo.h>
-#include <Utils/StringUtil.h>
+
 #include <cassert>
 #include <cerrno>
 #include <cstdio>

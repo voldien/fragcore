@@ -3,7 +3,7 @@
 #include <Renderer/RenderDesc.h>
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_video.h>
-#include <Utils/StringUtil.h>
+
 #include <fmt/core.h>
 using namespace fragcore;
 

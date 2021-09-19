@@ -3,7 +3,7 @@
 #include "Exception/InvalidArgumentException.h"
 #include "Exception/RuntimeException.h"
 #include "Renderer/RenderDesc.h"
-#include "Utils/StringUtil.h"
+
 #include "VKBuffer.h"
 #include "VKCommandList.h"
 #include "VKRenderWindow.h"
@@ -14,7 +14,7 @@
 #include <SDL2/SDL_syswm.h>
 #include <SDL2/SDL_video.h>
 #include <SDL2/SDL_vulkan.h>
-#include <Utils/StringUtil.h>
+
 #include <VKHelper.h>
 #include <VKUtil.h>
 #include <climits>

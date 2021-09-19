@@ -2,6 +2,10 @@
 #define _FV_NO_COPYABLE_H_ 1
 
 namespace fragcore {
+	/**
+	 * @brief
+	 *
+	 */
 	class NoCopyable {
 	public:
 		NoCopyable(const NoCopyable &) = delete; // non construction-copyable

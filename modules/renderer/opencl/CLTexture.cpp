@@ -1,7 +1,7 @@
 #include "Renderer/IRenderer.h"
 #include "Renderer/Texture.h"
 #include <Renderer/opencl/internal_object_type.h>
-#include <Utils/StringUtil.h>
+
 #include <stdexcept>
 using namespace fragcore;
 

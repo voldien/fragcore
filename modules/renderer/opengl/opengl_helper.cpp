@@ -3,7 +3,7 @@
 #include <Exception/InvalidArgumentException.h>
 #include <Exception/RuntimeException.h>
 #include <GL/glew.h>
-#include <Utils/StringUtil.h>
+
 #include <fmt/core.h>
 #include <stdexcept>
 using namespace fragcore;

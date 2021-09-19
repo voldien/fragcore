@@ -6,7 +6,7 @@
 #include <Exception/InvalidArgumentException.h>
 #include <Renderer/RenderDesc.h>
 #include <Utils/ShaderUtil.h>
-#include <Utils/StringUtil.h>
+
 #include <assert.h>
 #include <stdexcept>
 #include<fmt/core.h>

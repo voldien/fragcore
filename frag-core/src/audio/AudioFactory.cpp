@@ -1,7 +1,7 @@
 #include "Audio/AudioFactory.h"
 #include "Core/Library.h"
 #include "Core/Log.h"
-#include "Utils/StringUtil.h"
+
 #include <Exception/InvalidArgumentException.h>
 using namespace fragcore;
 

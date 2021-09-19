@@ -64,6 +64,7 @@ namespace fragcore {
 		TextureUtil(IFileSystem *fileSystem);
 		TextureUtil(const TextureUtil &other);
 
+	  private:
 		IFileSystem *fileSystem;
 	};
 } // namespace fragcore

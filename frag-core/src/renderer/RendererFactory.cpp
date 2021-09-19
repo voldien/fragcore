@@ -4,7 +4,7 @@
 #include <Core/Library.h>
 #include <Exception/InvalidArgumentException.h>
 #include <Renderer/RendererFactory.h>
-#include <Utils/StringUtil.h>
+
 #include <cassert>
 #include <cstdio>
 #include <exception>

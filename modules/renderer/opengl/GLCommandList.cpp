@@ -2,7 +2,7 @@
 #include "internal_object_type.h"
 #include <Exception/InvalidArgumentException.h>
 #include <GL/glew.h>
-#include <Utils/StringUtil.h>
+
 #include <stdexcept>
 
 using namespace fragcore;

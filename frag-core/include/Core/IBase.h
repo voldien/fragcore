@@ -23,12 +23,12 @@
 
 namespace fragcore {
 	/**
-	 * @brief 
+	 * @brief
 	 *
 	 */
 	class FVDECLSPEC IBase {
 	  public:
-		virtual ~IBase(void) = 0;
+		virtual ~IBase(void) = default;
 		virtual void encode(Ref<IO> &raw, Ref<IO> &encoded) = 0;
 		virtual void decode(Ref<IO> &encoded, Ref<IO> &raw) = 0;
 	};

@@ -22,7 +22,7 @@
 
 namespace fragcore {
     /**
-     * 
+     *
      */
 	class FVDECLSPEC Base32 : public IBase
 	{

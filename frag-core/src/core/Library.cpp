@@ -1,6 +1,6 @@
 #include "Core/Library.h"
 #include "Exception/RuntimeException.h"
-#include "Utils/StringUtil.h"
+
 #include <SDL2/SDL.h>
 #include <fmt/core.h>
 #include <stdexcept>

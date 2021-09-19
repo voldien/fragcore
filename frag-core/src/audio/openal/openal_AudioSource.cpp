@@ -1,6 +1,6 @@
 #include "Audio/AudioSource.h"
 #include "Audio/openal/internal_object_type.h"
-#include "Utils/StringUtil.h"
+
 #include <AL/al.h>
 #include <Audio/AudioClip.h>
 #include <Exception/InvalidArgumentException.h>

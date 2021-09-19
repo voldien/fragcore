@@ -3,7 +3,7 @@
 #include "Core/Log.h"
 #include <Exception/InvalidArgumentException.h>
 #include <Renderer/RendererFactory.h>
-#include <Utils/StringUtil.h>
+
 #include <csignal>
 #include <cstdlib>
 #include <getopt.h>

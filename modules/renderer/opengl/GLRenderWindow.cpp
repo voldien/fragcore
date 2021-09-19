@@ -9,7 +9,7 @@
 #include <SDL2/SDL_egl.h>
 #include <SDL2/SDL_opengl.h>
 #include <SDL2/SDL_syswm.h>
-#include <Utils/StringUtil.h>
+
 #include <fmt/core.h>
 
 using namespace fragcore;

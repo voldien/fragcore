@@ -5,7 +5,7 @@
 #include <Core/IO/FTPFileSystem.h>
 #include <Core/IO/GZFileIO.h>
 #include <Core/SystemInfo.h>
-#include <Utils/StringUtil.h>
+
 #include <cassert>
 #include <cerrno>
 #include <cstdio>
@@ -79,6 +79,14 @@ FTPFileSystem *FTPFileSystem::createFileSystem(const char *ip, int port, Ref<ISc
 	return filesystem;
 }
 
+void FTPFileSystem::setCredentials(const char *username, const char *password) {
+	if (handle == nullptr)
+		throw RuntimeException("FTP FileSystem Not Setup Properly");
+
+	if (password && username)
+		curl_easy_setopt(handle, CURLOPT_USERPWD, fmt::format("{}:{}", username, password).c_str());
+}
+
 FTPFileSystem::FTPFileSystem(const char *ip, int port, const char *username, const char *password, Ref<IScheduler> &ref)
 	: FTPFileSystem(ip, port, username, password) {
 
@@ -98,8 +106,9 @@ FTPFileSystem::FTPFileSystem(const char *ip, int port, const char *username, con
 	}
 
 	curl_easy_setopt(handle, CURLOPT_URL, fmt::format("ftp://{}/", ip).c_str());
+
 	if (password && username)
-		curl_easy_setopt(handle, CURLOPT_USERPWD, fmt::format("{}:{}", username, password).c_str());
+		setCredentials(username, password);
 }
 
 FTPFileSystem::~FTPFileSystem(void) { /*  Release all resources.  */

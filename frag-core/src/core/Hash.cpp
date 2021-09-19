@@ -1,5 +1,5 @@
 #include "Core/Hash.h"
-#include "Utils/StringUtil.h"
+
 #include <Exception/InvalidArgumentException.h>
 #include <Exception/NotSupportedException.h>
 #include <fmt/core.h>
@@ -86,7 +86,7 @@ unsigned int Hash::getResultSize(void) const {
 	}
 }
 
-long int Hash::getByteRead(void) const { return this->nbytes; }
+unsigned long int Hash::getByteRead(void) const { return this->nbytes; }
 
 Hash::ALGORITHM Hash::getAlgorithm(void) const noexcept { return this->algorithm; }
 

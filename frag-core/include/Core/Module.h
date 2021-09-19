@@ -19,6 +19,7 @@
 */
 #ifndef _FRAG_CORE_MODULE_H_
 #define _FRAG_CORE_MODULE_H_ 1
+#include "Library.h"
 #include "SmartReference.h"
 
 namespace fragcore {
@@ -33,6 +34,13 @@ namespace fragcore {
 		virtual void OnInitialization(void) = 0;
 		virtual void OnDestruction(void) = 0;
 		/**/
+	  public:
+		// TODO determine where it shal lbe located
+		static void loadModule(const char *name){
+
+		}
+
+		static void loadModule(Library &library) { library.getfunc("FragCoreModuleEntry"); }
 	};
 } // namespace fragcore
 

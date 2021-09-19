@@ -17,7 +17,7 @@
 #include <Renderer/Sampler.h>
 #include <Renderer/Sync.h>
 #include <SDL2/SDL.h>
-#include <Utils/StringUtil.h>
+
 #include <Window/WindowManager.h>
 #include <exception>
 #include <fmt/core.h>

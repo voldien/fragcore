@@ -6,7 +6,7 @@
 #include <Exception/RuntimeException.h>
 #include <SDL2/SDL_syswm.h>
 #include <SDL2/SDL_vulkan.h>
-#include <Utils/StringUtil.h>
+
 #include <Window/WindowManager.h>
 #include <fmt/core.h>
 #include <vulkan/vulkan.h>

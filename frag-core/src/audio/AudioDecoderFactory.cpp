@@ -4,7 +4,6 @@
 #include "Audio/decoder/WavDecoder.h"
 #include "Exception/InvalidArgumentException.h"
 #include "Exception/NotSupportedException.h"
-#include "Utils/StringUtil.h"
 #include<fmt/core.h>
 using namespace fragcore;
 

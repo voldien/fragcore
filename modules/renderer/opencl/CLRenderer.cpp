@@ -3,7 +3,7 @@
 #include "Renderer/RenderDesc.h"
 #include "Renderer/RendererFactory.h"
 #include "Renderer/opencl/internal_object_type.h"
-#include "Utils/StringUtil.h"
+
 #include <SDL2/SDL_syswm.h>
 
 using namespace fragcore;

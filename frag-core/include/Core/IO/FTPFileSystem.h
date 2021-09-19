@@ -75,6 +75,9 @@ namespace fragcore {
 
 		FTPFileSystem(FTPFileSystem &&other);
 		// TODO add remove function.
+
+		void setCredentials(const char* username, const char *password);
+
 	  protected:
 		FTPFileSystem(const char *ip, int port, const char *username, const char *password, Ref<IScheduler> &sch);
 		FTPFileSystem(const char *ip, int port, const char *username, const char *password);

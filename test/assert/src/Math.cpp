@@ -69,6 +69,26 @@ INSTANTIATE_TEST_SUITE_P(Math, SumTest,
 						 ::testing::Values(std::make_tuple(std::vector<float>{1, 2, 3, 4, 5}, 15),
 										   std::make_tuple(std::vector<float>{5, 5, 5, 5, 5}, 25)));
 
+class GuassianDistributionTest : public ::testing::TestWithParam<std::tuple<float, float,std::vector<float>>> {};
+
+TEST_P(GuassianDistributionTest, Values) {
+	auto [theta, standard_deviation, expected] = GetParam();
+	std::vector<float> guass;
+
+	Math::guassian(guass, expected.size(), theta, standard_deviation);
+
+	ASSERT_EQ(expected.size(), guass.size());
+
+	float sum = Math::sum(guass);
+	EXPECT_NEAR(sum, 1.0f, 10e-8);
+
+	//TODO check whole vector
+	//EXPECT_NEAR(sum, expected, 10e-8);
+}
+
+INSTANTIATE_TEST_SUITE_P(Math, GuassianDistributionTest,
+						 ::testing::Values(std::make_tuple(0.5, 0.5, std::vector<float>{1, 2, 3, 4, 5}),
+										   std::make_tuple(0.5, 0.5, std::vector<float>{5, 5, 5, 5, 5})));
 
 TEST(Math, Distrubtion) {
 

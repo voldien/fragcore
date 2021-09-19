@@ -20,7 +20,7 @@
 #ifndef _FRAG_CORE_FRAGVIEWCORE_H_
 #define _FRAG_CORE_FRAGVIEWCORE_H_ 1
 #include "Prerequisites.h"
-#include "Utils/StringUtil.h"
+
 /*  */
 #include "Core/IConfig.h"
 #include "Core/SystemInfo.h"

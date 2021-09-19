@@ -3,7 +3,6 @@
 #include "Core/IO/IOUtil.h"
 #include "Core/Math.h"
 #include "Exception/InvalidArgumentException.h"
-#include "Utils/StringUtil.h"
 #include "Utils/TextureUtil.h"
 #include <cassert>
 #include <cmath>

@@ -64,6 +64,7 @@ namespace fragcore {
 
 	  private:
 		struct sp_port *port;
+		Mode mode;
 	};
 } // namespace fragcore
 #endif
