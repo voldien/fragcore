@@ -26,7 +26,7 @@
 #include <optional>
 #include <vector>
 
-//TODO move to a module.
+// TODO move to a module.
 namespace fragcore {
 	/**
 	 * @brief
@@ -56,6 +56,12 @@ namespace fragcore {
 		virtual bool isReadable(void) const override;
 
 		virtual bool flush(void) override;
+
+	  public:
+		void setBaudRate(unsigned int rate);
+		void setFlowControl(void);
+		void setParity(void);
+		void setXonXoff(void);
 
 		/**
 		 *

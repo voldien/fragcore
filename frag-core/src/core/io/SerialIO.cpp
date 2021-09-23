@@ -28,6 +28,11 @@ bool SerialIO::isWriteable(void) const { return true; }
 bool SerialIO::isReadable(void) const { return true; }
 bool SerialIO::flush(void) { return sp_flush(this->port, SP_BUF_BOTH) == SP_OK; }
 
+void SerialIO::setBaudRate(unsigned int rate) {}
+void SerialIO::setFlowControl(void) {}
+void SerialIO::setParity(void) {}
+void SerialIO::setXonXoff(void) {}
+
 SerialIO::SerialIO(const std::string &path, Mode mode) {
 	const int baudRate = 115200;
 
