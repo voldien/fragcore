@@ -238,13 +238,14 @@ TARGET_INCLUDE_DIRECTORIES(fragcore PRIVATE ${SDL2_INCLUDE_DIRS} ${ZIP_INCLUDE_D
 													 ${ZLIB_INCLUDE_DIRS} ${ZSTD_INCLUDE_DIRS}  ${TASKSCH_INCLUDE_DIRS} ${HPM_INCLUDE_DIRS}
 													 ${CURL_INCLUDE_DIRS} ${HPMCPP_INCLUDE_DIRS}
 													 ${CMAKE_CURRENT_SOURCE_DIR}/../extern/infoware/include/infoware
-										PUBLIC ${FRAG_CORE_INCLUDE}
-											$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-											$<INSTALL_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+										PUBLIC
+											$<BUILD_INTERFACE:${FRAG_CORE_INCLUDE}>
+											$<INSTALL_INTERFACE:${FRAG_CORE_INCLUDE}>
 )
 
 # Create package information
 CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/fragcore.pc.in" "${CMAKE_CURRENT_BINARY_DIR}/fragcore.pc" @ONLY)
+# Generate revision for up to date header with version and etc.
 CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/include/fragcore_revision.h.in" "${CMAKE_CURRENT_BINARY_DIR}/include/fragcore_revision.h" @ONLY)
 
 IF(BUILD_WITH_INSTALL)

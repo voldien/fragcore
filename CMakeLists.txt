@@ -291,11 +291,11 @@ SET( FRAGCORE_BIN_INSTALL_DIR "bin" CACHE STRING
 		"Path the tool executables are installed to." )
 
 # Find all required libaries for the program.
-FIND_PACKAGE(ZLIB )
+FIND_PACKAGE(ZLIB QUIET)
 FIND_PACKAGE(Git QUIET)
-FIND_PACKAGE(Backtrace)
+FIND_PACKAGE(Backtrace QUIET)
 FIND_PACKAGE(PkgConfig QUIET)
-FIND_PACKAGE(OpenSSL)
+FIND_PACKAGE(OpenSSL QUIET)
 #TODO relocate to the compute plugin.
 FIND_PACKAGE(CUDA QUIET)
 IF( UNIX )

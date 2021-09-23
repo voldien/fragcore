@@ -3,7 +3,7 @@ FILE(GLOB SOURCE_COMMON ${CMAKE_CURRENT_SOURCE_DIR}/../common/*.cpp)
 FILE(GLOB SOURCE_COMMON_HEADER ${CMAKE_CURRENT_SOURCE_DIR}/../common/*.h)
 
 # Get the include directories for the target.
-get_target_property(LIBFRAGCORE_INCLUDES fragcore INCLUDE_DIRECTORIES)
+#get_target_property(LIBFRAGCORE_INCLUDES fragcore INCLUDE_DIRECTORIES)
 
 # Executable OpenGL hpm benchmark.
 ADD_EXECUTABLE(serial-sample ${SOURCE_FILES} ${SOURCE_COMMON} ${SOURCE_COMMON_HEADER})
