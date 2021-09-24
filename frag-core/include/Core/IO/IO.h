@@ -84,7 +84,8 @@ namespace fragcore {
 			OP_GETPOS = 1 << 5,
 			OP_FLUSH = 1 << 6,
 			OP_READABLE = 1 << 7,
-			OP_WRITEABLE = 1 << 8
+			OP_WRITEABLE = 1 << 8,
+			OP_PEEK = 1 << 8
 		};
 
 		virtual bool isOperationSupported(IOOperation operations) const noexcept {};

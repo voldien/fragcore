@@ -29,27 +29,31 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC BufferIO : public IO { // TODO rename so that it understood it is a system memory IO object.
 	  public:
-		void open(const char *path, Mode mode) override;
+		virtual void open(const char *path, Mode mode) override;
 
-		void close(void) override;
+		virtual void close(void) override;
 
-		long read(long int nbytes, void *pbuffer) override;
+		virtual long read(long int nbytes, void *pbuffer) override;
 
-		long write(long int nbytes, const void *pbuffer) override;
+		virtual long write(long int nbytes, const void *pbuffer) override;
 
-		bool eof(void) const override;
+		virtual bool eof(void) const override;
 
-		long length(void) override;
+		virtual long length(void) override;
 
-		void seek(long int nbytes, Seek seek) override;
+		virtual void seek(long int nbytes, Seek seek) override;
 
-		unsigned long getPos(void) override;
+		virtual unsigned long getPos(void) override;
 
-		bool isWriteable(void) const override;
+		virtual bool isWriteable(void) const override;
 
-		bool isReadable(void) const override;
+		virtual bool isReadable(void) const override;
 
-		bool flush(void) override;
+		virtual bool flush(void) override;
+
+		virtual bool isOperationSupported(IOOperation operations) const noexcept override {
+			return (operations & OP_ALL) != operations;
+		};
 
 	  private:
 		char *buffer;

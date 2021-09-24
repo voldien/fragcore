@@ -57,6 +57,12 @@ namespace fragcore {
 
 		virtual bool flush(void) override;
 
+		virtual bool isOperationSupported(IOOperation operations) const noexcept override {
+			const IOOperation supportedIO =
+				static_cast<IOOperation>(OP_READ | OP_WRITE | OP_FLUSH | OP_READABLE | OP_WRITEABLE);
+			return (operations & supportedIO) != operations;
+		};
+
 	  public:
 		void setBaudRate(unsigned int rate);
 		void setFlowControl(void);
