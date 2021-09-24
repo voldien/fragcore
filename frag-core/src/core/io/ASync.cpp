@@ -4,10 +4,10 @@
 #include "Exception/RuntimeException.h"
 
 #include <condition_variable>
+#include <fmt/core.h>
 #include <mutex>
 #include <taskSch.h> //TOOD remove once semaphore class has been implemented.
 #include <thread>
-#include<fmt/core.h>
 using namespace fragcore;
 
 class FVDECLSPEC AsyncTask : public Task {
@@ -23,6 +23,9 @@ ASyncHandle ASync::asyncOpen(Ref<IO> &io) {
 	/*  Check parameters.   */
 	if (!*io)
 		throw InvalidArgumentException("Invalid IO reference.");
+
+	if (!io->isOperationSupported(IO::OP_READ | IO::OP_WRITE))
+		throw InvalidArgumentException("IO: {} requires read/write operation support", io->getName());
 
 	/*  Increment reference.    */
 	io->increment();
