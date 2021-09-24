@@ -104,6 +104,10 @@ VideoTexture *VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IR
 	if (!renderer)
 		throw InvalidArgumentException("Requires rendering interface object.");
 
+	/*	Check if IO supports certain features.	*/
+	if (!ref->isOperationSupported(IO::OP_READ))
+		throw RuntimeException("IO: {} requires read operation support", ref->getName());
+
 	const int iBufSize = 32 * 1024;
 	uint8_t *pBuffer = new uint8_t[iBufSize];
 

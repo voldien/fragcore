@@ -56,6 +56,10 @@ namespace fragcore {
 
 		bool flush(void) override;
 
+		virtual bool isOperationSupported(IOOperation operations) const noexcept override {
+			return (operations & OP_ALL) != operations;
+		};
+
 	  private:
 		zip_file_t *file;			// Read only
 		zip_source_t *zipSource;	// Write only

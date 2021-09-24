@@ -54,6 +54,11 @@ namespace fragcore {
 
 		void open(const char *path, Mode mode) override;
 
+		virtual bool isOperationSupported(IOOperation operations) const noexcept override {
+			const IOOperation supportedIO = static_cast<IOOperation>(OP_READ | OP_WRITE);
+			return (operations & supportedIO) != operations;
+		};
+
 	  private:
 #if defined(FRAG_CORE_INTERNAL_IMP)
 #else
