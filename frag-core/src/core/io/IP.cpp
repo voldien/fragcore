@@ -1,5 +1,5 @@
-#include"Core/Network/IP.h"
+#include "Core/Network/IP.h"
 
-fragcore::IP::IP(void) {
+using namespace fragcore;
 
-}
+IP::IP(const std::string &ip, Type type) {}
