@@ -17,7 +17,7 @@
 // namespace fs = std::filesystem;
 using namespace fragcore;
 
-IO *FileSystem::openFile(const char *path, IO::Mode mode) {
+IO *FileSystem::openFile(const char *path, IO::IOMode mode) {
 	const char *extension = FileSystem::getFileExtension(path);
 
 	// Parse if possible IO type exists.

@@ -24,7 +24,9 @@ ASyncHandle ASync::asyncOpen(Ref<IO> &io) {
 	if (!*io)
 		throw InvalidArgumentException("Invalid IO reference.");
 
-	if (!io->isOperationSupported(IO::OP_READ | IO::OP_WRITE))
+	const IO::IOOperation requiredIOSupported = static_cast<IO::IOOperation>(IO::OP_READ | IO::OP_WRITE);
+
+	if (!io->isOperationSupported(requiredIOSupported))
 		throw InvalidArgumentException("IO: {} requires read/write operation support", io->getName());
 
 	/*  Increment reference.    */

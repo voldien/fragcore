@@ -20,6 +20,8 @@
 #define _FRAG_CORE_IOUTIL_H_ 1
 #include "../Ref.h"
 #include "IO.h"
+#include <fmt/format.h>
+#include <string>
 
 namespace fragcore {
 
@@ -56,7 +58,12 @@ namespace fragcore {
 		 * @param ...
 		 * @return long int
 		 */
-		static long int format(Ref<IO> &io, const char *vformat, ...) noexcept(noexcept(vformat != nullptr));
+		template <typename... Args>
+		static inline long int format(Ref<IO> &io, const std::string &format, Args &&... args) {
+			std::string formatted = fmt::format(format, args...);
+			//TODO allow to perform chunk if needed
+			return io->write(formatted.length(), formatted.data());
+		}
 	};
 } // namespace fragcore
 

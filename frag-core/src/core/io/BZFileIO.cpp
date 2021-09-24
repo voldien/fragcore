@@ -51,7 +51,7 @@ void BZFileIO::close(void) {
 	FileIO::close();
 }
 
-void BZFileIO::open(const char *path, IO::Mode mode) {
+void BZFileIO::open(const char *path, IO::IOMode mode) {
 
 	/*  */
 	int bzerror;
@@ -73,4 +73,4 @@ void BZFileIO::open(const char *path, IO::Mode mode) {
 		throw RuntimeException(fmt::format("Failed to open %s", BZ2_bzerror(this->bzFile, &bzerror)));
 }
 
-BZFileIO::BZFileIO(const char *path, IO::Mode mode) : FileIO(path, mode) { this->open(path, mode); }
+BZFileIO::BZFileIO(const char *path, IO::IOMode mode) : FileIO(path, mode) { this->open(path, mode); }

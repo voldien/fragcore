@@ -30,27 +30,27 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC GZFileIO : public FileIO { // TODO determine how to handle with the FileIO dep.
 	  public:
-		long read(long int nbytes, void *pbuffer) override;
+		virtual long read(long int nbytes, void *pbuffer) override;
 
-		long write(long int nbytes, const void *pbuffer) override;
+		virtual long write(long int nbytes, const void *pbuffer) override;
 
-		long length(void) override;
+		virtual long length(void) override;
 
-		bool eof(void) const override;
+		virtual bool eof(void) const override;
 
-		void seek(long int nbytes, Seek seek) override;
+		virtual void seek(long int nbytes, Seek seek) override;
 
-		unsigned long getPos(void) override;
+		virtual unsigned long getPos(void) override;
 
-		bool isWriteable(void) const override;
+		virtual bool isWriteable(void) const override;
 
-		bool isReadable(void) const override;
+		virtual bool isReadable(void) const override;
 
-		bool flush(void) override;
+		virtual bool flush(void) override;
 
-		void close(void) override;
+		virtual void close(void) override;
 
-		void open(const char *path, Mode mode) override;
+		virtual void open(const char *path, IOMode mode) override;
 
 		virtual bool isOperationSupported(IOOperation operations) const noexcept override {
 			return (operations & OP_ALL) != operations;
@@ -65,7 +65,7 @@ namespace fragcore {
 #endif
 		//};
 	  public:
-		GZFileIO(const char *path, Mode mode); // TODO remove filepath
+		GZFileIO(const char *path, IOMode mode); // TODO remove filepath
 		// GZFileIO(Ref<IO> &io);
 		virtual ~GZFileIO(void) = default;
 	};

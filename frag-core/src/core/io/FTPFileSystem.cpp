@@ -17,7 +17,7 @@
 
 using namespace fragcore;
 
-IO *FTPFileSystem::openFile(const char *path, IO::Mode mode) { throw NotImplementedException(); }
+IO *FTPFileSystem::openFile(const char *path, IO::IOMode mode) { throw NotImplementedException(); }
 
 void FTPFileSystem::closeFile(IO *io) { throw NotImplementedException(); }
 const char *FTPFileSystem::getBaseName(const char *path) {

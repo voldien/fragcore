@@ -34,7 +34,7 @@ namespace fragcore {
 	 */
 	class SerialIO : public IO {
 	  public:
-		SerialIO(const std::string &path, Mode mode);
+		SerialIO(const std::string &path, IOMode mode);
 		virtual ~SerialIO(void);
 
 		virtual void close(void) override;
@@ -58,27 +58,65 @@ namespace fragcore {
 		virtual bool flush(void) override;
 
 		virtual bool isOperationSupported(IOOperation operations) const noexcept override {
-			const IOOperation supportedIO =
-				static_cast<IOOperation>(OP_READ | OP_WRITE | OP_FLUSH | OP_READABLE | OP_WRITEABLE);
+			const IOOperation supportedIO = static_cast<IOOperation>(OP_READ | OP_WRITE | OP_FLUSH);
 			return (operations & supportedIO) != operations;
 		};
 
 	  public:
-		void setBaudRate(unsigned int rate);
-		void setFlowControl(void);
-		void setParity(void);
-		void setXonXoff(void);
+		enum class FlowControl {
 
+		};
+
+		enum class Parity {
+			NONE,
+			EVEN,
+			ODD
+		};
+
+		enum class StopBits { ONEBIT, TWOBIT };
+
+		enum class XonXoff {
+
+		};
+
+		enum class BaudRate {
+			BAUDRATE_110 = 110,
+			BAUDRATE_300 = 300,
+			BAUDRATE_600 = 600,
+			BAUDRATE_1200 = 1200,
+			BAUDRATE_2400 = 2400,
+			BAUDRATE_4800 = 4800,
+		};
+
+	  public:
+		void setBaudRate(unsigned int baudRate);
+		BaudRate getBaudRate(void) const;
+
+		void setStopBits(StopBits stopBits);
+		StopBits getStopBits() const;
+
+		void setFlowControl(FlowControl flowControl);
+		FlowControl getFlowControl() const;
+
+		void setParity(Parity flowControl);
+		FlowControl getParity() const;
+
+		void setXonXoff(XonXoff XonXoff);
+		XonXoff getXonXoff(XonXoff XonXoff);
+
+	  public:
+		static bool supportedBaudRate(unsigned int baudRate);
 		/**
 		 *
 		 */
 		static std::optional<std::vector<std::string>> getSerialPorts(void) noexcept;
 
 	  private:
-		virtual void open(const char *path, Mode mode) override {}
+		virtual void open(const char *path, IOMode mode) override {}
 
 		struct sp_port *port;
-		Mode mode;
+		struct sp_port_config *config;
+		IOMode mode;
 	};
 } // namespace fragcore
 #endif

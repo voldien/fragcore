@@ -10,7 +10,7 @@
 #include<fmt/core.h>
 using namespace fragcore;
 
-IO *ZipFileSystem::openFile(const char *path, IO::Mode mode) {
+IO *ZipFileSystem::openFile(const char *path, IO::IOMode mode) {
 	struct zip_file *zfile;
 	struct zip_stat stat;
 	struct zip *zip = (struct zip *)this->pzip;

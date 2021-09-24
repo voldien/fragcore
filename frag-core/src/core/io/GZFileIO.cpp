@@ -9,7 +9,7 @@
 #include "Core/IO/GZFileIO.h"
 using namespace fragcore;
 
-void GZFileIO::open(const char *path, Mode mode) {
+void GZFileIO::open(const char *path, IOMode mode) {
 	// TODO change.
 	FileIO::open(path, mode);
 
@@ -100,7 +100,7 @@ bool GZFileIO::flush(void) {
 	return false;
 }
 
-GZFileIO::GZFileIO(const char *path, Mode mode) { this->open(path, mode); }
+GZFileIO::GZFileIO(const char *path, IOMode mode) { this->open(path, mode); }
 
 // GZFileIO::GZFileIO(Ref<IO> &io){
 

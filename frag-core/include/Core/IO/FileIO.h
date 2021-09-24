@@ -45,7 +45,7 @@ namespace fragcore {
 
 		virtual bool isReadable(void) const override;
 
-		virtual void open(const char *path, Mode mode) override;
+		virtual void open(const char *path, IOMode mode) override;
 
 		virtual bool flush(void) override;
 
@@ -55,13 +55,13 @@ namespace fragcore {
 
 	  protected:
 		FILE *file;
-		Mode mode;
+		IOMode mode;
 
 		FileIO(void);
 
 	  public:
-		FileIO(const char *path, Mode mode);
-		FileIO(std::string &path, Mode mode);
+		FileIO(const char *path, IOMode mode);
+		FileIO(std::string &path, IOMode mode);
 		virtual ~FileIO(void) = default;
 
 		FileIO(FILE *file);

@@ -170,7 +170,7 @@ void IConfig::printTable(Ref<IO> &io) const {
 	conIT = this->config.begin();
 	for (; conIT != this->config.cend(); conIT++) {
 		const std::string &name = (*conIT).first;
-		IOUtil::format(io, "----- %s ----\n", name.c_str());
+		IOUtil::format(io, "----- {} ----\n", name.c_str());
 		const IConfig *_config = (*conIT).second;
 		_config->printTable(io);
 	}
@@ -179,19 +179,19 @@ void IConfig::printTable(Ref<IO> &io) const {
 	for (; iti != this->iconfig.end(); iti++) {
 		const std::string &key = (*iti).first;
 		const int hvalue = (*iti).second;
-		IOUtil::format(io, "%s%s : %i\n", tabNestedSpace, key.c_str(), hvalue);
+		IOUtil::format(io, "{}{} : {}\n", "\t", key.c_str(), hvalue);
 	}
 
 	for (; fti != this->fconfig.end(); fti++) {
 		const std::string &key = (*fti).first;
 		const float hvalue = (*fti).second;
-		IOUtil::format(io, "%s%s : %f\n", tabNestedSpace, key.c_str(), hvalue);
+		IOUtil::format(io, "{}{} : {}\n", "\t", key.c_str(), hvalue);
 	}
 
 	for (; sti != this->sconfig.end(); sti++) {
 		const std::string &key = (*sti).first;
 		const std::string hvalue = (*sti).second;
-		IOUtil::format(io, "%s%s : %s\n", tabNestedSpace, key.c_str(), hvalue.c_str());
+		IOUtil::format(io, "{}{} : {}\n", "\t", key.c_str(), hvalue.c_str());
 	}
 }
 

@@ -34,7 +34,7 @@ namespace fragcore {
 			END = 0x2  /*  From end position.  */
 		};
 
-		enum Mode {
+		enum IOMode {
 			READ = 0x1,				 /*  */
 			WRITE = 0x2,			 /*  */
 			ACCESS = (READ | WRITE), /*  */
@@ -76,7 +76,7 @@ namespace fragcore {
 		// TODO determine first how its behaviour before determine if it shall be included.
 		// virtual IFileSystem* getFileSystem(void) = 0;
 
-		enum IOOperation {
+		enum IOOperation : unsigned int {
 			OP_ALL = (unsigned int)(-1),
 			OP_READ = 1 << 0,
 			OP_WRITE = 1 << 1,
@@ -85,16 +85,17 @@ namespace fragcore {
 			OP_SEEK = 1 << 4,
 			OP_GETPOS = 1 << 5,
 			OP_FLUSH = 1 << 6,
-			OP_READABLE = 1 << 7,
-			OP_WRITEABLE = 1 << 8,
+			OP_FILEACCESS = 1 << 7,
 			OP_PEEK = 1 << 8
 		};
 
-		virtual bool isOperationSupported(IOOperation operations) const noexcept {};
+		virtual bool isOperationSupported(IOOperation operationFlags) const noexcept = 0;
+
+		template <typename T> T &as(void) { return static_cast<T>(*this); }
 
 	  protected: /*  Internal methods.   */
-		virtual void open(const char *path, Mode mode) = 0;
-		virtual void open(std::string &path, Mode mode) { this->open(path.c_str(), mode); }
+		virtual void open(const char *path, IOMode mode) = 0;
+		virtual void open(std::string &path, IOMode mode) { this->open(path.c_str(), mode); }
 	};
 
 } // namespace fragcore

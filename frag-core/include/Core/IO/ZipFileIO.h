@@ -34,7 +34,7 @@ namespace fragcore {
 		friend class ZipFileSystem;
 
 	  public:
-		void open(const char *path, Mode mode) override;
+		void open(const char *path, IOMode mode) override;
 
 		void close(void) override;
 

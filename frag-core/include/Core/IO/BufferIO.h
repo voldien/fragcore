@@ -29,7 +29,7 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC BufferIO : public IO { // TODO rename so that it understood it is a system memory IO object.
 	  public:
-		virtual void open(const char *path, Mode mode) override;
+		virtual void open(const char *path, IOMode mode) override;
 
 		virtual void close(void) override;
 

@@ -30,8 +30,8 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC IFileSystem : public ASync {
 	  public:
-		virtual IO *openFile(const char *path, IO::Mode mode) = 0; /*  Open based on the filename extension.*/
-		virtual ASyncHandle openASyncFile(const char *path, IO::Mode mode) {
+		virtual IO *openFile(const char *path, IO::IOMode mode) = 0; /*  Open based on the filename extension.*/
+		virtual ASyncHandle openASyncFile(const char *path, IO::IOMode mode) {
 			if (!isASyncSupported())
 				throw RuntimeException();
 

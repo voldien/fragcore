@@ -47,7 +47,7 @@ TEST_F(IOTest, IO_File_Invalid_Path_Throw_Exception) {
 	ASSERT_THROW(FileSystem::getFileSystem()->openFile("", IO::READ), InvalidArgumentException);
 }
 TEST_F(IOTest, IO_File_Invalid_Mode_Throw_Exception) {
-	ASSERT_THROW(FileSystem::getFileSystem()->openFile(__FILE__, (IO::Mode)-1), InvalidArgumentException);
+	ASSERT_THROW(FileSystem::getFileSystem()->openFile(__FILE__, (IO::IOMode)-1), InvalidArgumentException);
 }
 TEST_F(IOTest, IO_File_Open_Read_File_No_Throw) {
 	ASSERT_NO_THROW(FileSystem::getFileSystem()->openFile(__FILE__, IO::READ));
@@ -84,7 +84,7 @@ TEST_F(IOTest, IOFile) {
 	std::vector<char *>::const_iterator it = files.cbegin();
 	for (; it != files.cend(); it++) {
 		FileIO *fileIo;
-		ASSERT_NO_THROW(fileIo = new FileIO((*it), IO::Mode::READ));
+		ASSERT_NO_THROW(fileIo = new FileIO((*it), IO::IOMode::READ));
 		ASSERT_TRUE(fileIo->isReadable());
 		ASSERT_FALSE(fileIo->isWriteable());
 
@@ -196,7 +196,7 @@ TEST_F(IOTest, IOGzFile) {
 	// Validate the argument.
 	ASSERT_THROW(GZFileIO(NULL, IO::READ), std::invalid_argument);
 	ASSERT_THROW(GZFileIO("", IO::READ), RuntimeException);
-	ASSERT_THROW(GZFileIO("", (IO::Mode)33213123), std::invalid_argument);
+	ASSERT_THROW(GZFileIO("", (IO::IOMode)33213123), std::invalid_argument);
 
 	GZFileIO write = GZFileIO(gzFileWrite, IO::WRITE);
 	ASSERT_FALSE(write.isReadable());
@@ -205,7 +205,7 @@ TEST_F(IOTest, IOGzFile) {
 	std::vector<char *>::const_iterator it = gzFiles.cbegin();
 	for (; it != gzFiles.cend(); it++) {
 		GZFileIO *fileIo;
-		ASSERT_NO_THROW(fileIo = new GZFileIO((*it), IO::Mode::READ));
+		ASSERT_NO_THROW(fileIo = new GZFileIO((*it), IO::IOMode::READ));
 		ASSERT_TRUE(fileIo->isReadable());
 		ASSERT_FALSE(fileIo->isWriteable());
 

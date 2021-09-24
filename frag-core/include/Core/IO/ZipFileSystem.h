@@ -34,7 +34,7 @@ namespace fragcore {
 	  public:
 		virtual ~ZipFileSystem(void);
 
-		IO *openFile(const char *path, IO::Mode mode);
+		IO *openFile(const char *path, IO::IOMode mode);
 		IO *openFile(unsigned int index);
 
 		virtual std::vector<std::string> listFiles(const char *path) const;

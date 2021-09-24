@@ -5,7 +5,7 @@
 using namespace fragcore;
 
 int main(int argc, const char **argv) {
-	SerialIO io("/dev/ttyS0", IO::Mode::READ);
+	SerialIO io("/dev/ttyS0", IO::IOMode::READ);
 
 	char *data[10];
 	while(io.read(1, data) > 0){

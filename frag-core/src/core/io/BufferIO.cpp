@@ -4,7 +4,7 @@
 #include"Core/IO/BufferIO.h"
 using namespace fragcore;
 
-void BufferIO::open(const char *path, Mode mode) {
+void BufferIO::open(const char *path, IOMode mode) {
 
 }
 

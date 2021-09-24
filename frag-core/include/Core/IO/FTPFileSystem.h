@@ -32,7 +32,7 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC FTPFileSystem : public IFileSystem {
 	  public:
-		virtual IO *openFile(const char *path, IO::Mode mode); /*  Open based on the filename extension.*/
+		virtual IO *openFile(const char *path, IO::IOMode mode); /*  Open based on the filename extension.*/
 		virtual void closeFile(IO *io);
 
 		virtual void remove(const char *path);

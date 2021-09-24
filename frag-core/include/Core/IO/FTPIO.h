@@ -18,6 +18,7 @@
 */
 #ifndef _FRAG_CORE_FTP_IO_H_
 #define _FRAG_CORE_FTP_IO_H_ 1
+#include "../Ref.h"
 #include "FileIO.h"
 #include "IO.h"
 #if defined(FRAG_CORE_INTERNAL_IMP) // TODO resolve to a single file or something later
@@ -52,7 +53,7 @@ namespace fragcore {
 
 		void close(void) override;
 
-		void open(const char *path, Mode mode) override;
+		void open(const char *path, IOMode mode) override;
 
 		virtual bool isOperationSupported(IOOperation operations) const noexcept override {
 			const IOOperation supportedIO = static_cast<IOOperation>(OP_READ | OP_WRITE);
@@ -65,12 +66,15 @@ namespace fragcore {
 		void *data;
 #endif
 	  public:
-		FTPFileIO(const char *path, Mode mode); // TODO remove filepath
+		FTPFileIO(const char *path, IOMode mode); // TODO remove filepath
+		FTPFileIO(std::string &path, IOMode mode, Ref<IO>& io);
+
 	  private:
 #if defined(FRAG_CORE_INTERNAL_IMP) // TODO resolve to a single file or something later
-		FTPFileIO(CURL *handle, const char *path, Mode mode);
+		FTPFileIO(CURL *handle, const char *path, IOMode mode);
 		CURL *handle;
 #endif
+		Ref<IO> ref;
 		// GZFileIO(Ref<IO> &io);
 	};
 } // namespace fragcore
