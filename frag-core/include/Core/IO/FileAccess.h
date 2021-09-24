@@ -5,12 +5,17 @@
 namespace fragcore {
 
 	/**
+	 * @brief
 	 *
 	 */
 	class FVDECLSPEC FileAccess : public SmartReference {
 	  public:
 		FileAccess(void);
 		~FileAccess(void);
+
+		virtual bool readable(void) const;
+		virtual bool writeable(void) const;
+		virtual bool executable(void) const;
 
 		//		virtual uint32_t _get_unix_permissions(void) = 0;
 		//		virtual void _set_unix_permissions(uint32_t p_permissions) = 0;
