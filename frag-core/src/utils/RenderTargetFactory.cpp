@@ -1,7 +1,6 @@
 #include"Utils/RenderTargetFactory.h"
 #include<assert.h>
 #include <stdexcept>
-#include <Exception/InvalidArgumentException.h>
 
 using namespace fragcore;
 

@@ -16,3 +16,6 @@
 [submodule "extern/vulkan-samples"]
 	path = extern/vulkan-samples
 	url = https://github.com/voldien/vulkan-samples
+[submodule "extern/exceptcxx"]
+	path = extern/exceptcxx
+	url = https://github.com/voldien/execptcxx.git

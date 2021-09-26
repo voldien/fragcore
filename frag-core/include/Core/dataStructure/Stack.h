@@ -24,9 +24,11 @@
 #include <utility>
 
 namespace fragcore {
+
 	/**
-	 *	Data structure for
-	 *	putting data on stack.
+	 * @brief
+	 *
+	 * @tparam T
 	 */
 	template <class T> class Stack : public std::allocator<T> {
 	  public:
@@ -36,35 +38,58 @@ namespace fragcore {
 			this->mreserved = 0;
 		}
 
-		Stack(const Stack &stack) {
-			this->data = nullptr;
-			this->nrElements = 0;
-			this->mreserved = 0;
+		Stack(size_t size)
+			: Stack(){this->reserve(size)}
+
+			  Stack(const Stack &stack)
+			: Stack() {
+
 			reserve(stack.getReserved());
 			memcpy(this->data, stack.data, stack.getSize() * sizeof(T));
 		}
-		Stack(Stack &&other) { this->data = std::exchange(other.data, nullptr);
+		Stack(Stack &&other) {
+			this->data = std::exchange(other.data, nullptr);
 			this->nrElements = std::exchange(other.nrElements, 0);
 			this->mreserved = std::exchange(other.mreserved, 0);
 		}
 
 		~Stack(void) { delete data; }
 
+		/**
+		 *
+		 * @param allocator
+		 * @return
+		 */
+		Stack &operator=(const Stack &allocator) { return *this; }
+
+		Stack &operator=(Stack &&alloctor) { return *this; }
+
 		void push(const T &p) {
-			//TODO add validate
+			// TODO add validate
 			this->data[this->nrElements] = p;
 			this->nrElements++;
+		}
+		T &push(const T &p) {
+			this->data[this->nrElements] = p;
+			this->nrElements++;
+			return this->data[this->nrElements - 1];
 		}
 
 		T &peek(void) const { return data[this->nrElements - 1]; }
 
-		inline void pop(void) {
-			//TODO add validate
-			 this->nrElements--; }
+		void pop(void) {
+			// TODO add validate
+			this->nrElements--;
+		}
+		T &pop(void) {
+			// TODO add validate
+			this->nrElements--;
+			return this->data[this->nrElements + 1];
+		}
 
-		inline T &operator[](int index) { return this->data[index]; }
+		T &operator[](int index) { return this->data[index]; }
 
-		inline T &operator[](int index) const { return this->data[index]; }
+		const T &operator[](int index) const { return this->data[index]; }
 
 		void reserve(int nrOfElement) {
 			this->data = realloc(this->data, nrOfElement * sizeof(T));
@@ -76,18 +101,18 @@ namespace fragcore {
 
 		inline bool isEmpty(void) const noexcept { return this->nrElements != 0; }
 
-		inline int getSize(void) const noexcept { return this->nrElements; }
+		inline size_t getSize(void) const noexcept { return this->nrElements; }
 
-		inline int getReserved(void) const noexcept { return this->mreserved; }
+		inline size_t getReserved(void) const noexcept { return this->mreserved; }
 
 		class StackIterator : public Iterator<T> {};
 
 		StackIterator begin(void) {}
 		StackIterator end(void) {}
 
-	  private:					/*	Attributes.	*/
-		unsigned int nrElements;		/*	Number of elements in the stack.	*/
-		unsigned int mreserved; /*	Number of reserved elements in the stack.	*/
+	  private:			   /*	Attributes.	*/
+		size_t nrElements; /*	Number of elements in the stack.	*/
+		size_t mreserved;  /*	Number of reserved elements in the stack.	*/
 		T *data;
 	};
 

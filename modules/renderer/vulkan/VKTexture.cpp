@@ -1,6 +1,5 @@
 
 #include "internal_object_type.h"
-#include <Exception/RuntimeException.h>
 #include <Renderer/IRenderer.h>
 #include <Renderer/Texture.h>
 #include <fmt/core.h>

@@ -7,10 +7,13 @@
 #include <gtest/gtest.h>
 #include <SDL2/SDL.h>
 #include <Core/RefPtr.h>
-#include <Exception/RuntimeException.h>
 #include <FragCore.h>
 
 using namespace fragcore;
+
+TEST(ZipFileIO, ZipFileIO_Invalid_Path_Throw_Exception) {
+	//ASSERT_ANY_THROW(ZipFileSystem::)
+}
 
 TEST(ZipFileIO, ZipFileIO_Open_File){
 	

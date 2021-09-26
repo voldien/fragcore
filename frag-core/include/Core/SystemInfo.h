@@ -23,8 +23,10 @@
 #include "IO/IO.h"
 #include "Ref.h"
 namespace fragcore {
+
 	/**
-	 *
+	 * @brief 
+	 * 
 	 */
 	class FVDECLSPEC SystemInfo {
 	  public:
@@ -56,9 +58,14 @@ namespace fragcore {
 
 		enum KernelSystem {
 			UnKnownKernel,
-			// WindowsNT,
-			// Linux,
-			// Darwin,
+			WindowsNT,
+			LinuxGNU,
+			Darwin,
+		};
+
+		enum class Endianness {
+			LittleEndian,
+			BigEndian,
 		};
 
 		static KernelSystem getSystemKernel(void) noexcept;
@@ -71,6 +78,8 @@ namespace fragcore {
 		static unsigned long getCPUFrequence(void) noexcept;
 		static bool isSupportedInstruction(void) noexcept;
 		static SIMD getSupportedSIMD(void);
+
+		static Endianness getEndianness(void) noexcept;
 
 		static unsigned long int systemMemorySize(void);
 		static unsigned int getPageSize(void);

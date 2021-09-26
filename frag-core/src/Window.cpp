@@ -1,4 +1,4 @@
-#include <Exception/InvalidArgumentException.h>
+////#include <Exception/InvalidArgumentException.h>
 #include"Window/Window.h"
 
 using namespace fragcore;

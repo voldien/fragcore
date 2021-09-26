@@ -2,7 +2,6 @@
 #include "Core/Library.h"
 
 #include <Core/Log.h>
-#include <Exception/InvalidArgumentException.h>
 using namespace fragcore;
 
 /**

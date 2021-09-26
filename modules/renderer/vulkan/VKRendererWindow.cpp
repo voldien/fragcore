@@ -1,9 +1,6 @@
 #define FRAG_CORE_INTERNAL_IMP
 #include "VKRenderWindow.h"
 #include "internal_object_type.h"
-#include <Exception/NotImplementedException.h>
-#include <Exception/NotSupportedException.h>
-#include <Exception/RuntimeException.h>
 #include <SDL2/SDL_syswm.h>
 #include <SDL2/SDL_vulkan.h>
 

@@ -1,5 +1,4 @@
 #include "Window/SDL/SDLDisplay.h"
-#include <Exception/RuntimeException.h>
 #include <Renderer/RenderDesc.h>
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_video.h>

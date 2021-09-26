@@ -2,8 +2,8 @@
 
 #include "Core/IO/FTPIO.h"
 #include "Core/IO/GZFileIO.h"
-#include "Exception/InvalidArgumentException.h"
-#include "Exception/RuntimeException.h"
+//#include "Exception/InvalidArgumentException.h"
+//#include "Exception/RuntimeException.h"
 
 #include <curl/curl.h>
 #include <curl/multi.h>

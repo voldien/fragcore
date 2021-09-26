@@ -36,9 +36,7 @@ namespace fragcore {
 		/**/
 	  public:
 		// TODO determine where it shal lbe located
-		static void loadModule(const char *name){
-
-		}
+		static void loadModule(const char *name) {}
 
 		static void loadModule(Library &library) { library.getfunc("FragCoreModuleEntry"); }
 	};

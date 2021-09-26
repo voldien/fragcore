@@ -44,6 +44,8 @@
 
 //TODO relocate.
 //TODO rename to none prefix versions.
+#ifdef FRAGCORE_USE_HPMCPP_VECTORS
+#endif
 namespace fragcore {
 	typedef LIBHPM::Vector3 Vector3;
 	typedef LIBHPM::Vector4 Vector4;
@@ -57,6 +59,21 @@ namespace fragcore {
 	typedef LIBHPM::OBB OBB;
 	typedef LIBHPM::Ray Ray;
 	//typedef LIBHPM::Vector4 Color;
+}
+
+#include<Exception.hpp>
+namespace fragcore{
+
+	typedef cxxexcept::RuntimeException RuntimeException;
+	typedef cxxexcept::ErrnoException ErrnoException;
+	typedef cxxexcept::DivideByZeroException DivideByZeroException;
+	typedef cxxexcept::IOException IOException;
+	typedef cxxexcept::NotImplementedException NotImplementedException;
+	typedef cxxexcept::InvalidArgumentException InvalidArgumentException;
+	typedef cxxexcept::NotSupportedException NotSupportedException;
+
+	typedef cxxexcept::InvalidPointerException InvalidPointerException;
+	
 }
 
 /**

@@ -28,7 +28,8 @@ namespace fragcore {
 	class FileNotify;
 	class IConfig;
 	class Object;
-
+	
+	/*	*/
 	class IScheduler;
 
 	/*  IO  */

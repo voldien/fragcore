@@ -30,14 +30,39 @@ namespace fragcore {
 	class FVDECLSPEC Display : public Object {
 	public:
 
+		/**
+		 * @brief Get display position
+		 * 
+		 * @return unsigned int 
+		 */
 		virtual unsigned int x(void) const  = 0;
-
+		
+		/**
+		 * @brief 
+		 * 
+		 * @return unsigned int 
+		 */
 		virtual unsigned int y(void) const  = 0;
 
+		/**
+		 * @brief 
+		 * 
+		 * @return unsigned int 
+		 */
 		virtual unsigned int width(void) const  = 0;
 
+		/**
+		 * @brief 
+		 * 
+		 * @return unsigned int 
+		 */
 		virtual unsigned int height(void) const  = 0;
 
+		/**
+		 * @brief 
+		 * 
+		 * @return unsigned int 
+		 */
 		virtual unsigned int refreshRate(void) const  = 0;
 
 		typedef struct mode_t {
@@ -55,12 +80,22 @@ namespace fragcore {
 			float vdpi;
 		} DPI;
 
+		/**
+		 * @brief Look up Table for each
+		 * pixels value should be remapped to.
+		 * 
+		 */
 		typedef struct lut_t{
 
 		} LUT;
 
+		/**
+		 * @brief Get the Modes object
+		 * 
+		 * @return std::vector<Mode> 
+		 */
 		virtual std::vector<Mode> getModes(void) const = 0;
-		//virtual void setMode(const Mode *mode);
+		//virtual void setMode(const Mode &mode) = 0;
 
 		virtual void getDPI(DPI *dpi) = 0;
 

@@ -100,10 +100,18 @@ TEST_F(IOTest, IOFile) {
 	ASSERT_NO_THROW(write.close());
 }
 
-TEST_F(IOTest, IO_STD_STDOUT_ReadOnly) {}
-TEST_F(IOTest, IO_STD_STDIN_WriteOnly) {}
-TEST_F(IOTest, IO_STD_Read_No_Throw) {}
-TEST_F(IOTest, IO_STD_Write_STDIN_Throw_Exception) {}
+TEST_F(IOTest, IO_STD_STDOUT_ReadOnly) {
+
+}
+TEST_F(IOTest, IO_STD_STDIN_WriteOnly) {
+
+}
+TEST_F(IOTest, IO_STD_Read_No_Throw) {
+
+}
+TEST_F(IOTest, IO_STD_Write_STDIN_Throw_Exception) {
+	
+}
 
 TEST_F(IOTest, Std) {
 	// char buf[] = {'h', 'e', 'l', 'l', 'o', '\n'};

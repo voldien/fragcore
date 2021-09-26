@@ -1,8 +1,7 @@
 
-#include "Exception/RuntimeException.h"
+//#include "Exception/RuntimeException.h"
 #include <Core/IConfig.h>
 #include <Core/Library.h>
-#include <Exception/InvalidArgumentException.h>
 #include <Renderer/RendererFactory.h>
 
 #include <cassert>

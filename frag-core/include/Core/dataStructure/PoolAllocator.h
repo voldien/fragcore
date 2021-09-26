@@ -30,7 +30,7 @@
 /*TODO extract the pool information into a subclass such that the memory consumption can be monitored.*/
 // TODO add
 namespace fragcore {
-	
+
 	/**
 	 * @brief Pool allocate
 	 *
@@ -38,7 +38,7 @@ namespace fragcore {
 	 */
 	template <class T> class PoolAllocator {
 	  public:
-	  	/*	TODO add align and pack .	*/
+		/*	TODO add align and pack .	*/
 		typedef struct poolallactoritem {
 			T data;
 			poolallactoritem *next;
@@ -59,19 +59,40 @@ namespace fragcore {
 			this->setTypeSize(sizeof(T));
 			*this = pollallactor;
 		}
-		PoolAllocator(PoolAllocator&& other){
+		PoolAllocator(PoolAllocator &&other) {}
 
-		}
-
-		PoolAllocator(unsigned int num) {
-			this->item = nullptr;
-			this->nrOfElements = 0;
-			this->mReserved = 0;
-			this->setTypeSize(sizeof(T));
-			this->resize(num);
-		}
+		PoolAllocator(unsigned int num) : PoolAllocator() { this->resize(num); }
 
 		~PoolAllocator(void) { delete[] this->item; }
+		/**
+		 *
+		 * @param allocator
+		 * @return
+		 */
+		PoolAllocator &operator=(const PoolAllocator &allocator) {
+			this->mReserved = 0;
+			this->nrOfElements = 0;
+			this->item = nullptr;
+			this->setTypeSize(allocator.getTypeSize());
+
+			/*  */
+			resize(allocator.reserved());
+			this->nrOfElements = allocator.nrOfElements;
+
+			/*  Copy the list.  */
+			memcpy(this->item, allocator.item, allocator.getTypeSize() * allocator.reserved());
+
+			/*	Reconstruct next list.	*/
+			PoolAllactorItem *item = this->item;
+			for (int x = 0; x < this->reserved() - 1; x++) {
+				item[x].next = &item[x + 1];
+			}
+			item[this->reserved() - 1].next = nullptr;
+
+			return *this;
+		}
+
+		PoolAllocator &operator=(PoolAllocator &&alloctor) { return *this; }
 
 		/**
 		 *	Get a pointer to next object in pool allocator.
@@ -216,36 +237,6 @@ namespace fragcore {
 		 * @return
 		 */
 		inline T operator[](int index) const { return item[index].data; }
-
-		/**
-		 *
-		 * @param allocator
-		 * @return
-		 */
-		PoolAllocator &operator=(const PoolAllocator &allocator) {
-			this->mReserved = 0;
-			this->nrOfElements = 0;
-			this->item = nullptr;
-			this->setTypeSize(allocator.getTypeSize());
-
-			/*  */
-			resize(allocator.reserved());
-			this->nrOfElements = allocator.nrOfElements;
-
-			/*  Copy the list.  */
-			memcpy(this->item, allocator.item, allocator.getTypeSize() * allocator.reserved());
-
-			/*	Reconstruct next list.	*/
-			PoolAllactorItem *item = this->item;
-			for (int x = 0; x < this->reserved() - 1; x++) {
-				item[x].next = &item[x + 1];
-			}
-			item[this->reserved() - 1].next = nullptr;
-
-			return *this;
-		}
-
-		PoolAllocator &operator=(PoolAllocator &&alloctor) { return *this; }
 
 	  protected:
 		/**

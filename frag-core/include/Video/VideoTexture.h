@@ -18,11 +18,11 @@
 */
 #ifndef _FRAG_CORE_VIDEO_TEXTURE_H_
 #define _FRAG_CORE_VIDEO_TEXTURE_H_ 1
-#include "../Renderer/Texture.h"
 #include "../Audio/AudioClip.h"
 #include "../Core/SmartReference.h"
-#include"../Core/TaskScheduler/IScheduler.h"
-#include"VideoDecoder.h"
+#include "../Core/TaskScheduler/IScheduler.h"
+#include "../Renderer/Texture.h"
+#include "VideoDecoder.h"
 
 namespace fragcore {
 	/**
@@ -31,8 +31,8 @@ namespace fragcore {
 	class FVDECLSPEC VideoTexture : public SmartReference {
 		friend class VideoFactory;
 		friend class VideoManager;
-	public:
 
+	  public:
 		VideoTexture(void);
 
 		~VideoTexture(void);
@@ -56,15 +56,15 @@ namespace fragcore {
 
 		virtual bool isReadyToPlay(void) const;
 
-		virtual Texture* getTexture(void) const;
+		virtual Texture *getTexture(void) const;
 
-	protected:
+	  protected:
 		Task::TaskCallBack taskcallback;
 		void *pVideoData;
 		Ref<AudioClip> audioClip;
 		Ref<Texture> texture;
 		Ref<VideoDecoder> decoder;
 	};
-}
+} // namespace fragcore
 
 #endif

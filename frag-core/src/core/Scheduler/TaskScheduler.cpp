@@ -1,10 +1,9 @@
 #include "Core/TaskScheduler/TaskScheduler.h"
-#include "Exception/RuntimeException.h"
+//#include "Exception/RuntimeException.h"
 #include <taskSch.h>
 
 using namespace fragcore;
-TaskScheduler::TaskScheduler(void)
-{
+TaskScheduler::TaskScheduler(void) {
 	schTaskSch *taskSch = (schTaskSch *)malloc(sizeof(schTaskSch));
 	int sch = schCreateTaskPool(taskSch, 2, SCH_FLAG_NO_AFM, 48);
 	if (sch != SCH_OK)
@@ -13,8 +12,7 @@ TaskScheduler::TaskScheduler(void)
 	this->sch = taskSch;
 }
 
-TaskScheduler::TaskScheduler(int cores, unsigned int maxPackagesPool)
-{
+TaskScheduler::TaskScheduler(int cores, unsigned int maxPackagesPool) {
 	schTaskSch *taskSch = (schTaskSch *)malloc(sizeof(schTaskSch));
 	int sch = schCreateTaskPool(taskSch, cores, SCH_FLAG_NO_AFM, maxPackagesPool);
 	if (sch != SCH_OK)
@@ -23,15 +21,13 @@ TaskScheduler::TaskScheduler(int cores, unsigned int maxPackagesPool)
 	this->sch = taskSch;
 }
 
-TaskScheduler::~TaskScheduler(void)
-{
+TaskScheduler::~TaskScheduler(void) {
 	this->terminate();
 	/*	Release.	*/
 	delete this->sch;
 }
 
-static int internal_schCallback(struct sch_task_package_t *package)
-{
+static int internal_schCallback(struct sch_task_package_t *package) {
 	/*	extract variables.	*/
 	Task *task = (Task *)package->begin;
 	IScheduler *scheduler = (IScheduler *)package->end;
@@ -44,12 +40,11 @@ static int internal_schCallback(struct sch_task_package_t *package)
 	/*	Release task resources.	*/
 }
 
-void TaskScheduler::addTask(Task *task)
-{
+void TaskScheduler::addTask(Task *task) {
 	schTaskPackage packageTask = {0};
-	//TODO IMPROVE
-	//task->scheduler = Ref<IScheduler>(this);
-	//TODO how to handle the resources.
+	// TODO IMPROVE
+	// task->scheduler = Ref<IScheduler>(this);
+	// TODO how to handle the resources.
 
 	packageTask.callback = internal_schCallback;
 	packageTask.begin = task;
@@ -61,31 +56,20 @@ void TaskScheduler::addTask(Task *task)
 		throw RuntimeException(schErrorMsg(status));
 }
 
-void TaskScheduler::setUserData(const void *data)
-{
-	return schSetSchUserData((schTaskSch *)this->sch, data);
-}
-const void *TaskScheduler::getUserData(void)
-{
-	return schGetPoolUserData((schTaskSch *)this->sch, 0);
-}
-void TaskScheduler::run(void)
-{
+void TaskScheduler::setUserData(const void *data) { return schSetSchUserData((schTaskSch *)this->sch, data); }
+const void *TaskScheduler::getUserData(void) { return schGetPoolUserData((schTaskSch *)this->sch, 0); }
+void TaskScheduler::run(void) {
 	int status = schRunTaskSch((schTaskSch *)this->sch);
 	if (status != SCH_OK)
 		throw RuntimeException(schErrorMsg(status));
 }
 
-void TaskScheduler::terminate(void)
-{
+void TaskScheduler::terminate(void) {
 	int status = schTerminateTaskSch((schTaskSch *)this->sch);
 	if (status != SCH_OK)
 		throw RuntimeException(schErrorMsg(status));
 }
 
-void TaskScheduler::wait(void) 
-{
-	schWaitTask((schTaskSch*)this->sch);
-}
-void TaskScheduler::lock(void)  {}
-void TaskScheduler::unLock(void)  {}
+void TaskScheduler::wait(void) { schWaitTask((schTaskSch *)this->sch); }
+void TaskScheduler::lock(void) {}
+void TaskScheduler::unLock(void) {}

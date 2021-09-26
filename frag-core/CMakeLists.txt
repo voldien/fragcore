@@ -162,7 +162,6 @@ FILE(GLOB SOURCE_FILES  ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/src/scene/subgraph/*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/src/renderpipeline/*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/src/renderer/*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/src/exception/*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/src/utils/*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/src/core/*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/src/core/io/*.cpp
@@ -176,7 +175,6 @@ FILE(GLOB SOURCE_MAIN_FILES client/src/main.cpp)
 FILE(GLOB HEADER_FILES  ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h
 		${CMAKE_CURRENT_SOURCE_DIR}/include/Animation/*.h
 		${CMAKE_CURRENT_SOURCE_DIR}/include/Core/*.h
-		${CMAKE_CURRENT_SOURCE_DIR}/include/Exception/*.h
 		${CMAKE_CURRENT_SOURCE_DIR}/include/Renderer/*.h
 		${CMAKE_CURRENT_SOURCE_DIR}/include/RenderPipeline/*.h
 		${CMAKE_CURRENT_SOURCE_DIR}/include/Video/*.h
@@ -190,8 +188,7 @@ FILE(GLOB DEVELOPMENT_HEADER_FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h
 									${CMAKE_CURRENT_SOURCE_DIR}/include/Physic/*.h
 									${CMAKE_CURRENT_SOURCE_DIR}/include/Window/*.h
 									${CMAKE_CURRENT_SOURCE_DIR}/include/Video/*.h
-									${CMAKE_CURRENT_SOURCE_DIR}/include/Utils/*.h
-									${CMAKE_CURRENT_SOURCE_DIR}/include/Exception/*.h)
+									${CMAKE_CURRENT_SOURCE_DIR}/include/Utils/*.h)
 
 SET(FRAG_CORE_INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 SET(FRAG_CORE_INCLUDE_SUB_DIR
@@ -202,8 +199,7 @@ SET(FRAG_CORE_INCLUDE_SUB_DIR
 				${CMAKE_CURRENT_SOURCE_DIR}/include/Utils
 				${CMAKE_CURRENT_SOURCE_DIR}/include/Physic
 				${CMAKE_CURRENT_SOURCE_DIR}/include/Window
-				${CMAKE_CURRENT_SOURCE_DIR}/include/Video
-				${CMAKE_CURRENT_SOURCE_DIR}/include/Exception)
+				${CMAKE_CURRENT_SOURCE_DIR}/include/Video)
 
 
 # Core library for adding support for plugin.
@@ -211,7 +207,8 @@ ADD_LIBRARY(fragcore ${SOURCE_FILES} ${HEADER_FILES}
  							${OPEN_SIMPLEX_NOISE_SOURCE} ${PCG_C_BASIC_SOURCE}
 							${RECASTNAVIGATION_SOURCE} ${POLYPARITION_SOURCE} ${KISS_FFT_SOURCE}
 							${MISC_SOURCE})
-ADD_DEPENDENCIES(fragcore taskSch hpmcpp infoware )
+# 
+ADD_DEPENDENCIES(fragcore taskSch hpmcpp infoware cxxexcept)
 ADD_BACKWARD(fragcore)
 
 #
@@ -226,7 +223,7 @@ SET_TARGET_PROPERTIES(fragcore PROPERTIES
 		${AVUTIL_CFLAGS_OTHER} ${SWSCALE_CFLAGS_OTHER} ${ZIP_CFLAGS_OTHER}")
 
 #
-TARGET_LINK_LIBRARIES(fragcore PUBLIC taskSch hpmcpp PRIVATE ${SDL2_LIBRARIES} ${ZLIB_LIBRARIES} ${LIBXML2_LIBRARIES} ${Backtrace_LIBRARIES} ${FREETYPE_LIBRARIES}
+TARGET_LINK_LIBRARIES(fragcore PUBLIC taskSch hpmcpp cxxexcept PRIVATE dl ${SDL2_LIBRARIES} ${ZLIB_LIBRARIES} ${LIBXML2_LIBRARIES} ${Backtrace_LIBRARIES} ${FREETYPE_LIBRARIES}
 		${ZIP_LIBRARIES} freeimage m dl ${JSONC_LIBRARIES} yaml  ${OPENSSL_CRYPTO_LIBRARY}  ${CURL_LIBRARIES}
 		${AVFORMAT_LIBRARIES} ${AVCODEC_LIBRARIES} ${SWSCALE_LIBRARIES} ${AVUTIL_LIBRARIES} infoware fmt serialport )
 

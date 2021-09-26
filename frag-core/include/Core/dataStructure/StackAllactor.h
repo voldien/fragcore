@@ -23,8 +23,10 @@
 #include <cstdint>
 
 namespace fragcore {
+
 	/**
-	 *	Single stack buffer.
+	 * @brief Single stack buffer.
+	 *
 	 */
 	class FVDECLSPEC StackAllocator {
 	  public:

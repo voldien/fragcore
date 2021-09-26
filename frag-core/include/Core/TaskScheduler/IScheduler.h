@@ -26,6 +26,10 @@ namespace fragcore {
 	 *
 	 */
 	class IScheduler;
+	/**
+	 * @brief 
+	 * 
+	 */
 	class FVDECLSPEC Task : UIDObject {
 	  public:
 		typedef void (*TaskCallBack)(Task *task);

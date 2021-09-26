@@ -18,19 +18,17 @@
 */
 #ifndef _FRAG_CORE_GEOMETRYUTIL_H_
 #define _FRAG_CORE_GEOMETRYUTIL_H_ 1
-#include"../Def.h"
+#include "../Def.h"
 
-namespace fragcore{
+namespace fragcore {
 
 	/**
 	 *
 	 */
-	//TODO name class to match the file name.
+	// TODO name class to match the file name.
 	class FVDECLSPEC GeometryUtility {
-	public:
-
+	  public:
 		static bool TestPlanesAABB(const Plane &plane, const AABB &bound);
-
 	};
-}
+} // namespace fragcore
 #endif

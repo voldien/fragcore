@@ -1,7 +1,7 @@
 #define FRAG_CORE_INTERNAL_IMP
 
-#include "Exception/InvalidArgumentException.h"
-#include "Exception/RuntimeException.h"
+//#include "Exception/InvalidArgumentException.h"
+//#include "Exception/RuntimeException.h"
 
 #include <stdexcept>
 #include <zlib.h>

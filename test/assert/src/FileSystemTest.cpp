@@ -7,7 +7,6 @@
 #include <gtest/gtest.h>
 #include <SDL2/SDL.h>
 #include <Core/RefPtr.h>
-#include<Exception/RuntimeException.h>
 #include <FragCore.h>
 
 using namespace fragcore;

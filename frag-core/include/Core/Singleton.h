@@ -20,6 +20,7 @@
 #define _FRAG_CORE_SINGLETON_H_ 1
 #include "../Def.h"
 #include "SmartReference.h"
+#include"Ref.h"
 
 namespace fragcore {
 	template <typename T> class FVDECLSPEC Singleton : public SmartReference {

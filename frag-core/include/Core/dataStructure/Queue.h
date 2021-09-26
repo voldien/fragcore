@@ -18,7 +18,7 @@
 */
 #ifndef _FRAG_CORE_QUEUE_H_
 #define _FRAG_CORE_QUEUE_H_ 1
-#include "../../Exception/InvalidArgumentException.h"
+//#include "../../Exception/InvalidArgumentException.h"
 #include "Iterator.h"
 #include <memory>
 

@@ -1,7 +1,7 @@
 #include "VKRenderInterface.h"
 #include "Core/IConfig.h"
-#include "Exception/InvalidArgumentException.h"
-#include "Exception/RuntimeException.h"
+//#include "Exception/InvalidArgumentException.h"
+//#include "Exception/RuntimeException.h"
 #include "Renderer/RenderDesc.h"
 
 #include "VKBuffer.h"

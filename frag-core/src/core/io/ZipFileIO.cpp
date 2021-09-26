@@ -1,8 +1,5 @@
 #include "Core/IO/ZipFileIO.h"
 #include "Core/IO/ZipFileSystem.h"
-#include "Exception/RuntimeException.h"
-#include <Exception/InvalidArgumentException.h>
-#include <Exception/NotImplementedException.h>
 
 #include <stdexcept>
 #include <zip.h>
@@ -54,7 +51,7 @@ long ZipFileIO::read(long int nbytes, void *pbuffer) {
 }
 
 long ZipFileIO::write(long int nbytes, const void *pbuffer) {
-	throw NotImplementedException("Write is not supported");
+	throw NotImplementedException();
 	return nbytes;
 }
 

@@ -77,13 +77,13 @@ int main(int argc, const char **argv) {
 
 	try {
 		AudioPlayback(argc, argv);
-	} catch (fragcore::IException &ex) {
+	} /*catch (fragcore::Exception &ex) {
 		std::cerr << "Internal exception - " << ex.getName() << std::endl;
 		std::cerr << ex.what() << std::endl;
 		std::cerr << ex.getBackTrace() << std::endl;
 		return EXIT_FAILURE;
 
-	} catch (std::exception &ex) {
+	} */catch (std::exception &ex) {
 		std::cerr << "External library error" << std::endl;
 		std::cerr << ex.what() << std::endl;
 		return EXIT_FAILURE;

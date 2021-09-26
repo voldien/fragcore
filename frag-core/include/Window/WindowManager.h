@@ -14,13 +14,12 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC WindowManager : public Singleton<WindowManager> {
 	  public:
-
-	  	/**
-	  	 * @brief Get the Display object
-	  	 *
-	  	 * @param index
-	  	 * @return Display*
-	  	 */
+		/**
+		 * @brief Get the Display object
+		 *
+		 * @param index
+		 * @return Display*
+		 */
 		Display *getDisplay(unsigned int index) noexcept(true);
 
 		/**

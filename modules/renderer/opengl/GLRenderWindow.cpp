@@ -3,9 +3,6 @@
 #include "internal_object_type.h"
 
 #include "Window/WindowManager.h"
-#include <Exception/NotImplementedException.h>
-#include <Exception/NotSupportedException.h>
-#include <Exception/RuntimeException.h>
 #include <SDL2/SDL_egl.h>
 #include <SDL2/SDL_opengl.h>
 #include <SDL2/SDL_syswm.h>

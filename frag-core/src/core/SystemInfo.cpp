@@ -1,7 +1,7 @@
 #include "Core/SystemInfo.h"
 #include "Core/IO/FileIO.h"
-#include "Exception/InvalidArgumentException.h"
-#include "Exception/RuntimeException.h"
+//#include "Exception/InvalidArgumentException.h"
+//#include "Exception/RuntimeException.h"
 #include <Hpm.hpp>
 #include <infoware.hpp>
 
@@ -80,6 +80,7 @@ const char *SystemInfo::getCPUArchitecture(void) noexcept {
 		return "Itanium";
 	case iware::cpu::architecture_t::x86:
 		return "X86";
+	case iware::cpu::architecture_t::unknown:
 	default:
 		return "Unknown";
 	}
@@ -92,12 +93,25 @@ SystemInfo::SIMD SystemInfo::getSupportedSIMD(void) {
 
 	/**/
 	// iware::cpu::instruction_set_supported()
+	iware::cpu::instruction_set_supported(iware::cpu::instruction_set_t::adx);
 
 	for (int i = 1; i < 11; i++) {
 		if (hpm_support_cpu_feat(1 << i))
 			supportedSIMD |= (1 << i);
 	}
 	return (SystemInfo::SIMD)supportedSIMD;
+}
+
+SystemInfo::Endianness getEndianness(void) noexcept {
+	switch (iware::cpu::endianness()) {
+	case iware::cpu::endianness_t::big:
+		return SystemInfo::Endianness::BigEndian;
+	case iware::cpu::endianness_t::little:
+		return SystemInfo::Endianness::LittleEndian;
+	default:
+		assert(0);
+		throw RuntimeException();
+	}
 }
 
 const char *SystemInfo::getAppliationName(void) {

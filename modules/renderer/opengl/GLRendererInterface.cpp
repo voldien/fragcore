@@ -8,9 +8,6 @@
 #include "Renderer/RenderPipeline.h"
 #include "Renderer/ViewPort.h"
 #include "internal_object_type.h"
-#include <Exception/InvalidArgumentException.h>
-#include <Exception/NotImplementedException.h>
-#include <Exception/RuntimeException.h>
 #include <GL/glew.h>
 #include <Renderer/RenderDesc.h>
 #include <Renderer/RendererWindow.h>

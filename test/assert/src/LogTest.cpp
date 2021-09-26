@@ -1,6 +1,5 @@
 #include<gtest/gtest.h>
 #include<Core/Log.h>
-#include<Exception/InvalidArgumentException.h>
 using namespace fragcore;
 
 TEST(Log, Log_Set_Invalid_Verbosity_Throw_Exception){

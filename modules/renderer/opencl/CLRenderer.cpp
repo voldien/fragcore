@@ -1,4 +1,4 @@
-#include "Exception/RuntimeException.h"
+//#include "Exception/RuntimeException.h"
 #include "Renderer/IRenderer.h"
 #include "Renderer/RenderDesc.h"
 #include "Renderer/RendererFactory.h"

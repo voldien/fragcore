@@ -1,5 +1,5 @@
-#include "Exception/InvalidArgumentException.h"
-#include "Exception/RuntimeException.h"
+//#include "Exception/InvalidArgumentException.h"
+//#include "Exception/RuntimeException.h"
 
 #include "VKCommandList.h"
 #include "internal_object_type.h"

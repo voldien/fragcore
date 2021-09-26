@@ -1,5 +1,5 @@
-#include "Exception/InvalidArgumentException.h"
-#include "Exception/RuntimeException.h"
+//#include "Exception/InvalidArgumentException.h"
+//#include "Exception/RuntimeException.h"
 #include "Renderer/IRenderer.h"
 #include "Renderer/Sampler.h"
 #include "Renderer/Texture.h"

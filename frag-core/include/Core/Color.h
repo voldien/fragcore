@@ -4,28 +4,47 @@
 #include "Math.h"
 
 namespace fragcore {
+
+	/**
+	 * @brief
+	 *
+	 */
 	class Color : public Vector4 {
 	  public:
 		Color(float r, float g, float b, float a) noexcept : Vector4(r, g, b, a) {}
 		Color(unsigned int hex) noexcept { /*	Convert */
+			throw NotImplementedException();
 		}
 
-		float r(void) const noexcept { return x(); }
-		float g(void) const noexcept { return y(); }
-		float b(void) const noexcept { return z(); }
-		float a(void) const noexcept { return w(); }
+		inline float r(void) const noexcept { return x(); }
+		inline float g(void) const noexcept { return y(); }
+		inline float b(void) const noexcept { return z(); }
+		inline float a(void) const noexcept { return w(); }
 
-		void r(float red) noexcept { setX(red); }
-		void g(float green) noexcept { setY(green); }
-		void b(float blue) noexcept { setZ(blue); }
-		void a(float alpha) noexcept { setW(alpha); }
+		inline void r(float red) noexcept { setX(red); }
+		inline void g(float green) noexcept { setY(green); }
+		inline void b(float blue) noexcept { setZ(blue); }
+		inline void a(float alpha) noexcept { setW(alpha); }
 
 	  public:
+		/**
+		 * @brief
+		 *
+		 * @param gamma
+		 * @return Color
+		 */
 		Color gammaCorrect(float gamma) const noexcept {
 			return Color(Math::gammaCorrection(r(), gamma), Math::gammaCorrection(g(), gamma),
 						 Math::gammaCorrection(b(), gamma), Math::gammaCorrection(a(), gamma));
 		}
 
+		/**
+		 * @brief
+		 *
+		 * @tparam T
+		 * @param kelvin
+		 * @return Color
+		 */
 		template <typename T> static Color CorrelatedColorTemperatureToRGB(T kelvin) noexcept {
 			T temp = kelvin / static_cast<T>(100.0);
 
