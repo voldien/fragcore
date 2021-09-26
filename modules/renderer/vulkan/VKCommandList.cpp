@@ -1,7 +1,6 @@
 #include "VKCommandList.h"
 #include "Renderer/RenderPipeline.h"
 #include "internal_object_type.h"
-//#include <Exception/InvalidArgumentException.h>
 #include <GL/glew.h>
 
 #include <stdexcept>

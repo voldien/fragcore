@@ -1,7 +1,6 @@
 #include "Config.h"
 #include "Core/IO/FileSystem.h"
 #include "Core/Log.h"
-//#include <Exception/InvalidArgumentException.h>
 #include <Renderer/RendererFactory.h>
 
 #include <csignal>

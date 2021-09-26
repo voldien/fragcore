@@ -1,7 +1,5 @@
 #include "Core/Hash.h"
 
-////#include <Exception/InvalidArgumentException.h>
-//#include <Exception/NotSupportedException.h>
 #include <fmt/core.h>
 #include <openssl/md5.h>
 #include <openssl/sha.h>

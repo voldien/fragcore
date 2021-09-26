@@ -2,7 +2,6 @@
 #include "Core/IO/FileSystem.h"
 #include "Core/IO/IOUtil.h"
 #include "Core/Math.h"
-////#include "Exception/InvalidArgumentException.h"
 #include "Utils/TextureUtil.h"
 #include <cassert>
 #include <cmath>

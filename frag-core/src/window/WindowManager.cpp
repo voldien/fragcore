@@ -2,7 +2,6 @@
 
 /*	TODO relocate to be part of the platform specific.	*/
 #include"Window/SDL/SDLDisplay.h"
-//#include"Window/SDL/SDLRendererWindow.h"
 #include "Window/SDL/SDLWindow.h"
 
 using namespace fragcore;

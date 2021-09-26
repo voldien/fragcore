@@ -4,7 +4,6 @@
 #include <SDL2/SDL.h>
 #include <Window/WindowManager.h>
 #include<hpmcpp/Hpm.hpp>
-//#include"Config.h"
 
 using namespace fragcore;
 

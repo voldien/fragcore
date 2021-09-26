@@ -1,5 +1,4 @@
 #include "Core/Library.h"
-//#include "Exception/RuntimeException.h"
 
 #include <SDL2/SDL.h>
 #include <fmt/core.h>

@@ -53,12 +53,4 @@
 #include "Audio/AudioFactory.h"
 /*  */
 #include "Physic/PhysicFactory.h"
-/*  */
-//#include "Exception/IException.h"
-//#include "Exception/InvalidArgumentException.h"
-//#include "Exception/InvalidPointerException.h"
-//#include "Exception/NotImplementedException.h"
-//#include "Exception/NotSupportedException.h"
-//#include "Exception/PermissionDeniedException.h"
-//#include "Exception/RuntimeException.h"
 #endif

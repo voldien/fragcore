@@ -17,7 +17,6 @@
 */
 #ifndef _FRAG_CORE_TREE_H_
 #define _FRAG_CORE_TREE_H_ 1
-//#include"../../Exception/InvalidArgumentException.h"
 #include"../../Def.h"
 #include"Iterator.h"
 

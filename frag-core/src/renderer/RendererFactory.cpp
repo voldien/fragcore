@@ -1,5 +1,4 @@
 
-//#include "Exception/RuntimeException.h"
 #include <Core/IConfig.h>
 #include <Core/Library.h>
 #include <Renderer/RendererFactory.h>

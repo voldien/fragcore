@@ -1,7 +1,5 @@
 #include "Core/IO/FileSystem.h"
-//#include "Exception/InvalidArgumentException.h"
-//#include "Exception/NotImplementedException.h"
-//#include "Exception/RuntimeException.h"
+
 #include <Core/IO/FileSystem.h>
 #include <Core/IO/GZFileIO.h>
 #include <Core/SystemInfo.h>
@@ -10,10 +8,10 @@
 #include <cerrno>
 #include <cstdio>
 #include <cstring>
+#include <fmt/core.h>
+#include <fstream>
 #include <malloc.h>
 #include <stdexcept>
-#include <fstream>
-#include<fmt/core.h>
 // namespace fs = std::filesystem;
 using namespace fragcore;
 
@@ -48,7 +46,7 @@ void FileSystem::remove(const char *path) {
 
 void FileSystem::rename(const char *oldPath, const char *newPath) {
 #if __cplusplus >= 201703L
-	//return fs::rename(oldPath, newPath);
+	// return fs::rename(oldPath, newPath);
 #else
 	throw NotImplementedException();
 // if (::rename(oldPath, newPath) != 0)
@@ -58,7 +56,7 @@ void FileSystem::rename(const char *oldPath, const char *newPath) {
 
 bool FileSystem::exists(const char *path) const {
 #if __cplusplus >= 201703L
-	//return fs::exists(path);
+	// return fs::exists(path);
 #else
 	FILE *f = fopen(path, "r+");
 	if (f) {
@@ -119,7 +117,7 @@ bool FileSystem::isASyncSupported(void) const { return *this->getScheduler() != 
 
 bool FileSystem::isDirectory(const char *path) {}
 bool FileSystem::isFile(const char *path) {
-	//TODO improve!
+	// TODO improve!
 	std::ifstream ifs(path);
 	return ifs.good();
 }

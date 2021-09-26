@@ -2,11 +2,9 @@
 #include "Utils/TextureUtil.h"
 #include "Core/IO/IOUtil.h"
 #include "Core/Math.h"
-//#include "Exception/RuntimeException.h"
 #include "Renderer/Texture.h"
 
 #include <Core/IO/FileSystem.h>
-//#include <Exception/InvalidArgumentException.h>
 #include <FreeImage.h>
 #include <stdexcept>
 #include <stdio.h>
