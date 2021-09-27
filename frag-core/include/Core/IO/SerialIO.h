@@ -64,19 +64,21 @@ namespace fragcore {
 
 	  public:
 		enum class FlowControl {
-
+			FlowControlNone = 0,
+			FlowControlXonXoff = 1,
+			FlowControlRtsCts = 2,
+			FlowControlDtrDsr = 3
 		};
 
-		enum class Parity {
-			NONE,
-			EVEN,
-			ODD
-		};
+		enum class Parity { ParityNone, ParityOdd, ParityEven, ParityMark, ParitySpace };
 
-		enum class StopBits { ONEBIT, TWOBIT };
+		enum class StopBits { ONEBIT = 1, TWOBIT = 2 };
 
 		enum class XonXoff {
-
+			XonXoffDisable,
+			XonXoffIn,
+			XonXoffOut,
+			XonXoffInOut,
 		};
 
 		enum class BaudRate {
@@ -99,7 +101,7 @@ namespace fragcore {
 		FlowControl getFlowControl() const;
 
 		void setParity(Parity flowControl);
-		FlowControl getParity() const;
+		Parity getParity() const;
 
 		void setXonXoff(XonXoff XonXoff);
 		XonXoff getXonXoff(XonXoff XonXoff);
