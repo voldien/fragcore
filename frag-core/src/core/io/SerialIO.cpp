@@ -205,6 +205,7 @@ SerialIO::SerialIO(const std::string &path, IOMode mode) {
 		break;
 	default:
 		assert(0);
+		throw InvalidArgumentException("Invalid IO Mode: {} - {}", path, mode);
 	}
 
 	/*	*/
