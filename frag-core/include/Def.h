@@ -26,54 +26,45 @@
 #include<cassert>
 #include<errno.h>
 
+//TODO relocate.
+//TODO rename to none prefix versions.
 
-/*	Vector data types for rendering geometries.	*/
+#define FRAGCORE_USE_HPMCPP_VECTORS
+#ifdef FRAGCORE_USE_HPMCPP_VECTORS
 #include<Hpm.hpp>
 #include<Ext/HCPlane.hpp>
 #include <HCQuaternion.hpp>
 #include <HCVector2.hpp>
 #include <HCVector3.hpp>
 #include <HCVector4.hpp>
-
-#define FV_NAME ""
-#if defined(FRAG_CORE_INTERNAL_IMP)
-#include<zlib.h>
-#else
-
 #endif
-
-//TODO relocate.
-//TODO rename to none prefix versions.
-#ifdef FRAGCORE_USE_HPMCPP_VECTORS
-#endif
+/*	Vector data types for rendering geometries.	*/
 namespace fragcore {
-	typedef LIBHPM::Vector3 Vector3;
-	typedef LIBHPM::Vector4 Vector4;
-	typedef LIBHPM::Vector2 Vector2;
-	typedef LIBHPM::Matrix4x4 Matrix4x4;
-	typedef LIBHPM::Matrix3x3 Matrix3x3;
-	typedef LIBHPM::Quaternion Quaternion;
-	typedef LIBHPM::Plane Plane;
-	typedef LIBHPM::AABB AABB;
-	typedef LIBHPM::BoundingSphere BoundingSphere;
-	typedef LIBHPM::OBB OBB;
-	typedef LIBHPM::Ray Ray;
-	//typedef LIBHPM::Vector4 Color;
+	using Vector3 =  LIBHPM::Vector3;
+	using Vector4 = LIBHPM::Vector4 ;
+	using Vector2 = LIBHPM::Vector2 ;
+	using Matrix4x4= LIBHPM::Matrix4x4 ;
+	using Matrix3x3 = LIBHPM::Matrix3x3 ;
+	using Quaternion = LIBHPM::Quaternion ;
+	using Plane = LIBHPM::Plane ;
+	using AABB= LIBHPM::AABB ;
+	using BoundingSphere= LIBHPM::BoundingSphere ;
+	using OBB= LIBHPM::OBB ;
+	using Ray = LIBHPM::Ray ;
 }
 
 #include<Exception.hpp>
 namespace fragcore{
 
-	typedef cxxexcept::RuntimeException RuntimeException;
-	typedef cxxexcept::ErrnoException ErrnoException;
-	typedef cxxexcept::DivideByZeroException DivideByZeroException;
-	typedef cxxexcept::IOException IOException;
-	typedef cxxexcept::NotImplementedException NotImplementedException;
-	typedef cxxexcept::InvalidArgumentException InvalidArgumentException;
-	typedef cxxexcept::NotSupportedException NotSupportedException;
+	using RuntimeException = cxxexcept::RuntimeException;
+	using ErrnoException  = cxxexcept::ErrnoException ;
+	using DivideByZeroException = cxxexcept::DivideByZeroException ;
+	using IOException = cxxexcept::IOException ;
+	using NotImplementedException = cxxexcept::NotImplementedException ;
+	using InvalidArgumentException = cxxexcept::InvalidArgumentException ;
+	using NotSupportedException = cxxexcept::NotSupportedException ;
+	using InvalidPointerException = cxxexcept::InvalidPointerException ;
 
-	typedef cxxexcept::InvalidPointerException InvalidPointerException;
-	
 }
 
 /**
@@ -391,161 +382,8 @@ typedef double fvvec1d FV_VECTORALIGN(8);
 typedef double fvvec2d FV_VECTORALIGN(16);
 typedef double fvvec4d FV_VECTORALIGN(32);
 
-
 #ifdef __cplusplus /*	C++ Environment	*/
 }
 #endif
-// /**
-//  * Matrix4x4 float
-//  *
-//  */
-// HPM_ALIGN(32)
-// typedef hpmvec4f hpmvec4x4f_t[4];
-// typedef struct hpmvec4x4f_s{
-//      hpmvecf m11,m21,m31,m41,    /*  column1 */
-//              m12,m22,m32,m42,    /*  column2 */
-//              m13,m23,m33,m43,    /*  column3 */
-//              m14,m24,m34,m44;    /*  column4 */
-// }hpmmat4f;
-// typedef hpmv4sf hpmvec4x4fi_t[4];
-// typedef hpmvec4f hpmvec4x4fp_t;
-// HPM_ALIGN(16)
-// typedef union {
-// 	hpmvec4x4f_t m;
-// 	hpmmat4f s;
-// 	struct {
-// 		hpmvec8f oc[2];
-// 	};
-// } hpmmat4uf;
-
-
-// /**
-//  * Matrix4x4 double.
-//  *
-//  */
-// typedef hpmvec4d hpmvec4x4d_t[4];
-// typedef struct hpmvec4x4d_s{
-//     hpmvecd m11,m21,m31,m41,    /*  column1 */
-//             m12,m22,m32,m42,    /*  column2 */
-//             m13,m23,m33,m43,    /*  column3 */
-//             m14,m24,m34,m44;    /*  column4 */
-// } hpmmat4d;
-// HPM_ALIGN(16)
-// typedef union {
-// 	hpmvec4x4d_t m;
-// 	struct hpmvec4x4d_s s;
-// 	hpmvec2d t[2][2];
-// } hpmmat4ud;
-
-
-// /**
-//  * Matrix2x2 float
-//  *
-//  */
-// HPM_ALIGN(32)
-// typedef hpmvec2f hpmvec2x2f_t[2];
-// typedef struct hpmvec2x2f_s{hpmvecf m11,m21,m12,m22;}hpmmat2f;
-// typedef hpmvec2f hpmvec2x2fp_t;
-// HPM_ALIGN(16)
-// typedef union {
-// 	hpmvec2x2f_t m;
-// } hpmmat2uf;
-
-// /**
-//  *	Single component vector data type.
-//  */
-// typedef float hpmvecfv HPM_VECTORALIGN(4);      /*	*/
-// typedef double hpmvecdv HPM_VECTORALIGN(8);     /*	*/
-// typedef int hpmveciv HPM_VECTORALIGN(4);        /*	*/
-
-// /**
-//  *	Two component vector data type.
-//  */
-// typedef hpmveci hpmvec2i HPM_VECTORALIGN(8);    /*	*/
-// typedef hpmvecf hpmvec2f HPM_VECTORALIGN(8);    /*	*/
-// typedef hpmvecd hpmvec2d HPM_VECTORALIGN(16);   /*	*/
-// typedef struct hpm_vec2uf_t{
-// 	union{
-// 		hpmvec2f v;
-// 		struct{hpmvecf x, y;};
-// 	};
-// };
-
-// /**
-//  *	SSE 128 bit data types.
-//  */
-// typedef hpmveci hpmvec3i HPM_VECTORALIGN(16);   /*	*/
-// typedef hpmvecf hpmvec3f HPM_VECTORALIGN(16);   /*	*/
-// typedef hpmvecd hpmvec3d HPM_VECTORALIGN(32);   /*	*/
-// typedef struct hpm_vec3uf_t {
-// 	union {
-// 		hpmvec3f v;
-// 		struct {
-// 			hpmvecf x, y, z;
-// 		};
-// 	};
-// };
-
-
-// /**
-//  *	SSE 128 bits data types.
-//  */
-// typedef hpmveci hpmvec4i HPM_VECTORALIGN(16);   /*	*/
-// typedef hpmvecf hpmvec4f HPM_VECTORALIGN(16);   /*	*/
-// typedef struct hpm_vec4uf_t {
-// 	union {
-// 		hpmvec4f v;
-// 		struct {
-// 			hpmvecf x, y, z, w;
-// 		};
-// 	};
-// };
-
-// /**
-//  * 	Internal SSE 128 bit  data types
-//  *	for implementing the intrinsics.
-//  */
-// typedef hpmveci hpmv4si HPM_VECTORALIGNI(16);
-// typedef hpmvecf hpmv4sf HPM_VECTORALIGNI(16);
-
-// /**
-//  * 	AVX	256 bits data types.
-//  */
-// typedef hpmveci hpmvec8i HPM_VECTORALIGN(32);
-// typedef hpmvecf hpmvec8f HPM_VECTORALIGN(32);
-// typedef hpmvecd hpmvec4d HPM_VECTORALIGN(32);
-
-// /**
-//  *	Union data types
-//  */
-// HPM_ALIGN(16)
-// typedef struct hpmvec8fu_t {
-// 	union {
-// 		hpmvec4f d2[2];
-// 		hpmvec8f d;
-// 	};
-// } hpmvec8fu;
-// HPM_ALIGN(16)
-// typedef struct hpmvec4du_t {
-// 	union {
-// 		hpmvec2d d2[2];
-// 		hpmvec4d d;
-// 	};
-// } hpmvec4du;
-
-// /**
-//  *	AVX 512 bits data types.
-//  */
-// typedef hpmveci hpmvec16i HPM_VECTORALIGN(64);
-// typedef hpmvecf hpmvec16f HPM_VECTORALIGN(64);
-// typedef hpmvecd hpmvec8d HPM_VECTORALIGN(64);
-// HPM_ALIGN(16)
-// typedef struct hpmvec8du_t {
-// 	union {
-// 		hpmvec4d d2[2];
-// 		hpmvec8d d;
-// 	};
-// } hpmvec8du;
-
 
 #endif
