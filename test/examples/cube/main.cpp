@@ -1,9 +1,9 @@
 #include <FragCore.h>
+#include <Hpm.hpp>
 #include <Renderer/RendererWindow.h>
 #include <Renderer/ViewPort.h>
 #include <SDL2/SDL.h>
 #include <Window/WindowManager.h>
-#include<hpmcpp/Hpm.hpp>
 
 using namespace fragcore;
 
@@ -12,7 +12,7 @@ int main(int argc, const char **argv) {
 	// Config* config = Config::createConfig(argc, argv,
 	// Config::getConfigFilePath(argc, argv));
 
-//	SDL_Init(SDL_INIT_EVERYTHING);
+	//	SDL_Init(SDL_INIT_EVERYTHING);
 	Display *primaryDisplay = WindowManager::getInstance()->getDisplay(0);
 
 	Ref<IRenderer> renderer =
