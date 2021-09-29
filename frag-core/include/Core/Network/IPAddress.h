@@ -16,8 +16,8 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-#ifndef _FRAG_CORE_IP_H_
-#define _FRAG_CORE_IP_H_ 1
+#ifndef _FRAG_CORE_IP_ADDRESS_H_
+#define _FRAG_CORE_IP_ADDRESS_H_ 1
 #include "../Object.h"
 #include <vector>
 
@@ -26,7 +26,7 @@ namespace fragcore {
 	 * @brief
 	 *
 	 */
-	class FVDECLSPEC IPInterface : public Object {
+	class FVDECLSPEC IPAddress : public Object {
 	  public:
 		enum Type {
 
@@ -35,20 +35,12 @@ namespace fragcore {
 			TYPE_IPV6 = 2,
 			TYPE_ANY = 3,
 		};
-		IPInterface(const std::string &ip, Type type);
+		IPAddress(const std::string &ip, Type type);
 
 		const std::string &getIP() const;
 		const std::string &getHostName() const;
 		Type getIPType() const noexcept;
-		const std::string getBroadCastAddress();
-		unsigned int getNetMask();
 
-	  protected:
-		//		virtual IP_Address _resolve_hostname(const String &p_hostname, Type p_type = TYPE_ANY) = 0;
-		static std::vector<IPInterface> getLocalAddresses();
-		static std::vector<IPInterface> getLocalInterface();
-		//		Array _get_local_addresses() const;
-		//		Array _get_local_interfaces() const;
 	  private:
 		Type type;
 		std::string ip;

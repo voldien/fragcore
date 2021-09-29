@@ -1,7 +1,9 @@
-#include"Core/Network/NetSocket.h"
+#include "Core/Network/NetSocket.h"
+using namespace fragcore;
 
-fragcore::NetSocket::NetSocket(const IP &ip) {}
+NetSocket::NetSocket(const IPInterface &ip) {}
 
-fragcore::NetSocket::~NetSocket(void) {
-
+NetSocket::~NetSocket(void) {
+	/*Make sure it gets disconnected.   */
+	close();
 }

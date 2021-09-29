@@ -24,6 +24,7 @@
 namespace fragcore {
 
 	/**
+	 * @brief
 	 *
 	 */
 	class FVDECLSPEC IO : public FileAccess {
@@ -74,7 +75,10 @@ namespace fragcore {
 		//		inline bool get_endian_swap() const { return endian_swap; }
 
 		// TODO determine first how its behaviour before determine if it shall be included.
-		// virtual IFileSystem* getFileSystem(void) = 0;
+		// virtual std::optional<IFileSystem*> getFileSystem(void) = 0;
+
+		// 		virtual bool isBlocking(void);
+		// virtual void setBlocking(bool blocking);
 
 		enum IOOperation : unsigned int {
 			OP_ALL = (unsigned int)(-1),

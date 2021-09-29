@@ -3,8 +3,8 @@
 #include <fmt/core.h>
 #include <stdexcept>
 #include <utility>
+
 using namespace fragcore;
-#include <filesystem>
 
 FileIO::FileIO(void) {
 	this->mode = (IOMode)0;

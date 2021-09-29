@@ -50,7 +50,7 @@ namespace fragcore {
 	class Base32;
 	class Base16;
 	/*  Network.    */
-	class IP;
+	class IPInterface;
 	class NetSocket;
 
 	// class SandBoxSubScene;

@@ -16,42 +16,26 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-#ifndef _FRAG_CORE_NETSOCKET_H_
-#define _FRAG_CORE_NETSOCKET_H_ 1
-#include "../IO/IO.h"
-#include "../Ref.h"
-#include "../SmartReference.h"
-#include "IP.h"
+#ifndef _FRAG_CORE_UDP_NETSOCKET_H_
+#define _FRAG_CORE_UDP_NETSOCKET_H_ 1
+#include "NetSocket.h"
 
 namespace fragcore {
-
 	/**
-	 * @brief
 	 *
 	 */
-	class FVDECLSPEC NetSocket : public SmartReference {
+	class FVDECLSPEC UDPNetSocket : public NetSocket {
 	  public:
-		NetSocket(const IPInterface &ip);
-		virtual ~NetSocket(void);
-
-		/**
-		 * @brief
-		 *
-		 */
-		enum class TransportProtocol {
-			TCP,
-			UDP,
-			MaxTransportProtocol,
-		};
+		UDPNetSocket(const IPInterface &ip);
+		virtual ~UDPNetSocket(void);
 
 		// virtual Error open(Type p_type, IP::Type &ip_type) = 0;
-
-		virtual TransportProtocol getTransportProtocol() const noexcept = 0;
-
 		virtual void close() = 0;
-		virtual int bind(std::string &addr, unsigned int port) = 0;
-		virtual int listen(unsigned int maxListen) = 0;
-		virtual int connect(std::string &ip, unsigned int port) = 0;
+		virtual TransportProtocol getTransportProtocol() const noexcept { return TransportProtocol::UDP; }
+
+		virtual int bind(std::string &addr, unsigned int port) override;
+		virtual int listen(unsigned int maxListen) override;
+		virtual int connect(std::string &ip, unsigned int port) override;
 
 		// virtual Error bind(IPAddress p_addr, uint16_t p_port) = 0;
 		// virtual Error listen(int p_max_pending) = 0;
@@ -60,13 +44,12 @@ namespace fragcore {
 		// virtual Error recv(uint8_t *p_buffer, int p_len, int &r_read) = 0;
 		// virtual Error recvfrom(uint8_t *p_buffer, int p_len, int &r_read, IPAddress &r_ip, uint16_t &r_port,
 		// 					   bool p_peek = false) = 0;
-		virtual int recv(const void *pbuffer, int p_len, int &sent) = 0;
 		// virtual Error send(const uint8_t *p_buffer, int p_len, int &r_sent) = 0;
 		// virtual Error sendto(const uint8_t *p_buffer, int p_len, int &r_sent, IPAddress p_ip, uint16_t p_port) =
-		virtual long int send(const void *pbuffer, int p_len, int &sent) = 0;
-		// virtual long int send(Ref<IO> &io, int len, int &sent) = 0;
+		virtual long int send(const void *pbuffer, int p_len, int &sent) override;
+		// virtual long int send(Ref<IO> &io, int len, int &sent) override;
 		// 0; virtual Ref<NetSocket> accept(IPAddress &r_ip, uint16_t &r_port) = 0;
-		virtual Ref<NetSocket> accept(std::string &ip, unsigned int port) = 0;
+		virtual Ref<NetSocket> accept(std::string &ip, unsigned int port) override;
 
 		/*virtual int bind(IP adddrr, Type _type);
 		virtual int connect(IP& addr);
@@ -81,9 +64,8 @@ namespace fragcore {
 			*/
 
 		// enum class Status { Done, NotReady, Partial, Disconnected, Error };
-
-	  protected:
-		NetSocket(void) = default;
+	  private:
+		int socket;
 	};
 } // namespace fragcore
 
