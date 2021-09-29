@@ -16,8 +16,8 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-#ifndef _FRAG_CORE_ZIP_FILE_H_
-#define _FRAG_CORE_ZIP_FILE_H_ 1
+#ifndef _FRAG_CORE_ZIP_FILESYSTEM_H_
+#define _FRAG_CORE_ZIP_FILESYSTEM_H_ 1
 #include "../../Def.h"
 #include "../../Prerequisites.h"
 #include "../RefPtr.h"

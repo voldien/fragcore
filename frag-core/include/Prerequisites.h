@@ -38,7 +38,7 @@ namespace fragcore {
 	class ZipFileIO;
 	class BufferIO;
 	class FileAccess;
-	class ASync;
+	class ASyncIO;
 	class GZFileIO;
 	class ZipFileSystem;
 	class IFileSystem;

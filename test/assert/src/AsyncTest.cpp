@@ -1,4 +1,4 @@
-#include <Core/IO/ASync.h>
+#include <Core/IO/ASyncIO.h>
 #include <Core/IO/BufferIO.h>
 #include <Core/IO/FileIO.h>
 #include <Core/IO/FileSystem.h>
@@ -13,14 +13,14 @@
 #include <gtest/gtest.h>
 using namespace fragcore;
 
-TEST(ASync, Async_Create_NoThrowException) {
+TEST(ASyncIO, Async_Create_NoThrowException) {
 	Ref<IScheduler> sche = Ref<IScheduler>(new TaskScheduler());
-	ASSERT_NO_THROW(ASync async(sche));
+	ASSERT_NO_THROW(ASyncIO async(sche));
 }
 
-TEST(ASync, ASync_Open_IO_Async_Handle_No_Throw) {
+TEST(ASyncIO, ASync_Open_IO_Async_Handle_No_Throw) {
 	Ref<IScheduler> sche = Ref<IScheduler>(new TaskScheduler());
-	ASync async(sche);
+	ASyncIO async(sche);
 
 	Ref<IO> ioRef = SystemInfo::getStdOut();
 	ASyncHandle handle;
@@ -28,9 +28,9 @@ TEST(ASync, ASync_Open_IO_Async_Handle_No_Throw) {
 	async.asyncClose(handle);
 }
 
-TEST(ASync, ASync_ReadIOAsync_ThrowException) {
+TEST(ASyncIO, ASync_ReadIOAsync_ThrowException) {
 	Ref<IScheduler> sche = Ref<IScheduler>(new TaskScheduler());
-	ASync async(sche);
+	ASyncIO async(sche);
 
 	Ref<IO> ioRef = SystemInfo::getStdOut();
 	ASyncHandle handle;
@@ -38,9 +38,9 @@ TEST(ASync, ASync_ReadIOAsync_ThrowException) {
 	ASSERT_THROW(async.asyncWriteFile(handle, nullptr, 0, nullptr), InvalidArgumentException);
 }
 
-TEST(ASync, ASync_Wait_Correctly_NoThrowException) {
+TEST(ASyncIO, ASync_Wait_Correctly_NoThrowException) {
 	Ref<IScheduler> sche = Ref<IScheduler>(new TaskScheduler());
-	ASync async(sche);
+	ASyncIO async(sche);
 
 	Ref<IO> ioRef = SystemInfo::getStdOut();
 	ASyncHandle handle;
@@ -50,9 +50,9 @@ TEST(ASync, ASync_Wait_Correctly_NoThrowException) {
 	ASSERT_NO_THROW(async.asyncWait(handle));
 }
 
-TEST(ASync, ASync_CallBack_Called_No_Throw) {}
+TEST(ASyncIO, ASync_CallBack_Called_No_Throw) {}
 
-TEST(ASync, Async) {
+TEST(ASyncIO, Async) {
 	// ASyncHandle handle;
 	// IScheduler *sch;
 

@@ -1,4 +1,4 @@
-#include "Core/IO/ASync.h"
+#include "Core/IO/ASyncIO.h"
 #include "Core/IO/IFileSystem.h"
 //#include "Exception/InvalidArgumentException.h"
 //#include "Exception/RuntimeException.h"
@@ -16,7 +16,7 @@ class FVDECLSPEC AsyncTask : public Task {
 	virtual void Complete(void) noexcept override {}
 };
 
-ASyncHandle ASync::asyncOpen(Ref<IO> &io) {
+ASyncHandle ASyncIO::asyncOpen(Ref<IO> &io) {
 
 	if (*scheduler == nullptr)
 		throw RuntimeException("Async not initialized with a scheduler object");
@@ -45,7 +45,7 @@ ASyncHandle ASync::asyncOpen(Ref<IO> &io) {
 	return handle;
 }
 
-void ASync::asyncReadFile(ASyncHandle handle, char *buffer, unsigned int size, AsyncComplete complete) {
+void ASyncIO::asyncReadFile(ASyncHandle handle, char *buffer, unsigned int size, AsyncComplete complete) {
 	int error;
 	/*  Get object and check if exists. */
 	AsyncObject *ao = getObject(handle);
@@ -74,7 +74,7 @@ void ASync::asyncReadFile(ASyncHandle handle, char *buffer, unsigned int size, A
 	this->scheduler->addTask(&readTask);
 }
 
-void ASync::asyncReadFile(ASyncHandle handle, Ref<IO> &writeIO, AsyncComplete complete) {
+void ASyncIO::asyncReadFile(ASyncHandle handle, Ref<IO> &writeIO, AsyncComplete complete) {
 	AsyncObject *ao = getObject(handle);
 
 	/*  Check that open file is readable.   */
@@ -85,7 +85,7 @@ void ASync::asyncReadFile(ASyncHandle handle, Ref<IO> &writeIO, AsyncComplete co
 		throw RuntimeException(fmt::format("IO object is not writable {}", writeIO->getUID()));
 }
 
-void ASync::asyncWriteFile(ASyncHandle handle, char *buffer, unsigned int size, AsyncComplete complete) {
+void ASyncIO::asyncWriteFile(ASyncHandle handle, char *buffer, unsigned int size, AsyncComplete complete) {
 	int error;
 	AsyncObject *ao = getObject(handle);
 	// TODO perhaps can to use the IOBuffer has a interface object for reduced coupling and higher cohesion.
@@ -112,15 +112,15 @@ void ASync::asyncWriteFile(ASyncHandle handle, char *buffer, unsigned int size, 
 	this->scheduler->addTask(&readTask);
 }
 
-void ASync::asyncWriteFile(ASyncHandle handle, Ref<IO> &io, AsyncComplete complete) {}
+void ASyncIO::asyncWriteFile(ASyncHandle handle, Ref<IO> &io, AsyncComplete complete) {}
 
-Ref<IO> ASync::getIO(ASyncHandle handle) const { return getObject(handle)->ref; }
+Ref<IO> ASyncIO::getIO(ASyncHandle handle) const { return getObject(handle)->ref; }
 
-const ASync::IOStatus &ASync::getIOStatus(ASyncHandle handle) const { return this->getObject(handle)->status; }
+const ASyncIO::IOStatus &ASyncIO::getIOStatus(ASyncHandle handle) const { return this->getObject(handle)->status; }
 
-Ref<IScheduler> ASync::getScheduler(void) const { return this->scheduler; }
+Ref<IScheduler> ASyncIO::getScheduler(void) const { return this->scheduler; }
 
-void ASync::asyncWait(fragcore::ASyncHandle handle) {
+void ASyncIO::asyncWait(fragcore::ASyncHandle handle) {
 	AsyncObject *ao = getObject(handle);
 
 	schSemaphoreWait((schSemaphore *)ao->semaphore);
@@ -131,13 +131,13 @@ void ASync::asyncWait(fragcore::ASyncHandle handle) {
 	// ao->status.
 }
 
-bool ASync::asyncWait(ASyncHandle handle, long int timeout) {
+bool ASyncIO::asyncWait(ASyncHandle handle, long int timeout) {
 	AsyncObject *ao = getObject(handle);
 
 	return true; // schSemaphoreTimedWait((schSemaphore *)ao->semaphore, timeout) == SCH_OK;
 }
 
-void ASync::asyncClose(ASyncHandle handle) {
+void ASyncIO::asyncClose(ASyncHandle handle) {
 	AsyncObject *ao = this->getObject(handle);
 
 	/*  Check status of the scheduler.  */
@@ -153,7 +153,7 @@ void ASync::asyncClose(ASyncHandle handle) {
 	this->asyncs.erase(this->asyncs.find(handle));
 }
 
-void ASync::async_open(Task *task) {
+void ASyncIO::async_open(Task *task) {
 
 	// ASyncHandle handle = (ASyncHandle)task->userData;
 	AsyncObject *ao = (AsyncObject *)task->userData;
@@ -167,7 +167,7 @@ void ASync::async_open(Task *task) {
 	/*  Create the task in succession.  */
 }
 
-void ASync::async_read(Task *task) {
+void ASyncIO::async_read(Task *task) {
 	AsyncObject *ao = (AsyncObject *)task->userData;
 	const size_t block_size = 512;
 
@@ -187,7 +187,7 @@ void ASync::async_read(Task *task) {
 	schSemaphorePost((schSemaphore *)ao->semaphore);
 }
 
-void ASync::async_read_io(Task *task) {
+void ASyncIO::async_read_io(Task *task) {
 	AsyncObject *ao = (AsyncObject *)task->userData;
 	const size_t block_size = 512;
 	// TODO update for the IO based..
@@ -207,7 +207,7 @@ void ASync::async_read_io(Task *task) {
 	schSemaphorePost((schSemaphore *)ao->semaphore);
 }
 
-void ASync::async_write(Task *task) {
+void ASyncIO::async_write(Task *task) {
 	AsyncObject *ao = (AsyncObject *)task->userData;
 	const size_t block_size = 512;
 
@@ -227,9 +227,9 @@ void ASync::async_write(Task *task) {
 	schSemaphorePost((schSemaphore *)ao->semaphore);
 }
 
-void ASync::async_write_io(Task *task) { return; }
+void ASyncIO::async_write_io(Task *task) { return; }
 
-ASync::AsyncObject *ASync::getObject(ASyncHandle handle) {
+ASyncIO::AsyncObject *ASyncIO::getObject(ASyncHandle handle) {
 
 	if (this->asyncs.find(handle) != this->asyncs.end())
 		return &this->asyncs[handle];
@@ -237,7 +237,7 @@ ASync::AsyncObject *ASync::getObject(ASyncHandle handle) {
 	throw RuntimeException(fmt::format("Invalid Async object {}", handle));
 }
 
-const ASync::AsyncObject *ASync::getObject(ASyncHandle handle) const {
+const ASyncIO::AsyncObject *ASyncIO::getObject(ASyncHandle handle) const {
 	std::map<ASyncHandle, AsyncObject>::const_iterator it = this->asyncs.find(handle);
 	if (it != this->asyncs.cend())
 		return &it->second;
@@ -245,18 +245,18 @@ const ASync::AsyncObject *ASync::getObject(ASyncHandle handle) const {
 	throw RuntimeException(fmt::format("Invalid Async object {}", handle));
 }
 
-ASync::AsyncObject *ASync::createObject(ASyncHandle handle) { return &this->asyncs[handle]; }
+ASyncIO::AsyncObject *ASyncIO::createObject(ASyncHandle handle) { return &this->asyncs[handle]; }
 
-void ASync::setScheduleReference(Ref<IScheduler> &sch) { this->scheduler = sch; }
+void ASyncIO::setScheduleReference(Ref<IScheduler> &sch) { this->scheduler = sch; }
 
-ASync::~ASync(void) { this->getScheduler(); }
+ASyncIO::~ASyncIO(void) { this->getScheduler(); }
 
-ASync::ASync(void) {
+ASyncIO::ASyncIO(void) {
 	this->scheduler = nullptr;
 	// this->sch = nullptr;
 }
 
-ASync::ASync(Ref<IScheduler> &scheduler) {
+ASyncIO::ASyncIO(Ref<IScheduler> &scheduler) {
 	this->scheduler = scheduler;
 	this->uidGenerator = UIDGenerator();
 	/*  Take out the 0 UID that is invalid for the async handle
@@ -264,11 +264,11 @@ ASync::ASync(Ref<IScheduler> &scheduler) {
 	this->uidGenerator.getNextLUID();
 }
 
-ASync::ASync(ASync &&other) {
+ASyncIO::ASyncIO(ASyncIO &&other) {
 	// Move over the things!
 }
 
-ASync::ASync(const ASync &other) {
+ASyncIO::ASyncIO(const ASyncIO &other) {
 	this->scheduler = other.scheduler;
 	this->uidGenerator = other.uidGenerator;
 }

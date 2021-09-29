@@ -32,17 +32,17 @@
 namespace fragcore {
 
 	typedef long ASyncHandle;										 /*  */
-	typedef void (*AsyncComplete)(ASync *async, ASyncHandle handle); /*  */
+	typedef void (*AsyncComplete)(ASyncIO *async, ASyncHandle handle); /*  */
 
 	/**
 	 *
 	 */
 	// TODO rename so that it include the IO name.
-	class FVDECLSPEC ASync : public SmartReference {
+	class FVDECLSPEC ASyncIO : public SmartReference {
 	  public:
-		ASync(Ref<IScheduler> &scheduler);
-		ASync(ASync &&other); // Move semantics
-		~ASync(void);
+		ASyncIO(Ref<IScheduler> &scheduler);
+		ASyncIO(ASyncIO &&other); // Move semantics
+		~ASyncIO(void);
 
 		typedef struct io_status_t {
 			unsigned int nbytes; /*  Number of bytes read.   */
@@ -79,9 +79,9 @@ namespace fragcore {
 		static void async_write_io(Task *task);
 
 	  protected:	 /*  */
-		ASync(void); // TODO make protected since it is required to a have a scheduler attached but inheriet need to be
+		ASyncIO(void); // TODO make protected since it is required to a have a scheduler attached but inheriet need to be
 					 // able to call it.
-		ASync(const ASync &other);
+		ASyncIO(const ASyncIO &other);
 		virtual void setScheduleReference(Ref<IScheduler> &sch);
 
 		typedef struct async_object {

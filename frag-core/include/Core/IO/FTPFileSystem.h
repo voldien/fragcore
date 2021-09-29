@@ -19,7 +19,7 @@
 #ifndef _FRAG_CORE_FTP_FILESYSTEM_H_
 #define _FRAG_CORE_FTP_FILESYSTEM_H_ 1
 #include "../../Def.h"
-#include "ASync.h"
+#include "ASyncIO.h"
 #include "IFileSystem.h"
 #include "IO.h"
 #include <curl/curl.h>
@@ -76,7 +76,7 @@ namespace fragcore {
 		FTPFileSystem(FTPFileSystem &&other);
 		// TODO add remove function.
 
-		void setCredentials(const char* username, const char *password);
+		void setCredentials(const char *username, const char *password);
 
 	  protected:
 		FTPFileSystem(const char *ip, int port, const char *username, const char *password, Ref<IScheduler> &sch);
@@ -85,7 +85,7 @@ namespace fragcore {
 
 	  private:
 		CURL *handle;
-		CURL* multi;
+		CURL *multi;
 		char *URL;
 		int port;
 	};

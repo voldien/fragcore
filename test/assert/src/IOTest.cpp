@@ -31,9 +31,9 @@ class IOTest : public testing::Test {
 		zipFile = "zipfile.zip";
 	}
 
-	static void readcallback(ASync *async, ASyncHandle handle) {}
+	static void readcallback(ASyncIO *async, ASyncHandle handle) {}
 
-	static void writecallback(ASync *aSync, ASyncHandle handle) {}
+	static void writecallback(ASyncIO *aSync, ASyncHandle handle) {}
 
 	std::vector<char *> files;
 	char *FileWrite;

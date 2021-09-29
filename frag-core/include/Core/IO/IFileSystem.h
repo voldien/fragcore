@@ -18,7 +18,7 @@
 */
 #ifndef _FRAG_CORE_IFILESYSTEM_H_
 #define _FRAG_CORE_IFILESYSTEM_H_ 1
-#include "ASync.h"
+#include "ASyncIO.h"
 #include <vector>
 
 namespace fragcore {
@@ -27,7 +27,7 @@ namespace fragcore {
 	 * @brief
 	 *
 	 */
-	class FVDECLSPEC IFileSystem : public ASync {
+	class FVDECLSPEC IFileSystem : public ASyncIO {
 	  public:
 		virtual IO *openFile(const char *path, IO::IOMode mode) = 0; /*  Open based on the filename extension.*/
 		virtual ASyncHandle openASyncFile(const char *path, IO::IOMode mode) {
