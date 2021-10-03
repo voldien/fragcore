@@ -53,6 +53,13 @@ namespace fragcore {
 		 */
 		float randf(void) const noexcept;
 
+		/**
+		 * @brief 
+		 * 
+		 * @param min 
+		 * @param max 
+		 * @return float 
+		 */
 		float range(float min, float max) noexcept;
 
 	  private: /*	Attributes.	*/

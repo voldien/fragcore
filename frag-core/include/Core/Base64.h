@@ -23,6 +23,7 @@
 
 namespace fragcore {
 	/**
+	 * @brief 
 	 *
 	 */
 	class FVDECLSPEC Base64 : public IBase {
