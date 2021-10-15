@@ -26,7 +26,7 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC AudioPhysicalDevice : public Object {
 	public:
-		AudioPhysicalDevice(void) {
+		AudioPhysicalDevice() {
 
 		}
 		AudioPhysicalDevice(const AudioPhysicalDevice &other){}
@@ -35,8 +35,8 @@ namespace fragcore {
 		}
 
 		// TODO perhaps use the audio setting as part of the audio device.
-		// virtual AudioSettings* getAudioSettings(void);
-		// virtual void getCapabilities(void);
+		// virtual AudioSettings* getAudioSettings();
+		// virtual void getCapabilities();
 	};
 }
 

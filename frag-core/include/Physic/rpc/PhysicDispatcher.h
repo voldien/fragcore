@@ -30,7 +30,7 @@ namespace fragcore {
 	class FVDECLSPEC PhysicDispatcher {
 	public:
 
-		PhysicDispatcher(void);
+		PhysicDispatcher();
 		PhysicDispatcher(const PhysicDispatcher& other);
 
 		/**

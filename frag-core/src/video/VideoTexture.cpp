@@ -4,50 +4,50 @@
 #include"Core/Ref.h"
 using namespace fragcore;
 
-VideoTexture::VideoTexture(void) {
+VideoTexture::VideoTexture() {
 	//VideoManager::getInstance()->registerVideo(Ref<VideoTexture>(this));
 }
 
-VideoTexture::~VideoTexture(void) {
+VideoTexture::~VideoTexture() {
 	//VideoManager::getInstance()->unRegisterVideo(Ref<VideoTexture>(this));
 }
 
-bool VideoTexture::isPlaying(void) const{
+bool VideoTexture::isPlaying() const{
 
 }
 
-void VideoTexture::play(void) {
+void VideoTexture::play() {
 	
 }
 
-void VideoTexture::stop(void) {
+void VideoTexture::stop() {
 
 }
 
-void VideoTexture::pause(void) {
+void VideoTexture::pause() {
 
 }
 
-float VideoTexture::getCurrentPosition(void) const {
+float VideoTexture::getCurrentPosition() const {
 
 }
 
-float VideoTexture::getTotalLength(void) const {
+float VideoTexture::getTotalLength() const {
 
 }
 
-double VideoTexture::getDuration(void) const {
+double VideoTexture::getDuration() const {
 
 }
 
-double VideoTexture::getTime(void) const {
+double VideoTexture::getTime() const {
 
 }
 
-bool VideoTexture::isReadyToPlay(void) const {
+bool VideoTexture::isReadyToPlay() const {
 
 }
 
-Texture *VideoTexture::getTexture(void) const {
+Texture *VideoTexture::getTexture() const {
 	return (Texture*)this->texture.ptr();
 }

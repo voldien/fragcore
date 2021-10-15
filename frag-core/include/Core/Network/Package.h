@@ -7,7 +7,7 @@ namespace fragcore{
 	class Package{
 		public:
 
-		bool isEndOfStream(void) const;
+		bool isEndOfStream() const;
 
 
 		// Overload of operator >> to read data from the data stream

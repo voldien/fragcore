@@ -41,10 +41,10 @@ namespace fragcore {
 
 	private:    /*	Prevent one from creating an instance of this class.	*/
 
-		RenderTargetFactory(void) = delete;
+		RenderTargetFactory() = delete;
 		RenderTargetFactory(const RenderTargetFactory &other) = delete;
 		RenderTargetFactory(RenderTargetFactory &&other) = delete;
-		~RenderTargetFactory(void) = delete;
+		~RenderTargetFactory() = delete;
 	};
 }
 

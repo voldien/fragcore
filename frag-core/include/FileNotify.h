@@ -45,9 +45,9 @@ namespace fragcore {
 		/**
 		 * Start the file notification process.
 		 */
-		void start(void);
-		void stop(void);
-		//void restart(void);
+		void start();
+		void stop();
+		//void restart();
 
 	protected:
 
@@ -72,14 +72,14 @@ namespace fragcore {
 		void registerAsset(Ref<IO> &io);
 		void unregisterAsset(Object *notify);
 		void unregisterAsset(Ref<IO> &io);
-		void unRegisterAllAsset(void);
+		void unRegisterAllAsset();
 
 		void eventDone(FileNotificationEvent *event);
 
 		//TODO improve
-		bool pollEvent(void);
+		bool pollEvent();
 		void eventDone(const std::vector<FileNotificationEvent> &events) const;
-		bool releaseEventBuffer(void);
+		bool releaseEventBuffer();
 
 	private:
 
@@ -141,7 +141,7 @@ namespace fragcore {
 
 		FileNotify(Ref<IScheduler>& sch);
 
-		~FileNotify(void);
+		~FileNotify();
 	};
 }
 

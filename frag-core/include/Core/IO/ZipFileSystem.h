@@ -32,7 +32,7 @@ namespace fragcore {
 		friend class ZipFileIO;
 
 	  public:
-		virtual ~ZipFileSystem(void);
+		virtual ~ZipFileSystem();
 
 		IO *openFile(const char *path, IO::IOMode mode);
 		IO *openFile(unsigned int index);
@@ -57,7 +57,7 @@ namespace fragcore {
 
 		bool exists(const char *path) const override;
 
-		bool isASyncSupported(void) const override;
+		bool isASyncSupported() const override;
 
 		virtual bool isDirectory(const char *path);
 		virtual bool isFile(const char *path);
@@ -66,12 +66,12 @@ namespace fragcore {
 		/**
 		 * Release
 		 */
-		virtual void release(void);
+		virtual void release();
 
 	  private:		/*	*/
 		void *pzip; /**/
 
-		virtual void *getZipObject(void) const;
+		virtual void *getZipObject() const;
 
 	  public: /*	Factory method.	*/
 		/*  Create zip filesystem object.   */

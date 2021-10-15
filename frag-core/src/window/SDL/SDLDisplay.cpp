@@ -6,7 +6,7 @@
 #include <fmt/core.h>
 using namespace fragcore;
 
-unsigned int SDLDisplay::x(void) const {
+unsigned int SDLDisplay::x() const {
 	SDL_Rect bound;
 	int err = SDL_GetDisplayBounds(this->index, &bound);
 	if (err != 0)
@@ -14,7 +14,7 @@ unsigned int SDLDisplay::x(void) const {
 	return bound.x;
 }
 
-unsigned int SDLDisplay::y(void) const {
+unsigned int SDLDisplay::y() const {
 	SDL_Rect bound;
 	int err = SDL_GetDisplayBounds(this->index, &bound);
 	if (err != 0)
@@ -22,7 +22,7 @@ unsigned int SDLDisplay::y(void) const {
 	return bound.y;
 }
 
-unsigned int SDLDisplay::width(void) const {
+unsigned int SDLDisplay::width() const {
 	SDL_Rect bound;
 	int err = SDL_GetDisplayBounds(this->index, &bound);
 	if (err != 0)
@@ -30,7 +30,7 @@ unsigned int SDLDisplay::width(void) const {
 	return bound.w;
 }
 
-unsigned int SDLDisplay::height(void) const {
+unsigned int SDLDisplay::height() const {
 	SDL_Rect bound;
 	int err = SDL_GetDisplayBounds(this->index, &bound);
 	if (err != 0)
@@ -38,7 +38,7 @@ unsigned int SDLDisplay::height(void) const {
 	return bound.h;
 }
 
-unsigned int SDLDisplay::refreshRate(void) const {
+unsigned int SDLDisplay::refreshRate() const {
 	SDL_DisplayMode mode;
 	int err = SDL_GetCurrentDisplayMode(this->index, &mode);
 	if (err != 0)
@@ -46,7 +46,7 @@ unsigned int SDLDisplay::refreshRate(void) const {
 	return mode.refresh_rate;
 }
 
-std::vector<Display::Mode> SDLDisplay::getModes(void) const {
+std::vector<Display::Mode> SDLDisplay::getModes() const {
 	int n = SDL_GetNumDisplayModes(this->index);
 	SDL_DisplayMode mode;
 
@@ -69,7 +69,7 @@ void SDLDisplay::getDPI(Display::DPI *dpi) {
 		throw RuntimeException(fmt::format("Failed to retrieve display {} DPI, %s", this->index, SDL_GetError()));
 }
 
-TextureFormat SDLDisplay::getFormat(void) {
+TextureFormat SDLDisplay::getFormat() {
 	SDL_DisplayMode mode;
 	SDL_GetCurrentDisplayMode(this->index, &mode);
 	return (TextureFormat)translateFormat(mode.format);
@@ -91,4 +91,4 @@ unsigned int SDLDisplay::translateFormat(unsigned int format) {
 	return 0;
 }
 
-int SDLDisplay::getNumDisplays(void) { return SDL_GetNumVideoDisplays(); }
+int SDLDisplay::getNumDisplays() { return SDL_GetNumVideoDisplays(); }

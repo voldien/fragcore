@@ -3,7 +3,7 @@
 
 using namespace fragcore;
 
-intptr_t AudioListener::getNativePtr(void) const {
+intptr_t AudioListener::getNativePtr() const {
 	return 0;
 }
 
@@ -11,7 +11,7 @@ void AudioListener::setVolume(float volume) {
 	alListenerf(AL_GAIN, volume);
 }
 
-float AudioListener::getVolume(void) const {
+float AudioListener::getVolume() const {
 	float volume;
 	alGetListenerf(AL_GAIN, &volume);
 	return volume;
@@ -28,7 +28,7 @@ void AudioListener::setPosition(const Vector3 &position) {
 	setVelocity(position - prevPos);
 }
 
-const Vector3 AudioListener::getPosition(void) const {
+const Vector3 AudioListener::getPosition() const {
     Vector3 position(0.0f, 0.0f, 0.0f);
     alGetListenerfv(AL_POSITION, &position[0]);
     return position;
@@ -39,7 +39,7 @@ void AudioListener::setVelocity(const Vector3 &velocity) {
 	alListenerfv(AL_VELOCITY, (const ALfloat *)&v[0]);
 }
 
-const Vector3 AudioListener::getVelocity(void) const {
+const Vector3 AudioListener::getVelocity() const {
 	Vector3 velocity;
 	alGetListenerfv(AL_VELOCITY, &velocity[0]);
 	return velocity;
@@ -54,17 +54,17 @@ void AudioListener::setOrientation(const Quaternion &orientation) {
 	alListenerfv(AL_ORIENTATION, (const ALfloat *) &forward[0]);
 }
 
-const Quaternion AudioListener::getOrientation(void) const {
+const Quaternion AudioListener::getOrientation() const {
 	Quaternion orientation;
 	ALfloat listenerOri[6];
 	alGetListenerfv(AL_ORIENTATION, listenerOri);
 	return Quaternion::lookRotation(Vector3(listenerOri[0],listenerOri[1],listenerOri[2]), Vector3::zero(), Vector3(listenerOri[3],listenerOri[4],listenerOri[5]));
 }
 
-AudioListener::AudioListener(void) {
+AudioListener::AudioListener() {
 
 }
 
-AudioListener::~AudioListener(void) {
+AudioListener::~AudioListener() {
 
 }

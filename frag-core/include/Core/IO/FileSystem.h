@@ -46,7 +46,7 @@ namespace fragcore {
 
 		virtual bool exists(const char *path) const;
 
-		virtual bool isASyncSupported(void) const;
+		virtual bool isASyncSupported() const;
 		virtual bool isDirectory(const char *path);
 		virtual bool isFile(const char *path);
 
@@ -68,16 +68,16 @@ namespace fragcore {
 		static const char *getFileExtension(const char *path);
 
 	  public:
-		static FileSystem *getFileSystem(void);
+		static FileSystem *getFileSystem();
 		static FileSystem *createFileSystem(Ref<IScheduler> &sch);
-		static FileSystem *createFileSystem(void); /*	Filesystem without async support.	*/
+		static FileSystem *createFileSystem(); /*	Filesystem without async support.	*/
 
 		FileSystem(const FileSystem &&other);
 		// TODO add remove function.
 	  protected:
 		FileSystem(Ref<IScheduler> &sch);
-		FileSystem(void);
-		~FileSystem(void);
+		FileSystem();
+		~FileSystem();
 	};
 } // namespace fragcore
 

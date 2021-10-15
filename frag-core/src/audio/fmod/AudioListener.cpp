@@ -41,7 +41,7 @@ using namespace FMOD;
 
 VDAudioListener* gListener = nullptr;
 
-VDAudioListener::VDAudioListener(void) : VDBehavior(){
+VDAudioListener::VDAudioListener() : VDBehavior(){
 
 }
 
@@ -50,23 +50,23 @@ VDAudioListener::VDAudioListener(const VDAudioListener& listener) : VDBehavior()
 }
 
 
-void VDAudioListener::instanceInitilize(void){
+void VDAudioListener::instanceInitilize(){
 
 }
 
-void VDAudioListener::onEnable(void){
+void VDAudioListener::onEnable(){
 	engine.scene.gListener = this;
 }
 
-void VDAudioListener::onDisable(void){
+void VDAudioListener::onDisable(){
 	engine.scene.gListener = nullptr;
 }
 
-void VDAudioListener::onDestroy(void){
+void VDAudioListener::onDestroy(){
 	engine.scene.gListener = nullptr;
 }
 
-void VDAudioListener::initializeComponent(void){
+void VDAudioListener::initializeComponent(){
 	if(!engine.scene.gListener)
 		engine.scene.gListener = this;
 	else
@@ -99,6 +99,6 @@ void VDAudioListener::updateAudioListener(VDDoubleBufferedAllocator* allocator){
 
 }
 
-VDAudioListener* VDAudioListener::getAudioListener(void){
+VDAudioListener* VDAudioListener::getAudioListener(){
 	return engine.scene.gListener;
 }

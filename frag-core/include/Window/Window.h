@@ -29,29 +29,29 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC Window : public SmartReference {
 	  public:
-		virtual void show(void) = 0;
+		virtual void show() = 0;
 
-		virtual void hide(void) = 0;
+		virtual void hide() = 0;
 
-		virtual void close(void) = 0;
+		virtual void close() = 0;
 
-		virtual void focus(void) = 0;
+		virtual void focus() = 0;
 
-		virtual void restore(void) = 0;
+		virtual void restore() = 0;
 
-		virtual void maximize(void) = 0;
+		virtual void maximize() = 0;
 
-		virtual void minimize(void) = 0;
+		virtual void minimize() = 0;
 
 		virtual void setTitle(const char *title) = 0;
 
-		virtual const char *getTitle(void) const = 0;
+		virtual const char *getTitle() const = 0;
 
 		// TODO change the type to image.
 		virtual void setIcon(void *) = 0;
 		//		virtual void setIcon(Image* image) = 0;
 
-		virtual void *getIcon(void) const = 0;
+		virtual void *getIcon() const = 0;
 		//		virtual Image* setIcon(Image* image) = 0;
 
 		virtual void getPosition(int *x, int *y) const = 0;
@@ -62,9 +62,9 @@ namespace fragcore {
 
 		virtual void getSize(int *width, int *height) const = 0;
 
-		virtual Display *getCurrentDisplay(void) const = 0;
+		virtual Display *getCurrentDisplay() const = 0;
 
-		virtual float getGamma(void) const = 0;
+		virtual float getGamma() const = 0;
 
 		virtual void setGamma(float gamma) = 0;
 
@@ -73,7 +73,7 @@ namespace fragcore {
 		virtual void setFullScreen(bool fullscreen) = 0;
 		virtual void setFullScreen(Display &display) = 0;
 
-		virtual bool isFullScreen(void) const = 0;
+		virtual bool isFullScreen() const = 0;
 
 		virtual void setBordered(bool borded) = 0;
 
@@ -84,9 +84,9 @@ namespace fragcore {
 
 		FV_ALWAYS_INLINE void setUserData(void *userData) noexcept { this->userData = userData; }
 
-		FV_ALWAYS_INLINE virtual void *getUserData(void) const noexcept { return this->userData; }
+		FV_ALWAYS_INLINE virtual void *getUserData() const noexcept { return this->userData; }
 
-		virtual intptr_t getNativePtr(void) const = 0; /*  Get native window reference object. */
+		virtual intptr_t getNativePtr() const = 0; /*  Get native window reference object. */
 
 	  protected: /*  Internal utility methods.   */
 		// TODO determine how to handle it.

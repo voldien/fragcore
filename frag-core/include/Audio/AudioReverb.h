@@ -29,11 +29,11 @@ namespace fragcore {
 	class FVDECLSPEC AudioReverb : public AudioObject {
 		friend class AudioInterface;
 	public:
-		intptr_t getNativePtr(void) const override;
+		intptr_t getNativePtr() const override;
 
 	protected:
-		AudioReverb(void);
-		virtual ~AudioReverb(void);
+		AudioReverb();
+		virtual ~AudioReverb();
 	};
 
 }

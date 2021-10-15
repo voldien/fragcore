@@ -32,13 +32,13 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC SmartReference : public Object, public NoCopyable {
 	  public:
-		SmartReference(void) noexcept;
+		SmartReference() noexcept;
 
-		bool increment(void) noexcept;
+		bool increment() noexcept;
 
-		bool deincreemnt(void) noexcept;
+		bool deincreemnt() noexcept;
 
-		int getIndexCount(void) const noexcept;
+		int getIndexCount() const noexcept;
 
 		//TODO determine if shall add a force delete support.
 

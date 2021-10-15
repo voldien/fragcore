@@ -6,7 +6,7 @@
 #include <utility>
 using namespace fragcore;
 
-Library::Library(void) { this->mlib = nullptr; }
+Library::Library() { this->mlib = nullptr; }
 
 Library::Library(const char *clibrary) {
 	this->mlib = nullptr;
@@ -18,7 +18,7 @@ Library::Library(const Library &library) : Library(library.name.c_str()) {}
 
 Library::Library(Library &&other) { std::exchange(this->mlib, other.mlib); }
 
-Library::~Library(void) { /*	Nothing to release. Done by the kernel itself.	*/
+Library::~Library() { /*	Nothing to release. Done by the kernel itself.	*/
 }
 
 bool Library::open(const char *clibrary) {
@@ -33,12 +33,12 @@ bool Library::open(const char *clibrary) {
 	return this->mlib != nullptr;
 }
 
-void Library::close(void) {
+void Library::close() {
 	SDL_UnloadObject(this->mlib);
 	this->mlib = nullptr;
 }
 
-bool Library::isValid(void) const { return this->mlib != nullptr; }
+bool Library::isValid() const { return this->mlib != nullptr; }
 
 void *Library::getfunc(const char *pProcName) {
 	void *func = SDL_LoadFunction(this->mlib, pProcName);

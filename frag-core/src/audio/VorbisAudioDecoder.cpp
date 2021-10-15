@@ -97,7 +97,7 @@ VorbisAudioDecoder::VorbisAudioDecoder(Ref<IO> &io) : AudioDecoder(io) {
 	}
 }
 
-VorbisAudioDecoder::~VorbisAudioDecoder(void) { ov_clear(ov); }
+VorbisAudioDecoder::~VorbisAudioDecoder() { ov_clear(ov); }
 
 void VorbisAudioDecoder::seek(long int microseconds) { ov_time_seek(ov, microseconds * 1000.0); }
 
@@ -152,7 +152,7 @@ void *VorbisAudioDecoder::getPage(int i) {
 	// ov_read
 }
 
-AudioFormat VorbisAudioDecoder::getFormat(void) const {
+AudioFormat VorbisAudioDecoder::getFormat() const {
 	switch (this->channels) {
 	case 1:
 		return AudioFormat::eMono;
@@ -161,12 +161,12 @@ AudioFormat VorbisAudioDecoder::getFormat(void) const {
 	}
 	return AudioFormat::eMono;
 }
-unsigned int VorbisAudioDecoder::getSampleRate(void) const { return sampleFreq; }
+unsigned int VorbisAudioDecoder::getSampleRate() const { return sampleFreq; }
 
-unsigned int VorbisAudioDecoder::getNrChannels(void) const { return channels; }
-unsigned int VorbisAudioDecoder::getSampleBitResolution(void) const {
+unsigned int VorbisAudioDecoder::getNrChannels() const { return channels; }
+unsigned int VorbisAudioDecoder::getSampleBitResolution() const {
 	float p = (float)this->bitRate / (float)(getSampleRate() * getNrChannels());
 	return std::ceil(p) * 8;
 }
 
-double VorbisAudioDecoder::getTotalTime(void) const { return this->length; }
+double VorbisAudioDecoder::getTotalTime() const { return this->length; }

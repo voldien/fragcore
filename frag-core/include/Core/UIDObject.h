@@ -27,7 +27,7 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC UIDObject {
 	  public:
-		UIDObject(void) : UIDObject(generator) {}
+		UIDObject() : UIDObject(generator) {}
 		UIDObject(UIDGenerator &uidGenerator) noexcept { this->setUID(uidGenerator.getNextUID()); }
 		UIDObject(UIDObject &&other) noexcept = default;
 		UIDObject(const UIDObject &other) noexcept = default;
@@ -44,7 +44,7 @@ namespace fragcore {
 		 *	Get the unique identifier.
 		 *	@Return unique ID.
 		 */
-		virtual unsigned int getUID(void) const;
+		virtual unsigned int getUID() const;
 
 		virtual bool operator==(const UIDObject &o1) { return uid == o1.uid; }
 

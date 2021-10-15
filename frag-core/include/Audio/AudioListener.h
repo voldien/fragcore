@@ -31,27 +31,27 @@ namespace fragcore {
 	public:
 
 		virtual void setVolume(float volume);
-		virtual float getVolume(void) const;
+		virtual float getVolume() const;
 
 		//TODO rename to mute
 		virtual void pause(bool pause);
 
-		//virtual void getOutPutData(void);
+		//virtual void getOutPutData();
 
 		virtual void setPosition(const Vector3& position);
-		virtual const Vector3 getPosition(void) const;
+		virtual const Vector3 getPosition() const;
 
 		virtual void setVelocity(const Vector3& velocity);
-		virtual const Vector3 getVelocity(void) const;
+		virtual const Vector3 getVelocity() const;
 
 		virtual void setOrientation(const Quaternion& orientation);
-		virtual const Quaternion getOrientation(void) const;
+		virtual const Quaternion getOrientation() const;
 
-		virtual intptr_t getNativePtr(void) const override;
+		virtual intptr_t getNativePtr() const override;
 
 	protected:
-		AudioListener(void);
-		virtual ~AudioListener(void);
+		AudioListener();
+		virtual ~AudioListener();
 	};
 }
 

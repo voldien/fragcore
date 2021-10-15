@@ -58,7 +58,7 @@ namespace fragcore {
 		static const char *getInterfaceLibraryPath(RenderingAPI api);
 
 	  private: /*	Prevent one from creating an instance of this class.	*/
-		RenderingFactory(void) = delete;
+		RenderingFactory() = delete;
 		RenderingFactory(const RenderingFactory &other) = delete;
 	};
 } // namespace fragcore

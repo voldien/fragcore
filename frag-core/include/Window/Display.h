@@ -35,35 +35,35 @@ namespace fragcore {
 		 * 
 		 * @return unsigned int 
 		 */
-		virtual unsigned int x(void) const  = 0;
+		virtual unsigned int x() const  = 0;
 		
 		/**
 		 * @brief 
 		 * 
 		 * @return unsigned int 
 		 */
-		virtual unsigned int y(void) const  = 0;
+		virtual unsigned int y() const  = 0;
 
 		/**
 		 * @brief 
 		 * 
 		 * @return unsigned int 
 		 */
-		virtual unsigned int width(void) const  = 0;
+		virtual unsigned int width() const  = 0;
 
 		/**
 		 * @brief 
 		 * 
 		 * @return unsigned int 
 		 */
-		virtual unsigned int height(void) const  = 0;
+		virtual unsigned int height() const  = 0;
 
 		/**
 		 * @brief 
 		 * 
 		 * @return unsigned int 
 		 */
-		virtual unsigned int refreshRate(void) const  = 0;
+		virtual unsigned int refreshRate() const  = 0;
 
 		typedef struct mode_t {
 			int x;
@@ -94,12 +94,12 @@ namespace fragcore {
 		 * 
 		 * @return std::vector<Mode> 
 		 */
-		virtual std::vector<Mode> getModes(void) const = 0;
+		virtual std::vector<Mode> getModes() const = 0;
 		//virtual void setMode(const Mode &mode) = 0;
 
 		virtual void getDPI(DPI *dpi) = 0;
 
-		virtual TextureFormat getFormat(void) = 0;
+		virtual TextureFormat getFormat() = 0;
 
 	public:
 		// virtual void calculateGammaLookupTable(float gamma, ushort *rgbRamp) const; /*  */

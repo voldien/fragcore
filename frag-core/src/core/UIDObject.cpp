@@ -5,4 +5,4 @@ UIDGenerator UIDObject::generator = UIDGenerator();
 
 void UIDObject::setUID(unsigned int uid) { this->uid = uid; }
 
-unsigned int UIDObject::getUID(void) const { return this->uid; }
+unsigned int UIDObject::getUID() const { return this->uid; }

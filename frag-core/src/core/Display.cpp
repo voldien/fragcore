@@ -8,7 +8,7 @@
 ////SDL_GetNumVideoDisplays
 // using namespace fragview;
 //
-// unsigned int Display::x(void) const {
+// unsigned int Display::x() const {
 //	SDL_Rect bound;
 //	int err = SDL_GetDisplayBounds(this->index, &bound);
 //	if (err != 0)
@@ -16,7 +16,7 @@
 //	return bound.x;
 //}
 //
-// unsigned int Display::y(void) const {
+// unsigned int Display::y() const {
 //	SDL_Rect bound;
 //	int err = SDL_GetDisplayBounds(this->index, &bound);
 //	if (err != 0)
@@ -24,7 +24,7 @@
 //	return bound.y;
 //}
 //
-// unsigned int Display::width(void) const {
+// unsigned int Display::width() const {
 //	SDL_Rect bound;
 //	int err = SDL_GetDisplayBounds(this->index, &bound);
 //	if (err != 0)
@@ -32,7 +32,7 @@
 //	return bound.w;
 //}
 //
-// unsigned int Display::height(void) const {
+// unsigned int Display::height() const {
 //	SDL_Rect bound;
 //	int err = SDL_GetDisplayBounds(this->index, &bound);
 //	if (err != 0)
@@ -40,7 +40,7 @@
 //	return bound.h;
 //}
 //
-// unsigned int Display::refreshRate(void) const {
+// unsigned int Display::refreshRate() const {
 //	SDL_DisplayMode mode;
 //	int err = SDL_GetCurrentDisplayMode(this->index, &mode);
 //	if (err != 0)
@@ -48,7 +48,7 @@
 //	return mode.refresh_rate;
 //}
 //
-// std::vector<Display::Mode> Display::getModes(void) const {
+// std::vector<Display::Mode> Display::getModes() const {
 //	int n = SDL_GetNumDisplayModes(this->index);
 //	SDL_DisplayMode mode;
 //
@@ -65,7 +65,7 @@
 //	return modes;
 //}
 //
-////float Display::getGamma(void) const {
+////float Display::getGamma() const {
 ////	//TODO determine how to compute gamma exponent.
 ////	ushort ramp[256 * 3];
 ////	//SDL_CalculateGammaRamp()
@@ -96,11 +96,11 @@
 //		throw RuntimeException(fmt::format("Failed to retrieve display %d DPI, %s", this->index, SDL_GetError()));
 //}
 //
-// float Display::getFormat(void) {
+// float Display::getFormat() {
 //	return 0;
 //}
 
-// int Display::getNumDisplays(void) {
+// int Display::getNumDisplays() {
 //	int n = SDL_GetNumVideoDisplays();
 //	if (n <= 0)
 //		throw RuntimeException(fmt::format("Failed to retrieve number of displays, %s", SDL_GetError()));

@@ -45,7 +45,7 @@ namespace fragcore {
 		} PoolAllactorItem;
 
 	  public:
-		PoolAllocator(void) {
+		PoolAllocator() {
 			this->item = nullptr;
 			this->nrOfElements = 0;
 			this->mReserved = 0;
@@ -63,7 +63,7 @@ namespace fragcore {
 
 		PoolAllocator(unsigned int num) : PoolAllocator() { this->resize(num); }
 
-		~PoolAllocator(void) { delete[] this->item; }
+		~PoolAllocator() { delete[] this->item; }
 		/**
 		 *
 		 * @param allocator
@@ -99,7 +99,7 @@ namespace fragcore {
 		 *
 		 *	@Return None nullptr pointer if successful.
 		 */
-		T *obtain(void) {
+		T *obtain() {
 			T *alloc;
 
 			/*	if last, resize.    */
@@ -153,17 +153,17 @@ namespace fragcore {
 		/**
 		 *
 		 */
-		void clean(void) {
+		void clean() {
 			free(this->item);
 			this->mReserved = 0;
 			this->nrOfElements = 0;
 		}
 
-		bool isFull(void) const { return this->nrOfElements >= (this->reserved() - 1); }
+		bool isFull() const { return this->nrOfElements >= (this->reserved() - 1); }
 
-		inline int size(void) const { return this->nrOfElements; }
+		inline int size() const { return this->nrOfElements; }
 
-		inline int reserved(void) const { return this->mReserved; }
+		inline int reserved() const { return this->mReserved; }
 
 		/**
 		 * Get datatype size.
@@ -175,7 +175,7 @@ namespace fragcore {
 		 *
 		 * @return
 		 */
-		inline unsigned int getTypeSize(void) const { return this->typeSize; }
+		inline unsigned int getTypeSize() const { return this->typeSize; }
 
 		/**
 		 *
@@ -223,7 +223,7 @@ namespace fragcore {
 		 *
 		 * @return
 		 */
-		inline T *getLast(void) { return &this->item[this->mReserved - 1].data; }
+		inline T *getLast() { return &this->item[this->mReserved - 1].data; }
 
 		/**
 		 *
@@ -243,7 +243,7 @@ namespace fragcore {
 		 *
 		 * @return
 		 */
-		unsigned int getItemSize(void) const { return sizeof(PoolAllactorItem); }
+		unsigned int getItemSize() const { return sizeof(PoolAllactorItem); }
 
 	  private:					/*	attributes.	*/
 		PoolAllactorItem *item; /*	Pool data.	*/

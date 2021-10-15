@@ -32,7 +32,7 @@ namespace fragcore {
 	 */
 	template <class T> class Stack : public std::allocator<T> {
 	  public:
-		Stack(void) {
+		Stack() {
 			this->data = nullptr;
 			this->nrElements = 0;
 			this->mreserved = 0;
@@ -53,7 +53,7 @@ namespace fragcore {
 			this->mreserved = std::exchange(other.mreserved, 0);
 		}
 
-		~Stack(void) { delete data; }
+		~Stack() { delete data; }
 
 		/**
 		 *
@@ -75,13 +75,13 @@ namespace fragcore {
 			return this->data[this->nrElements - 1];
 		}
 
-		T &peek(void) const { return data[this->nrElements - 1]; }
+		T &peek() const { return data[this->nrElements - 1]; }
 
-		void pop(void) {
+		void pop() {
 			// TODO add validate
 			this->nrElements--;
 		}
-		T &pop(void) {
+		T &pop() {
 			// TODO add validate
 			this->nrElements--;
 			return this->data[this->nrElements + 1];
@@ -97,18 +97,18 @@ namespace fragcore {
 				throw RuntimeException("Out of memory");
 		}
 
-		inline void clear(void) noexcept { this->nrElements = 0; }
+		inline void clear() noexcept { this->nrElements = 0; }
 
-		inline bool isEmpty(void) const noexcept { return this->nrElements != 0; }
+		inline bool isEmpty() const noexcept { return this->nrElements != 0; }
 
-		inline size_t getSize(void) const noexcept { return this->nrElements; }
+		inline size_t getSize() const noexcept { return this->nrElements; }
 
-		inline size_t getReserved(void) const noexcept { return this->mreserved; }
+		inline size_t getReserved() const noexcept { return this->mreserved; }
 
 		class StackIterator : public Iterator<T> {};
 
-		StackIterator begin(void) {}
-		StackIterator end(void) {}
+		StackIterator begin() {}
+		StackIterator end() {}
 
 	  private:			   /*	Attributes.	*/
 		size_t nrElements; /*	Number of elements in the stack.	*/

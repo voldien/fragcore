@@ -53,7 +53,7 @@ namespace fragcore {
 			static AudioDecoder *createDecoder(AudioDecoderCodec codec, Ref<IO> &io);
 
 		private: /*	Prevent one from creating an instance of this class.	*/
-			AudioDecoderFactory(void) = delete;
+			AudioDecoderFactory() = delete;
 			AudioDecoderFactory(const AudioDecoderFactory &other) = delete;
 	};
 }

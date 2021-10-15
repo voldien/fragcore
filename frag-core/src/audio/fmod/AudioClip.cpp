@@ -7,7 +7,7 @@ using namespace FMOD;
 
 map<const char*, VDAudioClip*> audioClipCollection;
 
-VDAudioClip::VDAudioClip(void) : VDAssetObject() {
+VDAudioClip::VDAudioClip() : VDAssetObject() {
 	this->soundTrack = nullptr;
 }
 
@@ -20,11 +20,11 @@ VDAudioClip::VDAudioClip(const char* path, Format format) : VDAssetObject() {
 	this->load(path, format);
 }
 
-VDAudioClip::~VDAudioClip(void){
+VDAudioClip::~VDAudioClip(){
 	this->release();
 }
 
-void VDAudioClip::release(void){
+void VDAudioClip::release(){
 	if(!this->soundTrack)
 		this->soundTrack->release();
 
@@ -32,13 +32,13 @@ void VDAudioClip::release(void){
 	this->setName(nullptr);
 }
 
-bool VDAudioClip::is3D(void){
+bool VDAudioClip::is3D(){
 	FMOD_MODE audioMode;
 	this->soundTrack->getMode(&audioMode);
 	return (audioMode & FMOD_3D) != 0 ? SDL_TRUE : SDL_FALSE;
 }
 
-bool VDAudioClip::is2D(void){
+bool VDAudioClip::is2D(){
 	FMOD_MODE audioMode;
 	this->soundTrack->getMode(&audioMode);
 	return (audioMode & FMOD_2D);

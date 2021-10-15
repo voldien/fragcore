@@ -35,13 +35,13 @@ namespace fragcore {
 			Error = 0x2,
 		};
 
-		virtual void fence(void);
+		virtual void fence();
 
 		virtual void wait(int timeout = 0);
 
 		virtual SyncStatus waitClient(int timeout); /*  Wait in microseconds.   */
 
-		virtual intptr_t getNativePtr(void) const;
+		virtual intptr_t getNativePtr() const;
 	};
 }
 

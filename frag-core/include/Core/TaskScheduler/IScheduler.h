@@ -36,8 +36,8 @@ namespace fragcore {
 		TaskCallBack callback;
 		void *userData;
 
-		virtual void Execute(void) noexcept = 0;
-		virtual void Complete(void) noexcept = 0;
+		virtual void Execute() noexcept = 0;
+		virtual void Complete() noexcept = 0;
 
 	  private:
 		Ref<IScheduler> scheduler;
@@ -48,12 +48,12 @@ namespace fragcore {
 	  public:
 		virtual void addTask(Task *task) = 0;
 		virtual void setUserData(const void *data) = 0;
-		virtual const void *getUserData(void) = 0;
-		virtual void run(void) = 0;
-		virtual void terminate(void) = 0;
-		virtual void wait(void) = 0;
-		virtual void lock(void) = 0;
-		virtual void unLock(void) = 0;
+		virtual const void *getUserData() = 0;
+		virtual void run() = 0;
+		virtual void terminate() = 0;
+		virtual void wait() = 0;
+		virtual void lock() = 0;
+		virtual void unLock() = 0;
 
 	  private:
 	};

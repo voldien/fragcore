@@ -12,23 +12,23 @@ namespace fragcore {
 		friend class AudioInterface;
 	public:
 
-		virtual unsigned long int getSampleRate(void) const;
-		virtual unsigned long int getFrequency(void) const;
-		virtual AudioFormat getAudioFormat(void) const;
-		virtual unsigned int getNumberChannels(void) const;
-		virtual unsigned long getSize(void) const;
-		virtual float length(void) const;
+		virtual unsigned long int getSampleRate() const;
+		virtual unsigned long int getFrequency() const;
+		virtual AudioFormat getAudioFormat() const;
+		virtual unsigned int getNumberChannels() const;
+		virtual unsigned long getSize() const;
+		virtual float length() const;
 
-		virtual AudioDataMode clipType(void) const;
+		virtual AudioDataMode clipType() const;
 
 		virtual void getData(void* pData, unsigned int nsamples, unsigned int offset);
 		virtual void setData(const void* pData, unsigned int nsamples, unsigned int offset);
 
-		intptr_t getNativePtr(void) const override;
+		intptr_t getNativePtr() const override;
 
 	protected:
-		AudioClip(void);
-		virtual ~AudioClip(void);
+		AudioClip();
+		virtual ~AudioClip();
 	};
 }
 

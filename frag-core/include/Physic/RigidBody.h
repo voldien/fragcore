@@ -29,41 +29,41 @@ namespace fragcore {
 	class FVDECLSPEC RigidBody : public PhysicObject {
 		friend class DynamicInterface;
 	private:
-		inline RigidBody(void){}
+		inline RigidBody(){}
 
-		virtual ~RigidBody(void);
+		virtual ~RigidBody();
 
 	public:	/*	Public methods.	*/
 
 		virtual void useGravity(bool use);
-		virtual bool useGravity(void);
-		virtual float getMass(void);
+		virtual bool useGravity();
+		virtual float getMass();
 		virtual void setMass(float mass);
 
 		//virtual void setInertia(void* pobj);
 
-		virtual Vector3 getPosition(void);
+		virtual Vector3 getPosition();
 		virtual void setPosition(const Vector3& position);
 
 
-		virtual Quaternion getOrientation(void);
+		virtual Quaternion getOrientation();
 		virtual void setOrientation(const Quaternion& quat);
 
-		virtual Vector3 getScale(void);
+		virtual Vector3 getScale();
 		virtual void setScale(const Vector3& scale);
 
 		virtual void addForce(const Vector3& force);
 
 		/**/
-		virtual float getDrag(void);
+		virtual float getDrag();
 		virtual void setDrag(float drag);
 
-		virtual float getAngularDrag(void);
+		virtual float getAngularDrag();
 		virtual void setAngularDrag(float angularDrag);
 
-		virtual Vector3 getVelocity(void);
+		virtual Vector3 getVelocity();
 
-		intptr_t getNativePtr(void) const;
+		intptr_t getNativePtr() const;
 
 	};
 

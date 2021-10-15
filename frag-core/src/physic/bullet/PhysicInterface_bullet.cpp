@@ -52,7 +52,7 @@ PhysicInterface::PhysicInterface(IConfig* config){
 PhysicInterface::PhysicInterface(const PhysicInterface& other){
 //	*this = other;
 }
-PhysicInterface::~PhysicInterface(void) {
+PhysicInterface::~PhysicInterface() {
 
 	PhysicCore* physicore = (PhysicCore*)this->pdata;
 
@@ -67,10 +67,10 @@ PhysicInterface::~PhysicInterface(void) {
 	free(physicore);
 }
 
-void PhysicInterface::OnInitialization(void){
+void PhysicInterface::OnInitialization(){
 	
 }
-void PhysicInterface::OnDestruction(void){
+void PhysicInterface::OnDestruction(){
 
 }
 
@@ -83,7 +83,7 @@ void PhysicInterface::simulate(float timeStep, int maxSubSteps, float fixedTimeS
 		physicore->dynamicsWorld->debugDrawWorld();
 }
 
-void PhysicInterface::sync(void) {
+void PhysicInterface::sync() {
 	PhysicCore *physicore = (PhysicCore *) this->pdata;
 	assert(physicore);
 
@@ -98,7 +98,7 @@ void PhysicInterface::setGravity(const Vector3 &gravity) {
 	physicore->dynamicsWorld->setGravity(*(btVector3 *) &gravity);
 }
 
-Vector3 PhysicInterface::getGravity(void) const {
+Vector3 PhysicInterface::getGravity() const {
 	PhysicCore *physicore = (PhysicCore *) this->pdata;
 
 	btVector3 gr = physicore->dynamicsWorld->getGravity();
@@ -461,7 +461,7 @@ void PhysicInterface::setDebugRenderer(Ref <IRenderer>& renderer) {
 	physicore->dynamicsWorld->setDebugDrawer(physicore->drawDebugger);
 }
 
-const char* PhysicInterface::getVersion(void) const {
+const char* PhysicInterface::getVersion() const {
 	return FV_STR_VERSION(1,0,0);
 }
 

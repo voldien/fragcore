@@ -27,9 +27,9 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC SoftBody {
 	private:
-		inline SoftBody(void) {}
+		inline SoftBody() {}
 
-		virtual ~SoftBody(void);
+		virtual ~SoftBody();
 
 	public:    /*	Public methods.	*/
 

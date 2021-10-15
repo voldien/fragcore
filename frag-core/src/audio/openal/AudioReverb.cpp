@@ -2,15 +2,15 @@
 #include"Audio/AudioReverb.h"
 using namespace fragcore;
 
-intptr_t AudioReverb::getNativePtr(void) const  {
+intptr_t AudioReverb::getNativePtr() const  {
 	ALReverb *reverb= (ALReverb*) this->getObject();
 	return reverb->reverb;
 }
 
-AudioReverb::AudioReverb(void) {
+AudioReverb::AudioReverb() {
 
 }
 
-AudioReverb::~AudioReverb(void) {
+AudioReverb::~AudioReverb() {
 
 }

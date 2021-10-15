@@ -3,7 +3,7 @@
 #include<stdarg.h>
 using namespace fragcore;
 
-PhysicDispatcher::PhysicDispatcher(void){
+PhysicDispatcher::PhysicDispatcher(){
 	this->connection = nullptr;
 }
 PhysicDispatcher::PhysicDispatcher(const PhysicDispatcher& other){

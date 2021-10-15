@@ -5,7 +5,7 @@
 
 using namespace fragcore;
 
-void SerialIO::close(void) {
+void SerialIO::close() {
 	struct sp_port *serialPort = (struct sp_port *)this->port;
 	sp_close(serialPort);
 	this->port = nullptr;
@@ -20,13 +20,13 @@ long int SerialIO::write(long int nbytes, const void *pbuffer) {
 	nbytes = sp_nonblocking_write(serialPort, pbuffer, nbytes);
 	return nbytes;
 }
-bool SerialIO::eof(void) const { return false; }
-long int SerialIO::length(void) { return 0; }
+bool SerialIO::eof() const { return false; }
+long int SerialIO::length() { return 0; }
 void SerialIO::seek(long int nbytes, Seek seek) { return; }
-unsigned long SerialIO::getPos(void) { return 0; }
-bool SerialIO::isWriteable(void) const { return mode & IO::WRITE; }
-bool SerialIO::isReadable(void) const { return mode & IO::READ; }
-bool SerialIO::flush(void) { return sp_flush(this->port, SP_BUF_BOTH) == SP_OK; }
+unsigned long SerialIO::getPos() { return 0; }
+bool SerialIO::isWriteable() const { return mode & IO::WRITE; }
+bool SerialIO::isReadable() const { return mode & IO::READ; }
+bool SerialIO::flush() { return sp_flush(this->port, SP_BUF_BOTH) == SP_OK; }
 
 void SerialIO::setBaudRate(unsigned int baudRate) {
 	struct sp_port *serialPort = static_cast<struct sp_port *>(this->port);
@@ -36,7 +36,7 @@ void SerialIO::setBaudRate(unsigned int baudRate) {
 		throw RuntimeException("Failed to set baud Rate {} - {}", baudRate, sp_last_error_message());
 }
 
-SerialIO::BaudRate SerialIO::getBaudRate(void) const {
+SerialIO::BaudRate SerialIO::getBaudRate() const {
 	struct sp_port *serialPort = static_cast<struct sp_port *>(this->port);
 
 	sp_return res = sp_get_config(serialPort, config);
@@ -221,13 +221,13 @@ SerialIO::SerialIO(const std::string &path, IOMode mode) {
 	sp_new_config(&config);
 }
 
-SerialIO ::~SerialIO(void) {}
+SerialIO ::~SerialIO() {}
 
 bool SerialIO::supportedBaudRate(unsigned int baudRate) {
 	return baudRate == 110 || Math::IsPowerOfTwo(baudRate % (300));
 }
 
-std::optional<std::vector<std::string>> SerialIO::getSerialPorts(void) noexcept {
+std::optional<std::vector<std::string>> SerialIO::getSerialPorts() noexcept {
 	int i;
 	struct sp_port **ports;
 	std::vector<std::string> list;

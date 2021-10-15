@@ -144,7 +144,7 @@ PhysicInterface::PhysicInterface(const PhysicInterface &other)
 {
 	//	*this = other;
 }
-PhysicInterface::~PhysicInterface(void)
+PhysicInterface::~PhysicInterface()
 {
 	engine.physic.gPhysxScene->fetchResults(true);
 	engine.physic.gPhysxScene->flushQueryUpdates();
@@ -184,10 +184,10 @@ PhysicInterface::~PhysicInterface(void)
 	PxCloseExtensions();
 }
 
-void PhysicInterface::OnInitialization(void)
+void PhysicInterface::OnInitialization()
 {
 }
-void PhysicInterface::OnDestruction(void)
+void PhysicInterface::OnDestruction()
 {
 }
 
@@ -214,7 +214,7 @@ while(!gPhysxScene->fetchResults()){
 	}
 }
 
-void PhysicInterface::sync(void)
+void PhysicInterface::sync()
 {
 	PhysicCore *physicore = (PhysicCore *)this->pdata;
 	assert(physicore);
@@ -231,7 +231,7 @@ void PhysicInterface::setGravity(const Vector3 &gravity)
 	physicore->dynamicsWorld->setGravity(*(btVector3 *)&gravity);
 }
 
-Vector3 PhysicInterface::getGravity(void) const
+Vector3 PhysicInterface::getGravity() const
 {
 	PhysicCore *physicore = (PhysicCore *)this->pdata;
 
@@ -257,7 +257,7 @@ class PhysicUserControllerHitReport : public physx::PxUserControllerHitReport {
 /* Simulation Event CallBack  */
 class SimulationEventCallback : public physx::PxSimulationEventCallback {
    public:
-	SimulationEventCallback(void) {
+	SimulationEventCallback() {
 		memset(&this->dataBreak, 0, sizeof(ConstraintBreak));
 		memset(&this->dataContact, 0, sizeof(Contact));
 		memset(&this->dataTrigger, 0, sizeof(Trigger));
@@ -284,18 +284,18 @@ class SimulationEventCallback : public physx::PxSimulationEventCallback {
 		physx::PxU32 count;
 	} dataTrigger;
 
-	void VDAPIENTRY EventonConstraintBreak(void);
-	void VDAPIENTRY EventonWake(void);
-	void VDAPIENTRY EventonSleep(void);
-	void VDAPIENTRY EventonContact(void);
-	void VDAPIENTRY EventonTrigger(void);
+	void VDAPIENTRY EventonConstraintBreak();
+	void VDAPIENTRY EventonWake();
+	void VDAPIENTRY EventonSleep();
+	void VDAPIENTRY EventonContact();
+	void VDAPIENTRY EventonTrigger();
 };
 // extern VDDECLSPEC SimulationEventCallback* m_simulationEventcallBack;
 SimulationEventCallback* m_simulationEventcallBack = nullptr;
 
 std::vector<VDPhysicMaterial*> gPhysicMaterialCollection;
 
-void VDPhysic::initialize(void) {
+void VDPhysic::initialize() {
 	static PxDefaultErrorCallback gDefaultErrorCallback;
 	static PxDefaultAllocator gDefaultAllocatorCallback;
 
@@ -359,7 +359,7 @@ void VDPhysic::initialize(void) {
 	initDebug();
 }
 
-void VDPhysic::release(void) {
+void VDPhysic::release() {
 	engine.physic.gPhysxScene->fetchResults(true);
 	engine.physic.gPhysxScene->flushQueryUpdates();
 
@@ -423,7 +423,7 @@ void VDPhysic::initDebug(const char* pvd_host_ip) {
 	}
 }
 
-int VDPhysic::initVehicleSDK(void) {
+int VDPhysic::initVehicleSDK() {
 	if (PxInitVehicleSDK(*engine.physic.gPhysic)) {
 		// success!
 		PxVehicleSetBasisVectors(PxVec3(0, 1, 0), PxVec3(0, 0, 1));
@@ -434,7 +434,7 @@ int VDPhysic::initVehicleSDK(void) {
 	return SDL_FALSE;
 }
 
-int VDPhysic::initialzeScene(void) {
+int VDPhysic::initialzeScene() {
 	PxSceneDesc sceneDesc(engine.physic.gPhysic->getTolerancesScale());
 	sceneDesc.gravity = PxVec3(0, -9.82f, 0);
 
@@ -525,7 +525,7 @@ int VDPhysic::initialzeScene(void) {
 	return SDL_TRUE;
 }
 
-void VDPhysic::simulation(void) {
+void VDPhysic::simulation() {
 	engine.physic.gPhysxScene->simulate(
 		(VDTime::deltaTime() + 0.0000000001f));  //(_time * 0.000001f));
 
@@ -545,7 +545,7 @@ while(!gPhysxScene->fetchResults()){
 	}
 }
 
-void VDPhysic::update(void) {
+void VDPhysic::update() {
 	unsigned int x;
 
 	for (x = 0; x < rigidBodyCollection.size(); x++) {
@@ -562,11 +562,11 @@ void VDPhysic::setGravity(const VDVector3& gravity) {
 	return VDPhysic::getPhysicScene()->setGravity(*(PxVec3*)&gravity);
 }
 
-VDVector3 VDPhysic::getGravity(void) {
+VDVector3 VDPhysic::getGravity() {
 	return *(VDVector3*)&VDPhysic::getPhysicScene()->getGravity();
 }
 
-bool VDPhysic::isPhysicEnabled(void) {
+bool VDPhysic::isPhysicEnabled() {
 	return (VDEngine::getFlag() & VDEngine::ePhysic);
 }
 
@@ -1289,30 +1289,30 @@ void VDPhysic::removeActor(void* actor) {
 	engine.physic.gPhysxScene->removeActor(*VDCASTP(PxActor*, actor));
 }
 
-PxPhysics* VDPhysic::getPhysicHandle(void) { return engine.physic.gPhysic; }
+PxPhysics* VDPhysic::getPhysicHandle() { return engine.physic.gPhysic; }
 
-PxScene* VDPhysic::getPhysicScene(void) { return engine.physic.gPhysxScene; }
+PxScene* VDPhysic::getPhysicScene() { return engine.physic.gPhysxScene; }
 
-PxFoundation* VDPhysic::getFoundationHandle(void) {
+PxFoundation* VDPhysic::getFoundationHandle() {
 	return engine.physic.gFoundation;
 }
 
-PxControllerManager* VDPhysic::getControllerManager(void) {
+PxControllerManager* VDPhysic::getControllerManager() {
 	return engine.physic.gControlManager;
 }
 
-PxProfileZoneManager* VDPhysic::getProfileZoneManager(void) {
+PxProfileZoneManager* VDPhysic::getProfileZoneManager() {
 	return engine.physic.gProfileManager;
 }
 
-PxVisualDebugger* VDPhysic::getVisualDebugger(void) {
+PxVisualDebugger* VDPhysic::getVisualDebugger() {
 	if (engine.physic.gPhysic)
 		return engine.physic.gPhysic->getVisualDebugger();
 	else
 		return nullptr;
 }
 
-PxCudaContextManager* VDPhysic::getCudaContextManager(void) {
+PxCudaContextManager* VDPhysic::getCudaContextManager() {
 	return engine.physic.gCudaContextManager;
 }
 
@@ -1376,7 +1376,7 @@ void SimulationEventCallback::onTrigger(PxTriggerPair* pairs, PxU32 count) {
 	this->dataTrigger.count = count;
 }
 
-void SimulationEventCallback::EventonConstraintBreak(void) {
+void SimulationEventCallback::EventonConstraintBreak() {
 	PxRigidActor *a1, *a2;
 	VDGameObject *g1, *g2;
 	for (unsigned int ncount = 0; ncount < dataBreak.count; ncount++) {
@@ -1399,7 +1399,7 @@ void SimulationEventCallback::EventonConstraintBreak(void) {
 	}
 }
 
-void SimulationEventCallback::EventonContact(void) {
+void SimulationEventCallback::EventonContact() {
 	unsigned int nCount;
 	VDCollision collision;
 
@@ -1449,7 +1449,7 @@ void SimulationEventCallback::EventonContact(void) {
 	this->dataContact.nbPair = 0;
 }
 
-void SimulationEventCallback::EventonTrigger(void) {
+void SimulationEventCallback::EventonTrigger() {
 	for (unsigned int nCount = 0; nCount < this->dataTrigger.count; nCount++) {
 		VDGameObject* g =
 			VDCASTP(VDGameObject*,

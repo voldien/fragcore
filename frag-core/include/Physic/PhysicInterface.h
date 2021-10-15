@@ -20,10 +20,10 @@ namespace fragcore {
 
 	  public:
 		PhysicInterface(IConfig *config);
-		virtual ~PhysicInterface(void);
+		virtual ~PhysicInterface();
 
-		virtual void OnInitialization(void);
-		virtual void OnDestruction(void);
+		virtual void OnInitialization();
+		virtual void OnDestruction();
 
 		/**
 		 * Start simulate.
@@ -36,7 +36,7 @@ namespace fragcore {
 		/**
 		 * synchronize.
 		 */
-		virtual void sync(void);
+		virtual void sync();
 
 		/**
 		 * Set gravity.
@@ -47,7 +47,7 @@ namespace fragcore {
 		 *	Get gravity.
 		 *	@return gravity vector.
 		 */
-		virtual Vector3 getGravity(void) const;
+		virtual Vector3 getGravity() const;
 
 		/**
 		 * Add rigidbody to scene.
@@ -186,7 +186,7 @@ namespace fragcore {
 		 *	Get version of the interface.
 		 *	@Return non-null terminated string.
 		 */
-		virtual const char *getVersion(void) const;
+		virtual const char *getVersion() const;
 
 		// virtual intptr_t getNativePtr() const;
 

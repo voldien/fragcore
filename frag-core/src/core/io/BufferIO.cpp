@@ -6,7 +6,7 @@ void BufferIO::open(const char *path, IOMode mode) {
 
 }
 
-void BufferIO::close(void) {
+void BufferIO::close() {
 
 }
 
@@ -36,11 +36,11 @@ long BufferIO::write(long int nbytes, const void *pbuffer) {
 	throw RuntimeException(); //TODO determine if a another execption type is more appropicate.
 }
 
-bool BufferIO::eof(void) const {
+bool BufferIO::eof() const {
 	return false;
 }
 
-long BufferIO::length(void) {
+long BufferIO::length() {
 	return this->nbytes;
 }
 
@@ -59,19 +59,19 @@ void BufferIO::seek(long int nbytes, Seek seek) {
 	}
 }
 
-unsigned long BufferIO::getPos(void) {
+unsigned long BufferIO::getPos() {
 	return this->marker;
 }
 
-bool BufferIO::isWriteable(void) const {
+bool BufferIO::isWriteable() const {
 	return !this->readOnly;
 }
 
-bool BufferIO::isReadable(void) const {
+bool BufferIO::isReadable() const {
 	return true;
 }
 
-bool BufferIO::flush(void) {
+bool BufferIO::flush() {
 	return true;
 }
 
@@ -98,7 +98,7 @@ BufferIO::BufferIO(unsigned long size, bool expandable)
 	this->expandable = expandable;
 }
 
-BufferIO::~BufferIO(void){
+BufferIO::~BufferIO(){
 	if(this->expandable)
 		free(this->buffer);
 }

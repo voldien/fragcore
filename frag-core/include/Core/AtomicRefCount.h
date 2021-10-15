@@ -27,11 +27,11 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC AtomicRefCount {
 	public:
-	  FV_ALWAYS_INLINE bool ref(void) noexcept { return std::atomic_fetch_add(&count, 1) != 0; }
+	  FV_ALWAYS_INLINE bool ref() noexcept { return std::atomic_fetch_add(&count, 1) != 0; }
 
-	  FV_ALWAYS_INLINE bool unRef(void) noexcept { return std::atomic_fetch_add(&count, -1) == 0; }
+	  FV_ALWAYS_INLINE bool unRef() noexcept { return std::atomic_fetch_add(&count, -1) == 0; }
 
-	  FV_ALWAYS_INLINE uint32_t get(void) const noexcept { return std::atomic_load(&this->count); }
+	  FV_ALWAYS_INLINE uint32_t get() const noexcept { return std::atomic_load(&this->count); }
 
 	  FV_ALWAYS_INLINE void init(uint32_t value) noexcept { this->count = value; }
 

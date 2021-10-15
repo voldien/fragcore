@@ -29,7 +29,7 @@ namespace fragcore {
 
 	public:
 
-		virtual void bind(void);
+		virtual void bind();
 
 		virtual int getLocation(const char *cparamname);
 
@@ -48,7 +48,7 @@ namespace fragcore {
 
 		virtual void setMatrix4fv(int location, int n, const float *pvalue);
 
-		//virtual int getNumberUniform(void);
+		//virtual int getNumberUniform();
 		//virtual void getUniform(int location);
 
 		//	virtual void getAttributeLocatoin(const char* cparamname);
@@ -64,7 +64,7 @@ namespace fragcore {
 		//	    eMedium,
 		//	    eFull,
 		//	};
-		//	virtual ShaderPrecision getShaderPrecision(void);
+		//	virtual ShaderPrecision getShaderPrecision();
 
 		//virtual void bindBuffer(const char*  name,
 		//                       Buffer * buffer);
@@ -88,7 +88,7 @@ namespace fragcore {
 
 		void setName(const std::string &name) override;
 
-		intptr_t getNativePtr(void) const override;
+		intptr_t getNativePtr() const override;
 	};
 }
 

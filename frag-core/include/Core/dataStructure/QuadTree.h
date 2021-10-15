@@ -32,17 +32,17 @@ namespace fragcore {
 		} Node;
 
 	  public:
-		QuadTree(void) {}
+		QuadTree() {}
 
 		QuadTree(const QuadTree &quadTree) {}
 
-		~QuadTree(void) {}
+		~QuadTree() {}
 
-		void insert(void);
+		void insert();
 
-		void remove(void);
+		void remove();
 
-		void clear(void);
+		void clear();
 
 	  private:
 		Node *nodes;

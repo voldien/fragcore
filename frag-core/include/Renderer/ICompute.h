@@ -13,13 +13,13 @@ namespace fragcore {
 	class FVDECLSPEC ICompute : public Module {
 	public:
 
-		virtual void OnInitialization(void);
-		virtual void OnDestruction(void);
+		virtual void OnInitialization();
+		virtual void OnDestruction();
 
 		/**
 		 *
 		 */
-		virtual bool supportCompute(void) noexcept;
+		virtual bool supportCompute() noexcept;
 		/**
 		 * Dispatch compute program.
 		 * @param global global workgroup.
@@ -32,17 +32,17 @@ namespace fragcore {
 		// TODO remove and let command list!
 		//TODO add memory barrier.
 		//TODO add enumerator as argumment for all types of barries.
-		virtual void memoryBarrier(void) = 0;
+		virtual void memoryBarrier() = 0;
 
 		// virtual Sync *createSync(SyncDesc *desc);
 
 		// virtual void deleteSync(Sync *sync);
 
-		virtual const char *getVersion(void) const;
+		virtual const char *getVersion() const;
 
-		// virtual Shader* createComputeProgram(void);
-		// virtual Shader* deleteComputeProgram(void);
-		// virtual void getComputeCapabilties(void);
+		// virtual Shader* createComputeProgram();
+		// virtual Shader* deleteComputeProgram();
+		// virtual void getComputeCapabilties();
 		//virtual void getDeviceInfo(std::vector<DeviceInfo> &devices);
 
 		/**
@@ -50,7 +50,7 @@ namespace fragcore {
 		 *
 		 * @return CommandList*
 		 */
-		virtual CommandList *createCommandBuffer(void);
+		virtual CommandList *createCommandBuffer();
 
 		/**
 		 * @brief
@@ -66,10 +66,10 @@ namespace fragcore {
 		 */
 		virtual void execute(CommandList *list);
 
-		ICompute(void) = default;
+		ICompute() = default;
 		ICompute(const ICompute &other) = delete;
 		ICompute(ICompute &&other) = default;
-		virtual ~ICompute(void) = default;
+		virtual ~ICompute() = default;
 	};
 }
 #endif

@@ -26,9 +26,9 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC QueryObject : public RenderObject {
 	public:
-		inline QueryObject(void) {}
+		inline QueryObject() {}
 
-		virtual ~QueryObject(void);
+		virtual ~QueryObject();
 
 	public:
 
@@ -83,9 +83,9 @@ namespace fragcore {
 		/**
 		 *
 		 */
-		virtual void endConditionalRenderer(void);
+		virtual void endConditionalRenderer();
 
-		intptr_t getNativePtr(void) const override;
+		intptr_t getNativePtr() const override;
 
 	};
 }

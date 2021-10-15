@@ -30,15 +30,15 @@ namespace fragcore {
 	 */
 	class AudioObject : public SmartReference {
 	  public:
-		AudioObject(void) = default;
+		AudioObject() = default;
 
-		FV_ALWAYS_INLINE AudioInterface *getAudio(void) const { return this->audioInterface; }
+		FV_ALWAYS_INLINE AudioInterface *getAudio() const { return this->audioInterface; }
 
-		FV_ALWAYS_INLINE void *getObject(void) { return this->pdata; }
+		FV_ALWAYS_INLINE void *getObject() { return this->pdata; }
 
-		FV_ALWAYS_INLINE void *getObject(void) const { return this->pdata; }
+		FV_ALWAYS_INLINE void *getObject() const { return this->pdata; }
 
-		virtual intptr_t getNativePtr(void) const = 0;
+		virtual intptr_t getNativePtr() const = 0;
 
 	  protected: /*  */
 		void *pdata;

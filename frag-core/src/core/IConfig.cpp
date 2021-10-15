@@ -14,7 +14,7 @@
 
 using namespace fragcore;
 
-IConfig::IConfig(void) { this->parent = nullptr; }
+IConfig::IConfig() { this->parent = nullptr; }
 
 IConfig::IConfig(const IConfig &other) {
 	// TODO add copy
@@ -132,7 +132,7 @@ IConfig &IConfig::getSubConfig(const std::string &key) {
 	}
 }
 
-void IConfig::printTable(void) const { this->printTable(SystemInfo::getStdOut()); }
+void IConfig::printTable() const { this->printTable(SystemInfo::getStdOut()); }
 
 void IConfig::printTable(Ref<IO> &io) const {
 
@@ -674,7 +674,7 @@ void IConfig::parse_json(Ref<IO> &io) {
 	json_tokener_free(jsonTokener);
 }
 
-IConfig::~IConfig(void) {
+IConfig::~IConfig() {
 	/*  Release all resources.  */
 
 	/*  */
@@ -687,4 +687,4 @@ IConfig::~IConfig(void) {
 	}
 }
 
-IConfig *IConfig::getSuperInstance(void) { return new IConfig(); }
+IConfig *IConfig::getSuperInstance() { return new IConfig(); }

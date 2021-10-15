@@ -37,7 +37,7 @@ namespace fragcore {
 		/**
 		 *
 		 */
-		int getNumberSets(void) const {
+		int getNumberSets() const {
 			int i = 0;
 			for (i = 0; i < getSize(); i++) {
 				if (this->set[i] == -1)
@@ -60,7 +60,7 @@ namespace fragcore {
 		/**
 		 *
 		 */
-		int maxHeight(void) const {
+		int maxHeight() const {
 			int max = 0;
 			int m;
 			for (int i = 0; i < this->getSize(); i++) {
@@ -72,7 +72,7 @@ namespace fragcore {
 		}
 
 	  public:
-		DisjointSet(void) {
+		DisjointSet() {
 			this->set = nullptr;
 			this->reserved = 0;
 			this->size = 0;
@@ -168,13 +168,13 @@ namespace fragcore {
 			}
 		}
 
-		inline int getSize(void) const { return this->size; }
+		inline int getSize() const { return this->size; }
 
-		inline int getReserved(void) const { return this->reserved; }
+		inline int getReserved() const { return this->reserved; }
 
-		inline int getTypeSize(void) const { return sizeof(Partition); }
+		inline int getTypeSize() const { return sizeof(Partition); }
 
-		inline void *getData(void) const { return this->set; }
+		inline void *getData() const { return this->set; }
 
 		/**
 		 *

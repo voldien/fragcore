@@ -3,34 +3,34 @@
 
 using namespace fragcore;
 
-AudioClip::~AudioClip(void) {
+AudioClip::~AudioClip() {
 
 }
 
-AudioClip::AudioClip(void) {
+AudioClip::AudioClip() {
 
 }
 
-intptr_t AudioClip::getNativePtr(void) const {
+intptr_t AudioClip::getNativePtr() const {
 	ALClip *alClip = (ALClip *) this->getObject();
 	return alClip->source;
 }
 
-unsigned long int AudioClip::getSampleRate(void) const {
+unsigned long int AudioClip::getSampleRate() const {
 	ALClip *alClip = (ALClip *) this->getObject();
 	ALint sampleRate;
 	alGetBufferi(alClip->source, AL_BITS, &sampleRate);
 	return sampleRate;
 }
 
-unsigned long int AudioClip::getFrequency(void) const {
+unsigned long int AudioClip::getFrequency() const {
 	ALClip *alClip = (ALClip *) this->getObject();
 	ALint freq;
 	alGetBufferi(alClip->source, AL_FREQUENCY, &freq);
 	return freq;
 }
 
-AudioFormat AudioClip::getAudioFormat(void) const {
+AudioFormat AudioClip::getAudioFormat() const {
 	ALClip *alClip = (ALClip *) this->getObject();
 	ALint format;
 	alGetBufferi(alClip->source, AL_INTERNAL_FORMAT_SOFT, &format);
@@ -46,21 +46,21 @@ AudioFormat AudioClip::getAudioFormat(void) const {
 	}
 }
 
-unsigned int AudioClip::getNumberChannels(void) const {
+unsigned int AudioClip::getNumberChannels() const {
 	ALClip *alClip = (ALClip *) this->getObject();
 	ALint channels;
 	alGetBufferi(alClip->source, AL_CHANNELS, &channels);
 	return channels;
 }
 
-unsigned long AudioClip::getSize(void) const {
+unsigned long AudioClip::getSize() const {
 	ALClip *alClip = (ALClip *) this->getObject();
 	ALint size;
 	alGetBufferi(alClip->source, AL_SIZE, &size);
 	return size;
 }
 
-float AudioClip::length(void) const {
+float AudioClip::length() const {
 	ALClip *alClip = (ALClip *) this->getObject();
 	if(alClip->mode == LoadedInMemory){
 
@@ -88,7 +88,7 @@ void AudioClip::getData(void *pData, unsigned int nsamples, unsigned int offset)
 	//alBufferData
 }
 
-AudioDataMode AudioClip::clipType(void) const{
+AudioDataMode AudioClip::clipType() const{
 	ALClip *alClip = (ALClip *)this->getObject();
 	//TODO add equation for compute length from sample, format and size and etc.
 	return (AudioDataMode)0;

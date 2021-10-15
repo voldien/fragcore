@@ -50,7 +50,7 @@ namespace fragcore {
 		virtual bool isWriteable(const char *path) const = 0;
 		virtual bool exists(const char *path) const = 0;
 
-		virtual bool isASyncSupported(void) const = 0;
+		virtual bool isASyncSupported() const = 0;
 		virtual bool isDirectory(const char *path) = 0;
 		virtual bool isFile(const char *path) = 0;
 

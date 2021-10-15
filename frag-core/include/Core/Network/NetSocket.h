@@ -32,7 +32,7 @@ namespace fragcore {
 	class FVDECLSPEC NetSocket : public SmartReference {
 	  public:
 		NetSocket(const IPInterface &ip);
-		virtual ~NetSocket(void);
+		virtual ~NetSocket();
 
 		/**
 		 * @brief
@@ -70,20 +70,20 @@ namespace fragcore {
 
 		/*virtual int bind(IP adddrr, Type _type);
 		virtual int connect(IP& addr);
-		virtual int listen(void);
+		virtual int listen();
 		Status accept(NetSocket &socket);
 
-		virtual int close(void);
-		virtual int read(void);
-		virtual int write(void);
-		virtual bool isBlocking(void);
+		virtual int close();
+		virtual int read();
+		virtual int write();
+		virtual bool isBlocking();
 		virtual void setBlocking(bool blocking);
 			*/
 
 		// enum class Status { Done, NotReady, Partial, Disconnected, Error };
 
 	  protected:
-		NetSocket(void) = default;
+		NetSocket() = default;
 	};
 } // namespace fragcore
 

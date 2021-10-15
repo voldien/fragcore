@@ -29,9 +29,9 @@ namespace fragcore {
 		friend class DynamicInterface;
 
 	private:
-		inline Collision(void) {}
+		inline Collision() {}
 
-		virtual ~Collision(void);
+		virtual ~Collision();
 
 	public:    /*	Public methods.	*/
 
@@ -39,7 +39,7 @@ namespace fragcore {
 		 * Get center.
 		 * @return
 		 */
-		inline Vector3 getCenter(void) {
+		inline Vector3 getCenter() {
 			//return getCenter(getMappedObject());
 		}
 

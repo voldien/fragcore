@@ -113,7 +113,7 @@ void FileSystem::createDirectory(const char *path) {
 	// mkdir(path);
 }
 
-bool FileSystem::isASyncSupported(void) const { return *this->getScheduler() != nullptr; }
+bool FileSystem::isASyncSupported() const { return *this->getScheduler() != nullptr; }
 
 bool FileSystem::isDirectory(const char *path) {}
 bool FileSystem::isFile(const char *path) {
@@ -137,7 +137,7 @@ std::vector<std::string> FileSystem::list(const char *directory) const {
 }
 
 static FileSystem *fileSystem = nullptr;
-FileSystem *FileSystem::getFileSystem(void) {
+FileSystem *FileSystem::getFileSystem() {
 	if (fileSystem == nullptr)
 		throw RuntimeException("FileSystem must created before utilizing it.");
 	return fileSystem;
@@ -148,7 +148,7 @@ FileSystem *FileSystem::createFileSystem(Ref<IScheduler> &ref) {
 	return fileSystem;
 }
 
-FileSystem *FileSystem::createFileSystem(void) {
+FileSystem *FileSystem::createFileSystem() {
 	fileSystem = new FileSystem();
 	return fileSystem;
 }
@@ -165,7 +165,7 @@ FileSystem::FileSystem(Ref<IScheduler> &ref) : IFileSystem() {
 	this->setScheduleReference(ref);
 }
 
-FileSystem::FileSystem(void) {}
+FileSystem::FileSystem() {}
 
-FileSystem::~FileSystem(void) { /*  Release all resources.  */
+FileSystem::~FileSystem() { /*  Release all resources.  */
 }

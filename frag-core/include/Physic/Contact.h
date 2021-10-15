@@ -6,13 +6,13 @@ namespace fragcore {
 	// class FVDECLSPEC Contact
 	// {
 	// public:
-	// 	Contact(void);
+	// 	Contact();
 	// 	Contact(const Contact &contact);
 
 	// 	/**
 	// 	 *	@Return
 	// 	*/
-	// 	unsigned int VDAPIFASTENTRY getCount(void) const;
+	// 	unsigned int VDAPIFASTENTRY getCount() const;
 
 	// 	/**
 	// 	 *	@Return

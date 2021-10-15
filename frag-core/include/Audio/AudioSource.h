@@ -31,44 +31,44 @@ namespace fragcore {
 		friend class AudioClip;
 	public:
 
-		virtual ~ AudioSource(void);
+		virtual ~ AudioSource();
 
 		virtual void setClip(AudioClip* clip);
-		//virtual AudioClip* getClip(void) const;
+		//virtual AudioClip* getClip() const;
 
-		virtual void play(void);
+		virtual void play();
 
-		virtual void stop(void);
+		virtual void stop();
 
 		virtual void pause(void );
 
 		virtual void setVolume(float volume);
 
-		virtual float getVolume(void);
+		virtual float getVolume();
 
 		virtual void setDistance(float distance);
 
-		virtual float getDistance(void);
+		virtual float getDistance();
 
 		virtual void mute(bool mute);
 
 		virtual void loop(bool loop);
-		virtual bool isLooping(void);
+		virtual bool isLooping();
 
-		virtual bool isPlaying(void);
+		virtual bool isPlaying();
 
 
 
 //		virtual void setTime(float time);
-//		virtual void getTime(void) const;
+//		virtual void getTime() const;
 
-		virtual float getPos(void) const;
+		virtual float getPos() const;
 		virtual void setPos(float position);
 
-		virtual intptr_t getNativePtr(void) const override;
+		virtual intptr_t getNativePtr() const override;
 
 	private:
-		AudioSource(void);
+		AudioSource();
 	};
 }
 

@@ -2,14 +2,14 @@
 #include"AudioSetting.h"
 #include"VDEngine.h"
 
-bool AudioSetting::isEnable(void){
+bool AudioSetting::isEnable(){
 	if(engine.audioContext != nullptr){
 		return true;
 	}
 	return false;
 }
 
-bool AudioSetting::isDisable(void){
+bool AudioSetting::isDisable(){
 	return engine.audioContext == nullptr;
 }
 
@@ -22,7 +22,7 @@ void AudioSetting::setMasterVolume(float volume){
 	group->setVolume(volume);
 }
 
-float AudioSetting::getMasterVolume(void){
+float AudioSetting::getMasterVolume(){
 	if(AudioSetting::isDisable())
 		return 0;
 
@@ -42,7 +42,7 @@ void AudioSetting::setSpeakMode(SpeakerMode speakerMode){
 	VDCASTP(FMOD::System*,engine.audioContext)->setSpeakerMode((FMOD_SPEAKERMODE)speakerMode);
 }
 
-AudioSetting::SpeakerMode AudioSetting::getSpeakerMode(void){
+AudioSetting::SpeakerMode AudioSetting::getSpeakerMode(){
 	if(AudioSetting::isDisable())
 		return eUnknown;
 
@@ -51,7 +51,7 @@ AudioSetting::SpeakerMode AudioSetting::getSpeakerMode(void){
 	return (SpeakerMode)speakdermode;
 }
 
-int AudioSetting::getSampleRate(void){
+int AudioSetting::getSampleRate(){
 	if(AudioSetting::isDisable())
 		return 0;
 
@@ -79,7 +79,7 @@ void AudioSetting::setSampleRate(int samplerate){
 }
 
 
-AudioSetting::Format AudioSetting::getFormat(void){
+AudioSetting::Format AudioSetting::getFormat(){
 	if(AudioSetting::isDisable())
 		return 0;
 
@@ -101,7 +101,7 @@ void AudioSetting::setFormat(Format format){
 		return;
 }
 
-int AudioSetting::getVolumeSpeed(void){
+int AudioSetting::getVolumeSpeed(){
 	if(AudioSetting::isDisable())
 		return 0;
 	return 1;

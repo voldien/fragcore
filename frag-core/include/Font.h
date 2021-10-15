@@ -49,20 +49,20 @@ namespace fragcore {
 		};
 
 	  public:
-		Font(void);
+		Font();
 
-		~Font(void);
+		~Font();
 
-		unsigned int getNumberCharacter(void) const;
+		unsigned int getNumberCharacter() const;
 
 		// TODO rename index to unicode or something.
 		Character getCharacter(unsigned int index);
 
 		const Character &getCharacter(unsigned int index) const;
 
-		unsigned int getEncoding(void) const;
+		unsigned int getEncoding() const;
 
-		Texture *getTexture(void) const;
+		Texture *getTexture() const;
 
 		// TODO add support for config file for lookup.
 	  private:

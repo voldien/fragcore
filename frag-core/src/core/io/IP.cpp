@@ -7,8 +7,8 @@ using namespace fragcore;
 
 IPInterface::IPInterface(const std::string &ip, Type type) {}
 
-std::vector<IPInterface> IPInterface::getLocalAddresses(void) {}
-std::vector<IPInterface> IPInterface::getLocalInterface(void) {
+std::vector<IPInterface> IPInterface::getLocalAddresses() {}
+std::vector<IPInterface> IPInterface::getLocalInterface() {
 
 	struct ifaddrs *addrs, *tmp;
 

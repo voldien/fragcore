@@ -27,9 +27,9 @@ namespace fragcore {
 	class FVDECLSPEC CharacterController {
 		//friend class DynamicInterface;
 	private:
-		inline CharacterController(void){}
+		inline CharacterController(){}
 
-		virtual ~CharacterController(void);
+		virtual ~CharacterController();
 
 	public:	/*	Public methods.	*/
 

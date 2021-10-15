@@ -14,7 +14,7 @@ namespace fragcore {
 		friend class PhysicInterface;
 
 	public:
-		DynamicObjects(void) {
+		DynamicObjects() {
 			this->attachment = nullptr;
 		}
 
@@ -22,7 +22,7 @@ namespace fragcore {
 		 * Check if dynamic object is attached.
 		 * @return
 		 */
-		bool isAttached(void) const {
+		bool isAttached() const {
 			return attachment != nullptr;
 		}
 

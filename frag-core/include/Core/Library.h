@@ -28,13 +28,13 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC Library : public SmartReference {
 	  public:
-		Library(void);
+		Library();
 
 		Library(const char *clibrary);
 		Library(const Library &other);
 		Library(Library &&other);
 
-		~Library(void);
+		~Library();
 
 		/**
 		 *	Open library.
@@ -48,14 +48,14 @@ namespace fragcore {
 		 *	This will unload all function pointer loaded
 		 *	from this library object.
 		 */
-		void close(void);
+		void close();
 
 		/**
 		 *	Determine if loaded library is valid.
 		 *
 		 *	@Return true if valid library.
 		 */
-		bool isValid(void) const;
+		bool isValid() const;
 
 		/**
 		 *	Get function pointer.

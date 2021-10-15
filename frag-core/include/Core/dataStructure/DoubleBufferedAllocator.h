@@ -28,11 +28,11 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC DoubleBufferedAllocator {
 	  public:
-		DoubleBufferedAllocator(void);
+		DoubleBufferedAllocator();
 		DoubleBufferedAllocator(const DoubleBufferedAllocator &doublebuffer);
 		DoubleBufferedAllocator(DoubleBufferedAllocator &&other);
 		explicit DoubleBufferedAllocator(unsigned int sizeBytes);
-		~DoubleBufferedAllocator(void);
+		~DoubleBufferedAllocator();
 
 		/**
 		 *	Allocate n number of bytes.
@@ -49,13 +49,13 @@ namespace fragcore {
 		/**
 		 *	Set marker to zero.
 		 */
-		void clear(void);
+		void clear();
 
 		/**
 		 *	Return marker offset.
 		 *	@Return
 		 */
-		unsigned int getMarker(void) const;
+		unsigned int getMarker() const;
 
 		/**
 		 *	Fetch block of memory.
@@ -70,12 +70,12 @@ namespace fragcore {
 		/**
 		 *	Swap buffers.
 		 */
-		void swap(void);
+		void swap();
 
 		/**
 		 *	Get current stack buffer.
 		 */
-		StackAllocator *getCurrentStack(void);
+		StackAllocator *getCurrentStack();
 
 		/**
 		 *	Get current by index.

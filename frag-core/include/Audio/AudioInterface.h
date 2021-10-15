@@ -38,10 +38,10 @@ namespace fragcore {
 
 	public:
 		AudioInterface(IConfig* config);
-		virtual ~AudioInterface(void);
+		virtual ~AudioInterface();
 
-		virtual void OnInitialization(void);
-		virtual void OnDestruction(void);
+		virtual void OnInitialization();
+		virtual void OnDestruction();
 
 		/**
 		 *
@@ -82,18 +82,18 @@ namespace fragcore {
 		virtual void setAudioListener(AudioListener* listener);
 
 		/**/
-		virtual AudioCapture* createAudioCapture(void);
+		virtual AudioCapture* createAudioCapture();
 		virtual void deleteAudioCapture(AudioCapture* capture);
 
 
-		virtual std::vector<AudioPhysicalDevice> getDevices(void) const;
+		virtual std::vector<AudioPhysicalDevice> getDevices() const;
 
 		/*	*/
 		virtual void setAudioDevice(const AudioPhysicalDevice& device);
-		virtual const AudioPhysicalDevice &getAudioDevice(void) const;
+		virtual const AudioPhysicalDevice &getAudioDevice() const;
 
 		/*	*/
-		virtual const char *getVersion(void) const;
+		virtual const char *getVersion() const;
 
 	private:
 		void *pdata;

@@ -36,7 +36,7 @@ UDPNetSocket::UDPNetSocket(const IPInterface &ip) {
 	// 	}
 	// }
 }
-UDPNetSocket::~UDPNetSocket(void) {}
+UDPNetSocket::~UDPNetSocket() {}
 
 void UDPNetSocket::close() {}
 

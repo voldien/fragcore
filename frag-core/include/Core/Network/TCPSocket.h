@@ -27,7 +27,7 @@ namespace fragcore {
 	class FVDECLSPEC TCPNetSocket : public NetSocket {
 	  public:
 		TCPNetSocket(const IPInterface &ip);
-		virtual ~TCPNetSocket(void);
+		virtual ~TCPNetSocket();
 
 		// virtual Error open(Type p_type, IP::Type &ip_type) = 0;
 
@@ -54,13 +54,13 @@ namespace fragcore {
 
 		/*virtual int bind(IP adddrr, Type _type);
 		virtual int connect(IP& addr);
-		virtual int listen(void);
+		virtual int listen();
 		Status accept(NetSocket &socket);
 
-		virtual int close(void);
-		virtual int read(void);
-		virtual int write(void);
-		virtual bool isBlocking(void);
+		virtual int close();
+		virtual int read();
+		virtual int write();
+		virtual bool isBlocking();
 		virtual void setBlocking(bool blocking);
 			*/
 

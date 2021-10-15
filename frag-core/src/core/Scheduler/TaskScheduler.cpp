@@ -2,7 +2,7 @@
 #include <taskSch.h>
 
 using namespace fragcore;
-TaskScheduler::TaskScheduler(void) {
+TaskScheduler::TaskScheduler() {
 	schTaskSch *taskSch = (schTaskSch *)malloc(sizeof(schTaskSch));
 	int sch = schCreateTaskPool(taskSch, 2, SCH_FLAG_NO_AFM, 48);
 	if (sch != SCH_OK)
@@ -20,7 +20,7 @@ TaskScheduler::TaskScheduler(int cores, unsigned int maxPackagesPool) {
 	this->sch = taskSch;
 }
 
-TaskScheduler::~TaskScheduler(void) {
+TaskScheduler::~TaskScheduler() {
 	this->terminate();
 	/*	Release.	*/
 	delete this->sch;
@@ -56,19 +56,19 @@ void TaskScheduler::addTask(Task *task) {
 }
 
 void TaskScheduler::setUserData(const void *data) { return schSetSchUserData((schTaskSch *)this->sch, data); }
-const void *TaskScheduler::getUserData(void) { return schGetPoolUserData((schTaskSch *)this->sch, 0); }
-void TaskScheduler::run(void) {
+const void *TaskScheduler::getUserData() { return schGetPoolUserData((schTaskSch *)this->sch, 0); }
+void TaskScheduler::run() {
 	int status = schRunTaskSch((schTaskSch *)this->sch);
 	if (status != SCH_OK)
 		throw RuntimeException(schErrorMsg(status));
 }
 
-void TaskScheduler::terminate(void) {
+void TaskScheduler::terminate() {
 	int status = schTerminateTaskSch((schTaskSch *)this->sch);
 	if (status != SCH_OK)
 		throw RuntimeException(schErrorMsg(status));
 }
 
-void TaskScheduler::wait(void) { schWaitTask((schTaskSch *)this->sch); }
-void TaskScheduler::lock(void) {}
-void TaskScheduler::unLock(void) {}
+void TaskScheduler::wait() { schWaitTask((schTaskSch *)this->sch); }
+void TaskScheduler::lock() {}
+void TaskScheduler::unLock() {}

@@ -10,7 +10,7 @@ using namespace fragcore;
 
 void FTPFileIO::open(const char *path, IOMode mode) {}
 
-void FTPFileIO::close(void) { curl_easy_cleanup(this->handle); }
+void FTPFileIO::close() { curl_easy_cleanup(this->handle); }
 
 long FTPFileIO::read(long int nbytes, void *pbuffer) {
 	size_t nRecv;
@@ -30,14 +30,14 @@ long FTPFileIO::write(long int nbytes, const void *pbuffer) {
 	}
 }
 
-long FTPFileIO::length(void) {
+long FTPFileIO::length() {
 
 	double filesize = 0.0;
 	CURLcode res = curl_easy_getinfo(this->handle, CURLINFO_CONTENT_LENGTH_DOWNLOAD, &filesize);
 	return filesize;
 }
 
-bool FTPFileIO::eof(void) const { return 0; }
+bool FTPFileIO::eof() const { return 0; }
 
 void FTPFileIO::seek(long int nbytes, Seek seek) {
 	// curl_easy_setopt(SEEK_CO)
@@ -45,17 +45,17 @@ void FTPFileIO::seek(long int nbytes, Seek seek) {
 	//	FileIO::seek(nbytes, seek);
 }
 
-unsigned long FTPFileIO::getPos(void) {
+unsigned long FTPFileIO::getPos() {
 	// gzeof
 	// gztell
 	// return FileIO::getPos();
 }
 
-bool FTPFileIO::isWriteable(void) const { return false; }
+bool FTPFileIO::isWriteable() const { return false; }
 
-bool FTPFileIO::isReadable(void) const { return false; }
+bool FTPFileIO::isReadable() const { return false; }
 
-bool FTPFileIO::flush(void) {
+bool FTPFileIO::flush() {
 
 	// if (this->mode & WRITE) {
 	// 	int error;
@@ -79,8 +79,8 @@ static size_t ftpio_fwrite(void *buffer, size_t size, size_t nmemb, void *stream
 }
 
 static size_t throw_away(void *ptr, size_t size, size_t nmemb, void *data) {
-	(void)ptr;
-	(void)data;
+	()ptr;
+	()data;
 	/* we are not interested in the headers itself,
 	   so we only return the size we would have saved ... */
 	return (size_t)(size * nmemb);

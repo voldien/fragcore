@@ -64,15 +64,15 @@ namespace fragcore {
 		};
 
 		virtual int attachmentCount();
-		virtual std::vector<Texture *> getColorTargets(void);
+		virtual std::vector<Texture *> getColorTargets();
 
-		virtual void bind(void);
+		virtual void bind();
 
-		virtual void unBind(void);
+		virtual void unBind();
 
-		virtual void write(void);
+		virtual void write();
 
-		virtual void read(void) const;
+		virtual void read() const;
 
 		/**
 		 *	Get texture attached to framebuffer by index.
@@ -85,30 +85,30 @@ namespace fragcore {
 		 *
 		 * @return
 		 */
-		virtual Texture *getDepthAttachment(void);
+		virtual Texture *getDepthAttachment();
 
 		/**
 		 *
 		 * @return
 		 */
-		virtual Texture *getStencilAttachment(void);
+		virtual Texture *getStencilAttachment();
 
 		/**
 		 *
 		 */
-		virtual int width(void) const;
+		virtual int width() const;
 
 		/**
 		 *
 		 */
-		virtual int height(void) const;
+		virtual int height() const;
 
 		/**
 		 *
 		 */
-		virtual int layers(void);
+		virtual int layers();
 
-		virtual int nrSamples(void);
+		virtual int nrSamples();
 
 		/*  */
 		virtual void blend(BlendEqu equ, BlendFunc sfactor, BlendFunc dfactor, BufferAttachment bufferAttachment);
@@ -127,7 +127,7 @@ namespace fragcore {
 
 		virtual void setDraw(BufferAttachment attachment);
 
-		virtual intptr_t getNativePtr(void) const;
+		virtual intptr_t getNativePtr() const;
 
 		void setName(const std::string &name) override;
 	};

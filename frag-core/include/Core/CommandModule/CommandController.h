@@ -29,9 +29,9 @@
 class PVDECLSPEC CommandController {
 public :
 
-	CommandController(void);
+	CommandController();
 	CommandController(const CommandController &other);
-	~CommandController(void);
+	~CommandController();
 
 	/**
 	 * 
@@ -48,7 +48,7 @@ public :
 	/**
 	 * Execute the command in front of the queue.
 	 */
-	void dequeue(void);
+	void dequeue();
 
 	/**
 	 * Set keymapper used for mapping

@@ -5,38 +5,38 @@ namespace fragcore{
 	// class VDDECLSPEC VDCollision
 	// {
 	// public:
-	// 	VDCollision(void);
+	// 	VDCollision();
 	// 	VDCollision(const VDCollision &collision);
 
 	// 	/**
 	//  *	Get collider object.
 	//  */
-	// 	VDCollider *VDAPIENTRY collider(void) const;
+	// 	VDCollider *VDAPIENTRY collider() const;
 
 	// 	/**
 	//  *	Get relative velocity magnitude.
 	//  */
-	// 	float VDAPIENTRY relativeVelocity(void) const;
+	// 	float VDAPIENTRY relativeVelocity() const;
 
 	// 	/**
 	//  *	Get transform object.
 	//  */
-	// 	VDTransform *VDAPIENTRY transform(void) const;
+	// 	VDTransform *VDAPIENTRY transform() const;
 
 	// 	/**
 	//  *	Get gameobject.
 	//  */
-	// 	VDGameObject *VDAPIENTRY gameObject(void) const;
+	// 	VDGameObject *VDAPIENTRY gameObject() const;
 
 	// 	/**
 	//  *	Get rigidbodt object.
 	//  */
-	// 	VDRigidBody *VDAPIENTRY rigidBody(void) const;
+	// 	VDRigidBody *VDAPIENTRY rigidBody() const;
 
 	// 	/**
 	//  *	Get contact.
 	//  */
-	// 	VDContact VDAPIENTRY contacts(void) const;
+	// 	VDContact VDAPIENTRY contacts() const;
 
 	// private: /*	Attributes.	*/
 	// 	void *pair;

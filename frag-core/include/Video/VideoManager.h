@@ -36,7 +36,7 @@ namespace fragcore {
 		void unRegisterVideo(VideoTexture *video);
 
 	  private: /*	Prevent one from creating an instance of this class.	*/
-		VideoManager(void);
+		VideoManager();
 
 		VideoManager(const VideoManager &other);
 	};

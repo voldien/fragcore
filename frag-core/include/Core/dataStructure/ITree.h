@@ -28,7 +28,7 @@ namespace fragcore {
 	template <class T> // TODO evoluate.
 	class ITree {
 	  public:
-		ITree(void) {
+		ITree() {
 			this->sibling = nullptr;
 			this->numChildren = 0;
 			this->child = nullptr;
@@ -36,20 +36,20 @@ namespace fragcore {
 		}
 		ITree(ITree &&other) {}
 
-		virtual ITree<T> *root(void) const {
+		virtual ITree<T> *root() const {
 			if (this->getParent())
 				return (ITree<T> *)this;
 			else
 				return this->getParent()->root();
 		}
 
-		virtual bool isEmpty(void) const { return this->getNumChildren() == 0; }
+		virtual bool isEmpty() const { return this->getNumChildren() == 0; }
 
-		virtual ITree<T> *getParent(void) const { return this->parent; }
+		virtual ITree<T> *getParent() const { return this->parent; }
 
 		virtual void setParent(ITree<T> *parent) { this->parent = parent; }
 
-		virtual unsigned int getNumChildren(void) const { return this->numChildren; }
+		virtual unsigned int getNumChildren() const { return this->numChildren; }
 
 		virtual void addChild(ITree<T> *pchild) {
 			ITree<T> *find;
@@ -105,7 +105,7 @@ namespace fragcore {
 
 		class TIterator : public Iterator<T> {
 		  public:
-			/*			TIterator &operator++(void) override {
+			/*			TIterator &operator++() override {
 							return Iterator::operator++();
 						}
 
@@ -113,7 +113,7 @@ namespace fragcore {
 							return Iterator::operator++(i);
 						}
 
-						TIterator &operator--(void) override {
+						TIterator &operator--() override {
 							return Iterator::operator--();
 						}
 
@@ -137,15 +137,15 @@ namespace fragcore {
 							return Iterator::operator[](index);
 						}
 
-						T &operator->(void) const override {
+						T &operator->() const override {
 							return Iterator::operator->();
 						}
 
-						T &operator*(void) const override {
+						T &operator*() const override {
 							return Iterator::operator*();
 						}
 
-						T &operator*(void) override {
+						T &operator*() override {
 							return Iterator::operator*();
 						}
 
@@ -163,8 +163,8 @@ namespace fragcore {
 		};
 
 		/*  TODO determine if iterator can be added.    */
-		//		virtual TIterator<T> begin(void);
-		//		virtual TIterator<T> end(void);
+		//		virtual TIterator<T> begin();
+		//		virtual TIterator<T> end();
 
 	  protected: /*  */
 		void setSibling(ITree<T> *sibling) { this->sibling = sibling; }

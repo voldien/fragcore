@@ -11,7 +11,7 @@ namespace fragcore {
 	class FVDECLSPEC VorbisAudioDecoder : public AudioDecoder {
 	  public:
 		VorbisAudioDecoder(Ref<IO> &io);
-		virtual ~VorbisAudioDecoder(void);
+		virtual ~VorbisAudioDecoder();
 
 		virtual void seek(long int microseconds);
 
@@ -19,13 +19,13 @@ namespace fragcore {
 
 		virtual void *getPage(int i);
 
-		virtual AudioFormat getFormat(void) const;
-		virtual unsigned int getSampleRate(void) const;
+		virtual AudioFormat getFormat() const;
+		virtual unsigned int getSampleRate() const;
 
-		virtual unsigned int getNrChannels(void) const;
-		virtual unsigned int getSampleBitResolution(void) const;
+		virtual unsigned int getNrChannels() const;
+		virtual unsigned int getSampleBitResolution() const;
 
-		virtual double getTotalTime(void) const;
+		virtual double getTotalTime() const;
 
 	  protected:
 		OggVorbis_File *ov;

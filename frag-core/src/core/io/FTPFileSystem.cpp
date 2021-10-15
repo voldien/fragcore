@@ -46,7 +46,7 @@ void FTPFileSystem::createFile(const char *path) { throw NotImplementedException
 
 void FTPFileSystem::createDirectory(const char *path) { throw NotImplementedException(); }
 
-bool FTPFileSystem::isASyncSupported(void) const { return *this->getScheduler() != nullptr; }
+bool FTPFileSystem::isASyncSupported() const { return *this->getScheduler() != nullptr; }
 
 bool FTPFileSystem::isDirectory(const char *path) { throw NotImplementedException(); }
 bool FTPFileSystem::isFile(const char *path) { throw NotImplementedException(); }
@@ -108,6 +108,6 @@ FTPFileSystem::FTPFileSystem(const char *ip, int port, const char *username, con
 		setCredentials(username, password);
 }
 
-FTPFileSystem::~FTPFileSystem(void) { /*  Release all resources.  */
+FTPFileSystem::~FTPFileSystem() { /*  Release all resources.  */
 	curl_easy_cleanup(handle);
 }

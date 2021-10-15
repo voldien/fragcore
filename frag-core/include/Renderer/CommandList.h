@@ -31,11 +31,11 @@ namespace fragcore {
 	class CommandList : public SmartReference /*: public NoCopyable */ {
 	  public:
 		enum CommandBufferFlag { Single, Continuous };
-		virtual ~CommandList(void) = default;
+		virtual ~CommandList() = default;
 		// virtual void bindPipeline(RenderPipeline *p);
 
-		virtual void begin(void) = 0;
-		virtual void end(void) = 0;
+		virtual void begin() = 0;
+		virtual void end() = 0;
 
 		virtual void copyTexture(const Texture *src, Texture *dst) = 0;
 
@@ -53,17 +53,17 @@ namespace fragcore {
 
 		// virtual void executeCommand(CommandList &list);
 
-		// virtual void setGraphicResourcesSlot(void) = 0;
+		// virtual void setGraphicResourcesSlot() = 0;
 
 		// virtual void draw(Ref<Buffer>& buffer ) = 0;
-		// virtual void draw(void) = 0;
-		// virtual void drawIndexed(void) = 0;
-		// virtual void drawIndirect(void) = 0;
-		// virtual void drawIndexedIndirect(void) = 0;
+		// virtual void draw() = 0;
+		// virtual void drawIndexed() = 0;
+		// virtual void drawIndirect() = 0;
+		// virtual void drawIndexedIndirect() = 0;
 
 		// TOOD add support for raytracing
-		//		virtual void generateBVH(void);
-		//		virtual void setupSecene(void);
+		//		virtual void generateBVH();
+		//		virtual void setupSecene();
 		//		virtual void
 
 		/**
@@ -84,7 +84,7 @@ namespace fragcore {
 		/**
 		 *
 		 */
-		virtual void popDebugGroup(void) = 0;
+		virtual void popDebugGroup() = 0;
 
 		/**
 		 *

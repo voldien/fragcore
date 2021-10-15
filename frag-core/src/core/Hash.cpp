@@ -17,7 +17,7 @@ Hash::Hash(Hash &&other) {
 	// std::swap(other.context);
 }
 
-Hash::~Hash(void) { free(this->context); }
+Hash::~Hash() { free(this->context); }
 
 void Hash::update(const void *pdata, size_t nbytes) {
 	switch (this->algorithm) {
@@ -67,12 +67,12 @@ void Hash::final(std::vector<unsigned char> &hash) {
 
 	/**/
 }
-void Hash::reset(void) noexcept {
+void Hash::reset() noexcept {
 	this->nbytes = 0;
 	initHash(getAlgorithm());
 }
 
-unsigned int Hash::getResultSize(void) const {
+unsigned int Hash::getResultSize() const {
 	switch (this->getAlgorithm()) {
 	case MD5:
 	case SHA128:
@@ -84,9 +84,9 @@ unsigned int Hash::getResultSize(void) const {
 	}
 }
 
-unsigned long int Hash::getByteRead(void) const { return this->nbytes; }
+unsigned long int Hash::getByteRead() const { return this->nbytes; }
 
-Hash::ALGORITHM Hash::getAlgorithm(void) const noexcept { return this->algorithm; }
+Hash::ALGORITHM Hash::getAlgorithm() const noexcept { return this->algorithm; }
 
 void Hash::initHash(ALGORITHM algorithm) {
 

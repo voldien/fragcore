@@ -31,23 +31,23 @@ namespace fragcore {
 
 		virtual long write(long int nbytes, const void *pbuffer) override;
 
-		virtual void close(void) override;
+		virtual void close() override;
 
-		virtual long length(void) override;
+		virtual long length() override;
 
-		virtual unsigned long getPos(void) override;
+		virtual unsigned long getPos() override;
 
-		virtual bool eof(void) const override;
+		virtual bool eof() const override;
 
 		virtual void seek(long int nbytes, Seek seek) override;
 
-		virtual bool isWriteable(void) const override;
+		virtual bool isWriteable() const override;
 
-		virtual bool isReadable(void) const override;
+		virtual bool isReadable() const override;
 
 		virtual void open(const char *path, IOMode mode) override;
 
-		virtual bool flush(void) override;
+		virtual bool flush() override;
 
 		virtual bool isOperationSupported(IOOperation operations) const noexcept override {
 			return (operations & OP_ALL) != operations;
@@ -57,12 +57,12 @@ namespace fragcore {
 		FILE *file;
 		IOMode mode;
 
-		FileIO(void);
+		FileIO();
 
 	  public:
 		FileIO(const char *path, IOMode mode);
 		FileIO(std::string &path, IOMode mode);
-		virtual ~FileIO(void) = default;
+		virtual ~FileIO() = default;
 
 		FileIO(FILE *file);
 		FileIO(FileIO &&other);

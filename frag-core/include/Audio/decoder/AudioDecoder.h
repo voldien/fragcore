@@ -36,7 +36,7 @@ namespace fragcore {
 	class FVDECLSPEC AudioDecoder : public SmartReference {
 	  public:
 		AudioDecoder(Ref<IO> &io) { this->io = io; }
-		virtual ~AudioDecoder(void) {}
+		virtual ~AudioDecoder() {}
 
 		virtual void seek(long int microseconds) = 0;
 
@@ -50,20 +50,20 @@ namespace fragcore {
 		 *
 		 * @return AudioFormat
 		 */
-		virtual AudioFormat getFormat(void) const = 0;
+		virtual AudioFormat getFormat() const = 0;
 
 		/**
 		 * @brief Get the Sample Rate object
 		 *
 		 * @return unsigned int
 		 */
-		virtual unsigned int getSampleRate(void) const = 0;
-		virtual unsigned int getNrChannels(void) const = 0;
-		// virtual unsigned long getBitRate(void) const noexcept = 0;
-		virtual unsigned int getSampleBitResolution(void) const = 0;
+		virtual unsigned int getSampleRate() const = 0;
+		virtual unsigned int getNrChannels() const = 0;
+		// virtual unsigned long getBitRate() const noexcept = 0;
+		virtual unsigned int getSampleBitResolution() const = 0;
 
 		// TODO add method for checking if stream or not.
-		virtual double getTotalTime(void) const = 0;
+		virtual double getTotalTime() const = 0;
 
 		// TODO add more method for getting information and etc.
 

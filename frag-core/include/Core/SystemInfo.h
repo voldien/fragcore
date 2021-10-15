@@ -68,38 +68,38 @@ namespace fragcore {
 			BigEndian,
 		};
 
-		static KernelSystem getSystemKernel(void) noexcept;
-		static OperatingSystem getOperatingSystem(void) noexcept;
-		static const std::string &getOperatingSystemName(void) noexcept;
+		static KernelSystem getSystemKernel() noexcept;
+		static OperatingSystem getOperatingSystem() noexcept;
+		static const std::string &getOperatingSystemName() noexcept;
 		static const char *getOperatingSystemName(OperatingSystem os);
 
-		static const char *getCPUName(void) noexcept;
-		static const char *getCPUArchitecture(void) noexcept;
-		static unsigned long getCPUFrequence(void) noexcept;
-		static bool isSupportedInstruction(void) noexcept;
-		static SIMD getSupportedSIMD(void);
+		static const char *getCPUName() noexcept;
+		static const char *getCPUArchitecture() noexcept;
+		static unsigned long getCPUFrequence() noexcept;
+		static bool isSupportedInstruction() noexcept;
+		static SIMD getSupportedSIMD();
 
-		static Endianness getEndianness(void) noexcept;
+		static Endianness getEndianness() noexcept;
 
-		static unsigned long int systemMemorySize(void);
-		static unsigned int getPageSize(void);
+		static unsigned long int systemMemorySize();
+		static unsigned int getPageSize();
 
-		static unsigned int getCPUCoreCount(void);
+		static unsigned int getCPUCoreCount();
 
-		static unsigned int getCPUCacheLine(void);
+		static unsigned int getCPUCacheLine();
 
-		static const char *getAppliationName(void);
+		static const char *getAppliationName();
 
-		static const char *getUserName(void);
+		static const char *getUserName();
 
-		static bool supportsVibration(void);
+		static bool supportsVibration();
 
-		static const char *getCurrentDirectory(void);
+		static const char *getCurrentDirectory();
 
 		// TODO relocate
-		static Ref<IO> &getStdOut(void) noexcept;
-		static Ref<IO> &getStdIn(void) noexcept;
-		static Ref<IO> &getStdErr(void) noexcept;
+		static Ref<IO> &getStdOut() noexcept;
+		static Ref<IO> &getStdIn() noexcept;
+		static Ref<IO> &getStdErr() noexcept;
 
 	  private:
 	};

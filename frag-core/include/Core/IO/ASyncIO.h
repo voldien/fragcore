@@ -42,7 +42,7 @@ namespace fragcore {
 	  public:
 		ASyncIO(Ref<IScheduler> &scheduler);
 		ASyncIO(ASyncIO &&other); // Move semantics
-		~ASyncIO(void);
+		~ASyncIO();
 
 		typedef struct io_status_t {
 			unsigned int nbytes; /*  Number of bytes read.   */
@@ -68,7 +68,7 @@ namespace fragcore {
 		virtual const IOStatus &getIOStatus(ASyncHandle handle) const;
 
 		/*  */
-		virtual Ref<IScheduler> getScheduler(void) const;
+		virtual Ref<IScheduler> getScheduler() const;
 
 	  private:
 		/*  Static callback functions.  */
@@ -79,7 +79,7 @@ namespace fragcore {
 		static void async_write_io(Task *task);
 
 	  protected:	 /*  */
-		ASyncIO(void); // TODO make protected since it is required to a have a scheduler attached but inheriet need to be
+		ASyncIO(); // TODO make protected since it is required to a have a scheduler attached but inheriet need to be
 					 // able to call it.
 		ASyncIO(const ASyncIO &other);
 		virtual void setScheduleReference(Ref<IScheduler> &sch);

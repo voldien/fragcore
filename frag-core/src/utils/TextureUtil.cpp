@@ -302,4 +302,4 @@ Texture *TextureUtil::createTexture(IRenderer *renderer, unsigned int width, uns
 	return renderer->createTexture(&desc);
 }
 
-TextureUtil::TextureUtil(void) {}
+TextureUtil::TextureUtil() {}

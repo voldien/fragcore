@@ -28,7 +28,7 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC UIDGenerator /*: public UIDObject*/ {
 	  public:
-		UIDGenerator(void) noexcept {
+		UIDGenerator() noexcept {
 			this->nextUID = 0;
 			this->nextLUID = 0;
 		}
@@ -38,12 +38,12 @@ namespace fragcore {
 		/**
 		 *	@Return next unique id.
 		 */
-		unsigned int getNextUID(void) noexcept { return this->nextUID++; }
+		unsigned int getNextUID() noexcept { return this->nextUID++; }
 
 		/**
 		 *	@Return next long uniqie id.
 		 */
-		unsigned long int getNextLUID(void) noexcept { return this->nextLUID++; }
+		unsigned long int getNextLUID() noexcept { return this->nextLUID++; }
 
 		virtual bool operator==(const UIDGenerator &o1) noexcept { return uid == o1.uid; }
 		virtual bool operator!=(const UIDGenerator &o1) noexcept { return uid != o1.uid; }

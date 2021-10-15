@@ -42,14 +42,14 @@ namespace fragcore {
 		static Font *createFont(Ref<IRenderer> &renderer, Ref<IO> &io, float size, Encoding encoding = ASCII);
 		static Font *createSDFFont(Ref<IRenderer> &renderer, Ref<IO> &io, float size, Encoding encoding = ASCII);
 		// static Font *createFont(Image *image, Ref<IO> &io, float size, Encoding encoding = UTF8);
-		// static void CreateSDF(void);
+		// static void CreateSDF();
 
 		// TODO add a method for saving the font for allowing it to be a tool for generating on the build rather than in
 		// executable time.
 		static void saveFont(Ref<IO> &io, Ref<Font> &font);
 
 	  private: /*	Prevent one from creating an instance of this class.	*/
-		FontFactory(void) = default;
+		FontFactory() = default;
 		FontFactory(const FontFactory &other) = default;
 	};
 } // namespace fragcore

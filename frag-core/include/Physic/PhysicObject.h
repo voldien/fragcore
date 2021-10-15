@@ -28,17 +28,17 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC PhysicObject : public SmartReference {
 	  public:
-		inline PhysicInterface *getPhysicInterface(void) const { return this->iRenderer; }
+		inline PhysicInterface *getPhysicInterface() const { return this->iRenderer; }
 
-		// inline Ref<PhysicObject> getRef(void) const{
+		// inline Ref<PhysicObject> getRef() const{
 
 		// }
 
-		inline void *getObject(void) { return this->pdata; }
+		inline void *getObject() { return this->pdata; }
 
-		inline void *getObject(void) const { return this->pdata; }
+		inline void *getObject() const { return this->pdata; }
 
-		virtual intptr_t getNativePtr(void) const = 0;
+		virtual intptr_t getNativePtr() const = 0;
 
 	  protected: /*  */
 		void *pdata;

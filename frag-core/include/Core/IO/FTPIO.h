@@ -37,21 +37,21 @@ namespace fragcore {
 
 		long write(long int nbytes, const void *pbuffer) override;
 
-		long length(void) override;
+		long length() override;
 
-		bool eof(void) const override;
+		bool eof() const override;
 
 		void seek(long int nbytes, Seek seek) override;
 
-		unsigned long getPos(void) override;
+		unsigned long getPos() override;
 
-		bool isWriteable(void) const override;
+		bool isWriteable() const override;
 
-		bool isReadable(void) const override;
+		bool isReadable() const override;
 
-		bool flush(void) override;
+		bool flush() override;
 
-		void close(void) override;
+		void close() override;
 
 		void open(const char *path, IOMode mode) override;
 

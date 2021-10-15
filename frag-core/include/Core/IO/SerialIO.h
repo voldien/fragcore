@@ -35,27 +35,27 @@ namespace fragcore {
 	class SerialIO : public IO {
 	  public:
 		SerialIO(const std::string &path, IOMode mode);
-		virtual ~SerialIO(void);
+		virtual ~SerialIO();
 
-		virtual void close(void) override;
+		virtual void close() override;
 
 		virtual long int read(long int nbytes, void *pbuffer) override;
 
 		virtual long int write(long int nbytes, const void *pbuffer) override;
 
-		virtual bool eof(void) const override;
+		virtual bool eof() const override;
 
-		virtual long int length(void) override;
+		virtual long int length() override;
 
 		virtual void seek(long int nbytes, Seek seek) override;
 
-		virtual unsigned long getPos(void) override;
+		virtual unsigned long getPos() override;
 
-		virtual bool isWriteable(void) const override;
+		virtual bool isWriteable() const override;
 
-		virtual bool isReadable(void) const override;
+		virtual bool isReadable() const override;
 
-		virtual bool flush(void) override;
+		virtual bool flush() override;
 
 		virtual bool isOperationSupported(IOOperation operations) const noexcept override {
 			const IOOperation supportedIO = static_cast<IOOperation>(OP_READ | OP_WRITE | OP_FLUSH);
@@ -98,7 +98,7 @@ namespace fragcore {
 
 	  public:
 		void setBaudRate(unsigned int baudRate);
-		BaudRate getBaudRate(void) const;
+		BaudRate getBaudRate() const;
 
 		void setStopBits(StopBits stopBits);
 		StopBits getStopBits() const;
@@ -117,7 +117,7 @@ namespace fragcore {
 		/**
 		 *
 		 */
-		static std::optional<std::vector<std::string>> getSerialPorts(void) noexcept;
+		static std::optional<std::vector<std::string>> getSerialPorts() noexcept;
 
 	  private:
 		virtual void open(const char *path, IOMode mode) override {}

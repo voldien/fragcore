@@ -41,7 +41,7 @@ namespace fragcore {
 		/**
 		 *
 		 */
-		virtual void bind(void);
+		virtual void bind();
 
 		virtual int getLocation(const char *name);
 
@@ -63,7 +63,7 @@ namespace fragcore {
 
 		virtual void setShader(ShaderType type, Shader *shader);
 
-		intptr_t getNativePtr(void) const override;
+		intptr_t getNativePtr() const override;
 	};
 }
 

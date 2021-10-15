@@ -1,7 +1,7 @@
 #include"VDAudioGeometry.h"
 #include"VDEngine.h"
 
-VDAudioGeometry::VDAudioGeometry(void): VDBehavior(){
+VDAudioGeometry::VDAudioGeometry(): VDBehavior(){
 	audioGeometry = nullptr;
 }
 
@@ -13,11 +13,11 @@ VDAudioGeometry::VDAudioGeometry(const VDMesh* mesh) : VDBehavior(){
 	this->audioGeometry = nullptr;
 }
 
-void VDAudioGeometry::instanceInitilize(void){
+void VDAudioGeometry::instanceInitilize(){
 
 }
 
-void VDAudioGeometry::initializeComponent(void){
+void VDAudioGeometry::initializeComponent(){
 	this->initGeometry();
 
 	if(this->audioGeometry){
@@ -31,15 +31,15 @@ void VDAudioGeometry::initializeComponent(void){
 	}
 }
 
-void VDAudioGeometry::onEnable(void){
+void VDAudioGeometry::onEnable(){
 	this->audioGeometry->setActive(true);
 }
 
-void VDAudioGeometry::onDisable(void){
+void VDAudioGeometry::onDisable(){
 	this->audioGeometry->setActive(false);
 }
 
-void VDAudioGeometry::onDestroy(void){
+void VDAudioGeometry::onDestroy(){
 	this->audioGeometry->release();
 }
 
@@ -50,7 +50,7 @@ VDBehavior* VDAudioGeometry::copyComponent(unsigned int& dataSize){
 	return (VDBehavior*)audiogeometry;
 }
 
-int VDAudioGeometry::initGeometry(void){
+int VDAudioGeometry::initGeometry(){
 	int polyCount;
 
 	if(this->renderer()){ // find a render component

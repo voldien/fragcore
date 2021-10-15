@@ -16,10 +16,10 @@ namespace fragcore {
 			throw NotImplementedException();
 		}
 
-		inline float r(void) const noexcept { return x(); }
-		inline float g(void) const noexcept { return y(); }
-		inline float b(void) const noexcept { return z(); }
-		inline float a(void) const noexcept { return w(); }
+		inline float r() const noexcept { return x(); }
+		inline float g() const noexcept { return y(); }
+		inline float b() const noexcept { return z(); }
+		inline float a() const noexcept { return w(); }
 
 		inline void r(float red) noexcept { setX(red); }
 		inline void g(float green) noexcept { setY(green); }
@@ -81,17 +81,17 @@ namespace fragcore {
 		}
 
 	  public:
-		static Color clear(void) noexcept { return Color(0.0f, 0.0f, 0.0f, 0.0f); }	 // Clear Color {0,0,0,0}
-		static Color black(void) noexcept { return Color(0.0f, 0.0f, 0.0f, 1.0f); }	 // Black Color {0,0,0,1}
-		static Color white(void) noexcept { return Color(1.0f, 1.0f, 1.0f, 1.0f); }	 // White Color {1,1,1,constexpr
-		static Color red(void) noexcept { return Color(1.0f, 0.0f, 0.0f, 1.0f); }	 // Red Color {1,0,0,1}
-		static Color green(void) noexcept { return Color(0.0f, 1.0f, 0.0f, 1.0f); }	 // Green Color {0,1,0,1}
-		static Color blue(void) noexcept { return Color(0.0f, 0.0f, 1.0f, 1.0f); }	 // Blue Color {0,0,0,constexpr
-		static Color grey(void) noexcept { return Color(0.5f, 0.5f, 0.5f, 1.0f); }	 // Gray Color {0,0,0,1}
-		static Color yellow(void) noexcept { return Color(1.0f, 1.0f, 0.0f, 1.0f); } // Yellow Color {0,0,0,1}
-		static Color orange(void) noexcept { return Color(1.0f, 0.5f, 0.0f, 1.0f); } // Orange Color {0,0,0,1}
-		static Color pink(void) noexcept { return Color(1.0f, 0.5f, 1.0f, 1.0f); }	 // Pink Color {1,0.5,1.0,1.0}
-		static Color purple(void) noexcept { return Color(0.5f, 0.0f, 1.0f, 1.0f); } // Purple Color { 0.5, 0, 1, 1.0}
+		static Color clear() noexcept { return Color(0.0f, 0.0f, 0.0f, 0.0f); }	 // Clear Color {0,0,0,0}
+		static Color black() noexcept { return Color(0.0f, 0.0f, 0.0f, 1.0f); }	 // Black Color {0,0,0,1}
+		static Color white() noexcept { return Color(1.0f, 1.0f, 1.0f, 1.0f); }	 // White Color {1,1,1,constexpr
+		static Color red() noexcept { return Color(1.0f, 0.0f, 0.0f, 1.0f); }	 // Red Color {1,0,0,1}
+		static Color green() noexcept { return Color(0.0f, 1.0f, 0.0f, 1.0f); }	 // Green Color {0,1,0,1}
+		static Color blue() noexcept { return Color(0.0f, 0.0f, 1.0f, 1.0f); }	 // Blue Color {0,0,0,constexpr
+		static Color grey() noexcept { return Color(0.5f, 0.5f, 0.5f, 1.0f); }	 // Gray Color {0,0,0,1}
+		static Color yellow() noexcept { return Color(1.0f, 1.0f, 0.0f, 1.0f); } // Yellow Color {0,0,0,1}
+		static Color orange() noexcept { return Color(1.0f, 0.5f, 0.0f, 1.0f); } // Orange Color {0,0,0,1}
+		static Color pink() noexcept { return Color(1.0f, 0.5f, 1.0f, 1.0f); }	 // Pink Color {1,0.5,1.0,1.0}
+		static Color purple() noexcept { return Color(0.5f, 0.0f, 1.0f, 1.0f); } // Purple Color { 0.5, 0, 1, 1.0}
 	};
 } // namespace fragcore
 

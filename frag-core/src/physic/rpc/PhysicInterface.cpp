@@ -21,7 +21,7 @@ PhysicInterface::PhysicInterface(const PhysicInterface& other){
 	this->dispatcher = new PhysicDispatcher();
 	this->interpreter = new PhysicInterpreter();
 }
-PhysicInterface::~PhysicInterface(void){
+PhysicInterface::~PhysicInterface(){
 
 	/*	*/
 	delete this->dispatcher;
@@ -38,7 +38,7 @@ void PhysicInterface::simulate(float timeStep, int maxSubSteps, float fixedTimeS
 	this->dispatcher->send(eSimulate, sizeof(simulate), &simulate.header, nullptr);
 }
 
-void PhysicInterface::sync(void){
+void PhysicInterface::sync(){
 
 	PacketSync sync;
 	sync.num = 0;
@@ -54,7 +54,7 @@ void PhysicInterface::setGravity(const Vector3& gravity){
 	this->dispatcher->send(eGravity, sizeof(pgravity), &pgravity.header, nullptr);
 }
 
-Vector3 PhysicInterface::getGravity(void)const{
+Vector3 PhysicInterface::getGravity()const{
 
 	PacketRequest request;
 	request.request = eGravity;
@@ -130,10 +130,10 @@ void* PhysicInterface::getState(unsigned int* len){
 }
 
 
-const char* PhysicInterface::getVersion(void)const{
+const char* PhysicInterface::getVersion()const{
 	return PV_STR_VERSION(1,0,0);
 }
-const char* PhysicInterface::getName(void)const{
+const char* PhysicInterface::getName()const{
 	return "RPC Physic";
 }
 

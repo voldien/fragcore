@@ -6,7 +6,7 @@
 
 using namespace fragcore;
 
-Constraints::~Constraints(void){
+Constraints::~Constraints(){
 
 }
 

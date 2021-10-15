@@ -43,9 +43,9 @@ namespace fragcore {
 		};
 
 	  public:
-		virtual ~IO(void) = default;
+		virtual ~IO() = default;
 
-		virtual void close(void) = 0;
+		virtual void close() = 0;
 
 		virtual long int read(long int nbytes, void *pbuffer) = 0;
 
@@ -53,19 +53,19 @@ namespace fragcore {
 
 		virtual long int peek(long int nBytes, void *pbuffer) {}
 
-		virtual bool eof(void) const = 0;
+		virtual bool eof() const = 0;
 
-		virtual long int length(void) = 0;
+		virtual long int length() = 0;
 
 		virtual void seek(long int nbytes, Seek seek) = 0;
 
-		virtual unsigned long getPos(void) = 0;
+		virtual unsigned long getPos() = 0;
 
-		virtual bool isWriteable(void) const = 0;
+		virtual bool isWriteable() const = 0;
 
-		virtual bool isReadable(void) const = 0;
+		virtual bool isReadable() const = 0;
 
-		virtual bool flush(void) = 0;
+		virtual bool flush() = 0;
 
 		//		virtual String get_path() const { return ""; } /// returns the path for the current open file
 		//		virtual String get_path_absolute() const { return ""; } /// returns the absolute path for the current
@@ -75,9 +75,9 @@ namespace fragcore {
 		//		inline bool get_endian_swap() const { return endian_swap; }
 
 		// TODO determine first how its behaviour before determine if it shall be included.
-		// virtual std::optional<IFileSystem*> getFileSystem(void) = 0;
+		// virtual std::optional<IFileSystem*> getFileSystem() = 0;
 
-		// 		virtual bool isBlocking(void);
+		// 		virtual bool isBlocking();
 		// virtual void setBlocking(bool blocking);
 
 		enum IOOperation : unsigned int {
@@ -95,7 +95,7 @@ namespace fragcore {
 
 		virtual bool isOperationSupported(IOOperation operationFlags) const noexcept = 0;
 
-		template <typename T> T &as(void) { return static_cast<T>(*this); }
+		template <typename T> T &as() { return static_cast<T>(*this); }
 
 	  protected: /*  Internal methods.   */
 		virtual void open(const char *path, IOMode mode) = 0;

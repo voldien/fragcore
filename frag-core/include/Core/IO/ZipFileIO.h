@@ -36,25 +36,25 @@ namespace fragcore {
 	  public:
 		void open(const char *path, IOMode mode) override;
 
-		void close(void) override;
+		void close() override;
 
 		long read(long int nbytes, void *pbuffer) override;
 
 		long write(long int nbytes, const void *pbuffer) override;
 
-		bool eof(void) const override;
+		bool eof() const override;
 
-		long length(void) override;
+		long length() override;
 
 		void seek(long int nbytes, Seek seek) override;
 
-		unsigned long getPos(void) override;
+		unsigned long getPos() override;
 
-		bool isWriteable(void) const override;
+		bool isWriteable() const override;
 
-		bool isReadable(void) const override;
+		bool isReadable() const override;
 
-		bool flush(void) override;
+		bool flush() override;
 
 		virtual bool isOperationSupported(IOOperation operations) const noexcept override {
 			return (operations & OP_ALL) != operations;
@@ -69,11 +69,11 @@ namespace fragcore {
 		ZipFileIO(zip_file_t *file, zip_int64_t index, Ref<ZipFileSystem> ref);
 
 	  public:
-		ZipFileIO(void);
+		ZipFileIO();
 
 		ZipFileIO(const ZipFileIO &other);
 		ZipFileIO(const ZipFileIO &&other);
-		virtual ~ZipFileIO(void);
+		virtual ~ZipFileIO();
 	};
 } // namespace fragcore
 

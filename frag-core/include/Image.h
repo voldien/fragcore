@@ -33,11 +33,11 @@ namespace fragcore {
 		Image(int width, int height, TextureFormat format);
 
 		// TODO set const for the width and height
-		virtual unsigned int width(void) noexcept { return this->w; }
+		virtual unsigned int width() noexcept { return this->w; }
 
-		virtual unsigned int height(void) noexcept { return this->h; }
+		virtual unsigned int height() noexcept { return this->h; }
 
-		// virtual unsigned int layers(void) const;
+		// virtual unsigned int layers() const;
 		Color operator[](unsigned int index) { return Color::black(); }
 
 	  private:

@@ -119,7 +119,7 @@ namespace fragcore {
 			eReadWrite = 3,     /*  */
 		};
 
-		Texture(void) = default;
+		Texture() = default;
 
 		/**
 		 *
@@ -139,7 +139,7 @@ namespace fragcore {
 		 *
 		 * @return
 		 */
-		virtual bool isValid(void);
+		virtual bool isValid();
 
 		/**
 		 *
@@ -163,7 +163,7 @@ namespace fragcore {
 		 *
 		 * @return
 		 */
-		virtual FilterMode getFilterMode(void) override;
+		virtual FilterMode getFilterMode() override;
 
 		/**
 		 *
@@ -175,7 +175,7 @@ namespace fragcore {
 		 *
 		 * @return
 		 */
-		virtual WrapMode getWrapMode(void) override;
+		virtual WrapMode getWrapMode() override;
 
 		/**
 		 *
@@ -187,15 +187,15 @@ namespace fragcore {
 		 *
 		 * @return
 		 */
-		virtual float getAnisotropic(void) const override;
+		virtual float getAnisotropic() const override;
 
-		virtual CompareFunc getCompare(void) const override;
+		virtual CompareFunc getCompare() const override;
 
 		virtual void setCompareFunc(CompareFunc compareFunc) override;
 
 		void setMipMapBaseLevel(unsigned int level) override;
 
-		unsigned int getMipMapBaseLevel(void) const override;
+		unsigned int getMipMapBaseLevel() const override;
 
 		void setMipMapBias(float bias) override;
 
@@ -203,24 +203,24 @@ namespace fragcore {
 
 		void setBorderColor(float color) override;
 
-		float getBorderColor(void) const override;
+		float getBorderColor() const override;
 
 		unsigned int setMaxLod(unsigned int level) override;
 
-		unsigned int getMaxLod(void) const override;
+		unsigned int getMaxLod() const override;
 
 		unsigned int setMinLod(unsigned int level) override;
 
-		unsigned int getMinLod(void) const override;
+		unsigned int getMinLod() const override;
 
-		virtual Format getFormat(void) const;
+		virtual Format getFormat() const;
 
 		//TODO set const for the width and height
-		virtual unsigned int width(void);
+		virtual unsigned int width();
 
-		virtual unsigned int height(void);
+		virtual unsigned int height();
 
-		virtual unsigned int layers(void) const;
+		virtual unsigned int layers() const;
 
 		//TODO add mip map streaming.
 
@@ -236,7 +236,7 @@ namespace fragcore {
 		/**
 		 *
 		 */
-		virtual void unMapTexture(void);
+		virtual void unMapTexture();
 
 		//TOOD determine of range mapping is possible with flushing and etc.
 
@@ -255,11 +255,11 @@ namespace fragcore {
 		 */
 		virtual void *getPixels(TextureFormat format, unsigned int level, unsigned long *nBytes); // TOOD add fvformatf.
 
-		//virtual bool UseSRGB(void);
-		virtual void clear(void);
+		//virtual bool UseSRGB();
+		virtual void clear();
 
 		//TODO add get native ptr object.
-		virtual intptr_t getNativePtr(void) const;
+		virtual intptr_t getNativePtr() const;
 
 		virtual void setName(const std::string &name) override;
 	};

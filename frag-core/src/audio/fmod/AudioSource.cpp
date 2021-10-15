@@ -13,29 +13,29 @@ using namespace std;
 
 VDVector<AudioSource *> audioSources;
 
-AudioSource::AudioSource(void) {
+AudioSource::AudioSource() {
 	this->Clip = nullptr;
 	this->channel = nullptr;
 }
 
-void AudioSource::instanceInitilize(void) {
+void AudioSource::instanceInitilize() {
 
 }
 
-void AudioSource::onEnable(void) {
+void AudioSource::onEnable() {
 	this->channel->setPaused(true);
 }
 
-void AudioSource::onDisable(void) {
+void AudioSource::onDisable() {
 	this->channel->setPaused(true);
 }
 
-void AudioSource::onDestroy(void) {
+void AudioSource::onDestroy() {
 	if (this->channel)
 		this->channel->stop();
 }
 
-void AudioSource::initializeComponent(void) {
+void AudioSource::initializeComponent() {
 	this->channel = nullptr;
 	this->Clip = nullptr;
 	audioSources.push_back(this);
@@ -48,7 +48,7 @@ VDBehavior *AudioSource::copyComponent(unsigned int &dataSize) {
 	return VDCASTP(VDBehavior * , audiosource);
 }
 
-void AudioSource::play(void) {
+void AudioSource::play() {
 	FMOD_RESULT results;
 	if (!this->Clip)
 		return;
@@ -65,11 +65,11 @@ void AudioSource::play(void) {
 	}
 }
 
-void AudioSource::pause(void) {
+void AudioSource::pause() {
 	this->channel->setPaused(true);
 }
 
-void AudioSource::stop(void) {
+void AudioSource::stop() {
 	this->channel->stop();
 }
 
@@ -87,13 +87,13 @@ void AudioSource::loop(int loop) {
 	this->channel->setMode(FMOD_LOOP_NORMAL);
 }
 
-bool AudioSource::isPlaying(void) const {
+bool AudioSource::isPlaying() const {
 	bool playing;
 	this->channel->isPlaying(&playing);
 	return playing;
 }
 
-float AudioSource::getFrequency(void) const {
+float AudioSource::getFrequency() const {
 	float pvalue;
 	this->channel->getFrequency(&pvalue);
 	return pvalue;
@@ -108,7 +108,7 @@ void AudioSource::setVolume(float volume) {
 	this->channel->setVolume(volume);
 }
 
-float AudioSource::getVolume(void) const {
+float AudioSource::getVolume() const {
 	float volume;
 	this->channel->getVolume(&volume);
 	return volume;
@@ -118,7 +118,7 @@ void AudioSource::setPriority(int Priority) {
 	this->channel->setPriority(Priority);
 }
 
-int AudioSource::getPriority(void) const {
+int AudioSource::getPriority() const {
 	int priority;
 	this->channel->getPriority(&priority);
 	return priority;
@@ -128,7 +128,7 @@ void AudioSource::setMaxDistance(float maxDistance) {
 	this->channel->set3DMinMaxDistance(getMaxDistance(), maxDistance);
 }
 
-float AudioSource::getMaxDistance(void) const {
+float AudioSource::getMaxDistance() const {
 	float max;
 	this->channel->get3DMinMaxDistance(nullptr, &max);
 	return max;
@@ -138,7 +138,7 @@ void AudioSource::setMinDistance(float Mindistance) {
 	this->channel->set3DMinMaxDistance(Mindistance, getMaxDistance());
 }
 
-float AudioSource::getMinDistance(void) const {
+float AudioSource::getMinDistance() const {
 	float min;
 	this->channel->get3DMinMaxDistance(&min, nullptr);
 	return min;

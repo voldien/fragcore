@@ -64,10 +64,10 @@ namespace fragcore {
 		};
 
 		// TODO make it less state machine and allow it to become more modern.
-		IRenderer(void) = default;
+		IRenderer() = default;
 		IRenderer(const IRenderer &other) = default;
 		IRenderer(IRenderer &&other) = default;
-		virtual ~IRenderer(void) = default;
+		virtual ~IRenderer() = default;
 
 		/**
 		 *	Create texture.
@@ -266,7 +266,7 @@ namespace fragcore {
 		virtual void dispatchCompute(unsigned int *global, unsigned int *local, unsigned int offset = 0) = 0;
 
 		// TODO add memory barrier.
-		virtual void memoryBarrier(void) = 0;
+		virtual void memoryBarrier() = 0;
 
 		virtual Sync *createSync(SyncDesc *desc) = 0;
 
@@ -290,19 +290,19 @@ namespace fragcore {
 		 * Get all support shader languages.
 		 * @return bitflag of all supported shader languages.
 		 */
-		virtual ShaderLanguage getShaderLanguage(void) const = 0;
+		virtual ShaderLanguage getShaderLanguage() const = 0;
 
 		/**
 		 * Get the name of the rendering API.
 		 * @return non-null terminated string.
 		 */
-		virtual const char *getAPIVersion(void) const = 0;
+		virtual const char *getAPIVersion() const = 0;
 
 		/**
 		 *	Get version of the interface.
 		 *	@Return non-null terminated string.
 		 */
-		virtual const char *getVersion(void) const = 0;
+		virtual const char *getVersion() const = 0;
 
 		/**
 		 * Get all supported texture formats.
@@ -332,11 +332,11 @@ namespace fragcore {
 		// TODO imporove later
 		virtual void getStatus(MemoryInfo *memoryInfo) = 0;
 
-		virtual CommandList *createCommandBuffer(void) = 0;
+		virtual CommandList *createCommandBuffer() = 0;
 		virtual void submittCommand(Ref<CommandList> &list) = 0;
 		virtual void execute(CommandList *list) = 0;
 
-		virtual void *getData(void) const = 0;
+		virtual void *getData() const = 0;
 
 	  private: /*  */
 		void *pdata;

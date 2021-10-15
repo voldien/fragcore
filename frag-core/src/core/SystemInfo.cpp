@@ -6,7 +6,7 @@
 using namespace fragcore;
 static iware::system::OS_info_t info;
 
-SystemInfo::KernelSystem SystemInfo::getSystemKernel(void) noexcept {
+SystemInfo::KernelSystem SystemInfo::getSystemKernel() noexcept {
 	switch (iware::system::kernel_info().variant) {
 	default:
 		return SystemInfo::UnKnownKernel;
@@ -14,7 +14,7 @@ SystemInfo::KernelSystem SystemInfo::getSystemKernel(void) noexcept {
 	// iware::system::OS_
 }
 
-SystemInfo::OperatingSystem SystemInfo::getOperatingSystem(void) noexcept {
+SystemInfo::OperatingSystem SystemInfo::getOperatingSystem() noexcept {
 
 	// iware::system::OS_info().full_name
 	if (info.major == 0)
@@ -37,7 +37,7 @@ SystemInfo::OperatingSystem SystemInfo::getOperatingSystem(void) noexcept {
 	return SystemInfo::Unknown;
 }
 
-const std::string &SystemInfo::getOperatingSystemName(void) noexcept {
+const std::string &SystemInfo::getOperatingSystemName() noexcept {
 	if (info.major == 0)
 		info = iware::system::OS_info();
 	return info.full_name;
@@ -66,9 +66,9 @@ const char *SystemInfo::getOperatingSystemName(SystemInfo::OperatingSystem os) {
 	}
 }
 
-const char *SystemInfo::getCPUName(void) noexcept { return iware::cpu::model_name().c_str(); }
+const char *SystemInfo::getCPUName() noexcept { return iware::cpu::model_name().c_str(); }
 
-const char *SystemInfo::getCPUArchitecture(void) noexcept {
+const char *SystemInfo::getCPUArchitecture() noexcept {
 	switch (iware::cpu::architecture()) {
 	case iware::cpu::architecture_t::x64:
 		return "x64";
@@ -84,9 +84,9 @@ const char *SystemInfo::getCPUArchitecture(void) noexcept {
 	}
 }
 
-unsigned long SystemInfo::getCPUFrequence(void) noexcept { return iware::cpu::frequency(); }
+unsigned long SystemInfo::getCPUFrequence() noexcept { return iware::cpu::frequency(); }
 
-SystemInfo::SIMD SystemInfo::getSupportedSIMD(void) {
+SystemInfo::SIMD SystemInfo::getSupportedSIMD() {
 	unsigned int supportedSIMD = HPM_NONE;
 
 	/**/
@@ -100,7 +100,7 @@ SystemInfo::SIMD SystemInfo::getSupportedSIMD(void) {
 	return (SystemInfo::SIMD)supportedSIMD;
 }
 
-SystemInfo::Endianness getEndianness(void) noexcept {
+SystemInfo::Endianness getEndianness() noexcept {
 	switch (iware::cpu::endianness()) {
 	case iware::cpu::endianness_t::big:
 		return SystemInfo::Endianness::BigEndian;
@@ -112,30 +112,30 @@ SystemInfo::Endianness getEndianness(void) noexcept {
 	}
 }
 
-const char *SystemInfo::getAppliationName(void) {
+const char *SystemInfo::getAppliationName() {
 	return "";
 	/*fs::current_path().c_str();*/
 }
 
-const char *SystemInfo::getUserName(void) { return ""; }
+const char *SystemInfo::getUserName() { return ""; }
 
-unsigned int SystemInfo::getPageSize(void) { return 1024; }
+unsigned int SystemInfo::getPageSize() { return 1024; }
 
-unsigned int SystemInfo::getCPUCoreCount(void) { return iware::cpu::quantities().logical; }
+unsigned int SystemInfo::getCPUCoreCount() { return iware::cpu::quantities().logical; }
 
-unsigned int SystemInfo::getCPUCacheLine(void) {
+unsigned int SystemInfo::getCPUCacheLine() {
 	const auto cache = iware::cpu::cache(2);
 	return cache.line_size;
 }
 
-bool SystemInfo::supportsVibration(void) { return false; }
+bool SystemInfo::supportsVibration() { return false; }
 
-unsigned long int SystemInfo::systemMemorySize(void) {
+unsigned long int SystemInfo::systemMemorySize() {
 	const auto memory = iware::system::memory();
 	return memory.physical_available;
 }
 
-const char *SystemInfo::getCurrentDirectory(void) {
+const char *SystemInfo::getCurrentDirectory() {
 	return "";
 	/*fs::current_path().c_str();*/
 }
@@ -145,6 +145,6 @@ static Ref<IO> stdoutRef = Ref<IO>(new FileIO(stdout));
 static Ref<IO> stdinRef = Ref<IO>(new FileIO(stdin));
 static Ref<IO> stderrRef = Ref<IO>(new FileIO(stderr));
 
-Ref<IO> &SystemInfo::getStdOut(void) noexcept { return stdoutRef; }
-Ref<IO> &SystemInfo::getStdIn(void) noexcept { return stdoutRef; }
-Ref<IO> &SystemInfo::getStdErr(void) noexcept { return stdoutRef; }
+Ref<IO> &SystemInfo::getStdOut() noexcept { return stdoutRef; }
+Ref<IO> &SystemInfo::getStdIn() noexcept { return stdoutRef; }
+Ref<IO> &SystemInfo::getStdErr() noexcept { return stdoutRef; }

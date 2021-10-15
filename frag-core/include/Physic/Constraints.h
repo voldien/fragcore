@@ -29,9 +29,9 @@ namespace fragcore {
 	class FVDECLSPEC Constraints {
 		friend class DynamicInterface;
 	private:
-		inline Constraints(void){}
+		inline Constraints(){}
 
-		virtual ~Constraints(void);
+		virtual ~Constraints();
 	public:
 
 		/**

@@ -41,7 +41,7 @@ namespace fragcore {
 		Hash(ALGORITHM algorithm);
 		Hash(Hash &&other);
 
-		~Hash(void);
+		~Hash();
 
 		/*  Add additional data to be used for computing.   .*/
 		void update(const void *pdata, size_t nbytes);
@@ -55,12 +55,12 @@ namespace fragcore {
 
 		void final(std::vector<unsigned char> &hash);
 
-		void reset(void) noexcept;
+		void reset() noexcept;
 
-		unsigned int getResultSize(void) const;
-		unsigned long int getByteRead(void) const;
+		unsigned int getResultSize() const;
+		unsigned long int getByteRead() const;
 
-		ALGORITHM getAlgorithm(void) const noexcept;
+		ALGORITHM getAlgorithm() const noexcept;
 
 	  protected:
 		void initHash(ALGORITHM algorithm);
@@ -73,7 +73,7 @@ namespace fragcore {
 		long int nbytes;
 
 		Hash(const Hash &other) = default;
-		Hash(void) = default;
+		Hash() = default;
 	};
 
 } // namespace fragcore

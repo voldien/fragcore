@@ -39,7 +39,7 @@ void GZFileIO::open(const char *path, IOMode mode) {
 	}
 }
 
-void GZFileIO::close(void) {
+void GZFileIO::close() {
 	int error;
 	error = gzclose(this->gzFi);
 	if (error != Z_OK) {
@@ -61,7 +61,7 @@ long GZFileIO::write(long int nbytes, const void *pbuffer) {
 	return nWrittenBytes;
 }
 
-long GZFileIO::length(void) {
+long GZFileIO::length() {
 	long size;
 	unsigned long curPos = getPos();
 	FileIO::seek(0, SET);
@@ -69,24 +69,24 @@ long GZFileIO::length(void) {
 	return FileIO::length();
 }
 
-bool GZFileIO::eof(void) const { return FileIO::eof(); }
+bool GZFileIO::eof() const { return FileIO::eof(); }
 
 void GZFileIO::seek(long int nbytes, Seek seek) {
 	// gzrewind
 	FileIO::seek(nbytes, seek);
 }
 
-unsigned long GZFileIO::getPos(void) {
+unsigned long GZFileIO::getPos() {
 	// gzeof
 	// gztell
 	return FileIO::getPos();
 }
 
-bool GZFileIO::isWriteable(void) const { return FileIO::isWriteable(); }
+bool GZFileIO::isWriteable() const { return FileIO::isWriteable(); }
 
-bool GZFileIO::isReadable(void) const { return FileIO::isReadable(); }
+bool GZFileIO::isReadable() const { return FileIO::isReadable(); }
 
-bool GZFileIO::flush(void) {
+bool GZFileIO::flush() {
 
 	if (this->mode & WRITE) {
 		int error;

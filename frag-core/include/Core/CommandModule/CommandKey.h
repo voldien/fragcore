@@ -12,25 +12,25 @@ public:
 
 	CommandKey(unsigned int keycode, unsigned int mod, Scene *scene);
 	CommandKey(const CommandKey &other);
-	~CommandKey(void);
+	~CommandKey();
 
 	/**
 	 * Get keycode.
 	 * @return
 	 */
-	const unsigned int getKeyCode(void) const;
+	const unsigned int getKeyCode() const;
 
 	/**
 	 * Get modification key.
 	 * @return
 	 */
-	const unsigned int getModKey(void) const;
+	const unsigned int getModKey() const;
 
 	/**
 	 *
 	 * @return
 	 */
-	virtual CommandType getType(void) const;
+	virtual CommandType getType() const;
 
 private:
 	unsigned int keycode;    /*	*/

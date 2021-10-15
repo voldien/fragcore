@@ -11,8 +11,8 @@ namespace fragcore {
 		NoCopyable(const NoCopyable &) = delete; // non construction-copyable
 		NoCopyable &operator=(const NoCopyable &) = delete; // non copyable
 
-		static NoCopyable *create(void);
-		NoCopyable(void) = default;
+		static NoCopyable *create();
+		NoCopyable() = default;
 	};
 }
 

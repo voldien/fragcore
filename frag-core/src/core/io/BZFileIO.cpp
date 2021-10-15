@@ -23,24 +23,24 @@ long BZFileIO::write(long int nbytes, const void *pbuffer) {
 	return len;
 }
 
-long BZFileIO::length(void) { return FileIO::length(); }
+long BZFileIO::length() { return FileIO::length(); }
 
-bool BZFileIO::eof(void) const { return FileIO::eof(); }
+bool BZFileIO::eof() const { return FileIO::eof(); }
 
 void BZFileIO::seek(long int nbytes, IO::Seek seek) { FileIO::seek(nbytes, seek); }
 
-unsigned long BZFileIO::getPos(void) { return FileIO::getPos(); }
+unsigned long BZFileIO::getPos() { return FileIO::getPos(); }
 
-bool BZFileIO::isWriteable(void) const { return FileIO::isWriteable(); }
+bool BZFileIO::isWriteable() const { return FileIO::isWriteable(); }
 
-bool BZFileIO::isReadable(void) const { return FileIO::isReadable(); }
+bool BZFileIO::isReadable() const { return FileIO::isReadable(); }
 
-bool BZFileIO::flush(void) {
+bool BZFileIO::flush() {
 	return BZ2_bzflush(this->bzFile);
 	//	return FileIO::flush();
 }
 
-void BZFileIO::close(void) {
+void BZFileIO::close() {
 	int bzerror;
 	BZ2_bzReadClose(&bzerror, this->bzFile);
 

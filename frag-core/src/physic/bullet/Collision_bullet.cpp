@@ -4,7 +4,7 @@
 #include<bullet/btBulletDynamicsCommon.h>
 using namespace fragcore;
 
-Collision::~Collision(void){}
+Collision::~Collision(){}
 
 Vector3 Collision::getCenter(void* pobj){
 

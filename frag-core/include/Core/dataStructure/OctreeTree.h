@@ -28,7 +28,7 @@ namespace fragcore {
 		} Node;
 
 	  public:
-		Octree(void) {
+		Octree() {
 			nodes = nullptr;
 			nrOfElements = 0;
 			reserved = 0;
@@ -36,7 +36,7 @@ namespace fragcore {
 
 		Octree(const Octree &octree) {}
 
-		~Octree(void) {}
+		~Octree() {}
 
 		void resize(int n) { nodes = realloc(nodes, sizeof(Node) * n); }
 

@@ -26,9 +26,9 @@
 //class VDDECLSPEC VDEvent{
 //		public:
 //
-//		VDEvent(void);
+//		VDEvent();
 //		VDEvent(const VDEvent& event);
-//		virtual ~VDEvent(void);
+//		virtual ~VDEvent();
 //
 //		/**
 //		 *	On resize event.
@@ -81,12 +81,12 @@
 //		/**
 //		 *	Get number of registered event handler.
 //		 */
-//		static unsigned int VDAPIENTRY getNumEvents(void);
+//		static unsigned int VDAPIENTRY getNumEvents();
 //
 //		/**
 //		 *	Get list of all event handlers.
 //		 */
-//		static VDVector<VDEvent*>* VDAPIENTRY getEvents(void);
+//		static VDVector<VDEvent*>* VDAPIENTRY getEvents();
 //
 //		/**
 //		 *	Get event by index.

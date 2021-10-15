@@ -30,16 +30,16 @@ namespace fragcore {
 
 		//virtual unsigned int getVertexStride(void* pobj);
 		//virtual unsigned int getIndicecStride(void* pobj);
-		virtual unsigned int getVertexCount(void);
+		virtual unsigned int getVertexCount();
 
-		virtual unsigned int getIndicesCount(void);
+		virtual unsigned int getIndicesCount();
 
 
 		//virtual BufferObject* verticesbuffer(void* pobj);
 		//virtual BufferObject* indicesBuffer(void* pobj);
 
 
-		intptr_t getNativePtr(void) const override;
+		intptr_t getNativePtr() const override;
 	};
 }
 #endif

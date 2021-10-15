@@ -62,7 +62,7 @@ namespace fragcore {
 		static const char* getInterfaceLibraryPath(PhysicAPI api);
 	private:	/*	Prevent one from creating an instance of this class.	*/
 
-		PhysicFactory(void);
+		PhysicFactory();
 		PhysicFactory(const PhysicFactory& other);
 
 	};

@@ -12,28 +12,28 @@ namespace fragcore {
 	public:
 		SDLDisplay(int index);
 
-		unsigned int x(void) const override;
+		unsigned int x() const override;
 
-		unsigned int y(void) const override;
+		unsigned int y() const override;
 
-		unsigned int width(void) const override;
+		unsigned int width() const override;
 
-		unsigned int height(void) const override;
+		unsigned int height() const override;
 
-		unsigned int refreshRate(void) const override;
+		unsigned int refreshRate() const override;
 
-		std::vector<Mode> getModes(void) const override;
+		std::vector<Mode> getModes() const override;
 
 		void getDPI(DPI *dpi) override;
 
-		fragcore::TextureFormat getFormat(void) override;
+		fragcore::TextureFormat getFormat() override;
 
 	protected:
 		unsigned int translateFormat(unsigned int format);
 	private:
 		unsigned int index;
 	public:
-		static int getNumDisplays(void);
+		static int getNumDisplays();
 	};
 }
 

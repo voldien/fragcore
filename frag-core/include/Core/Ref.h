@@ -82,7 +82,7 @@ namespace fragcore {
 			return reference;
 		}
 	public:
-		Ref(void) {
+		Ref() {
 			reference = nullptr;
 		}
 
@@ -105,7 +105,7 @@ namespace fragcore {
 
 		Ref(T &&other) { this->p_reference = std::exchange(other.p_reference, nullptr); }
 
-		~Ref(void) {
+		~Ref() {
 			unref();
 		}
 
@@ -118,7 +118,7 @@ namespace fragcore {
 			//	reference = p_ref;
 		}
 
-		void unref(void) {
+		void unref() {
 			if (this->reference && this->reference->deincreemnt()) {
 				//delete reference;
 				//memdelete(reference);

@@ -61,7 +61,7 @@ namespace fragcore {
 		 *
 		 * @return
 		 */
-		static VERBOSITY getVerbosity(void);
+		static VERBOSITY getVerbosity();
 
 		/**
 		 *
@@ -92,7 +92,7 @@ namespace fragcore {
 		// TODO add support.
 		static void addIOOutput(Ref<IO> &io, const VERBOSITY mapping);
 		static void removeIOOutPut(Ref<IO> &io);
-		static void clearIO(void);
+		static void clearIO();
 
 	  private:
 		static int logv(VERBOSITY verbosity, const char *format, va_list va);

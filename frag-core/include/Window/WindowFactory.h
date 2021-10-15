@@ -11,7 +11,7 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC WindowFactory : public Module {
 	  public:
-		WindowManager *createWindowManager(void);
+		WindowManager *createWindowManager();
 	};
 } // namespace fragcore
 

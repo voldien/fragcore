@@ -5,7 +5,7 @@
 using namespace fmod;
 FMOD* fmodSystem = nullptr;
 
-int VDAudio::init(void){
+int VDAudio::init(){
 
 	if(fmodSystem != nullptr){
 		return 1;
@@ -93,7 +93,7 @@ int VDAudio::init(void){
 
 }
 
-void VDAudio::release(void){
+void VDAudio::release(){
 	if(!fmodSystem)
 		return 1;
 	return FMOD_System_Release(fmodSystem);

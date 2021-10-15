@@ -27,26 +27,26 @@ namespace fragcore {
 	class FVDECLSPEC RayCastHit {
 	public:
 	//TODO add parmaters and methods.
-		inline RayCastHit(void){}
-		~RayCastHit(void){
+		inline RayCastHit(){}
+		~RayCastHit(){
 
 		}
 
-		//Collider*  collider(void) const;
+		//Collider*  collider() const;
 
-		//RigidBody*  rigidBody(void) const;
+		//RigidBody*  rigidBody() const;
 
-	//	VDGameObject*  gameObject(void) const;
+	//	VDGameObject*  gameObject() const;
 
-		//VDTransform*  transform(void) const;
+		//VDTransform*  transform() const;
 
-		//Vector3& point(void) const;
+		//Vector3& point() const;
 
-		//Vector3 &normal(void) const;
+		//Vector3 &normal() const;
 
-		//float distance(void) const;
+		//float distance() const;
 
-		//PVVector2& barycentric(void) const;
+		//PVVector2& barycentric() const;
 	protected:
 		void *hitdata;
 	};

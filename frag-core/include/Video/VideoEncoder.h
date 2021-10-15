@@ -31,15 +31,15 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC VideoEncoder: public SmartReference {
 	  public:
-		void seekFrame(void);
+		void seekFrame();
 
-		Ref<AudioDecoder> &getAudioDecoder(void) const;
-		virtual double getTotalTime(void) const = 0;
+		Ref<AudioDecoder> &getAudioDecoder() const;
+		virtual double getTotalTime() const = 0;
 
 		// TODO add dedcode a frame
 
 	  private: /*	Prevent one from creating an instance of this class.	*/
-		VideoEncoder(void);
+		VideoEncoder();
 		VideoEncoder(const VideoFactory &other);
 	};
 } // namespace fragcore

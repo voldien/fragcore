@@ -36,7 +36,7 @@
 #define DEFAULT_MAX_RANGE 100
 
 
-FMOD_REVERB_PROPERTIES VDAPIENTRY getReverbProperties(void)const{
+FMOD_REVERB_PROPERTIES VDAPIENTRY getReverbProperties()const{
 	FMOD_REVERB_PROPERTIES reverbproperties;
 	if(this->reverb != nullptr){
 		reverb->getProperties(&reverbproperties);
@@ -44,7 +44,7 @@ FMOD_REVERB_PROPERTIES VDAPIENTRY getReverbProperties(void)const{
 	return reverbproperties;
 }
 
-VDAudioReverb::VDAudioReverb(void) : VDBehavior(){
+VDAudioReverb::VDAudioReverb() : VDBehavior(){
 	this->reverb = nullptr;
 }
 
@@ -52,27 +52,27 @@ VDAudioReverb::VDAudioReverb(const VDAudioReverb& audio) : VDBehavior(){
 	this->reverb = nullptr;
 }
 
-void VDAudioReverb::instanceInitilize(void){
+void VDAudioReverb::instanceInitilize(){
 
 }
 
-void VDAudioReverb::onEnable(void){
+void VDAudioReverb::onEnable(){
 	if(this->reverb)
 		this->reverb->setActive(true);
 }
 
-void VDAudioReverb::onDisable(void){
+void VDAudioReverb::onDisable(){
 	if(this->reverb)
 		this->reverb->setActive(false);
 }
 
-void VDAudioReverb::onDestroy(void){
+void VDAudioReverb::onDestroy(){
 	if(this->reverb){
 		this->reverb->release();
 	}
 }
 
-void VDAudioReverb::initializeComponent(void){
+void VDAudioReverb::initializeComponent(){
 	FMOD_RESULT results;
 
 	results = VDCASTP(FMOD::System*,engine.audioContext)->createReverb(&this->reverb);
@@ -98,7 +98,7 @@ void VDAudioReverb::setMinDistance(float distance){
 	this->reverb->set3DAttributes(&pos, distance, max);
 }
 
-float VDAudioReverb::getMinDistance(void)const{
+float VDAudioReverb::getMinDistance()const{
 	float min;
 	this->reverb->get3DAttributes(nullptr, &min, nullptr);
 	return min;
@@ -111,7 +111,7 @@ void VDAudioReverb::setMaxDistance(float distance){
 	this->reverb->set3DAttributes(&pos, min, distance);
 }
 
-float VDAudioReverb::getMaxDistance(void)const{
+float VDAudioReverb::getMaxDistance()const{
 	float max;
 	this->reverb->get3DAttributes(nullptr, nullptr, &max);
 	return max;
@@ -163,7 +163,7 @@ void VDAudioReverb::setReverb(float reverb){
 	this->reverb->setProperties(&m_reverb);
 }
 
-int VDAudioReverb::getReverb(void)const{
+int VDAudioReverb::getReverb()const{
 	FMOD_REVERB_PROPERTIES m_reverb = getReverbProperties();
 	return m_reverb.Reverb;
 }
@@ -174,7 +174,7 @@ void VDAudioReverb::setReverbDelay(float reverbdelay){
 	this->reverb->setProperties(&m_reverbDelay);
 }
 
-float VDAudioReverb::getReverbDelay(void)const{
+float VDAudioReverb::getReverbDelay()const{
 	FMOD_REVERB_PROPERTIES m_reverbDelay;
 	this->reverb->getProperties(&m_reverbDelay);
 	return m_reverbDelay.ReverbDelay;
@@ -186,7 +186,7 @@ void VDAudioReverb::setReflections(float Reflections){
 	this->reverb->setProperties(&m_reverb);
 }
 
-float VDAudioReverb::getReflections(void)const{
+float VDAudioReverb::getReflections()const{
 	FMOD_REVERB_PROPERTIES m_reverb;
 	this->reverb->getProperties(&m_reverb);
 	return m_reverb.Reflections;

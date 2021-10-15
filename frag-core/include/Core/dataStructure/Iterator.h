@@ -36,7 +36,7 @@ namespace fragcore {
 		/**
 		 *	@Return
 		 */
-		virtual Iterator &operator++(void) = 0;
+		virtual Iterator &operator++() = 0;
 
 		/**
 		 *	@Return
@@ -46,7 +46,7 @@ namespace fragcore {
 		/**
 		 *	@Return
 		 */
-		virtual Iterator &operator--(void) = 0;
+		virtual Iterator &operator--() = 0;
 
 		/**
 		 *	@Return
@@ -76,17 +76,17 @@ namespace fragcore {
 		/**
 		 *	@Return
 		 */
-		virtual T &operator->(void) const { return (T) * this->iterator; }
+		virtual T &operator->() const { return (T) * this->iterator; }
 
 		/**
 		 *	@Return
 		 */
-		virtual T &operator*(void) const { return *this->iterator; }
+		virtual T &operator*() const { return *this->iterator; }
 
 		/**
 		 *	@Return
 		 */
-		virtual T &operator*(void) { return *this->iterator; }
+		virtual T &operator*() { return *this->iterator; }
 
 		/**
 		 *	@Return

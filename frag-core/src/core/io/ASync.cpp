@@ -12,8 +12,8 @@ using namespace fragcore;
 
 class FVDECLSPEC AsyncTask : public Task {
   public:
-	virtual void Execute(void) noexcept override {}
-	virtual void Complete(void) noexcept override {}
+	virtual void Execute() noexcept override {}
+	virtual void Complete() noexcept override {}
 };
 
 ASyncHandle ASyncIO::asyncOpen(Ref<IO> &io) {
@@ -118,7 +118,7 @@ Ref<IO> ASyncIO::getIO(ASyncHandle handle) const { return getObject(handle)->ref
 
 const ASyncIO::IOStatus &ASyncIO::getIOStatus(ASyncHandle handle) const { return this->getObject(handle)->status; }
 
-Ref<IScheduler> ASyncIO::getScheduler(void) const { return this->scheduler; }
+Ref<IScheduler> ASyncIO::getScheduler() const { return this->scheduler; }
 
 void ASyncIO::asyncWait(fragcore::ASyncHandle handle) {
 	AsyncObject *ao = getObject(handle);
@@ -249,9 +249,9 @@ ASyncIO::AsyncObject *ASyncIO::createObject(ASyncHandle handle) { return &this->
 
 void ASyncIO::setScheduleReference(Ref<IScheduler> &sch) { this->scheduler = sch; }
 
-ASyncIO::~ASyncIO(void) { this->getScheduler(); }
+ASyncIO::~ASyncIO() { this->getScheduler(); }
 
-ASyncIO::ASyncIO(void) {
+ASyncIO::ASyncIO() {
 	this->scheduler = nullptr;
 	// this->sch = nullptr;
 }

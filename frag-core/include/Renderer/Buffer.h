@@ -42,9 +42,9 @@ namespace fragcore {
 			eFlushExplicit = 0x40, /*  */
 		};
 
-		virtual ~Buffer(void) = default;
+		virtual ~Buffer() = default;
 
-		virtual void bind(void) = 0;
+		virtual void bind() = 0;
 
 		virtual void bind(unsigned int offset, unsigned int size) = 0;
 
@@ -54,9 +54,9 @@ namespace fragcore {
 
 		virtual void *getData(unsigned int offset, unsigned int size) = 0;
 
-		virtual bool isValid(void) = 0;
+		virtual bool isValid() = 0;
 
-		virtual long int getSize(void) = 0;
+		virtual long int getSize() = 0;
 
 		virtual void *mapBuffer(MapTarget target) = 0;
 
@@ -64,7 +64,7 @@ namespace fragcore {
 
 		virtual void flush(unsigned long int offset, unsigned long int length) = 0;
 
-		virtual void unMapBuffer(void) = 0;
+		virtual void unMapBuffer() = 0;
 	};
 } // namespace fragcore
 

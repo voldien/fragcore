@@ -27,7 +27,7 @@ namespace fragcore {
 	 */
 	template <class T, int U = 0> class Queue : public std::allocator<T> {
 	  public:
-		Queue(void) {
+		Queue() {
 			this->mdata = nullptr;
 			this->reserved = 0;
 			this->nrElements = 0;
@@ -47,13 +47,13 @@ namespace fragcore {
 
 		Queue(const Queue &queue) { *this = queue; }
 
-		~Queue(void) { delete[] this->mdata; }
+		~Queue() { delete[] this->mdata; }
 
-		T &front(void) const { return getData()[head]; }
+		T &front() const { return getData()[head]; }
 
-		T &back(void) const { return getData()[tail]; }
+		T &back() const { return getData()[tail]; }
 
-		T &dequeue(void) {
+		T &dequeue() {
 			if (isEmpty())
 				throw InvalidArgumentException("");
 			T *obj = &this->getData()[head];
@@ -77,7 +77,7 @@ namespace fragcore {
 		/**
 		 *
 		 */
-		inline void clear(void) {
+		inline void clear() {
 			this->head = 0;
 			this->tail = 0;
 		}
@@ -85,12 +85,12 @@ namespace fragcore {
 		/**
 		 *	@Return true if queue empty.
 		 */
-		inline bool isEmpty(void) const { return (this->getSize() == 0); }
+		inline bool isEmpty() const { return (this->getSize() == 0); }
 
 		/**
 		 *	@Return true if full, false otherwise.
 		 */
-		inline bool isFull(void) const { return (this->getSize() == this->getReserved()); }
+		inline bool isFull() const { return (this->getSize() == this->getReserved()); }
 
 		/**
 		 *	Resize queue.
@@ -110,9 +110,9 @@ namespace fragcore {
 			this->reserved = size;
 		}
 
-		unsigned int getSize(void) const { return nrElements; }
+		unsigned int getSize() const { return nrElements; }
 
-		unsigned int getReserved(void) const { return this->reserved; }
+		unsigned int getReserved() const { return this->reserved; }
 
 		/*  */
 		class QueueIterator : public Iterator<T> {
@@ -120,14 +120,14 @@ namespace fragcore {
 			QueueIterator(Queue<T> *queue);
 		};
 
-		Iterator<T> begin(void) {}
+		Iterator<T> begin() {}
 
-		Iterator<T> end(void) {}
+		Iterator<T> end() {}
 
 	  private:
-		inline int getTypeSize(void) const { return sizeof(T); }
+		inline int getTypeSize() const { return sizeof(T); }
 
-		inline T *getData(void) const { return this->mdata; }
+		inline T *getData() const { return this->mdata; }
 
 	  public: /*  */
 		/**

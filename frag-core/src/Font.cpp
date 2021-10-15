@@ -1,15 +1,15 @@
 #include"Font.h"
 using namespace fragcore;
 
-Font::Font(void) {
+Font::Font() {
 	this->texture = nullptr;
 }
 
-Font::~Font(void) {
+Font::~Font() {
 	//TODO reduce references.
 }
 
-unsigned int Font::getNumberCharacter(void) const {
+unsigned int Font::getNumberCharacter() const {
 	return this->characters.size();
 }
 
@@ -22,6 +22,6 @@ const Font::Character &Font::getCharacter(unsigned int index) const {
 	//return this->characters[index];
 }
 
-Texture *Font::getTexture(void) const {
+Texture *Font::getTexture() const {
 	return this->texture;
 }

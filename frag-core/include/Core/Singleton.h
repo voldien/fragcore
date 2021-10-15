@@ -25,7 +25,7 @@
 namespace fragcore {
 	template <typename T> class FVDECLSPEC Singleton : public SmartReference {
 	  public:
-		static Ref<T> getInstance(void) {
+		static Ref<T> getInstance() {
 			static T *_instance = nullptr;
 			if (_instance == nullptr) {
 				T *instance = new T();

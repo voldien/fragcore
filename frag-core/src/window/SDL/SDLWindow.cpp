@@ -2,12 +2,12 @@
 
 // void Widnow::setIcon(void *pVoid) {}
 
-// void *Widnow::getIcon(void) const { return nullptr; }
+// void *Widnow::getIcon() const { return nullptr; }
 
-// void SDLRendererWindow::focus(void) { SDL_SetWindowInputFocus(this->window); }
+// void SDLRendererWindow::focus() { SDL_SetWindowInputFocus(this->window); }
 
-// void SDLRendererWindow::restore(void) { SDL_RestoreWindow(this->window); }
+// void SDLRendererWindow::restore() { SDL_RestoreWindow(this->window); }
 
-// void SDLRendererWindow::maximize(void) { SDL_MaximizeWindow(this->window); }
+// void SDLRendererWindow::maximize() { SDL_MaximizeWindow(this->window); }
 
-// void SDLRendererWindow::minimize(void) { SDL_MinimizeWindow(this->window); }
+// void SDLRendererWindow::minimize() { SDL_MinimizeWindow(this->window); }

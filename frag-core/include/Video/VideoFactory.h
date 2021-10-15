@@ -35,7 +35,7 @@ namespace fragcore {
 
 
 	private: /*	Prevent one from creating an instance of this class.	*/
-		VideoFactory(void);
+		VideoFactory();
 		VideoFactory(const VideoFactory &other);
 	};
 }

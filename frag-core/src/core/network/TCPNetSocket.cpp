@@ -36,7 +36,7 @@ TCPNetSocket::TCPNetSocket(const IPInterface &ip) {
 	// 	}
 	// }
 }
-TCPNetSocket::~TCPNetSocket(void) {}
+TCPNetSocket::~TCPNetSocket() {}
 
 void TCPNetSocket::close() {}
 

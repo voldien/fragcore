@@ -28,13 +28,13 @@ namespace fragcore {
 	class FVDECLSPEC AudioSettings : public AudioObject {
 	public:
 
-		virtual AudioSpeakerMode getSpeakerMode(void) const;
+		virtual AudioSpeakerMode getSpeakerMode() const;
 		virtual void setSpeakerMode(AudioSpeakerMode speakerMode);
 
 		virtual void setMasterVolume(float volume);
-		virtual float getMaterVolume(void) const;
+		virtual float getMaterVolume() const;
 		
-		virtual int outputSampleRate(void);
+		virtual int outputSampleRate();
 	};
 
 }

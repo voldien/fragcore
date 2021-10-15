@@ -41,7 +41,7 @@ AudioInterface::AudioInterface(IConfig *config) : Module() {
 	alDevice->scheduler = Ref<IScheduler>(new TaskScheduler(Math::clamp<int>(SystemInfo::getCPUCoreCount(), 1, 2), 48));
 }
 
-AudioInterface::~AudioInterface(void) {
+AudioInterface::~AudioInterface() {
 	OpenALInterfaceObject *audio = (OpenALInterfaceObject *)this->pdata;
 
 	/*	Release all the object associated.	*/
@@ -56,7 +56,7 @@ AudioInterface::~AudioInterface(void) {
 	free(audio);
 }
 
-void AudioInterface::OnInitialization(void) {
+void AudioInterface::OnInitialization() {
 	OpenALInterfaceObject *audio = (OpenALInterfaceObject *)this->pdata;
 
 	/*	Allocate data.	*/
@@ -65,7 +65,7 @@ void AudioInterface::OnInitialization(void) {
 	audio->reverbs.resize(32);
 }
 
-void AudioInterface::OnDestruction(void) {}
+void AudioInterface::OnDestruction() {}
 
 // TODO perhaps move to a helper header file and etc.
 #include <AL/alext.h>
@@ -240,10 +240,10 @@ void AudioInterface::setAudioListener(AudioListener *listener) {
 	// audio->
 }
 
-AudioCapture *AudioInterface::createAudioCapture(void) { return nullptr; }
+AudioCapture *AudioInterface::createAudioCapture() { return nullptr; }
 void AudioInterface::deleteAudioCapture(AudioCapture *capture) {}
 
-std::vector<AudioPhysicalDevice> AudioInterface::getDevices(void) const {
+std::vector<AudioPhysicalDevice> AudioInterface::getDevices() const {
 	OpenALInterfaceObject *audio = (OpenALInterfaceObject *)this->pdata;
 	std::vector<AudioPhysicalDevice> listDevices;
 
@@ -328,9 +328,9 @@ void AudioInterface::setAudioDevice(const AudioPhysicalDevice &device) {
 	// alcGetIntegerv(audio->device, ALC_MAX_AUXILIARY_SENDS, 1, &iSends);
 }
 
-const char *AudioInterface::getVersion(void) const { return FV_STR_VERSION(1, 0, 0); }
+const char *AudioInterface::getVersion() const { return FV_STR_VERSION(1, 0, 0); }
 
-const AudioPhysicalDevice &AudioInterface::getAudioDevice(void) const {
+const AudioPhysicalDevice &AudioInterface::getAudioDevice() const {
 	ALCdevice *dv = alcGetContextsDevice(alcGetCurrentContext());
 	AudioPhysicalDevice device = AudioPhysicalDevice();
 	device.setName(alcGetString(dv, ALC_DEVICE_SPECIFIER));

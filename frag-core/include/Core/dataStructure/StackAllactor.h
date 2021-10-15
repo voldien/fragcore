@@ -30,11 +30,11 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC StackAllocator {
 	  public:
-		StackAllocator(void);
+		StackAllocator();
 		StackAllocator(const StackAllocator &stack);
 		StackAllocator(StackAllocator &&other);
 		explicit StackAllocator(unsigned int stackSizeBytes);
-		~StackAllocator(void);
+		~StackAllocator();
 
 		/**
 		 *	Allocate n number of bytes.
@@ -46,7 +46,7 @@ namespace fragcore {
 		 *	Get size of the allocated data block
 		 *	in bytes.
 		 */
-		unsigned int getSize(void) const;
+		unsigned int getSize() const;
 
 		/**
 		 *	Allocate aligned memory block.
@@ -57,12 +57,12 @@ namespace fragcore {
 		/**
 		 *	Set marker to zero.
 		 */
-		void clear(void);
+		void clear();
 
 		/**
 		 *	@Return marker offset.
 		 */
-		unsigned int getMarker(void) const;
+		unsigned int getMarker() const;
 
 		/**
 		 *	@Return non null pointer if successfully.

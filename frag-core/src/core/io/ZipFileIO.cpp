@@ -14,15 +14,15 @@ ZipFileIO::ZipFileIO(zip_file_t *file, zip_int64_t index, Ref<ZipFileSystem> ref
 	this->zipfile->increment();
 }
 
-ZipFileIO::ZipFileIO(void) { this->file = nullptr; }
+ZipFileIO::ZipFileIO() { this->file = nullptr; }
 
 ZipFileIO::ZipFileIO(const ZipFileIO &other) { this->file = other.file; }
 
-ZipFileIO::~ZipFileIO(void) {}
+ZipFileIO::~ZipFileIO() {}
 
 void ZipFileIO::open(const char *path, IOMode mode) {}
 
-void ZipFileIO::close(void) {
+void ZipFileIO::close() {
 	int err;
 
 	err = zip_fclose(this->file);
@@ -55,9 +55,9 @@ long ZipFileIO::write(long int nbytes, const void *pbuffer) {
 	return nbytes;
 }
 
-bool ZipFileIO::eof(void) const { return false; }
+bool ZipFileIO::eof() const { return false; }
 
-long ZipFileIO::length(void) {
+long ZipFileIO::length() {
 	zip_int64_t prev;
 	zip_int64_t len;
 
@@ -100,11 +100,11 @@ void ZipFileIO::seek(long int nbytes, Seek seek) {
 	//	//zip_fseek
 }
 
-unsigned long ZipFileIO::getPos(void) {
+unsigned long ZipFileIO::getPos() {
 	return 0; // zip_ftell(this->file);
 }
 
-bool ZipFileIO::isWriteable(void) const {
+bool ZipFileIO::isWriteable() const {
 	zip_uint32_t attr;
 	// int err = zip_file_get_external_attributes((zip_t*)this->zipfile->getZipObject(), 0, ZIP_OPSYS_UNIX, nullptr,
 	// &attr);
@@ -112,9 +112,9 @@ bool ZipFileIO::isWriteable(void) const {
 	return true;
 }
 
-bool ZipFileIO::isReadable(void) const {
+bool ZipFileIO::isReadable() const {
 	// ZIP_RDONLY
 	return true;
 }
 
-bool ZipFileIO::flush(void) { return false; }
+bool ZipFileIO::flush() { return false; }

@@ -73,7 +73,7 @@ IO *ZipFileSystem::openFile(unsigned int index) {
 	return new ZipFileIO(zfile, index, Ref<ZipFileSystem>(this));
 }
 
-bool ZipFileSystem::isASyncSupported(void) const { return *this->getScheduler() != nullptr; }
+bool ZipFileSystem::isASyncSupported() const { return *this->getScheduler() != nullptr; }
 
 bool ZipFileSystem::isDirectory(const char *path) {}
 bool ZipFileSystem::isFile(const char *path) {}
@@ -122,7 +122,7 @@ std::vector<std::string> ZipFileSystem::list(const char *path) const {
 	// files.insert(files.end)
 }
 
-void ZipFileSystem::release(void) {
+void ZipFileSystem::release() {
 	if (this->deincreemnt()) {
 		if (this->pzip)
 			zip_close((zip_t *)this->pzip);
@@ -309,13 +309,13 @@ ZipFileSystem *ZipFileSystem::createZipFileObject(void *source, int size, Ref<IS
 	return nullptr;
 }
 
-void *ZipFileSystem::getZipObject(void) const { return this->pzip; }
+void *ZipFileSystem::getZipObject() const { return this->pzip; }
 
 ZipFileSystem::ZipFileSystem(Ref<IScheduler> ref) { this->setScheduleReference(ref); }
 
 ZipFileSystem::ZipFileSystem(const ZipFileSystem &other) { this->pzip = nullptr; }
 
-ZipFileSystem::~ZipFileSystem(void) {}
+ZipFileSystem::~ZipFileSystem() {}
 
 // FileAccess ZipFile::getFileAccess(const char *path) {
 //	return FileAccess();

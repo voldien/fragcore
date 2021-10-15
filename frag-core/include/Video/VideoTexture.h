@@ -33,30 +33,30 @@ namespace fragcore {
 		friend class VideoManager;
 
 	  public:
-		VideoTexture(void);
+		VideoTexture();
 
-		~VideoTexture(void);
+		~VideoTexture();
 
-		virtual bool isPlaying(void) const;
+		virtual bool isPlaying() const;
 
-		virtual void play(void);
+		virtual void play();
 
-		virtual void stop(void);
+		virtual void stop();
 
-		virtual void pause(void);
+		virtual void pause();
 
-		virtual float getCurrentPosition(void) const;
+		virtual float getCurrentPosition() const;
 
 		/*	Total length in seconds*/
-		virtual float getTotalLength(void) const;
+		virtual float getTotalLength() const;
 
-		virtual double getDuration(void) const;
+		virtual double getDuration() const;
 
-		virtual double getTime(void) const;
+		virtual double getTime() const;
 
-		virtual bool isReadyToPlay(void) const;
+		virtual bool isReadyToPlay() const;
 
-		virtual Texture *getTexture(void) const;
+		virtual Texture *getTexture() const;
 
 	  protected:
 		Task::TaskCallBack taskcallback;

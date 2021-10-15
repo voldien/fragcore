@@ -1,7 +1,7 @@
 #include"physic/CharacterController.h"
 using namespace fragcore;
 
-CharacterController::~CharacterController(void){
+CharacterController::~CharacterController(){
 
 }
 

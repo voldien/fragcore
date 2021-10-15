@@ -1,13 +1,13 @@
 #include"physic/PhysicInterface.h"
 
 
-PhysicInterpreter::PhysicInterpreter(void){
+PhysicInterpreter::PhysicInterpreter(){
 
 }
 PhysicInterpreter::PhysicInterpreter(const PhysicInterpreter& other){
 
 }
-PhysicInterpreter::~PhysicInterpreter(void){
+PhysicInterpreter::~PhysicInterpreter(){
 
 }
 

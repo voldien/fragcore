@@ -27,7 +27,7 @@ namespace fragcore {
 		 *
 		 * @return unsigned int
 		 */
-		unsigned int getNumDisplays(void) const noexcept;
+		unsigned int getNumDisplays() const noexcept;
 
 		/**
 		 * @brief Get the Associated Display object
@@ -50,13 +50,13 @@ namespace fragcore {
 		 *
 		 * @return Display*
 		 */
-		Display *primaryDisplay(void) const noexcept;
+		Display *primaryDisplay() const noexcept;
 		// Window* createWindow()
 		/*	TODO get the event.	*/
 
 		// protected:
 		void onCreation(Ref<WindowManager> &instance) override;
-		WindowManager(void);
+		WindowManager();
 	};
 } // namespace fragcore
 

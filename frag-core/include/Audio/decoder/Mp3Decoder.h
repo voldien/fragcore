@@ -11,7 +11,7 @@ namespace fragcore {
 	class FVDECLSPEC Mp3AudioDecoder : public AudioDecoder {
 	  public:
 		Mp3AudioDecoder(Ref<IO> &io);
-		virtual ~Mp3AudioDecoder(void);
+		virtual ~Mp3AudioDecoder();
 
 		virtual void seek(long int microseconds);
 
@@ -19,13 +19,13 @@ namespace fragcore {
 
 		virtual void *getPage(int i);
 
-		virtual AudioFormat getFormat(void) const;
-		virtual unsigned int getSampleRate(void) const;
+		virtual AudioFormat getFormat() const;
+		virtual unsigned int getSampleRate() const;
 
-		virtual unsigned int getNrChannels(void) const;
-		virtual unsigned int getSampleBitResolution(void) const;
+		virtual unsigned int getNrChannels() const;
+		virtual unsigned int getSampleBitResolution() const;
 
-		virtual double getTotalTime(void) const;
+		virtual double getTotalTime() const;
 
 	  protected:
 		double length;

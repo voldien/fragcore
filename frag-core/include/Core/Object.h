@@ -30,7 +30,7 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC Object : public UIDObject {
 	  public:
-		inline Object(void) noexcept {};
+		inline Object() noexcept {};
 		Object &operator=(Object &&other) {
 			this->setName(std::move(other.name));
 			return *this;
@@ -41,9 +41,9 @@ namespace fragcore {
 		virtual void setName(std::string &&name) { this->name = std::move(name); }
 		virtual void setName(const char *name) { this->name.assign(name); }
 
-		virtual std::string getName(void) noexcept { return this->name; }
+		virtual std::string getName() noexcept { return this->name; }
 
-		virtual const std::string &getName(void) const noexcept { return this->name; }
+		virtual const std::string &getName() const noexcept { return this->name; }
 
 	  protected: /*	*/
 		Object &operator=(const Object &object) {

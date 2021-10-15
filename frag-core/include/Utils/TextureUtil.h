@@ -60,7 +60,7 @@ namespace fragcore {
 									  unsigned int size, TextureFormat format, GraphicFormat graphicformat);
 
 	  private: /*	Prevent one from creating an instance of this class.	*/
-		TextureUtil(void);
+		TextureUtil();
 		TextureUtil(IFileSystem *fileSystem);
 		TextureUtil(const TextureUtil &other);
 

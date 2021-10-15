@@ -35,7 +35,7 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC IConfig : public SmartReference, public ITree<IConfig> {
 	  public:
-		~IConfig(void);
+		~IConfig();
 
 	  public: /*	Get and set methods.	*/
 		/**
@@ -111,7 +111,7 @@ namespace fragcore {
 		 * Print all elements in the configuration
 		 * object.
 		 */
-		virtual void printTable(void) const;
+		virtual void printTable() const;
 
 		/**
 		 * Print all elements in the configuration
@@ -154,7 +154,7 @@ namespace fragcore {
 
 		template <class T> class IConfigIterator : public Iterator<T> { /*	*/ };
 		// TODO add iterator for config arguments.
-		// virtual Iterator getIterator(void);
+		// virtual Iterator getIterator();
 
 	  protected:
 		virtual void parse_xml(Ref<IO> &io);
@@ -170,10 +170,10 @@ namespace fragcore {
 		static void parse_json_recursive_config(IConfig *config, struct json_object *root);
 
 	  public:
-		virtual IConfig *getSuperInstance(void);
+		virtual IConfig *getSuperInstance();
 
 	  public:
-		IConfig(void);
+		IConfig();
 		IConfig(const IConfig &other);
 		IConfig(const IConfig &&other);
 

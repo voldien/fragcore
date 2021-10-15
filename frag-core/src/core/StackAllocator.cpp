@@ -4,7 +4,7 @@
 #include <utility>
 using namespace fragcore;
 
-StackAllocator::StackAllocator(void) {
+StackAllocator::StackAllocator() {
 	this->mData = nullptr;
 	this->mMarker = 0;
 	this->mSize = 0;
@@ -28,7 +28,7 @@ StackAllocator::StackAllocator(unsigned int stackSizeBytes) {
 	this->alloc(stackSizeBytes);
 }
 
-StackAllocator::~StackAllocator(void) { free(this->mData); }
+StackAllocator::~StackAllocator() { free(this->mData); }
 
 void *StackAllocator::alloc(unsigned int sizeBytes) {
 	// TODO determine if allocaing smaller memory.
@@ -42,16 +42,16 @@ void *StackAllocator::alloc(unsigned int sizeBytes) {
 	return mData;
 }
 
-unsigned int StackAllocator::getSize(void) const { return this->mSize; }
+unsigned int StackAllocator::getSize() const { return this->mSize; }
 
 void *StackAllocator::allocateAligned(unsigned int sizeBytes, int alignment) {
 	sizeBytes += (sizeBytes % alignment);
 	return this->alloc(sizeBytes);
 }
 
-void StackAllocator::clear(void) { this->mMarker = 0; }
+void StackAllocator::clear() { this->mMarker = 0; }
 
-unsigned int StackAllocator::getMarker(void) const { return this->mMarker; }
+unsigned int StackAllocator::getMarker() const { return this->mMarker; }
 
 void *StackAllocator::fetch(unsigned int sizeBytes) {
 	void *p = ((uint8_t *)this->mData) + getMarker();

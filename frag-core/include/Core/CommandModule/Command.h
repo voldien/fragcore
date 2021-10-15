@@ -49,21 +49,21 @@ public:
 	 *
 	 * @return
 	 */
-	virtual CommandType getType(void) const = 0;
+	virtual CommandType getType() const = 0;
 
 	/**
 	 * Get command associated with.
 	 * @return non-null scene.
 	 */
-	Scene *getScene(void) const;
+	Scene *getScene() const;
 
 
 protected:	/*	*/
 
-	Command(void);
+	Command();
 	Command(Scene* scene);
 	Command(const Command& other);
-	~Command(void);
+	~Command();
 
 	Scene* scene;			/*	Scene associated with the command.  */
 	CommandType type;

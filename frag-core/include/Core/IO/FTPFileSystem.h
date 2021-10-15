@@ -49,7 +49,7 @@ namespace fragcore {
 
 		virtual bool exists(const char *path) const;
 
-		virtual bool isASyncSupported(void) const;
+		virtual bool isASyncSupported() const;
 		virtual bool isDirectory(const char *path);
 		virtual bool isFile(const char *path);
 
@@ -81,7 +81,7 @@ namespace fragcore {
 	  protected:
 		FTPFileSystem(const char *ip, int port, const char *username, const char *password, Ref<IScheduler> &sch);
 		FTPFileSystem(const char *ip, int port, const char *username, const char *password);
-		~FTPFileSystem(void);
+		~FTPFileSystem();
 
 	  private:
 		CURL *handle;

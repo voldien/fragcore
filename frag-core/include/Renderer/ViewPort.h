@@ -51,7 +51,7 @@ namespace fragcore {
 
 		/*	TODO add index.	*/
 
-		intptr_t getNativePtr(void) const override;
+		intptr_t getNativePtr() const override;
 	};
 } // namespace fragcore
 

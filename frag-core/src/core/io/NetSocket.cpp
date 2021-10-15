@@ -3,7 +3,7 @@ using namespace fragcore;
 
 NetSocket::NetSocket(const IPInterface &ip) {}
 
-NetSocket::~NetSocket(void) {
+NetSocket::~NetSocket() {
 	/*Make sure it gets disconnected.   */
 	close();
 }

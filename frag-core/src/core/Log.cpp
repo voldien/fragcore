@@ -32,7 +32,7 @@ void Log::setVerbosity(VERBOSITY verbosity) {
 	}
 }
 
-Log::VERBOSITY Log::getVerbosity(void) {
+Log::VERBOSITY Log::getVerbosity() {
 	return g_verbosity;
 }
 

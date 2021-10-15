@@ -27,9 +27,9 @@
  */
 class PVDECLSPEC PhysicInterpreter{
 public:
-	PhysicInterpreter(void);
+	PhysicInterpreter();
 	PhysicInterpreter(const PhysicInterpreter& other);
-	~PhysicInterpreter(void);
+	~PhysicInterpreter();
 
 
 	/**

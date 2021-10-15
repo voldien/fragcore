@@ -38,9 +38,9 @@ namespace fragcore {
 		static void createChecker(int width, int height, char **pixels);
 
 	  private: /*	Prevent one from creating an instance of this class.	*/
-		TextureFactory(void);
+		TextureFactory();
 		TextureFactory(const TextureFactory &other);
-		~TextureFactory(void);
+		~TextureFactory();
 	};
 } // namespace fragcore
 

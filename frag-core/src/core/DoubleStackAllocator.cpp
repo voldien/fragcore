@@ -2,7 +2,7 @@
 #include <utility>
 using namespace fragcore;
 
-DoubleBufferedAllocator::DoubleBufferedAllocator(void) {
+DoubleBufferedAllocator::DoubleBufferedAllocator() {
 	this->m_curStack = 0;
 	this->m_stack[0] = StackAllocator();
 	this->m_stack[1] = StackAllocator();
@@ -22,7 +22,7 @@ DoubleBufferedAllocator::DoubleBufferedAllocator(unsigned int sizeBytes) {
 	this->m_stack[1].alloc(sizeBytes);
 }
 
-DoubleBufferedAllocator::~DoubleBufferedAllocator(void) {
+DoubleBufferedAllocator::~DoubleBufferedAllocator() {
 	this->getStack(0)->clear();
 	this->getStack(1)->clear();
 }
@@ -37,9 +37,9 @@ void DoubleBufferedAllocator::allocateAligned(unsigned int sizeBytes, int alignm
 	this->alloc(sizeBytes);
 }
 
-void DoubleBufferedAllocator::clear(void) { this->m_stack[this->m_curStack].clear(); }
+void DoubleBufferedAllocator::clear() { this->m_stack[this->m_curStack].clear(); }
 
-unsigned int DoubleBufferedAllocator::getMarker(void) const { return this->m_stack[this->m_curStack].getMarker(); }
+unsigned int DoubleBufferedAllocator::getMarker() const { return this->m_stack[this->m_curStack].getMarker(); }
 
 void *DoubleBufferedAllocator::fetch(unsigned int sizeBytes) {
 	return this->m_stack[this->m_curStack].fetch(sizeBytes);
@@ -49,9 +49,9 @@ void DoubleBufferedAllocator::freeToMarker(unsigned int marker) {
 	return this->m_stack[this->m_curStack].freeToMarker(marker);
 }
 
-void DoubleBufferedAllocator::swap(void) { this->m_curStack = ~this->m_curStack & 0x1; }
+void DoubleBufferedAllocator::swap() { this->m_curStack = ~this->m_curStack & 0x1; }
 
-StackAllocator *DoubleBufferedAllocator::getCurrentStack(void) { return &this->m_stack[this->m_curStack]; }
+StackAllocator *DoubleBufferedAllocator::getCurrentStack() { return &this->m_stack[this->m_curStack]; }
 
 StackAllocator *DoubleBufferedAllocator::getStack(int index) const { return (StackAllocator *)&this->m_stack[index]; }
 

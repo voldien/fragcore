@@ -32,21 +32,21 @@ namespace fragcore {
 
 		virtual long write(long int nbytes, const void *pbuffer) override;
 
-		virtual long length(void) override;
+		virtual long length() override;
 
-		virtual bool eof(void) const override;
+		virtual bool eof() const override;
 
 		virtual void seek(long int nbytes, Seek seek) override;
 
-		virtual unsigned long getPos(void) override;
+		virtual unsigned long getPos() override;
 
-		virtual bool isWriteable(void) const override;
+		virtual bool isWriteable() const override;
 
-		virtual bool isReadable(void) const override;
+		virtual bool isReadable() const override;
 
-		virtual bool flush(void) override;
+		virtual bool flush() override;
 
-		virtual void close(void) override;
+		virtual void close() override;
 
 		virtual void open(const char *path, IOMode mode) override;
 

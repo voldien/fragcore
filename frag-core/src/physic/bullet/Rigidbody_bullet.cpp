@@ -4,9 +4,9 @@
 #include<bullet/btBulletDynamicsCommon.h>
 using namespace fragcore;
 
-RigidBody::~RigidBody(void){}
+RigidBody::~RigidBody(){}
 
-float RigidBody::getMass(void){
+float RigidBody::getMass(){
 	btRigidBody *body = (btRigidBody *)this->getObject();
 	return 1.0f / body->getInvMass();
 }
@@ -17,7 +17,7 @@ void RigidBody::setMass(float mass){
 	body->getCollisionShape()->calculateLocalInertia(mass, inertia);
 }
 
-Vector3 RigidBody::getPosition(void){
+Vector3 RigidBody::getPosition(){
 
 	btRigidBody* body;
 	btTransform trans;
@@ -39,7 +39,7 @@ void RigidBody::setPosition(const Vector3& position){
 
 }
 
-Quaternion RigidBody::getOrientation(void){
+Quaternion RigidBody::getOrientation(){
 
 	btRigidBody* body;
 	btQuaternion oritention;
@@ -58,7 +58,7 @@ void RigidBody::setOrientation(const Quaternion& quat){
 }
 
 
-Vector3 RigidBody::getScale(void){
+Vector3 RigidBody::getScale(){
 	btRigidBody* body;
 	body = (btRigidBody *)this->getObject();
 
@@ -79,7 +79,7 @@ void RigidBody::addForce(const Vector3& force){
 	body = (btRigidBody *)this->getObject();
 }
 
-float RigidBody::getDrag(void){
+float RigidBody::getDrag(){
 	btRigidBody* body;
 	body = (btRigidBody *)this->getObject();
 
@@ -92,7 +92,7 @@ void RigidBody::setDrag(float drag){
 	body->setDamping(drag, body->getAngularDamping());
 }
 
-float RigidBody::getAngularDrag(void){
+float RigidBody::getAngularDrag(){
 	btRigidBody* body;
 	body = (btRigidBody *)this->getObject();
 
@@ -106,7 +106,7 @@ void RigidBody::setAngularDrag(float angularDrag){
 }
 
 
-Vector3 RigidBody::getVelocity(void){
+Vector3 RigidBody::getVelocity(){
 	btRigidBody* body;
 	body = (btRigidBody *)this->getObject();
 

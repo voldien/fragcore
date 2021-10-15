@@ -34,7 +34,7 @@ FileNotify::FileNotify(Ref<IScheduler> &sch) {
 	fileChangeEvents.resize(32);
 }
 
-FileNotify::~FileNotify(void) {
+FileNotify::~FileNotify() {
 	this->stop();
 	fsw_destroy_session(this->session);
 	schDeleteThread(this->pthread);
@@ -86,7 +86,7 @@ void FileNotify::unregisterAsset(Object *object) {
 	}
 }
 
-void FileNotify::unRegisterAllAsset(void) {
+void FileNotify::unRegisterAllAsset() {
 	std::map<int, FileNoticationEntry>::iterator it = this->notify.begin();
 
 	/*  */
@@ -150,8 +150,8 @@ void FileNotify::fileFetchTask(Task *package) {
 
 class FVDECLSPEC FileNotifyTask : public Task {
   public:
-	virtual void Execute(void) override {}
-	virtual void Complete(void) override {}
+	virtual void Execute() override {}
+	virtual void Complete() override {}
 };
 
 void FileNotify::callback(fsw_cevent const *const events, const unsigned int event_num, void *data) {
@@ -227,7 +227,7 @@ void *FileNotify::fswatch(const void *psession) {
 		throw RuntimeException(fmt::format("Error on starting monitoring with the Filesystem watch: {}.", ret));
 }
 
-void FileNotify::start(void) {
+void FileNotify::start() {
 	/*  Create monitoring thread.   */
 	if (!fsw_is_running(this->session)) {
 		// TODO make use of the thread wrapper method.
@@ -235,7 +235,7 @@ void FileNotify::start(void) {
 	}
 }
 
-void FileNotify::stop(void) {
+void FileNotify::stop() {
 	FSW_STATUS ret;
 	if (fsw_is_running(this->session)) {
 		ret = fsw_stop_monitor(this->session);

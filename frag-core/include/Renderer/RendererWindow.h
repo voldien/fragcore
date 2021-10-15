@@ -34,12 +34,12 @@ namespace fragcore {
 	class FVDECLSPEC RendererWindow : public Window {
 		friend class IRenderer;
 	public:
-		virtual void swapBuffer(void) = 0;
+		virtual void swapBuffer() = 0;
 		virtual void vsync(bool state) = 0;
-		virtual ViewPort* getViewPort(void) = 0;
+		virtual ViewPort* getViewPort() = 0;
 		virtual FrameBuffer* getDefaultFrameBuffer() = 0;
 
-		//virtual const char* getRendererAPI(void);
+		//virtual const char* getRendererAPI();
 	protected:  /*  Renderer methods.   */
 		//TODO determine how to resolve and
 		virtual bool assertConfigAttributes(const IConfig *iConfig) = 0;

@@ -55,7 +55,7 @@ namespace fragcore {
 
 	private:    /*	Prevent one from creating an instance of this class.	*/
 
-		AudioFactory(void);
+		AudioFactory();
 
 		AudioFactory(const AudioFactory &other);
 	};

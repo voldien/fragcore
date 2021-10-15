@@ -6,7 +6,7 @@
 #include<fmt/core.h>
 using namespace fragcore;
 
-AudioSource::~AudioSource(void) {}
+AudioSource::~AudioSource() {}
 
 void AudioSource::setClip(AudioClip *clip) {
 	ALSource *source = (ALSource *)this->getObject();
@@ -23,7 +23,7 @@ void AudioSource::setClip(AudioClip *clip) {
 	// source->clip = alClip;
 }
 
-void AudioSource::play(void) {
+void AudioSource::play() {
 	ALSource *source = (ALSource *)this->getObject();
 	alSourcePlay(source->source);
 	int err = alGetError();
@@ -34,7 +34,7 @@ void AudioSource::play(void) {
 	}
 }
 
-void AudioSource::stop(void) {
+void AudioSource::stop() {
 	ALSource *source = (ALSource *)this->getObject();
 	alSourceStop(source->source);
 	int err = alGetError();
@@ -42,7 +42,7 @@ void AudioSource::stop(void) {
 		throw InvalidArgumentException(fmt::format("{}", alGetError()));
 }
 
-void AudioSource::pause(void) {
+void AudioSource::pause() {
 	ALSource *source = (ALSource *)this->getObject();
 
 	alSourcePause(source->source);
@@ -55,7 +55,7 @@ void AudioSource::setVolume(float volume) {
 	// alSourcef(source->source, AL_PITCH)
 }
 
-float AudioSource::getVolume(void) {
+float AudioSource::getVolume() {
 	float volume;
 	ALSource *source = (ALSource *)this->getObject();
 	return volume;
@@ -67,7 +67,7 @@ void AudioSource::setDistance(float distance) {
 	alSourcef(source->source, AL_MAX_DISTANCE, distance);
 }
 
-float AudioSource::getDistance(void) {
+float AudioSource::getDistance() {
 	ALSource *source = (ALSource *)this->getObject();
 	float distance;
 
@@ -89,7 +89,7 @@ void AudioSource::loop(bool loop) {
 	alSourcei(source->source, AL_LOOPING, loop ? AL_TRUE : AL_FALSE);
 }
 
-bool AudioSource::isLooping(void) {
+bool AudioSource::isLooping() {
 	ALSource *source = (ALSource *)this->getObject();
 
 	int loop;
@@ -97,7 +97,7 @@ bool AudioSource::isLooping(void) {
 	return loop;
 }
 
-bool AudioSource::isPlaying(void) {
+bool AudioSource::isPlaying() {
 	ALSource *source = (ALSource *)this->getObject();
 	int playing;
 
@@ -105,7 +105,7 @@ bool AudioSource::isPlaying(void) {
 	return playing == AL_PLAYING;
 }
 
-float AudioSource::getPos(void) const {
+float AudioSource::getPos() const {
 	float pos;
 	ALSource *source = (ALSource *)this->getObject();
 	alGetSourcef(source->source, AL_SEC_OFFSET, &pos);
@@ -117,9 +117,9 @@ void AudioSource::setPos(float position) {
 	alSourcef(source->source, AL_SEC_OFFSET, position);
 }
 
-intptr_t AudioSource::getNativePtr(void) const {
+intptr_t AudioSource::getNativePtr() const {
 	ALSource *source = (ALSource *)this->getObject();
 	return source->source;
 }
 
-AudioSource::AudioSource(void) {}
+AudioSource::AudioSource() {}

@@ -28,9 +28,9 @@ namespace fragcore {
 		friend class IRenderer;
 
 	public:
-	  Sampler(void) = default;
+	  Sampler() = default;
 
-	  virtual ~Sampler(void);
+	  virtual ~Sampler();
 
 	  enum WrapMode {
 		  eClamp = 0x1,	 /*  */
@@ -58,23 +58,23 @@ namespace fragcore {
 
 	  virtual void setFilterMode(FilterMode mode);
 
-	  virtual FilterMode getFilterMode(void);
+	  virtual FilterMode getFilterMode();
 
 	  virtual void setWrapMode(WrapMode mode);
 
-	  virtual WrapMode getWrapMode(void);
+	  virtual WrapMode getWrapMode();
 
 	  virtual void setAnisotropic(float anisotropy);
 
-	  virtual float getAnisotropic(void) const;
+	  virtual float getAnisotropic() const;
 
-	  virtual CompareFunc getCompare(void) const;
+	  virtual CompareFunc getCompare() const;
 
 	  virtual void setCompareFunc(CompareFunc compareFunc);
 
 	  virtual void setMipMapBaseLevel(unsigned int level);
 
-	  virtual unsigned int getMipMapBaseLevel(void) const;
+	  virtual unsigned int getMipMapBaseLevel() const;
 
 	  virtual void setMipMapBias(float bias);
 
@@ -82,19 +82,19 @@ namespace fragcore {
 
 	  virtual void setBorderColor(float color);
 
-	  virtual float getBorderColor(void) const;
+	  virtual float getBorderColor() const;
 
 	  virtual unsigned int setMaxLod(unsigned int level);
 
-	  virtual unsigned int getMaxLod(void) const;
+	  virtual unsigned int getMaxLod() const;
 
 	  virtual unsigned int setMinLod(unsigned int level);
 
-	  virtual unsigned int getMinLod(void) const;
+	  virtual unsigned int getMinLod() const;
 
 	  virtual void setName(const std::string &name) override;
 
-	  intptr_t getNativePtr(void) const override;
+	  intptr_t getNativePtr() const override;
 	};
 } // namespace fragcore
 

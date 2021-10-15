@@ -29,10 +29,10 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC Module : public SmartReference {
 	  public:
-		Module(void) = default;
-		virtual ~Module(void) = default;
-		virtual void OnInitialization(void) = 0;
-		virtual void OnDestruction(void) = 0;
+		Module() = default;
+		virtual ~Module() = default;
+		virtual void OnInitialization() = 0;
+		virtual void OnDestruction() = 0;
 		/**/
 	  public:
 		// TODO determine where it shal lbe located
