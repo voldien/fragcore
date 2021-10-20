@@ -13,3 +13,6 @@
 [submodule "extern/exceptcxx"]
 	path = extern/exceptcxx
 	url = https://github.com/voldien/execptcxx.git
+[submodule "extern/fvkcore"]
+	path = extern/fvkcore
+	url = https://github.com/voldien/fvkcore.git
