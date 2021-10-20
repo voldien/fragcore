@@ -53,6 +53,9 @@ namespace fragcore {
 		virtual int listen(unsigned int maxListen) = 0;
 		virtual int connect(std::string &ip, unsigned int port) = 0;
 
+		virtual int read();
+		virtual int write();
+
 		// virtual Error bind(IPAddress p_addr, uint16_t p_port) = 0;
 		// virtual Error listen(int p_max_pending) = 0;
 		// virtual Error connect_to_host(IPAddress p_addr, uint16_t p_port) = 0;
@@ -79,11 +82,16 @@ namespace fragcore {
 		virtual bool isBlocking();
 		virtual void setBlocking(bool blocking);
 			*/
+		virtual bool isBlocking() = 0;
+		virtual void setBlocking(bool blocking) = 0;
 
 		// enum class Status { Done, NotReady, Partial, Disconnected, Error };
 
 	  protected:
 		NetSocket() = default;
+
+	  public:
+		static constexpr const char *getTransportProtocolSymbol(TransportProtocol transportProtocol);
 	};
 } // namespace fragcore
 
