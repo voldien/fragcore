@@ -31,6 +31,7 @@ namespace fragcore {
 
 			NetWorkProtocol_NONE = 0,
 			NetWorkProtocol_IP = 1,
+			NetWorkProtocol_CAN = 2,
 			NetWorkProtocol_ANY = 3,
 		};
 		INetAddress(NetworkProtocol type);

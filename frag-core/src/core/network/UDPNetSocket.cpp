@@ -17,25 +17,7 @@
 
 using namespace fragcore;
 
-UDPNetSocket::UDPNetSocket(const IPInterface &ip) {
-	// /*	Create socket if not already created.	*/
-	// if ((protocol & SNT_TRANSPORT_TCP) && connection->tcpsock == 0) {
-	// 	sntDebugPrintf("Create stream socket.\n");
-	// 	connection->tcpsock = socket(affamily, SOCK_STREAM, 0);
-	// 	if (connection->tcpsock < 0) {
-	// 		sntLogErrorPrintf("Failed to create socket, %s.\n", strerror(errno));
-	// 		return 0;
-	// 	}
-	// }
-	// if ((protocol & SNT_TRANSPORT_UDP) && connection->udpsock == 0) {
-	// 	sntDebugPrintf("Create datagram socket.\n");
-	// 	connection->udpsock = socket(affamily, SOCK_DGRAM, IPPROTO_UDP);
-	// 	if (connection->udpsock < 0) {
-	// 		sntLogErrorPrintf("Failed to create socket, %s.\n", strerror(errno));
-	// 		return 0;
-	// 	}
-	// }
-}
+UDPNetSocket::UDPNetSocket(const IPInterface &ip) : netStatus(NetStatus::Status_Disconnected), socket(0) {}
 UDPNetSocket::~UDPNetSocket() {}
 
 NetSocket::TransportProtocol UDPNetSocket::getTransportProtocol() const noexcept {

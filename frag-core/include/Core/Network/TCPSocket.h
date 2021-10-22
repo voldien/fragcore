@@ -19,6 +19,7 @@
 #ifndef _FRAG_CORE_TCP_NETSOCKET_H_
 #define _FRAG_CORE_TCP_NETSOCKET_H_ 1
 #include "NetSocket.h"
+#include"INetAddress.h"
 
 namespace fragcore {
 	/**
@@ -57,6 +58,9 @@ namespace fragcore {
 		virtual void setBlocking(bool blocking) override;
 
 		virtual NetStatus getStatus() const noexcept override;
+
+		protected:
+			bool isNetworkLayerSupported(INetAddress::NetworkProtocol protocol);
 
 	  private:
 		int socket;
