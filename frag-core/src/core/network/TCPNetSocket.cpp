@@ -38,7 +38,11 @@ TCPNetSocket::TCPNetSocket(const IPInterface &ip) {
 }
 TCPNetSocket::~TCPNetSocket() {}
 
-void TCPNetSocket::close() {}
+NetSocket::TransportProtocol TCPNetSocket::getTransportProtocol() const noexcept {
+	return NetSocket::TransportProtocol::TCP;
+}
+
+int TCPNetSocket::close() { int status = ::close(socket); }
 
 int TCPNetSocket::bind(std::string &IPaddr, unsigned int port) {
 	socklen_t addrlen;	   /*	*/
@@ -51,13 +55,14 @@ int TCPNetSocket::bind(std::string &IPaddr, unsigned int port) {
 
 	/*	Bind process to socket.	*/
 	if (::bind(socket, (struct sockaddr *)addr, addrlen) < 0) {
-		throw RuntimeException();
-		// sntLogErrorPrintf("Failed to bind TCP socket, %s.\n", strerror(errno));
-		// sntDisconnectSocket(connection);
+		close();
+		throw RuntimeException("Failed to bind TCP socket, {}.\n", strerror(errno));
+	} else {
 	}
 }
 int TCPNetSocket::listen(unsigned int maxListen) {
 	if (::listen(socket, maxListen) < 0) {
+		close();
 		// sntLogErrorPrintf("listen failed, %s.\n", strerror(errno));
 		// sntDisconnectSocket(connection);
 		return NULL;
@@ -80,3 +85,21 @@ int TCPNetSocket::connect(std::string &ip, unsigned int port) {
 		// return NULL;
 	}
 }
+
+int TCPNetSocket::open(int p_type, int ip_type) {}
+int TCPNetSocket::bind(const INetAddress &p_addr, uint16_t p_port) {}
+int TCPNetSocket::poll(int p_type, int timeout) const {}
+int TCPNetSocket::recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddress &r_ip, uint16_t &r_port,
+						   bool p_peek) {}
+int TCPNetSocket::recv(const void *pbuffer, int p_len, int &sent) {}
+int TCPNetSocket::send(const uint8_t *p_buffer, int p_len, int &r_sent) {}
+int TCPNetSocket::sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const INetAddress &p_ip, uint16_t p_port) {}
+long int TCPNetSocket::send(const void *pbuffer, int p_len, int &sent) {}
+Ref<NetSocket> TCPNetSocket::accept(INetAddress &r_ip, uint16_t &r_port) {}
+Ref<NetSocket> TCPNetSocket::accept(std::string &ip, unsigned int port) {}
+TCPNetSocket::NetStatus TCPNetSocket::accept(NetSocket &socket) {}
+int TCPNetSocket::read() {}
+int TCPNetSocket::write() {}
+bool TCPNetSocket::isBlocking() {}
+void TCPNetSocket::setBlocking(bool blocking) {}
+TCPNetSocket::NetStatus TCPNetSocket::getStatus() const noexcept { return netStatus; }

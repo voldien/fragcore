@@ -8,4 +8,5 @@ NetSocket::~NetSocket() {
 	close();
 }
 
-constexpr const char *NetSocket::getTransportProtocolSymbol(TransportProtocol transportProtocol) { return ""; }
+constexpr const char *NetSocket::getTransportProtocolSymbol(TransportProtocol transportProtocol) noexcept { return ""; }
+constexpr const char *NetSocket::getNetStatusSymbol(NetStatus status) noexcept {}

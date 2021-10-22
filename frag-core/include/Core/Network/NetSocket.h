@@ -21,6 +21,7 @@
 #include "../IO/IO.h"
 #include "../Ref.h"
 #include "../SmartReference.h"
+#include "INetAddress.h"
 #include "IP.h"
 
 namespace fragcore {
@@ -38,60 +39,55 @@ namespace fragcore {
 		 * @brief
 		 *
 		 */
-		enum class TransportProtocol {
-			TCP,
-			UDP,
-			MaxTransportProtocol,
-		};
+		enum class TransportProtocol { TransportProtoclNone, TCP, UDP, MaxTransportProtocol };
+		enum class NetStatus { Status_Done, Status_NotReady, Status_Partial, Status_Disconnected, Status_Error };
 
-		// virtual Error open(Type p_type, IP::Type &ip_type) = 0;
+		virtual int open(int p_type, int ip_type) = 0;
 
 		virtual TransportProtocol getTransportProtocol() const noexcept = 0;
 
-		virtual void close() = 0;
+		virtual int close() = 0;
 		virtual int bind(std::string &addr, unsigned int port) = 0;
+		virtual int bind(const INetAddress &p_addr, uint16_t p_port) = 0;
 		virtual int listen(unsigned int maxListen) = 0;
 		virtual int connect(std::string &ip, unsigned int port) = 0;
+		virtual int poll(int p_type, int timeout) const = 0;
 
-		virtual int read();
-		virtual int write();
+		virtual int recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddress &r_ip, uint16_t &r_port,
+							 bool p_peek = false) = 0;
+		virtual int recv(const void *pbuffer, int p_len, int &sent) = 0;
+		virtual int send(const uint8_t *p_buffer, int p_len, int &r_sent) = 0;
+		virtual int sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const INetAddress &p_ip,
+						   uint16_t p_port) = 0;
+		virtual long int send(const void *pbuffer, int p_len, int &sent) = 0;
+		virtual Ref<NetSocket> accept(INetAddress &r_ip, uint16_t &r_port) = 0;
+		virtual Ref<NetSocket> accept(std::string &ip, unsigned int port) = 0;
+		virtual NetStatus accept(NetSocket &socket) = 0;
 
-		// virtual Error bind(IPAddress p_addr, uint16_t p_port) = 0;
+		virtual int read() = 0;
+		virtual int write() = 0;
+		virtual bool isBlocking() = 0;
+		virtual void setBlocking(bool blocking) = 0;
+
+		virtual NetStatus getStatus() const noexcept = 0;
+
 		// virtual Error listen(int p_max_pending) = 0;
 		// virtual Error connect_to_host(IPAddress p_addr, uint16_t p_port) = 0;
 		// virtual Error poll(PollType p_type, int timeout) const = 0;
 		// virtual Error recv(uint8_t *p_buffer, int p_len, int &r_read) = 0;
-		// virtual Error recvfrom(uint8_t *p_buffer, int p_len, int &r_read, IPAddress &r_ip, uint16_t &r_port,
-		// 					   bool p_peek = false) = 0;
-		virtual int recv(const void *pbuffer, int p_len, int &sent) = 0;
-		// virtual Error send(const uint8_t *p_buffer, int p_len, int &r_sent) = 0;
-		// virtual Error sendto(const uint8_t *p_buffer, int p_len, int &r_sent, IPAddress p_ip, uint16_t p_port) =
-		virtual long int send(const void *pbuffer, int p_len, int &sent) = 0;
-		// virtual long int send(Ref<IO> &io, int len, int &sent) = 0;
-		// 0; virtual Ref<NetSocket> accept(IPAddress &r_ip, uint16_t &r_port) = 0;
-		virtual Ref<NetSocket> accept(std::string &ip, unsigned int port) = 0;
 
 		/*virtual int bind(IP adddrr, Type _type);
 		virtual int connect(IP& addr);
 		virtual int listen();
-		Status accept(NetSocket &socket);
 
-		virtual int close();
-		virtual int read();
-		virtual int write();
-		virtual bool isBlocking();
-		virtual void setBlocking(bool blocking);
 			*/
-		virtual bool isBlocking() = 0;
-		virtual void setBlocking(bool blocking) = 0;
-
-		// enum class Status { Done, NotReady, Partial, Disconnected, Error };
 
 	  protected:
 		NetSocket() = default;
 
 	  public:
-		static constexpr const char *getTransportProtocolSymbol(TransportProtocol transportProtocol);
+		static constexpr const char *getTransportProtocolSymbol(TransportProtocol transportProtocol) noexcept;
+		static constexpr const char* getNetStatusSymbol(NetStatus status) noexcept;
 	};
 } // namespace fragcore
 

@@ -29,44 +29,38 @@ namespace fragcore {
 		TCPNetSocket(const IPInterface &ip);
 		virtual ~TCPNetSocket();
 
-		// virtual Error open(Type p_type, IP::Type &ip_type) = 0;
+		virtual int open(int p_type, int ip_type) override;
 
-		virtual TransportProtocol getTransportProtocol() const noexcept { return TransportProtocol::TCP; }
-		virtual void close() override;
+		virtual TransportProtocol getTransportProtocol() const noexcept;
 
+		virtual int close() override;
 		virtual int bind(std::string &addr, unsigned int port) override;
+		virtual int bind(const INetAddress &p_addr, uint16_t p_port) override;
 		virtual int listen(unsigned int maxListen) override;
 		virtual int connect(std::string &ip, unsigned int port) override;
+		virtual int poll(int p_type, int timeout) const override;
 
-		// virtual Error bind(IPAddress p_addr, uint16_t p_port) = 0;
-		// virtual Error listen(int p_max_pending) = 0;
-		// virtual Error connect_to_host(IPAddress p_addr, uint16_t p_port) = 0;
-		// virtual Error poll(PollType p_type, int timeout) const = 0;
-		// virtual Error recv(uint8_t *p_buffer, int p_len, int &r_read) = 0;
-		// virtual Error recvfrom(uint8_t *p_buffer, int p_len, int &r_read, IPAddress &r_ip, uint16_t &r_port,
-		// 					   bool p_peek = false) = 0;
-		// virtual Error send(const uint8_t *p_buffer, int p_len, int &r_sent) = 0;
-		// virtual Error sendto(const uint8_t *p_buffer, int p_len, int &r_sent, IPAddress p_ip, uint16_t p_port) =
+		virtual int recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddress &r_ip, uint16_t &r_port,
+							 bool p_peek = false) override;
+		virtual int recv(const void *pbuffer, int p_len, int &sent) override;
+		virtual int send(const uint8_t *p_buffer, int p_len, int &r_sent) override;
+		virtual int sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const INetAddress &p_ip,
+						   uint16_t p_port) override;
 		virtual long int send(const void *pbuffer, int p_len, int &sent) override;
-		// virtual long int send(Ref<IO> &io, int len, int &sent) override;
-		// 0; virtual Ref<NetSocket> accept(IPAddress &r_ip, uint16_t &r_port) = 0;
+		virtual Ref<NetSocket> accept(INetAddress &r_ip, uint16_t &r_port) override;
 		virtual Ref<NetSocket> accept(std::string &ip, unsigned int port) override;
+		virtual NetStatus accept(NetSocket &socket) override;
 
-		/*virtual int bind(IP adddrr, Type _type);
-		virtual int connect(IP& addr);
-		virtual int listen();
-		Status accept(NetSocket &socket);
+		virtual int read() override;
+		virtual int write() override;
+		virtual bool isBlocking() override;
+		virtual void setBlocking(bool blocking) override;
 
-		virtual int close();
-		virtual int read();
-		virtual int write();
-		virtual bool isBlocking();
-		virtual void setBlocking(bool blocking);
-			*/
+		virtual NetStatus getStatus() const noexcept override;
 
-		// enum class Status { Done, NotReady, Partial, Disconnected, Error };
 	  private:
 		int socket;
+		NetStatus netStatus;
 	};
 } // namespace fragcore
 

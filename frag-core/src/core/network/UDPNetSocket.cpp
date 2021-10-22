@@ -38,7 +38,11 @@ UDPNetSocket::UDPNetSocket(const IPInterface &ip) {
 }
 UDPNetSocket::~UDPNetSocket() {}
 
-void UDPNetSocket::close() {}
+NetSocket::TransportProtocol UDPNetSocket::getTransportProtocol() const noexcept {
+	return NetSocket::TransportProtocol::UDP;
+}
+
+int UDPNetSocket::close() { int status = ::close(socket); }
 
 int UDPNetSocket::bind(std::string &IPaddr, unsigned int port) {
 	socklen_t addrlen;	   /*	*/
@@ -63,6 +67,7 @@ int UDPNetSocket::listen(unsigned int maxListen) {
 		return NULL;
 	}
 }
+
 int UDPNetSocket::connect(std::string &ip, unsigned int port) {
 	socklen_t addrlen;			 /*	*/
 	const struct sockaddr *addr; /*	*/
@@ -80,3 +85,21 @@ int UDPNetSocket::connect(std::string &ip, unsigned int port) {
 		// return NULL;
 	}
 }
+
+int UDPNetSocket::open(int p_type, int ip_type) {}
+int UDPNetSocket::bind(const INetAddress &p_addr, uint16_t p_port) {}
+int UDPNetSocket::poll(int p_type, int timeout) const {}
+int UDPNetSocket::recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddress &r_ip, uint16_t &r_port,
+						   bool p_peek) {}
+int UDPNetSocket::recv(const void *pbuffer, int p_len, int &sent) {}
+int UDPNetSocket::send(const uint8_t *p_buffer, int p_len, int &r_sent) {}
+int UDPNetSocket::sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const INetAddress &p_ip, uint16_t p_port) {}
+long int UDPNetSocket::send(const void *pbuffer, int p_len, int &sent) {}
+Ref<NetSocket> UDPNetSocket::accept(INetAddress &r_ip, uint16_t &r_port) {}
+Ref<NetSocket> UDPNetSocket::accept(std::string &ip, unsigned int port) {}
+UDPNetSocket::NetStatus UDPNetSocket::accept(NetSocket &socket) {}
+int UDPNetSocket::read() {}
+int UDPNetSocket::write() {}
+bool UDPNetSocket::isBlocking() {}
+void UDPNetSocket::setBlocking(bool blocking) {}
+UDPNetSocket::NetStatus UDPNetSocket::getStatus() const noexcept { return this->netStatus; }

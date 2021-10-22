@@ -16,39 +16,28 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-#ifndef _FRAG_CORE_IP_ADDRESS_H_
-#define _FRAG_CORE_IP_ADDRESS_H_ 1
-#include "INetAddress.h"
-#include <vector>
+#ifndef _FRAG_CORE_INET_ADDRESS_H_
+#define _FRAG_CORE_INET_ADDRESS_H_ 1
+#include "../Object.h"
 
 namespace fragcore {
 	/**
 	 * @brief
 	 *
 	 */
-	class FVDECLSPEC IPAddress : public INetAddress {
+	class FVDECLSPEC INetAddress : public Object {
 	  public:
-		enum Type {
+		enum class NetworkProtocol {
 
-			TYPE_NONE = 0,
-			TYPE_IPV4 = 1,
-			TYPE_IPV6 = 2,
-			TYPE_ANY = 3,
+			NetWorkProtocol_NONE = 0,
+			NetWorkProtocol_IP = 1,
+			NetWorkProtocol_ANY = 3,
 		};
-		IPAddress(const std::string &ip, Type type);
-
-
-		virtual NetworkProtocol getNetworkProtocol() const noexcept override{
-			return NetworkProtocol::NetWorkProtocol_IP;
-		}
-		
-		const std::string &getIP() const;
-		const std::string &getHostName() const;
-		Type getIPType() const noexcept;
+		INetAddress(NetworkProtocol type);
+		virtual NetworkProtocol getNetworkProtocol() const noexcept = 0;
 
 	  private:
-		Type type;
-		std::string ip;
+		NetworkProtocol type;
 	};
 } // namespace fragcore
 
