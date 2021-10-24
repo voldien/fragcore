@@ -1,5 +1,6 @@
-#include "Core/Network/TCPSocket.h"
 
+#include "Core/Network/IPAddress.h"
+#include "Core/Network/TCPSocket.h"
 #include <arpa/inet.h>
 #include <assert.h>
 #include <errno.h>
@@ -17,7 +18,7 @@
 
 using namespace fragcore;
 
-TCPNetSocket::TCPNetSocket(const IPInterface &ip) : netStatus(NetStatus::Status_Disconnected), socket(0) {}
+TCPNetSocket::TCPNetSocket() : netStatus(NetStatus::Status_Disconnected), socket(0) {}
 TCPNetSocket::~TCPNetSocket() {}
 
 NetSocket::TransportProtocol TCPNetSocket::getTransportProtocol() const noexcept {
@@ -64,18 +65,79 @@ int TCPNetSocket::bind(std::string &IPaddr, unsigned int port) {
 
 	/*	Bind process to socket.	*/
 	if (::bind(socket, (struct sockaddr *)addr, addrlen) < 0) {
+		RuntimeException ex("Failed to bind TCP socket, {}", strerror(errno));
+		this->netStatus = NetStatus::Status_Error;
 		close();
-		throw RuntimeException("Failed to bind TCP socket, {}.\n", strerror(errno));
+		throw ex;
 	} else {
 		this->netStatus = NetStatus::Status_Done;
 	}
 }
+
+int TCPNetSocket::bind(const INetAddress &p_addr, uint16_t p_port) {
+	socklen_t addrlen;	   /*	*/
+	struct sockaddr *addr; /*	*/
+	union {
+		struct sockaddr_in addr4;  /*	*/
+		struct sockaddr_in6 addr6; /*	*/
+	} addrU;
+
+	int domain = 0; // TODO be override by the NetAddress!
+	switch (p_addr.getNetworkProtocol()) {
+	case INetAddress::NetworkProtocol::NetWorkProtocol_IP:
+		domain = AF_INET;
+		break;
+	case INetAddress::NetworkProtocol::NetWorkProtocol_CAN:
+		domain = AF_CAN;
+		break;
+	default:
+		throw RuntimeException("Non Supported Network Protocol: {}", p_addr.getNetworkProtocol());
+	}
+
+	/*	*/
+	if (domain == AF_INET) {
+		const IPAddress &ipAddress = static_cast<const IPAddress &>(p_addr);
+
+		bzero(&addrU.addr4, sizeof(addrU.addr4));
+		addrU.addr4.sin_port = htons(p_port);
+		addrU.addr4.sin_family = (sa_family_t)domain;
+		if (inet_pton(domain, ipAddress.getIP().c_str(), &addrU.addr4.sin_addr) < 0) {
+			this->close();
+		}
+		addrlen = sizeof(addrU.addr4);
+		addr = (struct sockaddr *)&addrU.addr4;
+	} else if (domain == AF_INET6) {
+		const IPAddress &ipAddress = static_cast<const IPAddress &>(p_addr);
+		bzero(&addrU.addr6, sizeof(addrU.addr6));
+		addrU.addr6.sin6_port = htons(p_port);
+		addrU.addr6.sin6_family = (sa_family_t)domain;
+		if (inet_pton(domain, ipAddress.getIP().c_str(), &addrU.addr6.sin6_addr) < 0) {
+			this->close();
+		}
+		addrlen = sizeof(addrU.addr6);
+		addr = (struct sockaddr *)&addrU.addr6;
+	} else {
+
+		this->close();
+	}
+
+	/*	Bind process to socket.	*/
+	if (::bind(socket, (struct sockaddr *)addr, addrlen) < 0) {
+		RuntimeException ex("Failed to bind TCP socket, {}", strerror(errno));
+		this->netStatus = NetStatus::Status_Error;
+		close();
+		throw ex;
+	} else {
+		this->netStatus = NetStatus::Status_Done;
+	}
+}
+
 int TCPNetSocket::listen(unsigned int maxListen) {
 	if (::listen(socket, maxListen) < 0) {
+		RuntimeException ex("Failed to listen TCP socket, {}", strerror(errno));
 		close();
 		// sntLogErrorPrintf("listen failed, {}.\n", strerror(errno));
 		// sntDisconnectSocket(connection);
-		return NULL;
 	}
 }
 int TCPNetSocket::connect(std::string &ip, unsigned int port) {
@@ -103,7 +165,7 @@ int TCPNetSocket::connect(std::string &ip, unsigned int port) {
 }
 
 int TCPNetSocket::open(int p_type, int ip_type) {}
-int TCPNetSocket::bind(const INetAddress &p_addr, uint16_t p_port) {}
+
 int TCPNetSocket::poll(int p_type, int timeout) const {}
 int TCPNetSocket::recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddress &r_ip, uint16_t &r_port,
 						   bool p_peek) {
@@ -125,8 +187,11 @@ int TCPNetSocket::sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const 
 	int res; //=  sendto(this->socket, p_buffer, p_len, flag, connection->extaddr, connection->sclen);
 	return res;
 }
+
 long int TCPNetSocket::send(const void *pbuffer, int p_len, int &sent) {}
+
 Ref<NetSocket> TCPNetSocket::accept(INetAddress &r_ip, uint16_t &r_port) {}
+
 Ref<NetSocket> TCPNetSocket::accept(std::string &ip, unsigned int port) {
 	struct sockaddr tobuffer; /*	*/
 	socklen_t aclen = 0;	  /*	*/

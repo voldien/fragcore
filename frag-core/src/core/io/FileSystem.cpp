@@ -90,9 +90,12 @@ std::string FileSystem::getAbsolutePath(const char *path) {
 	// char resolved_path[PATH_MAX];
 	// realpath(path, resolved_path);
 	// return resolved_path;
+	return "";
 }
 
-std::string FileSystem::getRelativePath(const char *path) {}
+std::string FileSystem::getRelativePath(const char *path) {
+		return "";
+}
 
 const char *FileSystem::getFileExtension(const char *path) {
 	const char *dot = strrchr(path, '.');
@@ -128,12 +131,14 @@ std::vector<std::string> FileSystem::listDirectories(const char *directory) cons
 	// for(auto& p: fs::directory_iterator("sandbox"))
 	// 	std::cout << p.path() << '\n';
 	// return std::vector<std::string>();
+	return {};
 }
 
 std::vector<std::string> FileSystem::list(const char *directory) const {
 	// for(auto& p: fs::directory_iterator("sandbox"))
 	// 	std::cout << p.path() << '\n';
 	// return std::vector<std::string>();
+	return {};
 }
 
 static FileSystem *fileSystem = nullptr;

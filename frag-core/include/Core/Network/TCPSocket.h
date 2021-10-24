@@ -18,16 +18,17 @@
 */
 #ifndef _FRAG_CORE_TCP_NETSOCKET_H_
 #define _FRAG_CORE_TCP_NETSOCKET_H_ 1
+#include "INetAddress.h"
 #include "NetSocket.h"
-#include"INetAddress.h"
 
 namespace fragcore {
 	/**
+	 * @brief
 	 *
 	 */
 	class FVDECLSPEC TCPNetSocket : public NetSocket {
 	  public:
-		TCPNetSocket(const IPInterface &ip);
+		TCPNetSocket();
 		virtual ~TCPNetSocket();
 
 		virtual int open(int p_type, int ip_type) override;
@@ -59,8 +60,8 @@ namespace fragcore {
 
 		virtual NetStatus getStatus() const noexcept override;
 
-		protected:
-			bool isNetworkLayerSupported(INetAddress::NetworkProtocol protocol);
+	  protected:
+		bool isNetworkLayerSupported(INetAddress::NetworkProtocol protocol);
 
 	  private:
 		int socket;

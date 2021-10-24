@@ -152,10 +152,10 @@ namespace fragcore {
 		template <typename T>
 		static void guassian(T &guassian, unsigned int height, T theta, T standard_deviation) noexcept {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
-			const T a = (1.0f / (standard_deviation * static_cast<T>(std::sqrt(2.0 * Math::PI))));
+			const T a = (static_cast<T>(1.0) / (standard_deviation * static_cast<T>(std::sqrt(2.0 * Math::PI))));
 
 			/*	*/
-			T *pGuass = &guassian;
+			T *pGuass = static_cast<T*>(&guassian);
 
 			for (unsigned int i = 0; i < height; i++) {
 				const T b = (-1.0f / 2.0f) * std::pow<T>(((i - standard_deviation) / theta), 2.0f);
@@ -170,6 +170,8 @@ namespace fragcore {
 		static void guassian(const std::vector<T> &guassian, unsigned int width, unsigned int height, T theta,
 							 T standard_deviation) noexcept {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
+			/*	TODO validate size.	*/
+
 			Math::guassian<T>((T &)*guassian.data(), width, height, theta, standard_deviation);
 		}
 

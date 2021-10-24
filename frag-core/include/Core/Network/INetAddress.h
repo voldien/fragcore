@@ -34,7 +34,7 @@ namespace fragcore {
 			NetWorkProtocol_CAN = 2,
 			NetWorkProtocol_ANY = 3,
 		};
-		INetAddress(NetworkProtocol type);
+		INetAddress(NetworkProtocol type) {}
 		virtual NetworkProtocol getNetworkProtocol() const noexcept = 0;
 
 	  private:

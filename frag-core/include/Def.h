@@ -64,7 +64,7 @@ namespace fragcore{
 	using InvalidArgumentException = cxxexcept::InvalidArgumentException ;
 	using NotSupportedException = cxxexcept::NotSupportedException ;
 	using InvalidPointerException = cxxexcept::InvalidPointerException ;
-
+	using SystemException = cxxexcept::SystemException;
 }
 
 /**

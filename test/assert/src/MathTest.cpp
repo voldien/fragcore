@@ -39,8 +39,8 @@ TEST_P(MinTest, Values) {
 }
 
 INSTANTIATE_TEST_SUITE_P(Math, MinTest,
-						 ::testing::Values(std::make_tuple(5, 3, 5), std::make_tuple(5, 3, 5),
-										   std::make_tuple(5, 3, 5)));
+						 ::testing::Values(std::make_tuple(5, 3, 3), std::make_tuple(5, 3, 3),
+										   std::make_tuple(5, 3, 3)));
 
 TEST(Math, PowerOf2_Found) {
 	for (unsigned int i = 0; i < 64; i++)
@@ -69,31 +69,29 @@ INSTANTIATE_TEST_SUITE_P(Math, SumTest,
 						 ::testing::Values(std::make_tuple(std::vector<float>{1, 2, 3, 4, 5}, 15),
 										   std::make_tuple(std::vector<float>{5, 5, 5, 5, 5}, 25)));
 
-class GuassianDistributionTest : public ::testing::TestWithParam<std::tuple<float, float,std::vector<float>>> {};
+class GuassianDistributionTest : public ::testing::TestWithParam<std::tuple<float, float, std::vector<float>>> {};
 
 TEST_P(GuassianDistributionTest, Values) {
 	auto [theta, standard_deviation, expected] = GetParam();
-	std::vector<float> guass;
+	std::vector<float> guass(expected.size());
 
 	Math::guassian(guass, expected.size(), theta, standard_deviation);
 
 	ASSERT_EQ(expected.size(), guass.size());
 
 	float sum = Math::sum(guass);
-	EXPECT_NEAR(sum, 1.0f, 10e-8);
+	EXPECT_NEAR(sum, 1.0f, 10e-9);
 
-	//TODO check whole vector
-	//EXPECT_NEAR(sum, expected, 10e-8);
+	// TODO check whole vector
+	// EXPECT_NEAR(sum, expected, 10e-8);
 }
 
 INSTANTIATE_TEST_SUITE_P(Math, GuassianDistributionTest,
-						 ::testing::Values(std::make_tuple(0.5, 0.5, std::vector<float>{1, 2, 3, 4, 5}),
-										   std::make_tuple(0.5, 0.5, std::vector<float>{5, 5, 5, 5, 5})));
-
-TEST(Math, Distrubtion) {
-
+						 ::testing::Values(std::make_tuple(0.5, 0.5, std::vector<float>{1, 2, 3, 4, 5, 5,5}),
+										   std::make_tuple(0.5, 0.5, std::vector<float>{5, 5, 5, 5, 5, 5,5})));
+TEST(Math, Distrubtion_GammaCorrection) {
 	/*	Gamma space */
-	const int sample_space = 2048;
+	const int sample_space = 1024;
 	float pre_gamma = 0.0f;
 	for (int i = 0; i < sample_space; i++) {
 		float linear = (float)i / (float)sample_space;
@@ -101,17 +99,19 @@ TEST(Math, Distrubtion) {
 		ASSERT_TRUE(gamma > pre_gamma);
 		pre_gamma = gamma;
 	}
+}
 
+TEST(Math, Distrubtion) {
 	/*	Guassian distribution.	*/
 	// TODO add
 	const float theta = 0.7f;
 	const int num_guass = 5;
 	const int num_total_guass = num_guass * 2 + 1;
-	std::vector<float> guassian;
+	std::vector<float> guassian(num_total_guass);
 	Math::guassian(guassian, num_guass, theta, 0.1f);
 	ASSERT_EQ(guassian.size(), num_total_guass);
 	float sum = Math::sum(guassian);
-	ASSERT_FLOAT_EQ(sum, 1.0f);
+	ASSERT_NEAR(sum, 1.0f, 0.01f);
 
 	Math::guassian(guassian, num_guass, theta, 0.1f);
 }

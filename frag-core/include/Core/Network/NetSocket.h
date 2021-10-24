@@ -87,7 +87,7 @@ namespace fragcore {
 
 	  public:
 		static constexpr const char *getTransportProtocolSymbol(TransportProtocol transportProtocol) noexcept;
-		static constexpr const char* getNetStatusSymbol(NetStatus status) noexcept;
+		static constexpr const char *getNetStatusSymbol(NetStatus status) noexcept;
 	};
 } // namespace fragcore
 

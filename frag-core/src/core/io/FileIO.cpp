@@ -40,7 +40,7 @@ void FileIO::open(const char *path, IOMode mode) {
 		m = "ab+";
 		break;
 	default:
-		throw InvalidArgumentException("Invalid IO mode.");
+		throw InvalidArgumentException("Invalid IO mode {}", mode);
 	}
 
 	file = fopen(path, m);
@@ -76,8 +76,13 @@ long FileIO::read(long int nbytes, void *pbuffer) {
 long FileIO::write(long int nbytes, const void *pbuffer) {
 	long int nreadBytes;
 	nreadBytes = fwrite((char *)pbuffer, 1, nbytes, this->file);
-	if (nreadBytes != nbytes && ferror(this->file) != 0)
+	if (nreadBytes != nbytes)
 		throw RuntimeException("Failed to write to file, {}.\n", strerror(errno));
+
+	int err = ferror(this->file);
+
+	if (err != 0)
+		throw RuntimeException("Failed to write to file, {}.\n", strerror(err));
 	return nreadBytes;
 }
 

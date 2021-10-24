@@ -19,7 +19,7 @@
 #ifndef _FRAG_CORE_IP_ADDRESS_H_
 #define _FRAG_CORE_IP_ADDRESS_H_ 1
 #include "INetAddress.h"
-#include <vector>
+#include <string>
 
 namespace fragcore {
 	/**
@@ -28,26 +28,25 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC IPAddress : public INetAddress {
 	  public:
-		enum Type {
+		enum class IPAddressType {
 
-			TYPE_NONE = 0,
-			TYPE_IPV4 = 1,
-			TYPE_IPV6 = 2,
-			TYPE_ANY = 3,
+			IPAddress_Type_NONE = 0,
+			IPAddress_Type_IPV4 = 1,
+			IPAddress_Type_IPV6 = 2,
+			IPAddress_Type_ANY = 3,
 		};
-		IPAddress(const std::string &ip, Type type);
+		IPAddress(const std::string &ip, IPAddressType type);
 
-
-		virtual NetworkProtocol getNetworkProtocol() const noexcept override{
+		virtual NetworkProtocol getNetworkProtocol() const noexcept override {
 			return NetworkProtocol::NetWorkProtocol_IP;
 		}
-		
+
 		const std::string &getIP() const;
 		const std::string &getHostName() const;
-		Type getIPType() const noexcept;
+		IPAddressType getIPType() const noexcept;
 
 	  private:
-		Type type;
+		IPAddressType type;
 		std::string ip;
 	};
 } // namespace fragcore
