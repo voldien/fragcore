@@ -8,7 +8,7 @@ using namespace fragcore;
 AudioDecoder *AudioDecoderFactory::createDecoder(AudioDecoderCodec codec, Ref<IO> &io) {
 	// TODO determine if needed or if each decoder class handles it.
 	if (!io->isReadable())
-		throw InvalidArgumentException(fmt::format("IO Object: '%s' is not readable.", io->getName().c_str()));
+		throw InvalidArgumentException("IO Object: '{}' is not readable.", io->getName().c_str());
 
 	switch (codec) {
 	case AudioDecoderCodec::Ogg:

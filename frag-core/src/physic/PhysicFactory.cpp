@@ -28,7 +28,7 @@ PhysicInterface *PhysicFactory::createPhysic(const char *libpath, IConfig *confi
 
 	/*	Validate parameters.	*/
 	if (libpath == nullptr)
-		throw InvalidArgumentException(fmt::format("Invalid filepath do dynamic library: %s", libpath));
+		throw InvalidArgumentException("Invalid filepath do dynamic library: {}", libpath);
 
 	/*	Open dynamicInterface library and create dynamicInterface object.	*/
 	library.open(libpath);

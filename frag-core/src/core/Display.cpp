@@ -12,7 +12,7 @@
 //	SDL_Rect bound;
 //	int err = SDL_GetDisplayBounds(this->index, &bound);
 //	if (err != 0)
-//		throw RuntimeException(fmt::format("Failed getting display %d bounds, %s.", this->index, SDL_GetError()));
+//		throw RuntimeException(fmt::format("Failed getting display %d bounds, {}.", this->index, SDL_GetError()));
 //	return bound.x;
 //}
 //
@@ -20,7 +20,7 @@
 //	SDL_Rect bound;
 //	int err = SDL_GetDisplayBounds(this->index, &bound);
 //	if (err != 0)
-//		throw RuntimeException(fmt::format("Failed getting display %d bounds, %s.", this->index, SDL_GetError()));
+//		throw RuntimeException(fmt::format("Failed getting display %d bounds, {}.", this->index, SDL_GetError()));
 //	return bound.y;
 //}
 //
@@ -28,7 +28,7 @@
 //	SDL_Rect bound;
 //	int err = SDL_GetDisplayBounds(this->index, &bound);
 //	if (err != 0)
-//		throw RuntimeException(fmt::format("Failed getting display %d bounds, %s.", this->index, SDL_GetError()));
+//		throw RuntimeException(fmt::format("Failed getting display %d bounds, {}.", this->index, SDL_GetError()));
 //	return bound.w;
 //}
 //
@@ -36,7 +36,7 @@
 //	SDL_Rect bound;
 //	int err = SDL_GetDisplayBounds(this->index, &bound);
 //	if (err != 0)
-//		throw RuntimeException(fmt::format("Failed getting display %d bounds, %s.", this->index, SDL_GetError()));
+//		throw RuntimeException(fmt::format("Failed getting display %d bounds, {}.", this->index, SDL_GetError()));
 //	return bound.h;
 //}
 //
@@ -44,7 +44,7 @@
 //	SDL_DisplayMode mode;
 //	int err = SDL_GetCurrentDisplayMode(this->index, &mode);
 //	if (err != 0)
-//		throw RuntimeException(fmt::format("Failed getting display %d refresh rate, %s.", this->index, SDL_GetError()));
+//		throw RuntimeException(fmt::format("Failed getting display %d refresh rate, {}.", this->index, SDL_GetError()));
 //	return mode.refresh_rate;
 //}
 //
@@ -93,7 +93,7 @@
 // void Display::getDPI(Display::DPI *dpi) {
 //	int err = SDL_GetDisplayDPI(this->index, &dpi->ddpi, &dpi->hdpi, &dpi->vdpi);
 //	if (err != 0)
-//		throw RuntimeException(fmt::format("Failed to retrieve display %d DPI, %s", this->index, SDL_GetError()));
+//		throw RuntimeException(fmt::format("Failed to retrieve display %d DPI, {}", this->index, SDL_GetError()));
 //}
 //
 // float Display::getFormat() {
@@ -103,7 +103,7 @@
 // int Display::getNumDisplays() {
 //	int n = SDL_GetNumVideoDisplays();
 //	if (n <= 0)
-//		throw RuntimeException(fmt::format("Failed to retrieve number of displays, %s", SDL_GetError()));
+//		throw RuntimeException(fmt::format("Failed to retrieve number of displays, {}", SDL_GetError()));
 //}
 //
 // Display Display::getDisplay(unsigned int index) {

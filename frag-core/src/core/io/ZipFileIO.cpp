@@ -29,7 +29,7 @@ void ZipFileIO::close() {
 	if (err != ZIP_ER_OK) {
 		char buf[1024];
 		zip_error_to_str(buf, sizeof(buf), err, errno);
-		throw RuntimeException(fmt::format("Failed to close zip file %s", buf));
+		throw RuntimeException(fmt::format("Failed to close zip file {}", buf));
 	}
 
 	// zip_file_add
@@ -45,7 +45,7 @@ long ZipFileIO::read(long int nbytes, void *pbuffer) {
 	if (nbytes == -1) {
 		char buf[1024];
 		zip_error_to_str(buf, sizeof(buf), nbytes, errno);
-		throw RuntimeException(fmt::format("Failed to close zip file %s", buf));
+		throw RuntimeException(fmt::format("Failed to close zip file {}", buf));
 	}
 	return nbytes;
 }
@@ -95,7 +95,7 @@ void ZipFileIO::seek(long int nbytes, Seek seek) {
 	//		int sys_err;
 	////		zip_error_get(zip, &err, &sys_err);
 	////		zip_error_to_str(buf, sizeof(buf), err, errno);
-	////		throw InvalidArgumentException(fmt::format("can't open `%s':\n\t%s\n", path, buf));
+	////		throw InvalidArgumentException("can't open `{}':\n\t{}\n", path, buf));
 	//	}
 	//	//zip_fseek
 }

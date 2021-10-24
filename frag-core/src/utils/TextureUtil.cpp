@@ -225,7 +225,7 @@ void TextureUtil::saveTexture(const char *filepath, IRenderer *renderer, Texture
 	image_format = FreeImage_GetFIFFromFilename(filepath);
 	if (image_format == FIF_UNKNOWN) {
 		texture->unMapTexture();
-		throw InvalidArgumentException(fmt::format("filepath file fmt::format is not supported : %s", filepath));
+		throw InvalidArgumentException("filepath file fmt::format is not supported : {}", filepath);
 	}
 
 	// TODO resolve color swizzle issue.
@@ -234,13 +234,13 @@ void TextureUtil::saveTexture(const char *filepath, IRenderer *renderer, Texture
 										 Bpp * 8, 0x000000FF, 0x0000FF00, 0x00FF0000, FALSE);
 	if (image == nullptr) {
 		FreeImage_DeInitialise();
-		throw RuntimeException(fmt::format("FreeImage_ConvertFromRawBits failed: %s", filepath));
+		throw RuntimeException("FreeImage_ConvertFromRawBits failed: {}", filepath);
 	}
 
 	/*  */
 	finalImage = FreeImage_ConvertTo32Bits(image);
 	if (finalImage == nullptr) {
-		throw RuntimeException(fmt::format("Failed convert image: %s", filepath));
+		throw RuntimeException("Failed convert image: {}", filepath);
 	}
 
 	/*  Save to file.   */
@@ -250,7 +250,7 @@ void TextureUtil::saveTexture(const char *filepath, IRenderer *renderer, Texture
 	// FreeImage_SaveToMemory(image_format, image, mem);
 
 	if (!FreeImage_Save(image_format, image, filepath, 0))
-		throw RuntimeException(fmt::format("Failed save image: %s", filepath));
+		throw RuntimeException("Failed save image: {}", filepath);
 
 	/*  */
 	FreeImage_CloseMemory(fimemory);

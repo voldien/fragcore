@@ -55,7 +55,7 @@ void IConfig::setInternal(const std::string &key, const void *value, const std::
 		const char *cstr = (const char *)value;
 		this->sconfig[key] = std::string(cstr);
 	} else
-		throw InvalidArgumentException(fmt::format("Invalid argument type %s.", type.name()));
+		throw InvalidArgumentException("Invalid argument type {}.", type.name());
 }
 
 void IConfig::getInternal(const std::string &key, void *value, const std::type_info &type) const {
@@ -79,35 +79,35 @@ void IConfig::getInternal(const std::string &key, void *value, const std::type_i
 		if (iti != iconfig.end())
 			*((int *)value) = (*iti).second;
 		else
-			throw InvalidArgumentException(fmt::format("Key '%s' don't exists", key.c_str()));
+			throw InvalidArgumentException("Key '{}' don't exists", key);
 	} else if (type == b) {
 		iti = iconfig.find(key);
 		if (iti != iconfig.end())
 			*((bool *)value) = (bool)(*iti).second;
 		else
-			throw InvalidArgumentException(fmt::format("Key '%s' don't exists", key.c_str()));
+			throw InvalidArgumentException("Key '{}' don't exists", key);
 	} else if (f == type) {
 		fti = fconfig.find(key);
 		if (fti != fconfig.end())
 			*((float *)value) = (*fti).second;
 		else
-			throw InvalidArgumentException(fmt::format("Key '%s' don't exists", key.c_str()));
+			throw InvalidArgumentException("Key '{}' don't exists", key);
 	} else if (s0 == type) {
 		sti = sconfig.find(key);
 		if (sti != sconfig.end())
 			*((std::string *)value) = (*sti).second;
 		else
-			throw InvalidArgumentException(fmt::format("Key '%s' don't exists", key.c_str()));
+			throw InvalidArgumentException("Key '{}' don't exists", key);
 	} else if (s2 == type) {
 		sti = sconfig.find(key);
 		if (sti != sconfig.end())
 			*((const char **)value) = (*sti).second.c_str();
 		else
-			throw InvalidArgumentException(fmt::format("Key '%s' don't exists", key.c_str()));
+			throw InvalidArgumentException("Key '{}' don't exists", key);
 	} else if (type.before(s1)) {
 
 	} else
-		throw InvalidArgumentException(fmt::format("Invalid argument type '%s'.", type.name()));
+		throw InvalidArgumentException("Invalid argument type '{}'.", type.name());
 }
 
 IConfig &IConfig::getSubConfig(const std::string &key) {
@@ -176,19 +176,19 @@ void IConfig::printTable(Ref<IO> &io) const {
 	for (; iti != this->iconfig.end(); iti++) {
 		const std::string &key = (*iti).first;
 		const int hvalue = (*iti).second;
-		IOUtil::format(io, "{}{} : {}\n", "\t", key.c_str(), hvalue);
+		IOUtil::format(io, "{}{} : {}\n", "\t", key, hvalue);
 	}
 
 	for (; fti != this->fconfig.end(); fti++) {
 		const std::string &key = (*fti).first;
 		const float hvalue = (*fti).second;
-		IOUtil::format(io, "{}{} : {}\n", "\t", key.c_str(), hvalue);
+		IOUtil::format(io, "{}{} : {}\n", "\t", key, hvalue);
 	}
 
 	for (; sti != this->sconfig.end(); sti++) {
 		const std::string &key = (*sti).first;
 		const std::string hvalue = (*sti).second;
-		IOUtil::format(io, "{}{} : {}\n", "\t", key.c_str(), hvalue.c_str());
+		IOUtil::format(io, "{}{} : {}\n", "\t", key, hvalue.c_str());
 	}
 }
 
@@ -197,14 +197,14 @@ static IConfig::ConfigFormat predictConfigExtFormat(Ref<IO> &ref) {
 
 	if (format == IConfig::ConfigFormat::Unknown)
 		throw InvalidArgumentException(
-			fmt::format("Could not predict file format of IO object: %s", ref->getName().c_str()));
+			fmt::format("Could not predict file format of IO object: {}", ref->getName().c_str()));
 
 	return format;
 }
 
 void IConfig::save(Ref<IO> &io, ConfigFormat format) {
 	if (!io->isWriteable())
-		throw RuntimeException(fmt::format("IO object %s is not writable.", io->getName().c_str()));
+		throw RuntimeException(fmt::format("IO object {} is not writable.", io->getName().c_str()));
 
 	if (format == ConfigFormat::Unknown)
 		format = predictConfigExtFormat(io);
@@ -276,7 +276,7 @@ void IConfig::save_xml(Ref<IO> &io) {
 	/*  */
 	rc = xmlTextWriterSetIndent(writer, 1);
 	if (rc < 0)
-		throw RuntimeException(fmt::format("Xml Identation failed: %s", xmlGetLastError()->message));
+		throw RuntimeException(fmt::format("Xml Identation failed: {}", xmlGetLastError()->message));
 
 	iti = this->iconfig.begin();
 	fti = this->fconfig.begin();
@@ -286,12 +286,12 @@ void IConfig::save_xml(Ref<IO> &io) {
 	rc = xmlTextWriterWriteComment(writer, BAD_CAST "sub-element contains all integers configuration values.");
 	if (rc == -1) {
 		xmlErrorPtr error = xmlGetLastError();
-		throw RuntimeException(fmt::format("Failed writing comment : %s", xmlGetLastError()->message));
+		throw RuntimeException(fmt::format("Failed writing comment : {}", xmlGetLastError()->message));
 	}
 	/*	Iterate through each int configuration.	*/
 	rc = xmlTextWriterSetIndent(writer, 1);
 	if (rc == -1)
-		throw RuntimeException(fmt::format("Failed to set indentation: %s", xmlGetLastError()->message));
+		throw RuntimeException(fmt::format("Failed to set indentation: {}", xmlGetLastError()->message));
 	for (; iti != this->iconfig.end(); iti++) {
 		const std::string &key = (*iti).first;
 		const int hvalue = (*iti).second;
@@ -301,20 +301,20 @@ void IConfig::save_xml(Ref<IO> &io) {
 		rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "type", BAD_CAST typeid(int).name());
 		if (rc == -1)
 			throw RuntimeException(
-				fmt::format("Failed writing attribute: %s - key :%s", key.c_str(), snbuf, xmlGetLastError()->message));
+				fmt::format("Failed writing attribute: {} - key :{}", key, snbuf, xmlGetLastError()->message));
 		rc = xmlTextWriterEndElement(writer);
 		if (rc == -1)
-			throw RuntimeException(fmt::format("Failed writing end attribute: %s - key :%s", key.c_str(), snbuf,
+			throw RuntimeException(fmt::format("Failed writing end attribute: {} - key :{}", key, snbuf,
 											   xmlGetLastError()->message));
 	}
 	rc = xmlTextWriterSetIndent(writer, 1);
 	if (rc == -1)
-		throw RuntimeException(fmt::format("Failed to set indentation: %s", xmlGetLastError()->message));
+		throw RuntimeException(fmt::format("Failed to set indentation: {}", xmlGetLastError()->message));
 
 	rc = xmlTextWriterWriteComment(writer, BAD_CAST "sub-element contains all float configuration values.");
 	if (rc == -1) {
 		xmlErrorPtr error = xmlGetLastError();
-		throw RuntimeException(fmt::format("Failed writing comment : %s", xmlGetLastError()->message));
+		throw RuntimeException(fmt::format("Failed writing comment : {}", xmlGetLastError()->message));
 	}
 
 	/*	Iterate through each float configuration.	*/
@@ -327,21 +327,21 @@ void IConfig::save_xml(Ref<IO> &io) {
 		rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "value", BAD_CAST snbuf);
 		rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "type", BAD_CAST typeid(float).name());
 		if (rc == -1)
-			throw RuntimeException(fmt::format("Failed writing attribute: %s - key :%s", key.c_str(), snbuf));
+			throw RuntimeException(fmt::format("Failed writing attribute: {} - key :{}", key, snbuf));
 		rc = xmlTextWriterEndElement(writer);
 		if (rc == -1)
-			throw RuntimeException(fmt::format("Failed writing end attribute: %s - key :%s", key.c_str(), snbuf,
+			throw RuntimeException(fmt::format("Failed writing end attribute: {} - key :{}", key, snbuf,
 											   xmlGetLastError()->message));
 	}
 	/*  */
 	rc = xmlTextWriterSetIndent(writer, 1);
 	if (rc == -1)
-		throw RuntimeException(fmt::format("Failed to set indentation: %s", xmlGetLastError()->message));
+		throw RuntimeException(fmt::format("Failed to set indentation: {}", xmlGetLastError()->message));
 
 	/*  */
 	rc = xmlTextWriterWriteComment(writer, BAD_CAST "sub-element contains all string configuration values.");
 	if (rc == -1) {
-		throw RuntimeException(fmt::format("Failed writing comment : %s", xmlGetLastError()->message));
+		throw RuntimeException(fmt::format("Failed writing comment : {}", xmlGetLastError()->message));
 	}
 
 	/*	Iterate through each string configuration.	*/
@@ -353,26 +353,26 @@ void IConfig::save_xml(Ref<IO> &io) {
 		rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "value", BAD_CAST hvalue.c_str());
 		rc = xmlTextWriterWriteAttribute(writer, BAD_CAST "type", BAD_CAST typeid(const char *).name());
 		if (rc == -1)
-			throw RuntimeException(fmt::format("Failed writing attribute: %s - key :%s", key.c_str(), hvalue.c_str()));
+			throw RuntimeException(fmt::format("Failed writing attribute: {} - key :{}", key, hvalue.c_str()));
 		rc = xmlTextWriterEndElement(writer);
 		if (rc == -1)
-			throw RuntimeException(fmt::format("Failed writing end attribute: %s - key :%s", key.c_str(), snbuf,
+			throw RuntimeException(fmt::format("Failed writing end attribute: {} - key :%s", key, snbuf,
 											   xmlGetLastError()->message));
 	}
 	rc = xmlTextWriterSetIndent(writer, 1);
 	if (rc == -1)
-		throw RuntimeException(fmt::format("Failed to set indentation: %s", xmlGetLastError()->message));
+		throw RuntimeException(fmt::format("Failed to set indentation: {}", xmlGetLastError()->message));
 
 	/*  */
 	rc = xmlTextWriterSetIndent(writer, 0);
 	if (rc == -1)
-		throw RuntimeException(fmt::format("Failed to set indentation: %s", xmlGetLastError()->message));
+		throw RuntimeException(fmt::format("Failed to set indentation: {}", xmlGetLastError()->message));
 	rc = xmlTextWriterEndElement(writer);
 	if (rc == -1)
-		throw RuntimeException(fmt::format("Failed to set indentation: %s", xmlGetLastError()->message));
+		throw RuntimeException(fmt::format("Failed to set indentation: {}", xmlGetLastError()->message));
 	rc = xmlTextWriterEndDocument(writer);
 	if (rc == -1)
-		throw RuntimeException(fmt::format("Failed to set indentation: %s", xmlGetLastError()->message));
+		throw RuntimeException(fmt::format("Failed to set indentation: {}", xmlGetLastError()->message));
 
 	/*	Clean up.	*/
 	xmlFreeTextWriter(writer);
@@ -480,7 +480,7 @@ void IConfig::save_json(Ref<IO> &io) {
 
 void IConfig::parseConfigFile(Ref<IO> &io, ConfigFormat format) {
 	if (!io->isReadable())
-		throw RuntimeException(fmt::format("IO object %s is not readable.", io->getName().c_str()));
+		throw RuntimeException(fmt::format("IO object {} is not readable.", io->getName().c_str()));
 
 	if (format == ConfigFormat::Unknown)
 		format = predictConfigExtFormat(io);
@@ -497,7 +497,7 @@ void IConfig::parseConfigFile(Ref<IO> &io, ConfigFormat format) {
 		parse_json(io);
 		break;
 	default:
-		throw InvalidArgumentException(fmt::format("Invalid configuration file format - {}", format));
+		throw InvalidArgumentException("Invalid configuration file format - {}", format);
 	}
 }
 
@@ -531,7 +531,7 @@ void IConfig::parse_xml(Ref<IO> &io) {
 					else if (strcmp(type, "PKc") == 0)
 						this->set(name, value);
 					else
-						throw RuntimeException(fmt::format("Invalid attribute %s", type));
+						throw RuntimeException(fmt::format("Invalid attribute {}", type));
 				}
 			}
 		}

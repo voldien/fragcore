@@ -44,7 +44,7 @@ void FileNotify::registerAsset(const char *filepath, Object *object) {
 
 	/*  TODO resolve and make part of the filesystem or IO.	*/
 	if (access(filepath, R_OK))
-		throw InvalidArgumentException(fmt::format("Not a valid file - %s", filepath));
+		throw InvalidArgumentException("Not a valid file - {}", filepath));
 
 	/*  Get key.    */
 	int uid = object->getUID();

@@ -34,27 +34,29 @@ namespace fragcore {
 		friend class ZipFileSystem;
 
 	  public:
-		void open(const char *path, IOMode mode) override;
+		virtual void open(const char *path, IOMode mode) override;
 
-		void close() override;
+		virtual void close() override;
 
-		long read(long int nbytes, void *pbuffer) override;
+		virtual long read(long int nbytes, void *pbuffer) override;
 
-		long write(long int nbytes, const void *pbuffer) override;
+		virtual long write(long int nbytes, const void *pbuffer) override;
 
-		bool eof() const override;
+		virtual long int peek(long int nBytes, void *pbuffer) override {};
 
-		long length() override;
+		virtual bool eof() const override;
 
-		void seek(long int nbytes, Seek seek) override;
+		virtual long length() override;
 
-		unsigned long getPos() override;
+		virtual void seek(long int nbytes, Seek seek) override;
 
-		bool isWriteable() const override;
+		virtual unsigned long getPos() override;
 
-		bool isReadable() const override;
+		virtual bool isWriteable() const override;
 
-		bool flush() override;
+		virtual bool isReadable() const override;
+
+		virtual bool flush() override;
 
 		virtual bool isOperationSupported(IOOperation operations) const noexcept override {
 			return (operations & OP_ALL) != operations;

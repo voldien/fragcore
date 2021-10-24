@@ -40,7 +40,7 @@ void FileSystem::remove(const char *path) {
 #else
 	throw NotImplementedException();
 // if (::remove(path) != 0)
-// throw RuntimeException(fmt::format("%s", strerror(errno)));
+// throw RuntimeException(fmt::format("{}", strerror(errno)));
 #endif
 }
 
@@ -50,7 +50,7 @@ void FileSystem::rename(const char *oldPath, const char *newPath) {
 #else
 	throw NotImplementedException();
 // if (::rename(oldPath, newPath) != 0)
-//     throw RuntimeException(fmt::format("%s", strerror(errno)));
+//     throw RuntimeException(fmt::format("{}", strerror(errno)));
 #endif
 }
 
@@ -104,7 +104,7 @@ const char *FileSystem::getFileExtension(const char *path) {
 void FileSystem::createFile(const char *path) {
 	FILE *f = fopen(path, "ab+");
 	if (f == nullptr)
-		throw RuntimeException(fmt::format("Failed to open file %s, %s.\n", path, strerror(errno)));
+		throw RuntimeException(fmt::format("Failed to open file {}, {}.\n", path, strerror(errno)));
 	fclose(f);
 }
 

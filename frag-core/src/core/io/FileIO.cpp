@@ -48,11 +48,11 @@ void FileIO::open(const char *path, IOMode mode) {
 		// TODO check the error
 		switch (errno) {
 		case ENOENT:
-			throw InvalidArgumentException("Failed to open file %s, %s.\n", path, strerror(errno));
+			throw InvalidArgumentException("Failed to open file {}, {}.\n", path, strerror(errno));
 		case EPERM:	 // TODO add support for exception for permission.
 		case EACCES: // TODO add support for exception for permission.
 		default:
-			throw RuntimeException("Failed to open file %s, %s.\n", path, strerror(errno));
+			throw RuntimeException("Failed to open file {}, {}.\n", path, strerror(errno));
 		}
 	}
 
@@ -77,7 +77,7 @@ long FileIO::write(long int nbytes, const void *pbuffer) {
 	long int nreadBytes;
 	nreadBytes = fwrite((char *)pbuffer, 1, nbytes, this->file);
 	if (nreadBytes != nbytes && ferror(this->file) != 0)
-		throw RuntimeException("Failed to write to file, %s.\n", strerror(errno));
+		throw RuntimeException("Failed to write to file, {}.\n", strerror(errno));
 	return nreadBytes;
 }
 
@@ -113,7 +113,7 @@ void FileIO::seek(long int nbytes, Seek seek) {
 
 	if (fseek(this->file, nbytes, whence) != 0) {
 		if (ferror(this->file))
-			throw RuntimeException(fmt::format("%s", strerror(errno)));
+			throw RuntimeException(fmt::format("{}", strerror(errno)));
 	}
 }
 

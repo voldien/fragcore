@@ -31,6 +31,8 @@ namespace fragcore {
 
 		virtual long write(long int nbytes, const void *pbuffer) override;
 
+		virtual long int peek(long int nBytes, void *pbuffer) {}
+
 		virtual void close() override;
 
 		virtual long length() override;

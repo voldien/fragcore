@@ -56,7 +56,7 @@ void ASyncIO::asyncReadFile(ASyncHandle handle, char *buffer, unsigned int size,
 	/*  Assign variables.   */
 	error = schCreateSemaphore((schSemaphore **)&ao->semaphore);
 	if (error != SCH_OK)
-		throw RuntimeException(fmt::format("Failed to create semaphore %s", schErrorMsg(error)));
+		throw RuntimeException(fmt::format("Failed to create semaphore {}", schErrorMsg(error)));
 
 	ao->buffer = buffer;
 	ao->size = size;
@@ -95,7 +95,7 @@ void ASyncIO::asyncWriteFile(ASyncHandle handle, char *buffer, unsigned int size
 	/*  Assign variables.   */
 	error = schCreateSemaphore((schSemaphore **)&ao->semaphore);
 	if (error != SCH_OK)
-		throw RuntimeException(fmt::format("Failed to create semaphore %s", schErrorMsg(error)));
+		throw RuntimeException(fmt::format("Failed to create semaphore {}", schErrorMsg(error)));
 
 	ao->buffer = buffer;
 	ao->size = size;

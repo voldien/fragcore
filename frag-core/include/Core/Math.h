@@ -137,7 +137,7 @@ namespace fragcore {
 		 */
 		template <typename T> static constexpr bool IsPowerOfTwo(T v) {
 			static_assert(std::is_integral<T>::value, "Must be a integer type.");
-			return (v && ((v - 1) & v));
+			return !(v == 0) && !((v - 1) & v);
 		}
 
 		/**

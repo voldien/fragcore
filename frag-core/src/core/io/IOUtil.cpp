@@ -10,7 +10,7 @@ long int IOUtil::loadFileMem(Ref<IO> &io, char **data) noexcept {
 
 	/*  Check if file is readable.  */
 	if (!io->isReadable())
-		throw InvalidArgumentException(fmt::format("Failed to read from IO: %s", io->getName()));
+		throw InvalidArgumentException("Failed to read from IO: {}", io->getName());
 
 	// Page aligned;
 	char buf[1024 * 4];
@@ -27,9 +27,9 @@ long int IOUtil::loadFileMem(Ref<IO> &io, char **data) noexcept {
 
 long int IOUtil::loadFile(Ref<IO> &in, Ref<IO> &out) {
 	if (!in->isReadable())
-		throw InvalidArgumentException(fmt::format("Failed to read from IO: %s", in->getName()));
+		throw InvalidArgumentException("Failed to read from IO: {}", in->getName());
 	if (!out->isWriteable())
-		throw InvalidArgumentException(fmt::format("Failed to write to IO: %s", out->getName()));
+		throw InvalidArgumentException("Failed to write to IO: {}", out->getName());
 
 	char buf[1024 * 4];
 	long nbytes;
@@ -57,9 +57,9 @@ long int IOUtil::loadStringMem(Ref<IO> &io, char **string) noexcept {
 long int IOUtil::loadString(Ref<IO> &in, Ref<IO> &out) {
 
 	if (!in->isReadable())
-		throw InvalidArgumentException(fmt::format("Failed to read from IO: %s", in->getName()));
+		throw InvalidArgumentException("Failed to read from IO: {}", in->getName());
 	if (!out->isWriteable())
-		throw InvalidArgumentException(fmt::format("Failed to write to IO: %s", out->getName()));
+		throw InvalidArgumentException("Failed to write to IO: {}", out->getName());
 
 	long int nbytes;
 

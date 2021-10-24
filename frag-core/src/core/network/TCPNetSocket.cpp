@@ -73,7 +73,7 @@ int TCPNetSocket::bind(std::string &IPaddr, unsigned int port) {
 int TCPNetSocket::listen(unsigned int maxListen) {
 	if (::listen(socket, maxListen) < 0) {
 		close();
-		// sntLogErrorPrintf("listen failed, %s.\n", strerror(errno));
+		// sntLogErrorPrintf("listen failed, {}.\n", strerror(errno));
 		// sntDisconnectSocket(connection);
 		return NULL;
 	}

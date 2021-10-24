@@ -51,7 +51,7 @@ namespace fragcore {
 
 		virtual long int write(long int nbytes, const void *pbuffer) = 0;
 
-		virtual long int peek(long int nBytes, void *pbuffer) {}
+		virtual long int peek(long int nBytes, void *pbuffer) = 0;
 
 		virtual bool eof() const = 0;
 

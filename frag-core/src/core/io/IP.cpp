@@ -17,7 +17,7 @@ std::vector<IPInterface> IPInterface::getLocalInterface() {
 
 	while (tmp) {
 		if (tmp->ifa_addr && tmp->ifa_addr->sa_family == AF_PACKET) {
-			printf("%s\n", tmp->ifa_name);
+			printf("{}\n", tmp->ifa_name);
             //tmp->ifa_addr
 		}
 
