@@ -1,7 +1,7 @@
-#include "Physic/PhysicDesc.h"
-#include "Physic/PhysicInterface.h"
-#include "Physic/bullet/debugDrawer.h"
-#include "Physic/bullet/internal_object_type.h"
+#include <Physic/PhysicDesc.h>
+#include <Physic/PhysicInterface.h>
+#include "debugDrawer.h"
+#include "internal_object_type.h"
 #include <FragCore.h>
 using namespace fragcore;
 
