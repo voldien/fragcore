@@ -28,7 +28,7 @@ namespace fragcore {
 	class FileNotify;
 	class IConfig;
 	class Object;
-	
+
 	/*	*/
 	class IScheduler;
 
@@ -43,7 +43,7 @@ namespace fragcore {
 	class ZipFileSystem;
 	class IFileSystem;
 	class FileSystem;
-
+	/*	*/
 	class Hash;
 	class Random;
 	class Base64;
@@ -52,14 +52,10 @@ namespace fragcore {
 	/*  Network.    */
 	class IPInterface;
 	class NetSocket;
-
-	// class SandBoxSubScene;
-	class RenderPipeline;
-
-	/**
-	 *
-	 */
-	class TargetNode;
+	class TCPNetSocket;
+	class UDPNetSocket;
+	class INetAddress;
+	class IPAddress;
 
 	class Font;
 	class FontFactory;

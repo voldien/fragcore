@@ -41,9 +41,9 @@ namespace fragcore {
 			return NetworkProtocol::NetWorkProtocol_IP;
 		}
 
-		const std::string &getIP() const;
+		const std::string &getIP() const noexcept { return this->ip; }
 		const std::string &getHostName() const;
-		IPAddressType getIPType() const noexcept;
+		IPAddressType getIPType() const noexcept { return this->type; }
 
 	  private:
 		IPAddressType type;

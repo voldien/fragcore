@@ -18,7 +18,6 @@
 */
 #ifndef _FRAG_CORE_TCP_NETSOCKET_H_
 #define _FRAG_CORE_TCP_NETSOCKET_H_ 1
-#include "INetAddress.h"
 #include "NetSocket.h"
 
 namespace fragcore {
@@ -40,6 +39,7 @@ namespace fragcore {
 		virtual int bind(const INetAddress &p_addr, uint16_t p_port) override;
 		virtual int listen(unsigned int maxListen) override;
 		virtual int connect(std::string &ip, unsigned int port) override;
+		virtual int connect(const INetAddress &p_addr, uint16_t p_port) override;
 		virtual int poll(int p_type, int timeout) const override;
 
 		virtual int recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddress &r_ip, uint16_t &r_port,
@@ -62,6 +62,9 @@ namespace fragcore {
 
 	  protected:
 		bool isNetworkLayerSupported(INetAddress::NetworkProtocol protocol);
+
+	  private:
+		int getDomain(const INetAddress &address);
 
 	  private:
 		int socket;

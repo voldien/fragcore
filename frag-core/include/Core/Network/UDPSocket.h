@@ -37,6 +37,7 @@ namespace fragcore {
 		virtual int bind(std::string &addr, unsigned int port) override;
 		virtual int bind(const INetAddress &p_addr, uint16_t p_port) override;
 		virtual int listen(unsigned int maxListen) override;
+		virtual int connect(const INetAddress &p_addr, uint16_t p_port) override;
 		virtual int connect(std::string &ip, unsigned int port) override;
 		virtual int poll(int p_type, int timeout) const override;
 
@@ -60,7 +61,7 @@ namespace fragcore {
 
 	  private:
 		int socket;
-				NetStatus netStatus;
+		NetStatus netStatus;
 	};
 } // namespace fragcore
 

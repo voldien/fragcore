@@ -68,6 +68,24 @@ int UDPNetSocket::connect(std::string &ip, unsigned int port) {
 	}
 }
 
+int UDPNetSocket::connect(const INetAddress &p_addr, uint16_t p_port) {
+	socklen_t addrlen;			 /*	*/
+	const struct sockaddr *addr; /*	*/
+	union {
+		struct sockaddr_in addr4;  /*	*/
+		struct sockaddr_in6 addr6; /*	*/
+	} addrU;
+	struct hostent *hosten = NULL; /*	*/
+	int domain;
+	struct timeval tv;
+
+	if (::connect(socket, addr, addrlen) < 0) {
+		// sntLogErrorPrintf("Failed to connect TCP, %s.\n", strerror(errno));
+		// sntDisconnectSocket(connection);
+		// return NULL;
+	}
+}
+
 int UDPNetSocket::open(int p_type, int ip_type) {}
 int UDPNetSocket::bind(const INetAddress &p_addr, uint16_t p_port) {}
 int UDPNetSocket::poll(int p_type, int timeout) const {}
