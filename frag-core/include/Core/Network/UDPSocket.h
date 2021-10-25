@@ -26,7 +26,7 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC UDPNetSocket : public NetSocket {
 	  public:
-		UDPNetSocket(const IPInterface &ip);
+		UDPNetSocket();
 		virtual ~UDPNetSocket();
 
 		virtual int open(int p_type, int ip_type) override;

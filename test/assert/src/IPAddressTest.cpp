@@ -8,25 +8,28 @@
 
 using namespace fragcore;
 
-class IPTest : public testing::Test {
+class IPAddressTest : public testing::Test {
   protected:
 };
 
-TEST_F(IPTest, IP_Create_Local_Connection_No_Exception) {
+TEST_F(IPAddressTest, IP_Create_Local_Address_IPV4_No_Exception) {
 	// IP
-	ASSERT_NO_THROW(IPAddress localHost("localhost", IPAddress::IPAddressType::IPAddress_Type_IPV4));
+	ASSERT_NO_THROW(IPAddress localHost("127.0.0.1", IPAddress::IPAddressType::IPAddress_Type_IPV4));
 }
 
-TEST_F(IPTest, IP) {
+TEST_F(IPAddressTest, IP_Create_Local_Address_IPV6_With_IPv6_Throw_Exception) {
+	// IP
+	ASSERT_NO_THROW(IPAddress localHost("127.0.0.1", IPAddress::IPAddressType::IPAddress_Type_IPV6));
+}
 
+TEST_F(IPAddressTest, IP_Create_Local_Adddress_FDQN_No_Exception) {
+	ASSERT_NO_THROW(IPAddress localHost("localhost", IPAddress::IPAddressType::IPAddress_Type_IPV4));
 	// IP ip;
 }
 
-TEST_F(IPTest, Socket) {
+TEST_F(IPAddressTest, Socket) {
 
 	// IP ip;
 
 	// NetSocket netSocket;
 }
-
-TEST(Network, NetworkSocket_CreateLocal_Connection_No_Throw_Exception) {}

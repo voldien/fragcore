@@ -5,15 +5,6 @@ using namespace fragcore;
 
 SocketIO::SocketIO(Ref<NetSocket> &socket) : netSocket(socket) {}
 
-// SocketIO::SocketIO() {
-// 	this->mode = (IOMode)0;
-// 	this->file = nullptr;
-// }
-
-// SocketIO::SocketIO(const char *path, IOMode mode) { this->open(path, mode); }
-
-// SocketIO::SocketIO(FILE *file) { this->file = file; }
-
 // SocketIO::SocketIO(SocketIO &&other) {
 // 	this->file = std::exchange(other.file, nullptr);
 // 	this->mode = other.mode;
@@ -23,13 +14,21 @@ void SocketIO::open(const char *path, IOMode mode) {}
 
 void SocketIO::close() {}
 
-long SocketIO::read(long int nbytes, void *pbuffer) {}
+long SocketIO::read(long int nbytes, void *pbuffer) {
+	int nWriten;
+	this->netSocket->recv(pbuffer, nbytes, nWriten);
+	return nWriten;
+}
 
 long SocketIO::write(long int nbytes, const void *pbuffer) {
 	int nWriten;
 	this->netSocket->send(pbuffer, nbytes, nWriten);
 	return nWriten;
 }
+
+long int SocketIO::peek(long int nBytes, void *pbuffer){
+
+};
 
 long SocketIO::length() { throw NotSupportedException(); }
 

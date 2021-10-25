@@ -17,7 +17,7 @@
 
 using namespace fragcore;
 
-UDPNetSocket::UDPNetSocket(const IPInterface &ip) : netStatus(NetStatus::Status_Disconnected), socket(0) {}
+UDPNetSocket::UDPNetSocket() : netStatus(NetStatus::Status_Disconnected), socket(0) {}
 UDPNetSocket::~UDPNetSocket() {}
 
 NetSocket::TransportProtocol UDPNetSocket::getTransportProtocol() const noexcept {

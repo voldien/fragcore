@@ -60,10 +60,13 @@ namespace fragcore {
 
 		virtual NetStatus getStatus() const noexcept override;
 
+		/*	TODO get info about connection IP and etc.	*/
+
 	  protected:
 		bool isNetworkLayerSupported(INetAddress::NetworkProtocol protocol);
 
 	  private:
+		TCPNetSocket(int socket);
 		int getDomain(const INetAddress &address);
 
 	  private:

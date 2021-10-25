@@ -18,15 +18,47 @@
 
 using namespace fragcore;
 
+// static void setupAddress(){
+// 	/*	*/
+// 	if (domain == AF_INET) {
+// 		const IPAddress &ipAddress = static_cast<const IPAddress &>(p_addr);
+
+// 		bzero(&addrU.addr4, sizeof(addrU.addr4));
+// 		addrU.addr4.sin_port = htons(p_port);
+// 		addrU.addr4.sin_family = (sa_family_t)domain;
+// 		if (inet_pton(domain, ipAddress.getIP().c_str(), &addrU.addr4.sin_addr) < 0) {
+// 			throw RuntimeException("");
+// 		}
+// 		addrlen = sizeof(addrU.addr4);
+// 		addr = (struct sockaddr *)&addrU.addr4;
+// 	} else if (domain == AF_INET6) {
+// 		const IPAddress &ipAddress = static_cast<const IPAddress &>(p_addr);
+// 		bzero(&addrU.addr6, sizeof(addrU.addr6));
+// 		addrU.addr6.sin6_port = htons(p_port);
+// 		addrU.addr6.sin6_family = (sa_family_t)domain;
+// 		if (inet_pton(domain, ipAddress.getIP().c_str(), &addrU.addr6.sin6_addr) < 0) {
+// 			throw RuntimeException("");
+// 		}
+// 		addrlen = sizeof(addrU.addr6);
+// 		addr = (struct sockaddr *)&addrU.addr6;
+// 	} else {
+
+// 		this->close();
+// 	}
+// }
+
 TCPNetSocket::TCPNetSocket() : netStatus(NetStatus::Status_Disconnected), socket(0) {}
-TCPNetSocket::~TCPNetSocket() { close(); }
+TCPNetSocket::TCPNetSocket(int socket) : socket(socket) {}
+TCPNetSocket::~TCPNetSocket() { this->close(); }
 
 NetSocket::TransportProtocol TCPNetSocket::getTransportProtocol() const noexcept {
 	return NetSocket::TransportProtocol::TCP;
 }
 
 int TCPNetSocket::close() {
-	int status = ::close(socket);
+	int status = ::close(this->socket);
+	if (status != 0)
+		throw RuntimeException("{}", strerror(errno));
 	this->socket = 0;
 	netStatus = NetStatus::Status_Disconnected;
 }
@@ -83,7 +115,7 @@ int TCPNetSocket::bind(const INetAddress &p_addr, uint16_t p_port) {
 		struct sockaddr_in6 addr6; /*	*/
 	} addrU;
 
-	int domain = getDomain(p_addr); // TODO be override by the NetAddress!
+	int domain = getDomain(p_addr);
 
 	/*	*/
 	if (domain == AF_INET) {
@@ -92,6 +124,7 @@ int TCPNetSocket::bind(const INetAddress &p_addr, uint16_t p_port) {
 		bzero(&addrU.addr4, sizeof(addrU.addr4));
 		addrU.addr4.sin_port = htons(p_port);
 		addrU.addr4.sin_family = (sa_family_t)domain;
+		/*	*/
 		if (inet_pton(domain, ipAddress.getIP().c_str(), &addrU.addr4.sin_addr) < 0) {
 			this->close();
 		}
@@ -108,7 +141,7 @@ int TCPNetSocket::bind(const INetAddress &p_addr, uint16_t p_port) {
 		addrlen = sizeof(addrU.addr6);
 		addr = (struct sockaddr *)&addrU.addr6;
 	} else {
-
+		throw RuntimeException("None Supported domain {}", domain);
 		this->close();
 	}
 
@@ -127,44 +160,17 @@ int TCPNetSocket::bind(const INetAddress &p_addr, uint16_t p_port) {
 	} else {
 		this->netStatus = NetStatus::Status_Done;
 	}
+	return 0;
 }
 
 int TCPNetSocket::listen(unsigned int maxListen) {
-	if (::listen(socket, maxListen) < 0) {
-		RuntimeException ex("Failed to listen TCP socket, {}", strerror(errno));
-		close();
-		// sntLogErrorPrintf("listen failed, {}.\n", strerror(errno));
-		// sntDisconnectSocket(connection);
+	if (::listen(this->socket, maxListen) < 0) {
+		RuntimeException ex("TCP socket: Failed to set listen {} - error: {}", maxListen, strerror(errno));
 	}
+	return 0;
 }
 int TCPNetSocket::connect(std::string &ip, unsigned int port) {
-	socklen_t addrlen;			 /*	*/
-	const struct sockaddr *addr; /*	*/
-	union {
-		struct sockaddr_in addr4;  /*	*/
-		struct sockaddr_in6 addr6; /*	*/
-	} addrU;
-	struct hostent *hosten = NULL; /*	*/
-	int domain;
-	struct timeval tv;
-
-	this->socket = ::socket(domain, SOCK_STREAM, 0);
-	if (this->socket < 0) {
-		throw RuntimeException("Failed to create TCP socket, {}", strerror(errno));
-		// sntLogErrorPrintf("Failed to create socket, %s.\n", strerror(errno));
-	}
-
-	if (::connect(socket, addr, addrlen) < 0) {
-		// sntLogErrorPrintf("Failed to connect TCP, %s.\n", strerror(errno));
-		// sntDisconnectSocket(connection);
-		// return NULL;
-	}
-
-	/*	Set timeout for client.	*/
-	// tv.tv_sec = 10;
-	// tv.tv_usec = 0;
-	// if (setsockopt(connection->udpsock, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv)) != 0) {
-	// }
+	return connect(IPAddress(ip, IPAddress::IPAddressType::IPAddress_Type_IPV4), port);
 }
 
 int TCPNetSocket::connect(const INetAddress &p_addr, uint16_t p_port) {
@@ -174,14 +180,13 @@ int TCPNetSocket::connect(const INetAddress &p_addr, uint16_t p_port) {
 		struct sockaddr_in addr4;  /*	*/
 		struct sockaddr_in6 addr6; /*	*/
 	} addrU;
-	struct hostent *hosten = NULL; /*	*/
-	int domain = getDomain(p_addr);
 	struct timeval tv;
+
+	int domain = getDomain(p_addr);
 
 	this->socket = ::socket(domain, SOCK_STREAM, 0);
 	if (this->socket < 0) {
-		throw RuntimeException("Failed to create TCP socket, {}", strerror(errno));
-		// sntLogErrorPrintf("Failed to create socket, %s.\n", strerror(errno));
+		throw RuntimeException("TCP socket - Failed to create socket {}", strerror(errno));
 	}
 
 	/*	*/
@@ -192,7 +197,7 @@ int TCPNetSocket::connect(const INetAddress &p_addr, uint16_t p_port) {
 		addrU.addr4.sin_port = htons(p_port);
 		addrU.addr4.sin_family = (sa_family_t)domain;
 		if (inet_pton(domain, ipAddress.getIP().c_str(), &addrU.addr4.sin_addr) < 0) {
-			this->close();
+			throw RuntimeException("");
 		}
 		addrlen = sizeof(addrU.addr4);
 		addr = (struct sockaddr *)&addrU.addr4;
@@ -202,7 +207,7 @@ int TCPNetSocket::connect(const INetAddress &p_addr, uint16_t p_port) {
 		addrU.addr6.sin6_port = htons(p_port);
 		addrU.addr6.sin6_family = (sa_family_t)domain;
 		if (inet_pton(domain, ipAddress.getIP().c_str(), &addrU.addr6.sin6_addr) < 0) {
-			this->close();
+			throw RuntimeException("");
 		}
 		addrlen = sizeof(addrU.addr6);
 		addr = (struct sockaddr *)&addrU.addr6;
@@ -211,11 +216,10 @@ int TCPNetSocket::connect(const INetAddress &p_addr, uint16_t p_port) {
 		this->close();
 	}
 
-	if (::connect(socket, addr, addrlen) < 0) {
+	if (::connect(socket, addr, addrlen) != 0) {
 		throw RuntimeException("Failed to create TCP socket, {}", strerror(errno));
-		// sntLogErrorPrintf("Failed to connect TCP, %s.\n", strerror(errno));
-		// sntDisconnectSocket(connection);
-		// return NULL;
+	} else {
+		this->netStatus = NetStatus::Status_Done;
 	}
 }
 
@@ -243,21 +247,40 @@ int TCPNetSocket::sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const 
 	return res;
 }
 
-long int TCPNetSocket::send(const void *pbuffer, int p_len, int &sent) {}
+long int TCPNetSocket::send(const void *pbuffer, int p_len, int &sent) {
+	int flag = 0;
+	long int res = ::send(this->socket, pbuffer, p_len, flag);
+	return res;
+}
 
-Ref<NetSocket> TCPNetSocket::accept(INetAddress &r_ip, uint16_t &r_port) {}
+Ref<NetSocket> TCPNetSocket::accept(INetAddress &r_ip, uint16_t &r_port) {
+	struct sockaddr tobuffer; /*	*/
+	socklen_t aclen = 0;	  /*	*/
+	int aaccept_socket = ::accept(this->socket, &tobuffer, &aclen);
+	if (aaccept_socket < 0) {
+		// close();
+	}
+	TCPNetSocket *_newsocket = new TCPNetSocket(aaccept_socket);
+	return Ref<NetSocket>(_newsocket);
+}
 
 Ref<NetSocket> TCPNetSocket::accept(std::string &ip, unsigned int port) {
 	struct sockaddr tobuffer; /*	*/
 	socklen_t aclen = 0;	  /*	*/
 	int aaccept_socket = ::accept(this->socket, &tobuffer, &aclen);
 	if (aaccept_socket < 0) {
-		// sntLogErrorPrintf("Failed to accept, %s.\n", strerror(errno));
-		// sntDisconnectSocket(connection);
-		close();
+		// close();
+	}
+	TCPNetSocket *_newsocket = new TCPNetSocket(aaccept_socket);
+	return Ref<NetSocket>(_newsocket);
+}
+TCPNetSocket::NetStatus TCPNetSocket::accept(NetSocket &socket) {
+	struct sockaddr tobuffer; /*	*/
+	socklen_t aclen = 0;	  /*	*/
+	int aaccept_socket = ::accept(this->socket, &tobuffer, &aclen);
+	if (aaccept_socket < 0) {
 	}
 }
-TCPNetSocket::NetStatus TCPNetSocket::accept(NetSocket &socket) {}
 int TCPNetSocket::read() {}
 int TCPNetSocket::write() {}
 bool TCPNetSocket::isBlocking() { /*	*/

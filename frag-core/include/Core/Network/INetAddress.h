@@ -37,6 +37,8 @@ namespace fragcore {
 		INetAddress(NetworkProtocol type) {}
 		virtual NetworkProtocol getNetworkProtocol() const noexcept = 0;
 
+		virtual bool isValid() const noexcept = 0;
+
 	  private:
 		NetworkProtocol type;
 	};

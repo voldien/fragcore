@@ -1,9 +1,10 @@
 #include "Core/Network/IPAddress.h"
+#include <arpa/inet.h>
 #include <netdb.h>
 using namespace fragcore;
 
 IPAddress::IPAddress(const std::string &ip, IPAddressType type)
-	: INetAddress(getNetworkProtocol()), ip(ip), type(type) {
+	: INetAddress(getNetworkProtocol()), ip(ip), type(type), valid(false) {
 	struct hostent *hosten = NULL; /*	*/
 	/*	Get IP from hostname.	*/
 	hosten = gethostbyname(ip.c_str());
@@ -11,9 +12,18 @@ IPAddress::IPAddress(const std::string &ip, IPAddressType type)
 
 	} else {
 		int domain = hosten->h_addrtype;
-		//hosten->h_addr_list;
+		for (char *address = hosten->h_addr_list[0]; address != nullptr; address++) {
+			if (inet_pton(domain, address, &field8[0]) < 0) {
+			}
+			throw RuntimeException("");
+		}
+		// hosten->h_addr_list;
 	}
 	/*	Get hostname	*/
 
 	/*	Get hostname to ipaddress.	*/
 }
+
+const uint8_t *IPAddress::getAddress(IPAddressType addressType) const noexcept { return field8; }
+
+bool IPAddress::isValid() const noexcept { return valid; }

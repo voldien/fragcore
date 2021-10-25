@@ -36,18 +36,31 @@ namespace fragcore {
 			IPAddress_Type_ANY = 3,
 		};
 		IPAddress(const std::string &ip, IPAddressType type);
+		IPAddress(const std::string &hostname);
+
+		bool operator==(const IPAddress &ipAddress) const { return false; }
+		bool operator!=(const IPAddress &ipAddress) const { return false; }
 
 		virtual NetworkProtocol getNetworkProtocol() const noexcept override {
 			return NetworkProtocol::NetWorkProtocol_IP;
 		}
 
 		const std::string &getIP() const noexcept { return this->ip; }
+		const uint8_t *getAddress(IPAddressType addressType) const noexcept;
 		const std::string &getHostName() const;
+		virtual bool isValid() const noexcept override;
 		IPAddressType getIPType() const noexcept { return this->type; }
 
+	  protected:
 	  private:
 		IPAddressType type;
 		std::string ip;
+		bool valid;
+		union {
+			uint8_t field8[16];
+			uint16_t field16[8];
+			uint32_t field32[4];
+		};
 	};
 } // namespace fragcore
 

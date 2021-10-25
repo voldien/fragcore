@@ -4,6 +4,7 @@
 using namespace fragcore;
 TaskScheduler::TaskScheduler() {
 	schTaskSch *taskSch = (schTaskSch *)malloc(sizeof(schTaskSch));
+	memset(taskSch, 0, sizeof(schTaskSch));
 	int sch = schCreateTaskPool(taskSch, 2, SCH_FLAG_NO_AFM, 48);
 	if (sch != SCH_OK)
 		throw RuntimeException(schErrorMsg(sch));
@@ -22,6 +23,7 @@ TaskScheduler::TaskScheduler(int cores, unsigned int maxPackagesPool) {
 
 TaskScheduler::~TaskScheduler() {
 	this->terminate();
+	schReleaseTaskSch((schTaskSch *)this->sch);
 	/*	Release.	*/
 	delete this->sch;
 }
@@ -52,7 +54,7 @@ void TaskScheduler::addTask(Task *task) {
 
 	int status = schSubmitTask((schTaskSch *)this->sch, &packageTask, nullptr);
 	if (status != SCH_OK)
-		throw RuntimeException(schErrorMsg(status));
+		throw RuntimeException("{}", schErrorMsg(status));
 }
 
 void TaskScheduler::setUserData(const void *data) { return schSetSchUserData((schTaskSch *)this->sch, data); }
@@ -65,8 +67,9 @@ void TaskScheduler::run() {
 
 void TaskScheduler::terminate() {
 	int status = schTerminateTaskSch((schTaskSch *)this->sch);
-	if (status != SCH_OK)
-		throw RuntimeException(schErrorMsg(status));
+
+	// if (status != SCH_OK)
+	//	throw RuntimeException(schErrorMsg(status));
 }
 
 void TaskScheduler::wait() { schWaitTask((schTaskSch *)this->sch); }

@@ -38,6 +38,8 @@ namespace fragcore {
 
 		virtual long int write(long int nbytes, const void *pbuffer) override;
 
+		virtual long int peek(long int nBytes, void *pbuffer) override;
+
 		virtual bool eof() const override;
 
 		virtual long int length() override;
@@ -53,7 +55,7 @@ namespace fragcore {
 		virtual bool flush() override;
 
 		virtual bool isOperationSupported(IOOperation operations) const noexcept override {
-			const IOOperation supportedIO = static_cast<IOOperation>(OP_READ | OP_WRITE | OP_FLUSH | OP_PEEK);
+			const IOOperation supportedIO = static_cast<IOOperation>(OP_READ | OP_WRITE | OP_PEEK);
 			return (operations & supportedIO) != operations;
 		}
 
