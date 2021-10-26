@@ -12,7 +12,7 @@
 	url = https://github.com/ThePhD/infoware.git
 [submodule "extern/exceptcxx"]
 	path = extern/exceptcxx
-	url = https://github.com/voldien/execptcxx.git
+	url = https://github.com/voldien/exceptcxx.git
 [submodule "extern/fvkcore"]
 	path = extern/fvkcore
 	url = https://github.com/voldien/fvkcore.git
