@@ -52,6 +52,8 @@ namespace fragcore {
 		IPAddressType getIPType() const noexcept { return this->type; }
 
 	  protected:
+		static unsigned int getDomain(IPAddressType IPaddressType) noexcept;
+
 	  private:
 		IPAddressType type;
 		std::string ip;

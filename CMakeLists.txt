@@ -47,8 +47,8 @@ OPTION(BUILD_WITH_DEBUG_BOUNDSCHECK "Array/Pointer BoundsChecking, buffer overfl
 option(BUILD_INSTALL_RESOURCES "Installs the Resources directory" ON)
 
 # Debug
-option(WITH_CXX_GUARDEDALLOC "Enable GuardedAlloc for C++ memory allocation tracking (only enable for development)" OFF)
-mark_as_advanced(WITH_CXX_GUARDEDALLOC)
+OPTION(WITH_CXX_GUARDEDALLOC "Enable GuardedAlloc for C++ memory allocation tracking (only enable for development)" OFF)
+MARK_AS_ADVANCED(WITH_CXX_GUARDEDALLOC)
 
 IF(NOT BUILD_SHARED_LIBS)
 	SET(CMAKE_EXE_LINKER_FLAGS "-static")

@@ -18,34 +18,41 @@
 
 using namespace fragcore;
 
-// static void setupAddress(){
-// 	/*	*/
-// 	if (domain == AF_INET) {
-// 		const IPAddress &ipAddress = static_cast<const IPAddress &>(p_addr);
+size_t TCPNetSocket::setupIPAddress(struct sockaddr *addr, const INetAddress &p_addr, uint16_t p_port) {
+	int domain = TCPNetSocket::getDomain(p_addr);
+	size_t addrlen;
+	/*	*/
+	if (domain == AF_INET) {
+		const IPAddress &ipAddress = static_cast<const IPAddress &>(p_addr);
+		const uint8_t *_addr = ipAddress.getAddress(IPAddress::IPAddressType::IPAddress_Type_IPV4);
+		sockaddr_in *addr4 = (sockaddr_in *)(addr);
+		addrlen = sizeof(*addr4);
 
-// 		bzero(&addrU.addr4, sizeof(addrU.addr4));
-// 		addrU.addr4.sin_port = htons(p_port);
-// 		addrU.addr4.sin_family = (sa_family_t)domain;
-// 		if (inet_pton(domain, ipAddress.getIP().c_str(), &addrU.addr4.sin_addr) < 0) {
-// 			throw RuntimeException("");
-// 		}
-// 		addrlen = sizeof(addrU.addr4);
-// 		addr = (struct sockaddr *)&addrU.addr4;
-// 	} else if (domain == AF_INET6) {
-// 		const IPAddress &ipAddress = static_cast<const IPAddress &>(p_addr);
-// 		bzero(&addrU.addr6, sizeof(addrU.addr6));
-// 		addrU.addr6.sin6_port = htons(p_port);
-// 		addrU.addr6.sin6_family = (sa_family_t)domain;
-// 		if (inet_pton(domain, ipAddress.getIP().c_str(), &addrU.addr6.sin6_addr) < 0) {
-// 			throw RuntimeException("");
-// 		}
-// 		addrlen = sizeof(addrU.addr6);
-// 		addr = (struct sockaddr *)&addrU.addr6;
-// 	} else {
+		size_t addr_len = sizeof(addr4->sin_addr);
+		bzero(&addr4->sin_addr, addr_len);
+		memcpy(&addr4->sin_addr, _addr, addr_len);
 
-// 		this->close();
-// 	}
-// }
+		addr4->sin_port = htons(p_port);
+		addr4->sin_family = (sa_family_t)domain;
+
+	} else if (domain == AF_INET6) {
+		const IPAddress &ipAddress = static_cast<const IPAddress &>(p_addr);
+		const uint8_t *_addr = ipAddress.getAddress(IPAddress::IPAddressType::IPAddress_Type_IPV4);
+		sockaddr_in6 *addr6 = (sockaddr_in6 *)(addr);
+		addrlen = sizeof(*addr6);
+
+		size_t addr_len = sizeof(addr6->sin6_addr);
+		bzero(&addr6->sin6_addr, addr_len);
+		memcpy(&addr6->sin6_addr, _addr, addr_len);
+
+		addr6->sin6_port = htons(p_port);
+		addr6->sin6_family = (sa_family_t)domain;
+
+	} else {
+		throw RuntimeException("");
+	}
+	return addrlen;
+}
 
 TCPNetSocket::TCPNetSocket() : netStatus(NetStatus::Status_Disconnected), socket(0) {}
 TCPNetSocket::TCPNetSocket(int socket) : socket(socket) {}
@@ -108,8 +115,7 @@ int TCPNetSocket::bind(std::string &IPaddr, unsigned int port) {
 }
 
 int TCPNetSocket::bind(const INetAddress &p_addr, uint16_t p_port) {
-	socklen_t addrlen;	   /*	*/
-	struct sockaddr *addr; /*	*/
+	socklen_t addrlen; /*	*/
 	union {
 		struct sockaddr_in addr4;  /*	*/
 		struct sockaddr_in6 addr6; /*	*/
@@ -117,33 +123,7 @@ int TCPNetSocket::bind(const INetAddress &p_addr, uint16_t p_port) {
 
 	int domain = getDomain(p_addr);
 
-	/*	*/
-	if (domain == AF_INET) {
-		const IPAddress &ipAddress = static_cast<const IPAddress &>(p_addr);
-
-		bzero(&addrU.addr4, sizeof(addrU.addr4));
-		addrU.addr4.sin_port = htons(p_port);
-		addrU.addr4.sin_family = (sa_family_t)domain;
-		/*	*/
-		if (inet_pton(domain, ipAddress.getIP().c_str(), &addrU.addr4.sin_addr) < 0) {
-			this->close();
-		}
-		addrlen = sizeof(addrU.addr4);
-		addr = (struct sockaddr *)&addrU.addr4;
-	} else if (domain == AF_INET6) {
-		const IPAddress &ipAddress = static_cast<const IPAddress &>(p_addr);
-		bzero(&addrU.addr6, sizeof(addrU.addr6));
-		addrU.addr6.sin6_port = htons(p_port);
-		addrU.addr6.sin6_family = (sa_family_t)domain;
-		if (inet_pton(domain, ipAddress.getIP().c_str(), &addrU.addr6.sin6_addr) < 0) {
-			this->close();
-		}
-		addrlen = sizeof(addrU.addr6);
-		addr = (struct sockaddr *)&addrU.addr6;
-	} else {
-		throw RuntimeException("None Supported domain {}", domain);
-		this->close();
-	}
+	addrlen = setupIPAddress((struct sockaddr *)&addrU, p_addr, p_port);
 
 	this->socket = ::socket(domain, SOCK_STREAM, 0);
 	if (this->socket < 0) {
@@ -152,10 +132,9 @@ int TCPNetSocket::bind(const INetAddress &p_addr, uint16_t p_port) {
 	}
 
 	/*	Bind process to socket.	*/
-	if (::bind(socket, (struct sockaddr *)addr, addrlen) < 0) {
-		RuntimeException ex("Failed to bind TCP socket, {}", strerror(errno));
+	if (::bind(socket, (struct sockaddr *)&addrU, addrlen) < 0) {
 		this->netStatus = NetStatus::Status_Error;
-		close();
+		RuntimeException ex("Failed to bind TCP socket, {}", strerror(errno));
 		throw ex;
 	} else {
 		this->netStatus = NetStatus::Status_Done;
@@ -189,34 +168,9 @@ int TCPNetSocket::connect(const INetAddress &p_addr, uint16_t p_port) {
 		throw RuntimeException("TCP socket - Failed to create socket {}", strerror(errno));
 	}
 
-	/*	*/
-	if (domain == AF_INET) {
-		const IPAddress &ipAddress = static_cast<const IPAddress &>(p_addr);
+	addrlen = setupIPAddress((struct sockaddr *)&addrU, p_addr, p_port);
 
-		bzero(&addrU.addr4, sizeof(addrU.addr4));
-		addrU.addr4.sin_port = htons(p_port);
-		addrU.addr4.sin_family = (sa_family_t)domain;
-		if (inet_pton(domain, ipAddress.getIP().c_str(), &addrU.addr4.sin_addr) < 0) {
-			throw RuntimeException("");
-		}
-		addrlen = sizeof(addrU.addr4);
-		addr = (struct sockaddr *)&addrU.addr4;
-	} else if (domain == AF_INET6) {
-		const IPAddress &ipAddress = static_cast<const IPAddress &>(p_addr);
-		bzero(&addrU.addr6, sizeof(addrU.addr6));
-		addrU.addr6.sin6_port = htons(p_port);
-		addrU.addr6.sin6_family = (sa_family_t)domain;
-		if (inet_pton(domain, ipAddress.getIP().c_str(), &addrU.addr6.sin6_addr) < 0) {
-			throw RuntimeException("");
-		}
-		addrlen = sizeof(addrU.addr6);
-		addr = (struct sockaddr *)&addrU.addr6;
-	} else {
-
-		this->close();
-	}
-
-	if (::connect(socket, addr, addrlen) != 0) {
+	if (::connect(socket, (struct sockaddr *)&addrU, addrlen) != 0) {
 		throw RuntimeException("Failed to create TCP socket, {}", strerror(errno));
 	} else {
 		this->netStatus = NetStatus::Status_Done;
@@ -287,7 +241,7 @@ bool TCPNetSocket::isBlocking() { /*	*/
 }
 void TCPNetSocket::setBlocking(bool blocking) { /*	*/
 }
-TCPNetSocket::NetStatus TCPNetSocket::getStatus() const noexcept { return netStatus; }
+TCPNetSocket::NetStatus TCPNetSocket::getStatus() const noexcept { return this->netStatus; }
 
 int TCPNetSocket::getDomain(const INetAddress &address) {
 
@@ -295,14 +249,13 @@ int TCPNetSocket::getDomain(const INetAddress &address) {
 	switch (address.getNetworkProtocol()) {
 	case INetAddress::NetworkProtocol::NetWorkProtocol_IP: {
 		const IPAddress &ipAddress = static_cast<const IPAddress &>(address);
-		domain = AF_INET;
 		if (ipAddress.getIPType() == IPAddress::IPAddressType::IPAddress_Type_IPV4)
 			return AF_INET;
 		else if (ipAddress.getIPType() == IPAddress::IPAddressType::IPAddress_Type_IPV6)
 			return AF_INET6;
 	} break;
 	case INetAddress::NetworkProtocol::NetWorkProtocol_CAN:
-		domain = AF_CAN;
+		return AF_CAN;
 		break;
 	default:
 		throw RuntimeException("Non Supported Network Protocol: {}", address.getNetworkProtocol());
