@@ -57,7 +57,6 @@ namespace fragcore {
 namespace fragcore{
 
 	using RuntimeException = cxxexcept::RuntimeException;
-	using ErrnoException  = cxxexcept::ErrnoException ;
 	using DivideByZeroException = cxxexcept::DivideByZeroException ;
 	using IOException = cxxexcept::IOException ;
 	using NotImplementedException = cxxexcept::NotImplementedException ;
