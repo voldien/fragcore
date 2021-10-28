@@ -29,7 +29,6 @@ size_t TCPNetSocket::setupIPAddress(struct sockaddr *addr, const INetAddress &p_
 		addrlen = sizeof(*addr4);
 
 		size_t addr_len = sizeof(addr4->sin_addr);
-		bzero(&addr4->sin_addr, addr_len);
 		memcpy(&addr4->sin_addr, _addr, addr_len);
 
 		addr4->sin_port = htons(p_port);
@@ -42,7 +41,6 @@ size_t TCPNetSocket::setupIPAddress(struct sockaddr *addr, const INetAddress &p_
 		addrlen = sizeof(*addr6);
 
 		size_t addr_len = sizeof(addr6->sin6_addr);
-		bzero(&addr6->sin6_addr, addr_len);
 		memcpy(&addr6->sin6_addr, _addr, addr_len);
 
 		addr6->sin6_port = htons(p_port);
@@ -59,7 +57,7 @@ TCPNetSocket::TCPNetSocket(int socket) : socket(socket) {}
 TCPNetSocket::~TCPNetSocket() { this->close(); }
 
 NetSocket::TransportProtocol TCPNetSocket::getTransportProtocol() const noexcept {
-	return NetSocket::TransportProtocol::TCP;
+	return NetSocket::TransportProtocol::TransportProtocolTCP;
 }
 
 int TCPNetSocket::close() {
@@ -128,7 +126,6 @@ int TCPNetSocket::bind(const INetAddress &p_addr, uint16_t p_port) {
 	this->socket = ::socket(domain, SOCK_STREAM, 0);
 	if (this->socket < 0) {
 		throw RuntimeException("Failed to create TCP socket, {}", strerror(errno));
-		// sntLogErrorPrintf("Failed to create socket, %s.\n", strerror(errno));
 	}
 
 	/*	Bind process to socket.	*/
@@ -144,7 +141,7 @@ int TCPNetSocket::bind(const INetAddress &p_addr, uint16_t p_port) {
 
 int TCPNetSocket::listen(unsigned int maxListen) {
 	if (::listen(this->socket, maxListen) < 0) {
-		RuntimeException ex("TCP socket: Failed to set listen {} - error: {}", maxListen, strerror(errno));
+		SystemException(errno, "TCP socket: Failed to set listen {} - error: {}", maxListen, strerror(errno));
 	}
 	return 0;
 }
@@ -196,8 +193,17 @@ int TCPNetSocket::send(const uint8_t *p_buffer, int p_len, int &r_sent) {
 	int res = ::send(this->socket, p_buffer, p_len, flag);
 	return res;
 }
-int TCPNetSocket::sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const INetAddress &p_ip, uint16_t p_port) {
-	int res; //=  sendto(this->socket, p_buffer, p_len, flag, connection->extaddr, connection->sclen);
+int TCPNetSocket::sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const INetAddress &p_addr, uint16_t p_port) {
+	socklen_t addrlen;			 /*	*/
+	const struct sockaddr *addr; /*	*/
+	union {
+		struct sockaddr_in addr4;  /*	*/
+		struct sockaddr_in6 addr6; /*	*/
+	} addrU;
+	addrlen = setupIPAddress((struct sockaddr *)&addrU, p_addr, p_port);
+	unsigned int flag = 0;
+
+	int res = ::sendto(this->socket, p_buffer, p_len, flag, (struct sockaddr *)&addrU, addrlen);
 	return res;
 }
 

@@ -1,5 +1,5 @@
+#include "Core/Network/INetAddress.h"
 #include "Core/Network/UDPSocket.h"
-
 #include <arpa/inet.h>
 #include <assert.h>
 #include <errno.h>
@@ -21,7 +21,7 @@ UDPNetSocket::UDPNetSocket() : netStatus(NetStatus::Status_Disconnected), socket
 UDPNetSocket::~UDPNetSocket() {}
 
 NetSocket::TransportProtocol UDPNetSocket::getTransportProtocol() const noexcept {
-	return NetSocket::TransportProtocol::UDP;
+	return NetSocket::TransportProtocol::TransportProtocolUDP;
 }
 
 int UDPNetSocket::close() { int status = ::close(socket); }
@@ -37,7 +37,7 @@ int UDPNetSocket::bind(std::string &IPaddr, unsigned int port) {
 
 	/*	Bind process to socket.	*/
 	if (::bind(socket, (struct sockaddr *)addr, addrlen) < 0) {
-		throw RuntimeException();
+		throw RuntimeException("Failed to bind UDP socket");
 		// sntLogErrorPrintf("Failed to bind TCP socket, %s.\n", strerror(errno));
 		// sntDisconnectSocket(connection);
 	}
@@ -46,26 +46,12 @@ int UDPNetSocket::listen(unsigned int maxListen) {
 	if (::listen(socket, maxListen) < 0) {
 		// sntLogErrorPrintf("listen failed, %s.\n", strerror(errno));
 		// sntDisconnectSocket(connection);
-		return NULL;
 	}
 }
 
 int UDPNetSocket::connect(std::string &ip, unsigned int port) {
-	socklen_t addrlen;			 /*	*/
-	const struct sockaddr *addr; /*	*/
-	union {
-		struct sockaddr_in addr4;  /*	*/
-		struct sockaddr_in6 addr6; /*	*/
-	} addrU;
-	struct hostent *hosten = NULL; /*	*/
-	int domain;
-	struct timeval tv;
-
-	if (::connect(socket, addr, addrlen) < 0) {
-		// sntLogErrorPrintf("Failed to connect TCP, %s.\n", strerror(errno));
-		// sntDisconnectSocket(connection);
-		// return NULL;
-	}
+	// IPAddress ipNet(ip);
+	// return this->connect(static_cast<const INetAddress &>(ipNet), port);
 }
 
 int UDPNetSocket::connect(const INetAddress &p_addr, uint16_t p_port) {
@@ -80,6 +66,7 @@ int UDPNetSocket::connect(const INetAddress &p_addr, uint16_t p_port) {
 	struct timeval tv;
 
 	if (::connect(socket, addr, addrlen) < 0) {
+		throw RuntimeException("Failed to connect UDP socket");
 		// sntLogErrorPrintf("Failed to connect TCP, %s.\n", strerror(errno));
 		// sntDisconnectSocket(connection);
 		// return NULL;

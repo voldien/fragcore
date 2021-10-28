@@ -16,32 +16,33 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-#ifndef _FRAG_CORE_INET_ADDRESS_H_
-#define _FRAG_CORE_INET_ADDRESS_H_ 1
-#include "../Object.h"
+#ifndef _FRAG_CORE_CAN_ADDRESS_H_
+#define _FRAG_CORE_CAN_ADDRESS_H_ 1
+#include "INetAddress.h"
+#include <string>
 
 namespace fragcore {
 	/**
 	 * @brief
 	 *
 	 */
-	class FVDECLSPEC INetAddress : public Object {
+	class FVDECLSPEC CANAddress : public INetAddress {
 	  public:
-		enum class NetworkProtocol {
+		CANAddress();
 
-			NetWorkProtocol_NONE = 0,
-			NetWorkProtocol_IP = 1,
-			NetWorkProtocol_CAN = 2,
-			NetWorkProtocol_ModBus = 3,
-			NetWorkProtocol_ANY = 5,
-		};
-		INetAddress(NetworkProtocol type) {}
-		virtual NetworkProtocol getNetworkProtocol() const noexcept = 0;
+		bool operator==(const CANAddress &ipAddress) const { return false; }
+		bool operator!=(const CANAddress &ipAddress) const { return false; }
 
-		virtual bool isValid() const noexcept = 0;
+		virtual NetworkProtocol getNetworkProtocol() const noexcept override {
+			return NetworkProtocol::NetWorkProtocol_CAN;
+		}
+
+		virtual bool isValid() const noexcept override;
+	  protected:
 
 	  private:
-		NetworkProtocol type;
+		bool valid;
+		unsigned int ID;
 	};
 } // namespace fragcore
 

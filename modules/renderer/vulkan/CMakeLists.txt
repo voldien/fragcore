@@ -11,10 +11,6 @@ ENDIF()
 
 FILE(GLOB SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
 
-# Get the include directories for the target.
-get_target_property(VKCommonCore_INCLUDE_DIRS vkcommon-core INCLUDE_DIRECTORIES)
-
-
 # Library target.
 ADD_LIBRARY(fragcore-rvk MODULE ${SOURCE_FILES})
 TARGET_LINK_LIBRARIES(fragcore-rvk ${Vulkan_LIBRARIES} vkcommon-core fragcore) #

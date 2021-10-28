@@ -19,8 +19,8 @@ IPAddress::IPAddress(const std::string &ip, IPAddressType type)
 	} else {
 		int domain = hosten->h_addrtype;
 		for (char **address = hosten->h_addr_list; address != nullptr; address++) {
-			//if (inet_pton(domain, *address, &field8[0]) < 0) {
-				throw RuntimeException("Bad");
+			// if (inet_pton(domain, *address, &field8[0]) < 0) {
+			throw RuntimeException("Bad");
 			//}
 		}
 		// hosten->h_addr_list;
@@ -28,6 +28,25 @@ IPAddress::IPAddress(const std::string &ip, IPAddressType type)
 	/*	Get hostname	*/
 
 	/*	Get hostname to ipaddress.	*/
+}
+
+IPAddress::IPAddress(const std::string &hostname)
+	: INetAddress(getNetworkProtocol()), valid(false), type(IPAddressType::IPAddress_Type_NONE) {
+	struct hostent *hosten = nullptr; /*	*/
+									  /*	Get IP from hostname.	*/
+	hosten = gethostbyname(hostname.c_str());
+	if (hosten != nullptr) {
+		int domain = hosten->h_addrtype;
+		for (char **address = hosten->h_addr_list; *address != nullptr; address++) {
+			if (inet_pton(domain, *address, &field8[0]) < 0) {
+				throw RuntimeException("Failed to convert {} to Address", *address);
+			} else {
+				/*	TODO get domain.	*/
+				valid = true;
+				break;
+			}
+		}
+	}
 }
 
 const uint8_t *IPAddress::getAddress(IPAddressType addressType) const noexcept { return field8; }

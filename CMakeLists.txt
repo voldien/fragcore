@@ -39,7 +39,7 @@ OPTION(BUILD_SHARED_LIBS "Build package with shared libraries." ON)
 OPTION(BUILD_WITH_COVERAGE "Enable profiling and coverage report analysis." OFF)
 OPTION(BUILD_WITH_PROFILER "Enable profiling." OFF)
 OPTION(BUILD_WITH_EXTERNAL_PROJECT "Enable external project build." ON)
-OPTION(BUILD_WITH_INSTALL "Disable this if you want to use fragengine as a submodule." ON )
+OPTION(BUILD_WITH_INSTALL "Will installs the target associated with the project." ON )
 OPTION(BUILD_WITH_UBSAN "" OFF)
 OPTION(BUILD_WITH_ASAN "Enable AddressSanitizer." OFF )
 OPTION(BUILD_OPT_BUILD_PACKAGES "Set to ON to generate CPack configuration files and packaging targets" OFF)
@@ -363,6 +363,10 @@ IF(BUILD_EXTERNAL_PHYSIC)
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/physic/bullet/)
 	#ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/physic/physx/)
 ENDIF()
+
+ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/IO/can)
+ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/IO/modbus)
+ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/IO/SerialIO)
 
 # Testing and assertion and other.
 #TODO attempt to remove so it works on all platforms.

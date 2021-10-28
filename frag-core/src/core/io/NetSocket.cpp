@@ -8,10 +8,10 @@ NetSocket::~NetSocket() { /*Make sure it gets disconnected.   */
 
 constexpr const char *NetSocket::getTransportProtocolSymbol(TransportProtocol transportProtocol) noexcept {
 	switch (transportProtocol) {
-	case TransportProtocol::TCP:
+	case TransportProtocol::TransportProtocolTCP:
 		return "TCP";
 
-	case TransportProtocol::UDP:
+	case TransportProtocol::TransportProtocolUDP:
 		return "TCP";
 	default:
 		return "";
