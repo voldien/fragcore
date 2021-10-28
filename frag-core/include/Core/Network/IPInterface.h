@@ -16,9 +16,10 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-#ifndef _FRAG_CORE_IP_H_
-#define _FRAG_CORE_IP_H_ 1
+#ifndef _FRAG_CORE_IP_INTERFACE_H_
+#define _FRAG_CORE_IP_INTERFACE_H_ 1
 #include "../Object.h"
+#include "NetInterface.h"
 #include <vector>
 
 namespace fragcore {
@@ -26,7 +27,7 @@ namespace fragcore {
 	 * @brief
 	 *
 	 */
-	class FVDECLSPEC IPInterface : public Object {
+	class FVDECLSPEC IPInterface : public NetInterface {
 	  public:
 		enum Type {
 

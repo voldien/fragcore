@@ -18,7 +18,7 @@
 */
 #ifndef _FRAG_CORE_MODBUS_NETSOCKET_H_
 #define _FRAG_CORE_MODBUS_NETSOCKET_H_ 1
-#include "Core/Network/NetSocket.h"
+#include "Core/Network/TCPSocket.h"
 #include <sys/socket.h>
 
 namespace fragcore {
@@ -26,7 +26,7 @@ namespace fragcore {
 	 * @brief
 	 *
 	 */
-	class FVDECLSPEC ModbusNetSocket : public NetSocket {
+	class FVDECLSPEC ModbusNetSocket : public TCPNetSocket {
 	  public:
 		ModbusNetSocket();
 		virtual ~ModbusNetSocket();
@@ -61,20 +61,11 @@ namespace fragcore {
 
 		virtual NetStatus getStatus() const noexcept override;
 
-		/*	TODO get info about connection IP and etc.	*/
-
-	  protected:
-		bool isNetworkLayerSupported(INetAddress::NetworkProtocol protocol);
-
 	  private:
 		ModbusNetSocket(int socket);
-		static int getDomain(const INetAddress &address);
-		static size_t setupIPAddress(sockaddr *addr, const INetAddress &p_addr, uint16_t p_port);
 
 	  private:
-		int socket;
 		void *ctx = nullptr;
-		NetStatus netStatus;
 	};
 } // namespace fragcore
 

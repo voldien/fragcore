@@ -1,4 +1,4 @@
-#include <Core/Network/IP.h>
+#include <Core/Network/IPInterface.h>
 #include <Core/Network/IPAddress.h>
 #include <Core/RefPtr.h>
 #include <gtest/gtest.h>

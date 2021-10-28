@@ -137,17 +137,23 @@ CANNetSocket::NetStatus CANNetSocket::accept(NetSocket &socket) {
 	if (aaccept_socket < 0) {
 	}
 }
+
 int CANNetSocket::read() {}
 int CANNetSocket::write() {}
 bool CANNetSocket::isBlocking() { /*	*/
 }
+
 void CANNetSocket::setBlocking(bool blocking) { /*	*/
 }
+
 CANNetSocket::NetStatus CANNetSocket::getStatus() const noexcept { return this->netStatus; }
 
 long int CANNetSocket::writeFrame(unsigned int ID, unsigned int nBytes, uint8_t *data) {
 	struct can_frame frame;
 	int nbytes;
+
+	frame.can_id = ID;
+	frame.can_dlc = nBytes;
 
 	this->send(&frame, sizeof(struct can_frame), nbytes);
 

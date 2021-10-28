@@ -3,6 +3,7 @@
 #include <arpa/inet.h>
 #include <assert.h>
 #include <errno.h>
+#include <modbus/modbus-rtu.h>
 #include <modbus/modbus-tcp.h>
 #include <modbus/modbus.h>
 #include <net/if.h>
@@ -19,8 +20,8 @@
 
 using namespace fragcore;
 
-ModbusNetSocket::ModbusNetSocket() : netStatus(NetStatus::Status_Disconnected), socket(0) {}
-ModbusNetSocket::ModbusNetSocket(int socket) : socket(socket) {}
+ModbusNetSocket::ModbusNetSocket() {}
+ModbusNetSocket::ModbusNetSocket(int socket) : TCPNetSocket(socket) {}
 ModbusNetSocket::~ModbusNetSocket() { this->close(); }
 
 ModbusNetSocket::TransportProtocol ModbusNetSocket::getTransportProtocol() const noexcept {
@@ -28,11 +29,8 @@ ModbusNetSocket::TransportProtocol ModbusNetSocket::getTransportProtocol() const
 }
 
 int ModbusNetSocket::close() {
-	modbus_close((modbus_t *)ctx);
-	modbus_free((modbus_t *)ctx);
-	int status = ::close(this->socket);
-	if (status != 0)
-		throw RuntimeException("{}", strerror(errno));
+	modbus_close((modbus_t *)this->ctx);
+	modbus_free((modbus_t *)this->ctx);
 	this->socket = 0;
 	netStatus = NetStatus::Status_Disconnected;
 }
@@ -50,10 +48,11 @@ int ModbusNetSocket::bind(const INetAddress &p_addr, uint16_t p_port) {
 	if (modbus_set_error_recovery((modbus_t *)this->ctx,
 								  static_cast<modbus_error_recovery_mode>(MODBUS_ERROR_RECOVERY_PROTOCOL)) == -1) {
 	}
+	this->socket = modbus_get_socket((modbus_t *)this->ctx);
 }
 
 int ModbusNetSocket::listen(unsigned int maxListen) {
-	if (::listen(this->socket, maxListen) < 0) {
+	if (modbus_tcp_listen((modbus_t *)this->ctx, maxListen) < 0) {
 		SystemException ex(errno, "TCP socket: Failed to set listen {} - error: {}", maxListen, strerror(errno));
 	}
 	return 0;
@@ -63,12 +62,24 @@ int ModbusNetSocket::connect(std::string &ip, unsigned int port) {
 }
 
 int ModbusNetSocket::connect(const INetAddress &p_addr, uint16_t p_port) {
+	uint32_t old_response_to_sec;
+	uint32_t old_response_to_usec;
 
-	// if (ctx == nullptr)
-	// 	ctx = modbus_new_tcp(p_addr. c_str(), p_port);
+	if (this->ctx == nullptr) {
+		this->ctx = modbus_new_tcp(nullptr, p_port);
+		if (this->ctx == nullptr)
+			throw RuntimeException("{}", modbus_strerror(errno));
+	}
+	modbus_get_response_timeout((modbus_t *)this->ctx, &old_response_to_sec, &old_response_to_usec);
 
-	if (modbus_connect((modbus_t *)ctx) != 0) {
-	};
+	if (modbus_set_error_recovery((modbus_t *)this->ctx,
+								  static_cast<modbus_error_recovery_mode>(MODBUS_ERROR_RECOVERY_PROTOCOL)) == -1) {
+		throw RuntimeException("Failed to set Recovery Mode {}", modbus_strerror(errno));
+	}
+
+	TCPNetSocket::connect(p_addr, p_port);
+	this->socket = modbus_set_socket((modbus_t *)this->ctx, this->socket);
+
 	this->netStatus = NetStatus::Status_Done;
 }
 
@@ -83,14 +94,21 @@ int ModbusNetSocket::recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAdd
 }
 int ModbusNetSocket::recv(const void *pbuffer, int p_len, int &sent) {
 	int flag = 0;
-	int res = ::recv(this->socket, (void *)pbuffer, p_len, flag);
+	int res = modbus_read_registers((modbus_t *)this->ctx, 0, p_len, (uint16_t *)pbuffer);
+	if (res != p_len) {
+		throw RuntimeException(" Failed to read Register {}", modbus_strerror(errno));
+	}
 	return res;
 }
 int ModbusNetSocket::send(const uint8_t *p_buffer, int p_len, int &r_sent) {
 	int flag = 0;
-	int res = ::send(this->socket, p_buffer, p_len, flag);
+	int res = modbus_write_registers((modbus_t *)this->ctx, 0, p_len, (const uint16_t *)p_buffer);
+	if (res != p_len) {
+		throw RuntimeException(" Failed to write Register {}", modbus_strerror(errno));
+	}
 	return res;
 }
+
 int ModbusNetSocket::sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const INetAddress &p_ip, uint16_t p_port) {
 	int res; //=  sendto(this->socket, p_buffer, p_len, flag, connection->extaddr, connection->sclen);
 	return res;
@@ -103,14 +121,7 @@ long int ModbusNetSocket::send(const void *pbuffer, int p_len, int &sent) {
 }
 
 Ref<NetSocket> ModbusNetSocket::accept(INetAddress &r_ip, uint16_t &r_port) {
-	struct sockaddr tobuffer; /*	*/
-	socklen_t aclen = 0;	  /*	*/
-	int aaccept_socket = ::accept(this->socket, &tobuffer, &aclen);
-	if (aaccept_socket < 0) {
-		// close();
-	}
-	ModbusNetSocket *_newsocket = new ModbusNetSocket(aaccept_socket);
-	return Ref<NetSocket>(_newsocket);
+	return TCPNetSocket::accept(r_ip, r_port);
 }
 
 Ref<NetSocket> ModbusNetSocket::accept(std::string &ip, unsigned int port) {
@@ -121,6 +132,7 @@ Ref<NetSocket> ModbusNetSocket::accept(std::string &ip, unsigned int port) {
 		// close();
 	}
 	ModbusNetSocket *_newsocket = new ModbusNetSocket(aaccept_socket);
+	// modbus_new_tcp
 	return Ref<NetSocket>(_newsocket);
 }
 ModbusNetSocket::NetStatus ModbusNetSocket::accept(NetSocket &socket) {
@@ -137,22 +149,3 @@ bool ModbusNetSocket::isBlocking() { /*	*/
 void ModbusNetSocket::setBlocking(bool blocking) { /*	*/
 }
 ModbusNetSocket::NetStatus ModbusNetSocket::getStatus() const noexcept { return this->netStatus; }
-
-// int ModbusNetSocket::getDomain(const INetAddress &address) {
-
-// 	int domain = 0; // TODO be override by the NetAddress!
-// 	switch (address.getNetworkProtocol()) {
-// 	case INetAddress::NetworkProtocol::NetWorkProtocol_IP: {
-// 		const IPAddress &ipAddress = static_cast<const IPAddress &>(address);
-// 		if (ipAddress.getIPType() == IPAddress::IPAddressType::IPAddress_Type_IPV4)
-// 			return AF_INET;
-// 		else if (ipAddress.getIPType() == IPAddress::IPAddressType::IPAddress_Type_IPV6)
-// 			return AF_INET6;
-// 	} break;
-// 	case INetAddress::NetworkProtocol::NetWorkProtocol_CAN:
-// 		return AF_CAN;
-// 		break;
-// 	default:
-// 		throw RuntimeException("Non Supported Network Protocol: {}", address.getNetworkProtocol());
-// 	}
-// }

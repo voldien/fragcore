@@ -1,4 +1,4 @@
-#include "Core/Network/IP.h"
+#include "Core/Network/IPInterface.h"
 
 #include <ifaddrs.h>
 #include <sys/types.h>
@@ -18,7 +18,7 @@ std::vector<IPInterface> IPInterface::getLocalInterface() {
 	while (tmp) {
 		if (tmp->ifa_addr && tmp->ifa_addr->sa_family == AF_PACKET) {
 			printf("{}\n", tmp->ifa_name);
-            //tmp->ifa_addr
+			// tmp->ifa_addr
 		}
 
 		tmp = tmp->ifa_next;

@@ -64,14 +64,13 @@ namespace fragcore {
 		/*	TODO get info about connection IP and etc.	*/
 
 	  protected:
-		bool isNetworkLayerSupported(INetAddress::NetworkProtocol protocol);
-
-	  private:
 		TCPNetSocket(int socket);
+
+		bool isNetworkLayerSupported(INetAddress::NetworkProtocol protocol);
 		static int getDomain(const INetAddress &address);
 		static size_t setupIPAddress(sockaddr *addr, const INetAddress &p_addr, uint16_t p_port);
 
-	  private:
+	  protected:
 		int socket;
 		NetStatus netStatus;
 	};

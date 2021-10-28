@@ -22,7 +22,7 @@
 #include "../Ref.h"
 #include "../SmartReference.h"
 #include "INetAddress.h"
-#include "IP.h"
+#include "NetInterface.h"
 
 namespace fragcore {
 
@@ -39,7 +39,13 @@ namespace fragcore {
 		 * @brief
 		 *
 		 */
-		enum class TransportProtocol { TransportProtoclNone, TransportProtocolTCP, TransportProtocolUDP, TransportProtocolCAN, MaxTransportProtocol };
+		enum class TransportProtocol {
+			TransportProtoclNone,
+			TransportProtocolTCP,
+			TransportProtocolUDP,
+			TransportProtocolCAN,
+			MaxTransportProtocol
+		};
 		enum class NetStatus { Status_Done, Status_NotReady, Status_Partial, Status_Disconnected, Status_Error };
 
 		virtual int open(int p_type, int ip_type) = 0;

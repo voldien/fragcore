@@ -7,7 +7,8 @@
 #include <net/if.h>
 #include <netdb.h>
 #include <netinet/in.h>
-#include <stdio.h>
+#include <netinet/ip.h>
+#include <netinet/tcp.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/ioctl.h>
@@ -157,17 +158,31 @@ int TCPNetSocket::connect(const INetAddress &p_addr, uint16_t p_port) {
 		struct sockaddr_in6 addr6; /*	*/
 	} addrU;
 	struct timeval tv;
+	int flags = SOCK_STREAM;
+	// #ifdef SOCK_CLOEXEC
+	// 	flags |= SOCK_CLOEXEC;
+	// #endif
 
+	// #ifdef SOCK_NONBLOCK
+	// 	flags |= SOCK_NONBLOCK;
+	// #endif
 	int domain = getDomain(p_addr);
 
-	this->socket = ::socket(domain, SOCK_STREAM, 0);
+	this->socket = ::socket(domain, flags, 0);
 	if (this->socket < 0) {
 		throw RuntimeException("TCP socket - Failed to create socket {}", strerror(errno));
 	}
 
+	int option = 1;
+	int rc = setsockopt(this->socket, IPPROTO_TCP, TCP_NODELAY, (const void *)&option, sizeof(int));
+	if (rc == -1) {
+		throw RuntimeException();
+	}
+
 	addrlen = setupIPAddress((struct sockaddr *)&addrU, p_addr, p_port);
 
-	if (::connect(socket, (struct sockaddr *)&addrU, addrlen) != 0) {
+	rc = ::connect(socket, (struct sockaddr *)&addrU, addrlen);
+	if (rc != 0) {
 		throw RuntimeException("Failed to create TCP socket, {}", strerror(errno));
 	} else {
 		this->netStatus = NetStatus::Status_Done;
