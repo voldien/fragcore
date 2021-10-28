@@ -183,7 +183,7 @@ int TCPNetSocket::connect(const INetAddress &p_addr, uint16_t p_port) {
 
 	rc = ::connect(socket, (struct sockaddr *)&addrU, addrlen);
 	if (rc != 0) {
-		throw RuntimeException("Failed to create TCP socket, {}", strerror(errno));
+		throw RuntimeException("Failed to connect TCP socket, {}", strerror(errno));
 	} else {
 		this->netStatus = NetStatus::Status_Done;
 	}

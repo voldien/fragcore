@@ -75,6 +75,7 @@ namespace fragcore {
 
 	  private:
 		int socket;
+		unsigned int ifrIndex;
 		NetStatus netStatus;
 	};
 } // namespace fragcore

@@ -18,7 +18,7 @@
 */
 #ifndef _FRAG_CORE_CAN_ADDRESS_H_
 #define _FRAG_CORE_CAN_ADDRESS_H_ 1
-#include "INetAddress.h"
+#include "Core/Network/INetAddress.h"
 #include <string>
 
 namespace fragcore {
@@ -28,7 +28,7 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC CANAddress : public INetAddress {
 	  public:
-		CANAddress();
+		CANAddress(unsigned int ID) : INetAddress(NetworkProtocol::NetWorkProtocol_CAN), id(ID) {}
 
 		bool operator==(const CANAddress &ipAddress) const { return false; }
 		bool operator!=(const CANAddress &ipAddress) const { return false; }
@@ -37,12 +37,14 @@ namespace fragcore {
 			return NetworkProtocol::NetWorkProtocol_CAN;
 		}
 
-		virtual bool isValid() const noexcept override;
-	  protected:
+		virtual bool isValid() const noexcept override { return this->valid; }
+		unsigned int getID() const noexcept { return this->id; }
 
+	  protected:
 	  private:
 		bool valid;
-		unsigned int ID;
+		unsigned int id;
+		unsigned int ifrIndex;
 	};
 } // namespace fragcore
 

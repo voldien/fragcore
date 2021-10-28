@@ -1,5 +1,6 @@
 
 #include "NetCANSocket.h"
+#include "CANAddress.h"
 #include <linux/can.h>
 #include <linux/can/raw.h>
 
@@ -41,40 +42,71 @@ int CANNetSocket::close() {
 int CANNetSocket::bind(std::string &IPaddr, unsigned int port) {}
 
 int CANNetSocket::bind(const INetAddress &p_addr, uint16_t p_port) {
+
+	const CANAddress &canAddress = static_cast<const CANAddress &>(p_addr);
 	struct sockaddr_can addr;
 	struct ifreq ifr;
 
 	this->socket = ::socket(PF_CAN, SOCK_RAW, CAN_RAW);
+	if (this->socket < 0) {
+		throw RuntimeException("Failed to create CAN socket, {}", strerror(errno));
+	}
 
-	strcpy(ifr.ifr_name, "can0");
-	ioctl(this->socket, SIOCGIFINDEX, &ifr);
+	strcpy(ifr.ifr_name, "vcan0");
+	if (ioctl(this->socket, SIOCGIFINDEX, &ifr) == 0) {
+		this->ifrIndex = ifr.ifr_ifindex;
+	} else {
+		throw SystemException(errno, "Failed to set interface index");
+	}
 
 	addr.can_family = AF_CAN;
 	addr.can_ifindex = ifr.ifr_ifindex;
 
-	::bind(this->socket, (struct sockaddr *)&addr, sizeof(addr));
+	int rc = ::bind(this->socket, (struct sockaddr *)&addr, sizeof(addr));
+	if (rc < 0) {
+		this->netStatus = NetStatus::Status_Error;
+		RuntimeException ex("Failed to bind CAN socket, {}", strerror(errno));
+		throw ex;
+	} else {
+		this->netStatus = NetStatus::Status_Done;
+	}
 }
 
 int CANNetSocket::listen(unsigned int maxListen) {
-	if (::listen(this->socket, maxListen) < 0) {
-		SystemException ex(errno, "TCP socket: Failed to set listen {} - error: {}", maxListen, strerror(errno));
-	}
+	// if (::listen(this->socket, maxListen) < 0) {
+	// 	SystemException ex(errno, "TCP socket: Failed to set listen {} - error: {}", maxListen, strerror(errno));
+	// }
 	return 0;
 }
 int CANNetSocket::connect(std::string &ip, unsigned int port) {}
 
 int CANNetSocket::connect(const INetAddress &p_addr, uint16_t p_port) {
+
+	const CANAddress &canAddress = static_cast<const CANAddress &>(p_addr);
+
 	this->socket = ::socket(PF_CAN, SOCK_DGRAM, CAN_BCM);
+	if (this->socket < 0) {
+		throw RuntimeException("Failed to create CAN socket, {}", strerror(errno));
+	}
 	struct sockaddr_can addr;
 	struct ifreq ifr;
 
-	strcpy(ifr.ifr_name, "can0");
-	ioctl(this->socket, SIOCGIFINDEX, &ifr);
+	strcpy(ifr.ifr_name, "vcan0");
+	if (ioctl(this->socket, SIOCGIFINDEX, &ifr) == 0) {
+		this->ifrIndex = ifr.ifr_ifindex;
+	} else {
+		throw SystemException(errno, "Failed to set interface index");
+	}
 
-	addr.can_family = AF_CAN;
+	addr.can_family = PF_CAN;
 	addr.can_ifindex = ifr.ifr_ifindex;
 
-	::connect(this->socket, (struct sockaddr *)&addr, sizeof(addr));
+	int rc = ::connect(this->socket, (struct sockaddr *)&addr, sizeof(addr));
+	if (rc != 0) {
+		throw RuntimeException("Failed connect CAN socket, {}", strerror(errno));
+	} else {
+		this->netStatus = NetStatus::Status_Done;
+	}
 
 	this->netStatus = NetStatus::Status_Done;
 }
@@ -85,7 +117,13 @@ int CANNetSocket::poll(int p_type, int timeout) const {}
 int CANNetSocket::recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddress &r_ip, uint16_t &r_port,
 						   bool p_peek) {
 	int flag = 0;
-	int res; //= recvfrom(this->socket, p_buffer, p_len, flag, connection->intaddr, &r_read);
+	const CANAddress &canAddress = static_cast<const CANAddress &>(r_ip);
+	struct sockaddr_can addr;
+	socklen_t len = sizeof(addr);
+	struct can_frame frame;
+	int res = ::recvfrom(this->socket, &frame, sizeof(frame), flag, (sockaddr *)&addr, &len);
+	if (res != sizeof(frame))
+		throw RuntimeException("");
 	return res;
 }
 int CANNetSocket::recv(const void *pbuffer, int p_len, int &sent) {
@@ -99,7 +137,13 @@ int CANNetSocket::send(const uint8_t *p_buffer, int p_len, int &r_sent) {
 	return res;
 }
 int CANNetSocket::sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const INetAddress &p_ip, uint16_t p_port) {
-	int res; //=  sendto(this->socket, p_buffer, p_len, flag, connection->extaddr, connection->sclen);
+	int flag = 0;
+	const CANAddress &canAddress = static_cast<const CANAddress &>(p_ip);
+	struct sockaddr_can addr;
+	addr.can_ifindex = this->ifrIndex;
+	addr.can_family = AF_CAN;
+	struct can_frame frame;
+	int res = ::sendto(this->socket, p_buffer, p_len, flag, (sockaddr *)&addr, sizeof(addr));
 	return res;
 }
 
@@ -161,22 +205,3 @@ long int CANNetSocket::writeFrame(unsigned int ID, unsigned int nBytes, uint8_t 
 	}
 	return nbytes;
 }
-
-// int CANNetSocket::getDomain(const INetAddress &address) {
-
-// 	int domain = 0; // TODO be override by the NetAddress!
-// 	switch (address.getNetworkProtocol()) {
-// 	case INetAddress::NetworkProtocol::NetWorkProtocol_IP: {
-// 		const IPAddress &ipAddress = static_cast<const IPAddress &>(address);
-// 		if (ipAddress.getIPType() == IPAddress::IPAddressType::IPAddress_Type_IPV4)
-// 			return AF_INET;
-// 		else if (ipAddress.getIPType() == IPAddress::IPAddressType::IPAddress_Type_IPV6)
-// 			return AF_INET6;
-// 	} break;
-// 	case INetAddress::NetworkProtocol::NetWorkProtocol_CAN:
-// 		return AF_CAN;
-// 		break;
-// 	default:
-// 		throw RuntimeException("Non Supported Network Protocol: {}", address.getNetworkProtocol());
-// 	}
-// }
