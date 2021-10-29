@@ -3,6 +3,8 @@
 #include <netdb.h>
 using namespace fragcore;
 
+IPAddress::IPAddress() : INetAddress(getNetworkProtocol()), valid(false) {}
+
 IPAddress::IPAddress(const std::string &ip, IPAddressType type)
 	: INetAddress(getNetworkProtocol()), ip(ip), type(type), valid(false) {
 	struct hostent *hosten = nullptr; /*	*/

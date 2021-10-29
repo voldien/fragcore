@@ -26,22 +26,22 @@ NetSocket::TransportProtocol UDPNetSocket::getTransportProtocol() const noexcept
 
 int UDPNetSocket::close() { int status = ::close(socket); }
 
-int UDPNetSocket::bind(std::string &IPaddr, unsigned int port) {
-	socklen_t addrlen;	   /*	*/
-	struct sockaddr *addr; /*	*/
-	union {
-		struct sockaddr_in addr4;  /*	*/
-		struct sockaddr_in6 addr6; /*	*/
-	} addrU;
-	// int domain = option->affamily;
+// int UDPNetSocket::bind(std::string &IPaddr, unsigned int port) {
+// 	socklen_t addrlen;	   /*	*/
+// 	struct sockaddr *addr; /*	*/
+// 	union {
+// 		struct sockaddr_in addr4;  /*	*/
+// 		struct sockaddr_in6 addr6; /*	*/
+// 	} addrU;
+// 	// int domain = option->affamily;
 
-	/*	Bind process to socket.	*/
-	if (::bind(socket, (struct sockaddr *)addr, addrlen) < 0) {
-		throw RuntimeException("Failed to bind UDP socket");
-		// sntLogErrorPrintf("Failed to bind TCP socket, %s.\n", strerror(errno));
-		// sntDisconnectSocket(connection);
-	}
-}
+// 	/*	Bind process to socket.	*/
+// 	if (::bind(socket, (struct sockaddr *)addr, addrlen) < 0) {
+// 		throw RuntimeException("Failed to bind UDP socket");
+// 		// sntLogErrorPrintf("Failed to bind TCP socket, %s.\n", strerror(errno));
+// 		// sntDisconnectSocket(connection);
+// 	}
+// }
 int UDPNetSocket::listen(unsigned int maxListen) {
 	if (::listen(socket, maxListen) < 0) {
 		// sntLogErrorPrintf("listen failed, %s.\n", strerror(errno));
@@ -49,10 +49,10 @@ int UDPNetSocket::listen(unsigned int maxListen) {
 	}
 }
 
-int UDPNetSocket::connect(std::string &ip, unsigned int port) {
-	// IPAddress ipNet(ip);
-	// return this->connect(static_cast<const INetAddress &>(ipNet), port);
-}
+// int UDPNetSocket::connect(std::string &ip, unsigned int port) {
+// 	// IPAddress ipNet(ip);
+// 	// return this->connect(static_cast<const INetAddress &>(ipNet), port);
+// }
 
 int UDPNetSocket::connect(const INetAddress &p_addr, uint16_t p_port) {
 	socklen_t addrlen;			 /*	*/

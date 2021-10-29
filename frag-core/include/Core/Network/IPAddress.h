@@ -35,6 +35,7 @@ namespace fragcore {
 			IPAddress_Type_IPV6 = 2,
 			IPAddress_Type_ANY = 3,
 		};
+		IPAddress();
 		IPAddress(const std::string &ip, IPAddressType type);
 		IPAddress(const std::string &hostname);
 

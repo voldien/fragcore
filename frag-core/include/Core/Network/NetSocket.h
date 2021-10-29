@@ -56,10 +56,10 @@ namespace fragcore {
 		virtual TransportProtocol getTransportProtocol() const noexcept = 0;
 
 		virtual int close() = 0;
-		virtual int bind(std::string &addr, unsigned int port) = 0;
+		//virtual int bind(std::string &addr, unsigned int port) = 0;
 		virtual int bind(const INetAddress &p_addr, uint16_t p_port) = 0;
 		virtual int listen(unsigned int maxListen) = 0;
-		virtual int connect(std::string &ip, unsigned int port) = 0;
+		//virtual int connect(std::string &ip, unsigned int port) = 0;
 		virtual int connect(const INetAddress &p_addr, uint16_t p_port) = 0;
 		virtual int poll(int p_type, int timeout) const = 0;
 

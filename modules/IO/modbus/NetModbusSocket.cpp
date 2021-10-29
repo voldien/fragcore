@@ -35,10 +35,10 @@ int ModbusNetSocket::close() {
 	netStatus = NetStatus::Status_Disconnected;
 }
 
-int ModbusNetSocket::bind(std::string &IPaddr, unsigned int port) {
-	if (ctx == nullptr)
-		ctx = modbus_new_tcp(IPaddr.c_str(), port);
-}
+// int ModbusNetSocket::bind(std::string &IPaddr, unsigned int port) {
+// 	if (ctx == nullptr)
+// 		ctx = modbus_new_tcp(IPaddr.c_str(), port);
+// }
 
 int ModbusNetSocket::bind(const INetAddress &p_addr, uint16_t p_port) {
 	// if (this->ctx == nullptr)
@@ -57,9 +57,9 @@ int ModbusNetSocket::listen(unsigned int maxListen) {
 	}
 	return 0;
 }
-int ModbusNetSocket::connect(std::string &ip, unsigned int port) {
-	// return connect(IPAddress(ip, IPAddress::IPAddressType::IPAddress_Type_IPV4), port);
-}
+// int ModbusNetSocket::connect(std::string &ip, unsigned int port) {
+// 	// return connect(IPAddress(ip, IPAddress::IPAddressType::IPAddress_Type_IPV4), port);
+// }
 
 int ModbusNetSocket::connect(const INetAddress &p_addr, uint16_t p_port) {
 	uint32_t old_response_to_sec;

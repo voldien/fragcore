@@ -16,33 +16,35 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-#ifndef _FRAG_CORE_INET_ADDRESS_H_
-#define _FRAG_CORE_INET_ADDRESS_H_ 1
-#include "../Object.h"
+#ifndef _FRAG_CORE_TCP_UDP_ADDRESS_H_
+#define _FRAG_CORE_TCP_UDP_ADDRESS_H_ 1
+#include "IPAddress.h"
+#include <string>
 
 namespace fragcore {
 	/**
 	 * @brief
 	 *
 	 */
-	class FVDECLSPEC INetAddress : public Object {
+	class FVDECLSPEC TCPUDPAddress : public INetAddress {
 	  public:
-		enum class NetworkProtocol : unsigned int {
+		TCPUDPAddress(IPAddress &ipaddress, unsigned int port);
 
-			NetWorkProtocol_NONE = 0,
-			NetWorkProtocol_IP = 1,
-			NetWorkProtocol_TCP_UDP = 2,
-			NetWorkProtocol_CAN = 3,
-			NetWorkProtocol_ModBus = 4,
-			NetWorkProtocol_ANY = 0xFFFFFFFF,
-		};
-		INetAddress(NetworkProtocol type) {}
-		virtual NetworkProtocol getNetworkProtocol() const noexcept = 0;
+		bool operator==(const TCPUDPAddress &ipAddress) const { return false; }
+		bool operator!=(const TCPUDPAddress &ipAddress) const { return false; }
 
-		virtual bool isValid() const noexcept = 0;
+		virtual NetworkProtocol getNetworkProtocol() const noexcept override {
+			return NetworkProtocol::NetWorkProtocol_TCP_UDP;
+		}
+
+		const IPAddress &getIPAddress() const noexcept { return ipAddress; }
+		const std::string &getHostName() const;
+		virtual bool isValid() const noexcept override;
 
 	  private:
-		NetworkProtocol type;
+		bool valid;
+		unsigned int port;
+		IPAddress ipAddress;
 	};
 } // namespace fragcore
 

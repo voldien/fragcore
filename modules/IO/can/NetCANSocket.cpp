@@ -39,7 +39,7 @@ int CANNetSocket::close() {
 	netStatus = NetStatus::Status_Disconnected;
 }
 
-int CANNetSocket::bind(std::string &IPaddr, unsigned int port) {}
+// int CANNetSocket::bind(std::string &IPaddr, unsigned int port) {}
 
 int CANNetSocket::bind(const INetAddress &p_addr, uint16_t p_port) {
 
@@ -79,7 +79,7 @@ int CANNetSocket::listen(unsigned int maxListen) {
 	// }
 	return 0;
 }
-int CANNetSocket::connect(std::string &ip, unsigned int port) {}
+// int CANNetSocket::connect(std::string &ip, unsigned int port) {}
 
 int CANNetSocket::connect(const INetAddress &p_addr, uint16_t p_port) {
 

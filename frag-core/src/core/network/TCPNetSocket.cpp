@@ -1,6 +1,7 @@
 
 #include "Core/Network/IPAddress.h"
 #include "Core/Network/TCPSocket.h"
+#include "Core/Network/TCPUDPAddress.h"
 #include <arpa/inet.h>
 #include <assert.h>
 #include <errno.h>
@@ -62,56 +63,58 @@ NetSocket::TransportProtocol TCPNetSocket::getTransportProtocol() const noexcept
 }
 
 int TCPNetSocket::close() {
-	int status = ::close(this->socket);
-	if (status != 0)
-		throw RuntimeException("{}", strerror(errno));
-	this->socket = 0;
+	if (this->socket > 0) {
+		int status = ::close(this->socket);
+		if (status != 0)
+			throw RuntimeException("{}", strerror(errno));
+		this->socket = 0;
+	}
 	netStatus = NetStatus::Status_Disconnected;
 }
 
-int TCPNetSocket::bind(std::string &IPaddr, unsigned int port) {
-	socklen_t addrlen;	   /*	*/
-	struct sockaddr *addr; /*	*/
-	union {
-		struct sockaddr_in addr4;  /*	*/
-		struct sockaddr_in6 addr6; /*	*/
-	} addrU;
-	int domain = AF_INET; // TODO be override by the NetAddress!
+// int TCPNetSocket::bind(std::string &IPaddr, unsigned int port) {
+// 	socklen_t addrlen;	   /*	*/
+// 	struct sockaddr *addr; /*	*/
+// 	union {
+// 		struct sockaddr_in addr4;  /*	*/
+// 		struct sockaddr_in6 addr6; /*	*/
+// 	} addrU;
+// 	int domain = AF_INET; // TODO be override by the NetAddress!
 
-	/*	*/
-	if (domain == AF_INET) {
-		bzero(&addrU.addr4, sizeof(addrU.addr4));
-		addrU.addr4.sin_port = htons(port);
-		addrU.addr4.sin_family = (sa_family_t)domain;
-		if (inet_pton(domain, IPaddr.c_str(), &addrU.addr4.sin_addr) < 0) {
-			this->close();
-		}
-		addrlen = sizeof(addrU.addr4);
-		addr = (struct sockaddr *)&addrU.addr4;
-	} else if (domain == AF_INET6) {
-		bzero(&addrU.addr6, sizeof(addrU.addr6));
-		addrU.addr6.sin6_port = htons(port);
-		addrU.addr6.sin6_family = (sa_family_t)domain;
-		if (inet_pton(domain, IPaddr.c_str(), &addrU.addr6.sin6_addr) < 0) {
-			this->close();
-		}
-		addrlen = sizeof(addrU.addr6);
-		addr = (struct sockaddr *)&addrU.addr6;
-	} else {
-		throw RuntimeException();
-		this->close();
-	}
+// 	/*	*/
+// 	if (domain == AF_INET) {
+// 		bzero(&addrU.addr4, sizeof(addrU.addr4));
+// 		addrU.addr4.sin_port = htons(port);
+// 		addrU.addr4.sin_family = (sa_family_t)domain;
+// 		if (inet_pton(domain, IPaddr.c_str(), &addrU.addr4.sin_addr) < 0) {
+// 			this->close();
+// 		}
+// 		addrlen = sizeof(addrU.addr4);
+// 		addr = (struct sockaddr *)&addrU.addr4;
+// 	} else if (domain == AF_INET6) {
+// 		bzero(&addrU.addr6, sizeof(addrU.addr6));
+// 		addrU.addr6.sin6_port = htons(port);
+// 		addrU.addr6.sin6_family = (sa_family_t)domain;
+// 		if (inet_pton(domain, IPaddr.c_str(), &addrU.addr6.sin6_addr) < 0) {
+// 			this->close();
+// 		}
+// 		addrlen = sizeof(addrU.addr6);
+// 		addr = (struct sockaddr *)&addrU.addr6;
+// 	} else {
+// 		throw RuntimeException();
+// 		this->close();
+// 	}
 
-	/*	Bind process to socket.	*/
-	if (::bind(socket, (struct sockaddr *)addr, addrlen) < 0) {
-		RuntimeException ex("Failed to bind TCP socket, {}", strerror(errno));
-		this->netStatus = NetStatus::Status_Error;
-		close();
-		throw ex;
-	} else {
-		this->netStatus = NetStatus::Status_Done;
-	}
-}
+// 	/*	Bind process to socket.	*/
+// 	if (::bind(socket, (struct sockaddr *)addr, addrlen) < 0) {
+// 		RuntimeException ex("Failed to bind TCP socket, {}", strerror(errno));
+// 		this->netStatus = NetStatus::Status_Error;
+// 		close();
+// 		throw ex;
+// 	} else {
+// 		this->netStatus = NetStatus::Status_Done;
+// 	}
+// }
 
 int TCPNetSocket::bind(const INetAddress &p_addr, uint16_t p_port) {
 	socklen_t addrlen; /*	*/
@@ -146,9 +149,9 @@ int TCPNetSocket::listen(unsigned int maxListen) {
 	}
 	return 0;
 }
-int TCPNetSocket::connect(std::string &ip, unsigned int port) {
-	return connect(IPAddress(ip, IPAddress::IPAddressType::IPAddress_Type_IPV4), port);
-}
+// int TCPNetSocket::connect(std::string &ip, unsigned int port) {
+// 	return connect(IPAddress(ip, IPAddress::IPAddressType::IPAddress_Type_IPV4), port);
+// }
 
 int TCPNetSocket::connect(const INetAddress &p_addr, uint16_t p_port) {
 	socklen_t addrlen;			 /*	*/
@@ -191,9 +194,7 @@ int TCPNetSocket::connect(const INetAddress &p_addr, uint16_t p_port) {
 
 int TCPNetSocket::open(int p_type, int ip_type) {}
 
-int TCPNetSocket::poll(int p_type, int timeout) const {
-
-	/*	select or poll.	*/
+int TCPNetSocket::poll(int p_type, int timeout) const { /*	select or poll.	*/
 }
 int TCPNetSocket::recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddress &r_ip, uint16_t &r_port,
 						   bool p_peek) {
