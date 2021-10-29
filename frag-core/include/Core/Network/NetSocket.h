@@ -33,7 +33,10 @@ namespace fragcore {
 	class FVDECLSPEC NetSocket : public SmartReference {
 	  public:
 		NetSocket(const IPInterface &ip);
+		NetSocket(NetSocket &&other) = default;
 		virtual ~NetSocket();
+
+		NetSocket &operator=(NetSocket &&other) = default;
 
 		/**
 		 * @brief

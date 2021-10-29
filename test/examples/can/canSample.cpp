@@ -11,7 +11,7 @@ int main(int argc, const char **argv) {
 	try {
 		CANNetSocket net;
 		CANAddress local(0);
-		net.connect(local, 1502);
+		net.bind(local, 1502);
 
 		int data[10];
 		int nr;
@@ -23,9 +23,10 @@ int main(int argc, const char **argv) {
 			if (c < 0)
 				break;
 			for (unsigned int i = 0; i < c; i++)
-				printf("%d", data[i]);
+				printf("%x", data[i]);
 			printf("\n");
 			sleep(1);
+			net.sendto((const uint8_t *)data, sizeof(data), nr, recvAddr, 0);
 		} while (true);
 	} catch (const std::exception &ex) {
 		std::cerr << ex.what() << std::endl;

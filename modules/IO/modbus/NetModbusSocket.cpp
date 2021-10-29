@@ -129,6 +129,7 @@ Ref<NetSocket> ModbusNetSocket::accept(std::string &ip, unsigned int port) {
 	socklen_t aclen = 0;	  /*	*/
 	int aaccept_socket = ::accept(this->socket, &tobuffer, &aclen);
 	if (aaccept_socket < 0) {
+		throw SystemException(errno, "Failed to accept connection");
 		// close();
 	}
 	ModbusNetSocket *_newsocket = new ModbusNetSocket(aaccept_socket);

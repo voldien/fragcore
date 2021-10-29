@@ -191,7 +191,10 @@ int TCPNetSocket::connect(const INetAddress &p_addr, uint16_t p_port) {
 
 int TCPNetSocket::open(int p_type, int ip_type) {}
 
-int TCPNetSocket::poll(int p_type, int timeout) const {}
+int TCPNetSocket::poll(int p_type, int timeout) const {
+
+	/*	select or poll.	*/
+}
 int TCPNetSocket::recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddress &r_ip, uint16_t &r_port,
 						   bool p_peek) {
 	int flag = 0;
@@ -233,8 +236,10 @@ Ref<NetSocket> TCPNetSocket::accept(INetAddress &r_ip, uint16_t &r_port) {
 	socklen_t aclen = 0;	  /*	*/
 	int aaccept_socket = ::accept(this->socket, &tobuffer, &aclen);
 	if (aaccept_socket < 0) {
+		throw SystemException(errno, "Failed to accept TCP connection");
 		// close();
 	}
+
 	TCPNetSocket *_newsocket = new TCPNetSocket(aaccept_socket);
 	return Ref<NetSocket>(_newsocket);
 }
@@ -250,17 +255,29 @@ Ref<NetSocket> TCPNetSocket::accept(std::string &ip, unsigned int port) {
 	return Ref<NetSocket>(_newsocket);
 }
 TCPNetSocket::NetStatus TCPNetSocket::accept(NetSocket &socket) {
-	struct sockaddr tobuffer; /*	*/
-	socklen_t aclen = 0;	  /*	*/
-	int aaccept_socket = ::accept(this->socket, &tobuffer, &aclen);
-	if (aaccept_socket < 0) {
-	}
+	IPAddress ipAddress("");
+	uint16_t port;
+	Ref<NetSocket> netSocket = this->accept(ipAddress, port);
+	// socket = std::move(*netSocket);
+	return netSocket->getStatus();
 }
 int TCPNetSocket::read() {}
 int TCPNetSocket::write() {}
 bool TCPNetSocket::isBlocking() { /*	*/
+	int flags = fcntl(this->socket, F_GETFL, 0);
+	if (flags == -1) {
+		//	return false;
+	}
+	return (flags & ~O_NONBLOCK) == 0;
 }
+
 void TCPNetSocket::setBlocking(bool blocking) { /*	*/
+	int flags = fcntl(this->socket, F_GETFL, 0);
+	if (flags == -1) {
+		//	return false;
+	}
+	flags = (flags & ~O_NONBLOCK);
+	int rc = fcntl(this->socket, F_SETFL, flags);
 }
 TCPNetSocket::NetStatus TCPNetSocket::getStatus() const noexcept { return this->netStatus; }
 

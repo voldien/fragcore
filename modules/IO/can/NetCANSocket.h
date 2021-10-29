@@ -65,6 +65,8 @@ namespace fragcore {
 		long int writeFrame(unsigned int ID, unsigned int nBytes, uint8_t *data);
 		long int readFrame(unsigned int &ID, unsigned int nBytes, uint8_t *data);
 
+		void setFilter(std::vector<uint32_t> &ids);
+
 	  protected:
 		bool isNetworkLayerSupported(INetAddress::NetworkProtocol protocol);
 
