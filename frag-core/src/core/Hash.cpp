@@ -14,7 +14,8 @@ Hash::Hash(Hash::ALGORITHM algorithm) {
 }
 
 Hash::Hash(Hash &&other) {
-	// std::swap(other.context);
+	std::swap(other.context, this->context);
+	this->algorithm = other.algorithm;
 }
 
 Hash::~Hash() { free(this->context); }

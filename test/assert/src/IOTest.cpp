@@ -98,47 +98,6 @@ TEST_F(IOTest, IOFile) {
 	ASSERT_NO_THROW(write.close());
 }
 
-TEST_F(IOTest, IO_STD_STDOUT_ReadOnly) {
-
-}
-TEST_F(IOTest, IO_STD_STDIN_WriteOnly) {
-
-}
-TEST_F(IOTest, IO_STD_Read_No_Throw) {
-
-}
-TEST_F(IOTest, IO_STD_Write_STDIN_Throw_Exception) {
-	
-}
-
-TEST_F(IOTest, Std) {
-	// char buf[] = {'h', 'e', 'l', 'l', 'o', '\n'};
-	// const unsigned int nBytes = sizeof(buf);
-
-	// /*  */
-	// ASSERT_EQ(stdoutIO->write(nBytes, buf), nBytes);
-	// EXPECT_NO_THROW(stdoutIO->write(nBytes, buf));
-	// EXPECT_NO_THROW(stdoutIO->flush());
-	// ASSERT_STREQ(stdoutIO->getName().c_str(), "stdout");
-	// ASSERT_FALSE(stdoutIO->isReadable());
-
-	// /*  */
-	// ASSERT_THROW(stdinIO->write(nBytes, buf), RuntimeException);
-	// ASSERT_STREQ(stdinIO->getName().c_str(), "stdin");
-	// ASSERT_TRUE(stdinIO->isReadable());
-
-	// /*  */
-	// ASSERT_EQ(stderrIO->write(nBytes, buf), nBytes);
-	// EXPECT_NO_THROW(stderrIO->write(nBytes, buf));
-	// EXPECT_NO_THROW(stderrIO->flush());
-	// ASSERT_STREQ(stderrIO->getName().c_str(), "stderr");
-
-	// /*  */
-	// EXPECT_NO_THROW(stdinIO->close());
-	// EXPECT_NO_THROW(stderrIO->close());
-	// EXPECT_NO_THROW(stdoutIO->close());
-}
-
 /*	TODO relocate to its own source file.	*/
 TEST_F(IOTest, IO_Buffer_Create_No_Execption) {
 	const char *buffer = "hello world!";

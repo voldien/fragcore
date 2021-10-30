@@ -4,26 +4,12 @@
 #include <gtest/gtest.h>
 using namespace fragcore;
 
-TEST(References, SmartReference) {
-
-	SmartReference smartReference;
-
-	/*	*/
-	ASSERT_TRUE(smartReference.increment());
-	ASSERT_EQ(smartReference.getIndexCount(), 2);
-	ASSERT_EQ(smartReference.deincreemnt(), false);
-	ASSERT_TRUE(smartReference.deincreemnt());
-	ASSERT_EQ(smartReference.getIndexCount(), 1);
-	ASSERT_FALSE(smartReference.deincreemnt());
-	ASSERT_EQ(smartReference.getIndexCount(), 0);
-}
-
-TEST(Ref, Ref_Added_First_Object_Increment2_1) {
+TEST(Ref, Added_First_Object_Increment2_1) {
 	Ref<SmartReference> ref = Ref<SmartReference>(new SmartReference());
 	ASSERT_EQ(ref->getIndexCount(), 1);
 }
 
-TEST(Ref, Ref_On_No_Reference) {
+TEST(Ref, _On_No_Reference) {
 	Ref<SmartReference> ref = Ref<SmartReference>(new SmartReference());
 	ref->increment();
 	ref->deincreemnt();
@@ -38,7 +24,7 @@ TEST(Ref, Ref_Operator_Pointer) {
 
 TEST(Ref, Ref_OnAllReferenceRemoved_ReleaseResources_No_Throw) {}
 
-TEST(References, RefCounter) {
+TEST(Ref, RefCounter) {
 
 	//	Ref<Object> ref;
 

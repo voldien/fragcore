@@ -1,12 +1,12 @@
-#include<gtest/gtest.h>
 #include <Core/UIDObject.h>
+#include <gtest/gtest.h>
 using namespace fragcore;
 
-TEST(UIDGenerator, Created_Default_Constructor){
+TEST(UIDGenerator, Create_Default_Constructor_No_Throw) { ASSERT_NO_THROW(UIDGenerator uid); }
+
+TEST(UIDGenerator, Next_UID_Is_Bigger_No_Throw) {
 	UIDGenerator uid;
+	unsigned int uid1 = uid.getNextUID();
+	unsigned int uid2 = uid.getNextUID();
+	ASSERT_GE(uid2, uid1);
 }
-
-TEST(UIDGenerator, UIDGenerator_Next_UID_Is_Bigger){
-
-}
-

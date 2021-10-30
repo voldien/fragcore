@@ -14,6 +14,6 @@ TEST(Scheduler, Create_TaskScheduler_Add_Task_No_Exception) {
 		virtual void Execute() noexcept {}
 		virtual void Complete() noexcept {}
 	};
-	QuickTask task;
+	ASSERT_NO_THROW(QuickTask task);
 	// ASSERT_NO_THROW(taskSch.addTask(&task));
 }

@@ -3,11 +3,11 @@
 using namespace fragcore;
 
 
-TEST(FontFactory, FontFactory_Create_Invalid_Size_Throw_Exception){
+TEST(FontFactory, Create_Invalid_Size_Throw_Exception){
 	//Ref<IRenderer> renderer;
 	//FontFactory::createFont(renderer, )
 }
 
-TEST(FontFactory, FontFactory_Create_Distance_Signed_Field_No_Throw){
+TEST(FontFactory, Create_Distance_Signed_Field_No_Throw){
 	
 }

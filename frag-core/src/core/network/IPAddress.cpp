@@ -48,6 +48,8 @@ IPAddress::IPAddress(const std::string &hostname)
 				break;
 			}
 		}
+	} else {
+		throw RuntimeException("Failed to get address {} - {}", hostname, strerror(errno));
 	}
 }
 
