@@ -18,6 +18,10 @@ TEST(ASyncIO, Async_Create_NoThrowException) {
 	ASSERT_NO_THROW(ASyncIO async(sche));
 }
 
+TEST(ASyncIO, Async_Create_Handle_No_Throw_Exception) {
+	ASSERT_NO_THROW(ASyncHandle handle);
+}
+
 TEST(ASyncIO, ASync_Open_IO_Async_Handle_No_Throw) {
 	Ref<IScheduler> sche = Ref<IScheduler>(new TaskScheduler());
 	ASyncIO async(sche);
@@ -25,7 +29,7 @@ TEST(ASyncIO, ASync_Open_IO_Async_Handle_No_Throw) {
 	Ref<IO> ioRef = SystemInfo::getStdOut();
 	ASyncHandle handle;
 	ASSERT_NO_THROW(handle = async.asyncOpen(ioRef));
-	async.asyncClose(handle);
+	ASSERT_NO_THROW(async.asyncClose(handle));
 }
 
 TEST(ASyncIO, ASync_ReadIOAsync_ThrowException) {

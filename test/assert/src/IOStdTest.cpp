@@ -19,7 +19,6 @@ TEST(StandardIOTest, Send_Stout_No_throw) {
 	const unsigned int nBytes = sizeof(buf);
 	Ref<IO> io_stdout = SystemInfo::getStdOut();
 	ASSERT_NO_THROW(io_stdout->write(nBytes, buf));
-
 }
 
 TEST(StandardIOTest, IO_STD_STDOUT_ReadOnly) {}
