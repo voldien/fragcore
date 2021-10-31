@@ -10,7 +10,7 @@ jobs:
     # Windows 10 with latest image
     runs-on: "windows-latest"
     # Windows Editor - checkout with the plugin
-    name: Core
+    name: Window FragCore Library
 
     steps:
     - uses: actions/checkout@v2
