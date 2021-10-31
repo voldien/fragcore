@@ -16,7 +16,7 @@ jobs:
       - name: Configure dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install pkg-config libjson-c-dev libxml2-dev libyaml-dev libsdl2-dev \
+          sudo apt-get install g++-10 pkg-config libjson-c-dev libxml2-dev libyaml-dev libsdl2-dev \
           fswatch libfreeimage-dev libavcodec-dev libavfilter-dev libavformat-dev libfreetype6-dev libssl-dev
           sudo apt-get install libsdl2-dev libglew-dev libvulkan-dev libgl1-mesa-dev opencl-headers \
           libgtest-dev libsubunit-dev qt5-default libassimp-dev glslang-tools libogg-dev libopus-dev libvorbis-dev \
