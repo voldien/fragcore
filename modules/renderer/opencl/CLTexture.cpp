@@ -2,7 +2,6 @@
 #include "Renderer/Texture.h"
 #include <Renderer/opencl/internal_object_type.h>
 
-#include <stdexcept>
 using namespace fragcore;
 
 void Texture::bind(unsigned int index) {}

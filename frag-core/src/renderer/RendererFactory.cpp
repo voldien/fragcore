@@ -7,7 +7,6 @@
 #include <cstdio>
 #include <exception>
 #include <fmt/core.h>
-#include <stdexcept>
 
 using namespace fragcore;
 typedef IRenderer *(*pcreateinternalrendering)(IConfig *config);

@@ -1,7 +1,6 @@
 #include "Core/IO/FileIO.h"
 
 #include <fmt/core.h>
-#include <stdexcept>
 #include <utility>
 
 using namespace fragcore;

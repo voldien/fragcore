@@ -6,7 +6,6 @@
 #include <Utils/ShaderUtil.h>
 
 #include <assert.h>
-#include <stdexcept>
 #include<fmt/core.h>
 
 using namespace fragcore;

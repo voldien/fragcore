@@ -5,7 +5,6 @@
 #include <Core/IO/FileSystem.h>
 #include <Core/IO/BufferIO.h>
 #include <gtest/gtest.h>
-#include <SDL2/SDL.h>
 #include <Core/RefPtr.h>
 #include <FragCore.h>
 

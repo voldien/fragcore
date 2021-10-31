@@ -6,7 +6,6 @@
 
 #include <Core/IO/FileSystem.h>
 #include <FreeImage.h>
-#include <stdexcept>
 #include <stdio.h>
 #include<fmt/core.h>
 using namespace fragcore;

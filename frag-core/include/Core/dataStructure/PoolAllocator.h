@@ -21,7 +21,6 @@
 #include <cassert>
 #include <malloc.h>
 #include <memory>
-#include <stdexcept>
 #include <stdio.h>
 #include <string.h>
 

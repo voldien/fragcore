@@ -1,7 +1,6 @@
 #define FRAG_CORE_INTERNAL_IMP
 
 
-#include <stdexcept>
 #include <zlib.h>
 #include<fmt/core.h>
 #include "Core/IO/GZFileIO.h"

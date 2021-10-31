@@ -3,7 +3,6 @@
 #include <GL/glew.h>
 
 #include <fmt/core.h>
-#include <stdexcept>
 using namespace fragcore;
 
 /*  Assign marker for debugging.    */

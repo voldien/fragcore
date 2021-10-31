@@ -1,9 +1,4 @@
 #include "Core/dataStructure/PoolAllocator.h"
-#include "Utils/TextureUtil.h"
-#include <Core/dataStructure/DoubleBufferedAllocator.h>
-#include <Core/dataStructure/ITree.h>
-#include <Core/dataStructure/Queue.h>
-#include <Core/dataStructure/StackAllactor.h>
 #include <gtest/gtest.h>
 using namespace fragcore;
 

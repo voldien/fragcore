@@ -3,7 +3,6 @@
 #include "internal_object_type.h"
 #include <GL/glew.h>
 
-#include <stdexcept>
 #include <vulkan/vulkan.h>
 
 using namespace fragcore;

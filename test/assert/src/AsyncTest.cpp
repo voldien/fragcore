@@ -8,8 +8,6 @@
 #include <Core/RefPtr.h>
 #include <Core/TaskScheduler/IScheduler.h>
 #include <FragCore.h>
-#include <SDL2/SDL.h>
-#include <Window/Display.h>
 #include <gtest/gtest.h>
 using namespace fragcore;
 

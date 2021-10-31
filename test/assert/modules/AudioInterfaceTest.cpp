@@ -7,7 +7,6 @@
 #include<Audio/decoder/AudioDecoder.h>
 #include<Audio/AudioSource.h>
 #include<gtest/gtest.h>
-#include <SDL2/SDL.h>
 #include<FragCore.h>
 using namespace fragcore;
 

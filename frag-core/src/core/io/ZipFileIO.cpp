@@ -1,7 +1,6 @@
 #include "Core/IO/ZipFileIO.h"
 #include "Core/IO/ZipFileSystem.h"
 
-#include <stdexcept>
 #include <zip.h>
 #include <zlib.h>
 #include<fmt/core.h>

@@ -8,3 +8,5 @@ TCPUDPAddress::TCPUDPAddress(const IPAddress &ipaddr, unsigned int port)
 	this->ipAddress = ipaddr;
 	this->port = port;
 }
+
+bool TCPUDPAddress::isValid() const noexcept { return this->valid; }

@@ -2,7 +2,6 @@
 
 #include <SDL2/SDL.h>
 #include <fmt/core.h>
-#include <stdexcept>
 #include <utility>
 using namespace fragcore;
 

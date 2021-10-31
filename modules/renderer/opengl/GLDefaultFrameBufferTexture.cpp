@@ -6,7 +6,6 @@
 #include "Renderer/Texture.h"
 #include "internal_object_type.h"
 #include <GL/glew.h>
-#include <stdexcept>
 
 using namespace fragcore;
 

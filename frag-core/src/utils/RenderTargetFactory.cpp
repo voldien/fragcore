@@ -1,6 +1,5 @@
 #include"Utils/RenderTargetFactory.h"
 #include<assert.h>
-#include <stdexcept>
 
 using namespace fragcore;
 

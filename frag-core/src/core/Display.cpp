@@ -1,8 +1,6 @@
 #include "Window/Display.h"
 #include <SDL2/SDL_video.h>
 
-#include <stdexcept>
-
 ////SDL_ShowSimpleMessageBox
 ////SDL_ShowMessageBox
 ////SDL_GetNumVideoDisplays

@@ -10,7 +10,6 @@
 #include <curl/curl.h>
 #include <fmt/core.h>
 #include <malloc.h>
-#include <stdexcept>
 
 using namespace fragcore;
 
