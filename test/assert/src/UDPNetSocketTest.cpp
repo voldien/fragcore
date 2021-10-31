@@ -23,5 +23,5 @@ TEST_F(UDPNetworkTest, CreateLocal_Bind_No_Throw_Exception) {
 
 	IPAddress localHost(ipAddress, IPAddress::IPAddressType::IPAddress_Type_IPV4);
 
-	ASSERT_NO_THROW(netSocket.bind(localHost, port));
+	ASSERT_NO_THROW(netSocket.bind(localHost));
 }

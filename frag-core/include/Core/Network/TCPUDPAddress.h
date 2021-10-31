@@ -28,7 +28,8 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC TCPUDPAddress : public INetAddress {
 	  public:
-		TCPUDPAddress(IPAddress &ipaddress, unsigned int port);
+		TCPUDPAddress(const TCPUDPAddress &other) = default;
+		TCPUDPAddress(const IPAddress &ipaddress, unsigned int port);
 
 		bool operator==(const TCPUDPAddress &ipAddress) const { return false; }
 		bool operator!=(const TCPUDPAddress &ipAddress) const { return false; }

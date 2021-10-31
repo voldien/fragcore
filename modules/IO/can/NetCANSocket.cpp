@@ -41,7 +41,7 @@ int CANNetSocket::close() {
 
 // int CANNetSocket::bind(std::string &IPaddr, unsigned int port) {}
 
-int CANNetSocket::bind(const INetAddress &p_addr, uint16_t p_port) {
+int CANNetSocket::bind(const INetAddress &p_addr) {
 
 	const CANAddress &canAddress = static_cast<const CANAddress &>(p_addr);
 	struct sockaddr_can addr = {0};
@@ -81,7 +81,7 @@ int CANNetSocket::listen(unsigned int maxListen) {
 }
 // int CANNetSocket::connect(std::string &ip, unsigned int port) {}
 
-int CANNetSocket::connect(const INetAddress &p_addr, uint16_t p_port) {
+int CANNetSocket::connect(const INetAddress &p_addr) {
 
 	const CANAddress &canAddress = static_cast<const CANAddress &>(p_addr);
 

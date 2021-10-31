@@ -1,5 +1,6 @@
 
 #include "NetModbusSocket.h"
+#include "Core/Network/TCPUDPAddress.h"
 #include <arpa/inet.h>
 #include <assert.h>
 #include <errno.h>
@@ -42,7 +43,7 @@ int ModbusNetSocket::close() {
 // 		ctx = modbus_new_tcp(IPaddr.c_str(), port);
 // }
 
-int ModbusNetSocket::bind(const INetAddress &p_addr, uint16_t p_port) {
+int ModbusNetSocket::bind(const INetAddress &p_addr) {
 	// if (this->ctx == nullptr)
 	// 	this->ctx = modbus_new_tcp(IPaddr.c_str(), p_port);
 
@@ -63,12 +64,13 @@ int ModbusNetSocket::listen(unsigned int maxListen) {
 // 	// return connect(IPAddress(ip, IPAddress::IPAddressType::IPAddress_Type_IPV4), port);
 // }
 
-int ModbusNetSocket::connect(const INetAddress &p_addr, uint16_t p_port) {
+int ModbusNetSocket::connect(const INetAddress &p_addr) {
 	uint32_t old_response_to_sec;
 	uint32_t old_response_to_usec;
 
+	const TCPUDPAddress &tcpAddress = static_cast<const TCPUDPAddress &>(p_addr);
 	if (this->ctx == nullptr) {
-		this->ctx = modbus_new_tcp(nullptr, p_port);
+		this->ctx = modbus_new_tcp(nullptr, tcpAddress.getPort());
 		if (this->ctx == nullptr)
 			throw RuntimeException("{}", modbus_strerror(errno));
 	}
@@ -79,7 +81,7 @@ int ModbusNetSocket::connect(const INetAddress &p_addr, uint16_t p_port) {
 		throw RuntimeException("Failed to set Recovery Mode {}", modbus_strerror(errno));
 	}
 
-	TCPNetSocket::connect(p_addr, p_port);
+	TCPNetSocket::connect(p_addr);
 	this->socket = modbus_set_socket((modbus_t *)this->ctx, this->socket);
 
 	this->netStatus = NetStatus::Status_Done;

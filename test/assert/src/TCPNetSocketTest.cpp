@@ -1,7 +1,7 @@
 #include "Core/IO/SocketIO.h"
 #include "Core/Network/IPAddress.h"
-#include"Core/Network/TCPUDPAddress.h"
 #include "Core/Network/TCPSocket.h"
+#include "Core/Network/TCPUDPAddress.h"
 #include <gtest/gtest.h>
 
 using namespace fragcore;
@@ -21,7 +21,7 @@ class TCPSocketServerClientTest : public testing::Test {
 		IPAddress localHost(ipAddress, IPAddress::IPAddressType::IPAddress_Type_IPV4);
 
 		tcpNetSocket = new TCPNetSocket();
-		tcpNetSocket->bind(localHost, port);
+		tcpNetSocket->bind(localHost);
 		tcpNetSocket->listen(2);
 	}
 	virtual void TearDown() override { delete tcpNetSocket; }
@@ -42,8 +42,8 @@ TEST_F(TCPSocketNetworkTest, CreateLocal_Bind_No_Throw_Exception) {
 	const char *ipAddress = "127.0.0.1";
 
 	IPAddress localHost(ipAddress, IPAddress::IPAddressType::IPAddress_Type_IPV4);
-	TCPUDPAddress tcpAddress(localhost, 42323);
-	ASSERT_NO_THROW(tpcSocket.bind(tcpAddress, 42323));
+	TCPUDPAddress tcpAddress(localHost, 42323);
+	ASSERT_NO_THROW(tpcSocket.bind(tcpAddress));
 }
 
 TEST_F(TCPSocketNetworkTest, CreateLocal_Bind_With_Listen_No_Throw_Exception) {
@@ -51,7 +51,7 @@ TEST_F(TCPSocketNetworkTest, CreateLocal_Bind_With_Listen_No_Throw_Exception) {
 	const char *ipAddress = "127.0.0.1";
 	IPAddress localHost(ipAddress, IPAddress::IPAddressType::IPAddress_Type_IPV4);
 
-	ASSERT_NO_THROW(tpcSocket.bind(localHost, 42323));
+	ASSERT_NO_THROW(tpcSocket.bind(localHost));
 	ASSERT_NO_THROW(tpcSocket.listen(2));
 }
 
@@ -60,11 +60,11 @@ TEST_F(TCPSocketNetworkTest, CreateLocal_Bind_And_Connect_No_Throw_Exception) {
 
 	const int port = 43323;
 	IPAddress localHost("127.0.0.1", IPAddress::IPAddressType::IPAddress_Type_IPV4);
-	tpcSocket.bind(localHost, port);
+	tpcSocket.bind(localHost);
 	tpcSocket.listen(2);
 
 	TCPNetSocket serverSocket;
-	ASSERT_NO_THROW(serverSocket.connect(localHost, port));
+	ASSERT_NO_THROW(serverSocket.connect(localHost));
 }
 
 TEST_F(TCPSocketServerClientTest, Bind_IO_To_NetSocket_No_Throw_Exception) {
@@ -77,7 +77,7 @@ TEST_F(TCPSocketServerClientTest, Connect_And_Accept_No_Throw_Exception) {
 	IPAddress localHost("127.0.0.1", IPAddress::IPAddressType::IPAddress_Type_IPV4);
 
 	TCPNetSocket clientSocket;
-	ASSERT_NO_THROW(clientSocket.connect(localHost, port));
+	ASSERT_NO_THROW(clientSocket.connect(localHost));
 
 	IPAddress acceptAddress;
 	uint16_t acceptPort;
@@ -88,7 +88,7 @@ TEST_F(TCPSocketServerClientTest, Connect_And_Send_No_Throw_Exception) {
 	IPAddress localHost("127.0.0.1", IPAddress::IPAddressType::IPAddress_Type_IPV4);
 
 	TCPNetSocket clientSocket;
-	ASSERT_NO_THROW(clientSocket.connect(localHost, port));
+	ASSERT_NO_THROW(clientSocket.connect(localHost));
 
 	std::vector<unsigned int> buffer(16, 0);
 	int n_sent;

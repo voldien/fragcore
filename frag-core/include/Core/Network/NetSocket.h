@@ -56,11 +56,9 @@ namespace fragcore {
 		virtual TransportProtocol getTransportProtocol() const noexcept = 0;
 
 		virtual int close() = 0;
-		//virtual int bind(std::string &addr, unsigned int port) = 0;
-		virtual int bind(const INetAddress &p_addr, uint16_t p_port) = 0;
+		virtual int bind(const INetAddress &p_addr) = 0;
 		virtual int listen(unsigned int maxListen) = 0;
-		//virtual int connect(std::string &ip, unsigned int port) = 0;
-		virtual int connect(const INetAddress &p_addr, uint16_t p_port) = 0;
+		virtual int connect(const INetAddress &p_addr) = 0;
 		virtual int poll(int p_type, int timeout) const = 0;
 
 		virtual int recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddress &r_ip, uint16_t &r_port,
@@ -82,7 +80,7 @@ namespace fragcore {
 		virtual NetStatus getStatus() const noexcept = 0;
 
 		// virtual Error listen(int p_max_pending) = 0;
-		// virtual Error connect_to_host(IPAddress p_addr, uint16_t p_port) = 0;
+		// virtual Error connect_to_host(IPAddress p_addr) = 0;
 		// virtual Error poll(PollType p_type, int timeout) const = 0;
 		// virtual Error recv(uint8_t *p_buffer, int p_len, int &r_read) = 0;
 

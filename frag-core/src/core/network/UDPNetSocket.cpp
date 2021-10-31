@@ -54,7 +54,7 @@ int UDPNetSocket::listen(unsigned int maxListen) {
 // 	// return this->connect(static_cast<const INetAddress &>(ipNet), port);
 // }
 
-int UDPNetSocket::connect(const INetAddress &p_addr, uint16_t p_port) {
+int UDPNetSocket::connect(const INetAddress &p_addr) {
 	socklen_t addrlen;			 /*	*/
 	const struct sockaddr *addr; /*	*/
 	union {
@@ -74,7 +74,7 @@ int UDPNetSocket::connect(const INetAddress &p_addr, uint16_t p_port) {
 }
 
 int UDPNetSocket::open(int p_type, int ip_type) {}
-int UDPNetSocket::bind(const INetAddress &p_addr, uint16_t p_port) {}
+int UDPNetSocket::bind(const INetAddress &p_addr) {}
 int UDPNetSocket::poll(int p_type, int timeout) const {}
 int UDPNetSocket::recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddress &r_ip, uint16_t &r_port,
 						   bool p_peek) {}

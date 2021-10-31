@@ -119,7 +119,7 @@ int TCPNetSocket::close() {
 // 	}
 // }
 
-int TCPNetSocket::bind(const INetAddress &p_addr, uint16_t p_port) {
+int TCPNetSocket::bind(const INetAddress &p_addr) {
 	socklen_t addrlen; /*	*/
 	union {
 		struct sockaddr_in addr4;  /*	*/
@@ -129,14 +129,12 @@ int TCPNetSocket::bind(const INetAddress &p_addr, uint16_t p_port) {
 	int domain = getDomain(p_addr);
 
 	const TCPUDPAddress &tcpAddress = static_cast<const TCPUDPAddress &>(p_addr);
-	addrlen = setupIPAddress((struct sockaddr *)&addrU, p_addr, tcpAddress.getPort() );
+	addrlen = setupIPAddress((struct sockaddr *)&addrU, p_addr, tcpAddress.getPort());
 
 	this->socket = ::socket(domain, SOCK_STREAM, 0);
 	if (this->socket < 0) {
 		throw RuntimeException("Failed to create TCP socket, {}", strerror(errno));
 	}
-
-
 
 	/*	Bind process to socket.	*/
 	if (::bind(socket, (struct sockaddr *)&addrU, addrlen) < 0) {
@@ -159,7 +157,7 @@ int TCPNetSocket::listen(unsigned int maxListen) {
 // 	return connect(IPAddress(ip, IPAddress::IPAddressType::IPAddress_Type_IPV4), port);
 // }
 
-int TCPNetSocket::connect(const INetAddress &p_addr, uint16_t p_port) {
+int TCPNetSocket::connect(const INetAddress &p_addr) {
 	socklen_t addrlen;			 /*	*/
 	const struct sockaddr *addr; /*	*/
 	union {
@@ -177,6 +175,7 @@ int TCPNetSocket::connect(const INetAddress &p_addr, uint16_t p_port) {
 	// #endif
 	int domain = getDomain(p_addr);
 
+	const TCPUDPAddress &tcpAddress = static_cast<const TCPUDPAddress &>(p_addr);
 	this->socket = ::socket(domain, flags, 0);
 	if (this->socket < 0) {
 		throw RuntimeException("TCP socket - Failed to create socket {}", strerror(errno));
@@ -188,7 +187,7 @@ int TCPNetSocket::connect(const INetAddress &p_addr, uint16_t p_port) {
 		throw RuntimeException();
 	}
 
-	addrlen = setupIPAddress((struct sockaddr *)&addrU, p_addr, p_port);
+	addrlen = setupIPAddress((struct sockaddr *)&addrU, p_addr, tcpAddress.getPort());
 
 	rc = ::connect(socket, (struct sockaddr *)&addrU, addrlen);
 	if (rc != 0) {

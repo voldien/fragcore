@@ -35,9 +35,9 @@ namespace fragcore {
 
 		virtual int close() override;
 
-		virtual int bind(const INetAddress &p_addr, uint16_t p_port) override;
+		virtual int bind(const INetAddress &p_addr) override;
 		virtual int listen(unsigned int maxListen) override;
-		virtual int connect(const INetAddress &p_addr, uint16_t p_port) override;
+		virtual int connect(const INetAddress &p_addr) override;
 
 		virtual int poll(int p_type, int timeout) const override;
 
