@@ -1,28 +1,28 @@
 #ifndef _FRAG_CORE_SHADER_COMPILER_H_
 #define _FRAG_CORE_SHADER_COMPILER_H_ 1
-#include"../Def.h"
-#include"../Renderer/Shader.h"
-#include"../Core/Ref.h"
-#include"ShaderUtil.h"
-#include<map>
-#include<vector>
+#include "../Core/Ref.h"
+#include "../Def.h"
+#include "../Renderer/Shader.h"
+#include "ShaderUtil.h"
+#include <map>
+#include <vector>
 
 namespace fragcore {
 
 	/**
 	 *
 	 */
-	class FVDECLSPEC ShaderCompiler{
-	public:
+	class FVDECLSPEC ShaderCompiler {
+	  public:
 		class CompilerOption : UIDObject {
-			public:
+		  public:
 			unsigned int type;
 			const char *name;
 			const char *value;
 		};
 
 		class CompilerSources {
-		public:
+		  public:
 			const ShaderUtil::ShaderObjectDesc *vertex;
 			const ShaderUtil::ShaderObjectDesc *fragment;
 			const ShaderUtil::ShaderObjectDesc *geometry;
@@ -39,21 +39,21 @@ namespace fragcore {
 		};
 
 		class ShaderResult : UIDObject {
-		public:
+		  public:
 			Ref<Shader> shader;
 			CompilerOption option;
 		};
 
 		class CompilerOptionSet {
-			public:
+		  public:
 			std::vector<CompilerOption> option;
 		};
 
-		std::map<long int, ShaderResult>
-		CompilePermutation(Ref<IRenderer> &renderer, CompilerSources* references, const CompilerOptionSet &optionset);
+		std::map<long int, ShaderResult> CompilePermutation(Ref<IRenderer> &renderer, CompilerSources *references,
+															const CompilerOptionSet &optionset);
 
 		/**/
-		void CompileCrossShader(Ref<IO> &io, Ref<IO>& out);
-  	};
-}
+		void CompileCrossShader(Ref<IO> &io, Ref<IO> &out);
+	};
+} // namespace fragcore
 #endif

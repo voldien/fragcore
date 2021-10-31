@@ -53,6 +53,7 @@ namespace fragcore {
 		}
 
 		unsigned int type;
+
 	  private: /*	Attributes.	*/
 		std::string name;
 	};

@@ -23,9 +23,12 @@ using namespace fragcore;
 size_t TCPNetSocket::setupIPAddress(struct sockaddr *addr, const INetAddress &p_addr, uint16_t p_port) {
 	int domain = TCPNetSocket::getDomain(p_addr);
 	size_t addrlen;
+
+	const TCPUDPAddress &tcpAddress = static_cast<const TCPUDPAddress &>(p_addr);
 	/*	*/
 	if (domain == AF_INET) {
-		const IPAddress &ipAddress = static_cast<const IPAddress &>(p_addr);
+		const IPAddress &ipAddress = tcpAddress.getIPAddress();
+
 		const uint8_t *_addr = ipAddress.getAddress(IPAddress::IPAddressType::IPAddress_Type_IPV4);
 		sockaddr_in *addr4 = (sockaddr_in *)(addr);
 		addrlen = sizeof(*addr4);
@@ -37,7 +40,7 @@ size_t TCPNetSocket::setupIPAddress(struct sockaddr *addr, const INetAddress &p_
 		addr4->sin_family = (sa_family_t)domain;
 
 	} else if (domain == AF_INET6) {
-		const IPAddress &ipAddress = static_cast<const IPAddress &>(p_addr);
+		const IPAddress &ipAddress = tcpAddress.getIPAddress();
 		const uint8_t *_addr = ipAddress.getAddress(IPAddress::IPAddressType::IPAddress_Type_IPV4);
 		sockaddr_in6 *addr6 = (sockaddr_in6 *)(addr);
 		addrlen = sizeof(*addr6);
@@ -125,12 +128,15 @@ int TCPNetSocket::bind(const INetAddress &p_addr, uint16_t p_port) {
 
 	int domain = getDomain(p_addr);
 
-	addrlen = setupIPAddress((struct sockaddr *)&addrU, p_addr, p_port);
+	const TCPUDPAddress &tcpAddress = static_cast<const TCPUDPAddress &>(p_addr);
+	addrlen = setupIPAddress((struct sockaddr *)&addrU, p_addr, tcpAddress.getPort() );
 
 	this->socket = ::socket(domain, SOCK_STREAM, 0);
 	if (this->socket < 0) {
 		throw RuntimeException("Failed to create TCP socket, {}", strerror(errno));
 	}
+
+
 
 	/*	Bind process to socket.	*/
 	if (::bind(socket, (struct sockaddr *)&addrU, addrlen) < 0) {
@@ -284,10 +290,11 @@ TCPNetSocket::NetStatus TCPNetSocket::getStatus() const noexcept { return this->
 
 int TCPNetSocket::getDomain(const INetAddress &address) {
 
+	const TCPUDPAddress &tcpAddress = static_cast<const TCPUDPAddress &>(address);
 	int domain = 0; // TODO be override by the NetAddress!
 	switch (address.getNetworkProtocol()) {
 	case INetAddress::NetworkProtocol::NetWorkProtocol_IP: {
-		const IPAddress &ipAddress = static_cast<const IPAddress &>(address);
+		const IPAddress &ipAddress = tcpAddress.getIPAddress();
 		if (ipAddress.getIPType() == IPAddress::IPAddressType::IPAddress_Type_IPV4)
 			return AF_INET;
 		else if (ipAddress.getIPType() == IPAddress::IPAddressType::IPAddress_Type_IPV6)

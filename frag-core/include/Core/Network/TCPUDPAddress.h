@@ -38,7 +38,7 @@ namespace fragcore {
 		}
 
 		const IPAddress &getIPAddress() const noexcept { return ipAddress; }
-		const std::string &getHostName() const;
+		unsigned int getPort() const noexcept { return this->port; }
 		virtual bool isValid() const noexcept override;
 
 	  private:

@@ -1,5 +1,6 @@
 #include "Core/IO/SocketIO.h"
 #include "Core/Network/IPAddress.h"
+#include"Core/Network/TCPUDPAddress.h"
 #include "Core/Network/TCPSocket.h"
 #include <gtest/gtest.h>
 
@@ -41,7 +42,8 @@ TEST_F(TCPSocketNetworkTest, CreateLocal_Bind_No_Throw_Exception) {
 	const char *ipAddress = "127.0.0.1";
 
 	IPAddress localHost(ipAddress, IPAddress::IPAddressType::IPAddress_Type_IPV4);
-	ASSERT_NO_THROW(tpcSocket.bind(localHost, 42323));
+	TCPUDPAddress tcpAddress(localhost, 42323);
+	ASSERT_NO_THROW(tpcSocket.bind(tcpAddress, 42323));
 }
 
 TEST_F(TCPSocketNetworkTest, CreateLocal_Bind_With_Listen_No_Throw_Exception) {

@@ -46,6 +46,7 @@ void Hash::update(Ref<IO> &io) {
 	long int prev_pos = io->getPos();
 	long int len;
 
+	/*	*/
 	while ((len = io->read(sizeof(buffer), buffer)) >= 0) {
 		this->update(buffer, len);
 	}

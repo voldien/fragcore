@@ -32,6 +32,7 @@ namespace fragcore {
 	class FVDECLSPEC Hash : public Object {
 	  public:
 		enum ALGORITHM {
+			HashNone = 0,
 			MD5,	/*  */
 			SHA128, /*  */
 			SHA224, /*  */
@@ -44,6 +45,12 @@ namespace fragcore {
 		~Hash();
 
 		/*  Add additional data to be used for computing.   .*/
+		/**
+		 * @brief
+		 *
+		 * @param pdata
+		 * @param nbytes
+		 */
 		void update(const void *pdata, size_t nbytes);
 		/**
 		 * @brief
@@ -55,9 +62,24 @@ namespace fragcore {
 
 		void final(std::vector<unsigned char> &hash);
 
+		/**
+		 * @brief
+		 *
+		 */
 		void reset() noexcept;
 
+		/**
+		 * @brief Get the Result Size object
+		 *
+		 * @return unsigned int
+		 */
 		unsigned int getResultSize() const;
+
+		/**
+		 * @brief Get the Byte Read object
+		 *
+		 * @return unsigned long int
+		 */
 		unsigned long int getByteRead() const;
 
 		ALGORITHM getAlgorithm() const noexcept;

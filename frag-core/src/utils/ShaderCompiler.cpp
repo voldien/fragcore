@@ -47,7 +47,7 @@ ShaderCompiler::CompilePermutation(Ref<IRenderer> &renderer, CompilerSources *re
 	return result;
 }
 
-#include <spirv_cross/spirv_cross_c.h>
+//#include <spirv_cross/spirv_cross_c.h>
 
 void CompileCrossShader(Ref<IO> &io, Ref<IO> &out) {
 

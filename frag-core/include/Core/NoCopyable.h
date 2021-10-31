@@ -7,13 +7,13 @@ namespace fragcore {
 	 *
 	 */
 	class NoCopyable {
-	public:
-		NoCopyable(const NoCopyable &) = delete; // non construction-copyable
+	  public:
+		NoCopyable(const NoCopyable &) = delete;			// non construction-copyable
 		NoCopyable &operator=(const NoCopyable &) = delete; // non copyable
 
 		static NoCopyable *create();
 		NoCopyable() = default;
 	};
-}
+} // namespace fragcore
 
 #endif
