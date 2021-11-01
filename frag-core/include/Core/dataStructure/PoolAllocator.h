@@ -18,11 +18,12 @@
 */
 #ifndef _FRAG_CORE_POOL_ALLACTOR_H_
 #define _FRAG_CORE_POOL_ALLACTOR_H_ 1
+#include"../../Def.h"
 #include <cassert>
 #include <malloc.h>
 #include <memory>
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <string>
 
 /* add support for C++ allocates in order to remove pure function bug, if it's that it's the culprit*/
 // TODO resolve bug.
@@ -124,7 +125,7 @@ namespace fragcore {
 		 */
 		void Return(T *element) {
 			if (!isValidItem(*element))
-				throw std::invalid_argument("invalid pointer returned");
+				throw InvalidArgumentException("invalid pointer returned");
 
 			PoolAllactorItem *alloc = (PoolAllactorItem *)element;
 			alloc->next = item->next;
@@ -197,7 +198,7 @@ namespace fragcore {
 			} else {
 				/*  */
 				if (size < this->reserved())
-					throw std::invalid_argument("Can no be downsized.");
+					throw InvalidArgumentException("Can no be downsized from {} to {}.", this->reserved(), size);
 
 				/*  Reallocate buffer.  */
 				i = this->reserved();

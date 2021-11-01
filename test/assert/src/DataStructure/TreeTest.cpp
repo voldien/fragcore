@@ -2,7 +2,7 @@
 #include <gtest/gtest.h>
 using namespace fragcore;
 
-TEST(Tree, Tree_Default_Is_Empty) {
+TEST(Tree, Default_Is_Empty) {
 	ITree<int> tree;
 	ASSERT_TRUE(tree.isEmpty());
 }

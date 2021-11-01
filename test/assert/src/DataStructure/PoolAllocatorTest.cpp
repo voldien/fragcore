@@ -3,14 +3,14 @@
 using namespace fragcore;
 
 
-TEST(DataStructure, PoolAllocator_Allocate_No_Throw) { ASSERT_NO_THROW(PoolAllocator<int> allocator(32)); }
+TEST(PoolAllocator, PoolAllocator_Allocate_No_Throw) { ASSERT_NO_THROW(PoolAllocator<int> allocator(32)); }
 
-TEST(DataStructure, PoolAllocator_obtain) {
+TEST(PoolAllocator, PoolAllocator_obtain) {
 	PoolAllocator<int> allocator(32);
 	allocator.obtain();
 }
 
-TEST(DataStructure, PoolAllocator) {
+TEST(PoolAllocator, PoolAllocator) {
 	PoolAllocator<int> allocator(32);
 	std::vector<int *> pointers;
 

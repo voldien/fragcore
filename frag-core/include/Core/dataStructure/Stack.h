@@ -19,7 +19,6 @@
 #ifndef _FRAG_CORE_STACK_H_
 #define _FRAG_CORE_STACK_H_ 1
 #include "../../Def.h"
-#include "../../Exception/RuntimeException.h"
 #include "Iterator.h"
 #include <utility>
 
@@ -30,6 +29,7 @@ namespace fragcore {
 	 *
 	 * @tparam T
 	 */
+	// TODO add atomic support
 	template <class T> class Stack : public std::allocator<T> {
 	  public:
 		Stack() {
@@ -37,12 +37,9 @@ namespace fragcore {
 			this->nrElements = 0;
 			this->mreserved = 0;
 		}
+		Stack(size_t size) : Stack() { this->reserve(size); }
 
-		Stack(size_t size)
-			: Stack(){this->reserve(size)}
-
-			  Stack(const Stack &stack)
-			: Stack() {
+		Stack(const Stack &stack) : Stack() {
 
 			reserve(stack.getReserved());
 			memcpy(this->data, stack.data, stack.getSize() * sizeof(T));
@@ -64,11 +61,12 @@ namespace fragcore {
 
 		Stack &operator=(Stack &&alloctor) { return *this; }
 
-		void push(const T &p) {
-			// TODO add validate
-			this->data[this->nrElements] = p;
-			this->nrElements++;
-		}
+		// void push(const T &p) {
+		// 	// TODO add validate
+		// 	this->data[this->nrElements] = p;
+		// 	this->nrElements++;
+		// }
+
 		T &push(const T &p) {
 			this->data[this->nrElements] = p;
 			this->nrElements++;
@@ -77,10 +75,10 @@ namespace fragcore {
 
 		T &peek() const { return data[this->nrElements - 1]; }
 
-		void pop() {
-			// TODO add validate
-			this->nrElements--;
-		}
+		// void pop() {
+		// 	// TODO add validate
+		// 	this->nrElements--;
+		// }
 		T &pop() {
 			// TODO add validate
 			this->nrElements--;
@@ -92,7 +90,7 @@ namespace fragcore {
 		const T &operator[](int index) const { return this->data[index]; }
 
 		void reserve(int nrOfElement) {
-			this->data = realloc(this->data, nrOfElement * sizeof(T));
+			this->data = static_cast<T *>(realloc(this->data, nrOfElement * sizeof(T)));
 			if (this->data == nullptr)
 				throw RuntimeException("Out of memory");
 		}

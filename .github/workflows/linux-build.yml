@@ -62,11 +62,17 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install libmodbus-dev
+      - name: Build-Modules
+        working-directory: ${{runner.workspace}}/build
+        shell: bash
+        # Execute the build.  You can specify a specific target with "--target <NAME>"
+        run: cmake --build . --config $BUILD_TYPE
+
 
   packing:
     needs: linuxbuild
     runs-on: ubuntu-latests
-    name: "Build Modules"
+    name: "Build Debian Packages"
     steps:
       - name: Construct package
         working-directory: ${{runner.workspace}}/build
