@@ -75,7 +75,7 @@ jobs:
 
 
   packing:
-    needs: linuxbuild testing modules
+    needs: testing
     runs-on: ubuntu-latests
     name: "Build Debian Packages"
     steps:
