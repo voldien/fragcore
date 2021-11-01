@@ -9,24 +9,25 @@ IPAddress::IPAddress(const std::string &ip, IPAddressType type)
 	: INetAddress(getNetworkProtocol()), ip(ip), type(type), valid(false) {
 	struct hostent *hosten = nullptr; /*	*/
 	/*	Get IP from hostname.	*/
-	hosten = gethostbyname(ip.c_str());
+	//	hosten = gethostbyname(ip.c_str());
 
-	hosten = nullptr;
-	if (hosten == nullptr) {
-		int domain = getDomain(type);
-		if (inet_pton(domain, ip.c_str(), &field8[0]) < 0) {
-			throw RuntimeException("Bad");
-		}
-
-	} else {
-		int domain = hosten->h_addrtype;
-		for (char **address = hosten->h_addr_list; address != nullptr; address++) {
-			// if (inet_pton(domain, *address, &field8[0]) < 0) {
-			throw RuntimeException("Bad");
-			//}
-		}
-		// hosten->h_addr_list;
+	int domain = getDomain(type);
+	if (inet_pton(domain, ip.c_str(), &field8[0]) < 0) {
+		throw RuntimeException("Bad");
 	}
+
+	// hosten = nullptr;
+	// if (hosten == nullptr) {
+
+	// } else {
+	// 	int domain = hosten->h_addrtype;
+	// 	for (char **address = hosten->h_addr_list; address != nullptr; address++) {
+	// 		// if (inet_pton(domain, *address, &field8[0]) < 0) {
+	// 		throw RuntimeException("Bad");
+	// 		//}
+	// 	}
+	// 	// hosten->h_addr_list;
+	// }
 	/*	Get hostname	*/
 
 	/*	Get hostname to ipaddress.	*/
@@ -67,3 +68,4 @@ unsigned int IPAddress::getDomain(IPAddressType addressType) noexcept {
 		return 0;
 	}
 }
+IPAddress::IPAddressType IPAddress::getIpAddressType(int domain) {}

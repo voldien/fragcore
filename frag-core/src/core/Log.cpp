@@ -1,41 +1,38 @@
+#include "Core/Log.h"
+#include "Core/IO/IOUtil.h"
+#include "Core/Ref.h"
+#include "Core/dataStructure/Queue.h"
 #include <cstdarg>
 #include <cstdio>
-#include"Core/dataStructure/Queue.h"
-#include"Core/Log.h"
-#include"Core/Ref.h"
-#include"Core/IO/IOUtil.h"
-#include<list>
+#include <list>
 
 using namespace fragcore;
 
 static Log::VERBOSITY g_verbosity = Log::Quite;
 static IO *verboseIO = nullptr;
 std::list<Ref<IO>> ios;
-typedef struct log_io_buf_t{
+typedef struct log_io_buf_t {
 	Log::VERBOSITY verbosity;
 	Ref<IO> io;
-}LogIOMap;
-//static Queue<Ref<IO>> iosQueue;
-//TOOD determine if queue, should be used.
+} LogIOMap;
+// static Queue<Ref<IO>> iosQueue;
+// TOOD determine if queue, should be used.
 
 void Log::setVerbosity(VERBOSITY verbosity) {
-	switch(verbosity){
-		case VERBOSITY::Quite:
-		case VERBOSITY::Error:
-		case VERBOSITY::Verbose:
-		case VERBOSITY::Warning:	
-		case VERBOSITY::Debug:
-			g_verbosity = verbosity;
-			break;
-		default:
-			throw InvalidArgumentException("");
+	switch (verbosity) {
+	case VERBOSITY::Quite:
+	case VERBOSITY::Error:
+	case VERBOSITY::Verbose:
+	case VERBOSITY::Warning:
+	case VERBOSITY::Debug:
+		g_verbosity = verbosity;
+		break;
+	default:
+		throw InvalidArgumentException("");
 	}
 }
 
-Log::VERBOSITY Log::getVerbosity() {
-	return g_verbosity;
-}
-
+Log::VERBOSITY Log::getVerbosity() { return g_verbosity; }
 
 int Log::log(VERBOSITY verbosity, const char *format, ...) {
 	int l = 0;
@@ -72,23 +69,21 @@ int Log::error(const char *format, ...) {
 }
 
 int Log::logv(VERBOSITY verbosity, const char *format, va_list va) {
-	//TODO add IO object support.
+	// TODO add IO object support.
 	if (ios.size() > 0) {
 		std::list<Ref<IO>>::iterator it = ios.begin();
 
 		for (; it != ios.end(); it++) {
 			Ref<IO> &ioRef = (*it);
 
-			//TODO resolve for variable list variable.
-			//IOUtil::format(ioRef, format);
-
+			// TODO resolve for variable list variable.
+			// IOUtil::format(ioRef, format);
 		}
 		if (verbosity <= getVerbosity()) {
 			return vprintf(format, va);
 		}
 	}
-	if (verbosity <= getVerbosity())
-	{
+	if (verbosity <= getVerbosity()) {
 		return vprintf(format, va);
 	}
 	return 0;

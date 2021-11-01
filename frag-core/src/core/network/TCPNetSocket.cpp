@@ -137,7 +137,7 @@ int TCPNetSocket::connect(const INetAddress &p_addr) {
 	const TCPUDPAddress *tcpAddress = dynamic_cast<const TCPUDPAddress *>(&p_addr);
 	if (tcpAddress == nullptr)
 		throw RuntimeException("Not a valid NetAddress Object");
-	int domain = getDomain(tcpAddress->getIPAddress());
+	int domain = this->getDomain(tcpAddress->getIPAddress());
 
 	this->socket = ::socket(domain, flags, 0);
 	if (this->socket < 0) {
@@ -262,6 +262,8 @@ int TCPNetSocket::getDomain(const INetAddress &address) {
 			return AF_INET;
 		else if (ipAddress.getIPType() == IPAddress::IPAddressType::IPAddress_Type_IPV6)
 			return AF_INET6;
+		else
+			throw RuntimeException("No valid IP address");
 	} break;
 	case INetAddress::NetworkProtocol::NetWorkProtocol_CAN:
 		return AF_CAN;

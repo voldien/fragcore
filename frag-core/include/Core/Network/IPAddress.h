@@ -35,8 +35,7 @@ namespace fragcore {
 			IPAddress_Type_IPV6 = 2,
 			IPAddress_Type_ANY = 3,
 		};
-		IPAddress();
-
+		IPAddress(); // TODO add binary as the address.
 		IPAddress(const IPAddress &other) = default;
 		IPAddress &operator=(const IPAddress &other) = default;
 		IPAddress(IPAddress &&other) = default;
@@ -66,6 +65,7 @@ namespace fragcore {
 
 	  protected:
 		static unsigned int getDomain(IPAddressType IPaddressType) noexcept;
+		static IPAddressType getIpAddressType(int domain);
 
 	  private:
 		IPAddressType type;

@@ -1,9 +1,8 @@
-#include"Core/SmartReference.h"
-#include<utility>
+#include "Core/SmartReference.h"
+#include <utility>
 using namespace fragcore;
 
 SmartReference::SmartReference() noexcept { this->counter.init(1); }
-
 
 bool SmartReference::increment() noexcept { return this->counter.ref(); }
 

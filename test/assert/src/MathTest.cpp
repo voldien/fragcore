@@ -43,7 +43,7 @@ INSTANTIATE_TEST_SUITE_P(Math, MinTest,
 										   std::make_tuple(5, 3, 3)));
 
 TEST(Math, PowerOf2_Found) {
-	for (unsigned int i = 0; i < 64; i++)
+	for (unsigned int i = 0; i < 63; i++)
 		ASSERT_TRUE(Math::IsPowerOfTwo<unsigned long int>(1 << i));
 }
 
