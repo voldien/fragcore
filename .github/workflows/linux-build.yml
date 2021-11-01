@@ -45,7 +45,11 @@ jobs:
         shell: bash
         # Execute the build.  You can specify a specific target with "--target <NAME>"
         run: cmake --build . --config $BUILD_TYPE --target fragcore-assert
-
+        
+  testing:
+    needs: linuxbuild
+    runs-on: ubuntu-latests
+    name: "Testing"
       - name: Test
         working-directory: ${{runner.workspace}}/build
         shell: bash
@@ -70,7 +74,7 @@ jobs:
 
 
   packing:
-    needs: linuxbuild
+    needs: linuxbuild testing modules
     runs-on: ubuntu-latests
     name: "Build Debian Packages"
     steps:
