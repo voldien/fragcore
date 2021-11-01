@@ -1,8 +1,8 @@
 #include "internal_object_type.h"
-#include <Renderer/Shader.h>
+#include <../Shader.h>
 using namespace fragcore;
 
-void Shader::bind(void) {
+void Shader::bind() {
 	VKShaderObject *shadobj = (VKShaderObject *)this->pdata;
 	// VulkanCore* vulkanCore = shadobj->vulkanCore;
 
@@ -49,7 +49,7 @@ void *Shader::getBinary(long int *size, unsigned int *format) {}
 // virtual void* getBinaryShader(long int* size, unsigned int* fvformatf, int p);
 void *Shader::getSource(long int *size) {}
 
-intptr_t Shader::getNativePtr(void) const { return 0; }
+intptr_t Shader::getNativePtr() const { return 0; }
 // TODO rename to the shader version instead of program.
 
 /*

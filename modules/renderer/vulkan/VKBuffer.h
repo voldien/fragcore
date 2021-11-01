@@ -19,7 +19,7 @@
 #ifndef _FV_GL_BUFFER_H_
 #define _FV_GL_BUFFER_H_ 1
 #include "internal_object_type.h"
-#include <Renderer/Buffer.h>
+#include "../Buffer.h"
 
 namespace fragcore {
 	/**
@@ -29,11 +29,11 @@ namespace fragcore {
 		friend class VKRendererInterface;
 
 	  public:
-		inline VKBuffer(void) = default;
+		inline VKBuffer() = default;
 
-		virtual ~VKBuffer(void);
+		virtual ~VKBuffer();
 
-		virtual void bind(void);
+		virtual void bind();
 
 		virtual void bind(unsigned int offset, unsigned int size);
 
@@ -43,9 +43,9 @@ namespace fragcore {
 
 		virtual void *getData(unsigned int offset, unsigned int size);
 
-		virtual bool isValid(void);
+		virtual bool isValid();
 
-		virtual long int getSize(void);
+		virtual long int getSize();
 
 		virtual void *mapBuffer(MapTarget target);
 
@@ -53,12 +53,12 @@ namespace fragcore {
 
 		virtual void flush(unsigned long int offset, unsigned long int length);
 
-		virtual void unMapBuffer(void);
+		virtual void unMapBuffer();
 
 		// virtual void clear(uint32_t i);
 		void setName(const std::string &name) override;
 
-		intptr_t getNativePtr(void) const override;
+		intptr_t getNativePtr() const override;
 
 	  protected:
 		BufferDesc desc;

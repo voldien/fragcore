@@ -1,14 +1,14 @@
 
-#include "Renderer/IRenderer.h"
-#include "Renderer/Sampler.h"
-#include "Renderer/Texture.h"
+#include "../IRenderer.h"
+#include "../Sampler.h"
+#include "../Texture.h"
 #include "internal_object_type.h"
 #include <GL/glew.h>
 
 using namespace fragcore;
 
 // TODO add for checking by the target
-static int getCurrentTexture(void) {
+static int getCurrentTexture() {
 	GLint whichID;
 	glGetIntegerv(GL_TEXTURE_BINDING_2D, &whichID);
 
@@ -47,7 +47,7 @@ void Texture::bindImage(unsigned int index, int level, MapTarget target, Format 
 		throw RuntimeException("glBindImageTexture not supported");
 }
 
-bool Texture::isValid(void) {
+bool Texture::isValid() {
 	GLTextureObject *texobj = (GLTextureObject *)this->getObject();
 	return glIsTexture(texobj->texture) == GL_TRUE;
 }
@@ -93,7 +93,7 @@ void Texture::setFilterMode(FilterMode mode) {
 	}
 }
 
-Texture::FilterMode Texture::getFilterMode(void) {
+Texture::FilterMode Texture::getFilterMode() {
 	GLTextureObject *texobj = (GLTextureObject *)this->pdata;
 
 	// TODO add logic.
@@ -131,7 +131,7 @@ void Texture::setWrapMode(Texture::WrapMode mode) {
 	}
 }
 
-Texture::WrapMode Texture::getWrapMode(void) {
+Texture::WrapMode Texture::getWrapMode() {
 	GLTextureObject *texobj = (GLTextureObject *)this->pdata;
 
 	GLint wrapS;
@@ -173,7 +173,7 @@ void Texture::setAnisotropic(float anisotropic) {
 	}
 }
 
-float Texture::getAnisotropic(void) const {
+float Texture::getAnisotropic() const {
 	GLTextureObject *texobj = (GLTextureObject *)this->pdata;
 	float anisotropic;
 	if (glGetTextureParameterfv) {
@@ -187,7 +187,7 @@ float Texture::getAnisotropic(void) const {
 	return anisotropic;
 }
 
-Texture::CompareFunc Texture::getCompare(void) const {
+Texture::CompareFunc Texture::getCompare() const {
 	GLTextureObject *texobj = (GLTextureObject *)this->pdata;
 	if (glGetTextureParameterfv) {
 
@@ -210,7 +210,7 @@ void Texture::setCompareFunc(CompareFunc compareFunc) {
 
 void Texture::setMipMapBaseLevel(unsigned int level) { GLTextureObject *texobj = (GLTextureObject *)this->pdata; }
 
-unsigned int Texture::getMipMapBaseLevel(void) const { GLTextureObject *texobj = (GLTextureObject *)this->pdata; }
+unsigned int Texture::getMipMapBaseLevel() const { GLTextureObject *texobj = (GLTextureObject *)this->pdata; }
 
 void Texture::setMipMapBias(float bias) { GLTextureObject *texobj = (GLTextureObject *)this->pdata; }
 
@@ -218,17 +218,17 @@ float Texture::getMipMapBias(float bias) const { GLTextureObject *texobj = (GLTe
 
 void Texture::setBorderColor(float color) { GLTextureObject *texobj = (GLTextureObject *)this->pdata; }
 
-float Texture::getBorderColor(void) const { GLTextureObject *texobj = (GLTextureObject *)this->pdata; }
+float Texture::getBorderColor() const { GLTextureObject *texobj = (GLTextureObject *)this->pdata; }
 
 unsigned int Texture::setMaxLod(unsigned int level) { GLTextureObject *texobj = (GLTextureObject *)this->pdata; }
 
-unsigned int Texture::getMaxLod(void) const { GLTextureObject *texobj = (GLTextureObject *)this->pdata; }
+unsigned int Texture::getMaxLod() const { GLTextureObject *texobj = (GLTextureObject *)this->pdata; }
 
 unsigned int Texture::setMinLod(unsigned int level) { GLTextureObject *texobj = (GLTextureObject *)this->pdata; }
 
-unsigned int Texture::getMinLod(void) const { GLTextureObject *texobj = (GLTextureObject *)this->pdata; }
+unsigned int Texture::getMinLod() const { GLTextureObject *texobj = (GLTextureObject *)this->pdata; }
 
-Texture::Format Texture::getFormat(void) const {
+Texture::Format Texture::getFormat() const {
 	GLTextureObject *texobj = (GLTextureObject *)this->pdata;
 
 	// glGetTexLevelParameterfv
@@ -246,17 +246,17 @@ Texture::Format Texture::getFormat(void) const {
 	}
 }
 
-unsigned int Texture::width(void) {
+unsigned int Texture::width() {
 	GLTextureObject *texobj = (GLTextureObject *)this->pdata;
 	return texobj->desc.width;
 }
 
-unsigned int Texture::height(void) {
+unsigned int Texture::height() {
 	GLTextureObject *texobj = (GLTextureObject *)this->pdata;
 	return texobj->desc.height;
 }
 
-unsigned int Texture::layers(void) const {
+unsigned int Texture::layers() const {
 	GLTextureObject *texobj = (GLTextureObject *)this->pdata;
 	return texobj->desc.depth;
 }
@@ -311,7 +311,7 @@ void *Texture::mapTexture(Format format, unsigned int level) {
 
 // glTextureSubImage2D
 // glTexSubImage2D
-void Texture::unMapTexture(void) {
+void Texture::unMapTexture() {
 	GLTextureObject *texobj = (GLTextureObject *)this->pdata;
 
 	glUnmapBufferARB(GL_PIXEL_PACK_BUFFER);
@@ -377,7 +377,7 @@ void *Texture::getPixels(TextureFormat format, unsigned int level, unsigned long
 	return pbuffer;
 }
 
-void Texture::clear(void) {
+void Texture::clear() {
 	GLTextureObject *texobj = (GLTextureObject *)this->pdata;
 
 	if (glClearTexImage)
@@ -386,7 +386,7 @@ void Texture::clear(void) {
 	}
 }
 
-intptr_t Texture::getNativePtr(void) const {
+intptr_t Texture::getNativePtr() const {
 	GLTextureObject *texobj = (GLTextureObject *)this->pdata;
 	return texobj->texture;
 }

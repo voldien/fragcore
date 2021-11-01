@@ -1,7 +1,7 @@
 #include "VKRenderInterface.h"
 #include "Core/IConfig.h"
 
-#include "Renderer/RenderDesc.h"
+#include "../RenderDesc.h"
 
 #include "VKBuffer.h"
 #include "VKCommandList.h"
@@ -347,14 +347,14 @@ VKRenderInterface::VKRenderInterface(IConfig *config) {
 	this->getCapability(&this->capability);
 }
 
-VKRenderInterface::~VKRenderInterface(void) {
+VKRenderInterface::~VKRenderInterface() {
 	/*  Release all vulkan resources.   */
 	SDL_QuitSubSystem(SDL_INIT_VIDEO);
 }
 
-void VKRenderInterface::OnInitialization(void) {}
+void VKRenderInterface::OnInitialization() {}
 
-void VKRenderInterface::OnDestruction(void) {}
+void VKRenderInterface::OnDestruction() {}
 
 Texture *VKRenderInterface::createTexture(TextureDesc *desc) {
 
@@ -1102,7 +1102,7 @@ void VKRenderInterface::disableState(VKRenderInterface::State state) { /*  */
 
 bool VKRenderInterface::isStateEnabled(VKRenderInterface::State state) {}
 
-void VKRenderInterface::swapBuffer(void) {
+void VKRenderInterface::swapBuffer() {
 
 	// VkResult result;
 	// uint32_t imageIndex;
@@ -1231,7 +1231,7 @@ void VKRenderInterface::dispatchCompute(unsigned int *global, unsigned int *loca
 	// vkCmdDispatch(curBuffer, local[0], local[1], local[2]);
 }
 
-void VKRenderInterface::memoryBarrier(void) {}
+void VKRenderInterface::memoryBarrier() {}
 
 Sync *VKRenderInterface::createSync(SyncDesc *desc) {}
 void VKRenderInterface::deleteSync(Sync *sync) {}
@@ -1466,9 +1466,9 @@ const char *VKRenderInterface::getShaderVersion(ShaderLanguage language) const {
 	return "";
 }
 
-ShaderLanguage VKRenderInterface::getShaderLanguage(void) const { return languageSupport; }
+ShaderLanguage VKRenderInterface::getShaderLanguage() const { return languageSupport; }
 
-const char *VKRenderInterface::getAPIVersion(void) const {
+const char *VKRenderInterface::getAPIVersion() const {
 	const VkPhysicalDeviceProperties &devicePropertie = this->device->getPhysicalDevice(0)->getProperties();
 	/*	Get API version.	*/
 	static char apiversion[64];
@@ -1477,13 +1477,13 @@ const char *VKRenderInterface::getAPIVersion(void) const {
 	return (const char *)apiversion;
 }
 
-const char *VKRenderInterface::getVersion(void) const {
+const char *VKRenderInterface::getVersion() const {
 	return FV_STR_VERSION(RENDER_VULKAN_MAJOR, RENDER_VULKAN_MINOR, RENDER_VULKAN_PATCH);
 }
 
 void VKRenderInterface::getStatus(MemoryInfo *memoryInfo) {}
 
-CommandList *VKRenderInterface::createCommandBuffer(void) {
+CommandList *VKRenderInterface::createCommandBuffer() {
 	// Ref<IRenderer> ref = Ref<IRenderer>(this);
 
 	// return new VKCommandList(ref);
@@ -1505,6 +1505,6 @@ void VKRenderInterface::submittCommand(Ref<CommandList> &list) {
 
 void VKRenderInterface::execute(CommandList *list) {}
 
-void *VKRenderInterface::getData(void) const { return nullptr; }
+void *VKRenderInterface::getData() const { return nullptr; }
 
 extern "C" IRenderer *createInternalRenderer(IConfig *config) { return new VKRenderInterface(config); }

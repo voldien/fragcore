@@ -1,12 +1,12 @@
 
 #ifndef _FRAGVIEW_INTERNAL_OBJECT_TYPE_H_
 #define _FRAGVIEW_INTERNAL_OBJECT_TYPE_H_ 1
-#include"Renderer/RenderDesc.h"
-#include"Renderer/Buffer.h"
-#include"Renderer/IRenderer.h"
+#include"../RenderDesc.h"
+#include"../Buffer.h"
+#include"../IRenderer.h"
 #include<GL/glew.h>
 #include<SDL2/SDL.h>
-#include <Renderer/RendererWindow.h>
+#include <../RendererWindow.h>
 
 
 namespace fragcore {
@@ -132,8 +132,8 @@ namespace fragcore {
 extern void addMarkerLabel(const fragcore::OpenGLCore *glcore, unsigned int identifier,
 		unsigned int object, const fragcore::MarkerDebug *debug);
 
-extern void checkError(void);
-extern void resetErrorFlag(void);
+extern void checkError();
+extern void resetErrorFlag();
 extern unsigned int getWrapMode(fragcore::SamplerDesc::AddressMode mode);
 
 extern unsigned int getFilterMode(fragcore::SamplerDesc::FilterMode mode, fragcore::SamplerDesc::FilterMode mips);

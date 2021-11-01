@@ -1,8 +1,8 @@
-#include <Audio/AudioClip.h>
-#include <Audio/AudioListener.h>
-#include <Audio/AudioSource.h>
-#include <Audio/decoder/AudioDecoder.h>
-#include <Audio/decoder/VorbisDecoder.h>
+#include <AudioClip.h>
+#include <AudioListener.h>
+#include <AudioSource.h>
+#include <decoder/AudioDecoder.h>
+#include <decoder/VorbisDecoder.h>
 #include <FragCore.h>
 
 using namespace fragcore;

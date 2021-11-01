@@ -1,5 +1,5 @@
-#include <Physic/PhysicDesc.h>
-#include <Physic/PhysicInterface.h>
+#include "../PhysicDesc.h"
+#include "../PhysicInterface.h"
 #include "debugDrawer.h"
 #include "internal_object_type.h"
 #include <FragCore.h>
@@ -454,12 +454,12 @@ bool PhysicInterface::raySphereTest(const Ray& ray, RayCastHit* hit){
 	//world->convexSweepTest
 }
 
-void PhysicInterface::setDebugRenderer(Ref <IRenderer>& renderer) {
-	PhysicCore* physicore = (PhysicCore*)this->pdata;
+// void PhysicInterface::setDebugRenderer(Ref <IRenderer>& renderer) {
+// 	PhysicCore* physicore = (PhysicCore*)this->pdata;
 
-	physicore->drawDebugger = new DebugDrawer(renderer);
-	physicore->dynamicsWorld->setDebugDrawer(physicore->drawDebugger);
-}
+// 	physicore->drawDebugger = new DebugDrawer(renderer);
+// 	physicore->dynamicsWorld->setDebugDrawer(physicore->drawDebugger);
+// }
 
 const char* PhysicInterface::getVersion() const {
 	return FV_STR_VERSION(1,0,0);

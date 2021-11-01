@@ -1,10 +1,10 @@
-#include "Renderer/RenderPipeline.h"
-#include "Renderer/Shader.h"
+#include "../RenderPipeline.h"
+#include "../Shader.h"
 #include "internal_object_type.h"
 #include <GL/glew.h>
 using namespace fragcore;
 
-void RenderPipeline::bind(void) {
+void RenderPipeline::bind() {
 	GLProgramPipeline *pipeline = (GLProgramPipeline *)this->pdata;
 	glBindProgramPipeline(pipeline->program);
 	// glActiveShaderProgram
@@ -117,4 +117,4 @@ void RenderPipeline::setShader(ShaderType type, Shader *shader) {
 		shadobj->c = shader;
 }
 
-intptr_t RenderPipeline::getNativePtr(void) const { return 0; }
+intptr_t RenderPipeline::getNativePtr() const { return 0; }

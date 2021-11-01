@@ -1,14 +1,14 @@
-#include"Renderer/ICompute.h"
+#include"../ICompute.h"
 
 using namespace fragcore;
 
-bool ICompute::supportCompute(void) noexcept { return true; }
-void ICompute::OnInitialization(void) {}
-void ICompute::OnDestruction(void) {}
+bool ICompute::supportCompute() noexcept { return true; }
+void ICompute::OnInitialization() {}
+void ICompute::OnDestruction() {}
 
-const char *ICompute::getVersion(void) const { return ""; }
+const char *ICompute::getVersion() const { return ""; }
 
-CommandList *ICompute::createCommandBuffer(void)
+CommandList *ICompute::createCommandBuffer()
 {
 
 }

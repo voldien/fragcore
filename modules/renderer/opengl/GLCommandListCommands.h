@@ -17,7 +17,7 @@ namespace fragcore {
 	class GLCommandBase {
 	  public:
 		GLCommandBase(GLCommandBufferCmd command) { this->cmd = command; }
-		inline GLCommandBufferCmd getCommand(void) const { return this->cmd; }
+		inline GLCommandBufferCmd getCommand() const { return this->cmd; }
 
 	  private:
 		GLCommandBufferCmd cmd;
@@ -31,7 +31,7 @@ namespace fragcore {
 	};
 	class GLCommandClear : public GLCommandBase {
 	  public:
-		GLCommandClear(void) : GLCommandBase(ClearImage) {}
+		GLCommandClear() : GLCommandBase(ClearImage) {}
 	};
 
 	class GLPushGroupMarkerCommand : public GLCommandBase {};

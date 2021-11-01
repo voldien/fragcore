@@ -28,13 +28,13 @@
 //     VDRenderingAPICache::enable();
 // }
 
-// void VDRenderingAPICache::disable(void) { cacheEnabled = false; }
+// void VDRenderingAPICache::disable() { cacheEnabled = false; }
 
-// void VDRenderingAPICache::enable(void) { cacheEnabled = true; }
+// void VDRenderingAPICache::enable() { cacheEnabled = true; }
 
-// bool VDRenderingAPICache::isEnabled(void) { return cacheEnabled == true; }
+// bool VDRenderingAPICache::isEnabled() { return cacheEnabled == true; }
 
-// bool VDRenderingAPICache::isDisable(void) { return cacheEnabled == false; }
+// bool VDRenderingAPICache::isDisable() { return cacheEnabled == false; }
 
 // void VDRenderingAPICache::setClearColor(float red, float green, float blue,
 //                                         float alpha) {
@@ -109,7 +109,7 @@
 //     shaderprogram = program;
 // }
 
-// unsigned int VDRenderingAPICache::currentBindedProgram(void) {
+// unsigned int VDRenderingAPICache::currentBindedProgram() {
 //     return shaderprogram;
 // }
 

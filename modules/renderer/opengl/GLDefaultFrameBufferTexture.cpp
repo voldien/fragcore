@@ -1,15 +1,15 @@
 #include "DefaultFrameBufferTexture.h"
 #include "GLRendererInterface.h"
-#include "Renderer/IRenderer.h"
-#include "Renderer/RenderObject.h"
-#include "Renderer/RendererWindow.h"
-#include "Renderer/Texture.h"
+#include "../IRenderer.h"
+#include "../RenderObject.h"
+#include "../RendererWindow.h"
+#include "../Texture.h"
 #include "internal_object_type.h"
 #include <GL/glew.h>
 
 using namespace fragcore;
 
-FrameBufferTexture::FrameBufferTexture(void) {
+FrameBufferTexture::FrameBufferTexture() {
 	// this->setName("Default frambuffer back color attachment");
 	glGenBuffersARB(1, &this->pbo);
 	glBindBufferARB(GL_PIXEL_PACK_BUFFER, pbo);
@@ -34,32 +34,32 @@ void *FrameBufferTexture::mapTexture(Format format, unsigned int level) {
 	return glMapBufferARB(GL_PIXEL_PACK_BUFFER_ARB, GL_READ_ONLY_ARB);
 }
 
-void FrameBufferTexture::unMapTexture(void) {
+void FrameBufferTexture::unMapTexture() {
 	if (glUnmapNamedBuffer)
 		glUnmapNamedBuffer(pbo);
 	else
 		glUnmapBufferARB(GL_PIXEL_PACK_BUFFER_ARB);
 }
 
-Texture::Format FrameBufferTexture::getFormat(void) const { return Texture::eR8G8B8A8; }
+Texture::Format FrameBufferTexture::getFormat() const { return Texture::eR8G8B8A8; }
 
 void FrameBufferTexture::bind(unsigned int index) {}
 
-bool FrameBufferTexture::isValid(void) { return true; }
+bool FrameBufferTexture::isValid() { return true; }
 
 void FrameBufferTexture::setMipLevel(unsigned int level) {}
 
 void FrameBufferTexture::setFilterMode(FilterMode mode) {}
 
-Texture::FilterMode FrameBufferTexture::getFilterMode(void) { return Texture::eNearest; }
+Texture::FilterMode FrameBufferTexture::getFilterMode() { return Texture::eNearest; }
 
 void FrameBufferTexture::setWrapMode(WrapMode mode) {}
 
-Texture::WrapMode FrameBufferTexture::getWrapMode(void) { return Texture::eClamp; }
+Texture::WrapMode FrameBufferTexture::getWrapMode() { return Texture::eClamp; }
 
 void FrameBufferTexture::setAnisotropic(float anisotropic) {}
 
-float FrameBufferTexture::getAnisotropic(void) const { return 0.0f; }
+float FrameBufferTexture::getAnisotropic() const { return 0.0f; }
 
 void FrameBufferTexture::setPixels(Format format, unsigned int level, const void *pixels, unsigned long size) {
 	// TODO
@@ -75,7 +75,7 @@ void *FrameBufferTexture::getPixels(Format format, unsigned int level, unsigned 
 	return nullptr; // Texture::getPixels(mipmap, nBytes);
 }
 
-unsigned int FrameBufferTexture::width(void) {
+unsigned int FrameBufferTexture::width() {
 	int width;
 	int height;
 	OpenGLCore *glcore = (OpenGLCore *)this->getRenderer<GLRendererInterface>()->getData();
@@ -85,7 +85,7 @@ unsigned int FrameBufferTexture::width(void) {
 	return width;
 }
 
-unsigned int FrameBufferTexture::height(void) {
+unsigned int FrameBufferTexture::height() {
 	int width;
 	int height;
 	OpenGLCore *glcore = (OpenGLCore *)this->getRenderer()->getData();

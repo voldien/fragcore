@@ -1,11 +1,11 @@
 #ifndef _LIB_FRAG_CORE_VK_RENDERER_INTERFACE_H_
 #define _LIB_FRAG_CORE_VK_RENDERER_INTERFACE_H_ 1
-#include"Prerequisites.h"
+#include "Prerequisites.h"
+#include <../Buffer.h>
+#include <../IRenderer.h>
+#include <../RenderDesc.h>
+#include <../Sampler.h>
 #include <Core/Ref.h>
-#include <Renderer/Buffer.h>
-#include <Renderer/IRenderer.h>
-#include <Renderer/RenderDesc.h>
-#include <Renderer/Sampler.h>
 #include <VKDevice.h>
 #include <vulkan/vulkan.h>
 
@@ -15,15 +15,15 @@ namespace fragcore {
 		friend class VKRenderWindow;
 
 	  public:
-		VKRenderInterface(void) = delete;
+		VKRenderInterface() = delete;
 		VKRenderInterface(const VKRenderInterface &other) = default;
 		VKRenderInterface(IConfig *config);
-		virtual ~VKRenderInterface(void);
+		virtual ~VKRenderInterface();
 
 		// TODO make it less state machine and allow it to become more modern.
 
-		virtual void OnInitialization(void);
-		virtual void OnDestruction(void);
+		virtual void OnInitialization();
+		virtual void OnDestruction();
 
 		virtual Texture *createTexture(TextureDesc *desc);
 
@@ -73,7 +73,7 @@ namespace fragcore {
 
 		virtual void setVSync(int sync); // TODO relocate to the render window.
 
-		virtual void swapBuffer(void); // TODO relocate to the render window.
+		virtual void swapBuffer(); // TODO relocate to the render window.
 
 		virtual void setDepthMask(bool flag);
 
@@ -113,7 +113,7 @@ namespace fragcore {
 		virtual void dispatchCompute(unsigned int *global, unsigned int *local, unsigned int offset = 0);
 
 		// TODO add memory barrier.
-		virtual void memoryBarrier(void);
+		virtual void memoryBarrier();
 
 		virtual Sync *createSync(SyncDesc *desc);
 
@@ -123,11 +123,11 @@ namespace fragcore {
 
 		virtual const char *getShaderVersion(ShaderLanguage language) const;
 
-		virtual ShaderLanguage getShaderLanguage(void) const;
+		virtual ShaderLanguage getShaderLanguage() const;
 
-		virtual const char *getAPIVersion(void) const;
+		virtual const char *getAPIVersion() const;
 
-		virtual const char *getVersion(void) const;
+		virtual const char *getVersion() const;
 
 		virtual void getSupportedTextureCompression(TextureDesc::Compression *pCompressions);
 		virtual void getCapability(Capability *capability);
@@ -136,13 +136,13 @@ namespace fragcore {
 
 		virtual void getStatus(MemoryInfo *memoryInfo);
 
-		virtual CommandList *createCommandBuffer(void);
+		virtual CommandList *createCommandBuffer();
 		virtual void submittCommand(Ref<CommandList> &list);
 		virtual void execute(CommandList *list);
 
-		virtual void *getData(void) const override;
+		virtual void *getData() const override;
 
-		std::shared_ptr<VKDevice>& getDevice(void){return this->device;};
+		std::shared_ptr<VKDevice> &getDevice() { return this->device; };
 
 	  protected:
 		std::shared_ptr<VKDevice> device;

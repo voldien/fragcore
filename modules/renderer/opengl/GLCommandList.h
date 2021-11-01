@@ -1,7 +1,7 @@
 #ifndef _FRAG_CORE_GL_COMMAND_LIST_H_
 #define _FRAG_CORE_GL_COMMAND_LIST_H_ 1
+#include "../CommandList.h"
 #include "GLCommandListCommands.h"
-#include "Renderer/CommandList.h"
 #include <vector>
 
 namespace fragcore {
@@ -12,10 +12,10 @@ namespace fragcore {
 		friend class GLRendererInterface;
 
 	  public:
-		virtual ~GLCommandList(void);
+		virtual ~GLCommandList();
 
-		virtual void begin(void);
-		virtual void end(void);
+		virtual void begin();
+		virtual void end();
 
 		virtual void copyTexture(const Texture *src, Texture *dst) override;
 
@@ -33,7 +33,7 @@ namespace fragcore {
 
 		virtual void pushDebugGroup(const char *name);
 
-		virtual void popDebugGroup(void);
+		virtual void popDebugGroup();
 		virtual void insertDebugMarker(const char *name);
 
 	  private:

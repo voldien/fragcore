@@ -1,8 +1,8 @@
-#include "Renderer/Query.h"
+#include "../Query.h"
 #include "internal_object_type.h"
 using namespace fragcore;
 
-QueryObject::~QueryObject(void) {}
+QueryObject::~QueryObject() {}
 
 void QueryObject::begin(Target target, unsigned int index) {}
 
@@ -12,6 +12,6 @@ long int QueryObject::getResult(int index) {}
 
 void QueryObject::beginConditionalRenderer(Condition target) {}
 
-void QueryObject::endConditionalRenderer(void) {}
+void QueryObject::endConditionalRenderer() {}
 
-intptr_t QueryObject::getNativePtr(void) const { return 0; }
+intptr_t QueryObject::getNativePtr() const { return 0; }

@@ -27,7 +27,7 @@ GLRenderWindow::GLRenderWindow(Ref<GLRendererInterface> &renderer) {
 	}
 }
 
-GLRenderWindow::~GLRenderWindow(void) {
+GLRenderWindow::~GLRenderWindow() {
 	/*	Release all the resources.	*/
 	// TODO add the swap chain to be part of the window rather than
 }
@@ -36,9 +36,9 @@ void GLRenderWindow::show() { SDL_ShowWindow(this->window); }
 
 void GLRenderWindow::hide() { SDL_HideWindow(this->window); }
 
-void GLRenderWindow::close(void) { SDL_DestroyWindow(this->window); }
+void GLRenderWindow::close() { SDL_DestroyWindow(this->window); }
 
-ViewPort *GLRenderWindow::getViewPort(void) { return this->renderer->getView(0); }
+ViewPort *GLRenderWindow::getViewPort() { return this->renderer->getView(0); }
 FrameBuffer *GLRenderWindow::getDefaultFrameBuffer() {
 	return this->renderer->getDefaultFramebuffer(nullptr);
 	//    throw NotSupportedException();
@@ -57,7 +57,7 @@ void GLRenderWindow::vsync(bool state) { SDL_GL_SetSwapInterval(state); }
 
 bool GLRenderWindow::assertConfigAttributes(const fragcore::IConfig *iConfig) { return false; }
 
-float GLRenderWindow::getGamma(void) const {
+float GLRenderWindow::getGamma() const {
 	ushort ramp[256 * 3];
 	int err = SDL_GetWindowGammaRamp(this->window, &ramp[256 * 0], &ramp[256 * 1], &ramp[256 * 2]);
 	if (err == -1)
@@ -75,13 +75,13 @@ void GLRenderWindow::setGamma(float gamma) {
 		throw NotSupportedException(fmt::format("Failed to set window gamma %f: %s", gamma, SDL_GetError()));
 }
 
-// GLRenderWindow::~RendererWindow(void) {}
+// GLRenderWindow::~RendererWindow() {}
 
 void GLRenderWindow::getPosition(int *x, int *y) const { SDL_GetWindowPosition(this->window, x, y); }
 
 void GLRenderWindow::getSize(int *width, int *height) const { SDL_GetWindowSize(this->window, width, height); }
 
-fragcore::Display *GLRenderWindow::getCurrentDisplay(void) const {
+fragcore::Display *GLRenderWindow::getCurrentDisplay() const {
 	int index;
 	index = SDL_GetWindowDisplayIndex(this->window);
 	return WindowManager::getInstance()->getDisplay(index);
@@ -100,7 +100,7 @@ void GLRenderWindow::useWindow(void *pdata) {}
 
 void GLRenderWindow::setTitle(const char *title) { SDL_SetWindowTitle(this->window, title); }
 
-const char *GLRenderWindow::getTitle(void) const { return SDL_GetWindowTitle(this->window); }
+const char *GLRenderWindow::getTitle() const { return SDL_GetWindowTitle(this->window); }
 
 void GLRenderWindow::resizable(bool resizable) { SDL_SetWindowResizable(this->window, (SDL_bool)resizable); }
 
@@ -114,7 +114,7 @@ void GLRenderWindow::setFullScreen(bool fullscreen) {
 
 void GLRenderWindow::setFullScreen(Display &display) {}
 
-bool GLRenderWindow::isFullScreen(void) const {}
+bool GLRenderWindow::isFullScreen() const {}
 
 void GLRenderWindow::setBordered(bool bordered) { SDL_SetWindowBordered(this->window, (SDL_bool)bordered); }
 
@@ -124,15 +124,15 @@ void GLRenderWindow::getMinimumSize(int *width, int *height) {}
 void GLRenderWindow::setMaximumSize(int width, int height) { SDL_SetWindowMaximumSize(this->window, width, height); }
 void GLRenderWindow::getMaximumSize(int *width, int *height) {}
 
-void GLRenderWindow::focus(void) { SDL_SetWindowInputFocus(this->window); }
+void GLRenderWindow::focus() { SDL_SetWindowInputFocus(this->window); }
 
-void GLRenderWindow::restore(void) { SDL_RestoreWindow(this->window); }
+void GLRenderWindow::restore() { SDL_RestoreWindow(this->window); }
 
-void GLRenderWindow::maximize(void) { SDL_MaximizeWindow(this->window); }
+void GLRenderWindow::maximize() { SDL_MaximizeWindow(this->window); }
 
-void GLRenderWindow::minimize(void) { SDL_MinimizeWindow(this->window); }
+void GLRenderWindow::minimize() { SDL_MinimizeWindow(this->window); }
 
-intptr_t GLRenderWindow::getNativePtr(void) const {
+intptr_t GLRenderWindow::getNativePtr() const {
 	//     SDL_SysWMinfo info;
 
 	//     SDL_VERSION(
@@ -185,6 +185,6 @@ intptr_t GLRenderWindow::getNativePtr(void) const {
 
 void GLRenderWindow::setIcon(void *pVoid) {}
 
-void *GLRenderWindow::getIcon(void) const { return nullptr; }
+void *GLRenderWindow::getIcon() const { return nullptr; }
 
-void GLRenderWindow::createSwapChain(void) {}
+void GLRenderWindow::createSwapChain() {}

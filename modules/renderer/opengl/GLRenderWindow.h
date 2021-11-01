@@ -1,7 +1,7 @@
 #ifndef _FRAG_CORE_VULKAN_WINDOW_H_
 #define _FRAG_CORE_VULKAN_WINDOW_H_ 1
 #include "GLRendererInterface.h"
-#include "Renderer/RendererWindow.h"
+#include "../RendererWindow.h"
 #if defined(FRAG_CORE_INTERNAL_IMP) // TODO resolve to a single file or
 									// something later
 #include <SDL2/SDL_syswm.h>
@@ -15,23 +15,23 @@ namespace fragcore {
 	class FVDECLSPEC GLRenderWindow : public RendererWindow {
 	  public:
 		GLRenderWindow(Ref<GLRendererInterface> &renderer);
-		~GLRenderWindow(void);
+		~GLRenderWindow();
 
-		void close(void) override;
+		void close() override;
 
-		virtual void show(void);
+		virtual void show();
 
-		virtual void hide(void);
+		virtual void hide();
 
-		void focus(void) override;
+		void focus() override;
 
-		void restore(void) override;
+		void restore() override;
 
-		void maximize(void) override;
+		void maximize() override;
 
-		void minimize(void) override;
+		void minimize() override;
 
-		virtual void swapBuffer(void);
+		virtual void swapBuffer();
 
 		virtual void setPosition(int x, int y);
 
@@ -47,14 +47,14 @@ namespace fragcore {
 
 		void setIcon(void *pVoid) override;
 
-		void *getIcon(void) const override;
+		void *getIcon() const override;
 
-		virtual Display *getCurrentDisplay(void) const;
+		virtual Display *getCurrentDisplay() const;
 
 		void setFullScreen(bool fullscreen) override;
 		virtual void setFullScreen(Display &display);
 
-		bool isFullScreen(void) const;
+		bool isFullScreen() const;
 
 		void setBordered(bool bordered) override;
 
@@ -63,16 +63,16 @@ namespace fragcore {
 		void setMaximumSize(int width, int height) override;
 		virtual void getMaximumSize(int *width, int *height);
 
-		virtual float getGamma(void) const;
+		virtual float getGamma() const;
 
 		virtual void setGamma(float);
 
 		virtual void setTitle(const char *title);
-		virtual const char *getTitle(void) const;
+		virtual const char *getTitle() const;
 
-		intptr_t getNativePtr(void) const override;
+		intptr_t getNativePtr() const override;
 
-		virtual ViewPort *getViewPort(void) override;
+		virtual ViewPort *getViewPort() override;
 		virtual FrameBuffer *getDefaultFrameBuffer() override;
 
 		virtual void createWindow(int x, int y, int width, int height, const char *api) override;
@@ -80,7 +80,7 @@ namespace fragcore {
 		virtual void useWindow(void *pdata) override;
 
 	  protected:
-		virtual void createSwapChain(void);
+		virtual void createSwapChain();
 
 	  private:
 		SDL_Window *window;

@@ -2,6 +2,6 @@
 
 using namespace fragcore;
 
-bool ICompute::supportCompute(void) { return true; }
-void ICompute::OnInitialization(void) {}
-void ICompute::OnDestruction(void) {}
+bool ICompute::supportCompute() { return true; }
+void ICompute::OnInitialization() {}
+void ICompute::OnDestruction() {}

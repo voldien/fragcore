@@ -1,9 +1,9 @@
 #include "internal_object_type.h"
-#include <Renderer/RenderPipeline.h>
-#include <Renderer/Shader.h>
+#include <../RenderPipeline.h>
+#include <../Shader.h>
 using namespace fragcore;
 
-void RenderPipeline::bind(void) {}
+void RenderPipeline::bind() {}
 
 int RenderPipeline::getLocation(const char *cparamname) {}
 
@@ -25,4 +25,4 @@ Shader *RenderPipeline::getShader(ShaderType type) {}
 
 void RenderPipeline::setShader(ShaderType type, Shader *shader) {}
 
-intptr_t RenderPipeline::getNativePtr(void) const { return 0; }
+intptr_t RenderPipeline::getNativePtr() const { return 0; }

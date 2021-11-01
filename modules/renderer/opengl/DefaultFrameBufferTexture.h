@@ -1,6 +1,6 @@
 #ifndef _FRAG_CORE_DEFAULTFRAMEBUFFERTEXTURE_H_
 #define _FRAG_CORE_DEFAULTFRAMEBUFFERTEXTURE_H_ 1
-#include"Renderer/Texture.h"
+#include"../Texture.h"
 
 namespace fragcore {
 
@@ -12,37 +12,37 @@ namespace fragcore {
 
 		virtual void *mapTexture(Format format, unsigned int level);
 
-		virtual void unMapTexture(void);
+		virtual void unMapTexture();
 
-		virtual Format getFormat(void) const;
+		virtual Format getFormat() const;
 
 		void bind(unsigned int index) override;
 
-		bool isValid(void) override;
+		bool isValid() override;
 
 		void setMipLevel(unsigned int level) override;
 
 		void setFilterMode(FilterMode mode) override;
 
-		FilterMode getFilterMode(void) override;
+		FilterMode getFilterMode() override;
 
 		void setWrapMode(WrapMode mode) override;
 
-		WrapMode getWrapMode(void) override;
+		WrapMode getWrapMode() override;
 
 		void setAnisotropic(float anisotropic) override;
 
-		float getAnisotropic(void) const override;
+		float getAnisotropic() const override;
 
 		void setPixels(Format format, unsigned int level, const void *pixels, unsigned long size);
 
 		void *getPixels(Format format, unsigned int level, unsigned long *nBytes);
 
-		virtual unsigned int width(void);
+		virtual unsigned int width();
 
-		virtual unsigned int height(void);
+		virtual unsigned int height();
 	private:
-		unsigned int pbo;	//TODO determine 
+		unsigned int pbo;	//TODO determine
 	};
 }
 

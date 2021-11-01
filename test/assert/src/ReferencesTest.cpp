@@ -1,6 +1,5 @@
 #include "Core/Object.h"
 #include "Core/Ref.h"
-#include <Renderer/Texture.h>
 #include <gtest/gtest.h>
 using namespace fragcore;
 

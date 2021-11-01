@@ -1,9 +1,9 @@
-#include "Renderer/Sampler.h"
-#include "Renderer/Texture.h"
+#include "../Sampler.h"
+#include "../Texture.h"
 #include "internal_object_type.h"
 #include <GL/glew.h>
 using namespace fragcore;
-Sampler::~Sampler(void) {}
+Sampler::~Sampler() {}
 
 void Sampler::setFilterMode(FilterMode mode) {
 	GLSamplerObject *sampler = (GLSamplerObject *)this->getObject();
@@ -12,7 +12,7 @@ void Sampler::setFilterMode(FilterMode mode) {
 	glSamplerParameteri(sampler->sampler, GL_TEXTURE_MIN_FILTER, getTextureFilterMode(mode));
 }
 
-Sampler::FilterMode Sampler::getFilterMode(void) {
+Sampler::FilterMode Sampler::getFilterMode() {
 	GLSamplerObject *sampler = (GLSamplerObject *)this->getObject();
 	int wrapS;
 	int wrapT;
@@ -31,7 +31,7 @@ void Sampler::setWrapMode(Sampler::WrapMode mode) {
 	glSamplerParameteri(sampler->sampler, GL_TEXTURE_WRAP_R, wrapMode);
 }
 
-Sampler::WrapMode Sampler::getWrapMode(void) {
+Sampler::WrapMode Sampler::getWrapMode() {
 	int wrapS;
 	int wrapT;
 	int wrapR;
@@ -52,14 +52,14 @@ void Sampler::setAnisotropic(float anisotropy) {
 	glSamplerParameterf(sample->sampler, GL_TEXTURE_MAX_ANISOTROPY_EXT, anisotropy);
 }
 
-float Sampler::getAnisotropic(void) const {
+float Sampler::getAnisotropic() const {
 	float ansio;
 	GLSamplerObject *sampler = (GLSamplerObject *)this->getObject();
 	glGetSamplerParameterfv(sampler->sampler, GL_TEXTURE_MAX_ANISOTROPY_EXT, &ansio);
 	return ansio;
 }
 
-Sampler::CompareFunc Sampler::getCompare(void) const {
+Sampler::CompareFunc Sampler::getCompare() const {
 	GLSamplerObject *sampler = (GLSamplerObject *)this->getObject();
 }
 
@@ -72,7 +72,7 @@ void Sampler::setCompareFunc(CompareFunc compareFunc) {
 
 void Sampler::setMipMapBaseLevel(unsigned int level) {}
 
-unsigned int Sampler::getMipMapBaseLevel(void) const {}
+unsigned int Sampler::getMipMapBaseLevel() const {}
 
 void Sampler::setMipMapBias(float bias) {}
 
@@ -80,15 +80,15 @@ float Sampler::getMipMapBias(float bias) const {}
 
 void Sampler::setBorderColor(float color) {}
 
-float Sampler::getBorderColor(void) const {}
+float Sampler::getBorderColor() const {}
 
 unsigned int Sampler::setMaxLod(unsigned int level) {}
 
-unsigned int Sampler::getMaxLod(void) const {}
+unsigned int Sampler::getMaxLod() const {}
 
 unsigned int Sampler::setMinLod(unsigned int level) {}
 
-unsigned int Sampler::getMinLod(void) const {}
+unsigned int Sampler::getMinLod() const {}
 
 void Sampler::setName(const std::string &name) {
 	GLSamplerObject *sampler = (GLSamplerObject *)this->getObject();
@@ -100,4 +100,4 @@ void Sampler::setName(const std::string &name) {
 	// addMarkerLabel((const OpenGLCore *) getRenderer()->getData(), GL_SAMPLER, sampler->sampler, &marker);
 }
 
-intptr_t Sampler::getNativePtr(void) const { return 0; }
+intptr_t Sampler::getNativePtr() const { return 0; }

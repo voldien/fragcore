@@ -1,8 +1,8 @@
 #ifndef _FRAG_CORE_VULKAN_WINDOW_H_
 #define _FRAG_CORE_VULKAN_WINDOW_H_ 1
 #include "VKRenderInterface.h"
-#include <Renderer/IRenderer.h>
-#include <Renderer/RendererWindow.h>
+#include <../IRenderer.h>
+#include <../RendererWindow.h>
 #include <vulkan/vulkan.h>
 #if defined(FRAG_CORE_INTERNAL_IMP) // TODO resolve to a single file or
 									// something later
@@ -16,23 +16,23 @@ namespace fragcore {
 	class FVDECLSPEC VKRenderWindow : public RendererWindow {
 	  public:
 		VKRenderWindow(Ref<VKRenderInterface> &renderer);
-		~VKRenderWindow(void);
+		~VKRenderWindow();
 
-		void close(void) override;
+		void close() override;
 
-		virtual void show(void);
+		virtual void show();
 
-		virtual void hide(void);
+		virtual void hide();
 
-		void focus(void) override;
+		void focus() override;
 
-		void restore(void) override;
+		void restore() override;
 
-		void maximize(void) override;
+		void maximize() override;
 
-		void minimize(void) override;
+		void minimize() override;
 
-		virtual void swapBuffer(void);
+		virtual void swapBuffer();
 
 		virtual void setPosition(int x, int y);
 
@@ -48,14 +48,14 @@ namespace fragcore {
 
 		void setIcon(void *pVoid) override;
 
-		void *getIcon(void) const override;
+		void *getIcon() const override;
 
-		virtual Display *getCurrentDisplay(void) const;
+		virtual Display *getCurrentDisplay() const;
 
 		void setFullScreen(bool fullscreen) override;
 		virtual void setFullScreen(Display &display);
 
-		bool isFullScreen(void) const;
+		bool isFullScreen() const;
 
 		void setBordered(bool bordered) override;
 
@@ -64,16 +64,16 @@ namespace fragcore {
 		void setMaximumSize(int width, int height) override;
 		virtual void getMaximumSize(int *width, int *height);
 
-		virtual float getGamma(void) const;
+		virtual float getGamma() const;
 
 		virtual void setGamma(float);
 
 		virtual void setTitle(const char *title);
-		virtual const char *getTitle(void) const;
+		virtual const char *getTitle() const;
 
-		intptr_t getNativePtr(void) const override;
+		intptr_t getNativePtr() const override;
 
-		virtual ViewPort *getViewPort(void) override;
+		virtual ViewPort *getViewPort() override;
 		virtual FrameBuffer *getDefaultFrameBuffer() override;
 
 		virtual void createWindow(int x, int y, int width, int height, const char *api) override;
@@ -82,25 +82,25 @@ namespace fragcore {
 
 	  public:
 		/*	Vulkan methods.	*/
-		VkDevice getDevice(void) const;
-		int getCurrentFrame(void) const;
-		VkFramebuffer getDefaultFrameBuffer(void) const;
-		VkFormat depthStencilFormat(void) const;
-		VkImage depthStencilImage(void) const;
+		VkDevice getDevice() const;
+		int getCurrentFrame() const;
+		VkFramebuffer getDefaultFrameBuffer() const;
+		VkFormat depthStencilFormat() const;
+		VkImage depthStencilImage() const;
 
-		VkCommandBuffer getCurrentCommandBuffer(void) const;
-		VkRenderPass getDefaultRenderPass(void) const;
-		VkCommandPool getGraphicCommadnPool(void) const;
-		VkImage getDefaultImage(void) const;
-		VkQueue getGraphicQueue(void) const;
+		VkCommandBuffer getCurrentCommandBuffer() const;
+		VkRenderPass getDefaultRenderPass() const;
+		VkCommandPool getGraphicCommadnPool() const;
+		VkImage getDefaultImage() const;
+		VkQueue getGraphicQueue() const;
 		VkPhysicalDevice physicalDevice() const;
-		std::vector<VkPhysicalDevice> getPhyiscalDevices(void);
-		// virtual void std::vector<SupportedExtensions> getSupportedExtensions(void);
+		std::vector<VkPhysicalDevice> getPhyiscalDevices();
+		// virtual void std::vector<SupportedExtensions> getSupportedExtensions();
 
 	  protected:
-		virtual void createSwapChain(void);
-		virtual void recreateSwapChain(void);
-		virtual void cleanSwapChain(void);
+		virtual void createSwapChain();
+		virtual void recreateSwapChain();
+		virtual void cleanSwapChain();
 
 	  private:
 		SDL_Window *window;

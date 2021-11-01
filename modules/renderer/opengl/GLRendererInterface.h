@@ -18,7 +18,7 @@
 */
 #ifndef _FRAG_CORE_GL_RENDERER_INTERFACE_H_
 #define _FRAG_CORE_GL_RENDERER_INTERFACE_H_ 1
-#include "Renderer/IRenderer.h"
+#include "../IRenderer.h"
 
 namespace fragcore {
 
@@ -30,8 +30,8 @@ namespace fragcore {
 		// TODO make it less state machine and allow it to become more modern.
 		virtual ~GLRendererInterface();
 
-		virtual void OnInitialization(void);
-		virtual void OnDestruction(void);
+		virtual void OnInitialization();
+		virtual void OnDestruction();
 
 		/**
 		 *	Create texture.
@@ -120,7 +120,7 @@ namespace fragcore {
 		/**
 		 * Create swapchain.
 		 */
-		virtual void createSwapChain(void);
+		virtual void createSwapChain();
 
 		/**
 		 *
@@ -154,7 +154,7 @@ namespace fragcore {
 		/**
 		 *	Swap current window buffer.
 		 */
-		virtual void swapBuffer(void); // TODO relocate to the render window.
+		virtual void swapBuffer(); // TODO relocate to the render window.
 
 		/**
 		 *	Set depth mask.
@@ -245,7 +245,7 @@ namespace fragcore {
 		virtual void dispatchCompute(unsigned int *global, unsigned int *local, unsigned int offset = 0);
 
 		// TODO add memory barrier.
-		virtual void memoryBarrier(void);
+		virtual void memoryBarrier();
 
 		virtual Sync *createSync(SyncDesc *desc);
 
@@ -269,19 +269,19 @@ namespace fragcore {
 		 * Get all support shader languages.
 		 * @return bitflag of all supported shader languages.
 		 */
-		virtual ShaderLanguage getShaderLanguage(void) const;
+		virtual ShaderLanguage getShaderLanguage() const;
 
 		/**
 		 * Get the name of the rendering API.
 		 * @return non-null terminated string.
 		 */
-		virtual const char *getAPIVersion(void) const;
+		virtual const char *getAPIVersion() const;
 
 		/**
 		 *	Get version of the interface.
 		 *	@Return non-null terminated string.
 		 */
-		virtual const char *getVersion(void) const;
+		virtual const char *getVersion() const;
 
 		/**
 		 * Get all supported texture formats.
@@ -311,13 +311,13 @@ namespace fragcore {
 		// TODO imporove later
 		virtual void getStatus(MemoryInfo *memoryInfo);
 
-		virtual CommandList *createCommandBuffer(void);
+		virtual CommandList *createCommandBuffer();
 		virtual void submittCommand(Ref<CommandList> &list);
 		virtual void execute(CommandList *list);
 
 		GLRendererInterface(IConfig *config);
 
-		virtual void *getData(void) const;
+		virtual void *getData() const;
 
 	  protected: /*  */
 		void *pdata;

@@ -1,9 +1,9 @@
-#include "Renderer/Shader.h"
+#include "../Shader.h"
 #include "internal_object_type.h"
 #include <GL/glew.h>
 using namespace fragcore;
 
-void Shader::bind(void) {
+void Shader::bind() {
 	GLShaderObject *shadobj = (GLShaderObject *)this->pdata;
 	glUseProgram(shadobj->program);
 }
@@ -100,4 +100,4 @@ void Shader::setName(const std::string &name) {
 	// addMarkerLabel((const OpenGLCore *) getRenderer()->getData(), GL_SHADER, shadobj->shader, &marker);
 }
 
-intptr_t Shader::getNativePtr(void) const { return 0; }
+intptr_t Shader::getNativePtr() const { return 0; }

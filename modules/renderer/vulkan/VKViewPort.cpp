@@ -1,4 +1,4 @@
-#include "Renderer/ViewPort.h"
+#include "../ViewPort.h"
 #include "internal_object_type.h"
 using namespace fragcore;
 
@@ -20,4 +20,4 @@ void ViewPort::disable(IRenderer::State state) {}
 
 bool ViewPort::isStateEnabled(IRenderer::State state) {}
 
-intptr_t ViewPort::getNativePtr(void) const { return 0; }
+intptr_t ViewPort::getNativePtr() const { return 0; }

@@ -1,7 +1,6 @@
 #include "Config.h"
 #include "Core/IO/FileSystem.h"
 #include "Core/Log.h"
-#include <Renderer/RendererFactory.h>
 
 #include <csignal>
 #include <cstdlib>
@@ -138,8 +137,8 @@ void Config::setDefaultOption(void) {
 	global.set("use-cache-shaders", true);
 
 	/*	Default interfaces configuration.	*/
-	global.set("renderer-dynamicInterface",
-			   fragcore::RenderingFactory::getInterfaceLibraryPath(fragcore::RenderingFactory::OpenGL));
+	// global.set("renderer-dynamicInterface",
+	// 		   fragcore::RenderingFactory::getInterfaceLibraryPath(fragcore::RenderingFactory::OpenGL));
 	global.set<int>("SIMD", LIBHPM::Hpm::eHPM_DEFAULT);
 
 	/*TODO determine if to relocate.    */
@@ -377,18 +376,18 @@ void Config::parseGetOpt(int argc, const char **argv) {
 			}
 		} break;
 		case '~': /*  Special type of options.    */
-			if (strcmp(option, "renderer-opengl") == 0)
-				this->set<const char *>("renderer-dynamicInterface",
-										RenderingFactory::getInterfaceLibraryPath(RenderingFactory::OpenGL));
-			if (strcmp(option, "renderer-vulkan") == 0)
-				this->set<const char *>("renderer-dynamicInterface",
-										RenderingFactory::getInterfaceLibraryPath(RenderingFactory::Vulkan));
-			if (strcmp(option, "renderer-opencl") == 0)
-				this->set<const char *>("renderer-dynamicInterface",
-										RenderingFactory::getInterfaceLibraryPath(RenderingFactory::OpenCL));
-			if (strcmp(option, "renderer-directx") == 0)
-				this->set<const char *>("renderer-dynamicInterface",
-										RenderingFactory::getInterfaceLibraryPath(RenderingFactory::DirectX));
+			// if (strcmp(option, "renderer-opengl") == 0)
+			// 	this->set<const char *>("renderer-dynamicInterface",
+			// 							RenderingFactory::getInterfaceLibraryPath(RenderingFactory::OpenGL));
+			// if (strcmp(option, "renderer-vulkan") == 0)
+			// 	this->set<const char *>("renderer-dynamicInterface",
+			// 							RenderingFactory::getInterfaceLibraryPath(RenderingFactory::Vulkan));
+			// if (strcmp(option, "renderer-opencl") == 0)
+			// 	this->set<const char *>("renderer-dynamicInterface",
+			// 							RenderingFactory::getInterfaceLibraryPath(RenderingFactory::OpenCL));
+			// if (strcmp(option, "renderer-directx") == 0)
+			// 	this->set<const char *>("renderer-dynamicInterface",
+			// 							RenderingFactory::getInterfaceLibraryPath(RenderingFactory::DirectX));
 			if (strcmp(option, "no-decoration") == 0)
 				this->set("window-bordered", false);
 			if (strcmp(option, "v-sync") == 0)

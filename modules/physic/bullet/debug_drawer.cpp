@@ -4,14 +4,14 @@
 
 using namespace fragcore;
 
-DebugDrawer::DebugDrawer(Ref<IRenderer> &renderer) {
-	renderer->increment();
-	this->renderer = renderer;
+// DebugDrawer::DebugDrawer(Ref<IRenderer> &renderer) {
+// 	renderer->increment();
+// 	this->renderer = renderer;
 
-	/*  Create buffers. */
+// 	/*  Create buffers. */
 
-	/*  Create shaders. */
-}
+// 	/*  Create shaders. */
+// }
 
 btIDebugDraw::DefaultColors DebugDrawer::getDefaultColors() const { return btIDebugDraw::getDefaultColors(); }
 

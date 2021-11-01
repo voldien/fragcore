@@ -6,7 +6,7 @@
 namespace fragcore {
 
 	/**
-	 * 
+	 *
 	 */
 	class FVDECLSPEC SDLDisplay : public Display {
 	public:
@@ -26,7 +26,7 @@ namespace fragcore {
 
 		void getDPI(DPI *dpi) override;
 
-		fragcore::TextureFormat getFormat() override;
+		//fragcore::TextureFormat getFormat() override;
 
 	protected:
 		unsigned int translateFormat(unsigned int format);

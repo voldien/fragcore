@@ -1,47 +1,47 @@
-#include"Renderer/FrameBuffer.h"
+#include"../FrameBuffer.h"
 
 using namespace fragcore;
 
 
-void FrameBuffer::bind(void) {
+void FrameBuffer::bind() {
     //vkCmdBeginRenderPass(commandBuffers[i], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 }
 
-void FrameBuffer::unBind(void) {
+void FrameBuffer::unBind() {
     //vkCmdEndRenderPass(commandBuffers[i]);
 }
 
-void FrameBuffer::write(void) {
+void FrameBuffer::write() {
 
 }
 
-void FrameBuffer::read(void) const {
+void FrameBuffer::read() const {
 }
 
 Texture *FrameBuffer::getAttachment(unsigned int index) {
 
 }
 
-Texture *FrameBuffer::getDepthAttachment(void) {
+Texture *FrameBuffer::getDepthAttachment() {
 
 }
 
-Texture *FrameBuffer::getStencilAttachment(void) {
+Texture *FrameBuffer::getStencilAttachment() {
 
 }
 
-int FrameBuffer::width(void) const
+int FrameBuffer::width() const
 {
 }
 
-int FrameBuffer::height(void) const
+int FrameBuffer::height() const
 {
 }
-int FrameBuffer::layers(void){
+int FrameBuffer::layers(){
 	
 }
 
-int FrameBuffer::nrSamples(void) {}
+int FrameBuffer::nrSamples() {}
 
 void FrameBuffer::blend(BlendEqu equ, BlendFunc sfactor, BlendFunc dfactor, BufferAttachment bufferAttachment) {
 
@@ -89,6 +89,6 @@ void FrameBuffer::setName(const std::string &name) {
 	Object::setName(name);
 }
 
-intptr_t FrameBuffer::getNativePtr(void) const {
+intptr_t FrameBuffer::getNativePtr() const {
 	return 0;
 }

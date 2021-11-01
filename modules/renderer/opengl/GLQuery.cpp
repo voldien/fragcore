@@ -1,10 +1,10 @@
-#include "Renderer/Query.h"
+#include "../Query.h"
 #include "internal_object_type.h"
 #include <GL/glew.h>
 
 using namespace fragcore;
 
-QueryObject::~QueryObject(void) {}
+QueryObject::~QueryObject() {}
 
 static GLenum getTarget(QueryObject::Target target) {
 	switch (target) {
@@ -60,6 +60,6 @@ void QueryObject::beginConditionalRenderer(Condition target) {
 	glBeginConditionalRender(query->query[0], condition);
 }
 
-void QueryObject::endConditionalRenderer(void) { glEndConditionalRender(); }
+void QueryObject::endConditionalRenderer() { glEndConditionalRender(); }
 
-intptr_t QueryObject::getNativePtr(void) const { return 0; }
+intptr_t QueryObject::getNativePtr() const { return 0; }

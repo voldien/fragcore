@@ -1,4 +1,4 @@
-#include "Renderer/IRenderer.h"
+#include "../IRenderer.h"
 #include "internal_object_type.h"
 #include <GL/glew.h>
 
@@ -20,7 +20,7 @@ void addMarkerLabel(const OpenGLCore *glcore, unsigned int identifier, unsigned 
 	}
 }
 
-void checkError(void) {
+void checkError() {
 	GLenum error = glGetError();
 	if (error != GL_NO_ERROR) {
 		throw RuntimeException(fmt::format("glGetError indicated an error: %s", glewGetErrorString(error)));
@@ -28,9 +28,8 @@ void checkError(void) {
 }
 
 /*  Helper function for extracting error from OpenGL.   */
-void resetErrorFlag(void) {
-	while (glGetError() != GL_NO_ERROR)
-		;
+void resetErrorFlag() {
+	while (glGetError() != GL_NO_ERROR){}
 }
 
 unsigned int getWrapMode(SamplerDesc::AddressMode mode) {

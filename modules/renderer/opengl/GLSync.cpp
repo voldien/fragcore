@@ -1,9 +1,9 @@
-#include "Renderer/Sync.h"
+#include "../Sync.h"
 #include "internal_object_type.h"
 #include <GL/glew.h>
 using namespace fragcore;
 
-void Sync::fence(void) {
+void Sync::fence() {
 	GLSync *glSync = (GLSync *)this->getObject();
 	glSync->sync = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
 }
@@ -28,7 +28,7 @@ Sync::SyncStatus Sync::waitClient(int timeout) {
 	}
 }
 
-intptr_t Sync::getNativePtr(void) const {
+intptr_t Sync::getNativePtr() const {
 	GLSync *glSync = (GLSync *)this->getObject();
 	return (intptr_t)glSync->sync;
 }

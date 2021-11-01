@@ -5,10 +5,10 @@
 
 using namespace fragcore;
 
-GLCommandList::~GLCommandList(void) {}
+GLCommandList::~GLCommandList() {}
 
-void GLCommandList::begin(void) {}
-void GLCommandList::end(void) {}
+void GLCommandList::begin() {}
+void GLCommandList::end() {}
 
 void GLCommandList::copyTexture(const Texture *src, Texture *dst) {}
 
@@ -33,5 +33,5 @@ void GLCommandList::dispatchIndirect(Buffer *buffer, u_int64_t offset) {
 void GLCommandList::setDepthBounds(float min, float max) {}
 
 void GLCommandList::pushDebugGroup(const char *name) {}
-void GLCommandList::popDebugGroup(void) {}
+void GLCommandList::popDebugGroup() {}
 void GLCommandList::insertDebugMarker(const char *name) {}

@@ -1,6 +1,6 @@
 #include"Renderer/IRenderer.h"
 
 
-IRenderer* createInternalRenderer(void){
+IRenderer* createInternalRenderer(){
     return new IRenderer();
 }

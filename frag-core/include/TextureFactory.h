@@ -18,8 +18,8 @@
 */
 #ifndef _FRAG_CORE_TEXTURE_FACTORY_H_
 #define _FRAG_CORE_TEXTURE_FACTORY_H_ 1
-#include "Def.h"
-#include"Renderer/Prerequisites.h"
+#include<FragCore.h>
+#include<RenderPrerequisites.h>
 
 namespace fragcore {
 

@@ -295,7 +295,7 @@ VKRenderWindow::VKRenderWindow(Ref<VKRenderInterface> &renderer) {
 // 	}
 }
 
-VKRenderWindow::~VKRenderWindow(void) {
+VKRenderWindow::~VKRenderWindow() {
 	/*	Release all the resources.	*/
 	// TODO add the swap chain to be part of the window rather than
 }
@@ -304,9 +304,9 @@ void VKRenderWindow::show() { SDL_ShowWindow(this->window); }
 
 void VKRenderWindow::hide() { SDL_HideWindow(this->window); }
 
-void VKRenderWindow::close(void) { SDL_DestroyWindow(this->window); }
+void VKRenderWindow::close() { SDL_DestroyWindow(this->window); }
 
-ViewPort *VKRenderWindow::getViewPort(void) { this->renderer->getView(0); }
+ViewPort *VKRenderWindow::getViewPort() { this->renderer->getView(0); }
 FrameBuffer *VKRenderWindow::getDefaultFrameBuffer() { throw NotSupportedException(); }
 
 void VKRenderWindow::swapBuffer() {
@@ -377,7 +377,7 @@ void VKRenderWindow::swapBuffer() {
 	swapChain.currentFrame = (swapChain.currentFrame + 1) % 2;
 }
 
-void VKRenderWindow::createSwapChain(void) {
+void VKRenderWindow::createSwapChain() {
 // 	/*  */
 // #ifdef VK_USE_PLATFORM_XLIB_KHR
 
@@ -540,7 +540,7 @@ void VKRenderWindow::createSwapChain(void) {
 // 	vkAllocateCommandBuffers(getDevice(), &cmdBufAllocInfo, this->swapChain.commandBuffers.data());
 }
 
-void VKRenderWindow::recreateSwapChain(void) {
+void VKRenderWindow::recreateSwapChain() {
 	vkDeviceWaitIdle(getDevice());
 
 	cleanSwapChain();
@@ -548,7 +548,7 @@ void VKRenderWindow::recreateSwapChain(void) {
 	createSwapChain();
 }
 
-void VKRenderWindow::cleanSwapChain(void) {
+void VKRenderWindow::cleanSwapChain() {
 	for (auto framebuffer : swapChain.swapChainFramebuffers) {
 		vkDestroyFramebuffer(getDevice(), framebuffer, nullptr);
 	}
@@ -565,20 +565,20 @@ void VKRenderWindow::cleanSwapChain(void) {
 	vkDestroySwapchainKHR(getDevice(), this->swapChain.swapchain, nullptr);
 }
 
-VkDevice VKRenderWindow::getDevice(void) const {
+VkDevice VKRenderWindow::getDevice() const {
 	const VKRenderInterface *vulkancore = *this->renderer;
 	return vulkancore->device->getHandle();
 }
-VkFramebuffer VKRenderWindow::getDefaultFrameBuffer(void) const {
+VkFramebuffer VKRenderWindow::getDefaultFrameBuffer() const {
 	return this->swapChain.swapChainFramebuffers[this->swapChain.currentFrame];
 }
 
-VkCommandBuffer VKRenderWindow::getCurrentCommandBuffer(void) const {
+VkCommandBuffer VKRenderWindow::getCurrentCommandBuffer() const {
 	return this->swapChain.commandBuffers[this->swapChain.currentFrame];
 }
-VkRenderPass VKRenderWindow::getDefaultRenderPass(void) const { return this->swapChain.renderPass; }
-VkCommandPool VKRenderWindow::getGraphicCommadnPool(void) const { return this->cmd_pool; }
-VkImage VKRenderWindow::getDefaultImage(void) const {
+VkRenderPass VKRenderWindow::getDefaultRenderPass() const { return this->swapChain.renderPass; }
+VkCommandPool VKRenderWindow::getGraphicCommadnPool() const { return this->cmd_pool; }
+VkImage VKRenderWindow::getDefaultImage() const {
 	return this->swapChain.swapChainImages[this->swapChain.currentFrame];
 }
 
@@ -587,7 +587,7 @@ VkPhysicalDevice VKRenderWindow::physicalDevice() const {
 	// physicalDevices[0];
 	return nullptr;
 }
-std::vector<VkPhysicalDevice> VKRenderWindow::getPhyiscalDevices(void) {}
+std::vector<VkPhysicalDevice> VKRenderWindow::getPhyiscalDevices() {}
 
 void VKRenderWindow::setPosition(int x, int y) { SDL_SetWindowPosition(this->window, x, y); }
 
@@ -600,7 +600,7 @@ void VKRenderWindow::vsync(bool state) { SDL_GL_SetSwapInterval(state); }
 
 bool VKRenderWindow::assertConfigAttributes(const fragcore::IConfig *iConfig) { return false; }
 
-float VKRenderWindow::getGamma(void) const {
+float VKRenderWindow::getGamma() const {
 	ushort ramp[256 * 3];
 	int err = SDL_GetWindowGammaRamp(this->window, &ramp[256 * 0], &ramp[256 * 1], &ramp[256 * 2]);
 	if (err == -1)
@@ -618,13 +618,13 @@ void VKRenderWindow::setGamma(float gamma) {
 		throw NotSupportedException(fmt::format("Failed to set window gamma %f: %s", gamma, SDL_GetError()));
 }
 
-// VKRenderWindow::~RendererWindow(void) {}
+// VKRenderWindow::~RendererWindow() {}
 
 void VKRenderWindow::getPosition(int *x, int *y) const { SDL_GetWindowPosition(this->window, x, y); }
 
 void VKRenderWindow::getSize(int *width, int *height) const { SDL_GetWindowSize(this->window, width, height); }
 
-fragcore::Display *VKRenderWindow::getCurrentDisplay(void) const {
+fragcore::Display *VKRenderWindow::getCurrentDisplay() const {
 	int index;
 	index = SDL_GetWindowDisplayIndex(this->window);
 	return WindowManager::getInstance()->getDisplay(index);
@@ -643,7 +643,7 @@ void VKRenderWindow::useWindow(void *pdata) {}
 
 void VKRenderWindow::setTitle(const char *title) { SDL_SetWindowTitle(this->window, title); }
 
-const char *VKRenderWindow::getTitle(void) const { return SDL_GetWindowTitle(this->window); }
+const char *VKRenderWindow::getTitle() const { return SDL_GetWindowTitle(this->window); }
 
 void VKRenderWindow::resizable(bool resizable) { SDL_SetWindowResizable(this->window, (SDL_bool)resizable); }
 
@@ -657,7 +657,7 @@ void VKRenderWindow::setFullScreen(bool fullscreen) {
 
 void VKRenderWindow::setFullScreen(Display &display) {}
 
-bool VKRenderWindow::isFullScreen(void) const {}
+bool VKRenderWindow::isFullScreen() const {}
 
 void VKRenderWindow::setBordered(bool bordered) { SDL_SetWindowBordered(this->window, (SDL_bool)bordered); }
 
@@ -667,15 +667,15 @@ void VKRenderWindow::getMinimumSize(int *width, int *height) {}
 void VKRenderWindow::setMaximumSize(int width, int height) { SDL_SetWindowMaximumSize(this->window, width, height); }
 void VKRenderWindow::getMaximumSize(int *width, int *height) {}
 
-void VKRenderWindow::focus(void) { SDL_SetWindowInputFocus(this->window); }
+void VKRenderWindow::focus() { SDL_SetWindowInputFocus(this->window); }
 
-void VKRenderWindow::restore(void) { SDL_RestoreWindow(this->window); }
+void VKRenderWindow::restore() { SDL_RestoreWindow(this->window); }
 
-void VKRenderWindow::maximize(void) { SDL_MaximizeWindow(this->window); }
+void VKRenderWindow::maximize() { SDL_MaximizeWindow(this->window); }
 
-void VKRenderWindow::minimize(void) { SDL_MinimizeWindow(this->window); }
+void VKRenderWindow::minimize() { SDL_MinimizeWindow(this->window); }
 
-intptr_t VKRenderWindow::getNativePtr(void) const {
+intptr_t VKRenderWindow::getNativePtr() const {
 	//     SDL_SysWMinfo info;
 
 	//     SDL_VERSION(
@@ -726,4 +726,4 @@ intptr_t VKRenderWindow::getNativePtr(void) const {
 
 void VKRenderWindow::setIcon(void *pVoid) {}
 
-void *VKRenderWindow::getIcon(void) const { return nullptr; }
+void *VKRenderWindow::getIcon() const { return nullptr; }

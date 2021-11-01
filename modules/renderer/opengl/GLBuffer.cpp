@@ -57,11 +57,11 @@ void *GLBuffer::getData(unsigned int offset, unsigned int size) {
 	return pbuffer;
 }
 
-bool GLBuffer::isValid(void) {
+bool GLBuffer::isValid() {
 	return glIsBufferARB(this->buffer) == GL_TRUE;
 }
 
-long int GLBuffer::getSize(void){
+long int GLBuffer::getSize(){
 	GLint size;
 	this->bind();
 	glGetBufferParameteriv(this->target, GL_BUFFER_SIZE, &size);
@@ -136,7 +136,7 @@ void GLBuffer::flush(unsigned long int offset, unsigned long int length) {
 	}
 }
 
-void GLBuffer::unMapBuffer(void) {
+void GLBuffer::unMapBuffer() {
 	
 	if (glUnmapNamedBuffer) {
 		glUnmapNamedBuffer(this->buffer);
@@ -155,4 +155,4 @@ void GLBuffer::setName(const std::string &name) {
 	////addMarkerLabel((const OpenGLCore *)getRenderer()->getData(), GL_BUFFER, this->buffer, &marker);
 }
 
-intptr_t GLBuffer::getNativePtr(void) const { return this->buffer; }
+intptr_t GLBuffer::getNativePtr() const { return this->buffer; }

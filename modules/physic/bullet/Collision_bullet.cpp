@@ -1,4 +1,4 @@
-#include"Physic/Collider.h"
+#include"../Collider.h"
 
 #include<bullet/btBulletCollisionCommon.h>
 #include<bullet/btBulletDynamicsCommon.h>

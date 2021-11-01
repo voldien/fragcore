@@ -46,6 +46,7 @@ OPTION(BUILD_OPT_BUILD_PACKAGES "Set to ON to generate CPack configuration files
 OPTION(BUILD_WITH_DEBUG_BOUNDSCHECK "Array/Pointer BoundsChecking, buffer overflow protection. Used in debug only." OFF)
 option(BUILD_INSTALL_RESOURCES "Installs the Resources directory" ON)
 
+
 # Debug
 OPTION(WITH_CXX_GUARDEDALLOC "Enable GuardedAlloc for C++ memory allocation tracking (only enable for development)" OFF)
 MARK_AS_ADVANCED(WITH_CXX_GUARDEDALLOC)
@@ -64,6 +65,7 @@ OPTION(BUILD_WITH_DOCS "Build documentation." OFF)
 OPTION(BUILD_WITH_SAMPLES "Build sample codes" ON)
 
 # Build external interface plugin.
+OPTION(BUILD_MODULES "" OFF)
 OPTION(BUILD_WITH_EXTERNAL_PLUGINS "" ON)
 OPTION(BUILD_EXTERNAL_RENDERER "Building external renderer libraries" ON)
 OPTION(BUILD_EXTERNAL_AUDIO "Building external audio libraries" ON)
@@ -343,30 +345,40 @@ ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/extern)
 # Main core library.
 ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/frag-core)
 
-# Rendering interfaces.
-IF(BUILD_EXTERNAL_RENDERER)
-	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/renderer/opengl/)
-	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/renderer/directx/)
-	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/renderer/vulkan/)
-	#TODO changed to a compute base class and module extension.
-	#ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/frag-core/src/renderer/opencl/)
-ENDIF()
 
-# Build FragCore Audio modules
-IF(BUILD_EXTERNAL_AUDIO)
-	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/frag-core/src/audio/openal/)
-	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/frag-core/src/audio/fmod/)
-ENDIF()
 
-# Build FragCore Physic modules
-IF(BUILD_EXTERNAL_PHYSIC)
-	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/physic/bullet/)
-	#ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/physic/physx/)
-ENDIF()
+IF(BUILD_MODULES)
+	# Rendering interfaces.
+	IF(BUILD_EXTERNAL_RENDERER)
+		ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/renderer/)
+		ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/renderer/opengl/)
+		ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/renderer/directx/)
+		ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/renderer/vulkan/)
+		#TODO changed to a compute base class and module extension.
+		#ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/frag-core/src/renderer/opencl/)
+	ENDIF()
 
-ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/IO/can)
-ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/IO/modbus)
-ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/IO/SerialIO)
+	# Build FragCore Audio modules
+	IF(BUILD_EXTERNAL_AUDIO)
+		ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/audio)
+		ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/audio/openal/)
+		ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/audio/fmod/)
+	ENDIF()
+
+	# Build FragCore Physic modules
+	IF(BUILD_EXTERNAL_PHYSIC)
+		ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/physic/)
+		ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/physic/bullet/)
+		#ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/physic/physx/)
+	ENDIF()
+
+	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/IO/can)
+	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/IO/modbus)
+	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/IO/SerialIO)
+
+	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/videoplayback)
+
+ENDIF(BUILD_MODULES)
 
 # Testing and assertion and other.
 #TODO attempt to remove so it works on all platforms.

@@ -5,5 +5,5 @@ FILE(GLOB SOURCE_COMMON_HEADER ${CMAKE_CURRENT_SOURCE_DIR}/../common/*.h)
 
 # Executable OpenGL hpm benchmark.
 ADD_EXECUTABLE(audio-example ${SOURCE_FILES} ${SOURCE_COMMON} ${SOURCE_COMMON_HEADER})
-TARGET_LINK_LIBRARIES(audio-example fragcore ${SDL2_LIBRARIES})
+TARGET_LINK_LIBRARIES(audio-example PRIVATE fragcore fragcore-audio-interface  ${SDL2_LIBRARIES})
 TARGET_INCLUDE_DIRECTORIES(audio-example PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../common/ )

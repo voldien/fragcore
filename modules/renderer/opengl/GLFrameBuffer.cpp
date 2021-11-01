@@ -1,35 +1,35 @@
-#include "Renderer/IRenderer.h"
+#include "../IRenderer.h"
 #include "internal_object_type.h"
 #include <GL/glew.h>
 
 #include <fmt/core.h>
 using namespace fragcore;
 
-static unsigned int getCurrentFrameBufferWrite(void) {
+static unsigned int getCurrentFrameBufferWrite() {
 	GLint whichID;
 	glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &whichID);
 	return whichID;
 }
 
-static unsigned int getCurrentFrameBufferRead(void) {
+static unsigned int getCurrentFrameBufferRead() {
 	GLint whichID;
 	glGetIntegerv(GL_READ_FRAMEBUFFER_BINDING, &whichID);
 	return whichID;
 }
 
-void FrameBuffer::bind(void) {
+void FrameBuffer::bind() {
 	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
 	glBindFramebuffer(GL_FRAMEBUFFER, fraobj->framebuffer);
 }
 
-void FrameBuffer::unBind(void) { glBindFramebuffer(GL_FRAMEBUFFER, 0); }
+void FrameBuffer::unBind() { glBindFramebuffer(GL_FRAMEBUFFER, 0); }
 
-void FrameBuffer::write(void) {
+void FrameBuffer::write() {
 	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fraobj->framebuffer);
 }
 
-void FrameBuffer::read(void) const {
+void FrameBuffer::read() const {
 	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, fraobj->framebuffer);
 }
@@ -39,17 +39,17 @@ Texture *FrameBuffer::getAttachment(unsigned int index) {
 	return fraobj->desc.attach[index];
 }
 
-Texture *FrameBuffer::getDepthAttachment(void) {
+Texture *FrameBuffer::getDepthAttachment() {
 	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
 	return fraobj->desc.depth;
 }
 
-Texture *FrameBuffer::getStencilAttachment(void) {
+Texture *FrameBuffer::getStencilAttachment() {
 	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
 	return fraobj->desc.stencil;
 }
 
-int FrameBuffer::width(void) const {
+int FrameBuffer::width() const {
 	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
 	int width;
 	if (glGetNamedFramebufferParameteriv) {
@@ -61,7 +61,7 @@ int FrameBuffer::width(void) const {
 	return width;
 }
 
-int FrameBuffer::height(void) const {
+int FrameBuffer::height() const {
 	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
 	int height;
 	if (glGetNamedFramebufferParameteriv) {
@@ -83,7 +83,7 @@ int FrameBuffer::layers() {
 	return layers;
 }
 
-int FrameBuffer::nrSamples(void) {
+int FrameBuffer::nrSamples() {
 	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
 	int nrSamples;
 	if (glGetNamedFramebufferParameteriv) {
@@ -167,7 +167,7 @@ void FrameBuffer::setDraw(BufferAttachment attachment) {
 	}
 }
 
-intptr_t FrameBuffer::getNativePtr(void) const {
+intptr_t FrameBuffer::getNativePtr() const {
 	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
 	return fraobj->framebuffer;
 }

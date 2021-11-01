@@ -1,0 +1,18 @@
+FILE(GLOB SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
+
+# Library target.
+ADD_LIBRARY(fragcore-physic-interface SHARED ${SOURCE_FILES})
+TARGET_LINK_LIBRARIES(fragcore-physic-interface fragcore) #
+TARGET_COMPILE_DEFINITIONS(fragcore-physic-interface PRIVATE FRAG_CORE_INTERNAL_IMP=1)
+
+ADD_DEPENDENCIES(fragcore-render-interface fragcore )
+
+#
+IF(BUILD_WITH_INSTALL)
+    INSTALL(TARGETS fragcore-physic-interface DESTINATION lib COMPONENT ${LIBFRAGCORE_COMPONENT})
+ENDIF()
+
+IF(CMAKE_TESTING_ENABLED)
+	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/test)
+ENDIF()
+

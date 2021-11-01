@@ -19,7 +19,6 @@
 #ifndef _FRAG_CORE_FONT_H_
 #define _FRAG_CORE_FONT_H_ 1
 #include "Core/SmartReference.h"
-#include "Renderer/Texture.h"
 #include <map>
 
 namespace fragcore {
@@ -35,7 +34,7 @@ namespace fragcore {
 			int height;
 			int Bearing[2]; // Offset from baseline to left/top of glyph
 			float Advance;	// Offset to advance to next glyph
-							//		float* advance;             /*  */
+						   //		float* advance;             /*  */
 			/*  UV rectangle.   */
 			float tex_x1; /*  */
 			float tex_x2; /*  */
@@ -62,11 +61,11 @@ namespace fragcore {
 
 		unsigned int getEncoding() const;
 
-		Texture *getTexture() const;
+		//Texture *getTexture() const;
 
 		// TODO add support for config file for lookup.
 	  private:
-		Texture *texture;
+		//Texture *texture;
 		std::map<unsigned int, Character> characters;
 	};
 } // namespace fragcore

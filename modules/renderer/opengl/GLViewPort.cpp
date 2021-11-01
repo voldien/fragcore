@@ -1,4 +1,4 @@
-#include "Renderer/ViewPort.h"
+#include "../ViewPort.h"
 #include "internal_object_type.h"
 #include <GL/glew.h>
 using namespace fragcore;
@@ -73,4 +73,4 @@ bool ViewPort::isStateEnabled(IRenderer::State state) {
 	return glIsEnabledi(getState(state), viewPort->viewport);
 }
 
-intptr_t ViewPort::getNativePtr(void) const { return 0; }
+intptr_t ViewPort::getNativePtr() const { return 0; }

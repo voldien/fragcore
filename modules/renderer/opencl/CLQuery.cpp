@@ -2,7 +2,7 @@
 #include "Renderer/opencl/internal_object_type.h"
 using namespace fragcore;
 
-QueryObject::~QueryObject(void) {}
+QueryObject::~QueryObject() {}
 
 void QueryObject::begin(Target target, unsigned int index) {
 	// GLQuery* query = (GLQuery*)obj;
@@ -18,4 +18,4 @@ void QueryObject::end(Target target, unsigned int index) {
 	// glBeginConditionalRender
 }
 
-intptr_t QueryObject::getNativePtr(void) const { return 0; }
+intptr_t QueryObject::getNativePtr() const { return 0; }

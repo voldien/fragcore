@@ -397,7 +397,7 @@ IRenderer::IRenderer(IConfig *config) {
 		throw RuntimeException("No valid back renderer for the OpenCL Rendering interface.");
 }
 
-IRenderer::~IRenderer(void) {
+IRenderer::~IRenderer() {
 	OpenCLCore *clCore = (OpenCLCore *)this->pdata;
 	delete clCore->back_renderer;
 	free(this->pdata);
@@ -522,7 +522,7 @@ void IRenderer::disableState(IRenderer::State state) {
 	core->back_renderer->disableState(state);
 }
 
-void IRenderer::swapBuffer(void) {
+void IRenderer::swapBuffer() {
 	OpenCLCore *core = (OpenCLCore *)this->pdata;
 	core->back_renderer->swapBuffer();
 }
@@ -553,12 +553,12 @@ const char *IRenderer::getShaderVersion(ShaderLanguage language) const {
 	}
 }
 
-ShaderLanguage IRenderer::getShaderLanguage(void) const {
+ShaderLanguage IRenderer::getShaderLanguage() const {
 	OpenCLCore *core = (OpenCLCore *)this->getData();
 	return (ShaderLanguage)(CLC | core->back_renderer->getShaderLanguage());
 }
 
-const char *IRenderer::getAPIVersion(void) const {
+const char *IRenderer::getAPIVersion() const {
 	OpenCLCore *core = (OpenCLCore *)this->pdata;
 	const char *v;
 
@@ -566,11 +566,11 @@ const char *IRenderer::getAPIVersion(void) const {
 	return v;
 }
 
-const char *IRenderer::getVersion(void) const {
+const char *IRenderer::getVersion() const {
 	return ""; // FV_STR_VERSION(RENDER_VULKAN_MAJOR, RENDER_VULKAN_MINOR, RENDER_VULKAN_PATCH);
 }
 
-/*const char *IRenderer::getName(void) const {
+/*const char *IRenderer::getName() const {
 	return "OpenCL";
 }*/
 

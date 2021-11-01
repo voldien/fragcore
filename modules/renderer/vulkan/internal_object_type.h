@@ -1,25 +1,33 @@
-#ifndef _FRAGVIEW_INTERNAL_OBJECT_TYPE_H_
-#define _FRAGVIEW_INTERNAL_OBJECT_TYPE_H_ 1
+#ifndef _FRAGCORE_VULKAN_INTERNAL_OBJECT_TYPE_H_
+#define _FRAGCORE_VULKAN_INTERNAL_OBJECT_TYPE_H_ 1
 /*	Expose the correct platform specific surface creation functions.	*/
 #if defined(FV_UNIX)
-	#define VK_USE_PLATFORM_XLIB_KHR
-	#define VK_USE_PLATFORM_WAYLAND_KHR
+#define VK_USE_PLATFORM_XLIB_KHR
+#define VK_USE_PLATFORM_WAYLAND_KHR
 #elif defined(FV_WINDOW)
-	#define VK_USE_PLATFORM_WIN32_KHR
+#define VK_USE_PLATFORM_WIN32_KHR
 #elif defined(FV_ANDROID)
-	#define VK_USE_PLATFORM_ANDROID_KHR
+#define VK_USE_PLATFORM_ANDROID_KHR
 #elif defined(FV_MACOSX)
 #define VK_USE_PLATFORM_MACOS_MVK
 #endif
 
-#include "Renderer/Buffer.h"
-#include "Renderer/RenderDesc.h"
-#include "Renderer/Sampler.h"
+#include "../Buffer.h"
+#include "../RenderDesc.h"
+#include "../Sampler.h"
 #include <Core/Ref.h>
 #include <SDL2/SDL.h>
 #include <VKDevice.h>
 #include <vector>
 #include <vulkan/vulkan.h>
+
+namespace fragcore {
+	class VKBuffer;
+	class VKTexture;
+	class VKSampler;
+	class VKShader;
+	class VKRenderInterface;
+} // namespace fragcore
 
 #define ArraySize(a) (sizeof(a) / sizeof(*a))
 namespace fragcore {
@@ -56,7 +64,6 @@ namespace fragcore {
 	// 	/*  Physical device.    */
 	// 	VkPhysicalDevice gpu;
 	// 	std::vector<VkPhysicalDevice> GPUs;
-
 
 	// 	/*  */
 	// 	VkDevice device;
@@ -127,7 +134,7 @@ namespace fragcore {
 	 */
 	typedef struct vulkan_texture_object_t {
 		std::shared_ptr<VKDevice> device;
-		//VulkanCore *vulkanCore;
+		// VulkanCore *vulkanCore;
 		TextureDesc desc;
 		unsigned int target;
 		VkImage texture;
@@ -141,7 +148,7 @@ namespace fragcore {
 	 */
 	typedef struct vulkan_shader_object_t {
 		std::shared_ptr<VKDevice> device;
-		//VulkanCore *vulkanCore;
+		// VulkanCore *vulkanCore;
 		VkPipeline graphicsPipeline;
 		VkPipelineLayout pipelineLayout;
 		unsigned int ver;
@@ -151,9 +158,9 @@ namespace fragcore {
 		unsigned int tessc;
 	} VKShaderObject;
 
-	typedef struct vulkan_pipeline_object_t{
+	typedef struct vulkan_pipeline_object_t {
 		std::shared_ptr<VKDevice> device;
-		//VulkanCore *vulkanCore;
+		// VulkanCore *vulkanCore;
 		VkPipeline graphicsPipeline;
 		VkPipelineLayout pipelineLayout;
 		VkDescriptorSet descriptorSet;
@@ -170,7 +177,6 @@ namespace fragcore {
 		VkBuffer buffer;
 		VkDeviceMemory vertexBufferMemory;
 	} VKBufferObject;
-
 
 	/**
 	 *
@@ -202,11 +208,12 @@ namespace fragcore {
 // extern void createSurface(fragcore::VulkanCore *vulkanCore, IConfig *config);
 
 // /*  Helper functions.   */
-// extern uint32_t findMemoryType(fragcore::VulkanCore *vulkanCore, uint32_t typeFilter, VkMemoryPropertyFlags properties);
+// extern uint32_t findMemoryType(fragcore::VulkanCore *vulkanCore, uint32_t typeFilter, VkMemoryPropertyFlags
+// properties);
 
 // extern void
-// createBuffer(fragcore::VulkanCore *vulkanCore, VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties,
-// 			 VkBuffer &buffer, VkDeviceMemory &bufferMemory);
+// createBuffer(fragcore::VulkanCore *vulkanCore, VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags
+// properties, 			 VkBuffer &buffer, VkDeviceMemory &bufferMemory);
 
 // extern VkImageView createImageView(fragcore::VulkanCore *vulkanCore, VkImage image, VkFormat format);
 
@@ -215,7 +222,8 @@ namespace fragcore {
 // //
 // extern bool isDeviceSuitable(VkPhysicalDevice device);
 
-// extern void selectDefaultDevices(std::vector<VkPhysicalDevice> &devices, std::vector<VkPhysicalDevice> &selectDevices);
+// extern void selectDefaultDevices(std::vector<VkPhysicalDevice> &devices, std::vector<VkPhysicalDevice>
+// &selectDevices);
 
 // //TODO improve to accomudate the configurations.
 // extern VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR> &availableFormats);
@@ -256,8 +264,7 @@ extern unsigned int getBufferHint(fragcore::BufferDesc::BufferHint hint);
 
 extern unsigned int getPrimitive(fragcore::GeometryDesc::Primitive primitive);
 
-extern unsigned int getAttributeDataType(
-	fragcore::GeometryDesc::AttributeType type);
+extern unsigned int getAttributeDataType(fragcore::GeometryDesc::AttributeType type);
 
 extern unsigned int getState(unsigned int state);
 

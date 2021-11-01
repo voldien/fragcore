@@ -1,7 +1,7 @@
 
 #ifndef _FRAG_CORE_VK_COMMAND_LIST_H_
 #define _FRAG_CORE_VK_COMMAND_LIST_H_ 1
-#include "Renderer/CommandList.h"
+#include "../CommandList.h"
 #include <vulkan/vulkan.h>
 
 namespace fragcore {
@@ -12,10 +12,10 @@ namespace fragcore {
 	  public:
 		VKCommandList(Ref<IRenderer> &renderer);
 		VKCommandList(const VKCommandList &other);
-		virtual ~VKCommandList(void);
+		virtual ~VKCommandList();
 
-		virtual void begin(void);
-		virtual void end(void);
+		virtual void begin();
+		virtual void end();
 
 		virtual void bindPipeline(RenderPipeline *p);
 		virtual void bindFramebuffer(Ref<FrameBuffer> &framebuffer);
@@ -28,12 +28,12 @@ namespace fragcore {
 		virtual void dispatchIndirect(Buffer *buffer, u_int64_t offset);
 
 		virtual void pushDebugGroup(const char *name);
-		virtual void popDebugGroup(void);
+		virtual void popDebugGroup();
 		virtual void insertDebugMarker(const char *name);
 
 	  private:
-		void beginCurrentRenderPass(void);
-		void endCurrentRenderPass(void);
+		void beginCurrentRenderPass();
+		void endCurrentRenderPass();
 
 	  public:
 		VkCommandBuffer cmdBuffer;

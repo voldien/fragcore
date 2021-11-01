@@ -1,7 +1,7 @@
 #include "Renderer/Shader.h"
 using namespace fragcore;
 
-void Shader::bind(void) {}
+void Shader::bind() {}
 
 int Shader::getLocation(const char *cparamname) {}
 
@@ -19,4 +19,4 @@ void Shader::setMatrix4f(int location, const float *pvalue) {}
 
 void Shader::setMatrix4fv(int location, int n, const float *pvalue) {}
 
-intptr_t Shader::getNativePtr(void) const { return 0; }
+intptr_t Shader::getNativePtr() const { return 0; }

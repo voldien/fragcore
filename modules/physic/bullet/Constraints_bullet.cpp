@@ -1,17 +1,10 @@
-#include"Physic/Constraints.h"
+#include "../Constraints.h"
 
-#include<bullet/btBulletCollisionCommon.h>
-#include<bullet/btBulletDynamicsCommon.h>
-#include <Physic/RigidBody.h>
+#include <bullet/btBulletCollisionCommon.h>
+#include <bullet/btBulletDynamicsCommon.h>
 
 using namespace fragcore;
 
-Constraints::~Constraints(){
+Constraints::~Constraints() {}
 
-}
-
-
-void Constraints::attachRigidbody(void* pobj,
-		RigidBody* r1, RigidBody* r2){
-
-}
+void Constraints::attachRigidbody(void *pobj, RigidBody *r1, RigidBody *r2) {}

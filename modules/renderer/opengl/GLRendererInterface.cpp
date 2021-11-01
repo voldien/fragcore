@@ -1,22 +1,21 @@
 #include "GLRendererInterface.h"
+#include "../FrameBuffer.h"
+#include "../RenderPipeline.h"
+#include "../ViewPort.h"
 #include "Core/IConfig.h"
 #include "DefaultFrameBufferTexture.h"
 #include "GLBuffer.h"
 #include "GLCommandList.h"
 #include "GLRenderWindow.h"
-#include "Renderer/FrameBuffer.h"
-#include "Renderer/RenderPipeline.h"
-#include "Renderer/ViewPort.h"
 #include "internal_object_type.h"
+#include <../RenderDesc.h>
+#include <../RendererWindow.h>
+#include <../Sampler.h>
+#include <../Sync.h>
 #include <GL/glew.h>
-#include <Renderer/RenderDesc.h>
-#include <Renderer/RendererWindow.h>
-#include <Renderer/Sampler.h>
-#include <Renderer/Sync.h>
 #include <SDL2/SDL.h>
 
 #include <Window/WindowManager.h>
-#include <exception>
 #include <fmt/core.h>
 #include <vector>
 using namespace fragcore;
@@ -40,8 +39,8 @@ static const char *reqConfigKey[] = {
 };
 const unsigned int numReqConfigKeys = sizeof(reqConfigKey) / sizeof(reqConfigKey[0]);
 
-void GLRendererInterface::OnInitialization(void) {}
-void GLRendererInterface::OnDestruction(void) {}
+void GLRendererInterface::OnInitialization() {}
+void GLRendererInterface::OnDestruction() {}
 
 GLRendererInterface::GLRendererInterface(IConfig *config) {
 
@@ -329,7 +328,7 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 	glcore->pboPack = this->createBuffer(&pbo);
 }
 
-GLRendererInterface::~GLRendererInterface(void) {
+GLRendererInterface::~GLRendererInterface() {
 
 	/*  Release PBO.    */
 
@@ -1359,7 +1358,7 @@ void GLRendererInterface::disableState(GLRendererInterface::State state) { glDis
 
 bool GLRendererInterface::isStateEnabled(GLRendererInterface::State state) { return glIsEnabled(getState(state)); }
 
-void GLRendererInterface::swapBuffer(void) {
+void GLRendererInterface::swapBuffer() {
 
 	OpenGLCore *glcore = (OpenGLCore *)this->pdata;
 
@@ -1570,7 +1569,7 @@ void GLRendererInterface::dispatchCompute(unsigned int *global, unsigned int *lo
 	glMemoryBarrier(GL_TEXTURE_UPDATE_BARRIER_BIT);
 }
 
-void GLRendererInterface::memoryBarrier(void) {}
+void GLRendererInterface::memoryBarrier() {}
 
 void callback_debug_gl(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar *message,
 					   GLvoid *userParam) {
@@ -1763,11 +1762,11 @@ const char *GLRendererInterface::getShaderVersion(ShaderLanguage language) const
 	throw std::invalid_argument("Invalid shader language);");
 }
 
-ShaderLanguage GLRendererInterface::getShaderLanguage(void) const { return this->supportedLanguages; }
+ShaderLanguage GLRendererInterface::getShaderLanguage() const { return this->supportedLanguages; }
 
-const char *GLRendererInterface::getAPIVersion(void) const { return (const char *)glGetString(GL_VERSION); }
+const char *GLRendererInterface::getAPIVersion() const { return (const char *)glGetString(GL_VERSION); }
 
-const char *GLRendererInterface::getVersion(void) const { return FV_STR_VERSION(1, 0, 0); }
+const char *GLRendererInterface::getVersion() const { return FV_STR_VERSION(1, 0, 0); }
 
 void GLRendererInterface::getSupportedTextureCompression(TextureDesc::Compression *pCompressions) {
 	if (pCompressions == nullptr)
@@ -2042,7 +2041,7 @@ void GLRendererInterface::getFeatures(Features *features) {
 	features->variableRateShading = glewIsExtensionSupported("GL_NV_shading_rate_image");
 }
 
-CommandList *GLRendererInterface::createCommandBuffer(void) { return new GLCommandList(); }
+CommandList *GLRendererInterface::createCommandBuffer() { return new GLCommandList(); }
 
 void GLRendererInterface::submittCommand(Ref<CommandList> &list) {}
 
@@ -2065,6 +2064,6 @@ void GLRendererInterface::execute(CommandList *list) {
 	}
 }
 
-void *GLRendererInterface::getData(void) const { return this->pdata; }
+void *GLRendererInterface::getData() const { return this->pdata; }
 
 extern "C" IRenderer *createInternalRenderer(IConfig *config) { return new GLRendererInterface(config); }

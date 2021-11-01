@@ -1,5 +1,5 @@
 #include "Window/SDL/SDLDisplay.h"
-#include <Renderer/RenderDesc.h>
+//#include <Renderer/RenderDesc.h>
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_video.h>
 
@@ -69,11 +69,11 @@ void SDLDisplay::getDPI(Display::DPI *dpi) {
 		throw RuntimeException(fmt::format("Failed to retrieve display {} DPI, %s", this->index, SDL_GetError()));
 }
 
-TextureFormat SDLDisplay::getFormat() {
-	SDL_DisplayMode mode;
-	SDL_GetCurrentDisplayMode(this->index, &mode);
-	return (TextureFormat)translateFormat(mode.format);
-}
+// TextureFormat SDLDisplay::getFormat() {
+// 	SDL_DisplayMode mode;
+// 	SDL_GetCurrentDisplayMode(this->index, &mode);
+// 	return (TextureFormat)translateFormat(mode.format);
+// }
 
 SDLDisplay::SDLDisplay(int index) { this->index = index; }
 

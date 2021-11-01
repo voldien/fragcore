@@ -15,7 +15,7 @@ class PhysicInterfaceTest : public CommonBaseTest {
 
 	// TODO add method that will be translated to all the interfaces to allow
 	// code reuse between the tests
-	void CreateClothNoThrow(void) {}
+	void CreateClothNoThrow() {}
 };
 
 // TODO resolve the naming convention for the test functions.

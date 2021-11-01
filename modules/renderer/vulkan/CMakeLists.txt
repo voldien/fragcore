@@ -13,12 +13,14 @@ FILE(GLOB SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
 
 # Library target.
 ADD_LIBRARY(fragcore-rvk MODULE ${SOURCE_FILES})
-TARGET_LINK_LIBRARIES(fragcore-rvk ${Vulkan_LIBRARIES} vkcommon-core fragcore) #
+TARGET_LINK_LIBRARIES(fragcore-rvk ${Vulkan_LIBRARIES} vkcommon-core fragcore fragcore-render-interface) #
 TARGET_COMPILE_DEFINITIONS(fragcore-rvk PRIVATE FRAG_CORE_INTERNAL_IMP=1)
 
 #
-TARGET_INCLUDE_DIRECTORIES(fragcore-rvk PRIVATE ${Vulkan_INCLUDE_DIRS} )
-ADD_DEPENDENCIES(fragcore-rvk fragcore vkcommon-core)
+TARGET_INCLUDE_DIRECTORIES(fragcore-rvk PRIVATE ${Vulkan_INCLUDE_DIRS}PUBLIC
+											$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+											$<INSTALL_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
+ADD_DEPENDENCIES(fragcore-rvk fragcore vkcommon-core fragcore-render-interface)
 
 #
 IF(BUILD_WITH_INSTALL)

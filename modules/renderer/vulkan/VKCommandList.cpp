@@ -1,5 +1,5 @@
 #include "VKCommandList.h"
-#include "Renderer/RenderPipeline.h"
+#include "../RenderPipeline.h"
 #include "internal_object_type.h"
 #include <GL/glew.h>
 
@@ -33,9 +33,9 @@ VKCommandList::VKCommandList(Ref<IRenderer> &renderer) {
 }
 VKCommandList::VKCommandList(const VKCommandList &other) {}
 
-VKCommandList::~VKCommandList(void) {}
+VKCommandList::~VKCommandList() {}
 
-void VKCommandList::begin(void) {
+void VKCommandList::begin() {
 
 	VkCommandBufferBeginInfo beginInfo = {};
 	beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -44,7 +44,7 @@ void VKCommandList::begin(void) {
 	vkBeginCommandBuffer(cmdBuffer, &beginInfo);
 }
 
-void VKCommandList::end(void) { vkEndCommandBuffer(cmdBuffer); }
+void VKCommandList::end() { vkEndCommandBuffer(cmdBuffer); }
 
 void VKCommandList::bindPipeline(RenderPipeline *pipeline) {
 	VKPipelineObject *vkpipeline = (VKPipelineObject *)pipeline->getObject();
@@ -68,7 +68,7 @@ void VKCommandList::beginCurrentRenderPass() {
 
 	vkCmdBeginRenderPass(cmdBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 }
-void VKCommandList::endCurrentRenderPass(void) { vkCmdEndRenderPass(cmdBuffer); }
+void VKCommandList::endCurrentRenderPass() { vkCmdEndRenderPass(cmdBuffer); }
 
 void VKCommandList::bindFramebuffer(Ref<FrameBuffer> &framebuffer) { beginCurrentRenderPass(); }
 
@@ -131,7 +131,7 @@ void VKCommandList::pushDebugGroup(const char *name) {
 
 	pvkCmdDebugMarkerBeginEXT(cmdBuffer, &markerinfo);
 }
-void VKCommandList::popDebugGroup(void) { pvkCmdDebugMarkerEndEXT(cmdBuffer); }
+void VKCommandList::popDebugGroup() { pvkCmdDebugMarkerEndEXT(cmdBuffer); }
 
 void VKCommandList::insertDebugMarker(const char *name) {
 	VkDebugMarkerMarkerInfoEXT markerinfo = {};
