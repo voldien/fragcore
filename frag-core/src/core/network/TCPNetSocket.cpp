@@ -21,10 +21,11 @@
 using namespace fragcore;
 
 size_t TCPNetSocket::setupIPAddress(struct sockaddr *addr, const INetAddress &p_addr, uint16_t p_port) {
-	int domain = TCPNetSocket::getDomain(p_addr);
+
 	size_t addrlen;
 
 	const TCPUDPAddress &tcpAddress = static_cast<const TCPUDPAddress &>(p_addr);
+	int domain = TCPNetSocket::getDomain(tcpAddress.getIPAddress());
 	/*	*/
 	if (domain == AF_INET) {
 		const IPAddress &ipAddress = tcpAddress.getIPAddress();
@@ -75,50 +76,6 @@ int TCPNetSocket::close() {
 	netStatus = NetStatus::Status_Disconnected;
 }
 
-// int TCPNetSocket::bind(std::string &IPaddr, unsigned int port) {
-// 	socklen_t addrlen;	   /*	*/
-// 	struct sockaddr *addr; /*	*/
-// 	union {
-// 		struct sockaddr_in addr4;  /*	*/
-// 		struct sockaddr_in6 addr6; /*	*/
-// 	} addrU;
-// 	int domain = AF_INET; // TODO be override by the NetAddress!
-
-// 	/*	*/
-// 	if (domain == AF_INET) {
-// 		bzero(&addrU.addr4, sizeof(addrU.addr4));
-// 		addrU.addr4.sin_port = htons(port);
-// 		addrU.addr4.sin_family = (sa_family_t)domain;
-// 		if (inet_pton(domain, IPaddr.c_str(), &addrU.addr4.sin_addr) < 0) {
-// 			this->close();
-// 		}
-// 		addrlen = sizeof(addrU.addr4);
-// 		addr = (struct sockaddr *)&addrU.addr4;
-// 	} else if (domain == AF_INET6) {
-// 		bzero(&addrU.addr6, sizeof(addrU.addr6));
-// 		addrU.addr6.sin6_port = htons(port);
-// 		addrU.addr6.sin6_family = (sa_family_t)domain;
-// 		if (inet_pton(domain, IPaddr.c_str(), &addrU.addr6.sin6_addr) < 0) {
-// 			this->close();
-// 		}
-// 		addrlen = sizeof(addrU.addr6);
-// 		addr = (struct sockaddr *)&addrU.addr6;
-// 	} else {
-// 		throw RuntimeException();
-// 		this->close();
-// 	}
-
-// 	/*	Bind process to socket.	*/
-// 	if (::bind(socket, (struct sockaddr *)addr, addrlen) < 0) {
-// 		RuntimeException ex("Failed to bind TCP socket, {}", strerror(errno));
-// 		this->netStatus = NetStatus::Status_Error;
-// 		close();
-// 		throw ex;
-// 	} else {
-// 		this->netStatus = NetStatus::Status_Done;
-// 	}
-// }
-
 int TCPNetSocket::bind(const INetAddress &p_addr) {
 	socklen_t addrlen; /*	*/
 	union {
@@ -126,14 +83,17 @@ int TCPNetSocket::bind(const INetAddress &p_addr) {
 		struct sockaddr_in6 addr6; /*	*/
 	} addrU;
 
-	int domain = getDomain(p_addr);
+	int flags = SOCK_STREAM;
 
-	const TCPUDPAddress &tcpAddress = static_cast<const TCPUDPAddress &>(p_addr);
-	addrlen = setupIPAddress((struct sockaddr *)&addrU, p_addr, tcpAddress.getPort());
+	const TCPUDPAddress *tcpAddress = dynamic_cast<const TCPUDPAddress *>(&p_addr);
+	if (tcpAddress == nullptr)
+		throw RuntimeException("Not a valid NetAddress Object");
+	int domain = getDomain(tcpAddress->getIPAddress());
+	addrlen = setupIPAddress((struct sockaddr *)&addrU, p_addr, tcpAddress->getPort());
 
-	this->socket = ::socket(domain, SOCK_STREAM, 0);
+	this->socket = ::socket(domain, flags, 0);
 	if (this->socket < 0) {
-		throw RuntimeException("Failed to create TCP socket, {}", strerror(errno));
+		throw RuntimeException("TCP socket - Failed to create socket {} - {}", domain, strerror(errno));
 	}
 
 	/*	Bind process to socket.	*/
@@ -173,12 +133,15 @@ int TCPNetSocket::connect(const INetAddress &p_addr) {
 	// #ifdef SOCK_NONBLOCK
 	// 	flags |= SOCK_NONBLOCK;
 	// #endif
-	int domain = getDomain(p_addr);
 
-	const TCPUDPAddress &tcpAddress = static_cast<const TCPUDPAddress &>(p_addr);
+	const TCPUDPAddress *tcpAddress = dynamic_cast<const TCPUDPAddress *>(&p_addr);
+	if (tcpAddress == nullptr)
+		throw RuntimeException("Not a valid NetAddress Object");
+	int domain = getDomain(tcpAddress->getIPAddress());
+
 	this->socket = ::socket(domain, flags, 0);
 	if (this->socket < 0) {
-		throw RuntimeException("TCP socket - Failed to create socket {}", strerror(errno));
+		throw RuntimeException("TCP socket - Failed to create socket {} - {}", domain, strerror(errno));
 	}
 
 	int option = 1;
@@ -187,7 +150,7 @@ int TCPNetSocket::connect(const INetAddress &p_addr) {
 		throw RuntimeException();
 	}
 
-	addrlen = setupIPAddress((struct sockaddr *)&addrU, p_addr, tcpAddress.getPort());
+	addrlen = setupIPAddress((struct sockaddr *)&addrU, *tcpAddress, tcpAddress->getPort());
 
 	rc = ::connect(socket, (struct sockaddr *)&addrU, addrlen);
 	if (rc != 0) {
@@ -224,7 +187,8 @@ int TCPNetSocket::sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const 
 		struct sockaddr_in addr4;  /*	*/
 		struct sockaddr_in6 addr6; /*	*/
 	} addrU;
-	addrlen = setupIPAddress((struct sockaddr *)&addrU, p_addr, p_port);
+	const TCPUDPAddress &tcpAddress = static_cast<const TCPUDPAddress &>(p_addr);
+	addrlen = setupIPAddress((struct sockaddr *)&addrU, tcpAddress, p_port);
 	unsigned int flag = 0;
 
 	int res = ::sendto(this->socket, p_buffer, p_len, flag, (struct sockaddr *)&addrU, addrlen);

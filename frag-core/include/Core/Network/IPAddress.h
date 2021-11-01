@@ -45,8 +45,14 @@ namespace fragcore {
 		IPAddress(const std::string &ip, IPAddressType type);
 		IPAddress(const std::string &hostname);
 
-		bool operator==(const IPAddress &ipAddress) const { return false; }
-		bool operator!=(const IPAddress &ipAddress) const { return false; }
+		bool operator==(const IPAddress &ipAddress) const {
+			if (this == &ipAddress)
+				return true;
+			if (this->getIPType() == ipAddress.getIPType() && ipAddress.getIP() == this->getIP())
+				return true;
+			return false;
+		}
+		bool operator!=(const IPAddress &ipAddress) const { return !(*this == ipAddress); }
 
 		virtual NetworkProtocol getNetworkProtocol() const noexcept override {
 			return NetworkProtocol::NetWorkProtocol_IP;

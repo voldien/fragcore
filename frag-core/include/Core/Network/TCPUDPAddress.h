@@ -32,8 +32,14 @@ namespace fragcore {
 		TCPUDPAddress(const IPAddress &ipaddress, unsigned int port);
 		~TCPUDPAddress() = default;
 
-		bool operator==(const TCPUDPAddress &ipAddress) const { return false; }
-		bool operator!=(const TCPUDPAddress &ipAddress) const { return false; }
+		bool operator==(const TCPUDPAddress &ipAddress) const {
+			if (this == &ipAddress)
+				return true;
+			if (this->getPort() == ipAddress.getPort() && ipAddress.getIPAddress() == getIPAddress())
+				return true;
+			return false;
+		}
+		bool operator!=(const TCPUDPAddress &ipAddress) const { return !(*this == ipAddress); }
 
 		virtual NetworkProtocol getNetworkProtocol() const noexcept override {
 			return NetworkProtocol::NetWorkProtocol_TCP_UDP;

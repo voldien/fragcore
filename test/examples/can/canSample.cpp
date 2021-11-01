@@ -11,7 +11,7 @@ int main(int argc, const char **argv) {
 	try {
 		CANNetSocket net;
 		CANAddress local(0);
-		net.bind(local, 1502);
+		net.bind(local);
 
 		int data[10];
 		int nr;

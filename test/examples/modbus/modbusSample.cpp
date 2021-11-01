@@ -1,17 +1,20 @@
 
 #include "Core/Log.h"
-#include "Core/Network/IPAddress.h"
+#include "Core/Network/TCPUDPAddress.h"
 #include "NetModbusSocket.h"
 
 using namespace fragcore;
 
 int main(int argc, const char **argv) {
 
+	/*	TODO get values from arguments	*/
+
 	Log::setVerbosity(Log::VERBOSITY::Debug);
 	try {
 		ModbusNetSocket net;
 		IPAddress local("127.0.0.1", IPAddress::IPAddressType::IPAddress_Type_IPV4);
-		net.connect(local, 1502);
+		TCPUDPAddress tcpAdddress(local, 1502);
+		net.connect(tcpAdddress);
 
 		int data[10];
 		int nr;

@@ -50,6 +50,7 @@ jobs:
     needs: linuxbuild
     runs-on: ubuntu-latests
     name: "Testing"
+    steps:
       - name: Test
         working-directory: ${{runner.workspace}}/build
         shell: bash

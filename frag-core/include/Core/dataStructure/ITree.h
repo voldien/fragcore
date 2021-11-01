@@ -37,7 +37,7 @@ namespace fragcore {
 		ITree(ITree &&other) {}
 
 		virtual ITree<T> *root() const {
-			if (this->getParent())
+			if (this->getParent() == nullptr)
 				return (ITree<T> *)this;
 			else
 				return this->getParent()->root();

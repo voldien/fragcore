@@ -18,10 +18,9 @@ class TCPSocketServerClientTest : public testing::Test {
 
 		const char *ipAddress = "127.0.0.1";
 
-		IPAddress localHost(ipAddress, IPAddress::IPAddressType::IPAddress_Type_IPV4);
-
+		TCPUDPAddress tcpAddress(IPAddress(ipAddress, IPAddress::IPAddressType::IPAddress_Type_IPV4), port);
 		tcpNetSocket = new TCPNetSocket();
-		tcpNetSocket->bind(localHost);
+		tcpNetSocket->bind(tcpAddress);
 		tcpNetSocket->listen(2);
 	}
 	virtual void TearDown() override { delete tcpNetSocket; }
@@ -40,18 +39,18 @@ TEST_F(TCPSocketNetworkTest, CreateLocal_Bind_No_Throw_Exception) {
 	TCPNetSocket tpcSocket;
 
 	const char *ipAddress = "127.0.0.1";
+	TCPUDPAddress tcpAddress(IPAddress(ipAddress, IPAddress::IPAddressType::IPAddress_Type_IPV4), 42323);
 
-	IPAddress localHost(ipAddress, IPAddress::IPAddressType::IPAddress_Type_IPV4);
-	TCPUDPAddress tcpAddress(localHost, 42323);
 	ASSERT_NO_THROW(tpcSocket.bind(tcpAddress));
 }
 
 TEST_F(TCPSocketNetworkTest, CreateLocal_Bind_With_Listen_No_Throw_Exception) {
 	TCPNetSocket tpcSocket;
 	const char *ipAddress = "127.0.0.1";
-	IPAddress localHost(ipAddress, IPAddress::IPAddressType::IPAddress_Type_IPV4);
 
-	ASSERT_NO_THROW(tpcSocket.bind(localHost));
+	TCPUDPAddress tcpAddress(IPAddress(ipAddress, IPAddress::IPAddressType::IPAddress_Type_IPV4), 42323);
+
+	ASSERT_NO_THROW(tpcSocket.bind(tcpAddress));
 	ASSERT_NO_THROW(tpcSocket.listen(2));
 }
 
@@ -60,7 +59,8 @@ TEST_F(TCPSocketNetworkTest, CreateLocal_Bind_And_Connect_No_Throw_Exception) {
 
 	const int port = 43323;
 	IPAddress localHost("127.0.0.1", IPAddress::IPAddressType::IPAddress_Type_IPV4);
-	tpcSocket.bind(localHost);
+	TCPUDPAddress tcpAddress(localHost, 42323);
+	tpcSocket.bind(tcpAddress);
 	tpcSocket.listen(2);
 
 	TCPNetSocket serverSocket;
