@@ -1,8 +1,8 @@
 #ifndef _FRAG_CORE_AUDIOCLIP_H_
 #define _FRAG_CORE_AUDIOCLIP_H_ 1
-#include"../Def.h"
+#include "../Def.h"
+#include "AudioDesc.h"
 #include "AudioObject.h"
-#include"AudioDesc.h"
 
 namespace fragcore {
 	/**
@@ -10,8 +10,8 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC AudioClip : public AudioObject {
 		friend class AudioInterface;
-	public:
 
+	  public:
 		virtual unsigned long int getSampleRate() const;
 		virtual unsigned long int getFrequency() const;
 		virtual AudioFormat getAudioFormat() const;
@@ -21,15 +21,15 @@ namespace fragcore {
 
 		virtual AudioDataMode clipType() const;
 
-		virtual void getData(void* pData, unsigned int nsamples, unsigned int offset);
-		virtual void setData(const void* pData, unsigned int nsamples, unsigned int offset);
+		virtual void getData(void *pData, unsigned int nsamples, unsigned int offset);
+		virtual void setData(const void *pData, unsigned int nsamples, unsigned int offset);
 
 		intptr_t getNativePtr() const override;
 
-	protected:
+	  protected:
 		AudioClip();
 		virtual ~AudioClip();
 	};
-}
+} // namespace fragcore
 
 #endif

@@ -20,7 +20,7 @@
 #define _FRAG_CORE_RENDEROBJECT_H_ 1
 #include "../Core/Ref.h"
 #include "../Core/SmartReference.h"
-#include "../Prerequisites.h"
+#include "Prerequisites.h"
 
 namespace fragcore {
 	/**

@@ -18,7 +18,7 @@
 */
 #ifndef _FRAG_CORE_RENDER_DESC_H_
 #define _FRAG_CORE_RENDER_DESC_H_ 1
-#include"../Prerequisites.h"
+#include"Prerequisites.h"
 
 namespace fragcore {
 	/**
