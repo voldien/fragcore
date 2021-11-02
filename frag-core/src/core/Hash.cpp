@@ -83,6 +83,7 @@ unsigned int Hash::getResultSize() const {
 		return 0;
 	default:
 		assert(0);
+		return 0;
 	}
 }
 

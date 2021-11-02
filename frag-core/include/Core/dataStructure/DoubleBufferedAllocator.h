@@ -22,7 +22,7 @@
 #include "StackAllactor.h"
 
 namespace fragcore {
-	
+
 	/**
 	 *	DoubleBufferedAllocator is two allocate buffer.
 	 */
@@ -89,14 +89,7 @@ namespace fragcore {
 		DoubleBufferedAllocator &operator=(DoubleBufferedAllocator &&alloc);
 
 	  private: /*	Attributes.	*/
-		/*
-		 *
-		 */
 		unsigned int m_curStack;
-
-		/*
-		 *
-		 */
 		StackAllocator m_stack[2];
 	};
 

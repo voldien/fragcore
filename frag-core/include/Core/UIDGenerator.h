@@ -27,38 +27,32 @@ namespace fragcore {
 	 *	Each next will be an increment of previosuly.
 	 */
 	// TODO make it generic
-	template <typename T> class FVDECLSPEC UIDGenerator /*: public UIDObject*/ {
+	template <class T> class UIDGenerator {
 	  public:
 		static_assert(std::is_arithmetic<T>::value, "Must support artithmetic operations");
-		UIDGenerator() noexcept {
-			this->nextUID = 0;
-			this->nextLUID = 0;
-		}
-
+		UIDGenerator() noexcept { this->nextUID = 0; }
+		UIDGenerator(UIDGenerator &&other) = default;
 		UIDGenerator(const UIDGenerator &other) = default;
+
+		UIDGenerator &operator=(const UIDGenerator & other) = default;
+		UIDGenerator &operator=(UIDGenerator &&other) = default;
 
 		/**
 		 *	@Return next unique id.
 		 */
 		T getNextUID() noexcept { return this->nextUID++; }
 
-		/**
-		 *	@Return next long uniqie id.
-		 */
-		// unsigned long int getNextLUID() noexcept { return this->nextLUID++; }
-
-		virtual bool operator==(const UIDGenerator &other) noexcept {
+		 bool operator==(const UIDGenerator &other) noexcept {
 			if (this == &other)
 				return true;
 			else
 				return this->uid == other.uid;
 		}
-		virtual bool operator!=(const UIDGenerator &other) noexcept { return !(*this == other); }
+		 bool operator!=(const UIDGenerator &other) noexcept { return !(*this == other); }
 
-	  private:						/*	Attributes.	*/
-		T nextUID;					/*	*/
-		unsigned long int nextLUID; /*	*/
-		T uid;						// TODO resolve.
+	  private:	   /*	Attributes.	*/
+		T nextUID; /*	*/
+		T uid;	   // TODO resolve.
 	};
 
 } // namespace fragcore

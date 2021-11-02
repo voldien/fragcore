@@ -24,7 +24,15 @@
 
 namespace fragcore {
 	/*  TODO fix!   */
+
+	/**
+	 * @brief
+	 *
+	 * @tparam T
+	 */
 	template <class T> class Ref { // TODO perhaps use the RefPtr as base?
+		static_assert(std::is_object<T>::value, "");
+
 	  private:
 		T *reference;
 

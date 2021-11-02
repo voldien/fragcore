@@ -62,4 +62,9 @@ DoubleBufferedAllocator &DoubleBufferedAllocator::operator=(const DoubleBuffered
 	return *this;
 }
 
-DoubleBufferedAllocator &DoubleBufferedAllocator::operator=(DoubleBufferedAllocator &&alloc) { return *this; }
+DoubleBufferedAllocator &DoubleBufferedAllocator::operator=(DoubleBufferedAllocator &&alloc) {
+	this->m_stack[0] = std::move(alloc.m_stack[0]);
+	this->m_stack[1] = std::move(alloc.m_stack[1]);
+	this->m_curStack = alloc.m_curStack;
+	return *this;
+}

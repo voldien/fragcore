@@ -23,7 +23,8 @@
 
 namespace fragcore {
 	/**
-	 * Atomic counter.
+	 * @brief
+	 *
 	 */
 	class FVDECLSPEC AtomicRefCount {
 	  public:
@@ -33,7 +34,7 @@ namespace fragcore {
 
 		FV_ALWAYS_INLINE uint32_t get() const noexcept { return std::atomic_load(&this->count); }
 
-		FV_ALWAYS_INLINE void init(uint32_t value) noexcept { this->count = value; }
+		FV_ALWAYS_INLINE void init(int32_t value) noexcept { this->count = value; }
 
 	  private: /*  */
 		std::atomic_int32_t count;

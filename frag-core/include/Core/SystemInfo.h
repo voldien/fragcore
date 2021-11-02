@@ -22,11 +22,12 @@
 #include "../Def.h"
 #include "IO/IO.h"
 #include "Ref.h"
+
 namespace fragcore {
 
 	/**
-	 * @brief 
-	 * 
+	 * @brief
+	 *
 	 */
 	class FVDECLSPEC SystemInfo {
 	  public:

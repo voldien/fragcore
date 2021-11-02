@@ -153,7 +153,7 @@ FILE(GLOB SOURCE_FILES  ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/src/core/Scheduler/*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/src/window/*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/src/window/SDL/*.cpp #TODO remove later once relocated to platform.
-		${CMAKE_CURRENT_SOURCE_DIR}/src/shaders/*.cpp)
+		)
 FILE(GLOB SOURCE_MAIN_FILES client/src/main.cpp)
 #
 FILE(GLOB HEADER_FILES  ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h
@@ -180,14 +180,11 @@ ADD_LIBRARY(fragcore ${SOURCE_FILES} ${HEADER_FILES}
  							${OPEN_SIMPLEX_NOISE_SOURCE} ${PCG_C_BASIC_SOURCE}
 							${RECASTNAVIGATION_SOURCE} ${POLYPARITION_SOURCE} ${KISS_FFT_SOURCE}
 							${MISC_SOURCE})
-#
 ADD_DEPENDENCIES(fragcore taskSch hpmcpp infoware cxxexcept)
 
 #
 TARGET_COMPILE_DEFINITIONS(fragcore PRIVATE FRAG_CORE_INTERNAL_IMP=1)
-TARGET_COMPILE_FEATURES(fragcore PUBLIC
-	cxx_std_17
-	cxx_constexpr)
+TARGET_COMPILE_FEATURES(fragcore PUBLIC cxx_std_17 cxx_constexpr)
 
 #
 SET_TARGET_PROPERTIES(fragcore PROPERTIES

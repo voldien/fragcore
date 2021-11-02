@@ -27,35 +27,38 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC UIDObject {
 	  public:
-		UIDObject() : UIDObject(generator) {}
-		UIDObject(UIDGenerator<unsigned int> &uidGenerator) noexcept { this->setUID(uidGenerator.getNextUID()); }
+		UIDObject() : UIDObject(UIDObject::generator) {}
+		UIDObject(UIDGenerator<uint32_t> &uidGenerator) noexcept { this->setUID(uidGenerator.getNextUID()); }
 		UIDObject(UIDObject &&other) noexcept = default;
 		UIDObject(const UIDObject &other) noexcept = default;
-		// TODO for selecting what UID pool.
+		UIDObject &operator=(const UIDObject &) = default;
+		UIDObject &operator=(UIDObject &&) = default;
 
 		/**
 		 * @brief Set Unique ID for the object.
 		 *
 		 * @param uid
 		 */
-		virtual void setUID(unsigned int uid);
+		virtual void setUID(uint32_t uid) noexcept { this->uid = uid; }
 
 		/**
 		 *	Get the unique identifier.
 		 *	@Return unique ID.
 		 */
-		virtual unsigned int getUID() const;
+		virtual uint32_t getUID() const noexcept { return this->uid; }
 
-		virtual bool operator==(const UIDObject &o1) { return uid == o1.uid; }
-
-		virtual bool operator!=(const UIDObject &o1) { return uid == o1.uid; }
-
-		// virtual void operator=(const UIDObject& o);
+		virtual bool operator==(const UIDObject &other) noexcept {
+			if (this == &other)
+				return true;
+			else
+				return this->uid == other.uid;
+		}
+		virtual bool operator!=(const UIDObject &other) noexcept { return !(*this == other); }
 
 	  private: /*	Attributes.	*/
 		// TODO remove. remove the responsiblity to the generator pool.
-		static UIDGenerator<unsigned int> generator;
-		unsigned int uid; /*	Unique Identifier.	*/
+		static UIDGenerator<uint32_t> generator;
+		uint32_t uid; /*	Unique Identifier.	*/
 	};
 } // namespace fragcore
 

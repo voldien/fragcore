@@ -12,13 +12,14 @@
 #include "Core/IO/GZFileIO.h"
 
 using namespace fragcore;
-template <typename T> class HashBaseUnitTest : public ::testing::TestWithParam<std::tuple<std::string, T>> {};
+template <typename T>
+class HashBaseUnitTest : public ::testing::TestWithParam<std::tuple<std::string, Hash::ALGORITHM, T>> {};
 
 using HashMD5Test = HashBaseUnitTest<std::vector<unsigned char>>;
 
 TEST_P(HashMD5Test, ComputeHashCorrect) {
-	auto [x, expected] = GetParam();
-	Hash hash(Hash::ALGORITHM::MD5);
+	auto [x, hash_algo, expected] = GetParam();
+	Hash hash(hash_algo);
 
 	EXPECT_NO_THROW(hash.update(x.data(), x.size()));
 
@@ -29,5 +30,6 @@ TEST_P(HashMD5Test, ComputeHashCorrect) {
 	ASSERT_EQ(md5, expected);
 }
 
-INSTANTIATE_TEST_SUITE_P(Hash, HashMD5Test,
-						 ::testing::Values(std::make_tuple("Hello World!", std::vector<unsigned char>{1, 2, 3, 4, 5})));
+INSTANTIATE_TEST_SUITE_P(ComputeHash, HashMD5Test,
+						 ::testing::Values(std::make_tuple("Hello World!", Hash::ALGORITHM::MD5,
+														   std::vector<unsigned char>{1, 2, 3, 4, 5})));

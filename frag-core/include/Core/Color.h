@@ -12,7 +12,7 @@ namespace fragcore {
 	class Color : public Vector4 {
 	  public:
 		Color(float r, float g, float b, float a) noexcept : Vector4(r, g, b, a) {}
-		Color(unsigned int hex) noexcept { /*	Convert */
+		Color(uint32_t hex) noexcept { /*	Convert */
 			throw NotImplementedException();
 		}
 
@@ -33,9 +33,11 @@ namespace fragcore {
 		 * @param gamma
 		 * @return Color
 		 */
-		Color gammaCorrect(float gamma) const noexcept {
-			return Color(Math::gammaCorrection(r(), gamma), Math::gammaCorrection(g(), gamma),
-						 Math::gammaCorrection(b(), gamma), Math::gammaCorrection(a(), gamma));
+		template <typename T> Color gammaCorrect(T gamma) const noexcept {
+			return Color(Math::gammaCorrection(this->r(), static_cast<T>(gamma)),
+						 Math::gammaCorrection(this->g(), static_cast<T>(gamma)),
+						 Math::gammaCorrection(this->b(), static_cast<T>(gamma)),
+						 Math::gammaCorrection(this->a(), static_cast<T>(gamma)));
 		}
 
 		/**
@@ -46,6 +48,7 @@ namespace fragcore {
 		 * @return Color
 		 */
 		template <typename T> static Color CorrelatedColorTemperatureToRGB(T kelvin) noexcept {
+			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
 			T temp = kelvin / static_cast<T>(100.0);
 
 			T red, green, blue;
