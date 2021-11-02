@@ -269,6 +269,6 @@ int TCPNetSocket::getDomain(const INetAddress &address) {
 		return AF_CAN;
 		break;
 	default:
-		throw RuntimeException("Non Supported Network Protocol: {}", address.getNetworkProtocol());
+		throw RuntimeException("Non Supported Network Protocol: {}", (unsigned int)address.getNetworkProtocol());
 	}
 }
