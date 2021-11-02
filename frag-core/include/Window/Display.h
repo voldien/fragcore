@@ -69,7 +69,7 @@ namespace fragcore {
 			unsigned int width;
 			unsigned int height;
 			unsigned int refreshRate;
-			//TextureFormat format;
+			// TextureFormat format;
 		} Mode;
 
 		typedef struct dpi_t {
@@ -97,7 +97,7 @@ namespace fragcore {
 
 		virtual void getDPI(DPI *dpi) = 0;
 
-		//virtual TextureFormat getFormat() = 0;
+		// virtual TextureFormat getFormat() = 0;
 
 	  public:
 		// virtual void calculateGammaLookupTable(float gamma, ushort *rgbRamp) const; /*  */

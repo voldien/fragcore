@@ -1,18 +1,18 @@
 #ifndef _FV_PHYSIC_DEBUGDRAWER_H_
 #define _FV_PHYSIC_DEBUGDRAWER_H_ 1
-#include<bullet/btBulletCollisionCommon.h>
-#include<bullet/btBulletDynamicsCommon.h>
+#include <bullet/btBulletCollisionCommon.h>
+#include <bullet/btBulletDynamicsCommon.h>
 // #include <Renderer/IRenderer.h>
 // #include <Renderer/CommandList.h>
-#include"internal_object_type.h"
+#include "internal_object_type.h"
 
 namespace fragcore {
 	/**
 	 *
 	 */
 	class FVDECLSPEC DebugDrawer : public btIDebugDraw {
-	public:
-		//DebugDrawer(Ref<IRenderer>& renderer);
+	  public:
+		// DebugDrawer(Ref<IRenderer>& renderer);
 
 		DefaultColors getDefaultColors() const override;
 
@@ -21,7 +21,7 @@ namespace fragcore {
 		void drawLine(const btVector3 &from, const btVector3 &to, const btVector3 &color) override;
 
 		void drawContactPoint(const btVector3 &PointOnB, const btVector3 &normalOnB, btScalar distance, int lifeTime,
-		                      const btVector3 &color) override;
+							  const btVector3 &color) override;
 
 		void reportErrorWarning(const char *warningString) override;
 
@@ -35,11 +35,11 @@ namespace fragcore {
 
 		void flushLines() override;
 
-	private:
+	  private:
 		// Ref<IRenderer> renderer;
 		// Ref<CommandList> cb;
 		// TODO add list of vector cached.
 	};
-}
+} // namespace fragcore
 
 #endif

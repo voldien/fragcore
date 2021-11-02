@@ -5,7 +5,7 @@
 //#include "Utils/TextureUtil.h"
 #include <cassert>
 #include <cmath>
-#include<fmt/core.h>
+#include <fmt/core.h>
 #include <ft2build.h>
 #include FT_FREETYPE_H
 using namespace fragcore;
