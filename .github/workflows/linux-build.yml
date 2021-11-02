@@ -48,7 +48,7 @@ jobs:
         
   testing:
     needs: linuxbuild
-    runs-on: ubuntu-latests
+    runs-on: "ubuntu-latest"
     name: "Testing"
     steps:
       - name: Test
@@ -60,7 +60,7 @@ jobs:
 
   modules:
     needs: linuxbuild
-    runs-on: ubuntu-latests
+    runs-on: "ubuntu-latest"
     name: "Build Modules"
     steps:
       - name: Configure dependencies
@@ -76,7 +76,7 @@ jobs:
 
   packing:
     needs: testing
-    runs-on: ubuntu-latests
+    runs-on: "ubuntu-latest"
     name: "Build Debian Packages"
     steps:
       - name: Construct package
