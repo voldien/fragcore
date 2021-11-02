@@ -90,7 +90,7 @@ int main(int argc, const char **argv) {
 					// 	-screen[1] / orthdiv, screen[1] / orthdiv,
 					// 	-0.0f, 1.0f);
 					// needMatrixUpdate = true;
-					window->getViewPort()->setDimensions(0, 0, width, height);
+					// window->getViewPort()->setDimensions(0, 0, width, height);
 					break;
 				case SDL_WINDOWEVENT_HIDDEN:
 				case SDL_WINDOWEVENT_MINIMIZED:

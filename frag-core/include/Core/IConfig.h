@@ -35,7 +35,7 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC IConfig : public SmartReference, public ITree<IConfig> {
 	  public:
-		~IConfig();
+		virtual ~IConfig();
 
 	  public: /*	Get and set methods.	*/
 		/**

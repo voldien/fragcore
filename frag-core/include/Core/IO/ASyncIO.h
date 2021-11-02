@@ -31,7 +31,7 @@
 
 namespace fragcore {
 
-	typedef long ASyncHandle;										 /*  */
+	typedef long ASyncHandle;										   /*  */
 	typedef void (*AsyncComplete)(ASyncIO *async, ASyncHandle handle); /*  */
 
 	/**
@@ -78,9 +78,9 @@ namespace fragcore {
 		static void async_write(Task *task);
 		static void async_write_io(Task *task);
 
-	  protected:	 /*  */
+	  protected:   /*  */
 		ASyncIO(); // TODO make protected since it is required to a have a scheduler attached but inheriet need to be
-					 // able to call it.
+				   // able to call it.
 		ASyncIO(const ASyncIO &other);
 		virtual void setScheduleReference(Ref<IScheduler> &sch);
 
@@ -107,7 +107,7 @@ namespace fragcore {
 
 		/*  */
 		std::map<ASyncHandle, AsyncObject> asyncs;
-		UIDGenerator uidGenerator;
+		UIDGenerator<unsigned int> uidGenerator;
 		Ref<IScheduler> scheduler;
 	};
 } // namespace fragcore

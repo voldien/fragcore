@@ -1,5 +1,4 @@
-#include "Core/IO/FTPFileSystem.h"
-#include <Core/IO/FTPFileSystem.h>
+#include "FTPFileSystem.h"
 #include <Core/IO/GZFileIO.h>
 #include <Core/SystemInfo.h>
 

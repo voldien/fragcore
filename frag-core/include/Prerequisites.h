@@ -57,8 +57,6 @@ namespace fragcore {
 	class Font;
 	class FontFactory;
 
-	class VideoFactory;
-	class VideoTexture;
 } // namespace fragcore
 
 #endif

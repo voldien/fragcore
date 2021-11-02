@@ -33,7 +33,7 @@ ASyncHandle ASyncIO::asyncOpen(Ref<IO> &io) {
 	io->increment();
 
 	/*  Create async object.*/
-	ASyncHandle handle = this->uidGenerator.getNextLUID();
+	ASyncHandle handle = this->uidGenerator.getNextUID();
 	AsyncObject *asyncObject = createObject(handle);
 	asyncObject->ref = io;
 	asyncObject->semaphore = nullptr;
@@ -258,10 +258,10 @@ ASyncIO::ASyncIO() {
 
 ASyncIO::ASyncIO(Ref<IScheduler> &scheduler) {
 	this->scheduler = scheduler;
-	this->uidGenerator = UIDGenerator();
+	this->uidGenerator = UIDGenerator<unsigned int>();
 	/*  Take out the 0 UID that is invalid for the async handle
 	 * for allowing checking if it is a valid handle.*/
-	this->uidGenerator.getNextLUID();
+	this->uidGenerator.getNextUID();
 }
 
 ASyncIO::ASyncIO(ASyncIO &&other) {

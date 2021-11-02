@@ -1,19 +1,19 @@
 /**
 	FragEngine, A Two layer Game Engine.
-    Copyright (C) 2018  Valdemar Lindberg
+	Copyright (C) 2018  Valdemar Lindberg
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+	You should have received a copy of the GNU General Public License
+	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 #ifndef _FRAG_CORE_UID_GENERATOR_H_
@@ -26,8 +26,10 @@ namespace fragcore {
 	 *	This is a simple UID generator.
 	 *	Each next will be an increment of previosuly.
 	 */
-	class FVDECLSPEC UIDGenerator /*: public UIDObject*/ {
+	// TODO make it generic
+	template <typename T> class FVDECLSPEC UIDGenerator /*: public UIDObject*/ {
 	  public:
+		static_assert(std::is_arithmetic<T>::value, "Must support artithmetic operations");
 		UIDGenerator() noexcept {
 			this->nextUID = 0;
 			this->nextLUID = 0;
@@ -38,20 +40,25 @@ namespace fragcore {
 		/**
 		 *	@Return next unique id.
 		 */
-		unsigned int getNextUID() noexcept { return this->nextUID++; }
+		T getNextUID() noexcept { return this->nextUID++; }
 
 		/**
 		 *	@Return next long uniqie id.
 		 */
-		unsigned long int getNextLUID() noexcept { return this->nextLUID++; }
+		// unsigned long int getNextLUID() noexcept { return this->nextLUID++; }
 
-		virtual bool operator==(const UIDGenerator &o1) noexcept { return uid == o1.uid; }
-		virtual bool operator!=(const UIDGenerator &o1) noexcept { return uid != o1.uid; }
+		virtual bool operator==(const UIDGenerator &other) noexcept {
+			if (this == &other)
+				return true;
+			else
+				return this->uid == other.uid;
+		}
+		virtual bool operator!=(const UIDGenerator &other) noexcept { return !(*this == other); }
 
 	  private:						/*	Attributes.	*/
-		unsigned int nextUID;		/*	*/
+		T nextUID;					/*	*/
 		unsigned long int nextLUID; /*	*/
-		unsigned int uid;			// TODO resolve.
+		T uid;						// TODO resolve.
 	};
 
 } // namespace fragcore

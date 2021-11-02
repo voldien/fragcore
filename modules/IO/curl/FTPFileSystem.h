@@ -18,10 +18,7 @@
 */
 #ifndef _FRAG_CORE_FTP_FILESYSTEM_H_
 #define _FRAG_CORE_FTP_FILESYSTEM_H_ 1
-#include "../../Def.h"
-#include "ASyncIO.h"
-#include "IFileSystem.h"
-#include "IO.h"
+#include <FragCore.h>
 #include <curl/curl.h>
 
 namespace fragcore {

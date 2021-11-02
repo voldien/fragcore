@@ -28,7 +28,7 @@ namespace fragcore {
 	class FVDECLSPEC UIDObject {
 	  public:
 		UIDObject() : UIDObject(generator) {}
-		UIDObject(UIDGenerator &uidGenerator) noexcept { this->setUID(uidGenerator.getNextUID()); }
+		UIDObject(UIDGenerator<unsigned int> &uidGenerator) noexcept { this->setUID(uidGenerator.getNextUID()); }
 		UIDObject(UIDObject &&other) noexcept = default;
 		UIDObject(const UIDObject &other) noexcept = default;
 		// TODO for selecting what UID pool.
@@ -54,7 +54,7 @@ namespace fragcore {
 
 	  private: /*	Attributes.	*/
 		// TODO remove. remove the responsiblity to the generator pool.
-		static UIDGenerator generator;
+		static UIDGenerator<unsigned int> generator;
 		unsigned int uid; /*	Unique Identifier.	*/
 	};
 } // namespace fragcore

@@ -1,6 +1,6 @@
 #define FRAG_CORE_INTERNAL_IMP
 
-#include "Core/IO/FTPIO.h"
+#include "FTPIO.h"
 #include "Core/IO/GZFileIO.h"
 
 #include <curl/curl.h>

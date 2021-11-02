@@ -18,9 +18,7 @@
 */
 #ifndef _FRAG_CORE_FTP_IO_H_
 #define _FRAG_CORE_FTP_IO_H_ 1
-#include "../Ref.h"
-#include "FileIO.h"
-#include "IO.h"
+#include<FragCore.h>
 #if defined(FRAG_CORE_INTERNAL_IMP) // TODO resolve to a single file or something later
 #include <curl/curl.h>
 #endif

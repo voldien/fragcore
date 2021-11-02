@@ -25,7 +25,7 @@
 #include <decoder/AudioDecoder.h>
 
 namespace fragcore {
-
+	class VideoFactory;
 	/**
 	 *
 	 */
