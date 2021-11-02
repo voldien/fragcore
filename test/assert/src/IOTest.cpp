@@ -45,7 +45,7 @@ TEST_F(IOTest, IO_File_Invalid_Path_Throw_Exception) {
 	ASSERT_THROW(FileSystem::getFileSystem()->openFile("", IO::READ), InvalidArgumentException);
 }
 TEST_F(IOTest, IO_File_Invalid_Mode_Throw_Exception) {
-	ASSERT_THROW(FileSystem::getFileSystem()->openFile(__FILE__, (IO::IOMode)-1), InvalidArgumentException);
+	ASSERT_THROW(FileSystem::getFileSystem()->openFile(__FILE__, (IO::IOMode)0), InvalidArgumentException);
 }
 TEST_F(IOTest, IO_File_Open_Read_File_No_Throw) {
 	ASSERT_NO_THROW(FileSystem::getFileSystem()->openFile(__FILE__, IO::READ));

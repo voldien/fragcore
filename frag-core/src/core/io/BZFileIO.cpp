@@ -1,7 +1,7 @@
 #include "Core/IO/BZFileIO.h"
 
 #include <bzlib.h>
-#include<fmt/core.h>
+#include <fmt/core.h>
 using namespace fragcore;
 
 long BZFileIO::read(long int nbytes, void *pbuffer) {
@@ -54,14 +54,14 @@ void BZFileIO::open(const char *path, IO::IOMode mode) {
 
 	/*  */
 	int bzerror;
-	switch (mode & IO::ACCESS) {
-	case IO::READ:
+	switch (mode & IO::IOMode::ACCESS) {
+	case IO::IOMode::READ:
 		this->bzFile = BZ2_bzReadOpen(&bzerror, this->file, 0, 0, nullptr, 0);
 		break;
-	case IO::WRITE:
+	case IO::IOMode::WRITE:
 		this->bzFile = BZ2_bzWriteOpen(&bzerror, this->file, 0, 0, 0);
 		break;
-	case IO::ACCESS:
+	case IO::IOMode::ACCESS:
 		break;
 	default:
 		break;
