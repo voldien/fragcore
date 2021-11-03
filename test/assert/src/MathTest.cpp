@@ -52,7 +52,7 @@ TEST(Math, PowerOf2_Next_Found) {
 	for (unsigned int i = 0; i < 31; i++) {
 		auto p2 = Math::NextPowerOfTwo<unsigned long int>(1 << i);
 		ASSERT_TRUE(Math::IsPowerOfTwo(p2));
-		ASSERT_TRUE(p2 == (1 << (i + 1)));
+		ASSERT_TRUE(p2 == static_cast<unsigned long int>(1 << (i + 1)));
 	}
 }
 
