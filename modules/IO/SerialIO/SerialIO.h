@@ -18,8 +18,8 @@
 */
 #ifndef _FRAG_CORE_SERIAL_FILE_IO_H_
 #define _FRAG_CORE_SERIAL_FILE_IO_H_ 1
-#include "Def.h"
 #include "Core/IO/IO.h"
+#include "Def.h"
 #include <libserialport.h>
 #include <optional>
 #include <vector>
@@ -111,6 +111,9 @@ namespace fragcore {
 
 		void setXonXoff(XonXoff XonXoff);
 		XonXoff getXonXoff(XonXoff XonXoff);
+
+		void setPayloadBits(unsigned int nrBits);
+		int getPayloadBits() const;
 
 	  public:
 		static bool supportedBaudRate(unsigned int baudRate);

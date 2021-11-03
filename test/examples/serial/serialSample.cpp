@@ -6,10 +6,12 @@ using namespace fragcore;
 
 int main(int argc, const char **argv) {
 	try {
-		SerialIO io(argv[1], IO::IOMode::READ);
-
+		SerialIO io(argv[1], IO::IOMode::ACCESS);
+		io.setBaudRate(4800);
 		unsigned int data[10];
-		while (io.read(1, data) > 0) {
+
+		io.write(sizeof(data), data);
+		while (io.read(sizeof(data), data) > 0) {
 			Log::log("%x", data[0]);
 		}
 	} catch (const std::exception &ex) {

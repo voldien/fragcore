@@ -188,6 +188,23 @@ SerialIO::XonXoff SerialIO::getXonXoff(XonXoff XonXoff) {
 	return (SerialIO::XonXoff)xonxoff;
 }
 
+void SerialIO::setPayloadBits(unsigned int nrBits) {
+	struct sp_port *serialPort = static_cast<struct sp_port *>(this->port);
+
+	sp_return res = sp_get_config(serialPort, config);
+
+	res = sp_set_config_bits(config, nrBits);
+}
+int SerialIO::getPayloadBits() const {
+	struct sp_port *serialPort = static_cast<struct sp_port *>(this->port);
+	sp_return res = sp_get_config(serialPort, config);
+
+	int nrBits;
+	res = sp_get_config_bits(config, &nrBits);
+
+	return nrBits;
+}
+
 SerialIO::SerialIO(const std::string &path, IOMode mode) {
 
 	/*	Get SP mode from IO::Mode	*/
