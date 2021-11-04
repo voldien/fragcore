@@ -257,6 +257,7 @@ SerialIO::SerialIO(const std::string &path, IOMode mode) : port(nullptr) {
 
 	res = sp_new_config(&config);
 	if (res != SP_OK)
+		this->close();
 		throw RuntimeException("Failed to create config: {}", sp_last_error_message());
 }
 
