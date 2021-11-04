@@ -79,7 +79,7 @@ SerialIO::StopBits SerialIO::getStopBits() const {
 	if (res != SP_OK)
 		throw RuntimeException("Failed to get StopBits {} - {}", "path", sp_last_error_message());
 
-	return (SerialIO::StopBits)stopBit;
+	return static_cast<SerialIO::StopBits>(stopBit);
 }
 
 void SerialIO::setFlowControl(FlowControl flowControl) {
@@ -157,7 +157,7 @@ SerialIO::Parity SerialIO::getParity() const {
 	if (res != SP_OK)
 		throw RuntimeException("Failed to get parity {} - {}", "path", sp_last_error_message());
 
-	return (SerialIO::Parity)parity;
+	return static_cast < SerialIO::Parity>(parity);
 }
 
 void SerialIO::setXonXoff(XonXoff XonXoff) {
@@ -196,7 +196,7 @@ SerialIO::XonXoff SerialIO::getXonXoff(XonXoff XonXoff) {
 	if (res != SP_OK)
 		throw RuntimeException("Failed to get config xon xoff: {}", sp_last_error_message());
 
-	return (SerialIO::XonXoff)xonxoff;
+	return static_cast<SerialIO::XonXoff>(xonxoff);
 }
 
 void SerialIO::setPayloadBits(unsigned int nrBits) {
