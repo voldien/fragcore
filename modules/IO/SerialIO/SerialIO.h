@@ -110,7 +110,7 @@ namespace fragcore {
 		Parity getParity() const;
 
 		void setXonXoff(XonXoff XonXoff);
-		XonXoff getXonXoff(XonXoff XonXoff);
+		XonXoff getXonXoff();
 
 		void setPayloadBits(unsigned int nrBits);
 		int getPayloadBits() const;

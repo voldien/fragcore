@@ -6,7 +6,7 @@
 using namespace fragcore;
 
 void SerialIO::close() {
-	struct sp_port *serialPort = (struct sp_port *)this->port;
+	struct sp_port *serialPort = static_cast<struct sp_port *>(this->port);
 	if (serialPort != nullptr) {
 		sp_return res = sp_close(serialPort);
 		if (res != SP_OK) {
@@ -15,12 +15,12 @@ void SerialIO::close() {
 	}
 }
 long int SerialIO::read(long int nbytes, void *pbuffer) {
-	struct sp_port *serialPort = (struct sp_port *)this->port;
+	struct sp_port *serialPort = static_cast<struct sp_port *>(this->port);
 	sp_return res_in_read_bytes = sp_nonblocking_read(serialPort, pbuffer, nbytes);
 	return res_in_read_bytes;
 }
 long int SerialIO::write(long int nbytes, const void *pbuffer) {
-	struct sp_port *serialPort = (struct sp_port *)this->port;
+	struct sp_port *serialPort = static_cast<struct sp_port *>(this->port);
 	sp_return res_in_written_bytes = sp_nonblocking_write(serialPort, pbuffer, nbytes);
 	return res_in_written_bytes;
 }
@@ -35,7 +35,7 @@ bool SerialIO::flush() { return sp_flush(this->port, SP_BUF_BOTH) == SP_OK; }
 void SerialIO::setBaudRate(unsigned int baudRate) {
 	struct sp_port *serialPort = static_cast<struct sp_port *>(this->port);
 
-	sp_return res = sp_set_baudrate(serialPort, baudRate);
+	sp_return res = sp_set_config_baudrate(this->config, baudRate);
 	if (res != SP_OK)
 		throw RuntimeException("Failed to set baud Rate {} - {}", baudRate, sp_last_error_message());
 }
@@ -157,7 +157,7 @@ SerialIO::Parity SerialIO::getParity() const {
 	if (res != SP_OK)
 		throw RuntimeException("Failed to get parity {} - {}", "path", sp_last_error_message());
 
-	return static_cast < SerialIO::Parity>(parity);
+	return static_cast<SerialIO::Parity>(parity);
 }
 
 void SerialIO::setXonXoff(XonXoff XonXoff) {
@@ -185,7 +185,7 @@ void SerialIO::setXonXoff(XonXoff XonXoff) {
 		throw RuntimeException("Failed to set xonoff {} - {}", "path", sp_last_error_message());
 }
 
-SerialIO::XonXoff SerialIO::getXonXoff(XonXoff XonXoff) {
+SerialIO::XonXoff SerialIO::getXonXoff() {
 	struct sp_port *serialPort = static_cast<struct sp_port *>(this->port);
 
 	sp_return res = sp_get_config(serialPort, config);
@@ -256,9 +256,10 @@ SerialIO::SerialIO(const std::string &path, IOMode mode) : port(nullptr) {
 	}
 
 	res = sp_new_config(&config);
-	if (res != SP_OK)
+	if (res != SP_OK) {
 		this->close();
 		throw RuntimeException("Failed to create config: {}", sp_last_error_message());
+	}
 }
 
 SerialIO ::~SerialIO() {
