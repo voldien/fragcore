@@ -7,18 +7,22 @@ using namespace fragcore;
 
 void SerialIO::close() {
 	struct sp_port *serialPort = (struct sp_port *)this->port;
-	sp_return res = sp_close(serialPort);
-	this->port = nullptr;
+	if (serialPort != nullptr) {
+		sp_return res = sp_close(serialPort);
+		if (res != SP_OK) {
+			throw RuntimeException("Failed to close serial: {} ", sp_last_error_message());
+		}
+	}
 }
 long int SerialIO::read(long int nbytes, void *pbuffer) {
 	struct sp_port *serialPort = (struct sp_port *)this->port;
-	nbytes = sp_nonblocking_read(serialPort, pbuffer, nbytes);
-	return nbytes;
+	sp_return res_in_read_bytes = sp_nonblocking_read(serialPort, pbuffer, nbytes);
+	return res_in_read_bytes;
 }
 long int SerialIO::write(long int nbytes, const void *pbuffer) {
 	struct sp_port *serialPort = (struct sp_port *)this->port;
-	nbytes = sp_nonblocking_write(serialPort, pbuffer, nbytes);
-	return nbytes;
+	sp_return res_in_written_bytes = sp_nonblocking_write(serialPort, pbuffer, nbytes);
+	return res_in_written_bytes;
 }
 bool SerialIO::eof() const { return false; }
 long int SerialIO::length() { return 0; }
@@ -217,7 +221,7 @@ int SerialIO::getPayloadBits() const {
 	return nrBits;
 }
 
-SerialIO::SerialIO(const std::string &path, IOMode mode) {
+SerialIO::SerialIO(const std::string &path, IOMode mode) : port(nullptr) {
 
 	/*	Get SP mode from IO::Mode	*/
 	sp_mode serial_mode = SP_MODE_READ;
@@ -237,21 +241,31 @@ SerialIO::SerialIO(const std::string &path, IOMode mode) {
 	}
 
 	/*	*/
-	sp_return res = sp_get_port_by_name(path.c_str(), (struct sp_port **)&this->port);
-	if (res != SP_OK)
+	struct sp_port *serialPort = static_cast<struct sp_port *>(this->port);
+	sp_return res = sp_get_port_by_name(path.c_str(), &serialPort);
+	if (res != SP_OK) {
+		this->close();
 		throw RuntimeException("Failed get this->port {} - {}", path, sp_last_error_message());
+	}
 
 	/*	*/
-	res = sp_open((struct sp_port *)this->port, serial_mode);
-	if (res != SP_OK)
+	res = sp_open(serialPort, serial_mode);
+	if (res != SP_OK) {
+		this->close();
 		throw RuntimeException("Failed to open {} in mode: {} - {}", path, mode, sp_last_error_message());
+	}
 
 	res = sp_new_config(&config);
 	if (res != SP_OK)
 		throw RuntimeException("Failed to create config: {}", sp_last_error_message());
 }
 
-SerialIO ::~SerialIO() {}
+SerialIO ::~SerialIO() {
+	this->close();
+	sp_free_config(config);
+	this->config = nullptr;
+	sp_free_port(this->port);
+}
 
 bool SerialIO::supportedBaudRate(unsigned int baudRate) {
 	return baudRate == 110 || Math::IsPowerOfTwo(baudRate % (300));
