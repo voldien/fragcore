@@ -7,7 +7,7 @@ using namespace fragcore;
 
 void SerialIO::close() {
 	struct sp_port *serialPort = (struct sp_port *)this->port;
-	sp_close(serialPort);
+	sp_return res = sp_close(serialPort);
 	this->port = nullptr;
 }
 long int SerialIO::read(long int nbytes, void *pbuffer) {
@@ -41,7 +41,7 @@ SerialIO::BaudRate SerialIO::getBaudRate() const {
 
 	sp_return res = sp_get_config(serialPort, config);
 	if (res != SP_OK)
-		throw RuntimeException("Failed to get config {} - {}", "path", sp_last_error_message());
+		throw RuntimeException("Failed to get config: {}", sp_last_error_message());
 
 	int baudRate;
 	res = sp_get_config_baudrate(config, &baudRate);
@@ -56,7 +56,7 @@ void SerialIO::setStopBits(StopBits stopBits) {
 
 	sp_return res = sp_get_config(serialPort, config);
 	if (res != SP_OK)
-		throw RuntimeException("Failed to get config {} - {}", "path", sp_last_error_message());
+		throw RuntimeException("Failed to get config: {}", sp_last_error_message());
 
 	res = sp_set_config_stopbits(config, (int)stopBits);
 	if (res != SP_OK)
@@ -69,7 +69,7 @@ SerialIO::StopBits SerialIO::getStopBits() const {
 
 	sp_return res = sp_get_config(serialPort, config);
 	if (res != SP_OK)
-		throw RuntimeException("Failed to get config {} - {}", "path", sp_last_error_message());
+		throw RuntimeException("Failed to get config: {}", sp_last_error_message());
 
 	res = sp_get_config_stopbits(config, &stopBit);
 	if (res != SP_OK)
@@ -108,6 +108,8 @@ void SerialIO::setFlowControl(FlowControl flowControl) {
 SerialIO::FlowControl SerialIO::getFlowControl() const {
 	struct sp_port *serialPort = static_cast<struct sp_port *>(this->port);
 	sp_return res = sp_get_config(serialPort, config);
+	if (res != SP_OK)
+		throw RuntimeException("Failed to get config: {}", sp_last_error_message());
 	throw NotImplementedException();
 }
 
@@ -143,6 +145,8 @@ SerialIO::Parity SerialIO::getParity() const {
 	struct sp_port *serialPort = static_cast<struct sp_port *>(this->port);
 
 	sp_return res = sp_get_config(serialPort, config);
+	if (res != SP_OK)
+		throw RuntimeException("Failed to get config: {}", sp_last_error_message());
 
 	sp_parity parity;
 	res = sp_get_config_parity(config, &parity);
@@ -181,9 +185,12 @@ SerialIO::XonXoff SerialIO::getXonXoff(XonXoff XonXoff) {
 	struct sp_port *serialPort = static_cast<struct sp_port *>(this->port);
 
 	sp_return res = sp_get_config(serialPort, config);
-
+	if (res != SP_OK)
+		throw RuntimeException("Failed to get config: {}", sp_last_error_message());
 	sp_xonxoff xonxoff;
 	res = sp_get_config_xon_xoff(config, &xonxoff);
+	if (res != SP_OK)
+		throw RuntimeException("Failed to get config xon xoff: {}", sp_last_error_message());
 
 	return (SerialIO::XonXoff)xonxoff;
 }
@@ -192,15 +199,20 @@ void SerialIO::setPayloadBits(unsigned int nrBits) {
 	struct sp_port *serialPort = static_cast<struct sp_port *>(this->port);
 
 	sp_return res = sp_get_config(serialPort, config);
-
+	if (res != SP_OK)
+		throw RuntimeException("Failed to get config: {}", sp_last_error_message());
 	res = sp_set_config_bits(config, nrBits);
 }
 int SerialIO::getPayloadBits() const {
 	struct sp_port *serialPort = static_cast<struct sp_port *>(this->port);
 	sp_return res = sp_get_config(serialPort, config);
+	if (res != SP_OK)
+		throw RuntimeException("Failed to get config: {}", sp_last_error_message());
 
 	int nrBits;
 	res = sp_get_config_bits(config, &nrBits);
+	if (res != SP_OK)
+		throw RuntimeException("Failed to get config payload bits: {}", sp_last_error_message());
 
 	return nrBits;
 }
@@ -216,7 +228,7 @@ SerialIO::SerialIO(const std::string &path, IOMode mode) {
 	case IO::IOMode::WRITE:
 		serial_mode = SP_MODE_WRITE;
 		break;
-	case ACCESS:
+	case IO::IOMode::ACCESS:
 		serial_mode = SP_MODE_READ_WRITE;
 		break;
 	default:
@@ -234,7 +246,9 @@ SerialIO::SerialIO(const std::string &path, IOMode mode) {
 	if (res != SP_OK)
 		throw RuntimeException("Failed to open {} in mode: {} - {}", path, mode, sp_last_error_message());
 
-	sp_new_config(&config);
+	res = sp_new_config(&config);
+	if (res != SP_OK)
+		throw RuntimeException("Failed to create config: {}", sp_last_error_message());
 }
 
 SerialIO ::~SerialIO() {}

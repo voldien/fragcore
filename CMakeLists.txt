@@ -65,7 +65,7 @@ OPTION(BUILD_WITH_DOCS "Build documentation." OFF)
 OPTION(BUILD_WITH_SAMPLES "Build sample codes" ON)
 
 # Build external interface plugin.
-OPTION(BUILD_MODULES "" OFF)
+OPTION(BUILD_MODULES "Build module plugins" ON)
 OPTION(BUILD_WITH_EXTERNAL_PLUGINS "" ON)
 OPTION(BUILD_EXTERNAL_RENDERER "Building external renderer libraries" ON)
 OPTION(BUILD_EXTERNAL_AUDIO "Building external audio libraries" ON)

@@ -1,9 +1,10 @@
 #include <AudioClip.h>
+#include <AudioFactory.h>
 #include <AudioListener.h>
 #include <AudioSource.h>
+#include <FragCore.h>
 #include <decoder/AudioDecoder.h>
 #include <decoder/VorbisDecoder.h>
-#include <FragCore.h>
 
 using namespace fragcore;
 
@@ -18,7 +19,6 @@ class AudioPlayback {
 		Ref<AudioInterface> iaudio =
 			Ref<AudioInterface>(AudioFactory::createAudioInterface(AudioFactory::OpenAL, &config));
 
-		
 		/*  Initialize HPM.  */
 		if (!LIBHPM::Hpm::init(LIBHPM::Hpm::eHPM_SSE2))
 			throw RuntimeException("Failed to initialize the hpm library.");
@@ -83,7 +83,8 @@ int main(int argc, const char **argv) {
 		std::cerr << ex.getBackTrace() << std::endl;
 		return EXIT_FAILURE;
 
-	} */catch (std::exception &ex) {
+	} */
+	catch (std::exception &ex) {
 		std::cerr << "External library error" << std::endl;
 		std::cerr << ex.what() << std::endl;
 		return EXIT_FAILURE;

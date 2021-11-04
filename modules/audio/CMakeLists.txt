@@ -1,8 +1,11 @@
-FILE(GLOB SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
+FILE(GLOB AUDIO_SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp
+			${CMAKE_CURRENT_SOURCE_DIR}/decoder/*.cpp)
+FILE(GLOB AUDIO_HEADER_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.h
+			${CMAKE_CURRENT_SOURCE_DIR}/decoder/*.h)
 
 # Library target.
-ADD_LIBRARY(fragcore-audio-interface SHARED ${SOURCE_FILES})
-TARGET_LINK_LIBRARIES(fragcore-audio-interface fragcore freeimage) #
+ADD_LIBRARY(fragcore-audio-interface SHARED ${AUDIO_SOURCE_FILES} ${AUDIO_HEADER_FILES})
+TARGET_LINK_LIBRARIES(fragcore-audio-interface fragcore) #
 TARGET_COMPILE_DEFINITIONS(fragcore-audio-interface PRIVATE FRAG_CORE_INTERNAL_IMP=1)
 
 #
