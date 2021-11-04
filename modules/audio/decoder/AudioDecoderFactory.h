@@ -25,7 +25,7 @@
 namespace fragcore {
 
 	// TODO rename to AudioCodec
-	enum class AudioDecoderCodec { Ogg, Mp3, Wav, maxAudioDecoderDecodec };
+	enum class AudioDecoderCodec { AudioDecoderOgg, AudioDecoderMp3, audioDecoderWav, AudioDecoderMax };
 
 	/**
 	 * @brief

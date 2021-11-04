@@ -11,11 +11,11 @@ AudioDecoder *AudioDecoderFactory::createDecoder(AudioDecoderCodec codec, Ref<IO
 		throw InvalidArgumentException("IO Object: '{}' is not readable.", io->getName().c_str());
 
 	switch (codec) {
-	case AudioDecoderCodec::Ogg:
+	case AudioDecoderCodec::AudioDecoderOgg:
 		return new VorbisAudioDecoder(io);
-	case AudioDecoderCodec::Wav:
+	case AudioDecoderCodec::audioDecoderWav:
 		return new WavAudioDecoder(io);
-	case AudioDecoderCodec::Mp3:
+	case AudioDecoderCodec::AudioDecoderMp3:
 		throw NotSupportedException();
 	default:
 		throw InvalidArgumentException("");
