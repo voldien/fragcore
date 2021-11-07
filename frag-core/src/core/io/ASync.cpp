@@ -112,7 +112,8 @@ void ASyncIO::asyncWriteFile(ASyncHandle handle, char *buffer, unsigned int size
 	this->scheduler->addTask(&readTask);
 }
 
-void ASyncIO::asyncWriteFile(ASyncHandle handle, Ref<IO> &io, AsyncComplete complete) {}
+void ASyncIO::asyncWriteFile(ASyncHandle handle, Ref<IO> &io, AsyncComplete complete) { /*	*/
+}
 
 Ref<IO> ASyncIO::getIO(ASyncHandle handle) const { return getObject(handle)->ref; }
 
@@ -227,7 +228,11 @@ void ASyncIO::async_write(Task *task) {
 	schSemaphorePost((schSemaphore *)ao->semaphore);
 }
 
-void ASyncIO::async_write_io(Task *task) { return; }
+void ASyncIO::async_write_io(Task *task) {
+	task->Execute();
+
+	return;
+}
 
 ASyncIO::AsyncObject *ASyncIO::getObject(ASyncHandle handle) {
 
@@ -266,6 +271,8 @@ ASyncIO::ASyncIO(Ref<IScheduler> &scheduler) {
 
 ASyncIO::ASyncIO(ASyncIO &&other) {
 	// Move over the things!
+	this->scheduler = std::exchange(other.scheduler, nullptr);
+	this->uidGenerator = other.uidGenerator;
 }
 
 ASyncIO::ASyncIO(const ASyncIO &other) {

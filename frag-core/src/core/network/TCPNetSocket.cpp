@@ -3,19 +3,19 @@
 #include "Core/Network/TCPSocket.h"
 #include "Core/Network/TCPUDPAddress.h"
 #include <arpa/inet.h>
-#include <assert.h>
-#include <errno.h>
+#include <cassert>
+#include <cerrno>
 #include <net/if.h>
 #include <netdb.h>
 #include <netinet/in.h>
 #include <netinet/ip.h>
 #include <netinet/tcp.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 #include <sys/ioctl.h>
 #include <sys/socket.h>
 #include <sys/types.h>
-#include <time.h>
+#include <ctime>
 #include <unistd.h>
 
 using namespace fragcore;
@@ -109,7 +109,7 @@ int TCPNetSocket::bind(const INetAddress &p_addr) {
 
 int TCPNetSocket::listen(unsigned int maxListen) {
 	if (::listen(this->socket, maxListen) < 0) {
-		SystemException(errno, "TCP socket: Failed to set listen {} - error: {}", maxListen, strerror(errno));
+		SystemException(errno, std::system_category(), "TCP socket: Failed to set listen {} - error: {}", maxListen, strerror(errno));
 	}
 	return 0;
 }
@@ -206,8 +206,7 @@ Ref<NetSocket> TCPNetSocket::accept(INetAddress &r_ip, uint16_t &r_port) {
 	socklen_t aclen = 0;	  /*	*/
 	int aaccept_socket = ::accept(this->socket, &tobuffer, &aclen);
 	if (aaccept_socket < 0) {
-		throw SystemException(errno, "Failed to accept TCP connection");
-		// close();
+		throw SystemException(errno, std::system_category(), "Failed to accept TCP connection");
 	}
 
 	TCPNetSocket *_newsocket = new TCPNetSocket(aaccept_socket);

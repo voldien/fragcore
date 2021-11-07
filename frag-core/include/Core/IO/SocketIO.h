@@ -67,6 +67,7 @@ namespace fragcore {
 
 	  protected:
 		Ref<NetSocket> netSocket;
+		IOMode iomode;
 	};
 } // namespace fragcore
 

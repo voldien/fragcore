@@ -100,7 +100,7 @@ SystemInfo::SIMD SystemInfo::getSupportedSIMD() {
 	return (SystemInfo::SIMD)supportedSIMD;
 }
 
-SystemInfo::Endianness getEndianness() noexcept {
+SystemInfo::Endianness getEndianness() {
 	switch (iware::cpu::endianness()) {
 	case iware::cpu::endianness_t::big:
 		return SystemInfo::Endianness::BigEndian;

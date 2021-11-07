@@ -1,6 +1,6 @@
 
-#include"../RenderPrerequisites.h"
 #include "../IRenderer.h"
+#include "../RenderPrerequisites.h"
 #include "VKBuffer.h"
 #include "VKRenderInterface.h"
 #include "internal_object_type.h"
@@ -11,13 +11,13 @@ using namespace fragcore;
 VKBuffer::~VKBuffer() {}
 
 void VKBuffer::bind() {
-	VKBufferObject *bufobj = (VKBufferObject *)this->pdata;
+	VKBufferObject *bufobj = static_cast<VKBufferObject *>(this->pdata);
 
-	// vkBindBufferMemory(bufobj->vulkanCore->device, bufobj->buffer, bufobj->vertexBufferMemory, 0);
+	vkBindBufferMemory(bufobj->vulkanCore->device, bufobj->buffer, bufobj->vertexBufferMemory, 0);
 }
 
 void VKBuffer::bind(unsigned int offset, unsigned int size) {
-	VKBufferObject *bufobj = (VKBufferObject *)this->pdata;
+	VKBufferObject *bufobj = static_cast<VKBufferObject *>(this->pdata);
 	// vkBindBufferMemory(bufobj->vulkanCore->device, bufobj->buffer, bufobj->vertexBufferMemory, offset);
 }
 

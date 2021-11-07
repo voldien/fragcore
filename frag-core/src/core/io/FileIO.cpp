@@ -85,6 +85,8 @@ long FileIO::write(long int nbytes, const void *pbuffer) {
 	return nreadBytes;
 }
 
+long int FileIO::peek(long int nBytes, void *pbuffer) { return this->read(nBytes, pbuffer); }
+
 long FileIO::length() {
 	/*	Get size of the file.	*/
 	long int prev = ftell(this->file);

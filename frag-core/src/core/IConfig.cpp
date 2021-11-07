@@ -9,7 +9,7 @@
 #include <libxml/encoding.h>
 #include <libxml/parser.h>
 #include <libxml/xmlwriter.h>
-#include <stdio.h>
+#include <cstdio>
 #include <yaml.h>
 
 using namespace fragcore;

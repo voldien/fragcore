@@ -1,10 +1,10 @@
 #ifndef FRAG_CORE_INTERNAL_IMP
-	#define FRAG_CORE_INTERNAL_IMP 1
+#define FRAG_CORE_INTERNAL_IMP 1
 #endif
 
-#include <zlib.h>
-#include<fmt/core.h>
 #include "Core/IO/GZFileIO.h"
+#include <fmt/core.h>
+#include <zlib.h>
 using namespace fragcore;
 
 void GZFileIO::open(const char *path, IOMode mode) {

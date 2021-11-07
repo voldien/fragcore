@@ -149,7 +149,7 @@ void FrameBuffer::setDraws(unsigned int nr, BufferAttachment *attachment) {
 	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
 	if (glNamedFramebufferDrawBuffers) {
 		GLenum buffers[nr];
-		for (int i = 0; i < nr; i++) {
+		for (size_t i = 0; i < nr; i++) {
 			buffers[i] = GL_COLOR_ATTACHMENT0 + (attachment[i] - FrameBuffer::eColor0);
 		}
 		glNamedFramebufferDrawBuffers(fraobj->framebuffer, nr, buffers);

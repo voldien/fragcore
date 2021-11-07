@@ -10,7 +10,7 @@ SocketIO::SocketIO(Ref<NetSocket> &socket) : netSocket(socket) {}
 // 	this->mode = other.mode;
 // }
 
-void SocketIO::open(const char *path, IOMode mode) {}
+void SocketIO::open(const char *path, IOMode mode)  {}
 
 void SocketIO::close() {}
 
@@ -27,7 +27,7 @@ long SocketIO::write(long int nbytes, const void *pbuffer) {
 }
 
 long int SocketIO::peek(long int nBytes, void *pbuffer){
-
+	// this->netSocket->read()
 };
 
 long SocketIO::length() { throw NotSupportedException(); }

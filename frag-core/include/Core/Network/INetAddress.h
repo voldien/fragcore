@@ -18,14 +18,14 @@
 */
 #ifndef _FRAG_CORE_INET_ADDRESS_H_
 #define _FRAG_CORE_INET_ADDRESS_H_ 1
-#include "../Object.h"
+#include "../UIDObject.h"
 
 namespace fragcore {
 	/**
 	 * @brief
 	 *
 	 */
-	class FVDECLSPEC INetAddress : public Object {
+	class FVDECLSPEC INetAddress : public UIDObject {
 	  public:
 		enum class NetworkProtocol : unsigned int {
 
@@ -36,14 +36,14 @@ namespace fragcore {
 			NetWorkProtocol_ModBus = 4,
 			NetWorkProtocol_ANY = 0xFFFFFFFF,
 		};
-		INetAddress(NetworkProtocol type) {}
+		INetAddress(NetworkProtocol type) : networkProtocol(type) {}
 
 		virtual NetworkProtocol getNetworkProtocol() const noexcept = 0;
 
 		virtual bool isValid() const noexcept = 0;
 
 	  private:
-		NetworkProtocol type;
+		NetworkProtocol networkProtocol;
 	};
 } // namespace fragcore
 

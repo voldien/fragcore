@@ -35,6 +35,10 @@ long BufferIO::write(long int nbytes, const void *pbuffer) {
 	throw RuntimeException(); //TODO determine if a another execption type is more appropicate.
 }
 
+long int BufferIO::peek(long int nBytes, void *pbuffer) { long nReadBytes = read(nBytes, pbuffer);
+	return nReadBytes;
+}
+
 bool BufferIO::eof() const {
 	return false;
 }

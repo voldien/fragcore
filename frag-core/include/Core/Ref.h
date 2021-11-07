@@ -88,6 +88,7 @@ namespace fragcore {
 			assert(p_ref);
 
 			// if (p_ref->init_ref())
+			this->reference = p_ref;
 			//	reference = p_ref;
 		}
 

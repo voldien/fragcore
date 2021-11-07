@@ -26,7 +26,7 @@ namespace fragcore {
 	 * @brief
 	 *
 	 */
-	class FVDECLSPEC Random {
+	template <typename T = float> class FVDECLSPEC Random {
 	  public:
 		Random() = default;
 		Random(const Random &other) = default;

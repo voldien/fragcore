@@ -22,16 +22,18 @@ TaskScheduler::TaskScheduler(int cores, unsigned int maxPackagesPool) {
 }
 
 TaskScheduler::~TaskScheduler() {
+	schTaskSch *taskSch = static_cast<schTaskSch *>(this->sch);
 	this->terminate();
-	schReleaseTaskSch((schTaskSch *)this->sch);
+	schReleaseTaskSch(taskSch);
 	/*	Release.	*/
 	delete this->sch;
+	this->sch = nullptr;
 }
 
 static int internal_schCallback(struct sch_task_package_t *package) {
 	/*	extract variables.	*/
-	Task *task = (Task *)package->begin;
-	IScheduler *scheduler = (IScheduler *)package->end;
+	Task *task = static_cast<Task *>(package->begin);
+	IScheduler *scheduler = static_cast<IScheduler *>(package->end);
 	Task::TaskCallBack callback = task->callback;
 
 	task->Execute();
@@ -39,10 +41,11 @@ static int internal_schCallback(struct sch_task_package_t *package) {
 	task->Complete();
 
 	/*	Release task resources.	*/
+	return 0;
 }
 
 void TaskScheduler::addTask(Task *task) {
-	schTaskPackage packageTask = {0};
+	schTaskPackage packageTask = {};
 	// TODO IMPROVE
 	// task->scheduler = Ref<IScheduler>(this);
 	// TODO how to handle the resources.
@@ -60,13 +63,15 @@ void TaskScheduler::addTask(Task *task) {
 void TaskScheduler::setUserData(const void *data) { return schSetSchUserData((schTaskSch *)this->sch, data); }
 const void *TaskScheduler::getUserData() { return schGetPoolUserData((schTaskSch *)this->sch, 0); }
 void TaskScheduler::run() {
-	int status = schRunTaskSch((schTaskSch *)this->sch);
+	schTaskSch *taskSch = static_cast<schTaskSch *>(this->sch);
+	int status = schRunTaskSch(taskSch);
 	if (status != SCH_OK)
 		throw RuntimeException(schErrorMsg(status));
 }
 
 void TaskScheduler::terminate() {
-	int status = schTerminateTaskSch((schTaskSch *)this->sch);
+	schTaskSch *taskSch = static_cast<schTaskSch *>(this->sch);
+	int status = schTerminateTaskSch(taskSch);
 
 	// if (status != SCH_OK)
 	//	throw RuntimeException(schErrorMsg(status));
