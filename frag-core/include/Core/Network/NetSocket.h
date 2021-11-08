@@ -32,7 +32,6 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC NetSocket : public SmartReference {
 	  public:
-		NetSocket(const IPInterface &ip);
 		NetSocket(NetSocket &&other) = default;
 		virtual ~NetSocket();
 
@@ -51,8 +50,6 @@ namespace fragcore {
 		};
 		enum class NetStatus { Status_Done, Status_NotReady, Status_Partial, Status_Disconnected, Status_Error };
 
-		virtual int open(int p_type, int ip_type) = 0;
-
 		virtual TransportProtocol getTransportProtocol() const noexcept = 0;
 
 		virtual int close() = 0;
@@ -61,15 +58,12 @@ namespace fragcore {
 		virtual int connect(const INetAddress &p_addr) = 0;
 		virtual int poll(int p_type, int timeout) const = 0;
 
-		virtual int recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddress &r_ip, uint16_t &r_port,
-							 bool p_peek = false) = 0;
+		virtual int recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddress &r_ip, bool p_peek = false) = 0;
 		virtual int recv(const void *pbuffer, int p_len, int &sent) = 0;
 		virtual int send(const uint8_t *p_buffer, int p_len, int &r_sent) = 0;
-		virtual int sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const INetAddress &p_ip,
-						   uint16_t p_port) = 0;
+		virtual int sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const INetAddress &p_ip) = 0;
 		virtual long int send(const void *pbuffer, int p_len, int &sent) = 0;
-		virtual Ref<NetSocket> accept(INetAddress &r_ip, uint16_t &r_port) = 0;
-		virtual Ref<NetSocket> accept(std::string &ip, unsigned int port) = 0;
+		virtual Ref<NetSocket> accept(INetAddress &r_ip) = 0;
 		virtual NetStatus accept(NetSocket &socket) = 0;
 
 		virtual int read() = 0;

@@ -28,7 +28,9 @@ namespace fragcore {
 	// TODO name class to match the file name.
 	class FVDECLSPEC GeometryUtility {
 	  public:
-		static bool TestPlanesAABB(const Plane &plane, const AABB &bound);
+		// static bool TestPlanesAABB(const Plane &plane, const AABB &bound){
+
+		// }
 	};
 } // namespace fragcore
 #endif

@@ -2,10 +2,10 @@
 #include "Core/IO/ZipFileIO.h"
 
 #include <cassert>
+#include <fmt/core.h>
 #include <vector>
 #include <zip.h>
 #include <zlib.h>
-#include<fmt/core.h>
 using namespace fragcore;
 
 IO *ZipFileSystem::openFile(const char *path, IO::IOMode mode) {
@@ -254,6 +254,7 @@ static zip_int64_t io_callback(void *userdata, void *data, zip_uint64_t len, zip
 											  ZIP_SOURCE_TELL, ZIP_SOURCE_STAT, ZIP_SOURCE_FREE, -1);
 	default:
 		assert(0); // TODO determine if this is state it shall never reach or not.
+		return 0;
 	}
 }
 

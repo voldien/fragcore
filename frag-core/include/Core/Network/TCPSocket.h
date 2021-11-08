@@ -31,8 +31,6 @@ namespace fragcore {
 		TCPNetSocket();
 		virtual ~TCPNetSocket();
 
-		virtual int open(int p_type, int ip_type) override;
-
 		virtual TransportProtocol getTransportProtocol() const noexcept;
 
 		virtual int close() override;
@@ -43,15 +41,13 @@ namespace fragcore {
 		virtual int connect(const INetAddress &p_addr) override;
 		virtual int poll(int p_type, int timeout) const override;
 
-		virtual int recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddress &r_ip, uint16_t &r_port,
+		virtual int recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddress &r_ip,
 							 bool p_peek = false) override;
 		virtual int recv(const void *pbuffer, int p_len, int &sent) override;
 		virtual int send(const uint8_t *p_buffer, int p_len, int &r_sent) override;
-		virtual int sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const INetAddress &p_ip,
-						   uint16_t p_port) override;
+		virtual int sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const INetAddress &p_ip) override;
 		virtual long int send(const void *pbuffer, int p_len, int &sent) override;
-		virtual Ref<NetSocket> accept(INetAddress &r_ip, uint16_t &r_port) override;
-		virtual Ref<NetSocket> accept(std::string &ip, unsigned int port) override;
+		virtual Ref<NetSocket> accept(INetAddress &r_ip) override;
 		virtual NetStatus accept(NetSocket &socket) override;
 
 		virtual int read() override;

@@ -18,11 +18,11 @@
 */
 #ifndef _FRAG_CORE_POOL_ALLACTOR_H_
 #define _FRAG_CORE_POOL_ALLACTOR_H_ 1
-#include"../../Def.h"
+#include "../../Def.h"
 #include <cassert>
+#include <cstdio>
 #include <malloc.h>
 #include <memory>
-#include <cstdio>
 #include <string>
 
 /* add support for C++ allocates in order to remove pure function bug, if it's that it's the culprit*/
@@ -202,7 +202,7 @@ namespace fragcore {
 
 				/*  Reallocate buffer.  */
 				i = this->reserved();
-				this->item = (PoolAllactorItem *)realloc(this->item, itemSize * size);
+				this->item = static_cast<PoolAllactorItem *>(realloc(this->item, itemSize * size));
 
 				PoolAllactorItem *lastItem = &this->item[i];
 				PoolAllactorItem *subpool = lastItem;

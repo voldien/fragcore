@@ -13,7 +13,7 @@ VKBuffer::~VKBuffer() {}
 void VKBuffer::bind() {
 	VKBufferObject *bufobj = static_cast<VKBufferObject *>(this->pdata);
 
-	vkBindBufferMemory(bufobj->vulkanCore->device, bufobj->buffer, bufobj->vertexBufferMemory, 0);
+	//vkBindBufferMemory(bufobj->vulkanCore->device, bufobj->buffer, bufobj->vertexBufferMemory, 0);
 }
 
 void VKBuffer::bind(unsigned int offset, unsigned int size) {

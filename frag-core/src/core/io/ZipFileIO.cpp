@@ -1,9 +1,9 @@
 #include "Core/IO/ZipFileIO.h"
 #include "Core/IO/ZipFileSystem.h"
 
+#include <fmt/core.h>
 #include <zip.h>
 #include <zlib.h>
-#include<fmt/core.h>
 using namespace fragcore;
 
 ZipFileIO::ZipFileIO(zip_file_t *file, zip_int64_t index, Ref<ZipFileSystem> ref) {
@@ -53,6 +53,8 @@ long ZipFileIO::write(long int nbytes, const void *pbuffer) {
 	throw NotImplementedException();
 	return nbytes;
 }
+
+long int ZipFileIO::peek(long int nBytes, void *pbuffer) { return this->read(nBytes, pbuffer); }
 
 bool ZipFileIO::eof() const { return false; }
 

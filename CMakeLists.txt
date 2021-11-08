@@ -346,6 +346,12 @@ ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/extern)
 ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/frag-core)
 
 
+# Testing and assertion and other.
+#TODO attempt to remove so it works on all platforms.
+IF(BUILD_WITH_TEST)
+	ENABLE_TESTING()
+ENDIF()
+
 
 IF(BUILD_MODULES)
 	# Rendering interfaces.
@@ -381,14 +387,13 @@ IF(BUILD_MODULES)
 
 ENDIF(BUILD_MODULES)
 
-# Testing and assertion and other.
-#TODO attempt to remove so it works on all platforms.
 IF(NOT ANDROID)
 	IF(BUILD_WITH_TEST)
-		ENABLE_TESTING()
+
 		ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/test/)
 	ENDIF()
 ENDIF()
+
 
 # Generate sample executables.
 IF(BUILD_WITH_SAMPLES)

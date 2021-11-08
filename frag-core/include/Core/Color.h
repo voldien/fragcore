@@ -12,8 +12,15 @@ namespace fragcore {
 	class Color : public Vector4 {
 	  public:
 		Color(float r, float g, float b, float a) noexcept : Vector4(r, g, b, a) {}
-		Color(uint32_t hex) noexcept { /*	Convert */
-			throw NotImplementedException();
+		Color(uint32_t hex) noexcept {				 /*	Convert */
+			float r = ((hex >> 24) & 0xFF) / 255.0f; // Extract the RR byte
+			float g = ((hex >> 16) & 0xFF) / 255.0f; // Extract the GG byte
+			float b = ((hex >> 8) & 0xFF) / 255.0f;	 // Extract the GG byte
+			float a = ((hex)&0xFF) / 255.0f;		 // Extract the BB byte
+			this->r(r);
+			this->g(g);
+			this->b(b);
+			this->a(a);
 		}
 
 		inline float r() const noexcept { return x(); }
@@ -21,10 +28,14 @@ namespace fragcore {
 		inline float b() const noexcept { return z(); }
 		inline float a() const noexcept { return w(); }
 
-		inline void r(float red) noexcept { setX(red); }
-		inline void g(float green) noexcept { setY(green); }
-		inline void b(float blue) noexcept { setZ(blue); }
-		inline void a(float alpha) noexcept { setW(alpha); }
+		inline void r(float red) noexcept { /*this->[0] = red; */
+		}
+		inline void g(float green) noexcept { /* this->[1] = green;*/
+		}
+		inline void b(float blue) noexcept { /* this->[2] = blue; */
+		}
+		inline void a(float alpha) noexcept { /* this->[3] = alpha;*/
+		}
 
 	  public:
 		/**

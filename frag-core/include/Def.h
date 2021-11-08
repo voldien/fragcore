@@ -18,18 +18,18 @@
 */
 #ifndef _FRAG_CORE_DEF_H_
 #define _FRAG_CORE_DEF_H_ 1
-#include<stdio.h>
+#include<cstdio>
 #include<stdint.h>
 #include<string.h>
-#include<stdlib.h>
+#include<cstdlib>
 #include<unistd.h>
 #include<cassert>
-#include<errno.h>
+#include<cerrno>
 
 //TODO relocate.
 //TODO rename to none prefix versions.
 
-#define FRAGCORE_USE_HPMCPP_VECTORS
+//#define FRAGCORE_USE_HPMCPP_VECTORS
 #ifdef FRAGCORE_USE_HPMCPP_VECTORS
 #include<Hpm.hpp>
 #include<Ext/HCPlane.hpp>
@@ -37,8 +37,6 @@
 #include <HCVector2.hpp>
 #include <HCVector3.hpp>
 #include <HCVector4.hpp>
-#endif
-/*	Vector data types for rendering geometries.	*/
 namespace fragcore {
 	using Vector3 =  LIBHPM::Vector3;
 	using Vector4 = LIBHPM::Vector4 ;
@@ -52,6 +50,19 @@ namespace fragcore {
 	using OBB= LIBHPM::OBB ;
 	using Ray = LIBHPM::Ray ;
 }
+#else
+#include<Eigen/Dense>
+namespace fragcore {
+	using Vector3 =  Eigen::Vector3f;
+	using Vector4 = Eigen::Vector4f ;
+	using Vector2 = Eigen::Vector2f ;
+	using Matrix4x4= Eigen::Matrix4f ;
+	using Matrix3x3 = Eigen::Matrix3f ;
+	using Quaternion = Eigen::Quaternionf;
+}
+#endif
+/*	Vector data types for rendering geometries.	*/
+
 
 #include<Exception.hpp>
 namespace fragcore{

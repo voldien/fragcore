@@ -20,7 +20,6 @@
 #define _FRAG_CORE_OBJECT_H_ 1
 #include "../Def.h"
 #include "UIDObject.h"
-#include <string.h>
 #include <string>
 
 namespace fragcore {

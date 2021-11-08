@@ -87,8 +87,6 @@ int ModbusNetSocket::connect(const INetAddress &p_addr) {
 	this->netStatus = NetStatus::Status_Done;
 }
 
-int ModbusNetSocket::open(int p_type, int ip_type) {}
-
 int ModbusNetSocket::poll(int p_type, int timeout) const {}
 int ModbusNetSocket::recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddress &r_ip, uint16_t &r_port,
 							  bool p_peek) {
@@ -128,18 +126,6 @@ Ref<NetSocket> ModbusNetSocket::accept(INetAddress &r_ip, uint16_t &r_port) {
 	return TCPNetSocket::accept(r_ip, r_port);
 }
 
-Ref<NetSocket> ModbusNetSocket::accept(std::string &ip, unsigned int port) {
-	struct sockaddr tobuffer; /*	*/
-	socklen_t aclen = 0;	  /*	*/
-	int aaccept_socket = ::accept(this->socket, &tobuffer, &aclen);
-	if (aaccept_socket < 0) {
-		throw SystemException(errno, "Failed to accept connection");
-		// close();
-	}
-	ModbusNetSocket *_newsocket = new ModbusNetSocket(aaccept_socket);
-	// modbus_new_tcp
-	return Ref<NetSocket>(_newsocket);
-}
 ModbusNetSocket::NetStatus ModbusNetSocket::accept(NetSocket &socket) {
 	struct sockaddr tobuffer; /*	*/
 	socklen_t aclen = 0;	  /*	*/

@@ -79,9 +79,8 @@ TEST_F(TCPSocketServerClientTest, Connect_And_Accept_No_Throw_Exception) {
 	TCPNetSocket clientSocket;
 	ASSERT_NO_THROW(clientSocket.connect(localHost));
 
-	IPAddress acceptAddress;
-	uint16_t acceptPort;
-	ASSERT_NO_THROW(tcpNetSocket->accept(acceptAddress, acceptPort));
+	TCPUDPAddress acceptAddress;
+	ASSERT_NO_THROW(tcpNetSocket->accept(acceptAddress));
 }
 
 TEST_F(TCPSocketServerClientTest, Connect_And_Send_No_Throw_Exception) {

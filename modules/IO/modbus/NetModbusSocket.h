@@ -31,7 +31,6 @@ namespace fragcore {
 		ModbusNetSocket();
 		virtual ~ModbusNetSocket();
 
-		virtual int open(int p_type, int ip_type) override;
 
 		virtual TransportProtocol getTransportProtocol() const noexcept;
 
@@ -51,7 +50,6 @@ namespace fragcore {
 						   uint16_t p_port) override;
 		virtual long int send(const void *pbuffer, int p_len, int &sent) override;
 		virtual Ref<NetSocket> accept(INetAddress &r_ip, uint16_t &r_port) override;
-		virtual Ref<NetSocket> accept(std::string &ip, unsigned int port) override;
 		virtual NetStatus accept(NetSocket &socket) override;
 
 		virtual int read() override;

@@ -3,17 +3,17 @@
 #include <netdb.h>
 using namespace fragcore;
 
-IPAddress::IPAddress() : INetAddress(getNetworkProtocol()), valid(false) {}
+IPAddress::IPAddress() : INetAddress(NetworkProtocol::NetWorkProtocol_IP), valid(false) {}
 
 IPAddress::IPAddress(const std::string &ip, IPAddressType type)
-	: INetAddress(getNetworkProtocol()), ip(ip), type(type), valid(false) {
+	: INetAddress(NetworkProtocol::NetWorkProtocol_IP), ip(ip), type(type), valid(false) {
 	struct hostent *hosten = nullptr; /*	*/
 	/*	Get IP from hostname.	*/
 	//	hosten = gethostbyname(ip.c_str());
 
 	int domain = getDomain(type);
 	if (inet_pton(domain, ip.c_str(), &field8[0]) < 0) {
-		throw RuntimeException("Bad");
+		throw RuntimeException("Failed to convert {} to IP Address", ip);
 	}
 
 	// hosten = nullptr;
@@ -34,7 +34,7 @@ IPAddress::IPAddress(const std::string &ip, IPAddressType type)
 }
 
 IPAddress::IPAddress(const std::string &hostname)
-	: INetAddress(getNetworkProtocol()), valid(false), type(IPAddressType::IPAddress_Type_NONE) {
+	: INetAddress(NetworkProtocol::NetWorkProtocol_IP), valid(false), type(IPAddressType::IPAddress_Type_NONE) {
 	struct hostent *hosten = nullptr; /*	*/
 									  /*	Get IP from hostname.	*/
 	hosten = gethostbyname(hostname.c_str());
@@ -54,7 +54,13 @@ IPAddress::IPAddress(const std::string &hostname)
 	}
 }
 
-const uint8_t *IPAddress::getAddress(IPAddressType addressType) const noexcept { return field8; }
+const uint8_t *IPAddress::getAddress(IPAddressType addressType) const noexcept {
+	switch (addressType) {
+	default:
+	case IPAddress::IPAddressType::IPAddress_Type_IPV4:
+		return field8;
+	}
+}
 
 bool IPAddress::isValid() const noexcept { return valid; }
 

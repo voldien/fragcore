@@ -1,18 +1,18 @@
 #include "Core/Network/INetAddress.h"
 #include "Core/Network/UDPSocket.h"
 #include <arpa/inet.h>
-#include <assert.h>
-#include <errno.h>
+#include <cassert>
+#include <cerrno>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <ctime>
 #include <net/if.h>
 #include <netdb.h>
 #include <netinet/in.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <sys/ioctl.h>
 #include <sys/socket.h>
 #include <sys/types.h>
-#include <time.h>
 #include <unistd.h>
 
 using namespace fragcore;
@@ -73,20 +73,17 @@ int UDPNetSocket::connect(const INetAddress &p_addr) {
 	}
 }
 
-int UDPNetSocket::open(int p_type, int ip_type) {}
-int UDPNetSocket::bind(const INetAddress &p_addr) {}
-int UDPNetSocket::poll(int p_type, int timeout) const {}
-int UDPNetSocket::recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddress &r_ip, uint16_t &r_port,
-						   bool p_peek) {}
-int UDPNetSocket::recv(const void *pbuffer, int p_len, int &sent) {}
-int UDPNetSocket::send(const uint8_t *p_buffer, int p_len, int &r_sent) {}
-int UDPNetSocket::sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const INetAddress &p_ip, uint16_t p_port) {}
-long int UDPNetSocket::send(const void *pbuffer, int p_len, int &sent) {}
-Ref<NetSocket> UDPNetSocket::accept(INetAddress &r_ip, uint16_t &r_port) {}
-Ref<NetSocket> UDPNetSocket::accept(std::string &ip, unsigned int port) {}
+int UDPNetSocket::bind(const INetAddress &p_addr) { return 0; }
+int UDPNetSocket::poll(int p_type, int timeout) const { return 0; }
+int UDPNetSocket::recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddress &r_ip, bool p_peek) { return 0; }
+int UDPNetSocket::recv(const void *pbuffer, int p_len, int &sent) { return 0; }
+int UDPNetSocket::send(const uint8_t *p_buffer, int p_len, int &r_sent) { return 0; }
+int UDPNetSocket::sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const INetAddress &p_ip) { return 0; }
+long int UDPNetSocket::send(const void *pbuffer, int p_len, int &sent) { return 0; }
+Ref<NetSocket> UDPNetSocket::accept(INetAddress &r_ip) {}
 UDPNetSocket::NetStatus UDPNetSocket::accept(NetSocket &socket) {}
-int UDPNetSocket::read() {}
-int UDPNetSocket::write() {}
-bool UDPNetSocket::isBlocking() {}
+int UDPNetSocket::read() { return 0; }
+int UDPNetSocket::write() { return 0; }
+bool UDPNetSocket::isBlocking() { return 0; }
 void UDPNetSocket::setBlocking(bool blocking) {}
 UDPNetSocket::NetStatus UDPNetSocket::getStatus() const noexcept { return this->netStatus; }

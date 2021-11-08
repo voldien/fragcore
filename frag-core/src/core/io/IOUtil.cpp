@@ -11,11 +11,11 @@ long int IOUtil::loadFileMem(Ref<IO> &io, char **data) noexcept {
 	/*  Check if file is readable.  */
 	if (!io->isReadable())
 		throw InvalidArgumentException("Failed to read from IO: {}", io->getName());
-
+	// TODO encapsualte data to reuse 
 	// Page aligned;
 	char buf[1024 * 4];
 	long nbytes;
-	while ((nbytes = io->read(sizeof(buf), buf)) > 0) {
+	while (!io->eof() && (nbytes = io->read(sizeof(buf), buf)) > 0) {
 		d = (char *)realloc(d, dataSize + nbytes);
 		memcpy(&d[dataSize], buf, nbytes);
 		dataSize += nbytes;
@@ -30,6 +30,8 @@ long int IOUtil::loadFile(Ref<IO> &in, Ref<IO> &out) {
 		throw InvalidArgumentException("Failed to read from IO: {}", in->getName());
 	if (!out->isWriteable())
 		throw InvalidArgumentException("Failed to write to IO: {}", out->getName());
+	
+
 
 	char buf[1024 * 4];
 	long nbytes;

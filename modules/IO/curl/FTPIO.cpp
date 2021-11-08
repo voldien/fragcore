@@ -1,4 +1,6 @@
-#define FRAG_CORE_INTERNAL_IMP
+#ifndef FRAG_CORE_INTERNAL_IMP
+#define FRAG_CORE_INTERNAL_IMP 1
+#endif
 
 #include "FTPIO.h"
 #include "Core/IO/GZFileIO.h"

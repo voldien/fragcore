@@ -64,6 +64,7 @@ namespace fragcore {
 		bool readOnly;
 		bool ownMem;
 		bool expandable;
+		IOMode ioMode;
 
 	  public:
 		BufferIO(const void *pBuffer, unsigned long size);

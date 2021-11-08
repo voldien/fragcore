@@ -1,12 +1,12 @@
 
 #ifndef _FRAG_CORE_PHYSIC_INTERFACE_H_
 #define _FRAG_CORE_PHYSIC_INTERFACE_H_ 1
+#include "PhysicDesc.h"
+#include "Prerequisites.h"
 #include <Core/IConfig.h>
 #include <Core/Module.h>
 #include <Core/Ref.h>
 #include <Core/SmartReference.h>
-#include "PhysicDesc.h"
-#include "Prerequisites.h"
 
 namespace fragcore {
 
@@ -179,7 +179,7 @@ namespace fragcore {
 		 *
 		 * @param renderer
 		 */
-		//virtual void setDebugRenderer(Ref<IRenderer> &renderer);
+		// virtual void setDebugRenderer(Ref<IRenderer> &renderer);
 
 		/**
 		 *	Get version of the interface.

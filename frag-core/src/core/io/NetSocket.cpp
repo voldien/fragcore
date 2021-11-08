@@ -1,8 +1,6 @@
 #include "Core/Network/NetSocket.h"
 using namespace fragcore;
 
-NetSocket::NetSocket(const IPInterface &ip) {}
-
 NetSocket::~NetSocket() { /*Make sure it gets disconnected.   */
 }
 
@@ -17,4 +15,12 @@ constexpr const char *NetSocket::getTransportProtocolSymbol(TransportProtocol tr
 		return "";
 	}
 }
-constexpr const char *NetSocket::getNetStatusSymbol(NetStatus status) noexcept {}
+constexpr const char *NetSocket::getNetStatusSymbol(NetStatus status) noexcept {
+	switch (status) {
+	case NetStatus::Status_Done:
+		return "";
+
+	default:
+		return "";
+	}
+}

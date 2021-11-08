@@ -15,25 +15,27 @@ Sampler::WrapMode Sampler::getWrapMode() {}
 
 void Sampler::setAnisotropic(float anisotropy) {}
 
-float Sampler::getAnisotropic() const {}
+float Sampler::getAnisotropic() const { return 0; }
 
 Sampler::CompareFunc Sampler::getCompare() const {}
 void Sampler::setCompareFunc(CompareFunc compareFunc) {}
 
 void Sampler::setMipMapBaseLevel(unsigned int level) {}
-unsigned int Sampler::getMipMapBaseLevel() const {}
+unsigned int Sampler::getMipMapBaseLevel() const { return 0; }
 
 void Sampler::setMipMapBias(float bias) {}
-float Sampler::getMipMapBias(float bias) const {}
+float Sampler::getMipMapBias(float bias) const { return 0; }
 
 void Sampler::setBorderColor(float color) {}
-float Sampler::getBorderColor() const {}
+float Sampler::getBorderColor() const { return 0; }
 
-unsigned int Sampler::setMaxLod(unsigned int level) {}
-unsigned int Sampler::getMaxLod() const {}
+unsigned int Sampler::setMaxLod(unsigned int level) { return 0; }
+unsigned int Sampler::getMaxLod() const {
+	return 0;
+}
 
 unsigned int Sampler::setMinLod(unsigned int level) {}
-unsigned int Sampler::getMinLod() const {}
+unsigned int Sampler::getMinLod() const { return 0; }
 
 void Sampler::setName(const std::string &name) {}
 

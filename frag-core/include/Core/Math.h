@@ -19,8 +19,8 @@
 #ifndef _FRAG_CORE_MATH_H_
 #define _FRAG_CORE_MATH_H_ 1
 #include "../Def.h"
-#include <float.h>
-#include <math.h>
+#include <cfloat>
+#include <cmath>
 #include <vector>
 
 namespace fragcore {
@@ -155,7 +155,7 @@ namespace fragcore {
 			const T a = (static_cast<T>(1.0) / (standard_deviation * static_cast<T>(std::sqrt(2.0 * Math::PI))));
 
 			/*	*/
-			T *pGuass = static_cast<T*>(&guassian);
+			T *pGuass = static_cast<T *>(&guassian);
 
 			for (unsigned int i = 0; i < height; i++) {
 				const T b = (-1.0f / 2.0f) * std::pow<T>(((i - standard_deviation) / theta), 2.0f);
@@ -186,6 +186,7 @@ namespace fragcore {
 
 		template <typename T> static T gammaCorrection(T x, T gamma) noexcept {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
+			// TODO add support for using vector components.
 			return static_cast<T>(std::pow(x, gamma));
 		}
 

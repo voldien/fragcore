@@ -55,7 +55,7 @@ TEST_F(IOTest, IO_File_Open_Read_No_Exception) {
 	char buf[512];
 	IO *io = FileSystem::getFileSystem()->openFile(__FILE__, IO::READ);
 
-	// ASSERT_NO_THROW(io->read(buf, sizeof(buf)));
+	ASSERT_NO_THROW(io->read(sizeof(buf), buf));
 
 	FileSystem::getFileSystem()->closeFile(io);
 }

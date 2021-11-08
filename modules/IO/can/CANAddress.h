@@ -28,10 +28,17 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC CANAddress : public INetAddress {
 	  public:
-		CANAddress(unsigned int ID) : INetAddress(NetworkProtocol::NetWorkProtocol_CAN), id(ID) {}
+		CANAddress(unsigned int ID)
+			: INetAddress(NetworkProtocol::NetWorkProtocol_CAN), valid(false), id(ID), ifrIndex(0) {}
 
-		bool operator==(const CANAddress &ipAddress) const { return false; }
-		bool operator!=(const CANAddress &ipAddress) const { return false; }
+		bool operator==(const CANAddress &address) const {
+			if (this == &address)
+				return true;
+			if (this->getID() == address.getID())
+				return true;
+			return false;
+		}
+		bool operator!=(const CANAddress &address) const { return !(*this == address); }
 
 		virtual NetworkProtocol getNetworkProtocol() const noexcept override {
 			return NetworkProtocol::NetWorkProtocol_CAN;

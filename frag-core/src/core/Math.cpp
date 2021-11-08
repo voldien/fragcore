@@ -1,8 +1,5 @@
 #include "Core/Math.h"
 #include "open-simplex-noise.h"
-#include <cfloat>
-#include <hpm.h>
-#include <cmath>
 using namespace fragcore;
 
 static struct osn_context *ctx = nullptr;

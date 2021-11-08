@@ -5,17 +5,17 @@
 #include <arpa/inet.h>
 #include <cassert>
 #include <cerrno>
+#include <cstdlib>
+#include <cstring>
+#include <ctime>
 #include <net/if.h>
 #include <netdb.h>
 #include <netinet/in.h>
 #include <netinet/ip.h>
 #include <netinet/tcp.h>
-#include <cstdlib>
-#include <cstring>
 #include <sys/ioctl.h>
 #include <sys/socket.h>
 #include <sys/types.h>
-#include <ctime>
 #include <unistd.h>
 
 using namespace fragcore;
@@ -58,7 +58,7 @@ size_t TCPNetSocket::setupIPAddress(struct sockaddr *addr, const INetAddress &p_
 	return addrlen;
 }
 
-TCPNetSocket::TCPNetSocket() : netStatus(NetStatus::Status_Disconnected), socket(0) {}
+TCPNetSocket::TCPNetSocket() : socket(0), netStatus(NetStatus::Status_Disconnected) {}
 TCPNetSocket::TCPNetSocket(int socket) : socket(socket) {}
 TCPNetSocket::~TCPNetSocket() { this->close(); }
 
@@ -74,6 +74,7 @@ int TCPNetSocket::close() {
 		this->socket = 0;
 	}
 	netStatus = NetStatus::Status_Disconnected;
+	return 0;
 }
 
 int TCPNetSocket::bind(const INetAddress &p_addr) {
@@ -109,7 +110,8 @@ int TCPNetSocket::bind(const INetAddress &p_addr) {
 
 int TCPNetSocket::listen(unsigned int maxListen) {
 	if (::listen(this->socket, maxListen) < 0) {
-		SystemException(errno, std::system_category(), "TCP socket: Failed to set listen {} - error: {}", maxListen, strerror(errno));
+		SystemException(errno, std::system_category(), "TCP socket: Failed to set listen {} - error: {}", maxListen,
+						strerror(errno));
 	}
 	return 0;
 }
@@ -158,14 +160,13 @@ int TCPNetSocket::connect(const INetAddress &p_addr) {
 	} else {
 		this->netStatus = NetStatus::Status_Done;
 	}
-}
 
-int TCPNetSocket::open(int p_type, int ip_type) {}
+	return 0;
+}
 
 int TCPNetSocket::poll(int p_type, int timeout) const { /*	select or poll.	*/
 }
-int TCPNetSocket::recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddress &r_ip, uint16_t &r_port,
-						   bool p_peek) {
+int TCPNetSocket::recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddress &r_ip, bool p_peek) {
 	int flag = 0;
 	int res; //= recvfrom(this->socket, p_buffer, p_len, flag, connection->intaddr, &r_read);
 	return res;
@@ -180,7 +181,7 @@ int TCPNetSocket::send(const uint8_t *p_buffer, int p_len, int &r_sent) {
 	int res = ::send(this->socket, p_buffer, p_len, flag);
 	return res;
 }
-int TCPNetSocket::sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const INetAddress &p_addr, uint16_t p_port) {
+int TCPNetSocket::sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const INetAddress &p_addr) {
 	socklen_t addrlen;			 /*	*/
 	const struct sockaddr *addr; /*	*/
 	union {
@@ -188,7 +189,7 @@ int TCPNetSocket::sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const 
 		struct sockaddr_in6 addr6; /*	*/
 	} addrU;
 	const TCPUDPAddress &tcpAddress = static_cast<const TCPUDPAddress &>(p_addr);
-	addrlen = setupIPAddress((struct sockaddr *)&addrU, tcpAddress, p_port);
+	addrlen = setupIPAddress((struct sockaddr *)&addrU, tcpAddress.getIPAddress(), tcpAddress.getPort());
 	unsigned int flag = 0;
 
 	int res = ::sendto(this->socket, p_buffer, p_len, flag, (struct sockaddr *)&addrU, addrlen);
@@ -201,7 +202,7 @@ long int TCPNetSocket::send(const void *pbuffer, int p_len, int &sent) {
 	return res;
 }
 
-Ref<NetSocket> TCPNetSocket::accept(INetAddress &r_ip, uint16_t &r_port) {
+Ref<NetSocket> TCPNetSocket::accept(INetAddress &r_ip) {
 	struct sockaddr tobuffer; /*	*/
 	socklen_t aclen = 0;	  /*	*/
 	int aaccept_socket = ::accept(this->socket, &tobuffer, &aclen);
@@ -213,20 +214,10 @@ Ref<NetSocket> TCPNetSocket::accept(INetAddress &r_ip, uint16_t &r_port) {
 	return Ref<NetSocket>(_newsocket);
 }
 
-Ref<NetSocket> TCPNetSocket::accept(std::string &ip, unsigned int port) {
-	struct sockaddr tobuffer; /*	*/
-	socklen_t aclen = 0;	  /*	*/
-	int aaccept_socket = ::accept(this->socket, &tobuffer, &aclen);
-	if (aaccept_socket < 0) {
-		// close();
-	}
-	TCPNetSocket *_newsocket = new TCPNetSocket(aaccept_socket);
-	return Ref<NetSocket>(_newsocket);
-}
 TCPNetSocket::NetStatus TCPNetSocket::accept(NetSocket &socket) {
-	IPAddress ipAddress("");
-	uint16_t port;
-	Ref<NetSocket> netSocket = this->accept(ipAddress, port);
+	TCPUDPAddress addr;
+
+	Ref<NetSocket> netSocket = this->accept(addr);
 	// socket = std::move(*netSocket);
 	return netSocket->getStatus();
 }
@@ -252,7 +243,8 @@ TCPNetSocket::NetStatus TCPNetSocket::getStatus() const noexcept { return this->
 
 int TCPNetSocket::getDomain(const INetAddress &address) {
 
-	const TCPUDPAddress &tcpAddress = static_cast<const TCPUDPAddress &>(address);
+	const TCPUDPAddress &tcpAddress = dynamic_cast<const TCPUDPAddress &>(address);
+
 	int domain = 0; // TODO be override by the NetAddress!
 	switch (address.getNetworkProtocol()) {
 	case INetAddress::NetworkProtocol::NetWorkProtocol_IP: {
