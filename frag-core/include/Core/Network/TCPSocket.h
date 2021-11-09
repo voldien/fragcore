@@ -63,6 +63,9 @@ namespace fragcore {
 		TCPNetSocket(int socket);
 
 		bool isNetworkLayerSupported(INetAddress::NetworkProtocol protocol);
+		bool isValidNetworkAddress(const INetAddress& address);
+
+		void setTimeout(long int nanoSeconds);
 		static int getDomain(const INetAddress &address);
 		static size_t setupIPAddress(sockaddr *addr, const INetAddress &p_addr, uint16_t p_port);
 

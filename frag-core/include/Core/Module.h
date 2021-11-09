@@ -36,9 +36,13 @@ namespace fragcore {
 		/**/
 	  public:
 		// TODO determine where it shal lbe located
-		static void loadModule(const char *name) {}
+		static void loadModule(const std::string &name) {
+			auto moduleFile = getModuleName(name);
+			Library lib(moduleFile.c_str());
+		}
 
 		static void loadModule(Library &library) { library.getfunc("FragCoreModuleEntry"); }
+		static std::string getModuleName(const std::string &name) { return name; }
 	};
 } // namespace fragcore
 

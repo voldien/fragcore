@@ -32,6 +32,9 @@ namespace fragcore {
 		TCPUDPAddress(const TCPUDPAddress &other) = default;
 		TCPUDPAddress(const IPAddress &ipaddress, unsigned int port);
 		~TCPUDPAddress() = default;
+		TCPUDPAddress &operator=(const TCPUDPAddress &other) = default;
+		TCPUDPAddress(TCPUDPAddress &&other) = default;
+		TCPUDPAddress &operator=(TCPUDPAddress &&other) = default;
 
 		bool operator==(const TCPUDPAddress &ipAddress) const {
 			if (this == &ipAddress)

@@ -25,6 +25,7 @@ size_t TCPNetSocket::setupIPAddress(struct sockaddr *addr, const INetAddress &p_
 	size_t addrlen;
 
 	const TCPUDPAddress &tcpAddress = static_cast<const TCPUDPAddress &>(p_addr);
+
 	int domain = TCPNetSocket::getDomain(tcpAddress.getIPAddress());
 	/*	*/
 	if (domain == AF_INET) {
@@ -53,7 +54,7 @@ size_t TCPNetSocket::setupIPAddress(struct sockaddr *addr, const INetAddress &p_
 		addr6->sin6_family = (sa_family_t)domain;
 
 	} else {
-		throw RuntimeException("");
+		throw RuntimeException("Not a valid Net Address");
 	}
 	return addrlen;
 }
@@ -86,16 +87,26 @@ int TCPNetSocket::bind(const INetAddress &p_addr) {
 
 	int flags = SOCK_STREAM;
 
+	/*	*/
+	if (isValidNetworkAddress(p_addr))
+		throw RuntimeException("Invalid Net Address Type");
+
+	/*	*/
 	const TCPUDPAddress *tcpAddress = dynamic_cast<const TCPUDPAddress *>(&p_addr);
 	if (tcpAddress == nullptr)
 		throw RuntimeException("Not a valid NetAddress Object");
+
+	/*	*/
 	int domain = getDomain(tcpAddress->getIPAddress());
 	addrlen = setupIPAddress((struct sockaddr *)&addrU, p_addr, tcpAddress->getPort());
 
+	/*	*/
 	this->socket = ::socket(domain, flags, 0);
 	if (this->socket < 0) {
 		throw RuntimeException("TCP socket - Failed to create socket {} - {}", domain, strerror(errno));
 	}
+
+	setTimeout(0);
 
 	/*	Bind process to socket.	*/
 	if (::bind(socket, (struct sockaddr *)&addrU, addrlen) < 0) {
@@ -120,13 +131,12 @@ int TCPNetSocket::listen(unsigned int maxListen) {
 // }
 
 int TCPNetSocket::connect(const INetAddress &p_addr) {
-	socklen_t addrlen;			 /*	*/
-	const struct sockaddr *addr; /*	*/
+	socklen_t addrlen; /*	*/
 	union {
 		struct sockaddr_in addr4;  /*	*/
 		struct sockaddr_in6 addr6; /*	*/
 	} addrU;
-	struct timeval tv;
+
 	int flags = SOCK_STREAM;
 	// #ifdef SOCK_CLOEXEC
 	// 	flags |= SOCK_CLOEXEC;
@@ -240,6 +250,21 @@ void TCPNetSocket::setBlocking(bool blocking) { /*	*/
 	int rc = fcntl(this->socket, F_SETFL, flags);
 }
 TCPNetSocket::NetStatus TCPNetSocket::getStatus() const noexcept { return this->netStatus; }
+
+bool TCPNetSocket::isValidNetworkAddress(const INetAddress &address) {
+	return address.getNetworkProtocol() == INetAddress::NetworkProtocol::NetWorkProtocol_TCP_UDP;
+}
+
+void TCPNetSocket::setTimeout(long int nanoSeconds) {
+	struct timeval tv;
+
+	/*	Set timeout for client.	*/
+	tv.tv_sec = nanoSeconds / 1000000000;
+	tv.tv_usec = nanoSeconds % 1000000000;
+	int rc = setsockopt(this->socket, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv));
+	if (rc < 0) {
+	}
+}
 
 int TCPNetSocket::getDomain(const INetAddress &address) {
 

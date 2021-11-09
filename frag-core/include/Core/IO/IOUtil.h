@@ -61,7 +61,7 @@ namespace fragcore {
 		template <typename... Args>
 		static inline long int format(Ref<IO> &io, const std::string &format, Args &&... args) {
 			std::string formatted = fmt::format(format, args...);
-			//TODO allow to perform chunk if needed
+			// TODO allow to perform chunk if needed
 			return io->write(formatted.length(), formatted.data());
 		}
 	};

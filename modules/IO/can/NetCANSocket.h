@@ -18,7 +18,8 @@
 */
 #ifndef _FRAG_CORE_CAN_NETSOCKET_H_
 #define _FRAG_CORE_CAN_NETSOCKET_H_ 1
-#include "Core/Network/NetSocket.h"
+#include "CANAddress.h"
+#include <Core/Network/NetSocket.h>
 #include <sys/socket.h>
 
 namespace fragcore {
@@ -69,13 +70,17 @@ namespace fragcore {
 
 	  private:
 		CANNetSocket(int socket);
+		void enableFDFrames(bool enable);
+		size_t getFrameSize() const noexcept;
 		static int getDomain(const INetAddress &address);
+
 		size_t setupAddress(struct sockaddr *addr, const INetAddress &p_addr);
 
 	  private:
 		int socket;
 		unsigned int ifrIndex;
 		NetStatus netStatus;
+		// CANAddress connectAddress;
 	};
 } // namespace fragcore
 

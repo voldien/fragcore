@@ -9,4 +9,4 @@ TCPUDPAddress::TCPUDPAddress(const IPAddress &ipaddr, unsigned int port)
 	this->port = port;
 }
 
-bool TCPUDPAddress::isValid() const noexcept { return this->valid; }
+bool TCPUDPAddress::isValid() const noexcept { return this->getIPAddress().isValid() && this->port > 0 && this->port < 65536; }

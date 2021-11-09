@@ -18,7 +18,10 @@ class TCPSocketServerClientTest : public testing::Test {
 
 		const char *ipAddress = "127.0.0.1";
 
+		/*	*/
 		TCPUDPAddress tcpAddress(IPAddress(ipAddress, IPAddress::IPAddressType::IPAddress_Type_IPV4), port);
+
+		/*	*/
 		tcpNetSocket = new TCPNetSocket();
 		tcpNetSocket->bind(tcpAddress);
 		tcpNetSocket->listen(2);
@@ -74,7 +77,8 @@ TEST_F(TCPSocketServerClientTest, Bind_IO_To_NetSocket_No_Throw_Exception) {
 }
 
 TEST_F(TCPSocketServerClientTest, Connect_And_Accept_No_Throw_Exception) {
-	IPAddress localHost("127.0.0.1", IPAddress::IPAddressType::IPAddress_Type_IPV4);
+	IPAddress ipAddress("127.0.0.1", IPAddress::IPAddressType::IPAddress_Type_IPV4);
+	TCPUDPAddress localHost(ipAddress, 42323);
 
 	TCPNetSocket clientSocket;
 	ASSERT_NO_THROW(clientSocket.connect(localHost));

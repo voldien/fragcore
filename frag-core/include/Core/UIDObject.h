@@ -51,7 +51,7 @@ namespace fragcore {
 			if (this == &other)
 				return true;
 			else
-				return this->uid == other.uid;
+				return this->uid == other.uid; // TODO verify!
 		}
 		virtual bool operator!=(const UIDObject &other) noexcept { return !(*this == other); }
 

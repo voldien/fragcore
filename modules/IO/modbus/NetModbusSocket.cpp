@@ -56,7 +56,7 @@ int ModbusNetSocket::bind(const INetAddress &p_addr) {
 
 int ModbusNetSocket::listen(unsigned int maxListen) {
 	if (modbus_tcp_listen((modbus_t *)this->ctx, maxListen) < 0) {
-		SystemException ex(errno, "TCP socket: Failed to set listen {} - error: {}", maxListen, strerror(errno));
+		SystemException ex(errno, std::system_category(), "TCP socket: Failed to set listen {} ", maxListen);
 	}
 	return 0;
 }
@@ -88,8 +88,7 @@ int ModbusNetSocket::connect(const INetAddress &p_addr) {
 }
 
 int ModbusNetSocket::poll(int p_type, int timeout) const {}
-int ModbusNetSocket::recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddress &r_ip, uint16_t &r_port,
-							  bool p_peek) {
+int ModbusNetSocket::recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddress &r_ip, bool p_peek) {
 	int flag = 0;
 	int res; //= recvfrom(this->socket, p_buffer, p_len, flag, connection->intaddr, &r_read);
 	return res;
@@ -111,7 +110,7 @@ int ModbusNetSocket::send(const uint8_t *p_buffer, int p_len, int &r_sent) {
 	return res;
 }
 
-int ModbusNetSocket::sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const INetAddress &p_ip, uint16_t p_port) {
+int ModbusNetSocket::sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const INetAddress &p_ip) {
 	int res; //=  sendto(this->socket, p_buffer, p_len, flag, connection->extaddr, connection->sclen);
 	return res;
 }
@@ -122,9 +121,7 @@ long int ModbusNetSocket::send(const void *pbuffer, int p_len, int &sent) {
 	return res;
 }
 
-Ref<NetSocket> ModbusNetSocket::accept(INetAddress &r_ip, uint16_t &r_port) {
-	return TCPNetSocket::accept(r_ip, r_port);
-}
+Ref<NetSocket> ModbusNetSocket::accept(INetAddress &r_ip) { return TCPNetSocket::accept(r_ip); }
 
 ModbusNetSocket::NetStatus ModbusNetSocket::accept(NetSocket &socket) {
 	struct sockaddr tobuffer; /*	*/
@@ -138,5 +135,6 @@ int ModbusNetSocket::write() {}
 bool ModbusNetSocket::isBlocking() { /*	*/
 }
 void ModbusNetSocket::setBlocking(bool blocking) { /*	*/
+												   // modbus_set_response_timeout()
 }
 ModbusNetSocket::NetStatus ModbusNetSocket::getStatus() const noexcept { return this->netStatus; }

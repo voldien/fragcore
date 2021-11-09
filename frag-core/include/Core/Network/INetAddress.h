@@ -34,6 +34,7 @@ namespace fragcore {
 			NetWorkProtocol_TCP_UDP = 2,
 			NetWorkProtocol_CAN = 3,
 			NetWorkProtocol_ModBus = 4,
+			NetworkProtocol_Unknown = 1000,
 			NetWorkProtocol_ANY = 0xFFFFFFFF,
 		};
 		INetAddress(NetworkProtocol type) : networkProtocol(type) {}

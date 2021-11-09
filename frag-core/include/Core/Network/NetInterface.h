@@ -31,9 +31,6 @@ namespace fragcore {
 	  public:
 		NetInterface() = default;
 
-		//		Type getIPType() const noexcept;
-		//
-
 	  private:
 		// Type type;
 	};

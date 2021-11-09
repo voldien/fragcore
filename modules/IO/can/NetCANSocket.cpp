@@ -45,7 +45,9 @@ int CANNetSocket::bind(const INetAddress &p_addr) {
 	/*	*/
 	const CANAddress &canAddress = static_cast<const CANAddress &>(p_addr);
 
-	this->socket = ::socket(PF_CAN, SOCK_RAW, CAN_RAW);
+	int domain = getDomain(p_addr);
+
+	this->socket = ::socket(domain, SOCK_RAW, CAN_RAW);
 	if (this->socket < 0) {
 		throw RuntimeException("Failed to create CAN socket, {}", strerror(errno));
 	}
@@ -74,8 +76,9 @@ int CANNetSocket::listen(unsigned int maxListen) {
 int CANNetSocket::connect(const INetAddress &p_addr) {
 
 	const CANAddress &canAddress = static_cast<const CANAddress &>(p_addr);
+	int domain = getDomain(p_addr);
 
-	this->socket = ::socket(PF_CAN, SOCK_DGRAM, CAN_BCM);
+	this->socket = ::socket(domain, SOCK_DGRAM, CAN_BCM);
 	if (this->socket < 0) {
 		throw RuntimeException("Failed to create CAN socket, {}", strerror(errno));
 	}
@@ -105,26 +108,33 @@ int CANNetSocket::recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddres
 	static const uint32_t frameMaxBuffer = sizeof(frame.data);
 
 	// TODO Recv all data.
+	if (p_peek)
+		flag |= MSG_PEEK;
 
 	int res = ::recvfrom(this->socket, &frame, sizeof(frame), flag, (sockaddr *)&addr, &len);
 	if (res != sizeof(frame))
 		throw RuntimeException("Invalid Frame");
 	memcpy(p_buffer, frame.data, frameMaxBuffer);
 
-	canAddress = CANAddress(frame.can_id);
+	// addr.can_addr
+
+	canAddress = std::move(CANAddress(frame.can_id));
 	return res;
 }
+
 int CANNetSocket::recv(const void *pbuffer, int p_len, int &sent) {
 	int flag = 0;
 	int res = ::recv(this->socket, (void *)pbuffer, p_len, flag);
 	return res;
 }
+
 int CANNetSocket::send(const uint8_t *p_buffer, int p_len, int &r_sent) {
 	int flag = 0;
 	int res = ::send(this->socket, p_buffer, p_len, flag);
 
 	return res;
 }
+
 int CANNetSocket::sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const INetAddress &p_ip) {
 	int flag = 0;
 	const CANAddress &canAddress = static_cast<const CANAddress &>(p_ip);
@@ -160,13 +170,17 @@ long int CANNetSocket::send(const void *pbuffer, int p_len, int &sent) {
 }
 
 Ref<NetSocket> CANNetSocket::accept(INetAddress &r_ip) {
-	struct sockaddr tobuffer; /*	*/
-	socklen_t aclen = 0;	  /*	*/
-	int aaccept_socket = ::accept(this->socket, &tobuffer, &aclen);
+	struct sockaddr acceptAddr; /*	*/
+	socklen_t aclen = 0;		/*	*/
+	int aaccept_socket = ::accept(this->socket, &acceptAddr, &aclen);
 	if (aaccept_socket < 0) {
 		// close();
 	}
+	// acceptAddr.sa_family
+
+	/*	Create net socket.	*/
 	CANNetSocket *_newsocket = new CANNetSocket(aaccept_socket);
+	/*	*/
 	return Ref<NetSocket>(_newsocket);
 }
 
@@ -181,9 +195,20 @@ CANNetSocket::NetStatus CANNetSocket::accept(NetSocket &socket) {
 int CANNetSocket::read() {}
 int CANNetSocket::write() {}
 bool CANNetSocket::isBlocking() { /*	*/
+	int flags = fcntl(this->socket, F_GETFL, 0);
+	if (flags == -1) {
+		return false; // TODO validate.
+	}
+	return (flags & ~O_NONBLOCK) == 0;
 }
 
 void CANNetSocket::setBlocking(bool blocking) { /*	*/
+	int flags = fcntl(this->socket, F_GETFL, 0);
+	if (flags == -1) {
+		//	return false;
+	}
+	flags = (flags & ~O_NONBLOCK);
+	int rc = fcntl(this->socket, F_SETFL, flags);
 }
 
 CANNetSocket::NetStatus CANNetSocket::getStatus() const noexcept { return this->netStatus; }
@@ -222,6 +247,9 @@ size_t CANNetSocket::setupAddress(struct sockaddr *paddr, const INetAddress &p_a
 	size_t addrlen = sizeof(addr);
 	struct ifreq ifr;
 
+	const CANAddress &canAddress = static_cast<const CANAddress &>(p_addr);
+	canAddress.getStandard();
+
 	// TODO resolve
 	const char *interface = "vcan0";
 	strcpy(ifr.ifr_name, interface);
@@ -231,7 +259,7 @@ size_t CANNetSocket::setupAddress(struct sockaddr *paddr, const INetAddress &p_a
 		throw SystemException(errno, std::system_category(), "Failed to set interface index {}", interface);
 	}
 
-	addr.can_family = AF_CAN;
+	addr.can_family = this->getDomain(p_addr);
 	addr.can_ifindex = ifr.ifr_ifindex;
 
 	memcpy(paddr, &addr, addrlen);
@@ -239,4 +267,17 @@ size_t CANNetSocket::setupAddress(struct sockaddr *paddr, const INetAddress &p_a
 	return addrlen;
 }
 
-int CANNetSocket::getDomain(const INetAddress &address) { return 0; }
+void CANNetSocket::enableFDFrames(bool enable) {
+
+	int enable_canfd = 1;
+	if (!enable)
+		enable_canfd = 0;
+	int rc = setsockopt(this->socket, SOL_CAN_RAW, CAN_RAW_FD_FRAMES, &enable_canfd, sizeof(enable_canfd));
+	if (rc != 0) {
+		throw SystemException(errno, std::system_category(), "Failed to set CAN Filter");
+	}
+}
+
+size_t CANNetSocket::getFrameSize() const noexcept { return sizeof(struct can_frame); }
+
+int CANNetSocket::getDomain(const INetAddress &address) { return AF_CAN; }
