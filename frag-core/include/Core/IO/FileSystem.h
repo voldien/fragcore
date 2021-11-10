@@ -29,26 +29,26 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC FileSystem : public IFileSystem {
 	  public:
-		virtual IO *openFile(const char *path, IO::IOMode mode); /*  Open based on the filename extension.*/
-		virtual void closeFile(IO *io);
+		virtual IO *openFile(const char *path, IO::IOMode mode) override; /*  Open based on the filename extension.*/
+		virtual void closeFile(IO *io) override;
 
-		virtual void remove(const char *path);
+		virtual void remove(const char *path) override;
 
-		virtual void rename(const char *oldPath, const char *newPath);
+		virtual void rename(const char *oldPath, const char *newPath) override;
 
-		virtual void createFile(const char *path);
+		virtual void createFile(const char *path) override;
 
-		virtual void createDirectory(const char *path);
+		virtual void createDirectory(const char *path) override;
 
-		virtual bool isReadable(const char *path) const;
+		virtual bool isReadable(const char *path) const override;
 
-		virtual bool isWriteable(const char *path) const;
+		virtual bool isWriteable(const char *path) const override;
 
-		virtual bool exists(const char *path) const;
+		virtual bool exists(const char *path) const override;
 
-		virtual bool isASyncSupported() const;
-		virtual bool isDirectory(const char *path);
-		virtual bool isFile(const char *path);
+		virtual bool isASyncSupported() const override;
+		virtual bool isDirectory(const char *path) override;
+		virtual bool isFile(const char *path) override;
 
 		// FileAccess getFileAccess(const char *path) override;
 

@@ -49,6 +49,7 @@ namespace fragcore {
 		virtual bool isValid() const noexcept override { return this->valid; }
 		CANStandard getStandard() const noexcept { return CANStandard::CANRaw; }
 		unsigned int getID() const noexcept { return this->id; }
+		const std::string getInterface() const;
 
 	  protected:
 	  private:

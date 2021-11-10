@@ -6,3 +6,9 @@ CANAddress::CANAddress(const std::string &interface, unsigned int ID) : CANAddre
 
 CANAddress::CANAddress(unsigned int ID)
 	: INetAddress(NetworkProtocol::NetWorkProtocol_CAN), valid(false), id(ID), ifrIndex(0) {}
+
+const std::string CANAddress::getInterface() const {
+	// struct ifreq ifr;
+	// ifr.ifr_ifindex = ifrIndex;
+	// ioctl(s, SIOCGIFNAME, &ifr);
+}

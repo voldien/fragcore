@@ -64,6 +64,7 @@ bool FileSystem::exists(const char *path) const {
 	}
 	return false;
 #endif
+	return false;
 }
 
 bool FileSystem::isReadable(const char *path) const {
@@ -117,7 +118,7 @@ void FileSystem::createDirectory(const char *path) {
 
 bool FileSystem::isASyncSupported() const { return *this->getScheduler() != nullptr; }
 
-bool FileSystem::isDirectory(const char *path) {}
+bool FileSystem::isDirectory(const char *path) { return false; }
 bool FileSystem::isFile(const char *path) {
 	// TODO improve!
 	std::ifstream ifs(path);

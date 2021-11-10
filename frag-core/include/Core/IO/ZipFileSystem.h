@@ -34,12 +34,12 @@ namespace fragcore {
 	  public:
 		virtual ~ZipFileSystem();
 
-		IO *openFile(const char *path, IO::IOMode mode);
+		IO *openFile(const char *path, IO::IOMode mode) override;
 		IO *openFile(unsigned int index);
 
-		virtual std::vector<std::string> listFiles(const char *path) const;
-		virtual std::vector<std::string> listDirectories(const char *path) const;
-		virtual std::vector<std::string> list(const char *path) const;
+		virtual std::vector<std::string> listFiles(const char *path) const override;
+		virtual std::vector<std::string> listDirectories(const char *path) const override;
+		virtual std::vector<std::string> list(const char *path) const override;
 
 		void closeFile(IO *io) override;
 
@@ -59,8 +59,8 @@ namespace fragcore {
 
 		bool isASyncSupported() const override;
 
-		virtual bool isDirectory(const char *path);
-		virtual bool isFile(const char *path);
+		virtual bool isDirectory(const char *path) override;
+		virtual bool isFile(const char *path) override;
 		// FileAccess getFileAccess(const char *path) override;
 
 		/**

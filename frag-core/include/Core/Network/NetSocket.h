@@ -83,6 +83,8 @@ namespace fragcore {
 		virtual int listen();
 
 			*/
+		//TODO get interaces assocated 
+
 
 	  protected:
 		NetSocket() = default;

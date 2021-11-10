@@ -4,14 +4,14 @@
 
 using namespace fragcore;
 
-long int IOUtil::loadFileMem(Ref<IO> &io, char **data) noexcept {
+long int IOUtil::loadFileMem(Ref<IO> &io, char **data) {
 	char *d = nullptr;
 	long dataSize = 0;
 
 	/*  Check if file is readable.  */
 	if (!io->isReadable())
 		throw InvalidArgumentException("Failed to read from IO: {}", io->getName());
-	// TODO encapsualte data to reuse 
+	// TODO encapsualte data to reuse
 	// Page aligned;
 	char buf[1024 * 4];
 	long nbytes;
@@ -30,8 +30,6 @@ long int IOUtil::loadFile(Ref<IO> &in, Ref<IO> &out) {
 		throw InvalidArgumentException("Failed to read from IO: {}", in->getName());
 	if (!out->isWriteable())
 		throw InvalidArgumentException("Failed to write to IO: {}", out->getName());
-	
-
 
 	char buf[1024 * 4];
 	long nbytes;
@@ -46,7 +44,7 @@ long int IOUtil::loadFile(Ref<IO> &in, Ref<IO> &out) {
 	return dataSize;
 }
 
-long int IOUtil::loadStringMem(Ref<IO> &io, char **string) noexcept {
+long int IOUtil::loadStringMem(Ref<IO> &io, char **string) {
 	long int nbytes;
 
 	nbytes = loadFileMem(io, string);

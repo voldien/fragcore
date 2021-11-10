@@ -27,8 +27,8 @@ namespace fragcore {
 	 */
 	class IScheduler;
 	/**
-	 * @brief 
-	 * 
+	 * @brief
+	 *
 	 */
 	class FVDECLSPEC Task : UIDObject {
 	  public:
@@ -46,6 +46,8 @@ namespace fragcore {
 	// TODO rename so that it includes the name task.
 	class FVDECLSPEC IScheduler : public SmartReference {
 	  public:
+		virtual ~IScheduler() = default;
+
 		virtual void addTask(Task *task) = 0;
 		virtual void setUserData(const void *data) = 0;
 		virtual const void *getUserData() = 0;

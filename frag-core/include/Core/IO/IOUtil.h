@@ -37,7 +37,7 @@ namespace fragcore {
 		 * @param data
 		 * @return long int
 		 */
-		static long int loadFileMem(Ref<IO> &io, char **data) noexcept(noexcept(data != nullptr));
+		static long int loadFileMem(Ref<IO> &io, char **data);
 		static long int loadFile(Ref<IO> &in, Ref<IO> &out);
 
 		/**
@@ -47,7 +47,7 @@ namespace fragcore {
 		 * @param data
 		 * @return long int
 		 */
-		static long int loadStringMem(Ref<IO> &io, char **data) noexcept(noexcept(data != nullptr));
+		static long int loadStringMem(Ref<IO> &io, char **data);
 		static long int loadString(Ref<IO> &in, Ref<IO> &out);
 
 		/**

@@ -31,7 +31,7 @@ namespace fragcore {
 		TCPNetSocket();
 		virtual ~TCPNetSocket();
 
-		virtual TransportProtocol getTransportProtocol() const noexcept;
+		virtual TransportProtocol getTransportProtocol() const noexcept override;
 
 		virtual int close() override;
 

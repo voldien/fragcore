@@ -33,7 +33,7 @@ TaskScheduler::~TaskScheduler() {
 static int internal_schCallback(struct sch_task_package_t *package) {
 	/*	extract variables.	*/
 	Task *task = static_cast<Task *>(package->begin);
-	IScheduler *scheduler = static_cast<IScheduler *>(package->end);
+	IScheduler *scheduler = reinterpret_cast<IScheduler *>(package->end);
 	Task::TaskCallBack callback = task->callback;
 
 	task->Execute();

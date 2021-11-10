@@ -28,6 +28,7 @@ long SocketIO::write(long int nbytes, const void *pbuffer) {
 
 long int SocketIO::peek(long int nBytes, void *pbuffer){
 	// this->netSocket->read()
+	return 0;
 }
 
 long SocketIO::length() { throw NotSupportedException(); }

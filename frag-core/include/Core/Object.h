@@ -30,6 +30,7 @@ namespace fragcore {
 	class FVDECLSPEC Object : public UIDObject {
 	  public:
 		inline Object() noexcept {};
+		Object(Object &&other) noexcept = default;
 		Object &operator=(Object &&other) {
 			this->setName(std::move(other.name));
 			return *this;

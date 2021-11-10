@@ -59,18 +59,19 @@ namespace fragcore {
 
 		virtual NetStatus getStatus() const noexcept override;
 
-	  public:
-		long int writeFrame(unsigned int ID, unsigned int nBytes, uint8_t *data);
-		long int readFrame(unsigned int &ID, unsigned int nBytes, uint8_t *data);
+	  public: /*	CAN Socket Specific NetSocket Methods.	*/
+		long int writeFrame(unsigned int ID, size_t nBytes, uint8_t *data);
+		long int readFrame(unsigned int &ID, size_t nBytes, uint8_t *data);
 
 		void setFilter(std::vector<uint32_t> &ids);
+		void enableFDFrames(bool enable);
 
 	  protected:
 		bool isNetworkLayerSupported(INetAddress::NetworkProtocol protocol);
 
 	  private:
 		CANNetSocket(int socket);
-		void enableFDFrames(bool enable);
+
 		size_t getFrameSize() const noexcept;
 		static int getDomain(const INetAddress &address);
 

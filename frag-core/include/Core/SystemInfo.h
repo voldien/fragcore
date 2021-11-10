@@ -74,7 +74,7 @@ namespace fragcore {
 		static const std::string &getOperatingSystemName() noexcept;
 		static const char *getOperatingSystemName(OperatingSystem os);
 
-		static const char *getCPUName() noexcept;
+		static std::string getCPUName() noexcept;
 		static const char *getCPUArchitecture() noexcept;
 		static unsigned long getCPUFrequence() noexcept;
 		static bool isSupportedInstruction() noexcept;

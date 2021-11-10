@@ -75,8 +75,8 @@ IO *ZipFileSystem::openFile(unsigned int index) {
 
 bool ZipFileSystem::isASyncSupported() const { return *this->getScheduler() != nullptr; }
 
-bool ZipFileSystem::isDirectory(const char *path) {}
-bool ZipFileSystem::isFile(const char *path) {}
+bool ZipFileSystem::isDirectory(const char *path) { return false; }
+bool ZipFileSystem::isFile(const char *path) { return false; }
 
 std::vector<std::string> ZipFileSystem::listFiles(const char *path) const {
 

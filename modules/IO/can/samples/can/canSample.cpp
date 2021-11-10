@@ -12,18 +12,19 @@ int main(int argc, const char **argv) {
 		CANNetSocket net;
 		CANAddress local(0);
 		net.bind(local);
+		net.enableFDFrames(true);
 
-		int data[10];
+		char data[32];
 		int nr;
 
 		do {
 			CANAddress recvAddr(0);
-			int c = net.recvfrom((uint8_t *)data, sizeof(data), nr, recvAddr) / 4;
+			int c = net.recvfrom((uint8_t *)data, sizeof(data), nr, recvAddr) / 1;
 			if (c < 0)
 				break;
-			printf("Adddress: %d - ", recvAddr.getID());
+			printf("Adddress: 0x%x - ", recvAddr.getID());
 			for (int i = 0; i < c; i++)
-				printf("%x", data[i]);
+				printf("%c", data[i]);
 			printf("\n");
 			sleep(1);
 			net.sendto((const uint8_t *)data, sizeof(data), nr, recvAddr);

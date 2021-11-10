@@ -66,7 +66,7 @@ const char *SystemInfo::getOperatingSystemName(SystemInfo::OperatingSystem os) {
 	}
 }
 
-const char *SystemInfo::getCPUName() noexcept { return iware::cpu::model_name().c_str(); }
+std::string SystemInfo::getCPUName() noexcept { return iware::cpu::model_name(); }
 
 const char *SystemInfo::getCPUArchitecture() noexcept {
 	switch (iware::cpu::architecture()) {
