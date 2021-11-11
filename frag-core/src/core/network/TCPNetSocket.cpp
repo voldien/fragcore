@@ -26,7 +26,7 @@ size_t TCPNetSocket::setupIPAddress(struct sockaddr *addr, const INetAddress &p_
 
 	const TCPUDPAddress &tcpAddress = static_cast<const TCPUDPAddress &>(p_addr);
 
-	int domain = TCPNetSocket::getDomain(tcpAddress.getIPAddress());
+	int domain = TCPNetSocket::getDomain(tcpAddress);
 	/*	*/
 	if (domain == AF_INET) {
 		const IPAddress &ipAddress = tcpAddress.getIPAddress();
@@ -97,7 +97,7 @@ int TCPNetSocket::bind(const INetAddress &p_addr) {
 		throw RuntimeException("Not a valid NetAddress Object");
 
 	/*	*/
-	int domain = getDomain(tcpAddress->getIPAddress());
+	int domain = getDomain(*tcpAddress);
 	addrlen = setupIPAddress((struct sockaddr *)&addrU, p_addr, tcpAddress->getPort());
 
 	/*	*/
@@ -149,7 +149,7 @@ int TCPNetSocket::connect(const INetAddress &p_addr) {
 	const TCPUDPAddress *tcpAddress = dynamic_cast<const TCPUDPAddress *>(&p_addr);
 	if (tcpAddress == nullptr)
 		throw RuntimeException("Not a valid NetAddress Object");
-	int domain = this->getDomain(tcpAddress->getIPAddress());
+	int domain = this->getDomain(*tcpAddress);
 
 	this->socket = ::socket(domain, flags, 0);
 	if (this->socket < 0) {
@@ -184,6 +184,7 @@ int TCPNetSocket::recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddres
 int TCPNetSocket::recv(const void *pbuffer, int p_len, int &sent) {
 	int flag = 0;
 	int res = ::recv(this->socket, (void *)pbuffer, p_len, flag);
+	sent = res;
 	return res;
 }
 int TCPNetSocket::send(const uint8_t *p_buffer, int p_len, int &r_sent) {
@@ -272,6 +273,7 @@ int TCPNetSocket::getDomain(const INetAddress &address) {
 
 	int domain = 0; // TODO be override by the NetAddress!
 	switch (address.getNetworkProtocol()) {
+	case INetAddress::NetworkProtocol::NetWorkProtocol_TCP_UDP:
 	case INetAddress::NetworkProtocol::NetWorkProtocol_IP: {
 		const IPAddress &ipAddress = tcpAddress.getIPAddress();
 		if (ipAddress.getIPType() == IPAddress::IPAddressType::IPAddress_Type_IPV4)
