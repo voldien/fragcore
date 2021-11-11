@@ -12,6 +12,8 @@ FileIO::FileIO() {
 
 FileIO::FileIO(const char *path, IOMode mode) { this->open(path, mode); }
 
+FileIO::FileIO(const std::string &path, IOMode mode) { this->open(path.c_str(), mode); }
+
 FileIO::FileIO(FILE *file) { this->file = file; }
 
 FileIO::FileIO(FileIO &&other) {

@@ -63,7 +63,7 @@ namespace fragcore {
 
 	  public:
 		FileIO(const char *path, IOMode mode);
-		FileIO(std::string &path, IOMode mode);
+		FileIO(const std::string &path, IOMode mode);
 		virtual ~FileIO() = default;
 
 		FileIO(FILE *file);

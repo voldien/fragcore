@@ -18,8 +18,7 @@
 */
 #ifndef _FRAG_CORE_SERIAL_FILE_IO_H_
 #define _FRAG_CORE_SERIAL_FILE_IO_H_ 1
-#include "Core/IO/IO.h"
-#include "Def.h"
+#include <Core/IO/IO.h>
 #include <libserialport.h>
 #include <optional>
 #include <vector>
@@ -41,7 +40,7 @@ namespace fragcore {
 
 		virtual long int write(long int nbytes, const void *pbuffer) override;
 
-		virtual long int peek(long int nBytes, void *pbuffer) override{};
+		virtual long int peek(long int nBytes, void *pbuffer) override;
 
 		virtual bool eof() const override;
 
