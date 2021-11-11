@@ -5,7 +5,6 @@
 #include <csignal>
 #include <cstdlib>
 #include <getopt.h>
-#include <stdexcept>
 
 using namespace fragcore;
 
@@ -139,7 +138,6 @@ void Config::setDefaultOption(void) {
 	/*	Default interfaces configuration.	*/
 	// global.set("renderer-dynamicInterface",
 	// 		   fragcore::RenderingFactory::getInterfaceLibraryPath(fragcore::RenderingFactory::OpenGL));
-	global.set<int>("SIMD", LIBHPM::Hpm::eHPM_DEFAULT);
 
 	/*TODO determine if to relocate.    */
 	/*	Engine default configuration.	*/
