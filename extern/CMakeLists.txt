@@ -1,6 +1,5 @@
 # By default exclude most of the sub-project to prevent it compile some target
 # is not needed by the project.
-ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/hpmcpp EXCLUDE_FROM_ALL)
 ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/task-scheduler EXCLUDE_FROM_ALL)
 ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/fvkcore EXCLUDE_FROM_ALL)
 ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/infoware EXCLUDE_FROM_ALL)

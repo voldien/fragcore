@@ -65,7 +65,7 @@ namespace fragcore {
 
 
 #include<Exception.hpp>
-namespace fragcore{
+namespace fragcore {
 
 	using RuntimeException = cxxexcept::RuntimeException;
 	using DivideByZeroException = cxxexcept::DivideByZeroException ;
