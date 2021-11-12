@@ -52,19 +52,59 @@ namespace fragcore {
 
 		virtual TransportProtocol getTransportProtocol() const noexcept = 0;
 
+		/**
+		 * @brief
+		 *
+		 * @return int
+		 */
 		virtual int close() = 0;
-		virtual int bind(const INetAddress &p_addr) = 0;
+
+		/**
+		 * @brief
+		 *
+		 * @param pAddr
+		 * @return int
+		 */
+		virtual int bind(const INetAddress &pAddr) = 0;
 		virtual int listen(unsigned int maxListen) = 0;
-		virtual int connect(const INetAddress &p_addr) = 0;
+		virtual int connect(const INetAddress &pAddr) = 0;
 		virtual int poll(int p_type, int timeout) const = 0;
 
-		virtual int recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddress &r_ip, bool p_peek = false) = 0;
-		// TODO addd peek
+		/**
+		 * @brief
+		 *
+		 * @param p_buffer
+		 * @param p_len
+		 * @param r_read
+		 * @param addr
+		 * @param p_peek
+		 * @return int
+		 */
+		virtual int recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddress &addr, bool p_peek = false) = 0;
+
+		/**
+		 * @brief
+		 *
+		 * @param pbuffer
+		 * @param p_len
+		 * @param sent
+		 * @param peek
+		 * @return int
+		 */
 		virtual int recv(void *pbuffer, int p_len, int &sent, bool peek = false) = 0;
+
+		/**
+		 * @brief
+		 *
+		 * @param p_buffer
+		 * @param p_len
+		 * @param r_sent
+		 * @return int
+		 */
 		virtual int send(const uint8_t *p_buffer, int p_len, int &r_sent) = 0;
 		virtual int sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const INetAddress &p_ip) = 0;
 		virtual long int send(const void *pbuffer, int p_len, int &sent) = 0;
-		virtual Ref<NetSocket> accept(INetAddress &r_ip) = 0;
+		virtual Ref<NetSocket> accept(INetAddress &addr) = 0;
 		virtual NetStatus accept(NetSocket &socket) = 0;
 
 		virtual int read() = 0;
@@ -74,16 +114,6 @@ namespace fragcore {
 
 		virtual NetStatus getStatus() const noexcept = 0;
 
-		// virtual Error listen(int p_max_pending) = 0;
-		// virtual Error connect_to_host(IPAddress p_addr) = 0;
-		// virtual Error poll(PollType p_type, int timeout) const = 0;
-		// virtual Error recv(uint8_t *p_buffer, int p_len, int &r_read) = 0;
-
-		/*virtual int bind(IP adddrr, Type _type);
-		virtual int connect(IP& addr);
-		virtual int listen();
-
-			*/
 		// TODO get interaces assocated
 
 	  protected:

@@ -32,7 +32,7 @@ namespace fragcore {
 		CANNetSocket();
 		virtual ~CANNetSocket();
 
-		virtual TransportProtocol getTransportProtocol() const noexcept;
+		virtual TransportProtocol getTransportProtocol() const noexcept override;
 
 		virtual int close() override;
 
@@ -42,13 +42,13 @@ namespace fragcore {
 		virtual int connect(const INetAddress &p_addr) override;
 		virtual int poll(int p_type, int timeout) const override;
 
-		virtual int recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddress &r_ip,
+		virtual int recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddress &addr,
 							 bool p_peek = false) override;
 		virtual int recv(void *pbuffer, int p_len, int &sent, bool peek = false) override;
 		virtual int send(const uint8_t *p_buffer, int p_len, int &r_sent) override;
 		virtual int sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const INetAddress &p_ip) override;
 		virtual long int send(const void *pbuffer, int p_len, int &sent) override;
-		virtual Ref<NetSocket> accept(INetAddress &r_ip) override;
+		virtual Ref<NetSocket> accept(INetAddress &addr) override;
 
 		virtual NetStatus accept(NetSocket &socket) override;
 
@@ -60,10 +60,29 @@ namespace fragcore {
 		virtual NetStatus getStatus() const noexcept override;
 
 	  public: /*	CAN Socket Specific NetSocket Methods.	*/
+		/**
+		 * @brief
+		 *
+		 * @param ID
+		 * @param nBytes
+		 * @param data
+		 * @return long int
+		 */
 		long int writeFrame(unsigned int ID, size_t nBytes, uint8_t *data);
 		long int readFrame(unsigned int &ID, size_t nBytes, uint8_t *data);
 
+		/**
+		 * @brief Set the Filter object
+		 *
+		 * @param ids
+		 */
 		void setFilter(std::vector<uint32_t> &ids);
+
+		/**
+		 * @brief
+		 *
+		 * @param enable
+		 */
 		void enableFDFrames(bool enable);
 
 	  protected:

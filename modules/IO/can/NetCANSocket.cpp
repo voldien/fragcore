@@ -1,6 +1,7 @@
 
 #include "NetCANSocket.h"
 #include "CANAddress.h"
+#include <Core/Math.h>
 #include <linux/can.h>
 #include <linux/can/raw.h>
 
@@ -50,7 +51,7 @@ int CANNetSocket::bind(const INetAddress &p_addr) {
 	/*	*/
 	const CANAddress &canAddress = static_cast<const CANAddress &>(p_addr);
 
-	int domain = getDomain(p_addr);
+	int domain = this->getDomain(p_addr);
 
 	this->socket = ::socket(domain, SOCK_RAW, CAN_RAW);
 	if (this->socket < 0) {
@@ -58,9 +59,9 @@ int CANNetSocket::bind(const INetAddress &p_addr) {
 	}
 
 	struct sockaddr_can addr = {0};
-	setupAddress(reinterpret_cast<struct sockaddr *>(&addr), p_addr);
+	size_t addrlen = this->setupAddress(reinterpret_cast<struct sockaddr *>(&addr), p_addr);
 
-	int rc = ::bind(this->socket, (struct sockaddr *)&addr, sizeof(addr));
+	int rc = ::bind(this->socket, (struct sockaddr *)&addr, addrlen);
 	if (rc < 0) {
 		this->netStatus = NetStatus::Status_Error;
 		RuntimeException ex("Failed to bind CAN socket, {}", strerror(errno));
@@ -113,14 +114,25 @@ int CANNetSocket::recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddres
 	socklen_t len = sizeof(addr);
 
 	struct canfd_frame frame;
-
-	// TODO Recv all data.
 	if (p_peek)
 		flag |= MSG_PEEK;
 
+	/*	*/
 	int res = ::recvfrom(this->socket, &frame, sizeof(frame), flag, (sockaddr *)&addr, &len);
 	if (res < 0) {
 		// TODO add implement to handle. reconnect.
+		switch (errno) {
+		case EAGAIN:
+		case ECONNREFUSED:
+		case EINTR:
+		case ENOTCONN:
+			this->netStatus = NetStatus::Status_Partial;
+			/* code */
+			break;
+		default: /*	Failure*/
+			this->netStatus = NetStatus::Status_Error;
+			break;
+		}
 	}
 
 	/*	Check what kind of package was received.	*/
@@ -177,12 +189,9 @@ int CANNetSocket::sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const 
 	const uint32_t frameMaxBuffer = sizeof(frame.data);
 
 	for (int i = 0; i < p_len; i += frameMaxBuffer) {
-		
-		const int nrByteLeft = p_len - i;
-		if(nrByteLeft > frameMaxBuffer)
-			frame.can_dlc = frameMaxBuffer;
-		else
-			frame.can_dlc = nrByteLeft;
+
+		const size_t nrByteLeft = p_len - i;
+		frame.can_dlc = static_cast<unsigned char>(Math::min<size_t>(nrByteLeft, frameMaxBuffer));
 		frame.can_id = canAddress.getID();
 		/*	*/
 		memcpy(&frame.data[0], &p_buffer[i], frame.can_dlc);
