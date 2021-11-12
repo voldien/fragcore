@@ -93,7 +93,7 @@ int ModbusNetSocket::recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAdd
 	int res; //= recvfrom(this->socket, p_buffer, p_len, flag, connection->intaddr, &r_read);
 	return res;
 }
-int ModbusNetSocket::recv(const void *pbuffer, int p_len, int &sent) {
+int ModbusNetSocket::recv( void *pbuffer, int p_len, int &sent, bool peek) {
 	int flag = 0;
 	int res = modbus_read_registers((modbus_t *)this->ctx, 0, p_len, (uint16_t *)pbuffer);
 	if (res != p_len) {

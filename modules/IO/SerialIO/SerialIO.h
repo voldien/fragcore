@@ -122,7 +122,7 @@ namespace fragcore {
 		static std::optional<std::vector<std::string>> getSerialPorts() noexcept;
 
 	  private:
-		virtual void open(const char *path, IOMode mode) override {}
+		virtual void open([[maybe_unused]] const char *path, [[maybe_unused]]IOMode mode) override {}
 
 		struct sp_port *port;
 		struct sp_port_config *config;

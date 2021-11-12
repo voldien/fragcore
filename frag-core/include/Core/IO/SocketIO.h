@@ -61,6 +61,7 @@ namespace fragcore {
 
 	  public:
 		SocketIO(Ref<NetSocket> &socket);
+		SocketIO(SocketIO &&other);
 
 	  private:
 		SocketIO() = default;

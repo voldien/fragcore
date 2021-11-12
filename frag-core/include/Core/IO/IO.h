@@ -76,23 +76,23 @@ namespace fragcore {
 
 		// TODO determine first how its behaviour before determine if it shall be included.
 		// virtual std::optional<IFileSystem*> getFileSystem() = 0;
-		//virtual bool hasFileSystem() const;
+		// virtual bool hasFileSystem() const;
 
 		// TODO
 		// 		virtual bool isBlocking();
 		// virtual void setBlocking(bool blocking);
 
 		enum IOOperation : unsigned int {
-			OP_ALL = (unsigned int)(-1), /*	*/
-			OP_READ = 1 << 0,			 /*	*/
-			OP_WRITE = 1 << 1,			 /*	*/
-			OP_EOF = 1 << 2,			 /*	*/
-			OP_LENGTH = 1 << 3,			 /*	*/
-			OP_SEEK = 1 << 4,			 /*	*/
-			OP_GETPOS = 1 << 5,			 /*	*/
-			OP_FLUSH = 1 << 6,			 /*	*/
-			OP_FILEACCESS = 1 << 7,		 /*	*/
-			OP_PEEK = 1 << 8			 /*	*/
+			OP_ALL = 0xFFFFFFFF,	/*	*/
+			OP_READ = 1 << 0,		/*	*/
+			OP_WRITE = 1 << 1,		/*	*/
+			OP_EOF = 1 << 2,		/*	*/
+			OP_LENGTH = 1 << 3,		/*	*/
+			OP_SEEK = 1 << 4,		/*	*/
+			OP_GETPOS = 1 << 5,		/*	*/
+			OP_FLUSH = 1 << 6,		/*	*/
+			OP_FILEACCESS = 1 << 7, /*	*/
+			OP_PEEK = 1 << 8		/*	*/
 		};
 
 		virtual bool isOperationSupported(IOOperation operationFlags) const noexcept = 0;

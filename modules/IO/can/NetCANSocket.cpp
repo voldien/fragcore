@@ -125,27 +125,31 @@ int CANNetSocket::recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddres
 
 	/*	Check what kind of package was received.	*/
 	if (res == CANFD_MTU) {
-		memcpy(p_buffer, frame.data, std::max((size_t)p_len, CANFD_MTU));
+		r_read = std::min((size_t)p_len, (size_t)frame.len);
+
 	} else if (res == CAN_MTU) {
-		memcpy(p_buffer, frame.data, std::max((size_t)p_len, CAN_MTU));
+		r_read = std::min((size_t)p_len, (size_t)frame.len);
 	} else {
 		throw RuntimeException("Invalid Frame");
 		return -1;
 	}
+	memcpy(p_buffer, frame.data, r_read);
 
 	canAddress = CANAddress(frame.can_id);
 	return res;
 }
 
-int CANNetSocket::recv(const void *pbuffer, int p_len, int &sent) {
+int CANNetSocket::recv(void *pbuffer, int p_len, int &sent, bool peek) {
 	int flag = 0;
-	int res = ::recv(this->socket, (void *)pbuffer, p_len, flag);
+	CANAddress addr(0);
+	long res = this->recvfrom((uint8_t *)pbuffer, p_len, sent, addr, peek);
 	return res;
 }
 
 int CANNetSocket::send(const uint8_t *p_buffer, int p_len, int &r_sent) {
-	int flag = 0;
-	int res = ::send(this->socket, p_buffer, p_len, flag);
+
+	CANAddress addr(0);
+	int res = this->sendto(p_buffer, p_len, r_sent, addr);
 
 	return res;
 }
@@ -155,32 +159,46 @@ int CANNetSocket::sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const 
 	const CANAddress &canAddress = static_cast<const CANAddress &>(p_ip);
 
 	/*	*/
-	struct sockaddr_can addr = {0};
+	struct sockaddr_can addr = {};
+	struct ifreq ifr;
 	addr.can_ifindex = this->ifrIndex;
 	addr.can_family = AF_CAN;
 
+	const char *interface = "vcan0";
+	strcpy(ifr.ifr_name, interface);
+	if (ioctl(this->socket, SIOCGIFINDEX, &ifr) == 0) {
+		addr.can_ifindex = ifr.ifr_ifindex;
+	} else {
+		throw SystemException(errno, std::system_category(), "Failed to set interface index {}", interface);
+	}
+
 	/*	*/
-	struct can_frame frame = {0};
-	static const uint32_t frameMaxBuffer = sizeof(frame.data);
+	struct can_frame frame;
+	const uint32_t frameMaxBuffer = sizeof(frame.data);
 
-	for (unsigned int i = 0; i < p_len; i += frameMaxBuffer) {
-
-		/*	*/
-		memcpy(frame.data, &p_buffer[i], p_len % frameMaxBuffer);
-		frame.can_dlc = p_len % frameMaxBuffer;
+	for (int i = 0; i < p_len; i += frameMaxBuffer) {
+		
+		const int nrByteLeft = p_len - i;
+		if(nrByteLeft > frameMaxBuffer)
+			frame.can_dlc = frameMaxBuffer;
+		else
+			frame.can_dlc = nrByteLeft;
 		frame.can_id = canAddress.getID();
+		/*	*/
+		memcpy(&frame.data[0], &p_buffer[i], frame.can_dlc);
 
 		int res = ::sendto(this->socket, &frame, sizeof(frame), flag, (sockaddr *)&addr, sizeof(addr));
 		if (res != sizeof(frame))
 			throw RuntimeException("Invalid Frame");
 	}
-
+	r_sent = p_len;
 	return p_len;
 }
 
 long int CANNetSocket::send(const void *pbuffer, int p_len, int &sent) {
-	int flag = 0;
-	long int res = ::send(this->socket, pbuffer, p_len, flag);
+	CANAddress addr(0);
+	int res = this->sendto((uint8_t *)pbuffer, p_len, sent, addr);
+
 	return res;
 }
 

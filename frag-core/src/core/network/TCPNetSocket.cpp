@@ -181,7 +181,7 @@ int TCPNetSocket::recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddres
 	int res; //= recvfrom(this->socket, p_buffer, p_len, flag, connection->intaddr, &r_read);
 	return res;
 }
-int TCPNetSocket::recv(const void *pbuffer, int p_len, int &sent) {
+int TCPNetSocket::recv(void *pbuffer, int p_len, int &sent, bool peek) {
 	int flag = 0;
 	int res = ::recv(this->socket, (void *)pbuffer, p_len, flag);
 	sent = res;

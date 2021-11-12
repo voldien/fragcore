@@ -76,7 +76,7 @@ int UDPNetSocket::connect(const INetAddress &p_addr) {
 int UDPNetSocket::bind(const INetAddress &p_addr) { return 0; }
 int UDPNetSocket::poll(int p_type, int timeout) const { return 0; }
 int UDPNetSocket::recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddress &r_ip, bool p_peek) { return 0; }
-int UDPNetSocket::recv(const void *pbuffer, int p_len, int &sent) { return 0; }
+int UDPNetSocket::recv( void *pbuffer, int p_len, int &sent, bool peek) { return 0; }
 int UDPNetSocket::send(const uint8_t *p_buffer, int p_len, int &r_sent) { return 0; }
 int UDPNetSocket::sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const INetAddress &p_ip) { return 0; }
 long int UDPNetSocket::send(const void *pbuffer, int p_len, int &sent) { return 0; }

@@ -59,7 +59,8 @@ namespace fragcore {
 		virtual int poll(int p_type, int timeout) const = 0;
 
 		virtual int recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddress &r_ip, bool p_peek = false) = 0;
-		virtual int recv(const void *pbuffer, int p_len, int &sent) = 0;
+		// TODO addd peek
+		virtual int recv(void *pbuffer, int p_len, int &sent, bool peek = false) = 0;
 		virtual int send(const uint8_t *p_buffer, int p_len, int &r_sent) = 0;
 		virtual int sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const INetAddress &p_ip) = 0;
 		virtual long int send(const void *pbuffer, int p_len, int &sent) = 0;
@@ -83,8 +84,7 @@ namespace fragcore {
 		virtual int listen();
 
 			*/
-		//TODO get interaces assocated 
-
+		// TODO get interaces assocated
 
 	  protected:
 		NetSocket() = default;

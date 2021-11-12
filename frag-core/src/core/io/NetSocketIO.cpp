@@ -5,10 +5,7 @@ using namespace fragcore;
 
 SocketIO::SocketIO(Ref<NetSocket> &socket) : netSocket(socket) {}
 
-// SocketIO::SocketIO(SocketIO &&other) {
-// 	this->file = std::exchange(other.file, nullptr);
-// 	this->mode = other.mode;
-// }
+SocketIO::SocketIO(SocketIO &&other) { this->netSocket = std::exchange(other.netSocket, nullptr); }
 
 void SocketIO::open(const char *path, IOMode mode) {}
 
@@ -26,9 +23,10 @@ long SocketIO::write(long int nbytes, const void *pbuffer) {
 	return nWriten;
 }
 
-long int SocketIO::peek(long int nBytes, void *pbuffer) {
-	// this->netSocket->read()
-	return 0;
+long int SocketIO::peek(long int nbytes, void *pbuffer) {
+	int nWriten;
+	this->netSocket->recv(pbuffer, nbytes, nWriten, true);
+	return nWriten;
 }
 
 long SocketIO::length() { throw NotSupportedException(); }
@@ -39,8 +37,8 @@ void SocketIO::seek(long int nbytes, Seek seek) { throw NotSupportedException();
 
 unsigned long SocketIO::getPos() { throw NotSupportedException(); }
 
-bool SocketIO::isWriteable() const { return false; }
+bool SocketIO::isWriteable() const { return true; }
 
-bool SocketIO::isReadable() const { return false; }
+bool SocketIO::isReadable() const { return true; }
 
-bool SocketIO::flush() { return false; }
+bool SocketIO::flush() { return true; }
