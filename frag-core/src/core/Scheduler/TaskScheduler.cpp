@@ -26,7 +26,8 @@ TaskScheduler::~TaskScheduler() {
 	this->terminate();
 	schReleaseTaskSch(taskSch);
 	/*	Release.	*/
-	delete this->sch;
+	delete taskSch;
+	/*	Reset memory.	*/
 	this->sch = nullptr;
 }
 

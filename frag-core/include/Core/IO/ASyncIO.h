@@ -45,22 +45,46 @@ namespace fragcore {
 		~ASyncIO();
 
 		typedef struct io_status_t {
-			unsigned int nbytes; /*  Number of bytes read.   */
-			unsigned int offset; /*  Current position in bytes from start position.  */
-			unsigned int status; /*  Status of the termination of the IO operation.  */
+			long int nbytes; /*  Number of bytes read.   */
+			long int offset; /*  Current position in bytes from start position.  */
+			long int status; /*  Status of the termination of the IO operation.  */
 		} IOStatus;
 
 		// TODO determine if adding support for dynamic sized buffer read and write.
 		// TODO add stragety perhaps for how to schedule it.
 		virtual ASyncHandle asyncOpen(Ref<IO> &io);
+
+		/**
+		 * @brief
+		 *
+		 * @param handle
+		 * @param buffer
+		 * @param size
+		 * @param complete
+		 */
 		virtual void asyncReadFile(ASyncHandle handle, char *buffer, unsigned int size, AsyncComplete complete);
 		virtual void asyncReadFile(ASyncHandle handle, Ref<IO> &writeIO, AsyncComplete complete);
+
+		/**
+		 * @brief
+		 *
+		 * @param handle
+		 * @param buffer
+		 * @param size
+		 * @param complete
+		 */
 		virtual void asyncWriteFile(ASyncHandle handle, char *buffer, unsigned int size, AsyncComplete complete);
 		virtual void asyncWriteFile(ASyncHandle handle, Ref<IO> &readIO, AsyncComplete complete);
 
 		/*  */
 		virtual void asyncWait(ASyncHandle handle);
 		virtual bool asyncWait(ASyncHandle handle, long int timeout);
+
+		/**
+		 * @brief
+		 *
+		 * @param handle
+		 */
 		virtual void asyncClose(ASyncHandle handle);
 
 		/*  */
@@ -85,6 +109,7 @@ namespace fragcore {
 		virtual void setScheduleReference(Ref<IScheduler> &sch);
 
 		typedef struct async_object {
+			//TOOD be replace with an encapsulated class version.
 #if defined(FRAG_CORE_INTERNAL_IMP)	 // TODO resolve to a single file or something later
 			schSemaphore *semaphore; /*  */
 #else
@@ -107,7 +132,7 @@ namespace fragcore {
 
 		/*  */
 		std::map<ASyncHandle, AsyncObject> asyncs;
-		UIDGenerator<unsigned int> uidGenerator;
+		UIDGenerator<size_t> uidGenerator;
 		Ref<IScheduler> scheduler;
 	};
 } // namespace fragcore

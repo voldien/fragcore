@@ -36,6 +36,7 @@ namespace fragcore {
 			IPAddress_Type_ANY = 3,
 		};
 		IPAddress(); // TODO add binary as the address.
+		//IPAddress(const std::vector<uint8_t>& encoded_address);
 		IPAddress(const IPAddress &other) = default;
 		IPAddress &operator=(const IPAddress &other) = default;
 		IPAddress(IPAddress &&other) = default;
@@ -65,11 +66,11 @@ namespace fragcore {
 
 	  protected:
 		static unsigned int getDomain(IPAddressType IPaddressType) noexcept;
-		static IPAddressType getIpAddressType(int domain);
+		static IPAddressType convertDomain2AddressType(int domain);
 
 	  private:
-		IPAddressType type;
 		std::string ip;
+		IPAddressType type;
 		bool valid;
 		union {
 			uint8_t field8[16];

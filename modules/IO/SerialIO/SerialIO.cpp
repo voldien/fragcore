@@ -25,9 +25,7 @@ long int SerialIO::write(long int nbytes, const void *pbuffer) {
 	return res_in_written_bytes;
 }
 
-long int SerialIO::peek(long int nBytes, void *pbuffer) {
-	return read(nBytes, pbuffer);
-}
+long int SerialIO::peek([[maybe_unused]] long int nBytes, [[maybe_unused]] void *pbuffer) { return 0; }
 
 bool SerialIO::eof() const { return false; }
 long int SerialIO::length() { return 0; }

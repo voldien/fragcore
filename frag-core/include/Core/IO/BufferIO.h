@@ -58,10 +58,10 @@ namespace fragcore {
 		};
 
 	  private:
+	  	//TODO handle memory ownership.
 		char *buffer;
 		unsigned long nbytes;
-		unsigned int marker;
-		bool readOnly;
+		unsigned long marker;
 		bool ownMem;
 		bool expandable;
 		IOMode ioMode;

@@ -249,6 +249,9 @@ void TCPNetSocket::setBlocking(bool blocking) { /*	*/
 	}
 	flags = (flags & ~O_NONBLOCK);
 	int rc = fcntl(this->socket, F_SETFL, flags);
+	if (rc < 0) {
+		throw RuntimeException("Failed to set blocking");
+	}
 }
 TCPNetSocket::NetStatus TCPNetSocket::getStatus() const noexcept { return this->netStatus; }
 

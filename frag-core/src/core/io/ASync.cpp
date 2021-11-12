@@ -83,6 +83,8 @@ void ASyncIO::asyncReadFile(ASyncHandle handle, Ref<IO> &writeIO, AsyncComplete 
 	/*  Check if IO object is writeable.    */
 	if (!writeIO->isWriteable())
 		throw RuntimeException(fmt::format("IO object is not writable {}", writeIO->getUID()));
+
+	ao->callback = complete;
 }
 
 void ASyncIO::asyncWriteFile(ASyncHandle handle, char *buffer, unsigned int size, AsyncComplete complete) {
@@ -121,19 +123,20 @@ const ASyncIO::IOStatus &ASyncIO::getIOStatus(ASyncHandle handle) const { return
 
 Ref<IScheduler> ASyncIO::getScheduler() const { return this->scheduler; }
 
-void ASyncIO::asyncWait(fragcore::ASyncHandle handle) {
+void ASyncIO::asyncWait(ASyncHandle handle) { asyncWait(handle, -1); }
+
+bool ASyncIO::asyncWait(ASyncHandle handle, long int timeout) {
+
 	AsyncObject *ao = getObject(handle);
 
-	schSemaphoreWait((schSemaphore *)ao->semaphore);
+	// TODO add wait mechanic.
+
+	// schSemaphoreWait((schSemaphore *)ao->semaphore);
 
 	// schCreateSemaphore(ao->semaphore);
 	//	schSemaphorePost((schSemaphore *) ao->semaphore);
 	/*  Set as finished.    */
 	// ao->status.
-}
-
-bool ASyncIO::asyncWait(ASyncHandle handle, long int timeout) {
-	AsyncObject *ao = getObject(handle);
 
 	return true; // schSemaphoreTimedWait((schSemaphore *)ao->semaphore, timeout) == SCH_OK;
 }
@@ -236,6 +239,7 @@ void ASyncIO::async_write_io(Task *task) {
 
 ASyncIO::AsyncObject *ASyncIO::getObject(ASyncHandle handle) {
 
+	/*	Check if handle exits.	*/
 	if (this->asyncs.find(handle) != this->asyncs.end())
 		return &this->asyncs[handle];
 
@@ -263,7 +267,7 @@ ASyncIO::ASyncIO() {
 
 ASyncIO::ASyncIO(Ref<IScheduler> &scheduler) {
 	this->scheduler = scheduler;
-	this->uidGenerator = UIDGenerator<unsigned int>();
+	this->uidGenerator = UIDGenerator<size_t>();
 	/*  Take out the 0 UID that is invalid for the async handle
 	 * for allowing checking if it is a valid handle.*/
 	this->uidGenerator.getNextUID();

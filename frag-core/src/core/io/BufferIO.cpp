@@ -58,9 +58,9 @@ void BufferIO::seek(long int nbytes, Seek seek) {
 
 unsigned long BufferIO::getPos() { return this->marker; }
 
-bool BufferIO::isWriteable() const { return !this->readOnly; }
+bool BufferIO::isWriteable() const { return (this->ioMode & IOMode::READ) != 0; }
 
-bool BufferIO::isReadable() const { return true; }
+bool BufferIO::isReadable() const { return (this->ioMode & IOMode::WRITE) != 0; }
 
 bool BufferIO::flush() { return true; }
 
@@ -68,21 +68,21 @@ BufferIO::BufferIO(const void *pBuffer, unsigned long size) {
 	this->marker = 0;
 	this->nbytes = size;
 	this->buffer = (char *)pBuffer;
-	this->readOnly = true;
+	this->ioMode = IOMode::READ;
 }
 
 BufferIO::BufferIO(void *pBuffer, unsigned long size) {
 	this->marker = 0;
 	this->nbytes = size;
 	this->buffer = (char *)pBuffer;
-	this->readOnly = false;
+	this->ioMode = static_cast<IOMode>(IOMode::READ | IOMode::WRITE);
 }
 
 BufferIO::BufferIO(unsigned long size, bool expandable) {
 	this->marker = 0;
 	this->nbytes = size;
 	this->buffer = (char *)malloc(size);
-	this->readOnly = false;
+	this->ioMode = static_cast<IOMode>(IOMode::READ | IOMode::WRITE);
 	this->expandable = expandable;
 }
 

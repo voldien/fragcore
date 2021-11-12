@@ -18,4 +18,6 @@ void Base64::encode(Ref<IO> &input, Ref<IO> &encoded) { /*	*/
 	encoded->writeable();
 }
 void Base64::decode(Ref<IO> &encoded, Ref<IO> &output) { /*	*/
+	output->readable();
+	encoded->writeable();
 }

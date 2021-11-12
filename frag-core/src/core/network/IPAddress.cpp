@@ -15,22 +15,6 @@ IPAddress::IPAddress(const std::string &ip, IPAddressType type)
 	if (inet_pton(domain, ip.c_str(), &field8[0]) < 0) {
 		throw RuntimeException("Failed to convert {} to IP Address", ip);
 	}
-
-	// hosten = nullptr;
-	// if (hosten == nullptr) {
-
-	// } else {
-	// 	int domain = hosten->h_addrtype;
-	// 	for (char **address = hosten->h_addr_list; address != nullptr; address++) {
-	// 		// if (inet_pton(domain, *address, &field8[0]) < 0) {
-	// 		throw RuntimeException("Bad");
-	// 		//}
-	// 	}
-	// 	// hosten->h_addr_list;
-	// }
-	/*	Get hostname	*/
-
-	/*	Get hostname to ipaddress.	*/
 }
 
 IPAddress::IPAddress(const std::string &hostname)
@@ -39,17 +23,24 @@ IPAddress::IPAddress(const std::string &hostname)
 									  /*	Get IP from hostname.	*/
 	hosten = gethostbyname(hostname.c_str());
 	if (hosten != nullptr) {
-		int domain = hosten->h_addrtype;
-		for (char **address = hosten->h_addr_list; *address != nullptr; address++) {
-			if (inet_pton(domain, *address, &field8[0]) < 0) {
-				throw RuntimeException("Failed to convert {} to Address", *address);
+		struct in_addr **addr_list;
+		int i;
+		addr_list = (struct in_addr **)hosten->h_addr_list;
+
+		for (i = 0; addr_list[i] != nullptr; i++) {
+			// Return the first one;
+			const char *ipAddress = inet_ntoa(*addr_list[i]);
+			int domain = hosten->h_addrtype;
+			if (inet_pton(domain, ipAddress, &field8[0]) != 1) {
+				throw RuntimeException("Failed to convert '{}' to Address", hosten->h_name);
 			} else {
-				/*	TODO get domain.	*/
+				this->type = convertDomain2AddressType(domain);
 				valid = true;
-				break;
 			}
 		}
+
 	} else {
+		/*	*/
 		throw RuntimeException("Failed to get address {} - {}", hostname, strerror(errno));
 	}
 }
@@ -74,4 +65,13 @@ unsigned int IPAddress::getDomain(IPAddressType addressType) noexcept {
 		return 0;
 	}
 }
-IPAddress::IPAddressType IPAddress::getIpAddressType(int domain) {}
+IPAddress::IPAddressType IPAddress::convertDomain2AddressType(int domain) {
+	switch (domain) {
+	case AF_INET:
+		return IPAddress::IPAddressType::IPAddress_Type_IPV4;
+	case AF_INET6:
+		return IPAddress::IPAddressType::IPAddress_Type_IPV6;
+	default:
+		return IPAddress::IPAddressType::IPAddress_Type_NONE;
+	}
+}

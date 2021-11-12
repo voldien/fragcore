@@ -26,9 +26,11 @@
 #endif
 #include <map>
 
+//TODO relocate to its own module.
 namespace fragcore {
 	/**
-	 *
+	 * @brief 
+	 * 
 	 */
 	class FVDECLSPEC TaskScheduler : public IScheduler {
 	  public:
