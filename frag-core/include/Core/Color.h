@@ -11,6 +11,7 @@ namespace fragcore {
 	 */
 	class Color : public Vector4 {
 	  public:
+		Color() = default;
 		Color(float r, float g, float b, float a) noexcept : Vector4(r, g, b, a) {}
 		Color(uint32_t hex) noexcept {				 /*	Convert */
 			float r = ((hex >> 24) & 0xFF) / 255.0f; // Extract the RR byte
