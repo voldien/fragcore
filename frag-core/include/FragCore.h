@@ -46,4 +46,9 @@
 /*  */
 #include "Core/Network/NetSocket.h"
 
+#include "Core/dataStructure/AABB.h"
+#include "Core/dataStructure/BoundingSphere.h"
+#include "Core/dataStructure/OBB.h"
+#include "Core/dataStructure/Plane.h"
+
 #endif
