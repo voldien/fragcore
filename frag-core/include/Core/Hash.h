@@ -94,8 +94,8 @@ namespace fragcore {
 		ALGORITHM algorithm; /**/
 		long int nbytes;
 
-		Hash(const Hash &other) = default;
-		Hash() = default;
+		Hash(const Hash &other) = delete;
+		Hash() = delete;
 	};
 
 } // namespace fragcore

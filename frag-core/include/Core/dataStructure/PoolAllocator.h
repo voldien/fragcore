@@ -189,7 +189,7 @@ namespace fragcore {
 
 			/*  No allocation.  */
 			if (this->reserved() == 0) {
-				this->item = (PoolAllactorItem *)realloc(this->item, itemSize * size);
+				this->item = static_cast<PoolAllactorItem *>(realloc(this->item, itemSize * size));
 				void **items = (void **)item;
 				for (i = 0; i < size - 1; i++) {
 					item[i].next = &item[i + 1];

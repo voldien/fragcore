@@ -136,6 +136,7 @@ bool ASyncIO::asyncWait(ASyncHandle handle, long int timeout) {
 	AsyncObject *ao = getObject(handle);
 
 	// TODO add wait mechanic.
+	//ao->sem->wait();
 
 	// schSemaphoreWait((schSemaphore *)ao->semaphore);
 

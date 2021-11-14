@@ -81,7 +81,7 @@ TEST_F(IOTest, IOFile) {
 
 	std::vector<char *>::const_iterator it = files.cbegin();
 	for (; it != files.cend(); it++) {
-		FileIO *fileIo;
+		FileIO *fileIo = nullptr;
 		ASSERT_NO_THROW(fileIo = new FileIO((*it), IO::IOMode::READ));
 		ASSERT_TRUE(fileIo->isReadable());
 		ASSERT_FALSE(fileIo->isWriteable());

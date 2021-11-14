@@ -74,8 +74,8 @@ void TaskScheduler::terminate() {
 	schTaskSch *taskSch = static_cast<schTaskSch *>(this->sch);
 	int status = schTerminateTaskSch(taskSch);
 
-	// if (status != SCH_OK)
-	//	throw RuntimeException(schErrorMsg(status));
+	if (status != SCH_OK)
+		throw RuntimeException(schErrorMsg(status));
 }
 
 void TaskScheduler::wait() { schWaitTask((schTaskSch *)this->sch); }

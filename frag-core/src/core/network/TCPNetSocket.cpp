@@ -175,10 +175,16 @@ int TCPNetSocket::connect(const INetAddress &p_addr) {
 }
 
 int TCPNetSocket::poll(int p_type, int timeout) const { /*	select or poll.	*/
+	return 0;
 }
 int TCPNetSocket::recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddress &r_ip, bool p_peek) {
 	int flag = 0;
-	int res; //= recvfrom(this->socket, p_buffer, p_len, flag, connection->intaddr, &r_read);
+	socklen_t addrlen; /*	*/
+	union {
+		struct sockaddr_in addr4;  /*	*/
+		struct sockaddr_in6 addr6; /*	*/
+	} addrU;
+	int res = ::recvfrom(this->socket, p_buffer, p_len, flag, reinterpret_cast <sockaddr *>(&addrU), &addrlen);
 	return res;
 }
 int TCPNetSocket::recv(void *pbuffer, int p_len, int &sent, bool peek) {
@@ -194,16 +200,15 @@ int TCPNetSocket::send(const uint8_t *p_buffer, int p_len, int &r_sent) {
 }
 int TCPNetSocket::sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const INetAddress &p_addr) {
 	socklen_t addrlen;			 /*	*/
-	const struct sockaddr *addr; /*	*/
 	union {
 		struct sockaddr_in addr4;  /*	*/
 		struct sockaddr_in6 addr6; /*	*/
 	} addrU;
 	const TCPUDPAddress &tcpAddress = static_cast<const TCPUDPAddress &>(p_addr);
-	addrlen = setupIPAddress((struct sockaddr *)&addrU, tcpAddress.getIPAddress(), tcpAddress.getPort());
+	addrlen = setupIPAddress(reinterpret_cast<sockaddr *>(&addrU), tcpAddress.getIPAddress(), tcpAddress.getPort());
 	unsigned int flag = 0;
 
-	int res = ::sendto(this->socket, p_buffer, p_len, flag, (struct sockaddr *)&addrU, addrlen);
+	int res = ::sendto(this->socket, p_buffer, p_len, flag, reinterpret_cast<sockaddr *>(&addrU), addrlen);
 	return res;
 }
 
@@ -232,8 +237,8 @@ TCPNetSocket::NetStatus TCPNetSocket::accept(NetSocket &socket) {
 	// socket = std::move(*netSocket);
 	return netSocket->getStatus();
 }
-int TCPNetSocket::read() {}
-int TCPNetSocket::write() {}
+int TCPNetSocket::read() { return 0; }
+int TCPNetSocket::write() { return 0; }
 bool TCPNetSocket::isBlocking() { /*	*/
 	int flags = fcntl(this->socket, F_GETFL, 0);
 	if (flags == -1) {

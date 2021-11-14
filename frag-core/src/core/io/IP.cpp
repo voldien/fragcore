@@ -7,7 +7,7 @@ using namespace fragcore;
 
 IPInterface::IPInterface(const std::string &ip, Type type) {}
 
-std::vector<IPInterface> IPInterface::getLocalAddresses() {}
+std::vector<IPInterface> IPInterface::getLocalAddresses() { return {}; }
 std::vector<IPInterface> IPInterface::getLocalInterface() {
 
 	struct ifaddrs *addrs, *tmp;
@@ -34,4 +34,5 @@ std::vector<IPInterface> IPInterface::getLocalInterface() {
 	// if(ioctl(connection->tcpsock, SIOCGIFCONF, &ifcon) < 0){
 	// 	sntLogErrorPrintf("ioctl %s.\n", strerror(errno));
 	// }
+	return {};
 }

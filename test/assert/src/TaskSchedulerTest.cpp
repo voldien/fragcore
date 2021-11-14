@@ -5,7 +5,7 @@
 
 using namespace fragcore;
 
-TEST(Scheduler, Create_TaskScheduler_No_Exception_Thrown) { ASSERT_NO_THROW(TaskScheduler taskSch()); }
+TEST(Scheduler, Create_TaskScheduler_No_Exception_Thrown) { ASSERT_NO_THROW(TaskScheduler()); }
 
 TEST(Scheduler, Create_TaskScheduler_Add_Task_No_Exception) {
 	TaskScheduler taskSch;

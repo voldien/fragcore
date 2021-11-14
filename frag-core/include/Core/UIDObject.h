@@ -28,9 +28,9 @@ namespace fragcore {
 	class FVDECLSPEC UIDObject {
 	  public:
 		UIDObject() : UIDObject(UIDObject::generator) {}
-		UIDObject(UIDGenerator<uint32_t> &uidGenerator) noexcept { this->setUID(uidGenerator.getNextUID()); }
-		UIDObject(UIDObject &&other) noexcept = default;
-		UIDObject(const UIDObject &other) noexcept = default;
+		UIDObject(UIDGenerator<uint32_t> &uidGenerator) { this->setUID(uidGenerator.getNextUID()); }
+		UIDObject(UIDObject &&other) = default;
+		UIDObject(const UIDObject &other) = default;
 		UIDObject &operator=(const UIDObject &) = default;
 		UIDObject &operator=(UIDObject &&) = default;
 

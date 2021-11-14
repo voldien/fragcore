@@ -24,6 +24,7 @@ namespace fragcore {
 	  public:
 		void lock();
 		void unloc();
+		void wait(long int nanoTimeout = -1);
 	};
 } // namespace fragcore
 
