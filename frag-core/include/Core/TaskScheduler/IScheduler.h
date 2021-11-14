@@ -22,9 +22,6 @@
 #include "../SmartReference.h"
 
 namespace fragcore {
-	/**
-	 *
-	 */
 	class IScheduler;
 	/**
 	 * @brief
@@ -32,6 +29,8 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC Task : UIDObject {
 	  public:
+		virtual ~Task() = default;
+
 		typedef void (*TaskCallBack)(Task *task);
 		TaskCallBack callback;
 		void *userData;
@@ -48,13 +47,50 @@ namespace fragcore {
 	  public:
 		virtual ~IScheduler() = default;
 
+		/**
+		 * @brief
+		 *
+		 * @param task
+		 */
 		virtual void addTask(Task *task) = 0;
+
+		/**
+		 * @brief Set the User Data object
+		 *
+		 * @param data
+		 */
 		virtual void setUserData(const void *data) = 0;
+
+		/**
+		 * @brief Get the User Data object
+		 *
+		 * @return const void*
+		 */
 		virtual const void *getUserData() = 0;
+
+		/**
+		 * @brief
+		 *
+		 */
 		virtual void run() = 0;
 		virtual void terminate() = 0;
+
+		/**
+		 * @brief
+		 *
+		 */
 		virtual void wait() = 0;
+
+		/**
+		 * @brief
+		 *
+		 */
 		virtual void lock() = 0;
+
+		/**
+		 * @brief
+		 *
+		 */
 		virtual void unLock() = 0;
 
 	  private:

@@ -24,6 +24,7 @@
 
 namespace fragcore {
 	/**
+	 * @brief
 	 *
 	 */
 	class FVDECLSPEC IThreading : public SmartReference {

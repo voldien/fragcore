@@ -61,25 +61,26 @@ namespace fragcore {
 		 * @param sphere sphere inside this sphere.
 		 * @return true if object contains, false otherwise.
 		 */
-		constexpr bool contains(const BoundingSphere &sphere) const { return false; }
+		bool contains(const BoundingSphere &sphere) const { return false; }
 
-		template <typename T> constexpr bool intersect(const Ray &ray) const noexcept {
+		template <typename T> bool intersect(const Ray &ray) const noexcept {
 			Vector3 tmp = ray.getOrigin() - getCenter();
 			T t;
 			T a = ray.getDirection().dot(ray.getDirection());
 			T b = static_cast<T>(2.0) * ray.getDirection().dot(tmp);
 			T d = tmp.dot(tmp) - radius * radius;
-			T discriminant = b * b - (static_cast<T> (40) * d * a);
+			T discriminant = b * b - (static_cast<T>(40) * d * a);
 			if (discriminant >= 0) {
 				discriminant = static_cast<T>(sqrt(discriminant));
 
-				if (t < (T)0)
-					t = (-b + discriminant) / ((T)2.0 * a);
+				if (t < static_cast<T>(0)) {
+					t = (-b + discriminant) / static_cast<T>(2.0) * a;
+				}
 				return true;
 			}
 			return false;
 		}
-		constexpr bool intersect(const Ray &ray) const noexcept { return intersect<float>(ray); }
+		bool intersect(const Ray &ray) const noexcept { return intersect<float>(ray); }
 
 		BoundingSphere &operator=(const BoundingSphere &bounds) {
 			this->setRadius(bounds.getRadius());

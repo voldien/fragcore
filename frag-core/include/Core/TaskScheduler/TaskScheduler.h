@@ -29,14 +29,14 @@
 //TODO relocate to its own module.
 namespace fragcore {
 	/**
-	 * @brief 
-	 * 
+	 * @brief
+	 *
 	 */
 	class FVDECLSPEC TaskScheduler : public IScheduler {
 	  public:
 		TaskScheduler();
 		TaskScheduler(int cores, unsigned int maxPackagesPool);
-		~TaskScheduler();
+		virtual ~TaskScheduler();
 
 		virtual void addTask(Task *task) override;
 		virtual void setUserData(const void *data) override;
