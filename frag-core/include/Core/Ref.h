@@ -66,16 +66,14 @@ namespace fragcore {
 
 			reference = nullptr;
 			if (p_reference) {
-				this->reference = p_reference;
-				ref_pointer(p_reference);
+				this->ref_pointer(p_reference);
 			}
 		}
 
 		Ref(T &p_reference) {
 			T *reference = nullptr;
 			if (&p_reference != nullptr) {
-				this->reference = &p_reference;
-				ref_pointer(&p_reference);
+				this->ref_pointer(&p_reference);
 			}
 		}
 
@@ -94,7 +92,7 @@ namespace fragcore {
 
 		void unref() {
 			if (this->reference && this->reference->deincreemnt()) {
-				// delete reference;
+				delete reference;
 				// memdelete(reference);
 			}
 

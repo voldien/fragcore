@@ -25,7 +25,9 @@
 namespace fragcore {
 
 	/**
+	 * @brief
 	 *
+	 * @tparam T
 	 */
 	template <class T> class RefPtr {
 	  public:

@@ -21,9 +21,11 @@
 #include "../Ref.h"
 #include "../RefPtr.h"
 #include "../TaskScheduler/IScheduler.h"
+#include "../TaskScheduler/ISemaphore.h"
 #include "IO.h"
 #include <condition_variable>
 #include <thread>
+// TODO remove
 #if defined(FRAG_CORE_INTERNAL_IMP) // TODO resolve to a single file or something later
 #include <taskSch.h>
 #endif
@@ -35,15 +37,19 @@ namespace fragcore {
 	typedef void (*AsyncComplete)(ASyncIO *async, ASyncHandle handle); /*  */
 
 	/**
+	 * @brief
 	 *
 	 */
-	// TODO rename so that it include the IO name.
 	class FVDECLSPEC ASyncIO : public SmartReference {
 	  public:
 		ASyncIO(Ref<IScheduler> &scheduler);
 		ASyncIO(ASyncIO &&other); // Move semantics
 		~ASyncIO();
 
+		/**
+		 * @brief
+		 *
+		 */
 		typedef struct io_status_t {
 			long int nbytes; /*  Number of bytes read.   */
 			long int offset; /*  Current position in bytes from start position.  */
@@ -109,12 +115,13 @@ namespace fragcore {
 		virtual void setScheduleReference(Ref<IScheduler> &sch);
 
 		typedef struct async_object {
-			//TOOD be replace with an encapsulated class version.
+			// TOOD be replace with an encapsulated class version.
 #if defined(FRAG_CORE_INTERNAL_IMP)	 // TODO resolve to a single file or something later
 			schSemaphore *semaphore; /*  */
 #else
 			void *data;
 #endif
+			ISemaphore *sem;
 			Ref<IO> ref;			/*  */
 			AsyncComplete callback; /*  */
 			Ref<IO> target;			/*  */

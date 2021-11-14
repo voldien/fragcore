@@ -19,10 +19,15 @@
 #ifndef _FRAG_CORE_SINGLETON_H_
 #define _FRAG_CORE_SINGLETON_H_ 1
 #include "../Def.h"
+#include "Ref.h"
 #include "SmartReference.h"
-#include"Ref.h"
 
 namespace fragcore {
+	/**
+	 * @brief
+	 *
+	 * @tparam T
+	 */
 	template <typename T> class FVDECLSPEC Singleton : public SmartReference {
 	  public:
 		static Ref<T> getInstance() {

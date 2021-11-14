@@ -4,7 +4,7 @@
 #include <gtest/gtest.h>
 using namespace fragcore;
 
-TEST(StandardIOTest, Send_Get_Standard_No_throw) {
+TEST(StandardIOTest, Get_Standard_File_No_Throw_Exception) {
 	ASSERT_NO_THROW(SystemInfo::getStdOut());
 	ASSERT_NO_THROW(SystemInfo::getStdIn());
 	ASSERT_NO_THROW(SystemInfo::getStdErr());

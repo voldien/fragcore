@@ -18,7 +18,13 @@
 */
 #ifndef _FRAG_CORE_ISEMPAHORE_H_
 #define _FRAG_CORE_ISEMPAHORE_H_ 1
-
-namespace fragcore {}
+#include "../UIDObject.h"
+namespace fragcore {
+	class ISemaphore : public UIDObject {
+	  public:
+		void lock();
+		void unloc();
+	};
+} // namespace fragcore
 
 #endif

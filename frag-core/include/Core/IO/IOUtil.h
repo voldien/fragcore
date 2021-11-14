@@ -24,8 +24,8 @@
 #include <string>
 
 namespace fragcore {
-
 	/**
+	 * @brief
 	 *
 	 */
 	class FVDECLSPEC IOUtil {

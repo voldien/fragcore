@@ -93,6 +93,7 @@ namespace fragcore {
 			this->data = static_cast<T *>(realloc(this->data, nrOfElement * sizeof(T)));
 			if (this->data == nullptr)
 				throw RuntimeException("Out of memory");
+			this->mreserved = nrOfElement;
 		}
 
 		inline void clear() noexcept { this->nrElements = 0; }

@@ -24,6 +24,7 @@
 
 namespace fragcore {
 	/**
+	 * @brief
 	 *
 	 */
 	class FVDECLSPEC Display : public Object {

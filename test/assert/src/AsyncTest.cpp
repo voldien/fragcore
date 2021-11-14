@@ -11,18 +11,19 @@
 #include <gtest/gtest.h>
 using namespace fragcore;
 
-TEST(ASyncIO, Async_Create_NoThrowException) {
-	Ref<IScheduler> sche = Ref<IScheduler>(new TaskScheduler());
-	ASSERT_NO_THROW(ASyncIO async(sche));
-}
+class ASyncIOTest : public testing::Test {
+  public:
+	void SetUp() override { this->sche = Ref<IScheduler>(new TaskScheduler()); }
 
-TEST(ASyncIO, Async_Create_Handle_No_Throw_Exception) {
-	ASSERT_NO_THROW(ASyncHandle handle);
-}
+	Ref<IScheduler> sche;
+};
 
-TEST(ASyncIO, ASync_Open_IO_Async_Handle_No_Throw) {
-	Ref<IScheduler> sche = Ref<IScheduler>(new TaskScheduler());
-	ASyncIO async(sche);
+TEST_F(ASyncIOTest, Create_NoThrowException) { ASSERT_NO_THROW(ASyncIO async(this->sche)); }
+
+TEST_F(ASyncIOTest, Create_Handle_No_Throw_Exception) { ASSERT_NO_THROW(ASyncHandle handle); }
+
+TEST_F(ASyncIOTest, Open_IO_Async_Handle_No_Throw) {
+	ASyncIO async(this->sche);
 
 	Ref<IO> ioRef = SystemInfo::getStdOut();
 	ASyncHandle handle;
@@ -30,9 +31,8 @@ TEST(ASyncIO, ASync_Open_IO_Async_Handle_No_Throw) {
 	ASSERT_NO_THROW(async.asyncClose(handle));
 }
 
-TEST(ASyncIO, ASync_ReadIOAsync_ThrowException) {
-	Ref<IScheduler> sche = Ref<IScheduler>(new TaskScheduler());
-	ASyncIO async(sche);
+TEST_F(ASyncIOTest, Read_IO_Async_ThrowException) {
+	ASyncIO async(this->sche);
 
 	Ref<IO> ioRef = SystemInfo::getStdOut();
 	ASyncHandle handle;
@@ -40,9 +40,8 @@ TEST(ASyncIO, ASync_ReadIOAsync_ThrowException) {
 	ASSERT_THROW(async.asyncWriteFile(handle, nullptr, 0, nullptr), InvalidArgumentException);
 }
 
-TEST(ASyncIO, ASync_Wait_Correctly_NoThrowException) {
-	Ref<IScheduler> sche = Ref<IScheduler>(new TaskScheduler());
-	ASyncIO async(sche);
+TEST_F(ASyncIOTest, Wait_Correctly_NoThrowException) {
+	ASyncIO async(this->sche);
 
 	Ref<IO> ioRef = SystemInfo::getStdOut();
 	ASyncHandle handle;
@@ -52,7 +51,7 @@ TEST(ASyncIO, ASync_Wait_Correctly_NoThrowException) {
 	ASSERT_NO_THROW(async.asyncWait(handle));
 }
 
-TEST(ASyncIO, ASync_CallBack_Called_No_Throw) {}
+TEST(ASyncIO, CallBack_Called_No_Throw) {}
 
 TEST(ASyncIO, Async) {
 	// ASyncHandle handle;

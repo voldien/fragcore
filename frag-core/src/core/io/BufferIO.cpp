@@ -3,7 +3,8 @@ using namespace fragcore;
 
 void BufferIO::open(const char *path, IOMode mode) {}
 
-void BufferIO::close() {}
+void BufferIO::close() { /*	TOOD reset values.	*/
+}
 
 long BufferIO::read(long int nbytes, void *pbuffer) {
 	long int nBytesLeft = this->nbytes - this->marker;
@@ -69,6 +70,7 @@ BufferIO::BufferIO(const void *pBuffer, unsigned long size) {
 	this->nbytes = size;
 	this->buffer = (char *)pBuffer;
 	this->ioMode = IOMode::READ;
+	this->expandable = false;
 }
 
 BufferIO::BufferIO(void *pBuffer, unsigned long size) {
@@ -76,6 +78,7 @@ BufferIO::BufferIO(void *pBuffer, unsigned long size) {
 	this->nbytes = size;
 	this->buffer = (char *)pBuffer;
 	this->ioMode = static_cast<IOMode>(IOMode::READ | IOMode::WRITE);
+	this->expandable = false;
 }
 
 BufferIO::BufferIO(unsigned long size, bool expandable) {

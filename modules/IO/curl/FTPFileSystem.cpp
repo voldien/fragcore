@@ -68,21 +68,24 @@ std::vector<std::string> FTPFileSystem::listDirectories(const char *directory) c
 
 std::vector<std::string> FTPFileSystem::list(const char *directory) const { throw NotImplementedException(); }
 
-FTPFileSystem *FTPFileSystem::createFileSystem(const char *ip, int port, Ref<IScheduler> &sch) {
+FTPFileSystem *FTPFileSystem::createFileSystem(const char *ip, int port, const Ref<IScheduler> &sch) {
 
 	FTPFileSystem *filesystem = new FTPFileSystem(ip, port, nullptr, nullptr, sch);
 	return filesystem;
 }
 
-void FTPFileSystem::setCredentials(const char *username, const char *password) {
+void FTPFileSystem::setCredentials(const std::string &username, const std::string &password) {
 	if (handle == nullptr)
 		throw RuntimeException("FTP FileSystem Not Setup Properly");
 
-	if (password && username)
-		curl_easy_setopt(handle, CURLOPT_USERPWD, fmt::format("{}:{}", username, password).c_str());
+	std::string cred = fmt::format("{}:{}", username, password);
+	curl_easy_setopt(handle, CURLOPT_USERPWD, cred.c_str());
+	/*	Remove the cred from memory once created.	*/
+	memset(cred.data(), 0, cred.length());
 }
 
-FTPFileSystem::FTPFileSystem(const char *ip, int port, const char *username, const char *password, Ref<IScheduler> &ref)
+FTPFileSystem::FTPFileSystem(const char *ip, int port, const char *username, const char *password,
+							 const Ref<IScheduler> &ref)
 	: FTPFileSystem(ip, port, username, password) {
 
 	this->setScheduleReference(ref);

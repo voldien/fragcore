@@ -33,26 +33,26 @@ namespace fragcore {
 		StackAllocator();
 		StackAllocator(const StackAllocator &stack);
 		StackAllocator(StackAllocator &&other);
-		explicit StackAllocator(unsigned int stackSizeBytes);
+		explicit StackAllocator(size_t stackSizeBytes);
 		~StackAllocator();
 
 		/**
 		 *	Allocate n number of bytes.
 		 *	@Return first memory address.
 		 */
-		void *alloc(unsigned int sizeBytes);
+		void *alloc(size_t sizeBytes);
 
 		/**
 		 *	Get size of the allocated data block
 		 *	in bytes.
 		 */
-		unsigned int getSize() const;
+		size_t getSize() const;
 
 		/**
 		 *	Allocate aligned memory block.
 		 *	@Return first memory address.
 		 */
-		void *allocateAligned(unsigned int sizeBytes, int alignment);
+		void *allocateAligned(size_t sizeBytes, int alignment);
 
 		/**
 		 *	Set marker to zero.
@@ -62,17 +62,17 @@ namespace fragcore {
 		/**
 		 *	@Return marker offset.
 		 */
-		unsigned int getMarker() const;
+		size_t getMarker() const;
 
 		/**
 		 *	@Return non null pointer if successfully.
 		 */
-		void *fetch(unsigned int sizeBytes);
+		void *fetch(size_t sizeBytes);
 
 		/**
 		 *	Release everything to marker.
 		 */
-		void freeToMarker(unsigned int marker);
+		void freeToMarker(size_t marker);
 
 		/**
 		 *	@Return
@@ -91,10 +91,10 @@ namespace fragcore {
 		 */
 		bool operator!=(const StackAllocator &alloc);
 
-	  private:				  /*	Attributes.	*/
-		void *mData;		  /*	*/
-		unsigned int mSize;	  /*	*/
-		unsigned int mMarker; /*	*/
+	  private:			/*	Attributes.	*/
+		void *mData;	/*	*/
+		size_t mSize;	/*	*/
+		size_t mMarker; /*	*/
 	};
 } // namespace fragcore
 

@@ -9,10 +9,6 @@ class IPAddressTest : public testing::Test {
   protected:
 };
 
-TEST_F(IPAddressTest, Create_Local_Address_IPV4_Throw_Exception) {
-	ASSERT_ANY_THROW(IPAddress localHost("127.0.0.1", IPAddress::IPAddressType::IPAddress_Type_IPV6));
-}
-
 TEST_F(IPAddressTest, Create_Local_Address_IPV4_No_Exception) {
 	ASSERT_NO_THROW(IPAddress localHost("127.0.0.1", IPAddress::IPAddressType::IPAddress_Type_IPV4));
 }

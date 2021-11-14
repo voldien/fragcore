@@ -18,6 +18,7 @@ class FVDECLSPEC AsyncTask : public Task {
 
 ASyncHandle ASyncIO::asyncOpen(Ref<IO> &io) {
 
+	/*	Check if scheduler is initialized.	*/
 	if (*scheduler == nullptr)
 		throw RuntimeException("Async not initialized with a scheduler object");
 	/*  Check parameters.   */
@@ -26,15 +27,17 @@ ASyncHandle ASyncIO::asyncOpen(Ref<IO> &io) {
 
 	const IO::IOOperation requiredIOSupported = static_cast<IO::IOOperation>(IO::OP_READ | IO::OP_WRITE);
 
+	/*	Check if IO operations are supported.	*/
 	if (!io->isOperationSupported(requiredIOSupported))
 		throw InvalidArgumentException("IO: {} requires read/write operation support", io->getName());
 
 	/*  Increment reference.    */
-	io->increment();
+	// io->increment();
 
 	/*  Create async object.*/
 	ASyncHandle handle = this->uidGenerator.getNextUID();
 	AsyncObject *asyncObject = createObject(handle);
+	/*	*/
 	asyncObject->ref = io;
 	asyncObject->semaphore = nullptr;
 	asyncObject->buffer = nullptr;
@@ -46,14 +49,17 @@ ASyncHandle ASyncIO::asyncOpen(Ref<IO> &io) {
 }
 
 void ASyncIO::asyncReadFile(ASyncHandle handle, char *buffer, unsigned int size, AsyncComplete complete) {
-	int error;
+
 	/*  Get object and check if exists. */
 	AsyncObject *ao = getObject(handle);
 
+	/*	Verify that is has read access.	*/
 	if (!ao->ref->isReadable())
 		throw RuntimeException(fmt::format("IO object is not readable {}", ao->ref->getUID()));
 
+	// TODO replace with an abstract version
 	/*  Assign variables.   */
+	int error;
 	error = schCreateSemaphore((schSemaphore **)&ao->semaphore);
 	if (error != SCH_OK)
 		throw RuntimeException(fmt::format("Failed to create semaphore {}", schErrorMsg(error)));
@@ -176,7 +182,6 @@ void ASyncIO::async_read(Task *task) {
 	const size_t block_size = 512;
 
 	Ref<IO> &io = ao->ref;
-	long int nread;
 	while (ao->status.nbytes < ao->size) {
 		long int nread = io->read(block_size, &ao->buffer[ao->status.nbytes]);
 		if (nread <= 0)
@@ -196,7 +201,6 @@ void ASyncIO::async_read_io(Task *task) {
 	const size_t block_size = 512;
 	// TODO update for the IO based..
 	Ref<IO> &io = ao->ref;
-	long int nread;
 	while (ao->status.nbytes < ao->size) {
 		long int nread = io->read(block_size, &ao->buffer[ao->status.nbytes]);
 		if (nread <= 0)
@@ -216,7 +220,6 @@ void ASyncIO::async_write(Task *task) {
 	const size_t block_size = 512;
 
 	Ref<IO> &io = ao->ref;
-	long int nwritten;
 	while (ao->status.nbytes < ao->size) {
 		long int nwritten = io->write(block_size, &ao->buffer[ao->status.nbytes]);
 		if (nwritten <= 0)
@@ -262,7 +265,6 @@ ASyncIO::~ASyncIO() { this->getScheduler(); }
 
 ASyncIO::ASyncIO() {
 	this->scheduler = nullptr;
-	// this->sch = nullptr;
 }
 
 ASyncIO::ASyncIO(Ref<IScheduler> &scheduler) {

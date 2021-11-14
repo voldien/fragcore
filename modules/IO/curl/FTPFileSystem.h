@@ -30,25 +30,26 @@ namespace fragcore {
 	class FVDECLSPEC FTPFileSystem : public IFileSystem {
 	  public:
 		virtual IO *openFile(const char *path, IO::IOMode mode); /*  Open based on the filename extension.*/
-		virtual void closeFile(IO *io);
 
-		virtual void remove(const char *path);
+		virtual void closeFile(IO *io) override;
 
-		virtual void rename(const char *oldPath, const char *newPath);
+		virtual void remove(const char *path) override;
 
-		virtual void createFile(const char *path);
+		virtual void rename(const char *oldPath, const char *newPath) override;
 
-		virtual void createDirectory(const char *path);
+		virtual void createFile(const char *path) override;
 
-		virtual bool isReadable(const char *path) const;
+		virtual void createDirectory(const char *path) override;
 
-		virtual bool isWriteable(const char *path) const;
+		virtual bool isReadable(const char *path) const override;
 
-		virtual bool exists(const char *path) const;
+		virtual bool isWriteable(const char *path) const override;
 
-		virtual bool isASyncSupported() const;
-		virtual bool isDirectory(const char *path);
-		virtual bool isFile(const char *path);
+		virtual bool exists(const char *path) const override;
+
+		virtual bool isASyncSupported() const override;
+		virtual bool isDirectory(const char *path) override;
+		virtual bool isFile(const char *path) override;
 
 		// FileAccess getFileAccess(const char *path) override;
 
@@ -68,15 +69,19 @@ namespace fragcore {
 		static const char *getFileExtension(const char *path);
 
 	  public:
-		static FTPFileSystem *createFileSystem(const char *ip, int port, Ref<IScheduler> &sch);
+		static FTPFileSystem *createFileSystem(const char *ip, int port,
+											   const Ref<IScheduler> &sch = Ref<IScheduler>(nullptr));
+		static FTPFileSystem *createFileSystem(const IPAddress &, int port,
+											   const Ref<IScheduler> &sch = Ref<IScheduler>(nullptr));
 
 		FTPFileSystem(FTPFileSystem &&other);
 		// TODO add remove function.
 
-		void setCredentials(const char *username, const char *password);
+	  public:
+		void setCredentials(const std::string &username, const std::string &password);
 
 	  protected:
-		FTPFileSystem(const char *ip, int port, const char *username, const char *password, Ref<IScheduler> &sch);
+		FTPFileSystem(const char *ip, int port, const char *username, const char *password, const Ref<IScheduler> &sch);
 		FTPFileSystem(const char *ip, int port, const char *username, const char *password);
 		~FTPFileSystem();
 

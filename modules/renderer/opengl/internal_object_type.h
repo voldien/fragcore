@@ -1,13 +1,12 @@
 
 #ifndef _FRAGVIEW_INTERNAL_OBJECT_TYPE_H_
 #define _FRAGVIEW_INTERNAL_OBJECT_TYPE_H_ 1
-#include"../RenderDesc.h"
-#include"../Buffer.h"
-#include"../IRenderer.h"
-#include<GL/glew.h>
-#include<SDL2/SDL.h>
+#include "../Buffer.h"
+#include "../IRenderer.h"
+#include "../RenderDesc.h"
 #include <../RendererWindow.h>
-
+#include <GL/glew.h>
+#include <SDL2/SDL.h>
 
 namespace fragcore {
 
@@ -23,7 +22,7 @@ namespace fragcore {
 		bool useCompatibility;
 
 		/*  */
-		//TODO determine if to use pool or something .
+		// TODO determine if to use pool or something .
 		Buffer *pboUnPack;
 		Buffer *pboPack;
 
@@ -42,7 +41,7 @@ namespace fragcore {
 		bool alpha;
 
 		ViewPort *defaultViewport;
-		std::vector<ViewPort *> viewports;   //TODO remove pointer.
+		std::vector<ViewPort *> viewports; // TODO remove pointer.
 		FrameBuffer *defaultFrameBuffer;
 		/*  Texture gamma corrections.  */
 		bool gamma;
@@ -60,7 +59,7 @@ namespace fragcore {
 		TextureDesc desc;
 		unsigned int target;
 		unsigned int texture;
-		unsigned int pbo;   /*  TODO resolve if to relocate.    */
+		unsigned int pbo; /*  TODO resolve if to relocate.    */
 		Sampler *sampler;
 	} GLTextureObject;
 
@@ -123,14 +122,14 @@ namespace fragcore {
 		void *sync;
 	} GLSync;
 
-}
+} // namespace fragcore
 
-//TODO change name to resolve potential symbol name conflict.
+// TODO change name to resolve potential symbol name conflict.
 /**
  * Helper functions.
  */
-extern void addMarkerLabel(const fragcore::OpenGLCore *glcore, unsigned int identifier,
-		unsigned int object, const fragcore::MarkerDebug *debug);
+extern void addMarkerLabel(const fragcore::OpenGLCore *glcore, unsigned int identifier, unsigned int object,
+						   const fragcore::MarkerDebug *debug);
 
 extern void checkError();
 extern void resetErrorFlag();
@@ -141,11 +140,12 @@ extern unsigned int getFilterMode(fragcore::SamplerDesc::FilterMode mode, fragco
 extern unsigned int getCompareMode(fragcore::SamplerDesc::CompareFunc mode);
 
 extern unsigned int getGraphicFormat(fragcore::GraphicFormat graphicFormat);
-extern unsigned int getTextureFormat(fragcore::TextureFormat textureFormat, unsigned int* pixelType);
+extern unsigned int getTextureFormat(fragcore::TextureFormat textureFormat, unsigned int *pixelType);
 
 extern unsigned int getTextureFormat(fragcore::TextureDesc::Format format);
 extern unsigned int getInternalTextureFormat(fragcore::TextureDesc::Format format, bool sRGB,
-                                             fragcore::TextureDesc::Compression compression, fragcore::TextureDesc::Type type);
+											 fragcore::TextureDesc::Compression compression,
+											 fragcore::TextureDesc::Type type);
 
 extern unsigned int getTextureTarget(fragcore::TextureDesc::Target target, int nrSamples);
 
@@ -186,6 +186,5 @@ extern unsigned int getAccess(fragcore::Texture::MapTarget target);
 extern unsigned int getTextureGLFormat(fragcore::Texture::Format format);
 
 extern fragcore::Texture::Format getTextureFormatUserSpace(unsigned int format);
-
 
 #endif

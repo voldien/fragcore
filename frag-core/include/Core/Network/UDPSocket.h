@@ -22,6 +22,7 @@
 
 namespace fragcore {
 	/**
+	 * @brief 
 	 *
 	 */
 	class FVDECLSPEC UDPNetSocket : public NetSocket {

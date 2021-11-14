@@ -22,11 +22,10 @@
 
 namespace fragcore {
 	/**
-	 *	Unique Identifier generator.
+	 *	@brief Unique Identifier generator.
 	 *	This is a simple UID generator.
 	 *	Each next will be an increment of previosuly.
 	 */
-	// TODO make it generic
 	template <class T> class UIDGenerator {
 	  public:
 		static_assert(std::is_arithmetic<T>::value, "Must support artithmetic operations");
@@ -34,7 +33,7 @@ namespace fragcore {
 		UIDGenerator(UIDGenerator &&other) = default;
 		UIDGenerator(const UIDGenerator &other) = default;
 
-		UIDGenerator &operator=(const UIDGenerator & other) = default;
+		UIDGenerator &operator=(const UIDGenerator &other) = default;
 		UIDGenerator &operator=(UIDGenerator &&other) = default;
 
 		/**
@@ -42,13 +41,13 @@ namespace fragcore {
 		 */
 		T getNextUID() noexcept { return this->nextUID++; }
 
-		 bool operator==(const UIDGenerator &other) noexcept {
+		bool operator==(const UIDGenerator &other) noexcept {
 			if (this == &other)
 				return true;
 			else
 				return this->uid == other.uid;
 		}
-		 bool operator!=(const UIDGenerator &other) noexcept { return !(*this == other); }
+		bool operator!=(const UIDGenerator &other) noexcept { return !(*this == other); }
 
 	  private:	   /*	Attributes.	*/
 		T nextUID; /*	*/
