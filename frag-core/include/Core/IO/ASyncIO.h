@@ -42,7 +42,7 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC ASyncIO : public SmartReference {
 	  public:
-		ASyncIO(Ref<IScheduler> &scheduler);
+		ASyncIO(const Ref<IScheduler> &scheduler);
 		ASyncIO(ASyncIO &&other); // Move semantics
 		~ASyncIO();
 
@@ -69,6 +69,7 @@ namespace fragcore {
 		 * @param complete
 		 */
 		virtual void asyncReadFile(ASyncHandle handle, char *buffer, unsigned int size, AsyncComplete complete);
+		// TODO add C++ Bind function and lamba support
 		virtual void asyncReadFile(ASyncHandle handle, Ref<IO> &writeIO, AsyncComplete complete);
 
 		/**
@@ -128,6 +129,7 @@ namespace fragcore {
 		} AsyncObject;
 
 		/*	*/
+		ASyncHandle generateHandle();
 		AsyncObject *getObject(ASyncHandle handle);
 		const AsyncObject *getObject(ASyncHandle handle) const;
 		AsyncObject *createObject(ASyncHandle handle);

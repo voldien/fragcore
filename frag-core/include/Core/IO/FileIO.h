@@ -52,7 +52,7 @@ namespace fragcore {
 		virtual bool flush() override;
 
 		virtual bool isOperationSupported(IOOperation operations) const noexcept override {
-			return (operations & OP_ALL) != operations;
+			return (operations & OP_ALL) == operations;
 		};
 
 	  protected:
@@ -66,7 +66,7 @@ namespace fragcore {
 		FileIO(const std::string &path, IOMode mode);
 		virtual ~FileIO() = default;
 
-		FileIO(FILE *file);	//TODO perhaps add IOMOde for overriding.
+		FileIO(FILE *file); // TODO perhaps add IOMOde for overriding.
 		FileIO(FileIO &&other);
 	};
 } // namespace fragcore

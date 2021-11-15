@@ -2,15 +2,7 @@
 #include <taskSch.h>
 
 using namespace fragcore;
-TaskScheduler::TaskScheduler() {
-	schTaskSch *taskSch = (schTaskSch *)malloc(sizeof(schTaskSch));
-	memset(taskSch, 0, sizeof(schTaskSch));
-	int sch = schCreateTaskPool(taskSch, -1, SCH_FLAG_NO_AFM, 48);
-	if (sch != SCH_OK)
-		throw RuntimeException(schErrorMsg(sch));
-
-	this->sch = taskSch;
-}
+TaskScheduler::TaskScheduler() : TaskScheduler(-1, 48) {}
 
 TaskScheduler::TaskScheduler(int cores, unsigned int maxPackagesPool) {
 	schTaskSch *taskSch = (schTaskSch *)malloc(sizeof(schTaskSch));
@@ -24,9 +16,9 @@ TaskScheduler::TaskScheduler(int cores, unsigned int maxPackagesPool) {
 TaskScheduler::~TaskScheduler() {
 	schTaskSch *taskSch = static_cast<schTaskSch *>(this->sch);
 	this->terminate();
-	schReleaseTaskSch(taskSch);
+	int rc = schReleaseTaskSch(taskSch);
 	/*	Release.	*/
-	delete taskSch;
+	free(taskSch);
 	/*	Reset memory.	*/
 	this->sch = nullptr;
 }

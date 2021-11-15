@@ -1,4 +1,5 @@
 #include "Core/IO/ASyncIO.h"
+#include "Core/IO/BufferIO.h"
 #include "Core/IO/IFileSystem.h"
 #include "Core/Threading/StdSemaphore.h"
 #include <condition_variable>
@@ -23,18 +24,18 @@ ASyncHandle ASyncIO::asyncOpen(Ref<IO> &io) {
 	if (!*io)
 		throw InvalidArgumentException("Invalid IO reference.");
 
-	const IO::IOOperation requiredIOSupported = static_cast<IO::IOOperation>(IO::OP_READ | IO::OP_WRITE);
+	/*	*/
+	const IO::IOOperation requiredIOReadSupported = static_cast<IO::IOOperation>(IO::OP_READ | IO::OP_WRITE);
 
 	/*	Check if IO operations are supported.	*/
-	if (!io->isOperationSupported(requiredIOSupported))
+	if (!io->isOperationSupported(requiredIOReadSupported))
 		throw InvalidArgumentException("IO: {} requires read/write operation support", io->getName());
 
-	/*  Increment reference.    */
-	// io->increment();
+	/*	Generate new handle*/
+	ASyncHandle handle = this->generateHandle();
 
 	/*  Create async object.*/
-	ASyncHandle handle = this->uidGenerator.getNextUID();
-	AsyncObject *asyncObject = createObject(handle);
+	AsyncObject *asyncObject = this->createObject(handle);
 	/*	*/
 	asyncObject->ref = io;
 	asyncObject->sem = nullptr;
@@ -91,10 +92,18 @@ void ASyncIO::asyncReadFile(ASyncHandle handle, Ref<IO> &writeIO, AsyncComplete 
 void ASyncIO::asyncWriteFile(ASyncHandle handle, char *buffer, unsigned int size, AsyncComplete complete) {
 	int error;
 	AsyncObject *ao = getObject(handle);
-	// TODO perhaps can to use the IOBuffer has a interface object for reduced coupling and higher cohesion.
-	if (!ao->ref->isWriteable())
-		throw RuntimeException(fmt::format("IO object is not writable {}", ao->ref->getUID()));
 
+	assert(ao);
+
+	if (buffer == nullptr || complete == nullptr || size <= 0) {
+		throw InvalidPointerException("");
+	}
+
+	if (!ao->ref->isWriteable()) {
+		throw RuntimeException(fmt::format("IO object is not writable {}", ao->ref->getUID()));
+	}
+	// TODO perhaps can to use the IOBuffer has a interface object for reduced coupling and higher cohesion.
+	BufferIO bufferIO(buffer, size);
 	/*  Assign variables.   */
 	ao->sem = new stdSemaphore();
 
@@ -128,8 +137,11 @@ bool ASyncIO::asyncWait(ASyncHandle handle, long int timeout) {
 
 	AsyncObject *ao = getObject(handle);
 
-	// TODO add wait mechanic.
-	ao->sem->wait();
+	assert(ao);
+
+	if (ao->sem) {
+		ao->sem->wait();
+	}
 
 	// schCreateSemaphore(ao->semaphore);
 	//	schSemaphorePost((schSemaphore *) ao->semaphore);
@@ -142,15 +154,19 @@ bool ASyncIO::asyncWait(ASyncHandle handle, long int timeout) {
 void ASyncIO::asyncClose(ASyncHandle handle) {
 	AsyncObject *ao = this->getObject(handle);
 
+	assert(ao);
 	/*  Check status of the scheduler.  */
 	// TODO determine.
 
-	asyncWait(handle);
+	this->asyncWait(handle);
 
 	/*  If not used by scheduler anymore, delete all references.    */
 	if (ao->ref->deincreemnt())
 		ao->ref->close();
 
+	/*	TODO: Release sync objects.	*/
+
+	/*	*/
 	this->asyncs.erase(this->asyncs.find(handle));
 }
 
@@ -241,16 +257,24 @@ void ASyncIO::async_write_io(Task *task) {
 	return;
 }
 
+ASyncHandle ASyncIO::generateHandle(){
+	return this->uidGenerator.getNextUID();
+}
+
 ASyncIO::AsyncObject *ASyncIO::getObject(ASyncHandle handle) {
 
 	/*	Check if handle exits.	*/
-	if (this->asyncs.find(handle) != this->asyncs.end())
+	std::map<ASyncHandle, AsyncObject>::iterator it = this->asyncs.find(handle);
+
+	if (it != this->asyncs.end())
 		return &this->asyncs[handle];
 
 	throw RuntimeException(fmt::format("Invalid Async object {}", handle));
 }
 
 const ASyncIO::AsyncObject *ASyncIO::getObject(ASyncHandle handle) const {
+
+	/*	Check if the object exits.	*/
 	std::map<ASyncHandle, AsyncObject>::const_iterator it = this->asyncs.find(handle);
 	if (it != this->asyncs.cend())
 		return &it->second;
@@ -262,12 +286,15 @@ ASyncIO::AsyncObject *ASyncIO::createObject(ASyncHandle handle) { return &this->
 
 void ASyncIO::setScheduleReference(const Ref<IScheduler> &sch) { this->scheduler = sch; }
 
-ASyncIO::~ASyncIO() { this->getScheduler(); }
+ASyncIO::~ASyncIO() {
+	//TODO add support for close all the handle.
+
+}
 
 ASyncIO::ASyncIO() { this->scheduler = nullptr; }
 
-ASyncIO::ASyncIO(Ref<IScheduler> &scheduler) {
-	this->scheduler = scheduler;
+ASyncIO::ASyncIO(const Ref<IScheduler> &scheduler) {
+	this->setScheduleReference(scheduler);
 	this->uidGenerator = UIDGenerator<size_t>();
 	/*  Take out the 0 UID that is invalid for the async handle
 	 * for allowing checking if it is a valid handle.*/

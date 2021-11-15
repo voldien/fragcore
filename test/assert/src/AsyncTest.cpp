@@ -15,7 +15,7 @@ class ASyncIOTest : public testing::Test {
   public:
 	void SetUp() override { this->sche = Ref<IScheduler>(new TaskScheduler()); }
 
-	Ref<IScheduler> sche;
+	Ref<IScheduler> sche{nullptr};
 };
 
 TEST_F(ASyncIOTest, Create_NoThrowException) { ASSERT_NO_THROW(ASyncIO async(this->sche)); }
@@ -37,7 +37,8 @@ TEST_F(ASyncIOTest, Read_IO_Async_ThrowException) {
 	Ref<IO> ioRef = SystemInfo::getStdOut();
 	ASyncHandle handle;
 	handle = async.asyncOpen(ioRef);
-	ASSERT_THROW(async.asyncWriteFile(handle, nullptr, 0, nullptr), InvalidArgumentException);
+	ASSERT_THROW(async.asyncWriteFile(handle, nullptr, 0, nullptr), InvalidPointerException);
+	async.asyncClose(handle);
 }
 
 TEST_F(ASyncIOTest, Wait_Correctly_NoThrowException) {

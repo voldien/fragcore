@@ -32,6 +32,7 @@ namespace fragcore {
 	 */
 	template <class T> class Ref { // TODO perhaps use the RefPtr as base?
 		static_assert(std::is_object<T>::value, "");
+		//static_assert(std::has_virtual_destructor<T>::value, "Must have a virtual deconstructor");
 
 	  private:
 		T *reference;
@@ -91,9 +92,11 @@ namespace fragcore {
 		}
 
 		void unref() {
-			if (this->reference && this->reference->deincreemnt()) {
-				delete reference;
-				// memdelete(reference);
+			if (this->reference) {
+				if (this->reference->deincreemnt()) {
+					delete reference;
+					// memdelete(reference);
+				}
 			}
 
 			/*	*/
