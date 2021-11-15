@@ -1,8 +1,6 @@
 #include "Core/IO/ASyncIO.h"
 #include "Core/IO/IFileSystem.h"
-//#include "Exception/InvalidArgumentException.h"
-//#include "Exception/RuntimeException.h"
-
+#include "Core/Threading/StdSemaphore.h"
 #include <condition_variable>
 #include <fmt/core.h>
 #include <mutex>
@@ -39,7 +37,7 @@ ASyncHandle ASyncIO::asyncOpen(Ref<IO> &io) {
 	AsyncObject *asyncObject = createObject(handle);
 	/*	*/
 	asyncObject->ref = io;
-	asyncObject->semaphore = nullptr;
+	asyncObject->sem = nullptr;
 	asyncObject->buffer = nullptr;
 	asyncObject->size = 0;
 	asyncObject->userData = nullptr;
@@ -59,10 +57,7 @@ void ASyncIO::asyncReadFile(ASyncHandle handle, char *buffer, unsigned int size,
 
 	// TODO replace with an abstract version
 	/*  Assign variables.   */
-	int error;
-	error = schCreateSemaphore((schSemaphore **)&ao->semaphore);
-	if (error != SCH_OK)
-		throw RuntimeException(fmt::format("Failed to create semaphore {}", schErrorMsg(error)));
+	ao->sem = new stdSemaphore();
 
 	ao->buffer = buffer;
 	ao->size = size;
@@ -101,9 +96,7 @@ void ASyncIO::asyncWriteFile(ASyncHandle handle, char *buffer, unsigned int size
 		throw RuntimeException(fmt::format("IO object is not writable {}", ao->ref->getUID()));
 
 	/*  Assign variables.   */
-	error = schCreateSemaphore((schSemaphore **)&ao->semaphore);
-	if (error != SCH_OK)
-		throw RuntimeException(fmt::format("Failed to create semaphore {}", schErrorMsg(error)));
+	ao->sem = new stdSemaphore();
 
 	ao->buffer = buffer;
 	ao->size = size;
@@ -136,9 +129,7 @@ bool ASyncIO::asyncWait(ASyncHandle handle, long int timeout) {
 	AsyncObject *ao = getObject(handle);
 
 	// TODO add wait mechanic.
-	//ao->sem->wait();
-
-	// schSemaphoreWait((schSemaphore *)ao->semaphore);
+	ao->sem->wait();
 
 	// schCreateSemaphore(ao->semaphore);
 	//	schSemaphorePost((schSemaphore *) ao->semaphore);
@@ -157,7 +148,6 @@ void ASyncIO::asyncClose(ASyncHandle handle) {
 	asyncWait(handle);
 
 	/*  If not used by scheduler anymore, delete all references.    */
-	schDeleteSemaphore(ao->semaphore);
 	if (ao->ref->deincreemnt())
 		ao->ref->close();
 
@@ -179,8 +169,10 @@ void ASyncIO::async_open(Task *task) {
 }
 
 void ASyncIO::async_read(Task *task) {
-	AsyncObject *ao = (AsyncObject *)task->userData;
+	AsyncObject *ao = static_cast<AsyncObject *>(task->userData);
 	const size_t block_size = 512;
+
+	ao->sem->lock();
 
 	Ref<IO> &io = ao->ref;
 	while (ao->status.nbytes < ao->size) {
@@ -194,12 +186,15 @@ void ASyncIO::async_read(Task *task) {
 	if (ao->callback)
 		ao->callback(nullptr, 0);
 	/*  Finish and posted for the data is available.  */
-	schSemaphorePost((schSemaphore *)ao->semaphore);
+	ao->sem->unlock();
 }
 
 void ASyncIO::async_read_io(Task *task) {
-	AsyncObject *ao = (AsyncObject *)task->userData;
+	AsyncObject *ao = static_cast<AsyncObject *>(task->userData);
 	const size_t block_size = 512;
+
+	ao->sem->lock();
+
 	// TODO update for the IO based..
 	Ref<IO> &io = ao->ref;
 	while (ao->status.nbytes < ao->size) {
@@ -213,12 +208,13 @@ void ASyncIO::async_read_io(Task *task) {
 	if (ao->callback)
 		ao->callback(nullptr, 0);
 	/*  Finish and posted for the data is available.  */
-	schSemaphorePost((schSemaphore *)ao->semaphore);
+	ao->sem->unlock();
 }
 
 void ASyncIO::async_write(Task *task) {
-	AsyncObject *ao = (AsyncObject *)task->userData;
+	AsyncObject *ao = static_cast<AsyncObject *>(task->userData);
 	const size_t block_size = 512;
+	ao->sem->lock();
 
 	Ref<IO> &io = ao->ref;
 	while (ao->status.nbytes < ao->size) {
@@ -232,12 +228,16 @@ void ASyncIO::async_write(Task *task) {
 	if (ao->callback)
 		ao->callback(nullptr, 0);
 	/*  Finish and posted for the data is available.  */
-	schSemaphorePost((schSemaphore *)ao->semaphore);
+	ao->sem->unlock();
 }
 
 void ASyncIO::async_write_io(Task *task) {
+	AsyncObject *ao = static_cast<AsyncObject *>(task->userData);
+	const size_t block_size = 512;
 	task->Execute();
 
+	ao->sem->lock();
+	ao->sem->unlock();
 	return;
 }
 
@@ -260,13 +260,11 @@ const ASyncIO::AsyncObject *ASyncIO::getObject(ASyncHandle handle) const {
 
 ASyncIO::AsyncObject *ASyncIO::createObject(ASyncHandle handle) { return &this->asyncs[handle]; }
 
-void ASyncIO::setScheduleReference(Ref<IScheduler> &sch) { this->scheduler = sch; }
+void ASyncIO::setScheduleReference(const Ref<IScheduler> &sch) { this->scheduler = sch; }
 
 ASyncIO::~ASyncIO() { this->getScheduler(); }
 
-ASyncIO::ASyncIO() {
-	this->scheduler = nullptr;
-}
+ASyncIO::ASyncIO() { this->scheduler = nullptr; }
 
 ASyncIO::ASyncIO(Ref<IScheduler> &scheduler) {
 	this->scheduler = scheduler;

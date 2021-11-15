@@ -45,7 +45,7 @@ namespace fragcore {
 	// TODO rename so that it includes the name task.
 	class FVDECLSPEC IScheduler : public SmartReference {
 	  public:
-		virtual ~IScheduler() = default;
+		virtual ~IScheduler() = 0;
 
 		/**
 		 * @brief
@@ -80,6 +80,7 @@ namespace fragcore {
 		 *
 		 */
 		virtual void wait() = 0;
+		// virtual void wait(Task *task);
 
 		/**
 		 * @brief

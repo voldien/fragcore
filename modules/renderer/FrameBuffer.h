@@ -127,7 +127,7 @@ namespace fragcore {
 
 		virtual void setDraw(BufferAttachment attachment);
 
-		virtual intptr_t getNativePtr() const;
+		virtual intptr_t getNativePtr() const override;
 
 		void setName(const std::string &name) override;
 	};

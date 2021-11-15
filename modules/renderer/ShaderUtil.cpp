@@ -18,7 +18,7 @@ void ShaderUtil::loadProgramFromMem(const ShaderObject *vshader, const ShaderObj
 	if (pshader == nullptr)
 		throw InvalidArgumentException("");
 
-	ShaderDesc desc = {0};
+	ShaderDesc desc = {};
 	Shader *shader = nullptr;
 	int nsources;
 
@@ -604,7 +604,9 @@ ShaderType ShaderUtil::getShaderType(const char *filePath) {
 	return eFrag;
 }
 
-std::vector<ShaderUtil::UniformLocation> ShaderUtil::getShaderUniformAttributes(const Ref<Shader> &shader) {}
+std::vector<ShaderUtil::UniformLocation> ShaderUtil::getShaderUniformAttributes(const Ref<Shader> &shader) {
+	return {};
+}
 
 void ShaderUtil::copyUniform(Ref<Shader> &shader) {
 	// NNshader->getUniform

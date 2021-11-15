@@ -68,7 +68,7 @@ namespace fragcore {
 
 		ICompute() = default;
 		ICompute(const ICompute &other) = delete;
-		ICompute(ICompute &&other) = default;
+		ICompute(ICompute &&other) = delete;
 		virtual ~ICompute() = default;
 	};
 }

@@ -259,7 +259,7 @@ namespace fragcore {
 		virtual void clear();
 
 		//TODO add get native ptr object.
-		virtual intptr_t getNativePtr() const;
+		virtual intptr_t getNativePtr() const override;
 
 		virtual void setName(const std::string &name) override;
 	};

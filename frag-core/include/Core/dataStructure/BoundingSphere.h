@@ -69,7 +69,7 @@ namespace fragcore {
 			T a = ray.getDirection().dot(ray.getDirection());
 			T b = static_cast<T>(2.0) * ray.getDirection().dot(tmp);
 			T d = tmp.dot(tmp) - radius * radius;
-			T discriminant = b * b - (static_cast<T>(40) * d * a);
+			T discriminant = b * b - (static_cast<T>(4) * d * a);
 			if (discriminant >= 0) {
 				discriminant = static_cast<T>(sqrt(discriminant));
 

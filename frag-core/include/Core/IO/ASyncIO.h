@@ -112,15 +112,10 @@ namespace fragcore {
 		ASyncIO(); // TODO make protected since it is required to a have a scheduler attached but inheriet need to be
 				   // able to call it.
 		ASyncIO(const ASyncIO &other);
-		virtual void setScheduleReference(Ref<IScheduler> &sch);
+		virtual void setScheduleReference(const Ref<IScheduler> &sch);
 
 		typedef struct async_object {
 			// TOOD be replace with an encapsulated class version.
-#if defined(FRAG_CORE_INTERNAL_IMP)	 // TODO resolve to a single file or something later
-			schSemaphore *semaphore; /*  */
-#else
-			void *data;
-#endif
 			ISemaphore *sem;
 			Ref<IO> ref;			/*  */
 			AsyncComplete callback; /*  */

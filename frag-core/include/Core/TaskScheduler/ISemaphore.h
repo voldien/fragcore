@@ -26,9 +26,9 @@ namespace fragcore {
 	 */
 	class ISemaphore : public UIDObject {
 	  public:
-		void lock();
-		void unloc();
-		void wait(long int nanoTimeout = -1);
+		virtual void lock() = 0;
+		virtual void unlock() = 0;
+		virtual void wait(long int nanoTimeout = -1) = 0;
 	};
 } // namespace fragcore
 

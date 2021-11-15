@@ -32,7 +32,7 @@ namespace fragcore {
 	  public:
 		RenderObject() = default;
 		RenderObject(IRenderer *renderer) { setRenderInterface(renderer); }
-		RenderObject(RenderObject &&other) = default;
+		RenderObject(RenderObject &&other) = delete;
 		virtual ~RenderObject() = default;
 
 		/**

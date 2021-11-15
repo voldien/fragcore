@@ -5,7 +5,7 @@ using namespace fragcore;
 TaskScheduler::TaskScheduler() {
 	schTaskSch *taskSch = (schTaskSch *)malloc(sizeof(schTaskSch));
 	memset(taskSch, 0, sizeof(schTaskSch));
-	int sch = schCreateTaskPool(taskSch, 2, SCH_FLAG_NO_AFM, 48);
+	int sch = schCreateTaskPool(taskSch, -1, SCH_FLAG_NO_AFM, 48);
 	if (sch != SCH_OK)
 		throw RuntimeException(schErrorMsg(sch));
 

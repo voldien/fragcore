@@ -140,13 +140,13 @@ namespace fragcore {
 		 */
 		Vector3 getVertexP(const Vector3 &normal) const noexcept {
 			Vector3 res = this->mhalfsize;
-			if (normal.x() >= 0.0f){
+			if (normal.x() >= 0.0f) {
 				res[0] = res.x() + this->mcenter.x();
 			}
-			if (normal.y() >= 0.0f){
-				res[1] =  res.y() + this->mcenter.y();
+			if (normal.y() >= 0.0f) {
+				res[1] = res.y() + this->mcenter.y();
 			}
-			if (normal.z() >= 0.0f){
+			if (normal.z() >= 0.0f) {
 				res[2] = res.z() + this->mcenter.z();
 			}
 			return res;

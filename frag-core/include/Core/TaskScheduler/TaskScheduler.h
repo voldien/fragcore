@@ -44,6 +44,7 @@ namespace fragcore {
 		virtual void run() override;
 		virtual void terminate() override;
 		virtual void wait() override;
+
 		virtual void lock() override;
 		virtual void unLock() override;
 
