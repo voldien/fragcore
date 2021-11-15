@@ -27,7 +27,7 @@ namespace fragcore {
 	 * @brief
 	 *
 	 */
-	class FVDECLSPEC Task : UIDObject {
+	class FVDECLSPEC Task : public Object {
 	  public:
 		virtual ~Task() = default;
 
@@ -37,6 +37,9 @@ namespace fragcore {
 
 		virtual void Execute() noexcept = 0;
 		virtual void Complete() noexcept = 0;
+
+		template <typename... Args> void succeed(Args &&... args) {}
+		template <typename... Args> void precede(Args &&... args) {}
 
 	  private:
 		Ref<IScheduler> scheduler;

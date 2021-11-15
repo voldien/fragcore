@@ -21,12 +21,9 @@
 #include "../Ref.h"
 #include "../RefPtr.h"
 #include "IScheduler.h"
-#if defined(FRAGVIEW_CORE_INTERNAL_IMP)
-#include <taskSch.h>
-#endif
 #include <map>
 
-//TODO relocate to its own module.
+// TODO relocate to its own module.
 namespace fragcore {
 	/**
 	 * @brief
@@ -49,11 +46,7 @@ namespace fragcore {
 		virtual void unLock() override;
 
 	  private:
-#ifdef FRAGVIEW_CORE_INTERNAL_IMP
-		schTaskSch *sch;
-#else
 		void *sch;
-#endif
 		std::map<int, Task *> tasks;
 	};
 } // namespace fragcore

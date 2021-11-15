@@ -22,16 +22,16 @@ Hash::~Hash() { free(this->context); }
 
 void Hash::update(const void *pdata, size_t nbytes) {
 	switch (this->algorithm) {
-	case MD5:
+	case Hash::ALGORITHM::MD5:
 		nbytes += MD5_Update((MD5_CTX *)this->context, pdata, nbytes);
 		break;
-	case SHA128:
+	case Hash::ALGORITHM::SHA128:
 		nbytes += SHA1_Update((SHA_CTX *)this->context, pdata, nbytes);
 		break;
-	case SHA256:
+	case Hash::ALGORITHM::SHA256:
 		nbytes += SHA256_Update((SHA256_CTX *)this->context, pdata, nbytes);
 		break;
-	case SHA512:
+	case Hash::ALGORITHM::SHA512:
 		nbytes += SHA512_Update((SHA512_CTX *)this->context, pdata, nbytes);
 		break;
 	default:
@@ -56,13 +56,13 @@ void Hash::update(Ref<IO> &io) {
 
 void Hash::final(std::vector<unsigned char> &hash) {
 	switch (this->algorithm) {
-	case MD5:
+	case Hash::ALGORITHM::MD5:
 		hash.resize(MD5_DIGEST_LENGTH);
 		MD5_Final(hash.data(), (MD5_CTX *)this->context);
 		break;
-	case SHA128:
-	case SHA256:
-	case SHA512:
+	case Hash::ALGORITHM::SHA128:
+	case Hash::ALGORITHM::SHA256:
+	case Hash::ALGORITHM::SHA512:
 	default:
 		throw NotSupportedException("Not supported");
 	}
@@ -76,10 +76,10 @@ void Hash::reset() noexcept {
 
 unsigned int Hash::getResultSize() const {
 	switch (this->getAlgorithm()) {
-	case MD5:
-	case SHA128:
-	case SHA256:
-	case SHA512:
+	case Hash::ALGORITHM::MD5:
+	case Hash::ALGORITHM::SHA128:
+	case Hash::ALGORITHM::SHA256:
+	case Hash::ALGORITHM::SHA512:
 		return 0;
 	default:
 		assert(0);
@@ -95,21 +95,21 @@ void Hash::initHash(ALGORITHM algorithm) {
 
 	/*	*/
 	switch (algorithm) {
-	case MD5:
+	case Hash::ALGORITHM::MD5:
 		this->context = malloc(sizeof(MD5_CTX));
 		MD5_Init((MD5_CTX *)this->context);
 		break;
-	case SHA128:
+	case Hash::ALGORITHM::SHA128:
 		this->context = malloc(sizeof(SHA_CTX));
 		SHA1_Init((SHA_CTX *)this->context);
 		break;
-	case SHA224:
+	case Hash::ALGORITHM::SHA224:
 		throw NotSupportedException();
-	case SHA256:
+	case Hash::ALGORITHM::SHA256:
 		this->context = malloc(sizeof(SHA256_CTX));
 		SHA256_Init((SHA256_CTX *)this->context);
 		break;
-	case SHA512:
+	case Hash::ALGORITHM::SHA512:
 		throw NotSupportedException();
 	default:
 		throw InvalidArgumentException("Invalid hash algorithm - {}", algorithm);

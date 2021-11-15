@@ -32,7 +32,7 @@ namespace fragcore {
 	/**
 	 *
 	 */
-	enum CLEARBITMASK { // TODO rename
+	enum class CLEARBITMASK { // TODO rename
 		eColor = 0x1,	/*	Clear color.    */
 		eDepth = 0x2,	/*	Clear depth.    */
 		eStencil = 0x4, /*	Clear stencil.  */
@@ -44,7 +44,7 @@ namespace fragcore {
 	class FVDECLSPEC IRenderer : public ICompute {
 	  public:
 		/*	TODO rename and fix enum names.	*/
-		enum State {
+		enum class State {
 			eDepthTest = 0x1, /*	Perform depth test on pixels.   */
 			eStencilTest,	  /*	Perform stencil test.   */
 			eScissorTest,	  /*  */

@@ -8,6 +8,6 @@ stdSemaphore::stdSemaphore() {
 		throw RuntimeException(fmt::format("Failed to create semaphore {}", schErrorMsg(error)));
 }
 
-void stdSemaphore::lock() { int status = schSemaphoreWait(this->semaphore); }
-void stdSemaphore::unlock() { int status = schSemaphorePost(this->semaphore); }
-void stdSemaphore::wait(long int nanoTimeout) { int status = schSemaphoreWait(this->semaphore); }
+void stdSemaphore::lock() { int rc = schSemaphoreWait(this->semaphore); }
+void stdSemaphore::unlock() { int rc = schSemaphorePost(this->semaphore); }
+void stdSemaphore::wait(long int nanoTimeout) { int rc = schSemaphoreWait(this->semaphore); }

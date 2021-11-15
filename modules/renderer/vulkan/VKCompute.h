@@ -1,6 +1,7 @@
-#ifndef _FRAG_CORE_ICOMPUTE_H_
-#define _FRAG_CORE_ICOMPUTE_H_ 1
-#include "RenderPrerequisites.h"
+#ifndef _FRAG_CORE_VK_COMPUTE_H_
+#define _FRAG_CORE_VK_COMPUTE_H_ 1
+#include "../ICompute.h"
+#include "../RenderPrerequisites.h"
 #include <Core/Module.h>
 #include <Core/Ref.h>
 #include <Core/SmartReference.h>
@@ -10,7 +11,7 @@ namespace fragcore {
 	/**
 	 *
 	 */
-	class FVDECLSPEC ICompute : public Module {
+	class FVDECLSPEC VKCompute : public ICompute {
 	  public:
 		virtual void OnInitialization();
 		virtual void OnDestruction();
