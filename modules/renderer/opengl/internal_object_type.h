@@ -6,7 +6,7 @@
 #include "../RenderDesc.h"
 #include <../RendererWindow.h>
 #include <GL/glew.h>
-#include <SDL2/SDL.h>
+#include <SDL2/SDL_video.h>
 
 namespace fragcore {
 

@@ -67,7 +67,7 @@ namespace fragcore {
 		virtual void execute(CommandList *list);
 
 		ICompute() = default;
-		ICompute(const ICompute &other) = delete;
+		ICompute(const ICompute &other) = default;
 		ICompute(ICompute &&other) = delete;
 		virtual ~ICompute() = default;
 	};

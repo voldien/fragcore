@@ -176,7 +176,7 @@ Collision *PhysicInterface::createCollision(const CollisionDesc *desc) {
 }
 void PhysicInterface::deleteCollision(Collision* collision){
 
-	btCollisionShape* shape;
+	btCollisionShape* shape = nullptr;
 
 	//shape = (btCollisionShape*)getPointerByIndex(collision);
 
