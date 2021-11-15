@@ -45,7 +45,7 @@ namespace fragcore {
 	// TODO rename so that it includes the name task.
 	class FVDECLSPEC IScheduler : public SmartReference {
 	  public:
-		virtual ~IScheduler() = 0;
+		virtual ~IScheduler() = default;
 
 		/**
 		 * @brief
