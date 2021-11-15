@@ -16,9 +16,16 @@ namespace fragcore {
 			this->d = 0;
 		}
 		Plane(const Vector3 &point, const Vector3 &normal) noexcept { this->setNormalAndPoint(normal, point); }
-		Plane(const Plane &plane) noexcept = default;
+		Plane(const Plane &other) noexcept {
+			this->normal = other.normal;
+			this->d = other.d;
+		}
 
-		Plane &operator=(const Plane &other) = default;
+		Plane &operator=(const Plane &other) {
+			this->normal = other.normal;
+			this->d = other.d;
+			return *this;
+		}
 
 		/**
 		 * Get normal of plane.
