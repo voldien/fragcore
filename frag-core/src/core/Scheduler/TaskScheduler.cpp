@@ -1,4 +1,5 @@
 #include "Core/TaskScheduler/TaskScheduler.h"
+#include <atomic>
 #include <taskSch.h>
 
 using namespace fragcore;

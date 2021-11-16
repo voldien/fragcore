@@ -25,10 +25,6 @@
 #include "IO.h"
 #include <condition_variable>
 #include <thread>
-// TODO remove
-#if defined(FRAG_CORE_INTERNAL_IMP) // TODO resolve to a single file or something later
-#include <taskSch.h>
-#endif
 #include <map>
 
 namespace fragcore {
