@@ -5,13 +5,14 @@
 using namespace fragcore;
 TaskScheduler::TaskScheduler() : TaskScheduler(-1, 48) {}
 
-TaskScheduler::TaskScheduler(int cores, unsigned int maxPackagesPool) {
+TaskScheduler::TaskScheduler(int cores, unsigned int maxPackagesPool) : sch(nullptr) {
 	schTaskSch *taskSch = nullptr;
 
 	schAllocateTaskPool(&taskSch);
 	int sch = schCreateTaskPool(taskSch, cores, SCH_FLAG_NO_AFM, maxPackagesPool);
-	if (sch != SCH_OK)
-		throw RuntimeException(schErrorMsg(sch));
+	if (sch != SCH_OK) {
+		throw RuntimeException("Failed to create Scheduler: {}", schErrorMsg(sch));
+	}
 
 	this->sch = taskSch;
 }
@@ -21,8 +22,9 @@ TaskScheduler::~TaskScheduler() {
 	this->terminate();
 	int rc = schReleaseTaskSch(taskSch);
 	/*	Release.	*/
-	free(taskSch);
+
 	/*	Reset memory.	*/
+	free(this->sch);
 	this->sch = nullptr;
 }
 

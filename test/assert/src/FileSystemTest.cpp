@@ -10,23 +10,26 @@
 
 using namespace fragcore;
 
+class FileSystemTest : public testing::Test {
+  public:
+	void SetUp() override { this->sche = Ref<IScheduler>(new TaskScheduler()); }
+
+	Ref<IScheduler> sche{nullptr};
+};
+
 TEST(FileSystem, FileSystem_Without_Calling_Create_Throw_Exception) {
 	ASSERT_THROW(FileSystem::getFileSystem(), RuntimeException);
 }
 
 TEST(FileSystem, Create_FileSystem_Without_Task_Scheduler) { ASSERT_NO_THROW(FileSystem::createFileSystem()); }
 
-TEST(FileSystem, Create_FileSystem_With_Task_Scheduler_Throw_No_Exception) {
-	TaskScheduler *task = new TaskScheduler();
-	Ref<IScheduler> refTask = Ref<IScheduler>(task);
+TEST_F(FileSystemTest, Create_With_Task_Scheduler_Throw_No_Exception) {
 
-	ASSERT_NO_THROW(FileSystem::createFileSystem(refTask));
+	ASSERT_NO_THROW(FileSystem::createFileSystem(this->sche));
 }
 
-TEST(FileSystem, FileSystem_With_Task_Scheduler_Check_Supported) {
-	TaskScheduler *task = new TaskScheduler();
-	Ref<IScheduler> refTask = Ref<IScheduler>(task);
-	FileSystem *fileSystem = FileSystem::createFileSystem(refTask);
+TEST_F(FileSystemTest, Create_With_Task_Scheduler_Check_Supported) {
+	FileSystem *fileSystem = FileSystem::createFileSystem(this->sche);
 
 	ASSERT_TRUE(fileSystem->isASyncSupported());
 }

@@ -93,9 +93,7 @@ std::string FileSystem::getAbsolutePath(const char *path) {
 	return "";
 }
 
-std::string FileSystem::getRelativePath(const char *path) {
-		return "";
-}
+std::string FileSystem::getRelativePath(const char *path) { return ""; }
 
 const char *FileSystem::getFileExtension(const char *path) {
 	const char *dot = strrchr(path, '.');

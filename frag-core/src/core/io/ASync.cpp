@@ -21,7 +21,7 @@ ASyncHandle ASyncIO::asyncOpen(Ref<IO> &io) {
 	if (*scheduler == nullptr)
 		throw RuntimeException("Async not initialized with a scheduler object");
 	/*  Check parameters.   */
-	if (!*io)
+	if (*io == nullptr)
 		throw InvalidArgumentException("Invalid IO reference.");
 
 	/*	*/
@@ -91,6 +91,7 @@ void ASyncIO::asyncReadFile(ASyncHandle handle, Ref<IO> &writeIO, AsyncComplete 
 
 void ASyncIO::asyncWriteFile(ASyncHandle handle, char *buffer, unsigned int size, AsyncComplete complete) {
 	int error;
+
 	AsyncObject *ao = getObject(handle);
 
 	assert(ao);
@@ -99,11 +100,14 @@ void ASyncIO::asyncWriteFile(ASyncHandle handle, char *buffer, unsigned int size
 		throw InvalidPointerException("");
 	}
 
+	BufferIO bufferIO(buffer, size);
+
 	if (!ao->ref->isWriteable()) {
 		throw RuntimeException(fmt::format("IO object is not writable {}", ao->ref->getUID()));
 	}
+
 	// TODO perhaps can to use the IOBuffer has a interface object for reduced coupling and higher cohesion.
-	BufferIO bufferIO(buffer, size);
+
 	/*  Assign variables.   */
 	ao->sem = new stdSemaphore();
 
@@ -257,9 +261,7 @@ void ASyncIO::async_write_io(Task *task) {
 	return;
 }
 
-ASyncHandle ASyncIO::generateHandle(){
-	return this->uidGenerator.getNextUID();
-}
+ASyncHandle ASyncIO::generateHandle() { return this->uidGenerator.getNextUID(); }
 
 ASyncIO::AsyncObject *ASyncIO::getObject(ASyncHandle handle) {
 
@@ -287,8 +289,7 @@ ASyncIO::AsyncObject *ASyncIO::createObject(ASyncHandle handle) { return &this->
 void ASyncIO::setScheduleReference(const Ref<IScheduler> &sch) { this->scheduler = sch; }
 
 ASyncIO::~ASyncIO() {
-	//TODO add support for close all the handle.
-
+	// TODO add support for close all the handle.
 }
 
 ASyncIO::ASyncIO() { this->scheduler = nullptr; }
