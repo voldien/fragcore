@@ -74,10 +74,11 @@ namespace fragcore {
 		static const std::string &getOperatingSystemName() noexcept;
 		static const char *getOperatingSystemName(OperatingSystem os);
 
+		//TODO add support for NUMA.
 		static std::string getCPUName() noexcept;
 		static const char *getCPUArchitecture() noexcept;
-		static unsigned long getCPUFrequence() noexcept;
-		static bool isSupportedInstruction() noexcept;
+		static unsigned long getCPUFrequency() noexcept;
+		static bool isSupportedInstruction(SIMD instruction) noexcept;
 		static SIMD getSupportedSIMD();
 
 		static Endianness getEndianness() noexcept;

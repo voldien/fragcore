@@ -83,7 +83,12 @@ const char *SystemInfo::getCPUArchitecture() noexcept {
 	}
 }
 
-unsigned long SystemInfo::getCPUFrequence() noexcept { return iware::cpu::frequency(); }
+unsigned long SystemInfo::getCPUFrequency() noexcept { return iware::cpu::frequency(); }
+
+bool SystemInfo::isSupportedInstruction(SIMD instruction) noexcept {
+	iware::cpu::instruction_set_t _instruction;
+	return iware::cpu::instruction_set_supported(_instruction);
+}
 
 SystemInfo::SIMD SystemInfo::getSupportedSIMD() {
 	unsigned int supportedSIMD = 0;
