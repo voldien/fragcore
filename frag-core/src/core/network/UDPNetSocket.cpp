@@ -1,4 +1,5 @@
 #include "Core/Network/INetAddress.h"
+#include "Core/Network/TCPUDPAddress.h"
 #include "Core/Network/UDPSocket.h"
 #include <arpa/inet.h>
 #include <cassert>
@@ -18,41 +19,34 @@
 using namespace fragcore;
 
 UDPNetSocket::UDPNetSocket() : netStatus(NetStatus::Status_Disconnected), socket(0) {}
-UDPNetSocket::~UDPNetSocket() {}
+
+UDPNetSocket::UDPNetSocket(int socket) : UDPNetSocket() {
+	this->socket = socket;
+	// TODO get the status of the socket.
+	this->netStatus = NetStatus::Status_Done;
+}
+UDPNetSocket::~UDPNetSocket() { this->close(); }
 
 NetSocket::TransportProtocol UDPNetSocket::getTransportProtocol() const noexcept {
 	return NetSocket::TransportProtocol::TransportProtocolUDP;
 }
 
-int UDPNetSocket::close() { int status = ::close(socket); }
+int UDPNetSocket::close() {
+	if (this->socket > 0) {
+		int rc = ::close(this->socket);
+		if (rc != 0)
+			throw RuntimeException("{}", strerror(errno));
+		this->socket = 0;
+	}
+	netStatus = NetStatus::Status_Disconnected;
+	return 0;
+}
+int UDPNetSocket::bind(const INetAddress &p_addr) { return 0; }
 
-// int UDPNetSocket::bind(std::string &IPaddr, unsigned int port) {
-// 	socklen_t addrlen;	   /*	*/
-// 	struct sockaddr *addr; /*	*/
-// 	union {
-// 		struct sockaddr_in addr4;  /*	*/
-// 		struct sockaddr_in6 addr6; /*	*/
-// 	} addrU;
-// 	// int domain = option->affamily;
-
-// 	/*	Bind process to socket.	*/
-// 	if (::bind(socket, (struct sockaddr *)addr, addrlen) < 0) {
-// 		throw RuntimeException("Failed to bind UDP socket");
-// 		// sntLogErrorPrintf("Failed to bind TCP socket, %s.\n", strerror(errno));
-// 		// sntDisconnectSocket(connection);
-// 	}
-// }
 int UDPNetSocket::listen(unsigned int maxListen) {
 	if (::listen(socket, maxListen) < 0) {
-		// sntLogErrorPrintf("listen failed, %s.\n", strerror(errno));
-		// sntDisconnectSocket(connection);
 	}
 }
-
-// int UDPNetSocket::connect(std::string &ip, unsigned int port) {
-// 	// IPAddress ipNet(ip);
-// 	// return this->connect(static_cast<const INetAddress &>(ipNet), port);
-// }
 
 int UDPNetSocket::connect(const INetAddress &p_addr) {
 	socklen_t addrlen;			 /*	*/
@@ -73,14 +67,23 @@ int UDPNetSocket::connect(const INetAddress &p_addr) {
 	}
 }
 
-int UDPNetSocket::bind(const INetAddress &p_addr) { return 0; }
 int UDPNetSocket::poll(int p_type, int timeout) const { return 0; }
 int UDPNetSocket::recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddress &r_ip, bool p_peek) { return 0; }
-int UDPNetSocket::recv( void *pbuffer, int p_len, int &sent, bool peek) { return 0; }
+int UDPNetSocket::recv(void *pbuffer, int p_len, int &sent, bool peek) { return 0; }
 int UDPNetSocket::send(const uint8_t *p_buffer, int p_len, int &r_sent) { return 0; }
 int UDPNetSocket::sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const INetAddress &p_ip) { return 0; }
 long int UDPNetSocket::send(const void *pbuffer, int p_len, int &sent) { return 0; }
-Ref<NetSocket> UDPNetSocket::accept(INetAddress &r_ip) {}
+Ref<NetSocket> UDPNetSocket::accept(INetAddress &r_ip) {
+	struct sockaddr tobuffer; /*	*/
+	socklen_t aclen = 0;	  /*	*/
+	int aaccept_socket = ::accept(this->socket, &tobuffer, &aclen);
+	if (aaccept_socket < 0) {
+		throw SystemException(errno, std::system_category(), "Failed to accept TCP connection");
+	}
+
+	UDPNetSocket *_newsocket = new UDPNetSocket(aaccept_socket);
+	return Ref<NetSocket>(_newsocket);
+}
 UDPNetSocket::NetStatus UDPNetSocket::accept(NetSocket &socket) {}
 int UDPNetSocket::read() { return 0; }
 int UDPNetSocket::write() { return 0; }

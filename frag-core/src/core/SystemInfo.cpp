@@ -8,7 +8,7 @@ static iware::system::OS_info_t info;
 SystemInfo::KernelSystem SystemInfo::getSystemKernel() noexcept {
 	switch (iware::system::kernel_info().variant) {
 	default:
-		return SystemInfo::UnKnownKernel;
+		return SystemInfo::KernelSystem::UnKnownKernel;
 	}
 	// iware::system::OS_
 }
@@ -21,19 +21,19 @@ SystemInfo::OperatingSystem SystemInfo::getOperatingSystem() noexcept {
 
 	/*  */
 	if (strcmp(info.name.c_str(), "Linux") == 0)
-		return SystemInfo::Linux;
+		return SystemInfo::OperatingSystem::Linux;
 	if (strcmp(info.name.c_str(), "Windows") == 0)
-		return SystemInfo::Window;
+		return SystemInfo::OperatingSystem::Window;
 	if (strcmp(info.name.c_str(), "Android") == 0)
-		return SystemInfo::Android;
+		return SystemInfo::OperatingSystem::Android;
 	if (strcmp(info.name.c_str(), "unix") == 0)
-		return SystemInfo::Unix;
+		return SystemInfo::OperatingSystem::Unix;
 	if (strcmp(info.name.c_str(), "iOS") == 0)
-		return SystemInfo::IOS;
+		return SystemInfo::OperatingSystem::IOS;
 	if (strcmp(info.name.c_str(), "Mac OS X") == 0)
-		return SystemInfo::Mac;
+		return SystemInfo::OperatingSystem::Mac;
 
-	return SystemInfo::Unknown;
+	return SystemInfo::OperatingSystem::Unknown;
 }
 
 const std::string &SystemInfo::getOperatingSystemName() noexcept {
@@ -46,19 +46,19 @@ const char *SystemInfo::getOperatingSystemName(SystemInfo::OperatingSystem os) {
 
 	/*  */
 	switch (os) {
-	case SystemInfo::Linux:
+	case SystemInfo::OperatingSystem::Linux:
 		return "Linux";
-	case SystemInfo::Window:
+	case SystemInfo::OperatingSystem::Window:
 		return "Window";
-	case SystemInfo::Unix:
+	case SystemInfo::OperatingSystem::Unix:
 		return "Unix";
-	case SystemInfo::Android:
+	case SystemInfo::OperatingSystem::Android:
 		return "Android";
-	case SystemInfo::Mac:
+	case SystemInfo::OperatingSystem::Mac:
 		return "Mac";
-	case SystemInfo::IOS:
+	case SystemInfo::OperatingSystem::IOS:
 		return "IOS";
-	case SystemInfo::FreeBSD:
+	case SystemInfo::OperatingSystem::FreeBSD:
 		return "FreeBSD";
 	default:
 		throw InvalidArgumentException("Invalid Operating System Enumerator");

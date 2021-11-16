@@ -21,6 +21,11 @@
 #include "IBase.h"
 
 namespace fragcore {
+
+	/**
+	 * @brief
+	 *
+	 */
 	class FVDECLSPEC Base16 : public IBase {
 	  public:
 		virtual void encode(Ref<IO> &input, Ref<IO> &encoded) override;

@@ -22,7 +22,7 @@
 
 namespace fragcore {
 	/**
-	 * @brief 
+	 * @brief
 	 *
 	 */
 	class FVDECLSPEC UDPNetSocket : public NetSocket {
@@ -42,7 +42,7 @@ namespace fragcore {
 
 		virtual int recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddress &r_ip,
 							 bool p_peek = false) override;
-		virtual int recv( void *pbuffer, int p_len, int &sent, bool peek = false) override;
+		virtual int recv(void *pbuffer, int p_len, int &sent, bool peek = false) override;
 		virtual int send(const uint8_t *p_buffer, int p_len, int &r_sent) override;
 		virtual int sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const INetAddress &p_ip) override;
 		virtual long int send(const void *pbuffer, int p_len, int &sent) override;
@@ -55,6 +55,16 @@ namespace fragcore {
 		virtual void setBlocking(bool blocking) override;
 
 		virtual NetStatus getStatus() const noexcept override;
+
+	  protected:
+		UDPNetSocket(int socket);
+
+		bool isNetworkLayerSupported(INetAddress::NetworkProtocol protocol);
+		bool isValidNetworkAddress(const INetAddress &address);
+
+		void setTimeout(long int nanoSeconds);
+		static int getDomain(const INetAddress &address);
+		// static size_t setupIPAddress(sockaddr *addr, const INetAddress &p_addr, uint16_t p_port);
 
 	  private:
 		int socket;

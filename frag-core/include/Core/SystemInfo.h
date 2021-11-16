@@ -31,7 +31,7 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC SystemInfo {
 	  public:
-		enum OperatingSystem {
+		enum class OperatingSystem {
 			Unix = 0x1,				/*	*/
 			Linux = (0x2 | Unix),	/*	*/
 			Window = 0x4,			/*	*/
@@ -42,7 +42,7 @@ namespace fragcore {
 			Unknown = (1 << 31)		/*  */
 		};
 
-		enum SIMD {
+		enum class SIMD {
 			NONE = (0 << 0),	/*	No HPM SIMD exention flag.	*/
 			MMX = (1 << 1),		/*	MMX. (Yet not supported)	*/
 			SSE = (1 << 2),		/*	SSE (Streaming SIMD Extensions).	*/
@@ -57,7 +57,7 @@ namespace fragcore {
 			NEON = (1 << 11),	/*	ARM	FPU (floating-point unit) feature.	*/
 		};
 
-		enum KernelSystem {
+		enum class KernelSystem {
 			UnKnownKernel,
 			WindowsNT,
 			LinuxGNU,
@@ -85,16 +85,36 @@ namespace fragcore {
 		static unsigned long int systemMemorySize();
 		static unsigned int getPageSize();
 
+		/**
+		 * @brief
+		 *
+		 * @return unsigned int
+		 */
 		static unsigned int getCPUCoreCount();
 
+		/**
+		 * @brief
+		 *
+		 * @return unsigned int
+		 */
 		static unsigned int getCPUCacheLine();
 
+		/**
+		 * @brief Get the Appliation Name object
+		 *
+		 * @return const char*
+		 */
 		static const char *getAppliationName();
 
 		static const char *getUserName();
 
 		static bool supportsVibration();
 
+		/**
+		 * @brief Get the Current Directory object
+		 *
+		 * @return const char*
+		 */
 		static const char *getCurrentDirectory();
 
 		// TODO relocate

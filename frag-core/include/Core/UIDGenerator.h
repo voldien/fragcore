@@ -37,7 +37,9 @@ namespace fragcore {
 		UIDGenerator &operator=(UIDGenerator &&other) = default;
 
 		/**
-		 *	@Return next unique id.
+		 * @brief Get the Next U I D object
+		 *
+		 * @return next unique id.
 		 */
 		T getNextUID() noexcept { return this->nextUID++; }
 

@@ -1,9 +1,5 @@
 #include "Window/WindowManager.h"
 
-/*	TODO relocate to be part of the platform specific.	*/
-// #include "SDLDisplay.h"
-// #include "SDLWindow.h"
-
 using namespace fragcore;
 
 Display *WindowManager::getDisplay(unsigned int index) noexcept {
