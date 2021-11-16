@@ -6,7 +6,7 @@
 #include "../RenderDesc.h"
 #include <../RendererWindow.h>
 #include <GL/glew.h>
-#include <SDL2/SDL_video.h>
+
 
 namespace fragcore {
 
@@ -15,7 +15,7 @@ namespace fragcore {
 	 */
 	typedef struct OpenGLCore_t {
 		void *openglcontext;
-		SDL_Window *tpmwindow;
+		void*tpmwindow;
 		fragcore::RendererWindow *drawwindow;
 
 		bool useCoreProfile;

@@ -1,7 +1,7 @@
 #include "Core/Library.h"
 
-#include <SDL2/SDL.h>
 #include <fmt/core.h>
+#include <unistd.h>
 #include <utility>
 using namespace fragcore;
 
@@ -21,31 +21,31 @@ Library::~Library() { /*	Nothing to release. Done by the kernel itself.	*/
 }
 
 bool Library::open(const char *clibrary) {
-	this->mlib = SDL_LoadObject(clibrary);
+	this->mlib = dlopen(clibrary, RTLD_LAZY | RTLD_NODELETE);
 
 	/*	Check for error.	*/
-	if (this->mlib == nullptr) {
+	// if (this->mlib == nullptr) {
 
-		throw RuntimeException("Failed open library : {}\n", SDL_GetError());
-	}
+	// 	throw RuntimeException("Failed open library : {}\n", SDL_GetError());
+	// }
 
 	return this->mlib != nullptr;
 }
 
 void Library::close() {
-	SDL_UnloadObject(this->mlib);
+	dlclose(this->mlib);
 	this->mlib = nullptr;
 }
 
 bool Library::isValid() const { return this->mlib != nullptr; }
 
 void *Library::getfunc(const char *pProcName) {
-	void *func = SDL_LoadFunction(this->mlib, pProcName);
+	void *func = dlsym(this->mlib, pProcName);
 
 	if (func == nullptr) {
-		std::string sdlerror = fmt::format("Failed to load function {}, {} from library {}.\n", pProcName,
-										   SDL_GetError(), this->name.c_str());
-		throw RuntimeException(sdlerror);
+		// std::string sdlerror = fmt::format("Failed to load function {}, {} from library {}.\n", pProcName,
+		// 								   SDL_GetError(), this->name.c_str());
+		//throw RuntimeException(sdlerror);
 	}
 
 	return func;

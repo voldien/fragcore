@@ -71,7 +71,7 @@ namespace fragcore {
 				red = 255;
 
 				green = temp;
-				green = 99.4708025861 * log(green) - 161.1195681661;
+				green = 99.4708025861 * std::log(green) - 161.1195681661;
 
 				if (temp <= 19) {
 
@@ -79,15 +79,15 @@ namespace fragcore {
 				} else {
 
 					blue = temp - 10;
-					blue = 138.5177312231 * log(blue) - 305.0447927307;
+					blue = 138.5177312231 * std::log(blue) - 305.0447927307;
 				}
 			} else {
 
 				red = temp - 60;
-				red = 329.698727446 * pow(red, -0.1332047592);
+				red = 329.698727446 * std::pow(red, -0.1332047592);
 
 				green = temp - 60;
-				green = 288.1221695283 * pow(green, -0.0755148492);
+				green = 288.1221695283 * std::pow(green, -0.0755148492);
 
 				blue = 255;
 			}

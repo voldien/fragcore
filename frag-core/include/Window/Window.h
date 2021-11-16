@@ -43,9 +43,9 @@ namespace fragcore {
 
 		virtual void minimize() = 0;
 
-		virtual void setTitle(const char *title) = 0;
+		virtual void setTitle(const std::string &title) = 0;
 
-		virtual const char *getTitle() const = 0;
+		virtual std::string getTitle() const = 0;
 
 		// TODO change the type to image.
 		virtual void setIcon(void *) = 0;

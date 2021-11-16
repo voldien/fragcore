@@ -1,16 +1,18 @@
 #ifndef _FRAGCORE_VULKAN_INTERNAL_OBJECT_TYPE_H_
 #define _FRAGCORE_VULKAN_INTERNAL_OBJECT_TYPE_H_ 1
 /*	Expose the correct platform specific surface creation functions.	*/
-#if defined(FV_UNIX)
-#define VK_USE_PLATFORM_XLIB_KHR
-#define VK_USE_PLATFORM_WAYLAND_KHR
-#elif defined(FV_WINDOW)
-#define VK_USE_PLATFORM_WIN32_KHR
-#elif defined(FV_ANDROID)
-#define VK_USE_PLATFORM_ANDROID_KHR
-#elif defined(FV_MACOSX)
-#define VK_USE_PLATFORM_MACOS_MVK
-#endif
+
+
+// #if defined(FV_UNIX)
+// #define VK_USE_PLATFORM_XLIB_KHR
+// #define VK_USE_PLATFORM_WAYLAND_KHR
+// #elif defined(FV_WINDOW)
+// #define VK_USE_PLATFORM_WIN32_KHR
+// #elif defined(FV_ANDROID)
+// #define VK_USE_PLATFORM_ANDROID_KHR
+// #elif defined(FV_MACOSX)
+// #define VK_USE_PLATFORM_MACOS_MVK
+// #endif
 
 #include "../Buffer.h"
 #include "../RenderDesc.h"

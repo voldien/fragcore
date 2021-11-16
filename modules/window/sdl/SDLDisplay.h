@@ -1,7 +1,6 @@
 #ifndef _FRAG_CORE_SDLDISPLAY_H_
 #define _FRAG_CORE_SDLDISPLAY_H_ 1
-#include"../../Def.h"
-#include"../Display.h"
+#include<Window/Display.h>
 
 namespace fragcore {
 
@@ -9,7 +8,7 @@ namespace fragcore {
 	 *
 	 */
 	class FVDECLSPEC SDLDisplay : public Display {
-	public:
+	  public:
 		SDLDisplay(int index);
 
 		unsigned int x() const override;
@@ -26,15 +25,17 @@ namespace fragcore {
 
 		void getDPI(DPI *dpi) override;
 
-		//fragcore::TextureFormat getFormat() override;
+		// fragcore::TextureFormat getFormat() override;
 
-	protected:
+	  protected:
 		unsigned int translateFormat(unsigned int format);
-	private:
+
+	  private:
 		unsigned int index;
-	public:
+
+	  public:
 		static int getNumDisplays();
 	};
-}
+} // namespace fragcore
 
 #endif

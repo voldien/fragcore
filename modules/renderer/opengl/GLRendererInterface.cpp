@@ -14,7 +14,7 @@
 #include <../Sync.h>
 #include <GL/glew.h>
 #include <SDL2/SDL.h>
-
+#include <SDL2/SDL_video.h>
 #include <Window/WindowManager.h>
 #include <fmt/core.h>
 #include <vector>
