@@ -23,16 +23,16 @@ Hash::~Hash() { free(this->context); }
 void Hash::update(const void *pdata, size_t nbytes) {
 	switch (this->algorithm) {
 	case Hash::ALGORITHM::MD5:
-		nbytes += MD5_Update((MD5_CTX *)this->context, pdata, nbytes);
+		nbytes += MD5_Update(static_cast<MD5_CTX *>(this->context), pdata, nbytes);
 		break;
 	case Hash::ALGORITHM::SHA128:
-		nbytes += SHA1_Update((SHA_CTX *)this->context, pdata, nbytes);
+		nbytes += SHA1_Update(static_cast<SHA_CTX *>(this->context), pdata, nbytes);
 		break;
 	case Hash::ALGORITHM::SHA256:
-		nbytes += SHA256_Update((SHA256_CTX *)this->context, pdata, nbytes);
+		nbytes += SHA256_Update(static_cast<SHA256_CTX *>(this->context), pdata, nbytes);
 		break;
 	case Hash::ALGORITHM::SHA512:
-		nbytes += SHA512_Update((SHA512_CTX *)this->context, pdata, nbytes);
+		nbytes += SHA512_Update(static_cast<SHA512_CTX *>(this->context), pdata, nbytes);
 		break;
 	default:
 		assert(0);
