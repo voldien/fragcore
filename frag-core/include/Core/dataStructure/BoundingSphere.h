@@ -88,6 +88,17 @@ namespace fragcore {
 			return *this;
 		}
 
+		friend bool operator==(const BoundingSphere &o1, const BoundingSphere &o2) noexcept {
+			if (&o1 == &o2)
+				return true;
+			else if (o1.center == o2.center && o1.radius == o2.radius)
+				return true;
+			else
+				return false;
+		}
+
+		friend bool operator!=(const BoundingSphere &o1, const BoundingSphere &o2) noexcept { return !(o1 == o2); }
+
 	  private:			/*	Private member attributes.	*/
 		float radius;	/*	Radius size.	*/
 		Vector3 center; /*	Center position in world space.*/
