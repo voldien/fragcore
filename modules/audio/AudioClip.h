@@ -26,9 +26,11 @@ namespace fragcore {
 
 		intptr_t getNativePtr() const override;
 
+		virtual ~AudioClip();
+
 	  protected:
 		AudioClip();
-		virtual ~AudioClip();
+
 	};
 } // namespace fragcore
 
