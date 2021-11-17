@@ -136,7 +136,7 @@ bool SystemInfo::supportsVibration() { return false; }
 
 unsigned long int SystemInfo::systemMemorySize() {
 	const auto memory = iware::system::memory();
-	return memory.physical_available;
+	return memory.physical_total;
 }
 
 const char *SystemInfo::getCurrentDirectory() {
