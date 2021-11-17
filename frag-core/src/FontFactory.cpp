@@ -216,9 +216,9 @@ using namespace fragcore;
 // 	desc.srgb = 0;
 
 // 	/*  sampler.    */
-// 	desc.sampler.AddressU = SamplerDesc::eRepeat;
-// 	desc.sampler.AddressV = SamplerDesc::eRepeat;
-// 	desc.sampler.AddressW = SamplerDesc::eRepeat;
+// 	desc.sampler.AddressU = SamplerDesc::Repeat;
+// 	desc.sampler.AddressV = SamplerDesc::Repeat;
+// 	desc.sampler.AddressW = SamplerDesc::Repeat;
 // 	desc.sampler.anisotropy = 8.0f;
 // 	desc.sampler.minFilter = SamplerDesc::eLinear;
 // 	desc.sampler.magFilter = SamplerDesc::eLinear;
@@ -486,9 +486,9 @@ using namespace fragcore;
 // 	// desc.srgb = 0;
 
 // 	// /*  sampler.    */
-// 	// desc.sampler.AddressU = SamplerDesc::eRepeat;
-// 	// desc.sampler.AddressV = SamplerDesc::eRepeat;
-// 	// desc.sampler.AddressW = SamplerDesc::eRepeat;
+// 	// desc.sampler.AddressU = SamplerDesc::Repeat;
+// 	// desc.sampler.AddressV = SamplerDesc::Repeat;
+// 	// desc.sampler.AddressW = SamplerDesc::Repeat;
 // 	// desc.sampler.anisotropy = 8.0f;
 // 	// desc.sampler.minFilter = SamplerDesc::eLinear;
 // 	// desc.sampler.magFilter = SamplerDesc::eLinear;

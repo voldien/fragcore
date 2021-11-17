@@ -34,15 +34,15 @@ void resetErrorFlag() {
 
 unsigned int getWrapMode(SamplerDesc::AddressMode mode) {
 	switch (mode) {
-	case SamplerDesc::eRepeat:
+	case SamplerDesc::Repeat:
 		return GL_REPEAT;
-	case SamplerDesc::eRepeatMirror:
+	case SamplerDesc::RepeatMirror:
 		return GL_MIRRORED_REPEAT;
-	case SamplerDesc::eClamp:
+	case SamplerDesc::Clamp:
 		return GL_CLAMP_TO_EDGE;
-	case SamplerDesc::eClampBorder:
+	case SamplerDesc::ClampBorder:
 		return GL_CLAMP_TO_BORDER;
-	case SamplerDesc::eNoAddressMode:
+	case SamplerDesc::NoAddressMode:
 	default:
 		throw InvalidArgumentException("Invalid address mode.");
 	}

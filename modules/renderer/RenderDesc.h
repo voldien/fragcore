@@ -60,11 +60,11 @@ namespace fragcore {
 		 *
 		 */
 		enum AddressMode {
-			eNoAddressMode,
-			eRepeat,	   /*  */
-			eRepeatMirror, /*  */
-			eClamp,		   /*  */
-			eClampBorder,  /*  */
+			NoAddressMode,
+			Repeat,		  /*  */
+			RepeatMirror, /*  */
+			Clamp,		  /*  */
+			ClampBorder,  /*  */
 		};
 
 		enum CompareFunc {
