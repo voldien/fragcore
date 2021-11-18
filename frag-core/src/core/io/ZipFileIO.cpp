@@ -96,7 +96,7 @@ void ZipFileIO::seek(long int nbytes, Seek seek) {
 	//		int sys_err;
 	////		zip_error_get(zip, &err, &sys_err);
 	////		zip_error_to_str(buf, sizeof(buf), err, errno);
-	////		throw InvalidArgumentException("can't open `{}':\n\t{}\n", path, buf));
+	////		throw InvalidArgumentException("can't open `{}':\n\t{}", path, buf));
 	//	}
 	//	//zip_fseek
 }

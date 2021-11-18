@@ -37,7 +37,7 @@ void *StackAllocator::alloc(size_t sizeBytes) {
 	mSize = sizeBytes;
 	mData = realloc(mData, sizeBytes);
 	if (!mData) {
-		// VDDebug::errorLog("Failed to allocate {} kb.\n", ( sizeBytes / 1024 ) );
+		// VDDebug::errorLog("Failed to allocate {} kb.", ( sizeBytes / 1024 ) );
 	}
 	return mData;
 }

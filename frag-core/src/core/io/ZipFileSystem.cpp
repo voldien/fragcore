@@ -25,7 +25,7 @@ IO *ZipFileSystem::openFile(const char *path, IO::IOMode mode) {
 		char buf[1024];
 		zip_error_get(zip, &err, &sys_err);
 		zip_error_to_str(buf, sizeof(buf), err, errno);
-		throw InvalidArgumentException("can't open `{}':\n\t{}\n", path, buf);
+		throw InvalidArgumentException("can't open `{}':\n\t{}", path, buf);
 	}
 
 	/*	*/
@@ -33,7 +33,7 @@ IO *ZipFileSystem::openFile(const char *path, IO::IOMode mode) {
 	if (err != 0) {
 		char buf[1024];
 		zip_error_to_str(buf, sizeof(buf), err, errno);
-		throw InvalidArgumentException("can't open `{}':\n\t{}\n", path, buf);
+		throw InvalidArgumentException("can't open `{}':\n\t{}", path, buf);
 	}
 
 	// TODO check if encryption and compression.
@@ -44,7 +44,7 @@ IO *ZipFileSystem::openFile(const char *path, IO::IOMode mode) {
 		char buf[1024];
 		zip_error_get(zip, &err, &sys_err);
 		zip_error_to_str(buf, sizeof(buf), err, errno);
-		throw InvalidArgumentException("can't open `{}':\n\t{}\n", path, buf);
+		throw InvalidArgumentException("can't open `{}':\n\t{}", path, buf);
 	}
 
 	return new ZipFileIO(zfile, index, Ref<ZipFileSystem>(this));
@@ -60,14 +60,14 @@ IO *ZipFileSystem::openFile(unsigned int index) {
 	err = zip_stat_index((struct zip *)this->pzip, index, 0, &stat);
 	if (err != 0) {
 		zip_error_to_str(buf, sizeof(buf), err, errno);
-		throw InvalidArgumentException("can't open `{}':\n\t{}\n", index, buf);
+		throw InvalidArgumentException("can't open `{}':\n\t{}", index, buf);
 	}
 
 	zfile = zip_fopen_index((struct zip *)this->pzip, index, 0);
 	if (!zfile) {
 		err = zip_get_error((struct zip *)this->pzip)->zip_err;
 		zip_error_to_str(buf, sizeof(buf), err, errno);
-		throw InvalidArgumentException("can't open index `{}':\n\t{}\n", index, buf);
+		throw InvalidArgumentException("can't open index `{}':\n\t{}", index, buf);
 	}
 
 	return new ZipFileIO(zfile, index, Ref<ZipFileSystem>(this));

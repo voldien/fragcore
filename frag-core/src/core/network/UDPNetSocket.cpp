@@ -61,7 +61,7 @@ int UDPNetSocket::connect(const INetAddress &p_addr) {
 
 	if (::connect(socket, addr, addrlen) < 0) {
 		throw RuntimeException("Failed to connect UDP socket");
-		// sntLogErrorPrintf("Failed to connect TCP, %s.\n", strerror(errno));
+		// sntLogErrorPrintf("Failed to connect TCP, %s.", strerror(errno));
 		// sntDisconnectSocket(connection);
 		// return NULL;
 	}

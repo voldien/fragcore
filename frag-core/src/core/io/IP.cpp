@@ -17,7 +17,7 @@ std::vector<IPInterface> IPInterface::getLocalInterface() {
 
 	while (tmp) {
 		if (tmp->ifa_addr && tmp->ifa_addr->sa_family == AF_PACKET) {
-			//printf("{}\n", tmp->ifa_name);
+			//printf("{}", tmp->ifa_name);
 			// tmp->ifa_addr
 		}
 
@@ -32,7 +32,7 @@ std::vector<IPInterface> IPInterface::getLocalInterface() {
 
 	// /*	Get interface list associated with the socket.	*/
 	// if(ioctl(connection->tcpsock, SIOCGIFCONF, &ifcon) < 0){
-	// 	sntLogErrorPrintf("ioctl %s.\n", strerror(errno));
+	// 	sntLogErrorPrintf("ioctl %s.", strerror(errno));
 	// }
 	return {};
 }

@@ -16,6 +16,10 @@ TEST_F(UDPNetworkTest, Create_Default_Correct_NetworkProtocol) {
 	ASSERT_EQ(netSocket.getTransportProtocol(), NetSocket::TransportProtocol::TransportProtocolUDP);
 }
 
+TEST_F(UDPNetworkTest, CreateLocal_Connect_No_Throw_Exception) {}
+
+TEST_F(UDPNetworkTest, CreateLocal_RecvFrom_No_Throw_Exception) {}
+
 TEST_F(UDPNetworkTest, CreateLocal_Bind_No_Throw_Exception) {
 	UDPNetSocket netSocket;
 	const int port = 43323;

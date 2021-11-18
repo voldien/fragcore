@@ -24,11 +24,12 @@
 
 namespace fragcore {
 	/**
-	 * @brief 
+	 * @brief
 	 *
 	 */
 	class FVDECLSPEC Log {
 	  public:
+
 		/**
 		 *	Verbosity level of the program.
 		 */
@@ -97,6 +98,8 @@ namespace fragcore {
 
 	  private:
 		static int logv(VERBOSITY verbosity, const char *format, va_list va);
+
+		Log() = default;
 	};
 } // namespace fragcore
 

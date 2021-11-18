@@ -105,7 +105,7 @@ const char *FileSystem::getFileExtension(const char *path) {
 void FileSystem::createFile(const char *path) {
 	FILE *f = fopen(path, "ab+");
 	if (f == nullptr)
-		throw RuntimeException("Failed to open file {}, {}.\n", path, strerror(errno));
+		throw RuntimeException("Failed to open file {}, {}", path, strerror(errno));
 	fclose(f);
 }
 

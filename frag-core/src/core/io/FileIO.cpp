@@ -54,13 +54,13 @@ void FileIO::open(const char *path, IOMode mode) {
 		// TODO check the error
 		switch (errno) {
 		case ENOENT:
-			throw InvalidArgumentException("Failed to open file {}, {}.\n", path, strerror(errno));
+			throw InvalidArgumentException("Failed to open file {}, {}.", path, strerror(errno));
 		case EPERM:	 // TODO add support for exception for permission.
 		case EACCES: // TODO add support for exception for permission.
 		case EBUSY:
 		case ENFILE:
 		default:
-			throw RuntimeException("Failed to open file {}, {}.\n", path, strerror(errno));
+			throw RuntimeException("Failed to open file {}, {}.", path, strerror(errno));
 		}
 	}
 
@@ -99,12 +99,12 @@ long FileIO::write(long int nbytes, const void *pbuffer) {
 	long int nreadBytes;
 	nreadBytes = fwrite((char *)pbuffer, 1, nbytes, this->file);
 	if (nreadBytes != nbytes)
-		throw RuntimeException("Failed to write to file, {}.\n", strerror(errno));
+		throw RuntimeException("Failed to write to file, {}.", strerror(errno));
 
 	int err = ferror(this->file);
 
 	if (err != 0)
-		throw RuntimeException("Failed to write to file, {}.\n", strerror(err));
+		throw RuntimeException("Failed to write to file, {}.", strerror(err));
 	return nreadBytes;
 }
 
