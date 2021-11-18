@@ -48,10 +48,11 @@ namespace fragcore {
 		virtual const Quaternion getOrientation() const;
 
 		virtual intptr_t getNativePtr() const override;
+		virtual ~AudioListener();
 
 	  protected:
 		AudioListener();
-		virtual ~AudioListener();
+
 	};
 } // namespace fragcore
 

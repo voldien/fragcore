@@ -1,9 +1,10 @@
 # Source files for the gl bunny program.
-FILE(GLOB SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
+FILE(GLOB AUDIO_EXAMPLE_SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
 FILE(GLOB SOURCE_COMMON ${CMAKE_CURRENT_SOURCE_DIR}/../common/*.cpp)
 FILE(GLOB SOURCE_COMMON_HEADER ${CMAKE_CURRENT_SOURCE_DIR}/../common/*.h)
 
 # Executable OpenGL hpm benchmark.
-ADD_EXECUTABLE(audio-example ${SOURCE_FILES} ${SOURCE_COMMON} ${SOURCE_COMMON_HEADER})
-TARGET_LINK_LIBRARIES(audio-example PRIVATE fragcore fragcore-audio-interface  ${SDL2_LIBRARIES})
+ADD_EXECUTABLE(audio-example ${AUDIO_EXAMPLE_SOURCE_FILES} ${SOURCE_COMMON} ${SOURCE_COMMON_HEADER})
+TARGET_LINK_LIBRARIES(audio-example PRIVATE fragcore fragcore-audio-interface )
 TARGET_INCLUDE_DIRECTORIES(audio-example PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../common/ )
+ADD_DEPENDENCIES(audio-example fragcore fragcore-audio-interface )
