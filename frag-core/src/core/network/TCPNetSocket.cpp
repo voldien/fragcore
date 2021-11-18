@@ -184,7 +184,7 @@ int TCPNetSocket::recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddres
 		struct sockaddr_in addr4;  /*	*/
 		struct sockaddr_in6 addr6; /*	*/
 	} addrU;
-	int res = ::recvfrom(this->socket, p_buffer, p_len, flag, reinterpret_cast <sockaddr *>(&addrU), &addrlen);
+	int res = ::recvfrom(this->socket, p_buffer, p_len, flag, reinterpret_cast<sockaddr *>(&addrU), &addrlen);
 	return res;
 }
 int TCPNetSocket::recv(void *pbuffer, int p_len, int &sent, bool peek) {
@@ -199,7 +199,7 @@ int TCPNetSocket::send(const uint8_t *p_buffer, int p_len, int &r_sent) {
 	return res;
 }
 int TCPNetSocket::sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const INetAddress &p_addr) {
-	socklen_t addrlen;			 /*	*/
+	socklen_t addrlen; /*	*/
 	union {
 		struct sockaddr_in addr4;  /*	*/
 		struct sockaddr_in6 addr6; /*	*/

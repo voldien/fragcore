@@ -16,26 +16,26 @@ class ModBusNetworkTest : public testing::Test {
 
 class ModBusServerClientTest : public testing::Test {
   protected:
-	virtual void SetUp() override {
+	void SetUp() override {
 
 		const char *ipAddress = "localhost";
 
 		/*	*/
-		TCPUDPAddress tcpAddress(IPAddress(ipAddress), port);
+		TCPUDPAddress tcpAddress(IPAddress(ipAddress), this->port);
 
 		/*	*/
 		modbusNetSocket = new ModbusNetSocket();
 		modbusNetSocket->bind(tcpAddress);
 		modbusNetSocket->listen(2);
 	}
-	virtual void TearDown() override { delete modbusNetSocket; }
+	void TearDown() override { delete modbusNetSocket; }
 	const int port = 43323;
 	ModbusNetSocket *modbusNetSocket;
 };
 
 TEST_F(ModBusServerClientTest, Connect_And_Accept_No_Throw_Exception) {
-	IPAddress ipAddress("127.0.0.1", IPAddress::IPAddressType::IPAddress_Type_IPV4);
-	TCPUDPAddress localHost(ipAddress, 42323);
+	IPAddress ipAddress("localhost");
+	TCPUDPAddress localHost(ipAddress, this->port);
 
 	ModbusNetSocket clientSocket;
 	ASSERT_NO_THROW(clientSocket.connect(localHost));

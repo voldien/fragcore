@@ -80,20 +80,30 @@ int ModbusNetSocket::connect(const INetAddress &addr) {
 	if (this->ctx == nullptr) {
 		this->ctx = modbus_new_tcp(nullptr, 0);
 		if (this->ctx == nullptr)
-			throw RuntimeException("{}", modbus_strerror(errno));
+			throw RuntimeException("Failed to create ModbusTCP Context: {}", modbus_strerror(errno));
 	}
 
+	/*	Connect over the transport layer.	*/
 	TCPNetSocket::connect(addr);
-	int rc = modbus_set_socket((modbus_t *)this->ctx, this->socket);
 
-	rc = modbus_get_response_timeout((modbus_t *)this->ctx, &old_response_to_sec, &old_response_to_usec);
+	int rc = modbus_set_socket(static_cast<modbus_t *>(this->ctx), this->socket);
+	if (rc == -1) {
+		throw RuntimeException("Failed to set Socket: {}", modbus_strerror(errno));
+	}
+	/*	*/
+	rc = modbus_get_response_timeout(static_cast<modbus_t *>(this->ctx), &old_response_to_sec, &old_response_to_usec);
+	if (rc == -1) {
+		throw RuntimeException("Failed to set response timeout Mode: {}", modbus_strerror(errno));
+	}
 
-	rc = modbus_set_error_recovery((modbus_t *)this->ctx,
+	/*	*/
+	rc = modbus_set_error_recovery(static_cast<modbus_t *>(this->ctx),
 								   static_cast<modbus_error_recovery_mode>(MODBUS_ERROR_RECOVERY_PROTOCOL));
 	if (rc == -1) {
-		throw RuntimeException("Failed to set Recovery Mode {}", modbus_strerror(errno));
+		throw RuntimeException("Failed to set Recovery Mode: {}", modbus_strerror(errno));
 	}
 
+	/*	*/
 	this->netStatus = NetStatus::Status_Done;
 	return 0;
 }
