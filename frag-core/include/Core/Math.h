@@ -185,6 +185,8 @@ namespace fragcore {
 
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
 			// TODO add support for using vector components.
+			T exponent = static_cast<T>(1.0) / gamma;
+
 			return static_cast<T>(std::pow(x, gamma));
 		}
 

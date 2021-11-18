@@ -21,8 +21,8 @@
 
 using namespace fragcore;
 
-ModbusNetSocket::ModbusNetSocket() {}
-ModbusNetSocket::ModbusNetSocket(int socket) : TCPNetSocket(socket) {}
+ModbusNetSocket::ModbusNetSocket() : ctx(nullptr) {}
+ModbusNetSocket::ModbusNetSocket(int socket) : TCPNetSocket(socket), ctx(nullptr) {}
 ModbusNetSocket::~ModbusNetSocket() { this->close(); }
 
 ModbusNetSocket::TransportProtocol ModbusNetSocket::getTransportProtocol() const noexcept {
@@ -36,53 +36,63 @@ int ModbusNetSocket::close() {
 	}
 	this->socket = 0;
 	netStatus = NetStatus::Status_Disconnected;
+	return 0;
 }
 
-// int ModbusNetSocket::bind(std::string &IPaddr, unsigned int port) {
-// 	if (ctx == nullptr)
-// 		ctx = modbus_new_tcp(IPaddr.c_str(), port);
-// }
-
 int ModbusNetSocket::bind(const INetAddress &p_addr) {
-	// if (this->ctx == nullptr)
-	// 	this->ctx = modbus_new_tcp(IPaddr.c_str(), p_port);
 
-	// modbus_set_debug(ctx, 1);
-	if (modbus_set_error_recovery((modbus_t *)this->ctx,
-								  static_cast<modbus_error_recovery_mode>(MODBUS_ERROR_RECOVERY_PROTOCOL)) == -1) {
+	const TCPUDPAddress &tcpAddress = static_cast<const TCPUDPAddress &>(p_addr);
+	if (this->ctx == nullptr) {
+		this->ctx = modbus_new_tcp(nullptr, tcpAddress.getPort());
+		if (this->ctx == nullptr) {
+			throw RuntimeException("{}", modbus_strerror(errno));
+		}
 	}
-	this->socket = modbus_get_socket((modbus_t *)this->ctx);
+
+	TCPNetSocket::bind(tcpAddress);
+
+	/*	*/
+	int rc = modbus_set_socket(static_cast<modbus_t *>(this->ctx), this->socket);
+	if (rc == -1) {
+		throw RuntimeException("{}", modbus_strerror(errno));
+	}
+
+	rc = modbus_set_debug(static_cast<modbus_t *>(this->ctx), 1);
+	if (modbus_set_error_recovery(static_cast<modbus_t *>(this->ctx),
+								  static_cast<modbus_error_recovery_mode>(MODBUS_ERROR_RECOVERY_PROTOCOL)) == -1) {
+		/*	*/
+		throw RuntimeException("{}", modbus_strerror(errno));
+	}
 }
 
 int ModbusNetSocket::listen(unsigned int maxListen) {
 	if (modbus_tcp_listen((modbus_t *)this->ctx, maxListen) < 0) {
-		SystemException ex(errno, std::system_category(), "TCP socket: Failed to set listen {} ", maxListen);
+		SystemException ex(errno, std::system_category(), "ModBus socket: Failed to set listen {} ", maxListen);
 	}
 	return 0;
 }
-// int ModbusNetSocket::connect(std::string &ip, unsigned int port) {
-// 	// return connect(IPAddress(ip, IPAddress::IPAddressType::IPAddress_Type_IPV4), port);
-// }
 
 int ModbusNetSocket::connect(const INetAddress &p_addr) {
 	uint32_t old_response_to_sec;
 	uint32_t old_response_to_usec;
 
-	const TCPUDPAddress &tcpAddress = static_cast<const TCPUDPAddress &>(p_addr);
+	const TCPUDPAddress &tcpAddress = dynamic_cast<const TCPUDPAddress &>(p_addr);
 	if (this->ctx == nullptr) {
 		this->ctx = modbus_new_tcp(nullptr, tcpAddress.getPort());
 		if (this->ctx == nullptr)
 			throw RuntimeException("{}", modbus_strerror(errno));
 	}
-	modbus_get_response_timeout((modbus_t *)this->ctx, &old_response_to_sec, &old_response_to_usec);
-
-	if (modbus_set_error_recovery((modbus_t *)this->ctx,
-								  static_cast<modbus_error_recovery_mode>(MODBUS_ERROR_RECOVERY_PROTOCOL)) == -1) {
-		throw RuntimeException("Failed to set Recovery Mode {}", modbus_strerror(errno));
-	}
 
 	TCPNetSocket::connect(p_addr);
-	this->socket = modbus_set_socket((modbus_t *)this->ctx, this->socket);
+	int rc = modbus_set_socket((modbus_t *)this->ctx, this->socket);
+
+	rc = modbus_get_response_timeout((modbus_t *)this->ctx, &old_response_to_sec, &old_response_to_usec);
+
+	rc = modbus_set_error_recovery((modbus_t *)this->ctx,
+								   static_cast<modbus_error_recovery_mode>(MODBUS_ERROR_RECOVERY_PROTOCOL));
+	if (rc == -1) {
+		throw RuntimeException("Failed to set Recovery Mode {}", modbus_strerror(errno));
+	}
 
 	this->netStatus = NetStatus::Status_Done;
 }
@@ -93,7 +103,7 @@ int ModbusNetSocket::recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAdd
 	int res; //= recvfrom(this->socket, p_buffer, p_len, flag, connection->intaddr, &r_read);
 	return res;
 }
-int ModbusNetSocket::recv( void *pbuffer, int p_len, int &sent, bool peek) {
+int ModbusNetSocket::recv(void *pbuffer, int p_len, int &sent, bool peek) {
 	int flag = 0;
 	int res = modbus_read_registers((modbus_t *)this->ctx, 0, p_len, (uint16_t *)pbuffer);
 	if (res != p_len) {

@@ -88,7 +88,7 @@ int TCPNetSocket::bind(const INetAddress &p_addr) {
 	int flags = SOCK_STREAM;
 
 	/*	*/
-	if (isValidNetworkAddress(p_addr))
+	if (!isValidNetworkAddress(p_addr))
 		throw RuntimeException("Invalid Net Address Type");
 
 	/*	*/
