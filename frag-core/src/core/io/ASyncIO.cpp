@@ -272,6 +272,8 @@ ASyncIO::AsyncObject *ASyncIO::getObject(ASyncHandle handle) {
 		return &this->asyncs[handle];
 
 	throw RuntimeException("Invalid Async object {}", handle);
+
+	return nullptr;
 }
 
 const ASyncIO::AsyncObject *ASyncIO::getObject(ASyncHandle handle) const {
@@ -282,6 +284,8 @@ const ASyncIO::AsyncObject *ASyncIO::getObject(ASyncHandle handle) const {
 		return &it->second;
 
 	throw RuntimeException("Invalid Async object {}", handle);
+
+	return nullptr;
 }
 
 ASyncIO::AsyncObject *ASyncIO::createObject(ASyncHandle handle) { return &this->asyncs[handle]; }

@@ -63,6 +63,7 @@ int ModbusNetSocket::bind(const INetAddress &p_addr) {
 		/*	*/
 		throw RuntimeException("{}", modbus_strerror(errno));
 	}
+	return 0;
 }
 
 int ModbusNetSocket::listen(unsigned int maxListen) {
@@ -72,18 +73,17 @@ int ModbusNetSocket::listen(unsigned int maxListen) {
 	return 0;
 }
 
-int ModbusNetSocket::connect(const INetAddress &p_addr) {
+int ModbusNetSocket::connect(const INetAddress &addr) {
 	uint32_t old_response_to_sec;
 	uint32_t old_response_to_usec;
 
-	const TCPUDPAddress &tcpAddress = dynamic_cast<const TCPUDPAddress &>(p_addr);
 	if (this->ctx == nullptr) {
-		this->ctx = modbus_new_tcp(nullptr, tcpAddress.getPort());
+		this->ctx = modbus_new_tcp(nullptr, 0);
 		if (this->ctx == nullptr)
 			throw RuntimeException("{}", modbus_strerror(errno));
 	}
 
-	TCPNetSocket::connect(p_addr);
+	TCPNetSocket::connect(addr);
 	int rc = modbus_set_socket((modbus_t *)this->ctx, this->socket);
 
 	rc = modbus_get_response_timeout((modbus_t *)this->ctx, &old_response_to_sec, &old_response_to_usec);
@@ -95,9 +95,10 @@ int ModbusNetSocket::connect(const INetAddress &p_addr) {
 	}
 
 	this->netStatus = NetStatus::Status_Done;
+	return 0;
 }
 
-int ModbusNetSocket::poll(int p_type, int timeout) const {}
+int ModbusNetSocket::poll(int p_type, int timeout) const { return 0; }
 int ModbusNetSocket::recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddress &r_ip, bool p_peek) {
 	int flag = 0;
 	int res; //= recvfrom(this->socket, p_buffer, p_len, flag, connection->intaddr, &r_read);
@@ -139,10 +140,12 @@ ModbusNetSocket::NetStatus ModbusNetSocket::accept(NetSocket &socket) {
 	int aaccept_socket = ::accept(this->socket, &tobuffer, &aclen);
 	if (aaccept_socket < 0) {
 	}
+	NetStatus::Status_Done;
 }
-int ModbusNetSocket::read() {}
-int ModbusNetSocket::write() {}
+int ModbusNetSocket::read() { return 0; }
+int ModbusNetSocket::write() { return 0; }
 bool ModbusNetSocket::isBlocking() { /*	*/
+	return false;
 }
 void ModbusNetSocket::setBlocking(bool blocking) { /*	*/
 												   // modbus_set_response_timeout()
