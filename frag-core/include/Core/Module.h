@@ -23,7 +23,8 @@
 #include "SmartReference.h"
 
 namespace fragcore {
-
+	class Module;
+	typedef Module *(*CreateModule)(Module *module);
 	/**
 	 *
 	 */
@@ -36,12 +37,26 @@ namespace fragcore {
 		/**/
 	  public:
 		// TODO determine where it shal lbe located
-		static void loadModule(const std::string &name) {
-			auto moduleFile = getModuleName(name);
+		static Module *loadModule(const std::string &moduleName, const std::string &moduleEntryPoint = "") {
+			auto moduleFile = getModuleName(moduleName);
 			Library lib(moduleFile.c_str());
+			return Module::loadModule(lib, moduleEntryPoint);
 		}
 
-		static void loadModule(Library &library) { library.getfunc("FragCoreModuleEntry"); }
+		static Module *loadModule(Library &library, const std::string &moduleEntryPoint = "") {
+			Module *module;
+			//			if (moduleEntryPoint.empty())
+			//				moduleEntryPoint = getModuleName(moduleEntryPoint);
+
+			CreateModule createModuleFunc = nullptr;
+			if (!library.isValid()) {
+			}
+
+			createModuleFunc = library.getfunc<CreateModule>("FragCoreModuleEntry");
+			module = createModuleFunc(nullptr);
+
+			return module;
+		}
 		static std::string getModuleName(const std::string &name) { return name; }
 	};
 } // namespace fragcore

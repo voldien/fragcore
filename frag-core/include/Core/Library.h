@@ -64,6 +64,10 @@ namespace fragcore {
 		 */
 		void *getfunc(const char *cfunctionName);
 
+		template <typename T> T getfunc(const char *cfunctionName) {
+			return reinterpret_cast<T>(this->getfunc(cfunctionName));
+		}
+
 	  private: /*	Attributes.	*/
 		void *mlib;
 		std::string name;
