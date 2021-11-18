@@ -98,6 +98,7 @@ namespace fragcore {
 
 		virtual void getDPI(DPI *dpi) = 0;
 
+		//TODO resolve!
 		// virtual TextureFormat getFormat() = 0;
 
 	  public:

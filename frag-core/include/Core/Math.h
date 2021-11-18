@@ -132,9 +132,6 @@ namespace fragcore {
 			return 0;
 		}
 
-		/**
-		 *
-		 */
 		template <typename T> static constexpr bool IsPowerOfTwo(T v) {
 			static_assert(std::is_integral<T>::value, "Must be a integer type.");
 			return !(v == 0) && !((v - 1) & v);
@@ -185,7 +182,7 @@ namespace fragcore {
 		}
 
 		template <typename T, typename U> static T gammaCorrection(T x, U gamma) noexcept {
-			
+
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
 			// TODO add support for using vector components.
 			return static_cast<T>(std::pow(x, gamma));

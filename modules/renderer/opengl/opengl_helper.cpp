@@ -49,32 +49,32 @@ unsigned int getWrapMode(SamplerDesc::AddressMode mode) {
 }
 
 unsigned int getFilterMode(SamplerDesc::FilterMode mode, SamplerDesc::FilterMode mips) {
-	if (mips == SamplerDesc::eNoFilterMode) {
+	if (mips == SamplerDesc::NoFilterMode) {
 		switch (mode) {
-		case SamplerDesc::eLinear:
+		case SamplerDesc::Linear:
 			return GL_LINEAR;
-		case SamplerDesc::eNearset:
+		case SamplerDesc::Nearset:
 			return GL_NEAREST;
 		default:
 			break;
 		}
 	} else {
 		switch (mode) {
-		case SamplerDesc::eLinear:
+		case SamplerDesc::Linear:
 			switch (mips) {
-			case SamplerDesc::eLinear:
+			case SamplerDesc::Linear:
 				return GL_LINEAR_MIPMAP_LINEAR;
-			case SamplerDesc::eNearset:
+			case SamplerDesc::Nearset:
 				return GL_LINEAR_MIPMAP_NEAREST;
 			default:
 				break;
 			}
 			break;
-		case SamplerDesc::eNearset:
+		case SamplerDesc::Nearset:
 			switch (mips) {
-			case SamplerDesc::eLinear:
+			case SamplerDesc::Linear:
 				return GL_NEAREST_MIPMAP_LINEAR;
-			case SamplerDesc::eNearset:
+			case SamplerDesc::Nearset:
 				return GL_NEAREST_MIPMAP_NEAREST;
 			default:
 				break;
@@ -642,7 +642,7 @@ unsigned int getBlendEqu(FrameBuffer::BlendEqu equ) {
 }
 unsigned int getBlendFunc(FrameBuffer::BlendFunc func) {
 	switch (func) {
-	case FrameBuffer::BlendFunc::eZero:
+	case FrameBuffer::BlendFunc::Zero:
 		return GL_ZERO;
 	case FrameBuffer::BlendFunc ::eOne:
 		return GL_ONE;

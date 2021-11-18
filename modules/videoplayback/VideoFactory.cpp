@@ -361,9 +361,9 @@ VideoTexture *VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IR
 	desc.sampler.AddressV = SamplerDesc::Repeat;
 	desc.sampler.AddressW = SamplerDesc::Repeat;
 	desc.sampler.anisotropy = 8.0f;
-	desc.sampler.minFilter = SamplerDesc::eLinear;
-	desc.sampler.magFilter = SamplerDesc::eLinear;
-	desc.sampler.mipmapFilter = SamplerDesc::eLinear;
+	desc.sampler.minFilter = SamplerDesc::Linear;
+	desc.sampler.magFilter = SamplerDesc::Linear;
+	desc.sampler.mipmapFilter = SamplerDesc::Linear;
 
 	desc.marker.markerName = ref->getName().c_str();
 	Texture *texture = renderer->createTexture(&desc);

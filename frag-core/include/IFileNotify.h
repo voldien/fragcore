@@ -23,6 +23,52 @@ FragEngine, A Two layer Game Engine.
 
 namespace fragcore {
 	// TOOD Determine name if shalla only be INotify
-	class FVDECLSPEC IFileNotify : public SmartReference {};
+	class FVDECLSPEC IFileNotify : public SmartReference {
+	  public:
+		/**
+		 *
+		 */
+		class FVDECLSPEC FileNoticationEntry {
+		  public:
+			int key;			  /*  */
+			std::string filepath; /*  */
+			Object *assetObject;  /*  */
+			void *userdata;
+			// TOOD change!
+			// AssetType type;         /*  */
+		};
+
+		/**
+		 * @brief
+		 *
+		 * @param path
+		 * @param object
+		 */
+		virtual void addFilePath(const char *path, Object *object) = 0;
+
+		/**
+		 * @brief
+		 *
+		 * @param path
+		 * @param object
+		 */
+		virtual void removeFilePath(const char *path, Object *object) = 0;
+
+		/**
+		 * @brief Get the Object object
+		 *
+		 * @param path
+		 * @return Object*
+		 */
+		virtual Object *getObject(const char *path) = 0;
+
+		/**
+		 * @brief Get the Entry object
+		 *
+		 * @param object
+		 * @return FileNoticationEntry*
+		 */
+		FileNoticationEntry *getEntry(Object *object);
+	};
 } // namespace fragcore
 #endif

@@ -150,7 +150,7 @@ void FrameBuffer::setDraws(unsigned int nr, BufferAttachment *attachment) {
 	if (glNamedFramebufferDrawBuffers) {
 		GLenum buffers[nr];
 		for (size_t i = 0; i < nr; i++) {
-			buffers[i] = GL_COLOR_ATTACHMENT0 + (attachment[i] - FrameBuffer::eColor0);
+			buffers[i] = GL_COLOR_ATTACHMENT0 + ((int)attachment[i] - (int)FrameBuffer::BufferAttachment::eColor0);
 		}
 		glNamedFramebufferDrawBuffers(fraobj->framebuffer, nr, buffers);
 	} else {
@@ -162,7 +162,9 @@ void FrameBuffer::setDraws(unsigned int nr, BufferAttachment *attachment) {
 void FrameBuffer::setDraw(BufferAttachment attachment) {
 	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
 	if (glNamedFramebufferDrawBuffer) {
-		glNamedFramebufferDrawBuffer(fraobj->framebuffer, GL_COLOR_ATTACHMENT0 + (attachment - FrameBuffer::eColor0));
+		glNamedFramebufferDrawBuffer(fraobj->framebuffer,
+									 GL_COLOR_ATTACHMENT0 +
+										 ((int)attachment - (int)FrameBuffer::BufferAttachment::eColor0));
 	} else {
 	}
 }

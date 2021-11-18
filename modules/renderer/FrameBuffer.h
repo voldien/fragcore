@@ -16,20 +16,21 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-#ifndef _FRAGVIEW_FRAMEBUFFER_H_
-#define _FRAGVIEW_FRAMEBUFFER_H_ 1
+#ifndef _FRAGCORE_FRAMEBUFFER_H_
+#define _FRAGCORE_FRAMEBUFFER_H_ 1
 #include "IRenderer.h"
 #include "RenderObject.h"
 #include <vector>
 
 namespace fragcore {
 	/**
+	 * @brief
 	 *
 	 */
 	class FVDECLSPEC FrameBuffer : public RenderObject {
 	  public:
-		enum BlendFunc {
-			eZero = 0, /*  */
+		enum class BlendFunc {
+			Zero = 0, /*  */
 			eOne = 1,  /*  */
 			eSrcColor = 2,
 			eOneMinusSrcColor = 3,
@@ -47,15 +48,15 @@ namespace fragcore {
 			eMax,
 		};
 
-		enum StencilFunc {
+		enum class StencilFunc {
 
 		};
 
-		enum DepthFunc {
+		enum class DepthFunc {
 
 		};
 
-		enum BufferAttachment {
+		enum class BufferAttachment : int {
 			eNoAttachment,
 			eDepth,
 			eStencil,

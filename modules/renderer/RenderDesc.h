@@ -50,10 +50,10 @@ namespace fragcore {
 		/**
 		 *
 		 */
-		enum FilterMode {
-			eNoFilterMode, /*  */
-			eLinear,	   /*  */
-			eNearset,	   /*  */
+		enum class FilterMode {
+			NoFilterMode, /*  */
+			Linear,	   /*  */
+			Nearset,	   /*  */
 		};
 
 		/**

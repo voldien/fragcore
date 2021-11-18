@@ -406,7 +406,7 @@ Texture *GLRendererInterface::createTexture(TextureDesc *desc) {
 						getFilterMode(desc->sampler.minFilter, desc->sampler.mipmapFilter));
 		checkError();
 		glTexParameteri(target, GL_TEXTURE_MAG_FILTER,
-						getFilterMode(desc->sampler.magFilter, SamplerDesc::eNoFilterMode));
+						getFilterMode(desc->sampler.magFilter, SamplerDesc::NoFilterMode));
 		checkError();
 
 		const GLint compareMode =
@@ -607,7 +607,7 @@ Sampler *GLRendererInterface::createSampler(SamplerDesc *desc) {
 
 	glSamplerParameteri(sampler, GL_TEXTURE_MIN_FILTER, getFilterMode(desc->minFilter, desc->mipmapFilter));
 	checkError();
-	glSamplerParameteri(sampler, GL_TEXTURE_MAG_FILTER, getFilterMode(desc->magFilter, SamplerDesc::eNoFilterMode));
+	glSamplerParameteri(sampler, GL_TEXTURE_MAG_FILTER, getFilterMode(desc->magFilter, SamplerDesc::NoFilterMode));
 	checkError();
 
 	const GLint compareMode = desc->compareMode == SamplerDesc::eNoCompare ? GL_NONE : GL_COMPARE_REF_TO_TEXTURE;

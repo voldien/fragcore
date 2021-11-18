@@ -18,9 +18,9 @@
 */
 #ifndef _FRAG_CORE_RENDEROBJECT_H_
 #define _FRAG_CORE_RENDEROBJECT_H_ 1
+#include "RenderPrerequisites.h"
 #include <Core/Ref.h>
 #include <Core/SmartReference.h>
-#include "RenderPrerequisites.h"
 
 namespace fragcore {
 	/**

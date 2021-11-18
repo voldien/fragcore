@@ -9,6 +9,7 @@ namespace fragcore {
 	 * @brief
 	 *
 	 */
+	// TODO add template for precisous
 	struct FVDECLSPEC BoundingSphere {
 	  public:
 		BoundingSphere() = default;
@@ -63,16 +64,26 @@ namespace fragcore {
 		 */
 		bool contains(const BoundingSphere &sphere) const { return false; }
 
+		/**
+		 * @brief
+		 *
+		 * @tparam T
+		 * @param ray
+		 * @return true
+		 * @return false
+		 */
 		template <typename T> bool intersect(const Ray &ray) const noexcept {
 			Vector3 tmp = ray.getOrigin() - getCenter();
 			T t;
+			/*	*/
 			T a = ray.getDirection().dot(ray.getDirection());
 			T b = static_cast<T>(2.0) * ray.getDirection().dot(tmp);
-			T d = tmp.dot(tmp) - radius * radius;
-			T discriminant = b * b - (static_cast<T>(4) * d * a);
-			if (discriminant >= 0) {
-				discriminant = static_cast<T>(sqrt(discriminant));
+			T c = tmp.dot(tmp) - (radius * radius);
 
+			/*	*/
+			T discriminant = b * b - (static_cast<T>(4) * c * a);
+			if (discriminant >= 0) {
+				t = (-b - std::sqrt(discriminant)) / (a * static_cast<T>(2));
 				if (t < static_cast<T>(0)) {
 					t = (-b + discriminant) / static_cast<T>(2.0) * a;
 				}

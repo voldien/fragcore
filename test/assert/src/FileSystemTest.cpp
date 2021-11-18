@@ -1,9 +1,4 @@
-#include <Core/IO/BufferIO.h>
-#include <Core/IO/FileIO.h>
 #include <Core/IO/FileSystem.h>
-#include <Core/IO/GZFileIO.h>
-#include <Core/IO/ZipFileIO.h>
-#include <Core/IO/ZipFileSystem.h>
 #include <Core/RefPtr.h>
 #include <FragCore.h>
 #include <gtest/gtest.h>
@@ -57,18 +52,3 @@ TEST(FileSystem, FileSystem_Compute_Absolute_Path_Correct) {
 }
 
 TEST(FileSystem, FileSystem_Compute_Relative_Path_Correct) {}
-
-/*	TODO relocate to its own file later.	*/
-TEST(ZipFileSystem, OpenZipFile_Invalid_Path_Throw_Exception) {
-	ASSERT_THROW(ZipFileSystem::createZipFileObject(""), InvalidArgumentException);
-}
-
-TEST(ZipFileSystem, OpenZipFile_Invalid_Memory_Throw_Exception) {
-	const char *buf = "hello world!";
-	int len = sizeof(buf);
-
-	// ASSERT_THROW(ZipFileSystem::createZipFileObject(buf, len), RuntimeException);
-}
-
-TEST(ZipFileSystem, OpenZipFile_Create_with_Task) { // TODO
-}

@@ -62,7 +62,7 @@ namespace fragcore {
 		 *
 		 *	@Return function pointer if successfully.
 		 */
-		void *getfunc(const char *pProcName);
+		void *getfunc(const char *cfunctionName);
 
 	  private: /*	Attributes.	*/
 		void *mlib;

@@ -8,7 +8,7 @@ long BZFileIO::read(long int nbytes, void *pbuffer) {
 	int bzerror;
 	int len = BZ2_bzRead(&bzerror, this->bzFile, pbuffer, nbytes);
 	if (bzerror != BZ_OK) {
-		throw RuntimeException(fmt::format("Failed to read {}", BZ2_bzerror(this->bzFile, &bzerror)));
+		throw RuntimeException("Failed to read {}", BZ2_bzerror(this->bzFile, &bzerror));
 	}
 	return len;
 }
@@ -18,7 +18,7 @@ long BZFileIO::write(long int nbytes, const void *pbuffer) {
 	int len = nbytes;
 	BZ2_bzWrite(&bzerror, this->bzFile, (void *)pbuffer, (int)nbytes);
 	if (bzerror != BZ_OK) {
-		throw RuntimeException(fmt::format("Failed to write {}", BZ2_bzerror(this->bzFile, &bzerror)));
+		throw RuntimeException("Failed to write {}", BZ2_bzerror(this->bzFile, &bzerror));
 	}
 	return len;
 }
@@ -69,7 +69,7 @@ void BZFileIO::open(const char *path, IO::IOMode mode) {
 
 	/*  */
 	if (this->bzFile == nullptr)
-		throw RuntimeException(fmt::format("Failed to open {}", BZ2_bzerror(this->bzFile, &bzerror)));
+		throw RuntimeException("Failed to open {}", BZ2_bzerror(this->bzFile, &bzerror));
 }
 
 BZFileIO::BZFileIO(const char *path, IO::IOMode mode) : FileIO(path, mode) { this->open(path, mode); }

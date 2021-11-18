@@ -20,7 +20,11 @@ namespace fragcore {
 			this->setDirection(ray.getDirection());
 		}
 
-		Ray &operator=(const Ray &other) = default;
+		Ray &operator=(const Ray &other) {
+			this->setOrigin(other.getOrigin());
+			this->setDirection(other.getDirection());
+			return *this;
+		}
 
 		/**
 		 * @return get origin position.

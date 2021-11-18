@@ -189,7 +189,7 @@ ZipFileSystem *ZipFileSystem::createZipFileObject(const char *cfilename, Ref<ISc
 		if (err == ZIP_ER_NOENT) {
 			throw InvalidArgumentException("can't open zip archive {} - {}", cfilename, buf);
 		} else {
-			throw RuntimeException(fmt::format("{}", buf));
+			throw RuntimeException("{}", buf);
 		}
 	}
 
@@ -285,7 +285,7 @@ ZipFileSystem *ZipFileSystem::createZipFileObject(Ref<IO> &ioRef, Ref<IScheduler
 		if (err == ZIP_ER_NOENT)
 			throw InvalidArgumentException("can't open zip archive - {}", buf);
 		else
-			throw RuntimeException(fmt::format("Can't open zip file: {}", zip_error_strerror(&error)));
+			throw RuntimeException("Can't open zip file: {}", zip_error_strerror(&error));
 	}
 	zip_source_keep(zipSource);
 
@@ -316,7 +316,12 @@ ZipFileSystem::ZipFileSystem(Ref<IScheduler> ref) { this->setScheduleReference(r
 
 ZipFileSystem::ZipFileSystem(const ZipFileSystem &other) { this->pzip = nullptr; }
 
-ZipFileSystem::~ZipFileSystem() {}
+ZipFileSystem::~ZipFileSystem() {
+
+	struct zip *zip = static_cast<struct zip *>(this->pzip);
+	/*	*/
+	int rc = zip_close(zip);
+}
 
 // FileAccess ZipFile::getFileAccess(const char *path) {
 //	return FileAccess();
