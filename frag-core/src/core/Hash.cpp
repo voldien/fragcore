@@ -112,6 +112,6 @@ void Hash::initHash(ALGORITHM algorithm) {
 	case Hash::ALGORITHM::SHA512:
 		throw NotSupportedException();
 	default:
-		throw InvalidArgumentException("Invalid hash algorithm - {}", algorithm);
+		throw InvalidArgumentException("Invalid hash algorithm - {}", (int)algorithm);
 	}
 }
