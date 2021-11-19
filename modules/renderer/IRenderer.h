@@ -33,9 +33,9 @@ namespace fragcore {
 	 *
 	 */
 	enum class CLEARBITMASK { // TODO rename
-		eColor = 0x1,	/*	Clear color.    */
-		eDepth = 0x2,	/*	Clear depth.    */
-		eStencil = 0x4, /*	Clear stencil.  */
+		eColor = 0x1,		  /*	Clear color.    */
+		eDepth = 0x2,		  /*	Clear depth.    */
+		eStencil = 0x4,		  /*	Clear stencil.  */
 	};
 
 	/**
@@ -45,27 +45,27 @@ namespace fragcore {
 	  public:
 		/*	TODO rename and fix enum names.	*/
 		enum class State {
-			eDepthTest = 0x1, /*	Perform depth test on pixels.   */
-			eStencilTest,	  /*	Perform stencil test.   */
-			eScissorTest,	  /*  */
-			eAlphaTest,		  /*  */
-			eDepthMask,
+			DepthTest = 0x1, /*	Perform depth test on pixels.   */
+			StencilTest,	 /*	Perform stencil test.   */
+			ScissorTest,	 /*  */
+			AlphaTest,		 /*  */
+			DepthMask,
 			/*	Perform .	*/ // TODO determine how to deal with depth, stencil and etc.
-			eBlend,			   /*	Set Color Blend. */
-			eCullface,		   /*	Set Culling face. */
-			eDither,		   /*	Set Color dithering.    */
-			eSRGB,
-			eMultiSampling,
-			eSampleShading, /*   */
+			Blend,			   /*	Set Color Blend. */
+			Cullface,		   /*	Set Culling face. */
+			Dither,			   /*	Set Color dithering.    */
+			SRGB,
+			MultiSampling,
+			SampleShading, /*   */
 			// GL_SAMPLE_COVERAGE
-			eSampleAlphaCoverage,  /*    */
-			eDiscardRasterization, /*  */
+			SampleAlphaCoverage,  /*    */
+			DiscardRasterization, /*  */
 
 		};
 
 		// TODO make it less state machine and allow it to become more modern.
 		IRenderer() = default;
-		IRenderer(const IRenderer &other) = default;
+		IRenderer(const IRenderer &other) = delete;
 		IRenderer(IRenderer &&other) = delete;
 		virtual ~IRenderer() = default;
 
@@ -76,10 +76,26 @@ namespace fragcore {
 		 */
 		virtual Texture *createTexture(TextureDesc *desc) noexcept(false) = 0;
 
+		/**
+		 * @brief
+		 *
+		 * @param texture
+		 */
 		virtual void deleteTexture(Texture *texture) noexcept(false) = 0;
 
+		/**
+		 * @brief Create a Sampler object
+		 *
+		 * @param desc
+		 * @return Sampler*
+		 */
 		virtual Sampler *createSampler(SamplerDesc *desc) = 0;
 
+		/**
+		 * @brief
+		 *
+		 * @param texture
+		 */
 		virtual void deleteSampler(Sampler *texture) = 0;
 
 		/**
