@@ -661,8 +661,8 @@ unsigned int getBlendFunc(FrameBuffer::BlendFunc func) {
 
 unsigned int getClearBitMask(CLEARBITMASK clearbitmask) {
 	GLbitfield mask = 0;
-	mask |= clearbitmask & eColor ? GL_COLOR_BUFFER_BIT : 0;
-	mask |= clearbitmask & eDepth ? GL_DEPTH_BUFFER_BIT : 0;
+	mask |= clearbitmask & Color ? GL_COLOR_BUFFER_BIT : 0;
+	mask |= clearbitmask & Depth ? GL_DEPTH_BUFFER_BIT : 0;
 	mask |= clearbitmask & eStencil ? GL_STENCIL_BUFFER_BIT : 0;
 	return mask;
 }

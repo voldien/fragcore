@@ -1327,8 +1327,8 @@ FrameBuffer *GLRendererInterface::getDefaultFramebuffer(void *window) {
 
 void GLRendererInterface::clear(unsigned int bitflag) {
 	GLbitfield mask = 0;
-	mask |= bitflag & eColor ? GL_COLOR_BUFFER_BIT : 0;
-	mask |= bitflag & eDepth ? GL_DEPTH_BUFFER_BIT : 0;
+	mask |= bitflag & Color ? GL_COLOR_BUFFER_BIT : 0;
+	mask |= bitflag & Depth ? GL_DEPTH_BUFFER_BIT : 0;
 	mask |= bitflag & eStencil ? GL_STENCIL_BUFFER_BIT : 0;
 	glClear(mask);
 }

@@ -33,8 +33,8 @@ namespace fragcore {
 	 *
 	 */
 	enum class CLEARBITMASK { // TODO rename
-		eColor = 0x1,		  /*	Clear color.    */
-		eDepth = 0x2,		  /*	Clear depth.    */
+		Color = 0x1,		  /*	Clear color.    */
+		Depth = 0x2,		  /*	Clear depth.    */
 		eStencil = 0x4,		  /*	Clear stencil.  */
 	};
 
