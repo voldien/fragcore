@@ -98,9 +98,9 @@ void GLRenderWindow::createWindow(int x, int y, int width, int height, const cha
 
 void GLRenderWindow::useWindow(void *pdata) {}
 
-void GLRenderWindow::setTitle(const char *title) { SDL_SetWindowTitle(this->window, title); }
+void GLRenderWindow::setTitle(const std::string &title) { SDL_SetWindowTitle(this->window, title.c_str()); }
 
-const char *GLRenderWindow::getTitle() const { return SDL_GetWindowTitle(this->window); }
+std::string GLRenderWindow::getTitle() const { return SDL_GetWindowTitle(this->window); }
 
 void GLRenderWindow::resizable(bool resizable) { SDL_SetWindowResizable(this->window, (SDL_bool)resizable); }
 

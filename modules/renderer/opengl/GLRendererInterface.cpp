@@ -260,23 +260,23 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 		glcore->supportedLanguages = GLSL;
 
 	/*	Set default state.	*/
-	this->enableState(eDepthTest);
-	this->disableState(eStencilTest);
-	this->disableState(eBlend);
-	this->enableState(eDither);
-	this->enableState(eCullface);
+	this->enableState(State::DepthTest);
+	this->disableState(State::StencilTest);
+	this->disableState(State::Blend);
+	this->enableState(State::Dither);
+	this->enableState(State::Cullface);
 	this->setDepthMask(true);
 	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_FALSE);
 	glDepthFunc(GL_LESS);
 	glCullFace(GL_FRONT_AND_BACK);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	if (glcore->alpha) {
-		this->enableState(eAlphaTest);
+		this->enableState(State::AlphaTest);
 		glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 	}
 	this->clearColor(0.2f, 0.2f, 0.2f, 1.0f);
 	if (glcore->gamma)
-		enableState(GLRendererInterface::eSRGB);
+		enableState(GLRendererInterface::State::SRGB);
 	// this->setVSync(config->get<bool>("v-sync"));
 	this->setDebug(glcore->debug);
 	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
@@ -406,7 +406,7 @@ Texture *GLRendererInterface::createTexture(TextureDesc *desc) {
 						getFilterMode(desc->sampler.minFilter, desc->sampler.mipmapFilter));
 		checkError();
 		glTexParameteri(target, GL_TEXTURE_MAG_FILTER,
-						getFilterMode(desc->sampler.magFilter, SamplerDesc::NoFilterMode));
+						getFilterMode(desc->sampler.magFilter, SamplerDesc::FilterMode::NoFilterMode));
 		checkError();
 
 		const GLint compareMode =
@@ -607,7 +607,8 @@ Sampler *GLRendererInterface::createSampler(SamplerDesc *desc) {
 
 	glSamplerParameteri(sampler, GL_TEXTURE_MIN_FILTER, getFilterMode(desc->minFilter, desc->mipmapFilter));
 	checkError();
-	glSamplerParameteri(sampler, GL_TEXTURE_MAG_FILTER, getFilterMode(desc->magFilter, SamplerDesc::NoFilterMode));
+	glSamplerParameteri(sampler, GL_TEXTURE_MAG_FILTER,
+						getFilterMode(desc->magFilter, SamplerDesc::FilterMode::NoFilterMode));
 	checkError();
 
 	const GLint compareMode = desc->compareMode == SamplerDesc::eNoCompare ? GL_NONE : GL_COMPARE_REF_TO_TEXTURE;
@@ -1276,7 +1277,7 @@ RendererWindow *GLRendererInterface::createWindow(int x, int y, int width, int h
 
 	/*	Cleanup.	*/
 	if (glcore->tpmwindow) {
-		SDL_DestroyWindow(glcore->tpmwindow);
+		SDL_DestroyWindow(static_cast<SDL_Window *>(glcore->tpmwindow));
 		glcore->tpmwindow = nullptr;
 	}
 
@@ -1327,9 +1328,9 @@ FrameBuffer *GLRendererInterface::getDefaultFramebuffer(void *window) {
 
 void GLRendererInterface::clear(unsigned int bitflag) {
 	GLbitfield mask = 0;
-	mask |= bitflag & Color ? GL_COLOR_BUFFER_BIT : 0;
-	mask |= bitflag & Depth ? GL_DEPTH_BUFFER_BIT : 0;
-	mask |= bitflag & eStencil ? GL_STENCIL_BUFFER_BIT : 0;
+	mask |= (bitflag & (unsigned int)CLEARBITMASK::Color) != 0 ? GL_COLOR_BUFFER_BIT : 0;
+	mask |= (bitflag & (unsigned int)CLEARBITMASK::Depth) != 0 ? GL_DEPTH_BUFFER_BIT : 0;
+	mask |= (bitflag & (unsigned int)CLEARBITMASK::eStencil) != 0 ? GL_STENCIL_BUFFER_BIT : 0;
 	glClear(mask);
 }
 

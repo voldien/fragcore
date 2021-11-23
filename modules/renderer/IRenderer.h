@@ -32,10 +32,10 @@ namespace fragcore {
 	/**
 	 *
 	 */
-	enum class CLEARBITMASK { // TODO rename
-		Color = 0x1,		  /*	Clear color.    */
-		Depth = 0x2,		  /*	Clear depth.    */
-		eStencil = 0x4,		  /*	Clear stencil.  */
+	enum class CLEARBITMASK : uint32_t { // TODO rename
+		Color = 0x1,					 /*	Clear color.    */
+		Depth = 0x2,					 /*	Clear depth.    */
+		eStencil = 0x4,					 /*	Clear stencil.  */
 	};
 
 	/**
