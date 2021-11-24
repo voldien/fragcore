@@ -338,11 +338,15 @@ IF(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
 ELSE()
 
 ENDIF()
-
+#################################
 # Inlucde external resources.
+#################################
 ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/extern)
 
+
+#########################################
 # Main core library.
+#########################################
 ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/frag-core)
 
 
@@ -352,7 +356,9 @@ IF(BUILD_WITH_TEST)
 	ENABLE_TESTING()
 ENDIF()
 
-
+##########################################################
+#	Seperate MOdules
+##########################################################
 IF(BUILD_MODULES)
 	# Rendering interfaces.
 	IF(BUILD_EXTERNAL_RENDERER)
