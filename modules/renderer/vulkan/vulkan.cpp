@@ -36,7 +36,7 @@ unsigned int getTextureFormat(TextureDesc::Format format) {
 		return VK_FORMAT_B8G8R8A8_UNORM;
 	case TextureDesc::eSingleColor:
 		return VK_FORMAT_R8_UNORM;
-	case TextureDesc::Depth:
+	case TextureDesc::eDepth:
 		return VK_FORMAT_R8_UNORM;
 	case TextureDesc::eStencil:
 		return VK_FORMAT_R8_UNORM;
