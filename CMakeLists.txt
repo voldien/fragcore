@@ -338,6 +338,8 @@ IF(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
 ELSE()
 
 ENDIF()
+
+
 #################################
 # Inlucde external resources.
 #################################
@@ -351,13 +353,12 @@ ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/frag-core)
 
 
 # Testing and assertion and other.
-#TODO attempt to remove so it works on all platforms.
 IF(BUILD_WITH_TEST)
 	ENABLE_TESTING()
 ENDIF()
 
 ##########################################################
-#	Seperate MOdules
+#	Seperate Modules, based on the core library.
 ##########################################################
 IF(BUILD_MODULES)
 	# Rendering interfaces.
@@ -392,23 +393,31 @@ IF(BUILD_MODULES)
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/videoplayback)
 
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/window/sdl)
+	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/window/glfw3)
 
 ENDIF(BUILD_MODULES)
 
+
+
+##########################################
+# Add Tests if Enabled.
+#########################################
 IF(NOT ANDROID)
 	IF(BUILD_WITH_TEST)
-
 		ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/test/)
 	ENDIF()
 ENDIF()
 
-
+########################################
 # Generate sample executables.
+########################################
 IF(BUILD_WITH_SAMPLES)
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/test/examples)
 ENDIF()
 
+#######################################
 # Generate documentations.
+#######################################
 IF(BUILD_WITH_DOCS)
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/docs/)
 ENDIF(BUILD_WITH_DOCS)
@@ -423,6 +432,7 @@ IF( UNIX )
 	#
 	FIND_PACKAGE(UnixCommands REQUIRED)
 
+	#TODO relocate
 	FIND_PROGRAM(GLSLLANGVALIDATOR glslangValidator)
 	FIND_PROGRAM(SPIRVDIS spirv-dis)
 	FIND_PROGRAM(SPIRVAS spirv-as)
@@ -459,6 +469,7 @@ IF( UNIX )
 ELSEIF(WIN32)
 
 ELSE()
+
 	# Cache these to allow the user to override them on non-Unix platforms
 	SET( FRAG_LIB_INSTALL_DIR "lib" CACHE STRING
 	"Path the built library files are installed to." )
@@ -496,8 +507,9 @@ IF(WIN32)
 	ENDIF(MSVC12 OR MSVC14 OR MSVC15 )
 ENDIF (WIN32)
 
-
+##############################################
 # Create install package.
+##############################################
 IF ( BUILD_WITH_INSTALL )
 	IF(CMAKE_CPACK_COMMAND AND UNIX AND BUILD_OPT_BUILD_PACKAGES)
 		# Packing information
@@ -555,7 +567,9 @@ IF ( BUILD_WITH_INSTALL )
 	ENDIF()
 ENDIF()
 
+####################################
 # Final verbose message status.
+####################################
 MESSAGE(STATUS "")
 MESSAGE(STATUS "These are the configured paths:")
 MESSAGE(STATUS "  PREFIX: ${CMAKE_INSTALL_PREFIX}")
