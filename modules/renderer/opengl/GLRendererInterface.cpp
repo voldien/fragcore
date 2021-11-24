@@ -2065,6 +2065,8 @@ void GLRendererInterface::execute(CommandList *list) {
 	}
 }
 
+void *GLRendererInterface::getOpenGLContext() noexcept { return this->openglcontext; }
+
 void *GLRendererInterface::getData() const { return this->pdata; }
 
 extern "C" IRenderer *createInternalRenderer(IConfig *config) { return new GLRendererInterface(config); }

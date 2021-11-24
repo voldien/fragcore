@@ -319,6 +319,9 @@ namespace fragcore {
 
 		virtual void *getData() const;
 
+	  public: /*	OpenGL Specific methods.	*/
+		void *getOpenGLContext() noexcept;
+
 	  protected: /*  */
 		void *pdata;
 
