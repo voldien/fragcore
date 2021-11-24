@@ -68,8 +68,8 @@ namespace fragcore {
 
 		virtual void setGamma(float);
 
-		virtual void setTitle(const char *title);
-		virtual const char *getTitle() const;
+		virtual void setTitle(const std::string& title);
+		virtual std::string getTitle() const;
 
 		intptr_t getNativePtr() const override;
 

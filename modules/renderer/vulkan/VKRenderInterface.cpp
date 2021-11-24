@@ -1050,7 +1050,7 @@ void VKRenderInterface::clear(unsigned int bitflag) {
 
 	const uint32_t currentFrame = currentFrame;
 	return;
-	if (bitflag & Color) {
+	if (bitflag & (unsigned int)CLEARBITMASK::Color) {
 		// VkClearColorValue clearColor = {color[0], color[1], color[2],
 		// 								color[3]};
 		// /*  */
@@ -1064,7 +1064,7 @@ void VKRenderInterface::clear(unsigned int bitflag) {
 		// 					 &clearColor, 1, &imageRange);
 	}
 
-	if (bitflag & Depth || bitflag & eStencil) {
+	if (bitflag & (unsigned int)CLEARBITMASK::Depth || bitflag & (unsigned int)CLEARBITMASK::eStencil) {
 		VkClearDepthStencilValue depthStencilClear = {0.0f, 0};
 
 		/*  */

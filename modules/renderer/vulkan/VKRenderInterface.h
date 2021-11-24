@@ -22,123 +22,123 @@ namespace fragcore {
 
 		// TODO make it less state machine and allow it to become more modern.
 
-		virtual void OnInitialization();
-		virtual void OnDestruction();
+		virtual void OnInitialization() override;
+		virtual void OnDestruction() override;
 
-		virtual Texture *createTexture(TextureDesc *desc);
+		virtual Texture *createTexture(TextureDesc *desc) override;
 
-		virtual void deleteTexture(Texture *texture);
+		virtual void deleteTexture(Texture *texture) override;
 
-		virtual Sampler *createSampler(SamplerDesc *desc);
+		virtual Sampler *createSampler(SamplerDesc *desc) override;
 
-		virtual void deleteSampler(Sampler *texture);
+		virtual void deleteSampler(Sampler *texture) override;
 
-		virtual RenderPipeline *createPipeline(const ProgramPipelineDesc *desc);
+		virtual RenderPipeline *createPipeline(const ProgramPipelineDesc *desc) override;
 
-		virtual void deletePipeline(RenderPipeline *obj);
+		virtual void deletePipeline(RenderPipeline *obj) override;
 
-		virtual Shader *createShader(ShaderDesc *desc);
+		virtual Shader *createShader(ShaderDesc *desc) override;
 
-		virtual void deleteShader(Shader *shader);
+		virtual void deleteShader(Shader *shader) override;
 
-		virtual Buffer *createBuffer(BufferDesc *desc);
+		virtual Buffer *createBuffer(BufferDesc *desc) override;
 
-		virtual void deleteBuffer(Buffer *object);
+		virtual void deleteBuffer(Buffer *object)override;
 
-		virtual Geometry *createGeometry(GeometryDesc *desc);
+		virtual Geometry *createGeometry(GeometryDesc *desc) override;
 
-		virtual void deleteGeometry(Geometry *obj);
+		virtual void deleteGeometry(Geometry *obj) override;
 
-		virtual FrameBuffer *
-		createFrameBuffer(FrameBufferDesc *desc); // TODO determine what to do with the reference objects. Same for
-												  // all other object using reference object to GPU resources.
-		virtual void deleteFrameBuffer(FrameBuffer *obj);
+		virtual FrameBuffer *createFrameBuffer(
+			FrameBufferDesc *desc) override; // TODO determine what to do with the reference objects. Same for
+											 // all other object using reference object to GPU resources.
+		virtual void deleteFrameBuffer(FrameBuffer *obj) override;
 
-		virtual QueryObject *createQuery(QueryDesc *desc);
+		virtual QueryObject *createQuery(QueryDesc *desc) override;
 
-		virtual void deleteQuery(QueryObject *query);
+		virtual void deleteQuery(QueryObject *query) override;
 
-		virtual RendererWindow *createWindow(int x, int y, int width, int height);
+		virtual RendererWindow *createWindow(int x, int y, int width, int height) override;
 
-		virtual void setCurrentWindow(RendererWindow *window);
+		virtual void setCurrentWindow(RendererWindow *window) override;
 
-		virtual FrameBuffer *getDefaultFramebuffer(void *window);
+		virtual FrameBuffer *getDefaultFramebuffer(void *window) override;
 
 		// TODO add viewobject for handling as a object
-		virtual ViewPort *getView(unsigned int i);
+		virtual ViewPort *getView(unsigned int i) override;
 
-		virtual void clear(unsigned int bitflag); // TODO relocate to the default framebuffer.
+		virtual void clear(unsigned int bitflag) ; // TODO relocate to the default framebuffer.
 
-		virtual void clearColor(float r, float g, float b, float a); // TODO relocate to the framebuffer.
+		virtual void clearColor(float r, float g, float b, float a) ; // TODO relocate to the framebuffer.
 
-		virtual void setVSync(int sync); // TODO relocate to the render window.
+		virtual void setVSync(int sync) ; // TODO relocate to the render window.
 
-		virtual void swapBuffer(); // TODO relocate to the render window.
+		virtual void swapBuffer() ; // TODO relocate to the render window.
 
-		virtual void setDepthMask(bool flag);
+		virtual void setDepthMask(bool flag) override;
 
-		virtual void enableState(IRenderer::State state);
+		virtual void enableState(IRenderer::State state) override;
 
-		virtual void disableState(IRenderer::State state);
+		virtual void disableState(IRenderer::State state) override;
 
-		virtual bool isStateEnabled(IRenderer::State state);
+		virtual bool isStateEnabled(IRenderer::State state) override;
 
-		virtual void drawInstance(Geometry *geometry, unsigned int num);
+		virtual void drawInstance(Geometry *geometry, unsigned int num) override;
 		// virtual void drawInstance(Shader* pipeline, GeometryObject* geometry, unsigned int num);
 
 		virtual void drawMultiInstance(Geometry &geometries, const unsigned int *first, const unsigned int *count,
-									   unsigned int num);
+									   unsigned int num) override;
 
-		virtual void drawMultiIndirect(Geometry &geometries, unsigned int offset, unsigned int indirectCount);
+		virtual void drawMultiIndirect(Geometry &geometries, unsigned int offset, unsigned int indirectCount) override;
 
-		virtual void drawIndirect(Geometry *geometry);
+		virtual void drawIndirect(Geometry *geometry) override;
 
-		virtual void setLineWidth(float width);
+		virtual void setLineWidth(float width) override;
 
-		virtual void
-		blit(const FrameBuffer *source, FrameBuffer *dest,
-			 Texture::FilterMode filterMode); // TODO add filter mode.    /*  TODO add filter and buffer bit.    */
+		virtual void blit(
+			const FrameBuffer *source, FrameBuffer *dest,
+			Texture::FilterMode filterMode) override; // TODO add filter mode.    /*  TODO add filter and buffer bit. */
 		// virtual void blit(const FrameBuffer* source, FrameBuffer* dest, int* source, int* dest, Texture::FilterMode
 		// filterMode, FrameBuffer::BufferAttachment attachment);
 		// TODO add additional version of the blit for sub image specifiction.
 
-		virtual void bindTextures(unsigned int firstUnit, const std::vector<Texture *> &textures);
+		virtual void bindTextures(unsigned int firstUnit, const std::vector<Texture *> &textures) override;
 
 		virtual void bindImages(unsigned int firstUnit, const std::vector<Texture *> &textures,
 								const std::vector<Texture::MapTarget> &mapping,
-								const std::vector<Texture::Format> &formats);
+								const std::vector<Texture::Format> &formats) override;
 
-		virtual void copyTexture(const Texture *source, Texture *target);
+		virtual void copyTexture(const Texture *source, Texture *target) override;
 
-		virtual void dispatchCompute(unsigned int *global, unsigned int *local, unsigned int offset = 0);
+		virtual void dispatchCompute(unsigned int *global, unsigned int *local, unsigned int offset = 0) override;
 
 		// TODO add memory barrier.
-		virtual void memoryBarrier();
+		virtual void memoryBarrier() override;
 
-		virtual Sync *createSync(SyncDesc *desc);
+		virtual Sync *createSync(SyncDesc *desc) override;
 
-		virtual void deleteSync(Sync *sync);
+		virtual void deleteSync(Sync *sync) override;
 
-		virtual void setDebug(bool enable);
+		virtual void setDebug(bool enable) override;
 
-		virtual const char *getShaderVersion(ShaderLanguage language) const;
+		virtual const char *getShaderVersion(ShaderLanguage language) const override;
 
-		virtual ShaderLanguage getShaderLanguage() const;
+		virtual ShaderLanguage getShaderLanguage() const override;
 
-		virtual const char *getAPIVersion() const;
+		virtual const char *getAPIVersion() const override;
 
-		virtual const char *getVersion() const;
+		virtual const char *getVersion() const override;
 
-		virtual void getSupportedTextureCompression(TextureDesc::Compression *pCompressions);
-		virtual void getCapability(Capability *capability);
+		virtual void getSupportedTextureCompression(TextureDesc::Compression *pCompressions) override;
+		virtual void getCapability(Capability *capability) override;
 
-		virtual void getFeatures(Features *features);
+		virtual void getFeatures(Features *features) override;
 
-		virtual void getStatus(MemoryInfo *memoryInfo);
+		virtual void getStatus(MemoryInfo *memoryInfo) override;
 
-		virtual CommandList *createCommandBuffer();
-		virtual void submittCommand(Ref<CommandList> &list);
-		virtual void execute(CommandList *list);
+		virtual CommandList *createCommandBuffer() override;
+		virtual void submittCommand(Ref<CommandList> &list) override;
+		virtual void execute(CommandList *list) override;
 
 		virtual void *getData() const override;
 
