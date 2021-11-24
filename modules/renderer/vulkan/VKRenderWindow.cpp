@@ -22,13 +22,13 @@ VKRenderWindow::VKRenderWindow(Ref<VKRenderInterface> &renderer) {
 	// 	WindowManager::getInstance();
 	// 	SDL_Window *windowp = SDL_CreateWindow("", 1, 1, 800, 600, SDL_WINDOW_VULKAN);
 	// 	if (windowp == nullptr)
-	// 		throw RuntimeException(fmt::format("failed create window - %s", SDL_GetError()));
+	// 		throw RuntimeException(fmt::format("failed create window - {}", SDL_GetError()));
 	// 	this->window = windowp;
 
 	// 	/*  Create surface. */
 	// 	surfaceResult = SDL_Vulkan_CreateSurface((SDL_Window *)window, vulkancore->inst, &vulkancore->surface);
 	// 	if (surfaceResult == SDL_FALSE)
-	// 		throw RuntimeException(fmt::format("failed create vulkan surface - %s", SDL_GetError()));
+	// 		throw RuntimeException(fmt::format("failed create vulkan surface - {}", SDL_GetError()));
 	// 		/*  */
 	// #ifdef VK_USE_PLATFORM_XLIB_KHR
 
@@ -92,8 +92,8 @@ VKRenderWindow::VKRenderWindow(Ref<VKRenderInterface> &renderer) {
 	// 	/*  Get the image associated with the swap chain.   */
 	// 	uint32_t nrChainImageCount = 1;
 	// 	result = vkGetSwapchainImagesKHR(vulkancore->device->getHandle(), swapChain.swapchain, &nrChainImageCount,
-	// nullptr); 	if (result != VK_SUCCESS) { 		throw RuntimeException(fmt::format("vkGetSwapchainImagesKHR failed query
-	// count - %d", result));
+	// nullptr); 	if (result != VK_SUCCESS) { 		throw RuntimeException(fmt::format("vkGetSwapchainImagesKHR
+	// failed query count - %d", result));
 	// 	}
 	// 	swapChain.swapChainImages.resize(nrChainImageCount);
 	// 	result = vkGetSwapchainImagesKHR(vulkancore->device->getHandle(), swapChain.swapchain, &nrChainImageCount,
@@ -122,7 +122,8 @@ VKRenderWindow::VKRenderWindow(Ref<VKRenderInterface> &renderer) {
 	// 		createInfo.subresourceRange.baseArrayLayer = 0;
 	// 		createInfo.subresourceRange.layerCount = 1;
 
-	// 		if (vkCreateImageView(vulkancore->device->getHandle(), &createInfo, nullptr, &swapChain.swapChainImageViews[i])
+	// 		if (vkCreateImageView(vulkancore->device->getHandle(), &createInfo, nullptr,
+	// &swapChain.swapChainImageViews[i])
 	// != 			VK_SUCCESS) { 			throw std::runtime_error("failed to create image views!");
 	// 		}
 	// 	}
@@ -183,7 +184,8 @@ VKRenderWindow::VKRenderWindow(Ref<VKRenderInterface> &renderer) {
 	// 		framebufferInfo.layers = 1;
 
 	// 		if (vkCreateFramebuffer(vulkancore->device->getHandle(), &framebufferInfo, nullptr,
-	// &swapChain.swapChainFramebuffers[i]) != 			VK_SUCCESS) { 			throw std::runtime_error("failed to create framebuffer!");
+	// &swapChain.swapChainFramebuffers[i]) != 			VK_SUCCESS) { 			throw std::runtime_error("failed to
+	// create framebuffer!");
 	// 		}
 	// 	}
 
@@ -242,9 +244,11 @@ VKRenderWindow::VKRenderWindow(Ref<VKRenderInterface> &renderer) {
 
 	// 	for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
 	// 		if (vkCreateSemaphore(vulkancore->device->getHandle(), &semaphoreInfo, nullptr,
-	// &vulkancore->imageAvailableSemaphores[i]) != 				VK_SUCCESS || 			vkCreateSemaphore(vulkancore->device->getHandle(),
-	// &semaphoreInfo, nullptr, &vulkancore->renderFinishedSemaphores[i]) != 				VK_SUCCESS ||
-	// 			vkCreateFence(vulkancore->device->getHandle()->getHandle, &fenceInfo, nullptr, &vulkancore->inFlightFences[i])
+	// &vulkancore->imageAvailableSemaphores[i]) != 				VK_SUCCESS ||
+	// vkCreateSemaphore(vulkancore->device->getHandle(), &semaphoreInfo, nullptr,
+	// &vulkancore->renderFinishedSemaphores[i]) != 				VK_SUCCESS ||
+	// 			vkCreateFence(vulkancore->device->getHandle()->getHandle, &fenceInfo, nullptr,
+	// &vulkancore->inFlightFences[i])
 	// != VK_SUCCESS) { 			throw std::runtime_error("failed to create synchronization objects for a frame!");
 	// 		}
 	// 	}
@@ -614,7 +618,7 @@ void VKRenderWindow::setGamma(float gamma) {
 	this->calculateGammaLookupTable(gamma, ramp);
 	int err = SDL_SetWindowGammaRamp(this->window, &ramp[256 * 0], &ramp[256 * 1], &ramp[256 * 2]);
 	if (err == -1)
-		throw NotSupportedException(fmt::format("Failed to set window gamma %f: %s", gamma, SDL_GetError()));
+		throw NotSupportedException("Failed to set window gamma {}: {}", gamma, SDL_GetError());
 }
 
 // VKRenderWindow::~RendererWindow() {}
@@ -634,15 +638,15 @@ void VKRenderWindow::createWindow(int x, int y, int width, int height, const cha
 
 	/*  */
 	if (window == nullptr)
-		throw RuntimeException(fmt::format("Failed to create window %s for API %s", SDL_GetError(), api));
+		throw RuntimeException("Failed to create window {} for API {}", SDL_GetError(), api);
 	this->api = api;
 }
 
 void VKRenderWindow::useWindow(void *pdata) {}
 
-void VKRenderWindow::setTitle(const char *title) { SDL_SetWindowTitle(this->window, title); }
+void VKRenderWindow::setTitle(const std::string &title) { SDL_SetWindowTitle(this->window, title.c_str()); }
 
-const char *VKRenderWindow::getTitle() const { return SDL_GetWindowTitle(this->window); }
+std::string VKRenderWindow::getTitle() const { return SDL_GetWindowTitle(this->window); }
 
 void VKRenderWindow::resizable(bool resizable) { SDL_SetWindowResizable(this->window, (SDL_bool)resizable); }
 
@@ -719,7 +723,7 @@ intptr_t VKRenderWindow::getNativePtr() const {
 	// #endif
 	//         }
 	//     } else
-	//         throw RuntimeException(fmt::format("%s", SDL_GetError()));
+	//         throw RuntimeException(fmt::format("{}", SDL_GetError()));
 	//     throw NotImplementedException("Window format not implemented");
 }
 
