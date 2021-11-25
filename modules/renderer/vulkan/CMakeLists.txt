@@ -24,7 +24,7 @@ TARGET_LINK_LIBRARIES(fragcore-module-render-vulkan INTERFACE fragcore-rvk )
 TARGET_INCLUDE_DIRECTORIES(fragcore-rvk PRIVATE ${Vulkan_INCLUDE_DIRS}PUBLIC
 											$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 											$<INSTALL_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
-ADD_DEPENDENCIES(fragcore-rvk fragcore vkcommon-core fragcore-render-interface)
+ADD_DEPENDENCIES(fragcore-rvk fragcore vkcommon-core fragcore-render-interface fragcore-window-sdl)
 
 #
 IF(BUILD_WITH_INSTALL)
