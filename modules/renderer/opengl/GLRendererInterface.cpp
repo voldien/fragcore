@@ -343,7 +343,7 @@ GLRendererInterface::~GLRendererInterface() {
 		SDL_GL_DeleteContext(this->openglcontext);
 
 	SDL_QuitSubSystem(SDL_INIT_VIDEO);
-	free(this->pdata);
+
 }
 
 Texture *GLRendererInterface::createTexture(TextureDesc *desc) {
@@ -1224,15 +1224,14 @@ FrameBuffer *GLRendererInterface::createFrameBuffer(FrameBufferDesc *desc) {
 
 void GLRendererInterface::deleteFrameBuffer(FrameBuffer *obj) {
 
-	GLFrameBufferObject *glfraobj = (GLFrameBufferObject *)obj->getObject();
+	GLFrameBuffer* glfFramebuffer = static_cast<GLFrameBuffer*>(obj);
 
-	if (glIsFramebuffer(glfraobj->framebuffer))
-		glDeleteFramebuffers(1, &glfraobj->framebuffer);
-	else if (glfraobj->framebuffer != 0) // Check for default framebuffer object.
+	if (glIsFramebuffer(glfFramebuffer->framebuffer))
+		glDeleteFramebuffers(1, &glfFramebuffer->framebuffer);
+	else if (glfFramebuffer->framebuffer != 0) // Check for default framebuffer object.
 		throw std::invalid_argument("None valid framebuffer object.");
 
 	/*  Delete memory.  */
-	delete obj->getObject();
 	delete obj;
 }
 

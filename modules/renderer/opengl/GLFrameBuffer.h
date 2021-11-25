@@ -28,6 +28,7 @@ namespace fragcore {
 	 *
 	 */
 	class FVDECLSPEC GLFrameBuffer : public FrameBuffer {
+		friend class GLRendererInterface;
 	  public:
 		virtual int attachmentCount() override;
 		virtual std::vector<Texture *> getColorTargets() override;
