@@ -12,9 +12,13 @@ ENDIF()
 FILE(GLOB SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
 
 # Library target.
-ADD_LIBRARY(fragcore-rvk MODULE ${SOURCE_FILES})
+ADD_LIBRARY(fragcore-rvk ${SOURCE_FILES})
 TARGET_LINK_LIBRARIES(fragcore-rvk ${Vulkan_LIBRARIES} vkcommon-core fragcore fragcore-render-interface) #
 TARGET_COMPILE_DEFINITIONS(fragcore-rvk PRIVATE FRAG_CORE_INTERNAL_IMP=1)
+
+
+ADD_LIBRARY(fragcore-module-render-vulkan MODULE $<TARGET_OBJECTS:fragcore-rvk>  )
+TARGET_LINK_LIBRARIES(fragcore-module-render-vulkan INTERFACE fragcore-rvk )
 
 #
 TARGET_INCLUDE_DIRECTORIES(fragcore-rvk PRIVATE ${Vulkan_INCLUDE_DIRS}PUBLIC

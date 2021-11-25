@@ -29,7 +29,7 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC Object : public UIDObject {
 	  public:
-		inline Object(){};
+		Object() = default;
 		Object(const std::string &name) { setName(name); }
 		Object(Object &&other) { this->name = std::exchange(other.name, nullptr); }
 		Object &operator=(Object &&other) {
