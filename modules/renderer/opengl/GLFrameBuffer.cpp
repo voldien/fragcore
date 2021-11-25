@@ -1,3 +1,4 @@
+#include "GLFrameBuffer.h"
 #include "../IRenderer.h"
 #include "internal_object_type.h"
 #include <GL/glew.h>
@@ -17,39 +18,42 @@ static unsigned int getCurrentFrameBufferRead() {
 	return whichID;
 }
 
-void FrameBuffer::bind() {
+int GLFrameBuffer::attachmentCount() {}
+std::vector<Texture *> GLFrameBuffer::getColorTargets() {}
+
+void GLFrameBuffer::bind() {
 	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
 	glBindFramebuffer(GL_FRAMEBUFFER, fraobj->framebuffer);
 }
 
-void FrameBuffer::unBind() { glBindFramebuffer(GL_FRAMEBUFFER, 0); }
+void GLFrameBuffer::unBind() { glBindFramebuffer(GL_FRAMEBUFFER, 0); }
 
-void FrameBuffer::write() {
+void GLFrameBuffer::write() {
 	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fraobj->framebuffer);
 }
 
-void FrameBuffer::read() const {
+void GLFrameBuffer::read() const {
 	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, fraobj->framebuffer);
 }
 
-Texture *FrameBuffer::getAttachment(unsigned int index) {
+Texture *GLFrameBuffer::getAttachment(unsigned int index) {
 	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
 	return fraobj->desc.attach[index];
 }
 
-Texture *FrameBuffer::getDepthAttachment() {
+Texture *GLFrameBuffer::getDepthAttachment() {
 	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
 	return fraobj->desc.depth;
 }
 
-Texture *FrameBuffer::getStencilAttachment() {
+Texture *GLFrameBuffer::getStencilAttachment() {
 	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
 	return fraobj->desc.stencil;
 }
 
-int FrameBuffer::width() const {
+int GLFrameBuffer::width() const {
 	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
 	int width;
 	if (glGetNamedFramebufferParameteriv) {
@@ -61,7 +65,7 @@ int FrameBuffer::width() const {
 	return width;
 }
 
-int FrameBuffer::height() const {
+int GLFrameBuffer::height() const {
 	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
 	int height;
 	if (glGetNamedFramebufferParameteriv) {
@@ -72,7 +76,7 @@ int FrameBuffer::height() const {
 	return height;
 }
 
-int FrameBuffer::layers() {
+int GLFrameBuffer::layers() {
 	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
 	int layers;
 	if (glGetNamedFramebufferParameteriv) {
@@ -83,7 +87,7 @@ int FrameBuffer::layers() {
 	return layers;
 }
 
-int FrameBuffer::nrSamples() {
+int GLFrameBuffer::nrSamples() {
 	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
 	int nrSamples;
 	if (glGetNamedFramebufferParameteriv) {
@@ -93,8 +97,8 @@ int FrameBuffer::nrSamples() {
 	return nrSamples;
 }
 
-void FrameBuffer::blend(BlendEqu equ, BlendFunc sfactor, BlendFunc dfactor, BufferAttachment bufferAttachment) {
-	int index = (int)bufferAttachment - (int)BufferAttachment::eColor0;
+void GLFrameBuffer::blend(BlendEqu equ, BlendFunc sfactor, BlendFunc dfactor, BufferAttachment bufferAttachment) {
+	int index = (int)bufferAttachment - (int)BufferAttachment::Color0;
 	GLenum glEqu = getBlendEqu(equ);
 	GLenum glsFactor = getBlendFunc(sfactor);
 	GLenum gldFactor = getBlendFunc(dfactor);
@@ -106,9 +110,9 @@ void FrameBuffer::blend(BlendEqu equ, BlendFunc sfactor, BlendFunc dfactor, Buff
 	glBlendFunci(index, glsFactor, gldFactor);
 }
 
-void FrameBuffer::blendSeperate(BlendEqu equ, BlendFunc srcRGB, BlendFunc dstRGB, BlendFunc srcAlpha,
-								BlendFunc dstAlpha, BufferAttachment bufferAttachment) {
-	int index = (int)bufferAttachment - (int)BufferAttachment::eColor0;
+void GLFrameBuffer::blendSeperate(BlendEqu equ, BlendFunc srcRGB, BlendFunc dstRGB, BlendFunc srcAlpha,
+								  BlendFunc dstAlpha, BufferAttachment bufferAttachment) {
+	int index = (int)bufferAttachment - (int)BufferAttachment::Color0;
 	GLenum glEqu = getBlendEqu(equ);
 	//	GLenum glsFactor = getBlendFunc(sfactor);
 	//	GLenum gldFactor = getBlendFunc(dfactor);
@@ -119,14 +123,14 @@ void FrameBuffer::blendSeperate(BlendEqu equ, BlendFunc srcRGB, BlendFunc dstRGB
 	// glBlendFuncSeparatei
 }
 
-void FrameBuffer::clear(unsigned int clear) {
+void GLFrameBuffer::clear(unsigned int clear) {
 	GLbitfield mask = getClearBitMask((CLEARBITMASK)clear);
 	glClear(mask);
 }
 
-void FrameBuffer::clearColor(BufferAttachment colorAttachment, const float *color) {
+void GLFrameBuffer::clearColor(BufferAttachment colorAttachment, const float *color) {
 	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
-	int index = (int)colorAttachment - (int)BufferAttachment::eColor0;
+	int index = (int)colorAttachment - (int)BufferAttachment::Color0;
 	if (glClearNamedFramebufferfv) {
 		glClearNamedFramebufferfv(fraobj->framebuffer, GL_COLOR, GL_COLOR_ATTACHMENT0 + index, (GLfloat *)color);
 	} else {
@@ -135,7 +139,7 @@ void FrameBuffer::clearColor(BufferAttachment colorAttachment, const float *colo
 	}
 }
 
-void FrameBuffer::clearDepthStencil(float depth, int stencil) {
+void GLFrameBuffer::clearDepthStencil(float depth, int stencil) {
 	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
 	if (glClearNamedFramebufferfi) {
 		glClearNamedFramebufferfi(fraobj->framebuffer, 0, GL_DEPTH_STENCIL, stencil, depth);
@@ -145,12 +149,12 @@ void FrameBuffer::clearDepthStencil(float depth, int stencil) {
 	}
 }
 
-void FrameBuffer::setDraws(unsigned int nr, BufferAttachment *attachment) {
+void GLFrameBuffer::setDraws(unsigned int nr, BufferAttachment *attachment) {
 	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
 	if (glNamedFramebufferDrawBuffers) {
 		GLenum buffers[nr];
 		for (size_t i = 0; i < nr; i++) {
-			buffers[i] = GL_COLOR_ATTACHMENT0 + ((int)attachment[i] - (int)FrameBuffer::BufferAttachment::eColor0);
+			buffers[i] = GL_COLOR_ATTACHMENT0 + ((int)attachment[i] - (int)GLFrameBuffer::BufferAttachment::Color0);
 		}
 		glNamedFramebufferDrawBuffers(fraobj->framebuffer, nr, buffers);
 	} else {
@@ -159,22 +163,22 @@ void FrameBuffer::setDraws(unsigned int nr, BufferAttachment *attachment) {
 	}
 }
 
-void FrameBuffer::setDraw(BufferAttachment attachment) {
+void GLFrameBuffer::setDraw(BufferAttachment attachment) {
 	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
 	if (glNamedFramebufferDrawBuffer) {
 		glNamedFramebufferDrawBuffer(fraobj->framebuffer,
 									 GL_COLOR_ATTACHMENT0 +
-										 ((int)attachment - (int)FrameBuffer::BufferAttachment::eColor0));
+										 ((int)attachment - (int)GLFrameBuffer::BufferAttachment::Color0));
 	} else {
 	}
 }
 
-intptr_t FrameBuffer::getNativePtr() const {
+intptr_t GLFrameBuffer::getNativePtr() const {
 	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
 	return fraobj->framebuffer;
 }
 
-void FrameBuffer::setName(const std::string &name) {
+void GLFrameBuffer::setName(const std::string &name) {
 	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
 	Object::setName(name);
 
@@ -185,3 +189,5 @@ void FrameBuffer::setName(const std::string &name) {
 }
 
 // glClearBuffer
+
+GLFrameBuffer::GLFrameBuffer() {}

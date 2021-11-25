@@ -16,8 +16,8 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-#ifndef _FRAGCORE_OPENGL_FRAMEBUFFER_H_
-#define _FRAGCORE_OPENGL_FRAMEBUFFER_H_ 1
+#ifndef _FRAGCORE_VULKAN_FRAMEBUFFER_H_
+#define _FRAGCORE_VULKAN_FRAMEBUFFER_H_ 1
 #include "../IRenderer.h"
 #include "../RenderObject.h"
 #include <vector>
@@ -27,8 +27,11 @@ namespace fragcore {
 	 * @brief
 	 *
 	 */
-	class FVDECLSPEC GLFrameBuffer : public FrameBuffer {
+	class FVDECLSPEC VKFrameBuffer : public FrameBuffer {
 	  public:
+		VKFrameBuffer() = default;
+		virtual ~VKFrameBuffer() = default;
+
 		virtual int attachmentCount() override;
 		virtual std::vector<Texture *> getColorTargets() override;
 
@@ -97,16 +100,6 @@ namespace fragcore {
 		virtual intptr_t getNativePtr() const override;
 
 		virtual void setName(const std::string &name) override;
-
-	  private:
-        FrameBufferDesc desc;
-		Texture *textures;
-		unsigned int numtextures;
-		unsigned int framebuffer;
-
-	  public:
-		GLFrameBuffer();
-		virtual ~GLFrameBuffer() = default;
 	};
 } // namespace fragcore
 #endif

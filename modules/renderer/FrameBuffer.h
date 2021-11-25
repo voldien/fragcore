@@ -29,9 +29,16 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC FrameBuffer : public RenderObject {
 	  public:
+		FrameBuffer() = default;
+		virtual ~FrameBuffer() = default;
+
+		/**
+		 * @brief
+		 *
+		 */
 		enum class BlendFunc {
 			Zero = 0, /*  */
-			eOne = 1,  /*  */
+			eOne = 1, /*  */
 			eSrcColor = 2,
 			eOneMinusSrcColor = 3,
 			eSrcAlpha = 4,
@@ -39,13 +46,17 @@ namespace fragcore {
 			eConstantAlpha = 6,
 		};
 
-		enum BlendEqu {
+		/**
+		 * @brief
+		 *
+		 */
+		enum class BlendEqu {
 			eNoEqu,
-			eAddition,
-			eSubtract,
-			eReverseSubtract,
-			eMin,
-			eMax,
+			Addition,
+			Subtract,
+			ReverseSubtract,
+			Min,
+			Max,
 		};
 
 		enum class StencilFunc {
@@ -57,80 +68,76 @@ namespace fragcore {
 		};
 
 		enum class BufferAttachment : int {
-			eNoAttachment,
-			eDepth,
-			eStencil,
-			eStencilDepth,
-			eColor0,
+			NoAttachment,
+			Depth,
+			Stencil,
+			StencilDepth,
+			Color0,
 		};
 
-		virtual int attachmentCount();
-		virtual std::vector<Texture *> getColorTargets();
+		virtual int attachmentCount() = 0;
+		virtual std::vector<Texture *> getColorTargets() = 0;
 
-		virtual void bind();
+		virtual void bind() = 0;
 
-		virtual void unBind();
+		virtual void unBind() = 0;
 
-		virtual void write();
+		virtual void write() = 0;
 
-		virtual void read() const;
+		virtual void read() const = 0;
 
 		/**
 		 *	Get texture attached to framebuffer by index.
 		 *
 		 *	@Return Non null texture pointer if successfully.
 		 */
-		virtual Texture *getAttachment(unsigned int index);
+		virtual Texture *getAttachment(unsigned int index) = 0;
 
 		/**
 		 *
 		 * @return
 		 */
-		virtual Texture *getDepthAttachment();
+		virtual Texture *getDepthAttachment() = 0;
 
 		/**
 		 *
 		 * @return
 		 */
-		virtual Texture *getStencilAttachment();
+		virtual Texture *getStencilAttachment() = 0;
 
 		/**
 		 *
 		 */
-		virtual int width() const;
+		virtual int width() const = 0;
 
 		/**
 		 *
 		 */
-		virtual int height() const;
+		virtual int height() const = 0;
 
 		/**
 		 *
 		 */
-		virtual int layers();
+		virtual int layers() = 0;
 
-		virtual int nrSamples();
+		virtual int nrSamples() = 0;
 
 		/*  */
-		virtual void blend(BlendEqu equ, BlendFunc sfactor, BlendFunc dfactor, BufferAttachment bufferAttachment);
+		virtual void blend(BlendEqu equ, BlendFunc sfactor, BlendFunc dfactor, BufferAttachment bufferAttachment) = 0;
 
 		virtual void blendSeperate(BlendEqu equ, BlendFunc srcRGB, BlendFunc dstRGB, BlendFunc srcAlpha,
-								   BlendFunc dstAlpha, BufferAttachment bufferAttachment);
+								   BlendFunc dstAlpha, BufferAttachment bufferAttachment) = 0;
 
-		virtual void clear(unsigned int clear);
+		virtual void clear(unsigned int clear) = 0;
 
-		virtual void clearColor(BufferAttachment colorAttachment, const float *color);
+		virtual void clearColor(BufferAttachment colorAttachment, const float *color) = 0;
 
-		virtual void clearDepthStencil(float depth, int stencil);
+		virtual void clearDepthStencil(float depth, int stencil) = 0;
 
 		/*  */
-		virtual void setDraws(unsigned int nr, BufferAttachment *attachment);
+		virtual void setDraws(unsigned int nr, BufferAttachment *attachment) = 0;
 
-		virtual void setDraw(BufferAttachment attachment);
-
-		virtual intptr_t getNativePtr() const override;
-
-		void setName(const std::string &name) override;
+		virtual void setDraw(BufferAttachment attachment) = 0;
 	};
 } // namespace fragcore
 

@@ -23,7 +23,7 @@ void addMarkerLabel(const OpenGLCore *glcore, unsigned int identifier, unsigned 
 void checkError() {
 	GLenum error = glGetError();
 	if (error != GL_NO_ERROR) {
-		throw RuntimeException(fmt::format("glGetError indicated an error: %s", glewGetErrorString(error)));
+		throw RuntimeException(fmt::format("glGetError indicated an error: {}", glewGetErrorString(error)));
 	}
 }
 
@@ -633,9 +633,9 @@ unsigned int getTextureFilterModeNoMip(Texture::FilterMode format) {
 
 unsigned int getBlendEqu(FrameBuffer::BlendEqu equ) {
 	switch (equ) {
-	case FrameBuffer::BlendEqu::eAddition:
+	case FrameBuffer::BlendEqu::Addition:
 		return GL_FUNC_ADD;
-	case FrameBuffer::BlendEqu ::eSubtract:
+	case FrameBuffer::BlendEqu ::Subtract:
 		return GL_FUNC_SUBTRACT;
 	default:
 		throw InvalidArgumentException("");

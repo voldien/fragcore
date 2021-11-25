@@ -7,7 +7,6 @@
 #include <../RendererWindow.h>
 #include <GL/glew.h>
 
-
 namespace fragcore {
 
 	/**
@@ -15,7 +14,7 @@ namespace fragcore {
 	 */
 	typedef struct OpenGLCore_t {
 		void *openglcontext;
-		void*tpmwindow;
+		void *tpmwindow;
 		fragcore::RendererWindow *drawwindow;
 
 		bool useCoreProfile;
@@ -123,6 +122,11 @@ namespace fragcore {
 	} GLSync;
 
 } // namespace fragcore
+
+#define CHECK_OPENGL_ERROR checkError();
+
+#define VALIDATE_OPENGL_CALL(x)                                                                                        \
+	{ x checkError(); }
 
 // TODO change name to resolve potential symbol name conflict.
 /**

@@ -321,6 +321,7 @@ namespace fragcore {
 
 	  public: /*	OpenGL Specific methods.	*/
 		void *getOpenGLContext() noexcept;
+		void bindWindowContext(void* window, void* context);
 
 	  protected: /*  */
 		void *pdata;

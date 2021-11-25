@@ -61,6 +61,7 @@ namespace fragcore {
 		virtual void setSize(int width, int height) = 0;
 
 		virtual void getSize(int *width, int *height) const = 0;
+		
 
 		virtual Display *getCurrentDisplay() const = 0;
 
