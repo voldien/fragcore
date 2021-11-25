@@ -29,6 +29,7 @@
 
 namespace fragcore {
 	/**
+	 * @brief
 	 *
 	 */
 	class FVDECLSPEC RendererWindow : public Window {

@@ -16,7 +16,8 @@ namespace fragcore {
 
 	  public:
 		VKRenderInterface() = delete;
-		VKRenderInterface(const VKRenderInterface &other) = default;
+		VKRenderInterface(VKRenderInterface &&other) = delete;
+		VKRenderInterface(const VKRenderInterface &other) = delete;
 		VKRenderInterface(IConfig *config);
 		virtual ~VKRenderInterface();
 
@@ -43,7 +44,7 @@ namespace fragcore {
 
 		virtual Buffer *createBuffer(BufferDesc *desc) override;
 
-		virtual void deleteBuffer(Buffer *object)override;
+		virtual void deleteBuffer(Buffer *object) override;
 
 		virtual Geometry *createGeometry(GeometryDesc *desc) override;
 
@@ -67,13 +68,13 @@ namespace fragcore {
 		// TODO add viewobject for handling as a object
 		virtual ViewPort *getView(unsigned int i) override;
 
-		virtual void clear(unsigned int bitflag) ; // TODO relocate to the default framebuffer.
+		virtual void clear(unsigned int bitflag); // TODO relocate to the default framebuffer.
 
-		virtual void clearColor(float r, float g, float b, float a) ; // TODO relocate to the framebuffer.
+		virtual void clearColor(float r, float g, float b, float a); // TODO relocate to the framebuffer.
 
-		virtual void setVSync(int sync) ; // TODO relocate to the render window.
+		virtual void setVSync(int sync); // TODO relocate to the render window.
 
-		virtual void swapBuffer() ; // TODO relocate to the render window.
+		virtual void swapBuffer(); // TODO relocate to the render window.
 
 		virtual void setDepthMask(bool flag) override;
 

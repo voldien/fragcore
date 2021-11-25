@@ -59,9 +59,7 @@ float Sampler::getAnisotropic() const {
 	return ansio;
 }
 
-Sampler::CompareFunc Sampler::getCompare() const {
-	GLSamplerObject *sampler = (GLSamplerObject *)this->getObject();
-}
+Sampler::CompareFunc Sampler::getCompare() const { GLSamplerObject *sampler = (GLSamplerObject *)this->getObject(); }
 
 void Sampler::setCompareFunc(CompareFunc compareFunc) {
 	GLSamplerObject *sampler = (GLSamplerObject *)this->getObject();

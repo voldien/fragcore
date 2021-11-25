@@ -21,8 +21,9 @@
 #include "UIDGenerator.h"
 
 namespace fragcore {
+
 	/**
-	 * Responsible for containing
+	 * @brief Responsible for containing
 	 * the UID of object.
 	 */
 	class FVDECLSPEC UIDObject {
@@ -42,8 +43,8 @@ namespace fragcore {
 		virtual void setUID(uint32_t uid) noexcept { this->uid = uid; }
 
 		/**
-		 *	Get the unique identifier.
-		 *	@Return unique ID.
+		 *	@brief Get the unique identifier.
+		 *	@return unique ID.
 		 */
 		virtual uint32_t getUID() const noexcept { return this->uid; }
 
