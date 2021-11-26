@@ -36,7 +36,7 @@ namespace fragcore {
 		/**
 		 *	Create texture.
 		 *
-		 *	@Return non null texture object if succesfully. Null otherwise.
+		 *	@return non null texture object if succesfully. Null otherwise.
 		 */
 		virtual Texture *createTexture(TextureDesc *desc);
 
@@ -63,7 +63,7 @@ namespace fragcore {
 		/**
 		 *	Create shader.
 		 *
-		 *	@Return
+		 *	@return
 		 */
 		virtual Shader *createShader(ShaderDesc *desc);
 
@@ -81,7 +81,7 @@ namespace fragcore {
 		/**
 		 *	Create geometry.
 		 *
-		 *	@Return
+		 *	@return
 		 */
 		virtual Geometry *createGeometry(GeometryDesc *desc);
 
@@ -261,7 +261,7 @@ namespace fragcore {
 
 		/**
 		 *	Get shader version.
-		 *	@Return non-null terminated string.
+		 *	@return non-null terminated string.
 		 */
 		virtual const char *getShaderVersion(ShaderLanguage language) const;
 
@@ -279,7 +279,7 @@ namespace fragcore {
 
 		/**
 		 *	Get version of the interface.
-		 *	@Return non-null terminated string.
+		 *	@return non-null terminated string.
 		 */
 		virtual const char *getVersion() const;
 

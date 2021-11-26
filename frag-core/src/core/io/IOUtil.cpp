@@ -16,7 +16,7 @@ long int IOUtil::loadFileMem(Ref<IO> &io, char **data) {
 	char buf[1024 * 4];
 	long nbytes;
 	while (!io->eof() && (nbytes = io->read(sizeof(buf), buf)) > 0) {
-		d = (char *)realloc(d, dataSize + nbytes);
+		d = static_cast<char *>(realloc(d, dataSize + nbytes));
 		memcpy(&d[dataSize], buf, nbytes);
 		dataSize += nbytes;
 	}
@@ -48,7 +48,7 @@ long int IOUtil::loadStringMem(Ref<IO> &io, char **string) {
 	long int nbytes;
 
 	nbytes = loadFileMem(io, string);
-	*string = (char *)realloc(*string, nbytes + 1);
+	*string = static_cast<char *>(realloc(*string, nbytes + 1));
 	(*string)[nbytes] = '\0';
 
 	return nbytes;

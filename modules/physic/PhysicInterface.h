@@ -75,7 +75,7 @@ namespace fragcore {
 		/**
 		 *	Create collision object.
 		 *
-		 *	@Return
+		 *	@return
 		 */
 		virtual Collision *createCollision(const CollisionDesc *desc);
 
@@ -87,7 +87,7 @@ namespace fragcore {
 		/**
 		 *	Create constraint object.
 		 *
-		 *	@Return
+		 *	@return
 		 */
 		virtual Constraints *createConstraints(const ConstraintsDesc *desc);
 
@@ -171,7 +171,7 @@ namespace fragcore {
 
 		/**
 		 *
-		 *	@Return
+		 *	@return
 		 */
 		virtual void *getState(unsigned int *len);
 
@@ -183,7 +183,7 @@ namespace fragcore {
 
 		/**
 		 *	Get version of the interface.
-		 *	@Return non-null terminated string.
+		 *	@return non-null terminated string.
 		 */
 		virtual const char *getVersion() const;
 
@@ -205,7 +205,7 @@ namespace fragcore {
 	 *	Create internal physic interface instance from external
 	 *	library.
 	 *
-	 *	@Return non-null physic interface object.
+	 *	@return non-null physic interface object.
 	 */
 	extern "C" PhysicInterface *createInternalPhysicInterface(IConfig *config);
 } // namespace fragcore

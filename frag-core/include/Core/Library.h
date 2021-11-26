@@ -39,7 +39,7 @@ namespace fragcore {
 		/**
 		 *	Open library.
 		 *
-		 *	@Return true if successfully.
+		 *	@return true if successfully.
 		 */
 		bool open(const char *clibrary);
 
@@ -53,14 +53,14 @@ namespace fragcore {
 		/**
 		 *	Determine if loaded library is valid.
 		 *
-		 *	@Return true if valid library.
+		 *	@return true if valid library.
 		 */
 		bool isValid() const;
 
 		/**
 		 *	Get function pointer.
 		 *
-		 *	@Return function pointer if successfully.
+		 *	@return function pointer if successfully.
 		 */
 		void *getfunc(const char *cfunctionName);
 

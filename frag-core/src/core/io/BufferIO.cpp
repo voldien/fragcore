@@ -84,7 +84,7 @@ BufferIO::BufferIO(void *pBuffer, unsigned long size) {
 BufferIO::BufferIO(unsigned long size, bool expandable) {
 	this->marker = 0;
 	this->nbytes = size;
-	this->buffer = (char *)malloc(size);
+	this->buffer = static_cast<char *>(malloc(size));
 	this->ioMode = static_cast<IOMode>(IOMode::READ | IOMode::WRITE);
 	this->expandable = expandable;
 }

@@ -177,7 +177,7 @@ void ASyncIO::asyncClose(ASyncHandle handle) {
 void ASyncIO::async_open(Task *task) {
 
 	// ASyncHandle handle = (ASyncHandle)task->userData;
-	AsyncObject *ao = (AsyncObject *)task->userData;
+	AsyncObject *ao = static_cast<AsyncObject *>(task->userData);
 
 	// const char *path = (const char *)ao->begin;
 	// ASync *async = (ASync *) package->puser;

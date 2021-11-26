@@ -53,7 +53,13 @@ void DoubleBufferedAllocator::swap() { this->m_curStack = ~this->m_curStack & 0x
 
 StackAllocator *DoubleBufferedAllocator::getCurrentStack() { return &this->m_stack[this->m_curStack]; }
 
-StackAllocator *DoubleBufferedAllocator::getStack(int index) const { return (StackAllocator *)&this->m_stack[index]; }
+const StackAllocator *DoubleBufferedAllocator::getStack(int index) const {
+	return static_cast<const StackAllocator *>(&this->m_stack[index]);
+}
+
+StackAllocator *DoubleBufferedAllocator::getStack(int index) {
+	return static_cast<StackAllocator *>(&this->m_stack[index]);
+}
 
 DoubleBufferedAllocator &DoubleBufferedAllocator::operator=(const DoubleBufferedAllocator &alloc) {
 	*this->getStack(0) = *alloc.getStack(0);

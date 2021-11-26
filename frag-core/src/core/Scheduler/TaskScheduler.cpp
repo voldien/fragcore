@@ -21,6 +21,9 @@ TaskScheduler::~TaskScheduler() {
 	schTaskSch *taskSch = static_cast<schTaskSch *>(this->sch);
 	this->terminate();
 	int rc = schReleaseTaskSch(taskSch);
+	if(rc != SCH_OK){
+		
+	}
 	/*	Release.	*/
 
 	/*	Reset memory.	*/
