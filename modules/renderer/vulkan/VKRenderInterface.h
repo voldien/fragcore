@@ -143,7 +143,9 @@ namespace fragcore {
 
 		virtual void *getData() const override;
 
+	  public: /*	*/
 		std::shared_ptr<VKDevice> &getDevice() { return this->device; };
+		std::shared_ptr<VulkanCore> getInstance() { return this->core; }
 
 	  protected:
 		std::shared_ptr<VKDevice> device;
