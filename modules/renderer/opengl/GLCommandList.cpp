@@ -2,19 +2,24 @@
 #include "internal_object_type.h"
 #include <GL/glew.h>
 
-
 using namespace fragcore;
+GLCommandList::GLCommandList() { this->commands.reserve(1000); }
 
 GLCommandList::~GLCommandList() {}
 
-void GLCommandList::begin() {}
+void GLCommandList::begin() { commands.clear(); }
 void GLCommandList::end() {}
 
 void GLCommandList::copyTexture(const Texture *src, Texture *dst) {}
 
 void GLCommandList::bindPipeline(RenderPipeline *p) {}
 void GLCommandList::bindFramebuffer(Ref<FrameBuffer> &framebuffer) {}
-void GLCommandList::setviewport(int x, int y, int width, int height) {}
+void GLCommandList::setviewport(int x, int y, int width, int height) {
+	GLViewPortCommand command;
+	GLViewPortCommand *_command =
+		(GLViewPortCommand *)this->stackAlloc.alloc(command.getCommandSize<GLViewPortCommand>());
+	glViewport(x, y, width, height);
+}
 
 void GLCommandList::clearDepth(float depth) {}
 void GLCommandList::clearColorTarget(uint index, const Color &color) {}

@@ -1,5 +1,6 @@
 #ifndef _FRAG_CORE_GL_COMMAND_LIST_H_
 #define _FRAG_CORE_GL_COMMAND_LIST_H_ 1
+#include<Core/dataStructure/StackAllactor.h>
 #include "../CommandList.h"
 #include "GLCommandListCommands.h"
 #include <vector>
@@ -12,6 +13,7 @@ namespace fragcore {
 		friend class GLRendererInterface;
 
 	  public:
+		GLCommandList();
 		virtual ~GLCommandList();
 
 		virtual void begin();
@@ -37,6 +39,7 @@ namespace fragcore {
 		virtual void insertDebugMarker(const char *name);
 
 	  private:
+		StackAllocator stackAlloc;
 		std::vector<GLCommandBase *> commands;
 	};
 } // namespace fragcore

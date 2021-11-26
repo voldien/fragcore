@@ -60,16 +60,16 @@ namespace fragcore {
 		void setBordered(bool bordered) override;
 
 		void setMinimumSize(int width, int height) override;
-		virtual void getMinimumSize(int *width, int *height);
+		virtual void getMinimumSize(int *width, int *height) override;
 		void setMaximumSize(int width, int height) override;
-		virtual void getMaximumSize(int *width, int *height);
+		virtual void getMaximumSize(int *width, int *height) override;
 
-		virtual float getGamma() const;
+		virtual float getGamma() const override;
 
-		virtual void setGamma(float);
+		virtual void setGamma(float gamma) override;
 
-		virtual void setTitle(const std::string& title);
-		virtual std::string getTitle() const;
+		virtual void setTitle(const std::string &title) override;
+		virtual std::string getTitle() const override;
 
 		intptr_t getNativePtr() const override;
 

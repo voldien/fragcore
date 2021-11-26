@@ -343,7 +343,6 @@ GLRendererInterface::~GLRendererInterface() {
 		SDL_GL_DeleteContext(this->openglcontext);
 
 	SDL_QuitSubSystem(SDL_INIT_VIDEO);
-
 }
 
 Texture *GLRendererInterface::createTexture(TextureDesc *desc) {
@@ -1224,7 +1223,7 @@ FrameBuffer *GLRendererInterface::createFrameBuffer(FrameBufferDesc *desc) {
 
 void GLRendererInterface::deleteFrameBuffer(FrameBuffer *obj) {
 
-	GLFrameBuffer* glfFramebuffer = static_cast<GLFrameBuffer*>(obj);
+	GLFrameBuffer *glfFramebuffer = static_cast<GLFrameBuffer *>(obj);
 
 	if (glIsFramebuffer(glfFramebuffer->framebuffer))
 		glDeleteFramebuffers(1, &glfFramebuffer->framebuffer);
@@ -2048,7 +2047,7 @@ void GLRendererInterface::execute(CommandList *list) {
 	for (int i = 0; i < glist->commands.size(); i++) {
 		const GLCommandBase *base = glist->commands[i];
 		switch (base->getCommand()) {
-		case ClearColor: {
+		case GLCommandBufferCmd::ClearColor: {
 			const GLCommandClearColor *clearColor = (const GLCommandClearColor *)base;
 			glClearColor(clearColor->clear.x(), clearColor->clear.x(), clearColor->clear.x(), clearColor->clear.x());
 			// glClearNamedFramebufferfv(fraobj->framebuffer, GL_COLOR, GL_COLOR_ATTACHMENT0 + index, (GLfloat *)color);

@@ -1,5 +1,5 @@
-#ifndef _FRAG_CORE_VULKAN_WINDOW_H_
-#define _FRAG_CORE_VULKAN_WINDOW_H_ 1
+#ifndef _FRAG_CORE_OPENGL_WINDOW_H_
+#define _FRAG_CORE_OPENGL_WINDOW_H_ 1
 #include "GLRendererInterface.h"
 #include "../RendererWindow.h"
 #if defined(FRAG_CORE_INTERNAL_IMP) // TODO resolve to a single file or
