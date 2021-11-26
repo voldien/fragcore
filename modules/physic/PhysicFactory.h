@@ -57,7 +57,7 @@ namespace fragcore {
 		static PhysicInterface* createPhysic(const char* libpath, IConfig* overrideOption);
 
 		/**
-		 * @Return
+		 * @return
 		 */
 		static const char* getInterfaceLibraryPath(PhysicAPI api);
 	private:	/*	Prevent one from creating an instance of this class.	*/

@@ -34,74 +34,74 @@ namespace fragcore {
 	template <class T> class Iterator {
 	  public:
 		/**
-		 *	@Return
+		 *	@return
 		 */
 		virtual Iterator &operator++() = 0;
 
 		/**
-		 *	@Return
+		 *	@return
 		 */
 		virtual Iterator &operator++(int) = 0;
 
 		/**
-		 *	@Return
+		 *	@return
 		 */
 		virtual Iterator &operator--() = 0;
 
 		/**
-		 *	@Return
+		 *	@return
 		 */
 		virtual Iterator &operator+=(int n) = 0;
 
 		/**
-		 *	@Return
+		 *	@return
 		 */
 		virtual Iterator &operator-=(int n) = 0;
 
 		/**
-		 *	@Return
+		 *	@return
 		 */
 		virtual Iterator &operator+(int n) = 0;
 
 		/**
-		 *	@Return
+		 *	@return
 		 */
 		virtual Iterator &operator-(int n) = 0;
 
 		/**
-		 *	@Return
+		 *	@return
 		 */
 		virtual Iterator &operator[](int index) const = 0;
 
 		/**
-		 *	@Return
+		 *	@return
 		 */
 		virtual T &operator->() const { return (T) * this->iterator; }
 
 		/**
-		 *	@Return
+		 *	@return
 		 */
 		virtual T &operator*() const { return *this->iterator; }
 
 		/**
-		 *	@Return
+		 *	@return
 		 */
 		virtual T &operator*() { return *this->iterator; }
 
 		/**
-		 *	@Return
+		 *	@return
 		 */
 		virtual inline bool operator==(const Iterator &iterator) noexcept { return this->iterator == iterator.iterator; }
 
 		/**
-		 *	@Return
+		 *	@return
 		 */
 		virtual inline bool operator!=(const Iterator &iterator) noexcept {
 			return this->iterator != iterator.iterator;
 		}
 
 		/**
-		 *	@Return
+		 *	@return
 		 */
 		virtual Iterator &operator=(const Iterator &iterator) {
 			this->iterator = iterator.iterator;

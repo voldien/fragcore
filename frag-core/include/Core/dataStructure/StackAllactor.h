@@ -38,7 +38,7 @@ namespace fragcore {
 
 		/**
 		 *	Allocate n number of bytes.
-		 *	@Return first memory address.
+		 *	@return first memory address.
 		 */
 		void *alloc(size_t sizeBytes);
 
@@ -50,7 +50,7 @@ namespace fragcore {
 
 		/**
 		 *	Allocate aligned memory block.
-		 *	@Return first memory address.
+		 *	@return first memory address.
 		 */
 		void *allocateAligned(size_t sizeBytes, int alignment);
 
@@ -60,12 +60,12 @@ namespace fragcore {
 		void clear();
 
 		/**
-		 *	@Return marker offset.
+		 *	@return marker offset.
 		 */
 		size_t getMarker() const;
 
 		/**
-		 *	@Return non null pointer if successfully.
+		 *	@return non null pointer if successfully.
 		 */
 		void *fetch(size_t sizeBytes);
 
@@ -75,19 +75,19 @@ namespace fragcore {
 		void freeToMarker(size_t marker);
 
 		/**
-		 *	@Return
+		 *	@return
 		 */
 		StackAllocator &operator=(const StackAllocator &alloc);
 
 		/**
 		 *
-		 *	@Return
+		 *	@return
 		 */
 		bool operator==(const StackAllocator &alloc);
 
 		/**
 		 *
-		 *	@Return
+		 *	@return
 		 */
 		bool operator!=(const StackAllocator &alloc);
 

@@ -57,7 +57,7 @@ namespace fragcore {
 		 *	@throws invalid_argument: if the configuration key
 		 *	did not exist.
 		 *
-		 *	@Return configuration value.
+		 *	@return configuration value.
 		 */
 		template <class T> T get(const std::string &key) const {
 			T tmp;

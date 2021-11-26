@@ -97,7 +97,7 @@ namespace fragcore {
 		/**
 		 *	Get a pointer to next object in pool allocator.
 		 *
-		 *	@Return None nullptr pointer if successful.
+		 *	@return None nullptr pointer if successful.
 		 */
 		T *obtain() {
 			T *alloc;
@@ -227,7 +227,7 @@ namespace fragcore {
 
 		/**
 		 *
-		 *	@Return
+		 *	@return
 		 */
 		inline T &operator[](int index) { return this->item[index].data; }
 

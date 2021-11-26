@@ -44,7 +44,7 @@ namespace fragcore {
 		/**
 		 *	Get texture attached to framebuffer by index.
 		 *
-		 *	@Return Non null texture pointer if successfully.
+		 *	@return Non null texture pointer if successfully.
 		 */
 		virtual Texture *getAttachment(unsigned int index) override;
 

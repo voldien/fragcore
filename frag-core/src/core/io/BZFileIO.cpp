@@ -16,7 +16,7 @@ long BZFileIO::read(long int nbytes, void *pbuffer) {
 long BZFileIO::write(long int nbytes, const void *pbuffer) {
 	int bzerror;
 	int len = nbytes;
-	BZ2_bzWrite(&bzerror, this->bzFile, (void *)pbuffer, (int)nbytes);
+	BZ2_bzWrite(&bzerror, this->bzFile, (void *)pbuffer, static_cast<int>(nbytes));
 	if (bzerror != BZ_OK) {
 		throw RuntimeException("Failed to write {}", BZ2_bzerror(this->bzFile, &bzerror));
 	}
@@ -35,10 +35,7 @@ bool BZFileIO::isWriteable() const { return FileIO::isWriteable(); }
 
 bool BZFileIO::isReadable() const { return FileIO::isReadable(); }
 
-bool BZFileIO::flush() {
-	return BZ2_bzflush(this->bzFile);
-	//	return FileIO::flush();
-}
+bool BZFileIO::flush() { return BZ2_bzflush(this->bzFile); }
 
 void BZFileIO::close() {
 	int bzerror;

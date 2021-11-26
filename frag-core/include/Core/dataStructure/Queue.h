@@ -83,12 +83,12 @@ namespace fragcore {
 		}
 
 		/**
-		 *	@Return true if queue empty.
+		 *	@return true if queue empty.
 		 */
 		inline bool isEmpty() const { return (this->getSize() == 0); }
 
 		/**
-		 *	@Return true if full, false otherwise.
+		 *	@return true if full, false otherwise.
 		 */
 		inline bool isFull() const { return (this->getSize() == this->getReserved()); }
 
@@ -131,7 +131,7 @@ namespace fragcore {
 
 	  public: /*  */
 		/**
-		 *	@Return
+		 *	@return
 		 */
 		Queue &operator=(const Queue &que) {
 			this->mdata = (T *)malloc(que.getReserved() * que.getTypeSize());

@@ -42,7 +42,7 @@ namespace fragcore {
 		/**
 		 *	Allocate n number of bytes aligned.
 		 *
-		 *	@Return first memory address.
+		 *	@return first memory address.
 		 */
 		void allocateAligned(unsigned int sizeBytes, int alignment);
 
@@ -53,7 +53,7 @@ namespace fragcore {
 
 		/**
 		 *	Return marker offset.
-		 *	@Return
+		 *	@return
 		 */
 		unsigned int getMarker() const;
 
@@ -80,10 +80,18 @@ namespace fragcore {
 		/**
 		 *	Get current by index.
 		 */
-		StackAllocator *getStack(int index) const;
+		const StackAllocator *getStack(int index) const;
 
 		/**
-		 *	@Return
+		 * @brief Get the Stack object
+		 * 
+		 * @param index 
+		 * @return StackAllocator* 
+		 */
+		StackAllocator *getStack(int index);
+
+		/**
+		 *	@return
 		 */
 		DoubleBufferedAllocator &operator=(const DoubleBufferedAllocator &alloc);
 		DoubleBufferedAllocator &operator=(DoubleBufferedAllocator &&alloc);

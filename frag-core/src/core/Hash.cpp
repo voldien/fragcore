@@ -58,7 +58,7 @@ void Hash::final(std::vector<unsigned char> &hash) {
 	switch (this->algorithm) {
 	case Hash::ALGORITHM::MD5:
 		hash.resize(MD5_DIGEST_LENGTH);
-		MD5_Final(hash.data(), (MD5_CTX *)this->context);
+		MD5_Final(hash.data(), static_cast<MD5_CTX *>(this->context));
 		break;
 	case Hash::ALGORITHM::SHA128:
 	case Hash::ALGORITHM::SHA256:
@@ -97,21 +97,23 @@ void Hash::initHash(ALGORITHM algorithm) {
 	switch (algorithm) {
 	case Hash::ALGORITHM::MD5:
 		this->context = malloc(sizeof(MD5_CTX));
-		MD5_Init((MD5_CTX *)this->context);
+		MD5_Init(static_cast<MD5_CTX *>(this->context));
 		break;
 	case Hash::ALGORITHM::SHA128:
 		this->context = malloc(sizeof(SHA_CTX));
-		SHA1_Init((SHA_CTX *)this->context);
+		SHA1_Init(static_cast<SHA_CTX *>(this->context));
 		break;
 	case Hash::ALGORITHM::SHA224:
 		throw NotSupportedException();
 	case Hash::ALGORITHM::SHA256:
 		this->context = malloc(sizeof(SHA256_CTX));
-		SHA256_Init((SHA256_CTX *)this->context);
+		SHA256_Init(static_cast<SHA256_CTX *>(this->context));
 		break;
 	case Hash::ALGORITHM::SHA512:
+		this->context = malloc(sizeof(SHA512_CTX));
+		SHA512_Init(static_cast<SHA512_CTX *>(this->context));
 		throw NotSupportedException();
 	default:
-		throw InvalidArgumentException("Invalid hash algorithm - {}", (int)algorithm);
+		throw InvalidArgumentException("Invalid hash algorithm - {}", static_cast<int>(algorithm));
 	}
 }

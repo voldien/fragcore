@@ -10,27 +10,27 @@ namespace fragcore {
 	// 	Contact(const Contact &contact);
 
 	// 	/**
-	// 	 *	@Return
+	// 	 *	@return
 	// 	*/
 	// 	unsigned int VDAPIFASTENTRY getCount() const;
 
 	// 	/**
-	// 	 *	@Return
+	// 	 *	@return
 	// 	*/
 	// 	VDVector3 VDAPIENTRY impulse(int index) const;
 
 	// 	/**
-	// 	 *	@Return
+	// 	 *	@return
 	// 	*/
 	// 	VDVector3 VDAPIENTRY point(int index) const;
 
 	// 	/**
-	// 	 *	@Return
+	// 	 *	@return
 	// 	*/
 	// 	VDVector3 VDAPIENTRY normal(int index) const;
 
 	// 	/**
-	// 	 *	@Return
+	// 	 *	@return
 	// 	*/
 	// 	float VDAPIENTRY distance(int index) const;
 

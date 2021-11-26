@@ -201,7 +201,7 @@ typedef struct elt_poll_events_t {
  *	\event non null pointer to ExEvent event structure.
  *	if event is NULL, there will be a segmentation violation.
  *
- *	@Return 1 if event was polled. 0 if no event was polled.
+ *	@return 1 if event was polled. 0 if no event was polled.
  */
 extern ELTDECLSPEC int ELTAPIENTRY ExPollEvent(ExEvent *event);
 
@@ -221,7 +221,7 @@ extern ELTDECLSPEC int ELTAPIENTRY ExPollWindowEvent(ExWin window, ExWindowEvent
 
 /**
  *
- *	@Return
+ *	@return
  */
 extern ELTDECLSPEC int ELTAPIENTRY ExForwardEvent(unsigned int event, ExHandle data, unsigned int size);
 
