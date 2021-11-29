@@ -35,8 +35,9 @@ namespace fragcore {
 			IPAddress_Type_IPV6 = 2,
 			IPAddress_Type_ANY = 3,
 		};
-		IPAddress(); // TODO add binary as the address.
-		//IPAddress(const std::vector<uint8_t>& encoded_address);
+		IPAddress();
+		IPAddress(void *encoded, IPAddressType type); // TODO add binary as the address.
+		IPAddress(const std::vector<uint8_t> &encoded_address);
 		IPAddress(const IPAddress &other) = default;
 		IPAddress &operator=(const IPAddress &other) = default;
 		IPAddress(IPAddress &&other) = default;
@@ -73,9 +74,9 @@ namespace fragcore {
 		IPAddressType type;
 		bool valid;
 		union {
-			uint8_t field8[16];
-			uint16_t field16[8];
-			uint32_t field32[4];
+			uint8_t field8[16];	 /*	Up to 16 bytes, support from IPV4 to IPV6.	*/
+			uint16_t field16[8]; /*	Up to 16 bytes, support from IPV4 to IPV6.	*/
+			uint32_t field32[4]; /*	Up to 16 bytes, support from IPV4 to IPV6.	*/
 		};
 	};
 } // namespace fragcore

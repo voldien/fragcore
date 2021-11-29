@@ -23,7 +23,8 @@ TEST_P(HashMD5Test, ComputeHashCorrect) {
 
 	EXPECT_NO_THROW(hash.update(x.data(), x.size()));
 
-	ASSERT_EQ(hash.getResultSize(), 10);
+	const size_t mdSize = 16;
+	ASSERT_EQ(hash.getResultSize(), mdSize);
 	std::vector<unsigned char> md5;
 	EXPECT_NO_THROW(hash.final(md5));
 

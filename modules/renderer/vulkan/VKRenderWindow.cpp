@@ -310,7 +310,7 @@ void VKRenderWindow::createSwapChain() {
 	/*	*/
 	const VKHelper::QueueFamilyIndices indices =
 		VKHelper::findQueueFamilies(physicalDevice->getHandle(), this->surface);
-	std::vector<uint32_t> queueFamilyIndices = {indices.graphicsFamily, indices.presentFamily};
+	std::vector<uint32_t> queueFamilyIndices = {(uint32_t)indices.graphicsFamily, (uint32_t)indices.presentFamily};
 
 	/*  */
 	VkSwapchainCreateInfoKHR createSwapChainInfo = {};

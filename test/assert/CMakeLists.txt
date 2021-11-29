@@ -8,7 +8,9 @@ ENDIF()
 
 # Source files.
 FILE(GLOB SOURCE_FILES 	${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
-						${CMAKE_CURRENT_SOURCE_DIR}/src/DataStructure/*.cpp)
+						${CMAKE_CURRENT_SOURCE_DIR}/src/dataStructure/*.cpp
+						${CMAKE_CURRENT_SOURCE_DIR}/src/math/*.cpp
+						${CMAKE_CURRENT_SOURCE_DIR}/src/network/*.cpp)
 FILE(GLOB HEADER_FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h)
 
 ADD_EXECUTABLE(fragcore-assert ${SOURCE_FILES} ${HEADER_FILES})

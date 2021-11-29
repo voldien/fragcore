@@ -15,10 +15,11 @@ IPAddress::IPAddress(const std::string &ip, IPAddressType type)
 	if (inet_pton(domain, ip.c_str(), &field8[0]) < 0) {
 		throw RuntimeException("Failed to convert {} to IP Address", ip);
 	}
+	this->valid = true;
 }
 
 IPAddress::IPAddress(const std::string &hostname)
-	: INetAddress(NetworkProtocol::NetWorkProtocol_IP), valid(false), type(IPAddressType::IPAddress_Type_NONE) {
+	: INetAddress(NetworkProtocol::NetWorkProtocol_IP), type(IPAddressType::IPAddress_Type_NONE), valid(false){
 	struct hostent *hosten = nullptr; /*	*/
 									  /*	Get IP from hostname.	*/
 	hosten = gethostbyname(hostname.c_str());
@@ -35,7 +36,7 @@ IPAddress::IPAddress(const std::string &hostname)
 				throw RuntimeException("Failed to convert '{}' to Address", hosten->h_name);
 			} else {
 				this->type = convertDomain2AddressType(domain);
-				valid = true;
+				this->valid = true;
 			}
 		}
 
@@ -49,6 +50,7 @@ const uint8_t *IPAddress::getAddress(IPAddressType addressType) const noexcept {
 	switch (addressType) {
 	default:
 	case IPAddress::IPAddressType::IPAddress_Type_IPV4:
+	case IPAddress::IPAddressType::IPAddress_Type_IPV6:
 		return field8;
 	}
 }

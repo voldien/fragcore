@@ -80,6 +80,12 @@ namespace fragcore {
 
 		Ref(T &&other) { this->p_reference = std::exchange(other.p_reference, nullptr); }
 
+		Ref(const Ref &other) {
+			if (other.reference) {
+				this->ref_pointer(other.reference);
+			}
+		}
+
 		~Ref() { unref(); }
 
 	  private:
