@@ -1,5 +1,5 @@
-#ifndef FRAGVIEW_ICONFIGTEST_H_
-#define FRAGVIEW_ICONFIGTEST_H_ 1
+#ifndef FRAG_CORE_ICONFIGTEST_H_
+#define FRAG_CORE_ICONFIGTEST_H_ 1
 #include"common.h"
 
 

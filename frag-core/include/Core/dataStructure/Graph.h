@@ -16,8 +16,8 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef FRAGVIEW_GRAPH_H_
-#define FRAGVIEW_GRAPH_H_ 1
+#ifndef FRAG_CORE_GRAPH_H_
+#define FRAG_CORE_GRAPH_H_ 1
 
 namespace fragcore{
 	template<class T>

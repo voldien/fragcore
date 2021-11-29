@@ -94,4 +94,4 @@
 //		static VDEvent* VDAPIENTRY getEvent(unsigned int index);
 //};
 
-#endif //FRAGVIEW_EVENT_H
+#endif //FRAG_CORE_EVENT_H
