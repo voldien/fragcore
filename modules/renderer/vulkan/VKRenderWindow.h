@@ -188,6 +188,7 @@ namespace fragcore {
 			VkExtent2D chainExtend;	  /*  */
 			int currentFrame = 0;
 			bool vsync = false;
+			int width,height;
 		} SwapchainBuffers;
 
 		SwapchainBuffers swapChain;

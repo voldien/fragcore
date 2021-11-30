@@ -163,52 +163,49 @@ void VKRenderWindow::maximize() { SDL_MaximizeWindow(this->window); }
 void VKRenderWindow::minimize() { SDL_MinimizeWindow(this->window); }
 
 intptr_t VKRenderWindow::getNativePtr() const {
-	//     SDL_SysWMinfo info;
+	SDL_SysWMinfo info = {};
 
-	//     SDL_VERSION(
-	//         &info.version); /* initialize info structure with SDL version info */
+	SDL_VERSION(&info.version); /* initialize info structure with SDL version info */
 
-	//     if (SDL_GetWindowWMInfo(window,
-	//                             &info)) { /* the call returns true on success */
-	//         /* success */
-	//         switch (info.subsystem) {
-	//             case SDL_SYSWM_UNKNOWN:
-	//                 return 0;
-	//             case SDL_SYSWM_WINDOWS:
-	// #if defined(SDL_VIDEO_DRIVER_WINDOWS)
-	//                 return info.info.win.window;
-	// #endif
-	//             case SDL_SYSWM_X11:
-	// #if defined(SDL_VIDEO_DRIVER_X11)
-	//                 return info.info.x11.window;
-	// #endif
-	// #if SDL_VERSION_ATLEAST(2, 0, 3)
-	//             case SDL_SYSWM_WINRT:
-	// #endif
-	//             case SDL_SYSWM_DIRECTFB:
-	//             case SDL_SYSWM_COCOA:
-	//             case SDL_SYSWM_UIKIT:
-	// #if SDL_VERSION_ATLEAST(2, 0, 2)
-	//             case SDL_SYSWM_WAYLAND:
-	// #if defined(SDL_VIDEO_DRIVER_WAYLAND)
-	//                 return (intptr_t)info.info.wl.surface;
-	// #endif
-	//             case SDL_SYSWM_MIR:
-	// #if defined(SDL_VIDEO_DRIVER_MIR)
-	//                 return (intptr_t)info.info.mir.surface;
-	// #endif
-	// #endif
-	// #if SDL_VERSION_ATLEAST(2, 0, 4)
-	//             case SDL_SYSWM_ANDROID:
-	// #endif
-	// #if SDL_VERSION_ATLEAST(2, 0, 5)
-	//             case SDL_SYSWM_VIVANTE:
-	//                 break;
-	// #endif
-	//         }
-	//     } else
-	//         throw RuntimeException(fmt::format("{}", SDL_GetError()));
-	//     throw NotImplementedException("Window format not implemented");
+	if (SDL_GetWindowWMInfo(this->window, &info)) { /* the call returns true on success */
+		/* success */
+		switch (info.subsystem) {
+		case SDL_SYSWM_UNKNOWN:
+			return 0;
+		case SDL_SYSWM_WINDOWS:
+#if defined(SDL_VIDEO_DRIVER_WINDOWS)
+			return info.info.win.window;
+#endif
+		case SDL_SYSWM_X11:
+#if defined(SDL_VIDEO_DRIVER_X11)
+			return info.info.x11.window;
+#endif
+#if SDL_VERSION_ATLEAST(2, 0, 3)
+		case SDL_SYSWM_WINRT:
+#endif
+		case SDL_SYSWM_DIRECTFB:
+		case SDL_SYSWM_COCOA:
+		case SDL_SYSWM_UIKIT:
+#if SDL_VERSION_ATLEAST(2, 0, 2)
+		case SDL_SYSWM_WAYLAND:
+#if defined(SDL_VIDEO_DRIVER_WAYLAND)
+			return (intptr_t)info.info.wl.surface;
+#endif
+		case SDL_SYSWM_MIR:
+#if defined(SDL_VIDEO_DRIVER_MIR)
+			return (intptr_t)info.info.mir.surface;
+#endif
+#endif
+#if SDL_VERSION_ATLEAST(2, 0, 4)
+		case SDL_SYSWM_ANDROID:
+#endif
+#if SDL_VERSION_ATLEAST(2, 0, 5)
+		case SDL_SYSWM_VIVANTE:
+			break;
+#endif
+		}
+	} else
+		throw RuntimeException(fmt::format("{}", SDL_GetError()));
 }
 
 void VKRenderWindow::setIcon(void *pVoid) {}
@@ -218,7 +215,14 @@ void *VKRenderWindow::getIcon() const { return nullptr; }
 void VKRenderWindow::swapBuffer() {
 	VkResult result;
 
-	vkWaitForFences(getDevice(), 1, &this->inFlightFences[this->swapChain.currentFrame], VK_TRUE, UINT64_MAX);
+	vkWaitForFences(this->getDevice(), 1, &this->inFlightFences[this->swapChain.currentFrame], VK_TRUE, UINT64_MAX);
+
+	int width, height;
+	this->getSize(&width, &height);
+	if (this->getSwapChain().width != width || this->getSwapChain().height != height) {
+		this->recreateSwapChain();
+		return;
+	}
 
 	/*  */
 	uint32_t imageIndex;
@@ -229,8 +233,9 @@ void VKRenderWindow::swapBuffer() {
 	if (result == VK_ERROR_OUT_OF_DATE_KHR) {
 		recreateSwapChain();
 		return;
-	} else
+	} else {
 		VKS_VALIDATE(result);
+	}
 
 	if (this->imagesInFlight[imageIndex] != VK_NULL_HANDLE) {
 		vkWaitForFences(getDevice(), 1, &this->imagesInFlight[imageIndex], VK_TRUE, UINT64_MAX);
@@ -341,7 +346,7 @@ void VKRenderWindow::createSwapChain() {
 	createSwapChainInfo.presentMode = presentMode;
 	createSwapChainInfo.clipped = VK_TRUE;
 
-	/*	*/
+	/*	TODO add support */
 	createSwapChainInfo.oldSwapchain = VK_NULL_HANDLE;
 
 	/*  Create swapchain.   */
@@ -358,6 +363,8 @@ void VKRenderWindow::createSwapChain() {
 	this->swapChain.swapChainImageFormat = surfaceFormat.format;
 	this->swapChain.chainExtend = extent;
 	this->imagesInFlight.resize(this->swapChain.swapChainImages.size(), VK_NULL_HANDLE);
+	this->swapChain.width = width;
+	this->swapChain.height = height;
 
 	/*	*/
 	this->swapChain.swapChainImageViews.resize(this->swapChain.swapChainImages.size());
