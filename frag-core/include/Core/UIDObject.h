@@ -56,6 +56,7 @@ namespace fragcore {
 		}
 		virtual bool operator!=(const UIDObject &other) noexcept { return !(*this == other); }
 
+		static UIDGenerator<uint32_t> &getGenerator() noexcept { return generator; }
 	  private: /*	Attributes.	*/
 		// TODO remove. remove the responsiblity to the generator pool.
 		static UIDGenerator<uint32_t> generator;

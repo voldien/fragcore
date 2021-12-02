@@ -18,8 +18,8 @@
  */
 #ifndef _FRAG_CORE_TREE_H_
 #define _FRAG_CORE_TREE_H_ 1
-#include"../../Def.h"
-#include"Iterator.h"
+#include "../../Def.h"
+#include "Iterator.h"
 
 namespace fragcore {
 
@@ -91,6 +91,14 @@ namespace fragcore {
 			return chi;
 		}
 
+		virtual bool isChild(ITree<T> *item) const {
+			for (unsigned int i = 0; i < getNumChildren(); i++) {
+				if (item == getChild(i))
+					return true;
+			}
+			return false;
+		}
+
 		virtual int getNodeChildIndex(ITree<T> *node) {
 			ITree<T> *n = this->child;
 			int i = 0;
@@ -103,6 +111,15 @@ namespace fragcore {
 			}
 			return -1;
 		}
+
+		// T *operator->() { return (T *)this; }
+
+		// T *operator*() { return (T *)this; }
+
+		// const T *operator->() const { return (T *)this; }
+
+		virtual const T *ptr() const { return (T *)this; }
+		virtual T *ptr() { return (T *)this; }
 
 		class TIterator : public Iterator<T> {
 		  public:
@@ -121,6 +138,8 @@ namespace fragcore {
 						TIterator &operator+=(int n) override {
 							return Iterator::operator+=(n);
 						}
+		virtual const T *ptr() const { return (T *)this; }
+		virtual T *ptr() { return (T *)this; }
 
 						TIterator &operator-=(int n) override {
 							return Iterator::operator-=(n);
