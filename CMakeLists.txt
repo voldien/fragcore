@@ -110,6 +110,10 @@ SET(PROJECT_VERSION "${VERSION}")
 # Set predefined macro for version.
 ADD_DEFINITIONS(-DFV_VERSION="${VERSION}")
 
+
+#############################################
+#  Extract git hash and branch information.
+#############################################
 IF(NOT FRAG_IGNORE_GIT_HASH)
   # Get the current working branch
   EXECUTE_PROCESS(

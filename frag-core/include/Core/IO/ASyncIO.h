@@ -33,7 +33,10 @@ namespace fragcore {
 	typedef void (*AsyncComplete)(ASyncIO *async, ASyncHandle handle); /*  */
 
 	/**
-	 * @brief
+	 * @brief Asynchronous IO
+	 *
+	 * Give support for IO being read and written
+	 * asynchronous.
 	 *
 	 */
 	class FVDECLSPEC ASyncIO : public SmartReference {
@@ -47,9 +50,9 @@ namespace fragcore {
 		 *
 		 */
 		typedef struct io_status_t {
-			long int nbytes; /*  Number of bytes read.   */
-			long int offset; /*  Current position in bytes from start position.  */
-			long int status; /*  Status of the termination of the IO operation.  */
+			std::atomic_long nbytes; /*  Number of bytes read.   */
+			std::atomic_long offset; /*  Current position in bytes from start position.  */
+			std::atomic_long status; /*  Status of the termination of the IO operation.  */
 		} IOStatus;
 
 		// TODO determine if adding support for dynamic sized buffer read and write.
@@ -66,6 +69,13 @@ namespace fragcore {
 		 */
 		virtual void asyncReadFile(ASyncHandle handle, char *buffer, unsigned int size, AsyncComplete complete);
 		// TODO add C++ Bind function and lamba support
+		/**
+		 * @brief
+		 *
+		 * @param handle
+		 * @param writeIO
+		 * @param complete
+		 */
 		virtual void asyncReadFile(ASyncHandle handle, Ref<IO> &writeIO, AsyncComplete complete);
 
 		/**
@@ -77,11 +87,32 @@ namespace fragcore {
 		 * @param complete
 		 */
 		virtual void asyncWriteFile(ASyncHandle handle, char *buffer, unsigned int size, AsyncComplete complete);
+		// TODO add C++ Bind function and lamba support
+		/**
+		 * @brief
+		 *
+		 * @param handle
+		 * @param readIO
+		 * @param complete
+		 */
 		virtual void asyncWriteFile(ASyncHandle handle, Ref<IO> &readIO, AsyncComplete complete);
 
-		/*  */
+		/**
+		 * @brief
+		 *
+		 * @param handle
+		 */
 		virtual void asyncWait(ASyncHandle handle);
-		virtual bool asyncWait(ASyncHandle handle, long int timeout);
+
+		/**
+		 * @brief
+		 *
+		 * @param handle
+		 * @param timeout_nanosec
+		 * @return true
+		 * @return falset
+		 */
+		virtual bool asyncWait(ASyncHandle handle, long int timeout_nanosec);
 
 		/**
 		 * @brief
@@ -90,11 +121,30 @@ namespace fragcore {
 		 */
 		virtual void asyncClose(ASyncHandle handle);
 
-		/*  */
+		/**
+		 * @brief
+		 *
+		 * @param handle
+		 * @return Ref<IO>
+		 */
 		virtual Ref<IO> getIO(ASyncHandle handle) const;
+
+		/**
+		 * @brief Get current IO Status.
+		 *
+		 * Will return the current IO status of a specific
+		 * asynchronous process.
+		 *
+		 * @param handle A valid asynchronous handle.
+		 * @return const IOStatus&
+		 */
 		virtual const IOStatus &getIOStatus(ASyncHandle handle) const;
 
-		/*  */
+		/**
+		 * @brief Get the Scheduler object
+		 *
+		 * @return Ref<IScheduler>
+		 */
 		virtual Ref<IScheduler> getScheduler() const;
 
 	  private:
@@ -111,6 +161,10 @@ namespace fragcore {
 		ASyncIO(const ASyncIO &other);
 		virtual void setScheduleReference(const Ref<IScheduler> &sch);
 
+		/**
+		 * @brief
+		 *
+		 */
 		typedef struct async_object {
 			// TOOD be replace with an encapsulated class version.
 			ISemaphore *sem;

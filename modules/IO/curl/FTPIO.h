@@ -35,6 +35,8 @@ namespace fragcore {
 
 		long write(long int nbytes, const void *pbuffer) override;
 
+		virtual long int peek(long int nBytes, void *pbuffer) override { return 0; }
+
 		long length() override;
 
 		bool eof() const override;
@@ -54,7 +56,7 @@ namespace fragcore {
 		void open(const char *path, IOMode mode) override;
 
 		virtual bool isOperationSupported(IOOperation operations) const noexcept override {
-			const IOOperation supportedIO = static_cast<IOOperation>(OP_READ | OP_WRITE);
+			const IOOperation supportedIO = static_cast<IOOperation>(OP_READ | OP_WRITE | OP_LENGTH);
 			return (operations & supportedIO) != operations;
 		};
 
@@ -67,12 +69,13 @@ namespace fragcore {
 		FTPFileIO(const char *path, IOMode mode); // TODO remove filepath
 		FTPFileIO(std::string &path, IOMode mode, Ref<IO>& io);
 
-	  private:
 #if defined(FRAG_CORE_INTERNAL_IMP) // TODO resolve to a single file or something later
 		FTPFileIO(CURL *handle, const char *path, IOMode mode);
 		CURL *handle;
 #endif
 		Ref<IO> ref;
+		Ref<IO> buffer;
+		IO::IOMode ioMode;
 		// GZFileIO(Ref<IO> &io);
 	};
 } // namespace fragcore

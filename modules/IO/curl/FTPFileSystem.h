@@ -29,7 +29,7 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC FTPFileSystem : public IFileSystem {
 	  public:
-		virtual IO *openFile(const char *path, IO::IOMode mode); /*  Open based on the filename extension.*/
+		virtual IO *openFile(const char *path, IO::IOMode mode) override; /*  Open based on the filename extension.*/
 
 		virtual void closeFile(IO *io) override;
 
@@ -69,8 +69,24 @@ namespace fragcore {
 		static const char *getFileExtension(const char *path);
 
 	  public:
+		/**
+		 * @brief Create a File System object
+		 *
+		 * @param ip
+		 * @param port
+		 * @param sch
+		 * @return FTPFileSystem*
+		 */
 		static FTPFileSystem *createFileSystem(const char *ip, int port,
 											   const Ref<IScheduler> &sch = Ref<IScheduler>(nullptr));
+
+		/**
+		 * @brief Create a File System object
+		 *
+		 * @param port
+		 * @param sch
+		 * @return FTPFileSystem*
+		 */
 		static FTPFileSystem *createFileSystem(const IPAddress &, int port,
 											   const Ref<IScheduler> &sch = Ref<IScheduler>(nullptr));
 
@@ -78,6 +94,12 @@ namespace fragcore {
 		// TODO add remove function.
 
 	  public:
+		/**
+		 * @brief Set the Credentials object
+		 *
+		 * @param username
+		 * @param password
+		 */
 		void setCredentials(const std::string &username, const std::string &password);
 
 	  protected:
