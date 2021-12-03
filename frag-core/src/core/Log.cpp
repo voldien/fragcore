@@ -2,7 +2,6 @@
 #include "Core/IO/IOUtil.h"
 #include "Core/Ref.h"
 #include "Core/dataStructure/Queue.h"
-#include<spdlog/spdlog-inl.h>
 #include <cstdarg>
 #include <cstdio>
 #include <list>
