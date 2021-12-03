@@ -20,7 +20,6 @@
 #define _FRAG_CORE_LOG_H_ 1
 #include "IO/IO.h"
 #include "Ref.h"
-#include <spdlog/spdlog.h>
 
 namespace fragcore {
 	/**
