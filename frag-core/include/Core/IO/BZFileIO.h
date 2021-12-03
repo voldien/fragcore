@@ -24,6 +24,7 @@
 
 namespace fragcore {
 	/**
+	 * @brief
 	 *
 	 */
 	class FVDECLSPEC BZFileIO : public FileIO {

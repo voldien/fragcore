@@ -24,7 +24,7 @@
 namespace fragcore {
 
 	/**
-	 * @brief
+	 * @brief FileSystem Interface.
 	 *
 	 */
 	class FVDECLSPEC IFileSystem : public ASyncIO {
@@ -40,10 +40,33 @@ namespace fragcore {
 		}
 		virtual void closeFile(IO *io) = 0;
 
+		/**
+		 * @brief
+		 *
+		 * @param path
+		 */
 		virtual void remove(const char *path) = 0;
+
+		/**
+		 * @brief
+		 *
+		 * @param oldPath
+		 * @param newPath
+		 */
 		virtual void rename(const char *oldPath, const char *newPath) = 0;
 
+		/**
+		 * @brief Create a File object
+		 *
+		 * @param path
+		 */
 		virtual void createFile(const char *path) = 0;
+
+		/**
+		 * @brief Create a Directory object
+		 *
+		 * @param path
+		 */
 		virtual void createDirectory(const char *path) = 0;
 
 		virtual bool isReadable(const char *path) const = 0;

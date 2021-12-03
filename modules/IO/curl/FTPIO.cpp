@@ -16,7 +16,8 @@ void FTPFileIO::close() { curl_easy_cleanup(this->handle); }
 
 long FTPFileIO::read(long int nbytes, void *pbuffer) {
 	size_t nRecv;
-	if (curl_easy_recv(this->handle, pbuffer, nbytes, &nRecv) == CURLE_OK)
+	CURLcode rc = curl_easy_recv(this->handle, pbuffer, nbytes, &nRecv);
+	if (rc == CURLE_OK)
 		return nRecv;
 	else {
 		return 0;
@@ -25,7 +26,8 @@ long FTPFileIO::read(long int nbytes, void *pbuffer) {
 
 long FTPFileIO::write(long int nbytes, const void *pbuffer) {
 	size_t nRecv;
-	if (curl_easy_send(this->handle, pbuffer, nbytes, &nRecv) == CURLE_OK)
+	CURLcode rc = curl_easy_send(this->handle, pbuffer, nbytes, &nRecv);
+	if (rc == CURLE_OK)
 		return nRecv;
 	else {
 		return 0;
@@ -33,7 +35,6 @@ long FTPFileIO::write(long int nbytes, const void *pbuffer) {
 }
 
 long FTPFileIO::length() {
-
 	double filesize = 0.0;
 	CURLcode res = curl_easy_getinfo(this->handle, CURLINFO_CONTENT_LENGTH_DOWNLOAD, &filesize);
 	return filesize;
@@ -51,6 +52,7 @@ unsigned long FTPFileIO::getPos() {
 	// gzeof
 	// gztell
 	// return FileIO::getPos();
+	return 0;
 }
 
 bool FTPFileIO::isWriteable() const { return false; }
@@ -67,6 +69,7 @@ bool FTPFileIO::flush() {
 	// 	return true;
 	// }
 	// return false;
+	return true;
 }
 
 static size_t ftpio_fwrite(void *buffer, size_t size, size_t nmemb, void *stream) {
@@ -78,12 +81,19 @@ static size_t ftpio_fwrite(void *buffer, size_t size, size_t nmemb, void *stream
 	//       return -1; /* failure, can't open file to write */
 	//   }
 	//   return fwrite(buffer, size, nmemb, out->stream);
+	return 0;
 }
 
 static size_t throw_away(void *ptr, size_t size, size_t nmemb, void *data) {
 	/* we are not interested in the headers itself,
 	   so we only return the size we would have saved ... */
 	return (size_t)(size * nmemb);
+}
+
+static int seek_cb(void *userp, curl_off_t offset, int origin) {
+	FTPFileIO *out = (FTPFileIO *)userp;
+	// lseek(our_fd, offset, origin);
+	return CURL_SEEKFUNC_OK;
 }
 
 FTPFileIO::FTPFileIO(const char *path, IOMode mode) {
@@ -107,39 +117,46 @@ FTPFileIO::FTPFileIO(const char *path, IOMode mode) {
 	}
 }
 
+int debug_callback(CURL *handle, curl_infotype type, char *data, size_t size, void *userptr) {
+	if (type == CURLINFO_TEXT) {
+	}
+	return 0;
+}
+
 FTPFileIO::FTPFileIO(CURL *handle, const char *path, IOMode mode) {
 	if (handle == nullptr)
 		throw InvalidArgumentException("");
+	this->handle = handle;
 
 	if (handle) {
 		curl_easy_setopt(handle, CURLOPT_URL,
 						 path); // "ftp://ftp.example.com/curl/curl-7.9.2.tar.gz");
-		/* Define our callback to get called when there's data to be written */
-		switch (mode) {
-		case IOMode::READ:
-			/* code */
-			break;
-		case IOMode::WRITE:
-			break;
-		case IOMode::ACCESS:
-			break;
-		default:
-			break;
-		}
-		curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, ftpio_fwrite);
-		/* Set a pointer to our struct to pass to the callback */
-		curl_easy_setopt(handle, CURLOPT_WRITEDATA, this);
+		this->ioMode = mode;
 
-		curl_easy_setopt(handle, CURLOPT_READFUNCTION, ftpio_fwrite);
-		/* Set a pointer to our struct to pass to the callback */
-		curl_easy_setopt(handle, CURLOPT_READDATA, this);
+		if (mode & IOMode::READ) {
+			curl_easy_setopt(handle, CURLOPT_READFUNCTION, ftpio_fwrite);
+			/* Set a pointer to our struct to pass to the callback */
+			curl_easy_setopt(handle, CURLOPT_READDATA, this);
+		}
+		if (mode & IOMode::WRITE) {
+			curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, ftpio_fwrite);
+			/* Set a pointer to our struct to pass to the callback */
+			curl_easy_setopt(handle, CURLOPT_WRITEDATA, this);
+		}
 
 		curl_easy_setopt(handle, CURLOPT_HEADERFUNCTION, throw_away);
 
 		curl_easy_setopt(handle, CURLOPT_HEADER, 0L);
 
+		curl_easy_setopt(this->handle, CURLOPT_SEEKFUNCTION, seek_cb);
+
+		curl_easy_setopt(this->handle, CURLOPT_SEEKDATA, (void *)this);
+
 		/* Switch on full protocol/debug output */
-		curl_easy_setopt(handle, CURLOPT_VERBOSE, 1L);
+		curl_easy_setopt(this->handle, CURLOPT_VERBOSE, 1L);
+		curl_easy_setopt(this->handle, CURLOPT_DEBUGFUNCTION, debug_callback);
+
+		this->buffer = Ref<IO>(new BufferIO(4096, false));
 	}
 }
 
