@@ -1,8 +1,26 @@
 # FragCore - Work in Progress
 [![Linux Build](https://github.com/voldien/fragcore/actions/workflows/linux-build.yml/badge.svg)](https://github.com/voldien/fragcore/actions/workflows/linux-build.yml)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![GitHub release](https://img.shields.io/github/release/voldien/fragcore.svg)](https://github.com/voldien/fragcore/releases)
 [![Language grade: C/C++](https://img.shields.io/lgtm/grade/cpp/g/voldien/fragcore.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/voldien/fragcore/context:cpp)
+[![GitHub release](https://img.shields.io/github/release/voldien/fragcore.svg)](https://github.com/voldien/fragcore/releases)
+
+A Core library framework library for Game Engine and other similar software. 
+
+Architecture is still in work progress.
+
+## Features
+
+* IO - Abstract interface for IO, such as File,Memory,TCP/UDP,FTP and much more
+* Modular - Modular support of loading library in runtime and compilation time.
+* Network -
+* DataStructure -
+* Threading -
+* Task Scheduler -
+* Math -
+
+## Motivation
+
+This library contains all the low level functionlties assocated with a game engine. It was derived from the project fragview and fragengine, extracted their common low level functionties.
 
 ## Installation
 
@@ -25,6 +43,7 @@ make install
 ```
 
 # Dependencies #
+
 In order to compile the program, the following Debian packages is required. 
 
 ```bash
