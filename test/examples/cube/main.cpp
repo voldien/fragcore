@@ -1,6 +1,5 @@
 #include <CommandList.h>
 #include <FragCore.h>
-#include <Hpm.hpp>
 #include <RendererFactory.h>
 #include <RendererWindow.h>
 #include <SDL2/SDL.h>
@@ -25,7 +24,6 @@ int main(int argc, const char **argv) {
 	window->setTitle(fmt::format("Cube Example: {}", renderer->getName()).c_str());
 	window->show();
 
-	LIBHPM::Hpm::init(LIBHPM::Hpm::eHPM_NOSIMD);
 	// ShaderUtil::loadProgram()
 	// Shader* shader = renderer->createShader(NULL);
 	// Geometry* obj= renderer->createGeometry(NULL);
