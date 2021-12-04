@@ -68,10 +68,12 @@ NetSocket::TransportProtocol TCPNetSocket::getTransportProtocol() const noexcept
 }
 
 int TCPNetSocket::close() {
+	/*	*/
 	if (this->socket > 0) {
 		int status = ::close(this->socket);
-		if (status != 0)
+		if (status != 0) {
 			throw RuntimeException("{}", strerror(errno));
+		}
 		this->socket = 0;
 	}
 	netStatus = NetStatus::Status_Disconnected;
@@ -88,8 +90,9 @@ int TCPNetSocket::bind(const INetAddress &p_addr) {
 	int flags = SOCK_STREAM;
 
 	/*	*/
-	if (isValidNetworkAddress(p_addr))
-		throw RuntimeException("Invalid Net Address Type");
+	if (!isValidNetworkAddress(p_addr)) {
+		throw RuntimeException("Invalid Net Address");
+	}
 
 	/*	*/
 	const TCPUDPAddress *tcpAddress = dynamic_cast<const TCPUDPAddress *>(&p_addr);
@@ -146,6 +149,12 @@ int TCPNetSocket::connect(const INetAddress &p_addr) {
 	// 	flags |= SOCK_NONBLOCK;
 	// #endif
 
+	/*	*/
+	if (!isValidNetworkAddress(p_addr)) {
+		throw RuntimeException("Invalid Net Address");
+	}
+
+	/*	*/
 	const TCPUDPAddress *tcpAddress = dynamic_cast<const TCPUDPAddress *>(&p_addr);
 	if (tcpAddress == nullptr)
 		throw RuntimeException("Not a valid NetAddress Object");
@@ -184,7 +193,7 @@ int TCPNetSocket::recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddres
 		struct sockaddr_in addr4;  /*	*/
 		struct sockaddr_in6 addr6; /*	*/
 	} addrU;
-	int res = ::recvfrom(this->socket, p_buffer, p_len, flag, reinterpret_cast <sockaddr *>(&addrU), &addrlen);
+	int res = ::recvfrom(this->socket, p_buffer, p_len, flag, reinterpret_cast<sockaddr *>(&addrU), &addrlen);
 	return res;
 }
 int TCPNetSocket::recv(void *pbuffer, int p_len, int &sent, bool peek) {
@@ -196,10 +205,13 @@ int TCPNetSocket::recv(void *pbuffer, int p_len, int &sent, bool peek) {
 int TCPNetSocket::send(const uint8_t *p_buffer, int p_len, int &r_sent) {
 	int flag = 0;
 	int res = ::send(this->socket, p_buffer, p_len, flag);
+	// Check status of the send.
+	if (res < 0) {
+	}
 	return res;
 }
 int TCPNetSocket::sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const INetAddress &p_addr) {
-	socklen_t addrlen;			 /*	*/
+	socklen_t addrlen; /*	*/
 	union {
 		struct sockaddr_in addr4;  /*	*/
 		struct sockaddr_in6 addr6; /*	*/
@@ -261,7 +273,7 @@ void TCPNetSocket::setBlocking(bool blocking) { /*	*/
 TCPNetSocket::NetStatus TCPNetSocket::getStatus() const noexcept { return this->netStatus; }
 
 bool TCPNetSocket::isValidNetworkAddress(const INetAddress &address) {
-	return address.getNetworkProtocol() == INetAddress::NetworkProtocol::NetWorkProtocol_TCP_UDP;
+	return address.getNetworkProtocol() == INetAddress::NetworkProtocol::NetWorkProtocol_TCP_UDP && address.isValid();
 }
 
 void TCPNetSocket::setTimeout(long int nanoSeconds) {

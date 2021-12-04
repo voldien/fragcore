@@ -13,16 +13,15 @@ using namespace fragcore;
 
 GLRenderWindow::GLRenderWindow(Ref<GLRendererInterface> &renderer) {
 	this->renderer = renderer;
-	OpenGLCore *core = (OpenGLCore *)renderer->getData();
 
-	this->window = SDL_CreateWindow("", 0, 0, 800, 600, SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN);
+	this->window = SDL_CreateWindow("", 0, 0, 800, 600, SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN | SDL_WINDOW_RESIZABLE);
 
 	/*  */
 	if (window == nullptr)
 		throw RuntimeException(fmt::format("Failed to create window %s for API %s", SDL_GetError(), api));
 
 	// TODO make it part of the framebuffer bind
-	if (SDL_GL_MakeCurrent(this->window, (SDL_GLContext *)core->openglcontext) != 0) {
+	if (SDL_GL_MakeCurrent(this->window, renderer->getOpenGLContext()) != 0) {
 		throw RuntimeException(::fmt::format("%s", SDL_GetError()));
 	}
 }
@@ -98,9 +97,9 @@ void GLRenderWindow::createWindow(int x, int y, int width, int height, const cha
 
 void GLRenderWindow::useWindow(void *pdata) {}
 
-void GLRenderWindow::setTitle(const char *title) { SDL_SetWindowTitle(this->window, title); }
+void GLRenderWindow::setTitle(const std::string &title) { SDL_SetWindowTitle(this->window, title.c_str()); }
 
-const char *GLRenderWindow::getTitle() const { return SDL_GetWindowTitle(this->window); }
+std::string GLRenderWindow::getTitle() const { return SDL_GetWindowTitle(this->window); }
 
 void GLRenderWindow::resizable(bool resizable) { SDL_SetWindowResizable(this->window, (SDL_bool)resizable); }
 
@@ -133,6 +132,7 @@ void GLRenderWindow::maximize() { SDL_MaximizeWindow(this->window); }
 void GLRenderWindow::minimize() { SDL_MinimizeWindow(this->window); }
 
 intptr_t GLRenderWindow::getNativePtr() const {
+	return reinterpret_cast<intptr_t>(this->window);
 	//     SDL_SysWMinfo info;
 
 	//     SDL_VERSION(

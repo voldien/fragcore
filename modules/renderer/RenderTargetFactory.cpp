@@ -22,12 +22,12 @@ FrameBuffer *RenderTargetFactory::createShadow(IRenderer *render, int width, int
 	depthdesc.internalformat = TextureDesc::eDepth;
 	depthdesc.format = TextureDesc::eDepth;
 	depthdesc.type = TextureDesc::eFloat;
-	depthdesc.sampler.AddressU = SamplerDesc::eClamp;
-	depthdesc.sampler.AddressV = SamplerDesc::eClamp;
-	depthdesc.sampler.AddressW = SamplerDesc::eClamp;
-	depthdesc.sampler.minFilter = SamplerDesc::eLinear;
-	depthdesc.sampler.magFilter = SamplerDesc::eLinear;
-	depthdesc.sampler.mipmapFilter = SamplerDesc::eLinear;
+	depthdesc.sampler.AddressU = SamplerDesc::Clamp;
+	depthdesc.sampler.AddressV = SamplerDesc::Clamp;
+	depthdesc.sampler.AddressW = SamplerDesc::Clamp;
+	depthdesc.sampler.minFilter = SamplerDesc::FilterMode::Linear;
+	depthdesc.sampler.magFilter = SamplerDesc::FilterMode::Linear;
+	depthdesc.sampler.mipmapFilter = SamplerDesc::FilterMode::Linear;
 	depthdesc.sampler.anisotropy = 1.0f;
 	depthdesc.pixel = nullptr;
 
@@ -65,12 +65,12 @@ FrameBuffer *RenderTargetFactory::createDeffered(IRenderer *render, int width, i
 	texdesc.format = TextureDesc::eDepthStencil;
 	texdesc.internalformat = TextureDesc::eDepthStencil;
 	texdesc.type = TextureDesc::eUnsigned24_8;
-	texdesc.sampler.AddressU = SamplerDesc::eClamp;
-	texdesc.sampler.AddressV = SamplerDesc::eClamp;
-	texdesc.sampler.AddressW = SamplerDesc::eClamp;
-	texdesc.sampler.minFilter = SamplerDesc::eLinear;
-	texdesc.sampler.magFilter = SamplerDesc::eLinear;
-	texdesc.sampler.mipmapFilter = SamplerDesc::eNoFilterMode;
+	texdesc.sampler.AddressU = SamplerDesc::Clamp;
+	texdesc.sampler.AddressV = SamplerDesc::Clamp;
+	texdesc.sampler.AddressW = SamplerDesc::Clamp;
+	texdesc.sampler.minFilter = SamplerDesc::FilterMode::Linear;
+	texdesc.sampler.magFilter = SamplerDesc::FilterMode::Linear;
+	texdesc.sampler.mipmapFilter = SamplerDesc::FilterMode::NoFilterMode;
 	texdesc.sampler.anisotropy = 1.0f;
 	depthstencil = render->createTexture(&texdesc);
 
@@ -143,12 +143,12 @@ FrameBuffer *RenderTargetFactory::createColor(IRenderer *render, int width, int 
 	texdesc.srgb = 1;
 	texdesc.usemipmaps = 0;
 	texdesc.compression = 0;
-	texdesc.sampler.AddressU = SamplerDesc::eClamp;
-	texdesc.sampler.AddressV = SamplerDesc::eClamp;
-	texdesc.sampler.AddressW = SamplerDesc::eClamp;
-	texdesc.sampler.minFilter = SamplerDesc::eLinear;
-	texdesc.sampler.magFilter = SamplerDesc::eLinear;
-	texdesc.sampler.mipmapFilter = SamplerDesc::eNoFilterMode;
+	texdesc.sampler.AddressU = SamplerDesc::Clamp;
+	texdesc.sampler.AddressV = SamplerDesc::Clamp;
+	texdesc.sampler.AddressW = SamplerDesc::Clamp;
+	texdesc.sampler.minFilter = SamplerDesc::FilterMode::Linear;
+	texdesc.sampler.magFilter = SamplerDesc::FilterMode::Linear;
+	texdesc.sampler.mipmapFilter = SamplerDesc::FilterMode::NoFilterMode;
 	texdesc.sampler.anisotropy = 1.0f;
 	texdesc.marker.markerName = "FrameBuffer Color Component";
 
@@ -185,12 +185,12 @@ FrameBuffer *RenderTargetFactory::createHDR(IRenderer *renderer, int width, int 
 	texdesc.format = TextureDesc::eRGB;
 	texdesc.internalformat = TextureDesc::eRGB;
 	texdesc.type = TextureDesc::eFloat;
-	texdesc.sampler.AddressU = SamplerDesc::eClamp;
-	texdesc.sampler.AddressV = SamplerDesc::eClamp;
-	texdesc.sampler.AddressW = SamplerDesc::eClamp;
-	texdesc.sampler.minFilter = SamplerDesc::eLinear;
-	texdesc.sampler.magFilter = SamplerDesc::eLinear;
-	texdesc.sampler.mipmapFilter = SamplerDesc::eLinear;
+	texdesc.sampler.AddressU = SamplerDesc::Clamp;
+	texdesc.sampler.AddressV = SamplerDesc::Clamp;
+	texdesc.sampler.AddressW = SamplerDesc::Clamp;
+	texdesc.sampler.minFilter = SamplerDesc::FilterMode::Linear;
+	texdesc.sampler.magFilter = SamplerDesc::FilterMode::Linear;
+	texdesc.sampler.mipmapFilter = SamplerDesc::FilterMode::Linear;
 	texdesc.sampler.anisotropy = 1.0f;
 	color = renderer->createTexture(&texdesc);
 

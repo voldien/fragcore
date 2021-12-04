@@ -107,7 +107,7 @@ int main(int argc, const char **argv) {
 			}
 		}
 		// window->getDefaultFrameBuffer()->bind();
-		// window->getDefaultFrameBuffer()->clear(eColor | eDepth);
+		// window->getDefaultFrameBuffer()->clear(Color | Depth);
 
 		// renderer->submittCommand(Ref<CommadList>(clc));
 		/*	Draw rotating cube.	*/

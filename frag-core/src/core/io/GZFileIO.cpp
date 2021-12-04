@@ -29,7 +29,7 @@ void GZFileIO::open(const char *path, IOMode mode) {
 	if (this->gzFi == nullptr) {
 		int error;
 		const char *errMsg = gzerror(this->gzFi, &error);
-		throw RuntimeException(fmt::format("Failed to open {} - error: {} | {}", path, error, errMsg));
+		throw RuntimeException("Failed to open {} - error: {} | {}", path, error, errMsg);
 	}
 
 	/*  Set buffer size.    */
@@ -44,7 +44,7 @@ void GZFileIO::close() {
 	error = gzclose(this->gzFi);
 	if (error != Z_OK) {
 		FileIO::close();
-		throw RuntimeException(fmt::format("Failed to close gzfile {}", zError(error)));
+		throw RuntimeException("Failed to close gzfile {}", zError(error));
 	}
 	FileIO::close();
 }
@@ -57,7 +57,7 @@ long GZFileIO::read(long int nbytes, void *pbuffer) {
 long GZFileIO::write(long int nbytes, const void *pbuffer) {
 	long int nWrittenBytes = gzfwrite(pbuffer, 1, nbytes, this->gzFi);
 	if (nWrittenBytes == 0)
-		throw RuntimeException(fmt::format("Failed to write to  gz file {}", gzerror(this->gzFi, nullptr)));
+		throw RuntimeException("Failed to write to  gz file {}", gzerror(this->gzFi, nullptr));
 	return nWrittenBytes;
 }
 

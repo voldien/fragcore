@@ -1,4 +1,21 @@
-
+/*
+ *	FragCore - Core Framework Functionalities for Game Engines
+ *	Copyright (C) 2018  Valdemar Lindberg
+ *
+ *	This program is free software: you can redistribute it and/or modify
+ *	it under the terms of the GNU General Public License as published by
+ *	the Free Software Foundation, either version 3 of the License, or
+ *	(at your option) any later version.
+ *
+ *	This program is distributed in the hope that it will be useful,
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *	GNU General Public License for more details.
+ *
+ *	You should have received a copy of the GNU General Public License
+ *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 #ifndef _FRAG_CORE_PHYSIC_INTERFACE_H_
 #define _FRAG_CORE_PHYSIC_INTERFACE_H_ 1
 #include "PhysicDesc.h"
@@ -75,7 +92,7 @@ namespace fragcore {
 		/**
 		 *	Create collision object.
 		 *
-		 *	@Return
+		 *	@return
 		 */
 		virtual Collision *createCollision(const CollisionDesc *desc);
 
@@ -87,7 +104,7 @@ namespace fragcore {
 		/**
 		 *	Create constraint object.
 		 *
-		 *	@Return
+		 *	@return
 		 */
 		virtual Constraints *createConstraints(const ConstraintsDesc *desc);
 
@@ -171,7 +188,7 @@ namespace fragcore {
 
 		/**
 		 *
-		 *	@Return
+		 *	@return
 		 */
 		virtual void *getState(unsigned int *len);
 
@@ -183,7 +200,7 @@ namespace fragcore {
 
 		/**
 		 *	Get version of the interface.
-		 *	@Return non-null terminated string.
+		 *	@return non-null terminated string.
 		 */
 		virtual const char *getVersion() const;
 
@@ -205,7 +222,7 @@ namespace fragcore {
 	 *	Create internal physic interface instance from external
 	 *	library.
 	 *
-	 *	@Return non-null physic interface object.
+	 *	@return non-null physic interface object.
 	 */
 	extern "C" PhysicInterface *createInternalPhysicInterface(IConfig *config);
 } // namespace fragcore

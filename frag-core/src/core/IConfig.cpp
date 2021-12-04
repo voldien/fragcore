@@ -244,7 +244,7 @@ void IConfig::save_xml(Ref<IO> &io) {
 
 	buf = xmlBufferCreate();
 	if (buf == nullptr)
-		throw RuntimeException(fmt::format("testXmlwriterMemory: Error creating the xml buffer\n"));
+		throw RuntimeException(fmt::format("testXmlwriterMemory: Error creating the xml buffer"));
 
 	/*	Create write file.	*/
 	writer = xmlNewTextWriterMemory(buf, 0);
@@ -415,9 +415,9 @@ void IConfig::save_yaml(Ref<IO> &io) {
 	//
 	//
 	//    if (!yaml_parser_initialize(&parser))
-	//        fputs("Failed to initialize parser!\n", stderr);
+	//        fputs("Failed to initialize parser!", stderr);
 	//    if (fh == nullptr)
-	//        fputs("Failed to open file!\n", stderr);
+	//        fputs("Failed to open file!", stderr);
 	//    yaml_parser_set_encoding(&parser, YAML_UTF8_ENCODING);
 	//    yaml_parser_delete(&parser);
 }

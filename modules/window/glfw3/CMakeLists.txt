@@ -1,0 +1,39 @@
+
+# Find package that is not part of a Module
+FIND_PACKAGE(PkgConfig QUIET)
+IF(PKG_CONFIG_FOUND)
+	MESSAGE(STATUS "Found pkg-config: ${PKG_CONFIG_EXECUTABLE} -- version ${PKG_CONFIG_VERSION_STRING}.")
+ELSE()
+	MESSAGE(WARNING "Some library dependices may not be able to be found automatically.")
+ENDIF()
+
+IF(PKG_CONFIG_FOUND)
+	pkg_check_modules(GLFW glfw3)
+ELSE()
+	#TODO Resolve
+ENDIF()
+
+IF(GLFW_FOUND)
+	MESSAGE(STATUS "Found glfw: ${GLFW_LIBRARIES} -- version ${GLFW_VERSION}.")
+ENDIF()
+
+
+FILE(GLOB GLFW_WINDOW_SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
+FILE(GLOB GLFW_WINDOW_HEADER_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.h)
+
+# Core library for adding support for plugin.
+ADD_LIBRARY(fragcore-window-glfw ${GLFW_WINDOW_SOURCE_FILES} ${GLFW_WINDOW_HEADER_FILES})
+ADD_DEPENDENCIES( fragcore-window-glfw  fragcore )
+
+#
+TARGET_COMPILE_DEFINITIONS(fragcore-window-glfw PRIVATE FRAG_CORE_INTERNAL_IMP=1)
+#
+TARGET_COMPILE_OPTIONS(fragcore-window-glfw PRIVATE ${GLFW_CFLAGS_OTHER} )
+#
+TARGET_LINK_LIBRARIES(fragcore-window-glfw PUBLIC fragcore PRIVATE ${GLFW_LIBRARIES} )
+#
+TARGET_INCLUDE_DIRECTORIES(fragcore-window-glfw PRIVATE ${GLFW_INCLUDE_DIRS} PUBLIC
+											$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+											$<INSTALL_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
+
+INSTALL(TARGETS fragcore-window-glfw DESTINATION lib)

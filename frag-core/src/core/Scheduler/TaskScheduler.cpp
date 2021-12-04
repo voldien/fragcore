@@ -8,10 +8,13 @@ TaskScheduler::TaskScheduler() : TaskScheduler(-1, 48) {}
 TaskScheduler::TaskScheduler(int cores, unsigned int maxPackagesPool) : sch(nullptr) {
 	schTaskSch *taskSch = nullptr;
 
-	schAllocateTaskPool(&taskSch);
-	int sch = schCreateTaskPool(taskSch, cores, SCH_FLAG_NO_AFM, maxPackagesPool);
-	if (sch != SCH_OK) {
-		throw RuntimeException("Failed to create Scheduler: {}", schErrorMsg(sch));
+	int rc = schAllocateTaskPool(&taskSch);
+	if (rc != SCH_OK) {
+		throw RuntimeException("Failed to create Scheduler: {}", schErrorMsg(rc));
+	}
+	rc = schCreateTaskPool(taskSch, cores, SCH_FLAG_NO_AFM, maxPackagesPool);
+	if (rc != SCH_OK) {
+		throw RuntimeException("Failed to create Scheduler: {}", schErrorMsg(rc));
 	}
 
 	this->sch = taskSch;
@@ -21,6 +24,8 @@ TaskScheduler::~TaskScheduler() {
 	schTaskSch *taskSch = static_cast<schTaskSch *>(this->sch);
 	this->terminate();
 	int rc = schReleaseTaskSch(taskSch);
+	if (rc != SCH_OK) {
+	}
 	/*	Release.	*/
 
 	/*	Reset memory.	*/

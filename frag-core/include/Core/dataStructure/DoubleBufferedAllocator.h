@@ -1,21 +1,21 @@
-/**
-	FragEngine, A Two layer Game Engine.
-	Copyright (C) 2014  Valdemar Lindberg
-
-	This program is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-*/
+/*
+ *	FragCore - Core Framework Functionalities for Game Engines
+ *	Copyright (C) 2018  Valdemar Lindberg
+ *
+ *	This program is free software: you can redistribute it and/or modify
+ *	it under the terms of the GNU General Public License as published by
+ *	the Free Software Foundation, either version 3 of the License, or
+ *	(at your option) any later version.
+ *
+ *	This program is distributed in the hope that it will be useful,
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *	GNU General Public License for more details.
+ *
+ *	You should have received a copy of the GNU General Public License
+ *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 #ifndef _FRAG_CORE_DOUBLE_BUFFERED_ALLACATOR_H_
 #define _FRAG_CORE_DOUBLE_BUFFERED_ALLACATOR_H_ 1
 #include "../SmartReference.h"
@@ -42,7 +42,7 @@ namespace fragcore {
 		/**
 		 *	Allocate n number of bytes aligned.
 		 *
-		 *	@Return first memory address.
+		 *	@return first memory address.
 		 */
 		void allocateAligned(unsigned int sizeBytes, int alignment);
 
@@ -53,7 +53,7 @@ namespace fragcore {
 
 		/**
 		 *	Return marker offset.
-		 *	@Return
+		 *	@return
 		 */
 		unsigned int getMarker() const;
 
@@ -80,10 +80,18 @@ namespace fragcore {
 		/**
 		 *	Get current by index.
 		 */
-		StackAllocator *getStack(int index) const;
+		const StackAllocator *getStack(int index) const;
 
 		/**
-		 *	@Return
+		 * @brief Get the Stack object
+		 *
+		 * @param index
+		 * @return StackAllocator*
+		 */
+		StackAllocator *getStack(int index);
+
+		/**
+		 *	@return
 		 */
 		DoubleBufferedAllocator &operator=(const DoubleBufferedAllocator &alloc);
 		DoubleBufferedAllocator &operator=(DoubleBufferedAllocator &&alloc);

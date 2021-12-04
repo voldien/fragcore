@@ -1,20 +1,20 @@
-/**
-	ELT (Engine Library Toolkit) is a cross platform engine toolkit
-	Copyright (C) 2014  Valdemar Lindberg
-
-	This program is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+/*
+ *	FragCore - Core Framework Functionalities for Game Engines
+ *	Copyright (C) 2018  Valdemar Lindberg
+ *
+ *	This program is free software: you can redistribute it and/or modify
+ *	it under the terms of the GNU General Public License as published by
+ *	the Free Software Foundation, either version 3 of the License, or
+ *	(at your option) any later version.
+ *
+ *	This program is distributed in the hope that it will be useful,
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *	GNU General Public License for more details.
+ *
+ *	You should have received a copy of the GNU General Public License
+ *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 #ifndef _ELT_EVENT_H_
 #define _ELT_EVENT_H_ 1
@@ -201,7 +201,7 @@ typedef struct elt_poll_events_t {
  *	\event non null pointer to ExEvent event structure.
  *	if event is NULL, there will be a segmentation violation.
  *
- *	@Return 1 if event was polled. 0 if no event was polled.
+ *	@return 1 if event was polled. 0 if no event was polled.
  */
 extern ELTDECLSPEC int ELTAPIENTRY ExPollEvent(ExEvent *event);
 
@@ -221,7 +221,7 @@ extern ELTDECLSPEC int ELTAPIENTRY ExPollWindowEvent(ExWin window, ExWindowEvent
 
 /**
  *
- *	@Return
+ *	@return
  */
 extern ELTDECLSPEC int ELTAPIENTRY ExForwardEvent(unsigned int event, ExHandle data, unsigned int size);
 

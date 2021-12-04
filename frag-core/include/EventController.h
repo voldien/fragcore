@@ -1,5 +1,5 @@
-#ifndef FRAGVIEW_EVENTCONTROLLER_H_
-#define FRAGVIEW_EVENTCONTROLLER_H_ 1
+#ifndef FRAG_CORE_EVENTCONTROLLER_H_
+#define FRAG_CORE_EVENTCONTROLLER_H_ 1
 #include "Core/SmartReference.h"
 
 namespace fragcore {

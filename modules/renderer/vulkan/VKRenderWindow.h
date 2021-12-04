@@ -1,3 +1,21 @@
+/*
+ *	FragCore - Core Framework Functionalities for Game Engines
+ *	Copyright (C) 2018  Valdemar Lindberg
+ *
+ *	This program is free software: you can redistribute it and/or modify
+ *	it under the terms of the GNU General Public License as published by
+ *	the Free Software Foundation, either version 3 of the License, or
+ *	(at your option) any later version.
+ *
+ *	This program is distributed in the hope that it will be useful,
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *	GNU General Public License for more details.
+ *
+ *	You should have received a copy of the GNU General Public License
+ *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 #ifndef _FRAG_CORE_VULKAN_WINDOW_H_
 #define _FRAG_CORE_VULKAN_WINDOW_H_ 1
 #include "VKRenderInterface.h"
@@ -60,16 +78,16 @@ namespace fragcore {
 		void setBordered(bool bordered) override;
 
 		void setMinimumSize(int width, int height) override;
-		virtual void getMinimumSize(int *width, int *height);
+		virtual void getMinimumSize(int *width, int *height) override;
 		void setMaximumSize(int width, int height) override;
-		virtual void getMaximumSize(int *width, int *height);
+		virtual void getMaximumSize(int *width, int *height) override;
 
-		virtual float getGamma() const;
+		virtual float getGamma() const override;
 
-		virtual void setGamma(float);
+		virtual void setGamma(float gamma) override;
 
-		virtual void setTitle(const char *title);
-		virtual const char *getTitle() const;
+		virtual void setTitle(const std::string &title) override;
+		virtual std::string getTitle() const override;
 
 		intptr_t getNativePtr() const override;
 
@@ -80,27 +98,66 @@ namespace fragcore {
 		virtual bool assertConfigAttributes(const IConfig *iConfig) override;
 		virtual void useWindow(void *pdata) override;
 
-	  public:
-		/*	Vulkan methods.	*/
-		VkDevice getDevice() const;
-		int getCurrentFrame() const;
-		VkFramebuffer getDefaultFrameBuffer() const;
-		VkFormat depthStencilFormat() const;
-		VkImage depthStencilImage() const;
+	  public: /*	Vulkan methods.	*/
+		/*	*/
+		VkDevice getDevice() const noexcept;
+		/*	*/
+		uint32_t getCurrentFrameIndex() const noexcept;
+		uint32_t getSwapChainImageCount() const noexcept;
+		VkFramebuffer getDefaultFrameBuffer() const noexcept;
+		VkRenderPass getDefaultRenderPass() const noexcept;
 
-		VkCommandBuffer getCurrentCommandBuffer() const;
-		VkRenderPass getDefaultRenderPass() const;
-		VkCommandPool getGraphicCommadnPool() const;
+		VkFramebuffer getFrameBuffer(unsigned int index) const noexcept;
+		/*	*/
+		VkFormat depthStencilFormat() const noexcept;
+		VkImage depthStencilImage() const noexcept;
+		VkImageView depthStencilImageView() const noexcept;
+
+		/*	*/
+		VkImage getDefaultMSSAColorImage() const noexcept;
+		VkImageView getDefaultMSSAColorImageView() const noexcept;
+
+		/*	*/
 		VkImage getDefaultImage() const;
-		VkQueue getGraphicQueue() const;
+		VkImageView getDefaultImageView() const;
+		VkFormat getDefaultImageFormat() const noexcept;
+
+		/*	*/
+		VkCommandBuffer getCurrentCommandBuffer() const noexcept;
+		size_t getNrCommandBuffers() const noexcept;
+		VkCommandBuffer getCommandBuffers(unsigned int index) const noexcept;
+		VkCommandPool getGraphicCommandPool() const noexcept;
+
+	  public:
+		// VkCommandPool getComputeCommandPool() const noexcept;
+		const VkPhysicalDeviceProperties &physicalDeviceProperties() const noexcept;
+
+		/*	*/
+		uint32_t getGraphicQueueIndex() const;
+		VkQueue getDefaultGraphicQueue() const;
+		VkQueue getDefaultComputeQueue() const;
+
+		const std::vector<VkImage> &getSwapChainImages() const noexcept;
+		const std::vector<VkImageView> &getSwapChainImageViews() const noexcept;
+
+		const std::shared_ptr<VKDevice> &getVKDevice() const noexcept;
+		const std::shared_ptr<PhysicalDevice> getPhysicalDevice() const noexcept;
+
 		VkPhysicalDevice physicalDevice() const;
-		std::vector<VkPhysicalDevice> getPhyiscalDevices();
-		// virtual void std::vector<SupportedExtensions> getSupportedExtensions();
+		void setPhysicalDevice(VkPhysicalDevice device);
+		std::vector<VkQueue> getQueues() const noexcept;
+		const std::vector<VkPhysicalDevice> &availablePhysicalDevices() const;
+
+		VkSurfaceKHR getSurface() { return this->surface; }
+		VkSurfaceFormatKHR getSurfaceFormat() { return this->surfaceFormat; }
+		VkPresentModeKHR getPresentMode() { return this->presentMode; }
 
 	  protected:
 		virtual void createSwapChain();
 		virtual void recreateSwapChain();
 		virtual void cleanSwapChain();
+		VkFormat findDepthFormat();
+		VkSurfaceKHR createSurface();
 
 	  private:
 		SDL_Window *window;
@@ -119,12 +176,19 @@ namespace fragcore {
 			std::vector<VkImageView> swapChainImageViews;
 			std::vector<VkFramebuffer> swapChainFramebuffers;
 			std::vector<VkCommandBuffer> commandBuffers;
+
+			VkImage depthImage;
+			VkDeviceMemory depthImageMemory;
+			VkImageView depthImageView;
+
+			/*	*/
 			VkFormat swapChainImageFormat;
 			VkRenderPass renderPass;
-			VkCommandBuffer *currentBuffer;
 			VkSwapchainKHR swapchain; /*  */
 			VkExtent2D chainExtend;	  /*  */
-			int currentFrame;
+			int currentFrame = 0;
+			bool vsync = false;
+			int width,height;
 		} SwapchainBuffers;
 
 		SwapchainBuffers swapChain;
@@ -135,19 +199,24 @@ namespace fragcore {
 		std::vector<VkFence> inFlightFences;
 		std::vector<VkFence> imagesInFlight;
 
-		VkQueue queue; // TODO rename graphicsQueue
-		VkQueue presentQueue;
+		VkQueue queue{VK_NULL_HANDLE}; // TODO rename graphicsQueue
+		VkQueue presentQueue{VK_NULL_HANDLE};
 
 		/*  */
 		VkPhysicalDeviceProperties gpu_props;
 		VkQueueFamilyProperties *queue_props;
 		uint32_t graphics_queue_node_index;
 
-		VkSurfaceKHR surface;
+		VkSurfaceKHR surface{VK_NULL_HANDLE};
+		VkSurfaceFormatKHR surfaceFormat;
+		VkPresentModeKHR presentMode;
 
-		VkCommandPool cmd_pool;
-		VkCommandPool compute_pool;
-		VkCommandPool transfer_pool;
+		VkCommandPool cmd_pool{VK_NULL_HANDLE};
+		VkCommandPool compute_pool{VK_NULL_HANDLE};
+		VkCommandPool transfer_pool{VK_NULL_HANDLE};
+
+	  public:
+		const SwapchainBuffers &getSwapChain() const { return this->swapChain; }
 	};
 } // namespace fragcore
 

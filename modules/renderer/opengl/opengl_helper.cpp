@@ -23,58 +23,59 @@ void addMarkerLabel(const OpenGLCore *glcore, unsigned int identifier, unsigned 
 void checkError() {
 	GLenum error = glGetError();
 	if (error != GL_NO_ERROR) {
-		throw RuntimeException(fmt::format("glGetError indicated an error: %s", glewGetErrorString(error)));
+		throw RuntimeException(fmt::format("glGetError indicated an error: {}", glewGetErrorString(error)));
 	}
 }
 
 /*  Helper function for extracting error from OpenGL.   */
 void resetErrorFlag() {
-	while (glGetError() != GL_NO_ERROR){}
+	while (glGetError() != GL_NO_ERROR) {
+	}
 }
 
 unsigned int getWrapMode(SamplerDesc::AddressMode mode) {
 	switch (mode) {
-	case SamplerDesc::eRepeat:
+	case SamplerDesc::Repeat:
 		return GL_REPEAT;
-	case SamplerDesc::eRepeatMirror:
+	case SamplerDesc::RepeatMirror:
 		return GL_MIRRORED_REPEAT;
-	case SamplerDesc::eClamp:
+	case SamplerDesc::Clamp:
 		return GL_CLAMP_TO_EDGE;
-	case SamplerDesc::eClampBorder:
+	case SamplerDesc::ClampBorder:
 		return GL_CLAMP_TO_BORDER;
-	case SamplerDesc::eNoAddressMode:
+	case SamplerDesc::NoAddressMode:
 	default:
 		throw InvalidArgumentException("Invalid address mode.");
 	}
 }
 
 unsigned int getFilterMode(SamplerDesc::FilterMode mode, SamplerDesc::FilterMode mips) {
-	if (mips == SamplerDesc::eNoFilterMode) {
+	if (mips == SamplerDesc::FilterMode::NoFilterMode) {
 		switch (mode) {
-		case SamplerDesc::eLinear:
+		case SamplerDesc::FilterMode::Linear:
 			return GL_LINEAR;
-		case SamplerDesc::eNearset:
+		case SamplerDesc::FilterMode::Nearset:
 			return GL_NEAREST;
 		default:
 			break;
 		}
 	} else {
 		switch (mode) {
-		case SamplerDesc::eLinear:
+		case SamplerDesc::FilterMode::Linear:
 			switch (mips) {
-			case SamplerDesc::eLinear:
+			case SamplerDesc::FilterMode::Linear:
 				return GL_LINEAR_MIPMAP_LINEAR;
-			case SamplerDesc::eNearset:
+			case SamplerDesc::FilterMode::Nearset:
 				return GL_LINEAR_MIPMAP_NEAREST;
 			default:
 				break;
 			}
 			break;
-		case SamplerDesc::eNearset:
+		case SamplerDesc::FilterMode::Nearset:
 			switch (mips) {
-			case SamplerDesc::eLinear:
+			case SamplerDesc::FilterMode::Linear:
 				return GL_NEAREST_MIPMAP_LINEAR;
-			case SamplerDesc::eNearset:
+			case SamplerDesc::FilterMode::Nearset:
 				return GL_NEAREST_MIPMAP_NEAREST;
 			default:
 				break;
@@ -591,29 +592,29 @@ unsigned int getAttributeDataType(GeometryDesc::AttributeType type) {
 
 unsigned int getState(IRenderer::State state) {
 	switch (state) {
-	case IRenderer::eDepthTest:
+	case IRenderer::State::DepthTest:
 		return GL_DEPTH_TEST;
-	case IRenderer::eStencilTest:
+	case IRenderer::State::StencilTest:
 		return GL_STENCIL_TEST;
-	case IRenderer::eScissorTest:
+	case IRenderer::State::ScissorTest:
 		return GL_SCISSOR_TEST;
-	case IRenderer::eAlphaTest:
+	case IRenderer::State::AlphaTest:
 		return GL_ALPHA_TEST;
-	case IRenderer::eBlend:
+	case IRenderer::State::Blend:
 		return GL_BLEND;
-	case IRenderer::eCullface:
+	case IRenderer::State::Cullface:
 		return GL_CULL_FACE;
-	case IRenderer::eDither:
+	case IRenderer::State::Dither:
 		return GL_DITHER;
-	case IRenderer::eSRGB:
+	case IRenderer::State::SRGB:
 		return GL_FRAMEBUFFER_SRGB;
-	case IRenderer::eMultiSampling:
+	case IRenderer::State::MultiSampling:
 		return GL_MULTISAMPLE;
-	case IRenderer::eDiscardRasterization:
+	case IRenderer::State::DiscardRasterization:
 		return GL_RASTERIZER_DISCARD;
-	case IRenderer::eSampleShading:
+	case IRenderer::State::SampleShading:
 		return GL_SAMPLE_SHADING;
-	case IRenderer::eSampleAlphaCoverage:
+	case IRenderer::State::SampleAlphaCoverage:
 		return GL_SAMPLE_ALPHA_TO_COVERAGE;
 	default:
 		throw InvalidArgumentException(fmt::format("Invalid state - %d.", state));
@@ -632,9 +633,9 @@ unsigned int getTextureFilterModeNoMip(Texture::FilterMode format) {
 
 unsigned int getBlendEqu(FrameBuffer::BlendEqu equ) {
 	switch (equ) {
-	case FrameBuffer::BlendEqu::eAddition:
+	case FrameBuffer::BlendEqu::Addition:
 		return GL_FUNC_ADD;
-	case FrameBuffer::BlendEqu ::eSubtract:
+	case FrameBuffer::BlendEqu ::Subtract:
 		return GL_FUNC_SUBTRACT;
 	default:
 		throw InvalidArgumentException("");
@@ -642,7 +643,7 @@ unsigned int getBlendEqu(FrameBuffer::BlendEqu equ) {
 }
 unsigned int getBlendFunc(FrameBuffer::BlendFunc func) {
 	switch (func) {
-	case FrameBuffer::BlendFunc::eZero:
+	case FrameBuffer::BlendFunc::Zero:
 		return GL_ZERO;
 	case FrameBuffer::BlendFunc ::eOne:
 		return GL_ONE;
@@ -661,9 +662,9 @@ unsigned int getBlendFunc(FrameBuffer::BlendFunc func) {
 
 unsigned int getClearBitMask(CLEARBITMASK clearbitmask) {
 	GLbitfield mask = 0;
-	mask |= clearbitmask & eColor ? GL_COLOR_BUFFER_BIT : 0;
-	mask |= clearbitmask & eDepth ? GL_DEPTH_BUFFER_BIT : 0;
-	mask |= clearbitmask & eStencil ? GL_STENCIL_BUFFER_BIT : 0;
+	mask |= ((unsigned int)clearbitmask & (unsigned int)CLEARBITMASK::Color) != 0 ? GL_COLOR_BUFFER_BIT : 0;
+	mask |= ((unsigned int)clearbitmask & (unsigned int)CLEARBITMASK::Depth) != 0 ? GL_DEPTH_BUFFER_BIT : 0;
+	mask |= ((unsigned int)clearbitmask & (unsigned int)CLEARBITMASK::eStencil) != 0 ? GL_STENCIL_BUFFER_BIT : 0;
 	return mask;
 }
 
@@ -684,6 +685,7 @@ unsigned int getTextureWrapMode(Texture::WrapMode mode) {
 unsigned int getTextureFilterMode(Texture::FilterMode mode) {
 	switch (mode) {
 	case Texture::FilterMode::eNearest:
+
 		return GL_NEAREST_MIPMAP_NEAREST;
 	case Texture::FilterMode::eBilinear:
 		return GL_LINEAR_MIPMAP_NEAREST;

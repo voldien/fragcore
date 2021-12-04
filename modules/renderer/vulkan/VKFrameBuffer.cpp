@@ -1,94 +1,67 @@
-#include"../FrameBuffer.h"
+#include "VKFrameBuffer.h"
 
 using namespace fragcore;
 
-
-void FrameBuffer::bind() {
-    //vkCmdBeginRenderPass(commandBuffers[i], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+void VKFrameBuffer::bind() {
+	// vkCmdBeginRenderPass(commandBuffers[i], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 }
 
-void FrameBuffer::unBind() {
-    //vkCmdEndRenderPass(commandBuffers[i]);
+void VKFrameBuffer::unBind() {
+	// vkCmdEndRenderPass(commandBuffers[i]);
 }
 
-void FrameBuffer::write() {
+void VKFrameBuffer::write() {}
 
+void VKFrameBuffer::read() const {}
+
+Texture *VKFrameBuffer::getAttachment(unsigned int index) {}
+
+Texture *VKFrameBuffer::getDepthAttachment() {}
+
+Texture *VKFrameBuffer::getStencilAttachment() {}
+
+int VKFrameBuffer::width() const {}
+
+int VKFrameBuffer::height() const {}
+int VKFrameBuffer::layers() {}
+
+int VKFrameBuffer::nrSamples() {}
+
+void VKFrameBuffer::blend(BlendEqu equ, BlendFunc sfactor, BlendFunc dfactor, BufferAttachment bufferAttachment) {}
+void VKFrameBuffer::blendSeperate(BlendEqu equ, BlendFunc srcRGB, BlendFunc dstRGB, BlendFunc srcAlpha,
+								  BlendFunc dstAlpha, BufferAttachment bufferAttachment) {}
+
+void VKFrameBuffer::clear(unsigned int clear) {
+	//  VkImageSubresourceRange ImageSubresourceRange;
+	//    ImageSubresourceRange.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
+	//    ImageSubresourceRange.baseMipLevel   = 0;
+	//    ImageSubresourceRange.levelCount     = 1;
+	//    ImageSubresourceRange.baseArrayLayer = 0;
+	//    ImageSubresourceRange.layerCount     = 1;
+
+	//    VkClearColorValue ClearColorValue = { 1.0, 0.0, 0.0, 0.0 };
+
+	//     VkCommandBuffer CommandBuffer = CommandBuffers[i];
+
+	//   Result = vkBeginCommandBuffer(CommandBuffer, &CommandBufferBeginInfo);
+
+	//   PrintVkResult("vkBeginCommandBuffer", Result);
+
+	//   vkCmdClearColorImage(CommandBuffer, SwapchainImages[i], VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, &ClearColorValue,
+	//   1, &ImageSubresourceRange);
+
+	//   Result = vkEndCommandBuffer(CommandBuffer);
+
+	//   PrintVkResult("vkEndCommandBuffer", Result);
 }
 
-void FrameBuffer::read() const {
-}
+void VKFrameBuffer::clearColor(BufferAttachment colorAttachment, const float *color) { /*  Assign only.*/ }
 
-Texture *FrameBuffer::getAttachment(unsigned int index) {
+void VKFrameBuffer::clearDepthStencil(float depth, int stencil) {}
 
-}
+void VKFrameBuffer::setDraws(unsigned int nr, BufferAttachment *attachment) {}
+void VKFrameBuffer::setDraw(BufferAttachment attachment) {}
 
-Texture *FrameBuffer::getDepthAttachment() {
+void VKFrameBuffer::setName(const std::string &name) { Object::setName(name); }
 
-}
-
-Texture *FrameBuffer::getStencilAttachment() {
-
-}
-
-int FrameBuffer::width() const
-{
-}
-
-int FrameBuffer::height() const
-{
-}
-int FrameBuffer::layers(){
-	
-}
-
-int FrameBuffer::nrSamples() {}
-
-void FrameBuffer::blend(BlendEqu equ, BlendFunc sfactor, BlendFunc dfactor, BufferAttachment bufferAttachment) {
-
-}
-void FrameBuffer::blendSeperate(BlendEqu equ, BlendFunc srcRGB,
-                                BlendFunc dstRGB, BlendFunc srcAlpha,
-                                BlendFunc dstAlpha,
-                                BufferAttachment bufferAttachment) {}
-
-void FrameBuffer::clear(unsigned int clear) {
-//  VkImageSubresourceRange ImageSubresourceRange;
-//    ImageSubresourceRange.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
-//    ImageSubresourceRange.baseMipLevel   = 0;
-//    ImageSubresourceRange.levelCount     = 1;
-//    ImageSubresourceRange.baseArrayLayer = 0;
-//    ImageSubresourceRange.layerCount     = 1;
-
-//    VkClearColorValue ClearColorValue = { 1.0, 0.0, 0.0, 0.0 };
-
-    //     VkCommandBuffer CommandBuffer = CommandBuffers[i];
-
-    //   Result = vkBeginCommandBuffer(CommandBuffer, &CommandBufferBeginInfo);
-
-    //   PrintVkResult("vkBeginCommandBuffer", Result);
-
-    //   vkCmdClearColorImage(CommandBuffer, SwapchainImages[i], VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, &ClearColorValue, 1, &ImageSubresourceRange);
-
-    //   Result = vkEndCommandBuffer(CommandBuffer);
-
-    //   PrintVkResult("vkEndCommandBuffer", Result);
-}
-
-void FrameBuffer::clearColor(BufferAttachment colorAttachment, const float *color){
-    /*  Assign only.*/
-}
-
-void FrameBuffer::clearDepthStencil(float depth, int stencil){
-
-}
-
-void FrameBuffer::setDraws(unsigned int nr, BufferAttachment *attachment){}
-void FrameBuffer::setDraw(BufferAttachment attachment){}
-
-void FrameBuffer::setName(const std::string &name) {
-	Object::setName(name);
-}
-
-intptr_t FrameBuffer::getNativePtr() const {
-	return 0;
-}
+intptr_t VKFrameBuffer::getNativePtr() const { return 0; }

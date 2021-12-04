@@ -6,6 +6,7 @@
 #include "DefaultFrameBufferTexture.h"
 #include "GLBuffer.h"
 #include "GLCommandList.h"
+#include "GLFrameBuffer.h"
 #include "GLRenderWindow.h"
 #include "internal_object_type.h"
 #include <../RenderDesc.h>
@@ -44,7 +45,6 @@ void GLRendererInterface::OnDestruction() {}
 
 GLRendererInterface::GLRendererInterface(IConfig *config) {
 
-	OpenGLCore *glcore;
 	SDL_Window *window = nullptr;
 	GLenum status;
 
@@ -58,7 +58,7 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 		setupConfig.set("opengl", -1);
 		setupConfig.set("anti-aliasing-samples", 0);
 		setupConfig.set("anti-aliasing", false);
-		setupConfig.set("gamma-correction", true);
+		setupConfig.set("gamma-correction", false);
 	} else {
 		// setupConfig = *config
 	}
@@ -67,22 +67,18 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 	for (int i = 0; i < numReqConfigKeys; i++) {
 		if (!setupConfig.isSet(reqConfigKey[i]))
 			throw RuntimeException(
-				fmt::format("None valid configuration node - missing attribute %s", reqConfigKey[i]));
+				fmt::format("None valid configuration node - missing attribute {}", reqConfigKey[i]));
 	}
 
-	/*  Allocate Opengl internal.	*/
-	glcore = new OpenGLCore();
-	assert(glcore);
-	this->pdata = glcore;
-
-	if (SDL_InitSubSystem(SDL_INIT_VIDEO) != 0)
-		throw RuntimeException(fmt::format("SDL_InitSubSystem failed, %s.\n", SDL_GetError()));
+	if (SDL_InitSubSystem(SDL_INIT_VIDEO) != 0) {
+		throw RuntimeException(fmt::format("SDL_InitSubSystem failed, {}.\n", SDL_GetError()));
+	}
 
 	/*  */
 	bool useCoreProfile = setupConfig.get<bool>("core");
-	glcore->gamma = setupConfig.get<bool>("gamma-correction");
-	glcore->alpha = setupConfig.get<bool>("alpha");
-	glcore->debug = setupConfig.get<bool>("debug");
+	this->gamma = setupConfig.get<bool>("gamma-correction");
+	this->alpha = setupConfig.get<bool>("alpha");
+	this->debug = setupConfig.get<bool>("debug");
 
 	/*	Default framebuffer.	*/
 	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, SDL_TRUE);
@@ -90,10 +86,10 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 0);
-	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, glcore->alpha ? 8 : 0);
+	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, this->alpha ? 8 : 0);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, SDL_TRUE);
-	SDL_GL_SetAttribute(SDL_GL_FRAMEBUFFER_SRGB_CAPABLE, glcore->gamma ? SDL_TRUE : SDL_FALSE);
+	SDL_GL_SetAttribute(SDL_GL_FRAMEBUFFER_SRGB_CAPABLE, this->gamma ? SDL_TRUE : SDL_FALSE);
 
 	/*	Set default framebuffer Multisampling.	*/
 	if (setupConfig.get<bool>("anti-aliasing")) {
@@ -117,7 +113,7 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 	SDL_GL_GetAttribute(SDL_GL_CONTEXT_FLAGS, &curDefaultFlag);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS,
 						curDefaultFlag |
-							(glcore->debug ? (SDL_GL_CONTEXT_DEBUG_FLAG | SDL_GL_CONTEXT_ROBUST_ACCESS_FLAG) : 0));
+							(this->debug ? (SDL_GL_CONTEXT_DEBUG_FLAG | SDL_GL_CONTEXT_ROBUST_ACCESS_FLAG) : 0));
 
 	/*  Set OpenGL version. */
 	if (setupConfig.get<int>("opengl") > 0) {
@@ -126,30 +122,30 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, gmajor);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, gminor);
 
-		glcore->majorVersion = gmajor;
-		glcore->minorVersion = gminor;
+		this->majorVersion = gmajor;
+		this->minorVersion = gminor;
 	} else {
 		// Assume the highest version.
-		glcore->majorVersion = 4;
-		glcore->minorVersion = 6;
+		this->majorVersion = 4;
+		this->minorVersion = 6;
 
 		/*  */
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, glcore->majorVersion);
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, glcore->minorVersion);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, this->majorVersion);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, this->minorVersion);
 	}
 
 	/*	Create tmp window.	*/
 	window = SDL_CreateWindow("", 0, 0, 1, 1, SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN);
-	glcore->tpmwindow = window;
+	this->tpmwindow = window;
 
 	if (window == nullptr) {
-		throw RuntimeException(fmt::format("Could not create an OpenGL window - %s.", SDL_GetError()));
+		throw RuntimeException(fmt::format("Could not create an OpenGL window - {}.", SDL_GetError()));
 	}
 
 	/*	Create OpenGL context.	*/ // TODO add config attribute for auto or force the version.
 	// config->get<const char*>("version");
-	glcore->openglcontext = SDL_GL_CreateContext(window);
-	if (glcore->openglcontext == nullptr) {
+	this->openglcontext = SDL_GL_CreateContext(window);
+	if (this->openglcontext == nullptr) {
 		const unsigned int validGLVersion[][2] = {
 			{4, 6}, {4, 5}, {4, 4}, {4, 3}, {4, 2}, {4, 1}, {4, 0}, {3, 3},
 			{3, 2}, {3, 1}, {3, 0}, {2, 1}, {2, 0}, {1, 4}, {1, 3}, {1, 2},
@@ -161,44 +157,44 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, nthValidGLVersion[0]);
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, nthValidGLVersion[1]);
 
-			glcore->majorVersion = nthValidGLVersion[0];
-			glcore->minorVersion = nthValidGLVersion[1];
-			glcore->openglcontext = SDL_GL_CreateContext(window);
-			if (glcore->openglcontext)
+			this->majorVersion = nthValidGLVersion[0];
+			this->minorVersion = nthValidGLVersion[1];
+			this->openglcontext = SDL_GL_CreateContext(window);
+			if (this->openglcontext != nullptr)
 				break;
 		}
 
 		/*	Attempt to create compatible.	*/
 		/*  Using a top down approach   .    */
-		if (!glcore->openglcontext) {
+		if (!this->openglcontext) {
 			for (int i = 0; i < nValidVersions; i++) {
 				const unsigned int *nthValidGLVersion = &validGLVersion[i][0];
 				SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, nthValidGLVersion[0]);
 				SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, nthValidGLVersion[1]);
-				glcore->majorVersion = nthValidGLVersion[0];
-				glcore->minorVersion = nthValidGLVersion[1];
+				this->majorVersion = nthValidGLVersion[0];
+				this->minorVersion = nthValidGLVersion[1];
 
 				// Attempt Compatibility.
 				SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
-				glcore->openglcontext = SDL_GL_CreateContext(window);
-				if (glcore->openglcontext)
+				this->openglcontext = SDL_GL_CreateContext(window);
+				if (this->openglcontext)
 					break;
 			}
 
 			// Last attempt creating an ES profile context.
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
-			glcore->openglcontext = SDL_GL_CreateContext(window);
+			this->openglcontext = SDL_GL_CreateContext(window);
 
 			// SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
-			SDL_GL_GetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, &glcore->majorVersion);
-			SDL_GL_GetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, &glcore->minorVersion);
-			glcore->profile = false;
-			glcore->useCompatibility = false;
+			SDL_GL_GetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, &this->majorVersion);
+			SDL_GL_GetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, &this->minorVersion);
+			this->profile = false;
+			this->useCompatibility = false;
 
 			/*  Final check.    */
-			if (glcore->openglcontext == nullptr) {
+			if (this->openglcontext == nullptr) {
 				SDL_DestroyWindow(window);
-				throw RuntimeException(fmt::format("Failed to create compatibility context: %s.", SDL_GetError()));
+				throw RuntimeException(fmt::format("Failed to create compatibility context: {}.", SDL_GetError()));
 			}
 		}
 	}
@@ -207,23 +203,23 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 	int profile, cflag;
 	glGetIntegerv(GL_CONTEXT_PROFILE_MASK, &profile);
 	glGetIntegerv(GL_CONTEXT_FLAGS, &cflag);
-	glcore->profile = profile;
-	glcore->cflag = cflag;
+	this->profile = profile;
+	this->cflag = cflag;
 	/*  Set final attributes.   */
-	glcore->useCoreProfile = profile == GL_CONTEXT_CORE_PROFILE_BIT;
+	this->useCoreProfile = profile == GL_CONTEXT_CORE_PROFILE_BIT;
 
 	/*  Get the version if supported. Otherwise use the SDL and convert it.   */
 	int major, minor;
 	glGetIntegerv(GL_MAJOR_VERSION, &major);
 	glGetIntegerv(GL_MINOR_VERSION, &minor);
 	if (major > 0)
-		glcore->majorVersion = major * 100;
+		this->majorVersion = major * 100;
 	else
-		glcore->majorVersion *= 100;
+		this->majorVersion *= 100;
 	if (minor >= 0)
-		glcore->minorVersion = minor * 10;
+		this->minorVersion = minor * 10;
 	else
-		glcore->minorVersion *= 10;
+		this->minorVersion *= 10;
 
 	/*  Set for core support or not for GLEW.   */
 	// TODO resolve.
@@ -235,77 +231,77 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 	/*	Init GLEW library.	*/
 	status = glewInit();
 	if (status != GLEW_OK) {
-		SDL_GL_DeleteContext(glcore->openglcontext);
+		SDL_GL_DeleteContext(this->openglcontext);
 		SDL_DestroyWindow(window);
-		throw RuntimeException(fmt::format("Could not Initialize GLEW - %s.", glewGetErrorString(status)));
+		throw RuntimeException(fmt::format("Could not Initialize GLEW - {}.", glewGetErrorString(status)));
 	}
 
 	/*  TODO add function for checking if context is supported. */
 	for (int i = 0; i < numMinReqExtensions; i++) {
 		const char *extension = minRequiredExtensions[i];
 		if (!glewIsExtensionSupported(extension)) {
-			throw RuntimeException(fmt::format("Non supported GPU - %s using OpenGL version: %s\nGLSL: %s", extension,
+			throw RuntimeException(fmt::format("Non supported GPU - {} using OpenGL version: {}\nGLSL: {}", extension,
 											   getVersion(), glGetString(GL_SHADING_LANGUAGE_VERSION)));
 		}
 	}
 
 	/*  Get internal capability list and cache it.   */
-	this->getCapability(&glcore->capability);
-	this->getSupportedTextureCompression(&glcore->compression);
+	this->getCapability(&this->capability);
+	this->getSupportedTextureCompression(&this->compression);
 
 	// Determine and cache the supported shader languages.
 	if (glewIsExtensionSupported("GL_ARB_gl_spirv"))
-		glcore->supportedLanguages = (ShaderLanguage)(GLSL | SPIRV);
+		this->supportedLanguages = (ShaderLanguage)(GLSL | SPIRV);
 	else
-		glcore->supportedLanguages = GLSL;
+		this->supportedLanguages = GLSL;
 
 	/*	Set default state.	*/
-	this->enableState(eDepthTest);
-	this->disableState(eStencilTest);
-	this->disableState(eBlend);
-	this->enableState(eDither);
-	this->enableState(eCullface);
+	this->enableState(State::DepthTest);
+	this->disableState(State::StencilTest);
+	this->disableState(State::Blend);
+	this->enableState(State::Dither);
+	this->enableState(State::Cullface);
 	this->setDepthMask(true);
 	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_FALSE);
 	glDepthFunc(GL_LESS);
 	glCullFace(GL_FRONT_AND_BACK);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	if (glcore->alpha) {
-		this->enableState(eAlphaTest);
+	if (this->alpha) {
+		this->enableState(State::AlphaTest);
 		glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 	}
 	this->clearColor(0.2f, 0.2f, 0.2f, 1.0f);
-	if (glcore->gamma)
-		enableState(GLRendererInterface::eSRGB);
+	if (this->gamma)
+		enableState(GLRendererInterface::State::SRGB);
 	// this->setVSync(config->get<bool>("v-sync"));
-	this->setDebug(glcore->debug);
+	this->setDebug(this->debug);
 	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 
 	// TODO improve
 	// TODO, add support for version without viewports.
 	/*  Create default viewport object. */
-	glcore->defaultViewport = new ViewPort();
-	// glcore->defaultViewport->iRenderer = this;
+	this->defaultViewport = new ViewPort();
+	// this->defaultViewport->iRenderer = this;
 	GLViewPort *glViewPort = new GLViewPort();
 	glViewPort->viewport = 0;
-	// glcore->defaultViewport->pdata = glViewPort;
-	for (int i = 0; i < glcore->capability.sMaxViewPorts - 1; i++) {
+	// this->defaultViewport->pdata = glViewPort;
+	for (int i = 0; i < this->capability.sMaxViewPorts - 1; i++) {
 		ViewPort *virtualView = new ViewPort();
 		// virtualView->iRenderer = this;
 		GLViewPort *glViewPort = new GLViewPort();
 		glViewPort->viewport = i + 1;
 		// virtualView->pdata = glViewPort;
-		glcore->viewports.push_back(virtualView);
+		this->viewports.push_back(virtualView);
 	}
 
 	// TODO create default framebuffer.
 	// TODO create default texture.
-	glcore->defaultFrameBuffer = new FrameBuffer();
+	this->defaultFrameBuffer = new GLFrameBuffer();
 	GLFrameBufferObject *frameBufferObject = new GLFrameBufferObject();
 	frameBufferObject->framebuffer = 0;
 	frameBufferObject->numtextures = 1;
-	// glcore->defaultFrameBuffer->pdata = frameBufferObject;
-	// glcore->defaultFrameBuffer->iRenderer = this;
+	// this->defaultFrameBuffer->pdata = frameBufferObject;
+	// this->defaultFrameBuffer->iRenderer = this;
 	frameBufferObject->desc.attach[0] = new FrameBufferTexture();
 	// frameBufferObject->desc.attach[0]->iRenderer = this;
 	GLenum drawbuffers[] = {GL_FRONT, GL_BACK};
@@ -313,19 +309,19 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 
 	// TODO determine how to utualize the PBO.
 	/*  Create PBO for image transfer. */
-	BufferDesc pbo = {};
-	pbo.size = 0;
-	pbo.data = nullptr;
-	pbo.hint = (BufferDesc::BufferHint)(BufferDesc::eStream | BufferDesc::eWrite);
-	pbo.type = BufferDesc::ePixelUnpack;
-	glcore->pboUnPack = this->createBuffer(&pbo);
+	// BufferDesc pbo = {};
+	// pbo.size = 0;
+	// pbo.data = nullptr;
+	// pbo.hint = (BufferDesc::BufferHint)(BufferDesc::eStream | BufferDesc::eWrite);
+	// pbo.type = BufferDesc::ePixelUnpack;
+	// this->pboUnPack = this->createBuffer(&pbo);
 
-	/*  Create PBO for image transfer. */
-	pbo.size = 0;
-	pbo.data = nullptr;
-	pbo.hint = (BufferDesc::BufferHint)(BufferDesc::eStream | BufferDesc::eWrite);
-	pbo.type = BufferDesc::ePixelPack;
-	glcore->pboPack = this->createBuffer(&pbo);
+	// /*  Create PBO for image transfer. */
+	// pbo.size = 0;
+	// pbo.data = nullptr;
+	// pbo.hint = (BufferDesc::BufferHint)(BufferDesc::eStream | BufferDesc::eWrite);
+	// pbo.type = BufferDesc::ePixelPack;
+	// this->pboPack = this->createBuffer(&pbo);
 }
 
 GLRendererInterface::~GLRendererInterface() {
@@ -347,7 +343,6 @@ GLRendererInterface::~GLRendererInterface() {
 		SDL_GL_DeleteContext(this->openglcontext);
 
 	SDL_QuitSubSystem(SDL_INIT_VIDEO);
-	free(this->pdata);
 }
 
 Texture *GLRendererInterface::createTexture(TextureDesc *desc) {
@@ -357,7 +352,7 @@ Texture *GLRendererInterface::createTexture(TextureDesc *desc) {
 	if (desc->numlevel < 0 && desc->usemipmaps)
 		throw InvalidArgumentException("Mips number count must be greater than or equal to 0.");
 	if (desc->compression & ~this->compression)
-		throw InvalidArgumentException(fmt::format("Invalid compression format - %d.", desc->compression));
+		throw InvalidArgumentException(fmt::format("Invalid compression format - {}.", desc->compression));
 	if (desc->srgb) {
 		if (!this->capability.sSRGB)
 			throw InvalidArgumentException("sRGB is not supported.");
@@ -406,7 +401,7 @@ Texture *GLRendererInterface::createTexture(TextureDesc *desc) {
 						getFilterMode(desc->sampler.minFilter, desc->sampler.mipmapFilter));
 		checkError();
 		glTexParameteri(target, GL_TEXTURE_MAG_FILTER,
-						getFilterMode(desc->sampler.magFilter, SamplerDesc::eNoFilterMode));
+						getFilterMode(desc->sampler.magFilter, SamplerDesc::FilterMode::NoFilterMode));
 		checkError();
 
 		const GLint compareMode =
@@ -449,7 +444,7 @@ Texture *GLRendererInterface::createTexture(TextureDesc *desc) {
 			glTexParameteri(target, GL_TEXTURE_SWIZZLE_A, getTextureSwizzle(desc->Swizzlea));
 
 		// if (errorStatus != GL_NO_ERROR)
-		// 	throw RuntimeException(::fmt::format("Error when setting texture parameters - %d, %s", errorStatus,
+		// 	throw RuntimeException(::fmt::format("Error when setting texture parameters - {}, {}", errorStatus,
 		// 	                                   gluErrorString(errorStatus)));
 
 		/*	assign data.	*/
@@ -539,7 +534,7 @@ Texture *GLRendererInterface::createTexture(TextureDesc *desc) {
 	if (errorStatus != GL_NO_ERROR) {
 		glDeleteTextures(1, &texture);
 		throw RuntimeException(
-			::fmt::format("Error when allocating the texture - %d, %s", errorStatus, gluErrorString(errorStatus)));
+			::fmt::format("Error when allocating the texture - {}, {}", errorStatus, gluErrorString(errorStatus)));
 	}
 
 	// Unbound texture.
@@ -607,7 +602,8 @@ Sampler *GLRendererInterface::createSampler(SamplerDesc *desc) {
 
 	glSamplerParameteri(sampler, GL_TEXTURE_MIN_FILTER, getFilterMode(desc->minFilter, desc->mipmapFilter));
 	checkError();
-	glSamplerParameteri(sampler, GL_TEXTURE_MAG_FILTER, getFilterMode(desc->magFilter, SamplerDesc::eNoFilterMode));
+	glSamplerParameteri(sampler, GL_TEXTURE_MAG_FILTER,
+						getFilterMode(desc->magFilter, SamplerDesc::FilterMode::NoFilterMode));
 	checkError();
 
 	const GLint compareMode = desc->compareMode == SamplerDesc::eNoCompare ? GL_NONE : GL_COMPARE_REF_TO_TEXTURE;
@@ -667,7 +663,7 @@ static void checkShaderError(int shader) {
 		char log[maxLength];
 		glGetShaderInfoLog(shader, sizeof(log), &maxLength, log);
 		checkError();
-		//		throw RuntimeException(fmt::format("Shader compilation error\n%s", log));
+		//		throw RuntimeException(fmt::format("Shader compilation error\n{}", log));
 	}
 }
 
@@ -901,7 +897,7 @@ finished:
 	if (lstatus != GL_TRUE) {
 		char log[4096];
 		glGetProgramInfoLog(program, sizeof(log), nullptr, log);
-		fprintf(stderr, "%s.\n", log);
+		fprintf(stderr, "{}.\n", log);
 		return nullptr;
 	}
 
@@ -992,7 +988,7 @@ Buffer *GLRendererInterface::createBuffer(BufferDesc *desc) {
 		if (error != GL_NO_ERROR) {
 			glDeleteBuffers(1, &buf);
 			checkError();
-			throw RuntimeException(fmt::format("Failed to create buffer - %s", glewGetErrorString(error)));
+			throw RuntimeException(fmt::format("Failed to create buffer - {}", glewGetErrorString(error)));
 		}
 
 		glBindBufferARB(target, 0);
@@ -1011,7 +1007,7 @@ Buffer *GLRendererInterface::createBuffer(BufferDesc *desc) {
 		error = glGetError();
 		if (error != GL_NO_ERROR) {
 			glDeleteBuffers(1, &buf);
-			throw RuntimeException(fmt::format("Failed to create buffer - %s", glewGetErrorString(error)));
+			throw RuntimeException(fmt::format("Failed to create buffer - {}", glewGetErrorString(error)));
 		}
 
 		glBindBuffer(target, 0);
@@ -1210,7 +1206,7 @@ FrameBuffer *GLRendererInterface::createFrameBuffer(FrameBufferDesc *desc) {
 		/*  Delete  */
 		glDeleteFramebuffers(1, &glfraobj->framebuffer);
 		delete glfraobj;
-		throw RuntimeException(fmt::format("Failed to create framebuffer, 0x%x.\n", frstat));
+		throw RuntimeException(fmt::format("Failed to create framebuffer, {}.\n", frstat));
 	}
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -1220,22 +1216,21 @@ FrameBuffer *GLRendererInterface::createFrameBuffer(FrameBufferDesc *desc) {
 
 	/*  */
 	glfraobj->desc = *desc;
-	FrameBuffer *frameBuffer = new FrameBuffer();
+	FrameBuffer *frameBuffer = new GLFrameBuffer();
 	// frameBuffer->pdata = glfraobj;
 	frameBuffer->setRenderInterface(this);
 }
 
 void GLRendererInterface::deleteFrameBuffer(FrameBuffer *obj) {
 
-	GLFrameBufferObject *glfraobj = (GLFrameBufferObject *)obj->getObject();
+	GLFrameBuffer *glfFramebuffer = static_cast<GLFrameBuffer *>(obj);
 
-	if (glIsFramebuffer(glfraobj->framebuffer))
-		glDeleteFramebuffers(1, &glfraobj->framebuffer);
-	else if (glfraobj->framebuffer != 0) // Check for default framebuffer object.
+	if (glIsFramebuffer(glfFramebuffer->framebuffer))
+		glDeleteFramebuffers(1, &glfFramebuffer->framebuffer);
+	else if (glfFramebuffer->framebuffer != 0) // Check for default framebuffer object.
 		throw std::invalid_argument("None valid framebuffer object.");
 
 	/*  Delete memory.  */
-	delete obj->getObject();
 	delete obj;
 }
 
@@ -1273,11 +1268,12 @@ RendererWindow *GLRendererInterface::createWindow(int x, int y, int width, int h
 	WindowManager::getInstance();
 	Ref<GLRendererInterface> rendRef = Ref<GLRendererInterface>(this);
 	GLRenderWindow *renderWindow = new GLRenderWindow(rendRef);
+	renderWindow->show();
 
 	/*	Cleanup.	*/
-	if (glcore->tpmwindow) {
-		SDL_DestroyWindow(glcore->tpmwindow);
-		glcore->tpmwindow = nullptr;
+	if (this->tpmwindow) {
+		SDL_DestroyWindow(static_cast<SDL_Window *>(this->tpmwindow));
+		this->tpmwindow = nullptr;
 	}
 
 	return renderWindow;
@@ -1294,11 +1290,11 @@ RendererWindow *GLRendererInterface::createWindow(int x, int y, int width, int h
 
 void GLRendererInterface::setCurrentWindow(RendererWindow *window) {
 	OpenGLCore *glcore = (OpenGLCore *)this->pdata;
-	// window->useWindow(glcore->openglcontext);
-	glcore->drawwindow = window;
+	// window->useWindow(this->openglcontext);
+	this->drawwindow = window;
 
-	//	glcore->drawwindow = (SDL_Window *) window;
-	//	if (SDL_GL_MakeCurrent(glcore->drawwindow, glcore->openglcontext) != 0) {
+	//	this->drawwindow = (SDL_Window *) window;
+	//	if (SDL_GL_MakeCurrent(this->drawwindow, this->openglcontext) != 0) {
 	//		throw RuntimeException(fmt::format(""));
 	//	}
 }
@@ -1311,7 +1307,7 @@ FrameBuffer *GLRendererInterface::getDefaultFramebuffer(void *window) {
 	static FrameBuffer *defaultFrambuffer = nullptr;
 	if (defaultFrambuffer == nullptr) {
 
-		defaultFrambuffer = new FrameBuffer();
+		defaultFrambuffer = new GLFrameBuffer();
 		GLFrameBufferObject *frameBufferObject = new GLFrameBufferObject();
 		frameBufferObject->framebuffer = 0;
 		frameBufferObject->numtextures = 1;
@@ -1327,9 +1323,9 @@ FrameBuffer *GLRendererInterface::getDefaultFramebuffer(void *window) {
 
 void GLRendererInterface::clear(unsigned int bitflag) {
 	GLbitfield mask = 0;
-	mask |= bitflag & eColor ? GL_COLOR_BUFFER_BIT : 0;
-	mask |= bitflag & eDepth ? GL_DEPTH_BUFFER_BIT : 0;
-	mask |= bitflag & eStencil ? GL_STENCIL_BUFFER_BIT : 0;
+	mask |= (bitflag & (unsigned int)CLEARBITMASK::Color) != 0 ? GL_COLOR_BUFFER_BIT : 0;
+	mask |= (bitflag & (unsigned int)CLEARBITMASK::Depth) != 0 ? GL_DEPTH_BUFFER_BIT : 0;
+	mask |= (bitflag & (unsigned int)CLEARBITMASK::eStencil) != 0 ? GL_STENCIL_BUFFER_BIT : 0;
 	glClear(mask);
 }
 
@@ -1338,14 +1334,14 @@ void GLRendererInterface::clearColor(float r, float g, float b, float a) { glCle
 ViewPort *GLRendererInterface::getView(unsigned int i) {
 	OpenGLCore *glcore = (OpenGLCore *)this->pdata;
 	/*  Validate the index. */
-	if (i >= glcore->capability.sMaxViewPorts)
+	if (i >= this->capability.sMaxViewPorts)
 		throw std::invalid_argument(
-			fmt::format("Does not support viewport index %d, max index %d.", i, glcore->capability.sMaxViewPorts));
+			fmt::format("Does not support viewport index {}, max index {}.", i, this->capability.sMaxViewPorts));
 
 	// If the view does not exits. Create it.
 	if (i == 0)
-		return glcore->defaultViewport;
-	return glcore->viewports[i - 1];
+		return this->defaultViewport;
+	return this->viewports[i - 1];
 }
 
 void GLRendererInterface::setVSync(int sync) { SDL_GL_SetSwapInterval(sync); }
@@ -1362,8 +1358,8 @@ void GLRendererInterface::swapBuffer() {
 
 	OpenGLCore *glcore = (OpenGLCore *)this->pdata;
 
-	glcore->drawwindow->swapBuffer();
-	// SDL_GL_SwapWindow(glcore->drawwindow);
+	this->drawwindow->swapBuffer();
+	// SDL_GL_SwapWindow(this->drawwindow);
 }
 
 void GLRendererInterface::drawInstance(Geometry *geometry, unsigned int num) {
@@ -1386,7 +1382,7 @@ void GLRendererInterface::drawInstance(Geometry *geometry, unsigned int num) {
 	GLenum errorStatus = glGetError();
 	if (errorStatus != GL_NO_ERROR)
 		throw RuntimeException(
-			::fmt::format("Error when dispatching compute - %d, %s", errorStatus, gluErrorString(errorStatus)));
+			::fmt::format("Error when dispatching compute - {}, {}", errorStatus, gluErrorString(errorStatus)));
 
 	glBindVertexArray(0);
 }
@@ -1419,7 +1415,7 @@ void GLRendererInterface::drawIndirect(Geometry *geometry) {
 	GLenum errorStatus = glGetError();
 	if (errorStatus != GL_NO_ERROR)
 		throw RuntimeException(
-			::fmt::format("Error when dispatching compute - %d, %s", errorStatus, gluErrorString(errorStatus)));
+			::fmt::format("Error when dispatching compute - {}, {}", errorStatus, gluErrorString(errorStatus)));
 
 	glBindVertexArray(0);
 }
@@ -1562,7 +1558,7 @@ void GLRendererInterface::dispatchCompute(unsigned int *global, unsigned int *lo
 	GLenum errorStatus = glGetError();
 	if (errorStatus != GL_NO_ERROR)
 		throw RuntimeException(
-			::fmt::format("Error when dispatching compute - %d, %s", errorStatus, gluErrorString(errorStatus)));
+			::fmt::format("Error when dispatching compute - {}, {}", errorStatus, gluErrorString(errorStatus)));
 
 	// TODO relocate
 	glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
@@ -1720,7 +1716,7 @@ const char *GLRendererInterface::getShaderVersion(ShaderLanguage language) const
 
 	if (language == GLSL) {
 		/*  Lookup table.   */
-		int glVersion = glcore->majorVersion + glcore->minorVersion;
+		int glVersion = this->majorVersion + this->minorVersion;
 		switch (glVersion) {
 		case 200:
 			return "110";
@@ -1750,10 +1746,10 @@ const char *GLRendererInterface::getShaderVersion(ShaderLanguage language) const
 			return "460";
 		// Add the rest of the mapping as each new version is released.
 		default:
-			throw RuntimeException(fmt::format("OpenGL version %d is not supported", glVersion));
+			throw RuntimeException(fmt::format("OpenGL version {} is not supported", glVersion));
 		}
 		// TODO add core and compatibility on the name.
-		profile = glcore->useCoreProfile;
+		profile = this->useCoreProfile;
 		strcore = profile ? "core" : "";
 	}
 	if (language == SPIRV) {
@@ -2051,7 +2047,7 @@ void GLRendererInterface::execute(CommandList *list) {
 	for (int i = 0; i < glist->commands.size(); i++) {
 		const GLCommandBase *base = glist->commands[i];
 		switch (base->getCommand()) {
-		case ClearColor: {
+		case GLCommandBufferCmd::ClearColor: {
 			const GLCommandClearColor *clearColor = (const GLCommandClearColor *)base;
 			glClearColor(clearColor->clear.x(), clearColor->clear.x(), clearColor->clear.x(), clearColor->clear.x());
 			// glClearNamedFramebufferfv(fraobj->framebuffer, GL_COLOR, GL_COLOR_ATTACHMENT0 + index, (GLfloat *)color);
@@ -2063,6 +2059,9 @@ void GLRendererInterface::execute(CommandList *list) {
 		}
 	}
 }
+
+void *GLRendererInterface::getOpenGLContext() noexcept { return this->openglcontext; }
+void GLRendererInterface::bindWindowContext(void *window, void *context) {}
 
 void *GLRendererInterface::getData() const { return this->pdata; }
 

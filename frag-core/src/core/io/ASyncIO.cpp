@@ -54,7 +54,7 @@ void ASyncIO::asyncReadFile(ASyncHandle handle, char *buffer, unsigned int size,
 
 	/*	Verify that is has read access.	*/
 	if (!ao->ref->isReadable())
-		throw RuntimeException(fmt::format("IO object is not readable {}", ao->ref->getUID()));
+		throw RuntimeException("IO object is not readable {}", ao->ref->getUID());
 
 	// TODO replace with an abstract version
 	/*  Assign variables.   */
@@ -81,10 +81,10 @@ void ASyncIO::asyncReadFile(ASyncHandle handle, Ref<IO> &writeIO, AsyncComplete 
 
 	/*  Check that open file is readable.   */
 	if (!ao->ref->isReadable())
-		throw RuntimeException(fmt::format("IO object is not writable {}", ao->ref->getUID()));
+		throw RuntimeException("IO object is not writable {}", ao->ref->getUID());
 	/*  Check if IO object is writeable.    */
 	if (!writeIO->isWriteable())
-		throw RuntimeException(fmt::format("IO object is not writable {}", writeIO->getUID()));
+		throw RuntimeException("IO object is not writable {}", writeIO->getUID());
 
 	ao->callback = complete;
 }
@@ -103,7 +103,7 @@ void ASyncIO::asyncWriteFile(ASyncHandle handle, char *buffer, unsigned int size
 	BufferIO bufferIO(buffer, size);
 
 	if (!ao->ref->isWriteable()) {
-		throw RuntimeException(fmt::format("IO object is not writable {}", ao->ref->getUID()));
+		throw RuntimeException("IO object is not writable {}", ao->ref->getUID());
 	}
 
 	// TODO perhaps can to use the IOBuffer has a interface object for reduced coupling and higher cohesion.
@@ -177,7 +177,7 @@ void ASyncIO::asyncClose(ASyncHandle handle) {
 void ASyncIO::async_open(Task *task) {
 
 	// ASyncHandle handle = (ASyncHandle)task->userData;
-	AsyncObject *ao = (AsyncObject *)task->userData;
+	AsyncObject *ao = static_cast<AsyncObject *>(task->userData);
 
 	// const char *path = (const char *)ao->begin;
 	// ASync *async = (ASync *) package->puser;
@@ -271,7 +271,9 @@ ASyncIO::AsyncObject *ASyncIO::getObject(ASyncHandle handle) {
 	if (it != this->asyncs.end())
 		return &this->asyncs[handle];
 
-	throw RuntimeException(fmt::format("Invalid Async object {}", handle));
+	throw RuntimeException("Invalid Async object {}", handle);
+
+	return nullptr;
 }
 
 const ASyncIO::AsyncObject *ASyncIO::getObject(ASyncHandle handle) const {
@@ -281,7 +283,9 @@ const ASyncIO::AsyncObject *ASyncIO::getObject(ASyncHandle handle) const {
 	if (it != this->asyncs.cend())
 		return &it->second;
 
-	throw RuntimeException(fmt::format("Invalid Async object {}", handle));
+	throw RuntimeException("Invalid Async object {}", handle);
+
+	return nullptr;
 }
 
 ASyncIO::AsyncObject *ASyncIO::createObject(ASyncHandle handle) { return &this->asyncs[handle]; }

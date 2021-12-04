@@ -1,21 +1,21 @@
-/**
-	FragEngine, A Two layer Game Engine.
-	Copyright (C) 2014  Valdemar Lindberg
-
-	This program is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-*/
+/*
+ *	FragCore - Core Framework Functionalities for Game Engines
+ *	Copyright (C) 2018  Valdemar Lindberg
+ *
+ *	This program is free software: you can redistribute it and/or modify
+ *	it under the terms of the GNU General Public License as published by
+ *	the Free Software Foundation, either version 3 of the License, or
+ *	(at your option) any later version.
+ *
+ *	This program is distributed in the hope that it will be useful,
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *	GNU General Public License for more details.
+ *
+ *	You should have received a copy of the GNU General Public License
+ *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 #ifndef _FRAG_CORE_STACK_ALLACTOR_H_
 #define _FRAG_CORE_STACK_ALLACTOR_H_ 1
 #include "../../Def.h"
@@ -38,7 +38,7 @@ namespace fragcore {
 
 		/**
 		 *	Allocate n number of bytes.
-		 *	@Return first memory address.
+		 *	@return first memory address.
 		 */
 		void *alloc(size_t sizeBytes);
 
@@ -50,7 +50,7 @@ namespace fragcore {
 
 		/**
 		 *	Allocate aligned memory block.
-		 *	@Return first memory address.
+		 *	@return first memory address.
 		 */
 		void *allocateAligned(size_t sizeBytes, int alignment);
 
@@ -60,12 +60,12 @@ namespace fragcore {
 		void clear();
 
 		/**
-		 *	@Return marker offset.
+		 *	@return marker offset.
 		 */
 		size_t getMarker() const;
 
 		/**
-		 *	@Return non null pointer if successfully.
+		 *	@return non null pointer if successfully.
 		 */
 		void *fetch(size_t sizeBytes);
 
@@ -75,19 +75,19 @@ namespace fragcore {
 		void freeToMarker(size_t marker);
 
 		/**
-		 *	@Return
+		 *	@return
 		 */
 		StackAllocator &operator=(const StackAllocator &alloc);
 
 		/**
 		 *
-		 *	@Return
+		 *	@return
 		 */
 		bool operator==(const StackAllocator &alloc);
 
 		/**
 		 *
-		 *	@Return
+		 *	@return
 		 */
 		bool operator!=(const StackAllocator &alloc);
 

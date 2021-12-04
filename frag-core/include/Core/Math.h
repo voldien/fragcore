@@ -1,21 +1,21 @@
-/**
-	FragEngine, A Two layer Game Engine.
-	Copyright (C) 2018  Valdemar Lindberg
-
-	This program is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-*/
+/*
+ *	FragCore - Core Framework Functionalities for Game Engines
+ *	Copyright (C) 2018  Valdemar Lindberg
+ *
+ *	This program is free software: you can redistribute it and/or modify
+ *	it under the terms of the GNU General Public License as published by
+ *	the Free Software Foundation, either version 3 of the License, or
+ *	(at your option) any later version.
+ *
+ *	This program is distributed in the hope that it will be useful,
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *	GNU General Public License for more details.
+ *
+ *	You should have received a copy of the GNU General Public License
+ *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 #ifndef _FRAG_CORE_MATH_H_
 #define _FRAG_CORE_MATH_H_ 1
 #include "../Def.h"
@@ -132,9 +132,6 @@ namespace fragcore {
 			return 0;
 		}
 
-		/**
-		 *
-		 */
 		template <typename T> static constexpr bool IsPowerOfTwo(T v) {
 			static_assert(std::is_integral<T>::value, "Must be a integer type.");
 			return !(v == 0) && !((v - 1) & v);
@@ -185,9 +182,11 @@ namespace fragcore {
 		}
 
 		template <typename T, typename U> static T gammaCorrection(T x, U gamma) noexcept {
-			
+
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
 			// TODO add support for using vector components.
+			T exponent = static_cast<T>(1.0) / gamma;
+
 			return static_cast<T>(std::pow(x, gamma));
 		}
 

@@ -1,21 +1,21 @@
-/**
-	FragEngine, A Two layer Game Engine.
-	Copyright (C) 2018  Valdemar Lindberg
-
-	This program is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-*/
+/*
+ *	FragCore - Core Framework Functionalities for Game Engines
+ *	Copyright (C) 2018  Valdemar Lindberg
+ *
+ *	This program is free software: you can redistribute it and/or modify
+ *	it under the terms of the GNU General Public License as published by
+ *	the Free Software Foundation, either version 3 of the License, or
+ *	(at your option) any later version.
+ *
+ *	This program is distributed in the hope that it will be useful,
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *	GNU General Public License for more details.
+ *
+ *	You should have received a copy of the GNU General Public License
+ *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 #ifndef _FRAG_CORE_GL_RENDERER_INTERFACE_H_
 #define _FRAG_CORE_GL_RENDERER_INTERFACE_H_ 1
 #include "../IRenderer.h"
@@ -36,7 +36,7 @@ namespace fragcore {
 		/**
 		 *	Create texture.
 		 *
-		 *	@Return non null texture object if succesfully. Null otherwise.
+		 *	@return non null texture object if succesfully. Null otherwise.
 		 */
 		virtual Texture *createTexture(TextureDesc *desc);
 
@@ -63,7 +63,7 @@ namespace fragcore {
 		/**
 		 *	Create shader.
 		 *
-		 *	@Return
+		 *	@return
 		 */
 		virtual Shader *createShader(ShaderDesc *desc);
 
@@ -81,7 +81,7 @@ namespace fragcore {
 		/**
 		 *	Create geometry.
 		 *
-		 *	@Return
+		 *	@return
 		 */
 		virtual Geometry *createGeometry(GeometryDesc *desc);
 
@@ -261,7 +261,7 @@ namespace fragcore {
 
 		/**
 		 *	Get shader version.
-		 *	@Return non-null terminated string.
+		 *	@return non-null terminated string.
 		 */
 		virtual const char *getShaderVersion(ShaderLanguage language) const;
 
@@ -279,7 +279,7 @@ namespace fragcore {
 
 		/**
 		 *	Get version of the interface.
-		 *	@Return non-null terminated string.
+		 *	@return non-null terminated string.
 		 */
 		virtual const char *getVersion() const;
 
@@ -318,6 +318,10 @@ namespace fragcore {
 		GLRendererInterface(IConfig *config);
 
 		virtual void *getData() const;
+
+	  public: /*	OpenGL Specific methods.	*/
+		void *getOpenGLContext() noexcept;
+		void bindWindowContext(void* window, void* context);
 
 	  protected: /*  */
 		void *pdata;

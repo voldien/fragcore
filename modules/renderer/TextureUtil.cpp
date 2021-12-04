@@ -44,13 +44,13 @@ void TextureUtil::loadTexture(const char *path, IRenderer *renderer, Texture **t
 		desc.srgb = 0;
 
 		/*  sampler.    */
-		desc.sampler.AddressU = SamplerDesc::eRepeat;
-		desc.sampler.AddressV = SamplerDesc::eRepeat;
-		desc.sampler.AddressW = SamplerDesc::eRepeat;
+		desc.sampler.AddressU = SamplerDesc::Repeat;
+		desc.sampler.AddressV = SamplerDesc::Repeat;
+		desc.sampler.AddressW = SamplerDesc::Repeat;
 		desc.sampler.anisotropy = 8.0f;
-		desc.sampler.minFilter = SamplerDesc::eLinear;
-		desc.sampler.magFilter = SamplerDesc::eLinear;
-		desc.sampler.mipmapFilter = SamplerDesc::eLinear;
+		desc.sampler.minFilter = SamplerDesc::FilterMode::Linear;
+		desc.sampler.magFilter = SamplerDesc::FilterMode::Linear;
+		desc.sampler.mipmapFilter = SamplerDesc::FilterMode::Linear;
 
 		desc.marker.markerName = path;
 
@@ -286,13 +286,13 @@ Texture *TextureUtil::createTexture(IRenderer *renderer, unsigned int width, uns
 	desc.srgb = 0;
 
 	/*  Sampler.    */
-	desc.sampler.AddressU = SamplerDesc::eRepeat;
-	desc.sampler.AddressV = SamplerDesc::eRepeat;
-	desc.sampler.AddressW = SamplerDesc::eRepeat;
+	desc.sampler.AddressU = SamplerDesc::Repeat;
+	desc.sampler.AddressV = SamplerDesc::Repeat;
+	desc.sampler.AddressW = SamplerDesc::Repeat;
 	desc.sampler.anisotropy = 8.0f;
-	desc.sampler.minFilter = SamplerDesc::eLinear;
-	desc.sampler.magFilter = SamplerDesc::eLinear;
-	desc.sampler.mipmapFilter = SamplerDesc::eLinear;
+	desc.sampler.minFilter = SamplerDesc::FilterMode::Linear;
+	desc.sampler.magFilter = SamplerDesc::FilterMode::Linear;
+	desc.sampler.mipmapFilter = SamplerDesc::FilterMode::Linear;
 	desc.sampler.maxLOD = 0;
 	desc.sampler.minLOD = 0;
 	desc.sampler.biasLOD = 0;

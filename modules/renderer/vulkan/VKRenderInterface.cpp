@@ -59,169 +59,16 @@ VKRenderInterface::VKRenderInterface(IConfig *config) {
 	if (SDL_InitSubSystem(SDL_INIT_VIDEO) != 0) {
 		throw RuntimeException(fmt::format("SDL_InitSubSystem failed, %s.\n", SDL_GetError()));
 	}
-
-	/*	Allocate private data structure for the renderer interface. */
-	// vulkancore = new VulkanCore();
-	// if (vulkancore == nullptr)
-	// 	throw RuntimeException();
-
 	/*  Store reference with the object. */
-	// this->pdata = vulkancore;
-	const std::unordered_map<const char *, bool> &requested_extensions{};
+	std::unordered_map<const char *, bool> required_instance_extensions = {{VK_KHR_SURFACE_EXTENSION_NAME, true},
+																		   {"VK_KHR_xlib_surface", true}};
 
-	this->core = std::make_shared<VulkanCore>(requested_extensions);
+	std::unordered_map<const char *, bool> required_instance_layer = {{"VK_LAYER_KHRONOS_validation", true}};
+	std::unordered_map<const char *, bool> required_device_extensions = {{VK_KHR_SWAPCHAIN_EXTENSION_NAME, true}};
+
+	this->core = std::make_shared<VulkanCore>(required_instance_extensions, required_instance_layer);
 	std::vector<std::shared_ptr<PhysicalDevice>> devices = core->createPhysicalDevices();
-	this->device = std::make_shared<VKDevice>(devices);
-
-	/*  Determine layer validation. */
-	// vulkancore->enableValidationLayers = setupConfig.get<bool>("debug");
-	// vulkancore->enableValidationLayers = 1;
-	// vulkancore->enableDebugTracer = setupConfig.get<bool>("debug-tracer");
-	// vulkancore->useGamma = setupConfig.get<bool>("gamma-correction");
-
-	// /*  Vulkan variables.   */
-	// VkResult result;
-
-	// /*  Check for supported extensions.*/
-	// uint32_t extensionCount = 0;
-	// if (vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr) != VK_SUCCESS) {
-	// 	throw RuntimeException("Failed enumerate Vulkan extension properties");
-	// }
-	// vulkancore->extension_names = (VkExtensionProperties *)(malloc(sizeof(VkExtensionProperties) * extensionCount));
-	// if (vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount,
-	// 										   (VkExtensionProperties *)vulkancore->extension_names) != VK_SUCCESS) {
-	// 	throw RuntimeException("Failed enumerate Vulkan extension properties");
-	// }
-
-	// /*  Check for supported validation layers.  */
-	// uint32_t layerCount;
-	// if (vkEnumerateInstanceLayerProperties(&layerCount, nullptr) != VK_SUCCESS)
-	// 	throw RuntimeException("Failed enumerate Vulkan extension properties");
-	// std::vector<VkLayerProperties> availableLayers(layerCount);
-	// if (vulkancore->enableValidationLayers) {
-	// 	if (vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data()) != VK_SUCCESS)
-	// 		throw RuntimeException("Failed enumerate Vulkan extension properties");
-
-	// 	/*  Check if exists.    */
-	// 	for (uint32_t i = 0; i < availableLayers.size(); i++) {
-	// 	}
-	// }
-
-	// /*  TODO add support for loading requried extensions.   */
-	// // TODO improve later.
-	// /*  Create Vulkan window.   */
-	// SDL_Window *tmpWindow = SDL_CreateWindow("", 0, 0, 1, 1, SDL_WINDOW_VULKAN);
-	// if (tmpWindow == nullptr)
-	// 	throw RuntimeException(fmt::format("failed create window - %s", SDL_GetError()));
-	// unsigned int count;
-	// if (!SDL_Vulkan_GetInstanceExtensions(tmpWindow, &count, nullptr))
-	// 	throw RuntimeException(fmt::format("%s", SDL_GetError()));
-	// unsigned int additional_extension_count = (unsigned int)instanceExtensionNames.size();
-	// instanceExtensionNames.resize((size_t)(additional_extension_count + count));
-	// if (!SDL_Vulkan_GetInstanceExtensions(tmpWindow, &count, &instanceExtensionNames[additional_extension_count]))
-	// 	throw RuntimeException(fmt::format("failed SDL_Vulkan_GetInstanceExtensions - %s", SDL_GetError()));
-	// SDL_DestroyWindow(tmpWindow);
-
-	// /*  Get Vulkan version. */
-	// uint32_t version;
-	// result = vkEnumerateInstanceVersion(&version);
-	// if (result != VK_SUCCESS)
-	// 	throw RuntimeException(fmt::format("Failed to enumerate instance version - %d", result));
-
-	// /*	Primary Vulkan instance Object. */
-	// VkApplicationInfo ai = {};
-	// ai.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-	// ai.pNext = nullptr;
-	// ai.pApplicationName = "FragCore";
-	// ai.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
-	// ai.pEngineName = "FragCore-Engine";
-	// ai.engineVersion = VK_MAKE_VERSION(1, 0, 0);
-	// ai.apiVersion = version;
-
-	// VkDebugReportCallbackCreateInfoEXT callbackCreateInfoExt = {
-	// 	VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT, // sType
-	// 	nullptr,													 // pNext
-	// 	VK_DEBUG_REPORT_ERROR_BIT_EXT |							 // flags
-	// 		VK_DEBUG_REPORT_WARNING_BIT_EXT,
-	// 	nullptr, // myOutputDebugString,                                        // pfnCallback
-	// 	nullptr  // pUserData
-	// };
-	// VkDebugUtilsMessengerCreateInfoEXT debugUtilsMessengerCreateInfoExt = {
-	// 	.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT,
-	// 	.pNext = &callbackCreateInfoExt,
-	// };
-	// VkValidationCheckEXT validationCheckExt[] = {VK_VALIDATION_CHECK_ALL_EXT};
-	// VkValidationFlagsEXT validationFlagsExt = {.sType = VK_STRUCTURE_TYPE_VALIDATION_FLAGS_EXT,
-	// 										   .pNext = nullptr, //&debugUtilsMessengerCreateInfoExt,
-	// 										   .disabledValidationCheckCount = 1,
-	// 										   .pDisabledValidationChecks = validationCheckExt};
-
-	// /*	Prepare the instance object. */
-	// VkInstanceCreateInfo ici = {};
-	// ici.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-	// if (vulkancore->enableValidationLayers)
-	// 	ici.pNext = nullptr;
-	// else
-	// 	ici.pNext = nullptr;
-	// ici.flags = 0;
-	// ici.pApplicationInfo = &ai;
-	// if (vulkancore->enableValidationLayers) {
-	// 	ici.enabledLayerCount = validationLayers.size();
-	// 	ici.ppEnabledLayerNames = validationLayers.data();
-	// } else {
-	// 	ici.enabledLayerCount = 0;
-	// 	ici.ppEnabledLayerNames = nullptr;
-	// }
-	// ici.enabledExtensionCount = instanceExtensionNames.size();
-	// ici.ppEnabledExtensionNames = instanceExtensionNames.data();
-
-	// /*	Create Vulkan instance.	*/
-	// result = vkCreateInstance(&ici, nullptr, &vulkancore->inst);
-	// if (result != VK_SUCCESS)
-	// 	throw RuntimeException(fmt::format("vkCreateInstance - %d.", result));
-
-	// /*  Set debug mode.  */
-	// this->setDebug(setupConfig.get<bool>("debug"));
-
-	// /*	Get number of physical devices. */
-	// int num_physica_devices;
-	// result = vkEnumeratePhysicalDevices(vulkancore->inst, &vulkancore->num_physical_devices, nullptr);
-	// if (result != VK_SUCCESS) {
-	// 	throw RuntimeException(fmt::format("Failed to get number physical devices - %d", result));
-	// }
-	// /*  Get all physical devices.    */
-	// vulkancore->physical_devices =
-	// 	(VkPhysicalDevice *)malloc(sizeof(VkPhysicalDevice) * vulkancore->num_physical_devices);
-	// assert(vulkancore->physical_devices);
-	// vulkancore->GPUs.resize(vulkancore->num_physical_devices);
-	// result =
-	// 	vkEnumeratePhysicalDevices(vulkancore->inst, &vulkancore->num_physical_devices, vulkancore->physical_devices);
-	// if (result != VK_SUCCESS)
-	// 	throw RuntimeException(fmt::format("Failed to enumerate physical devices - %d.", result));
-
-	// /*	*/
-	// uint32_t pPhysicalDeviceGroupCount;
-	// result = vkEnumeratePhysicalDeviceGroups(vulkancore->inst, &pPhysicalDeviceGroupCount, nullptr);
-	// if (result != VK_SUCCESS)
-	// 	throw RuntimeException(fmt::format("vkEnumeratePhysicalDeviceGroups failed query - %d.", result));
-	// std::vector<VkPhysicalDeviceGroupProperties> phyiscalDevices;
-	// phyiscalDevices.resize(pPhysicalDeviceGroupCount);
-	// result = vkEnumeratePhysicalDeviceGroups(vulkancore->inst, &pPhysicalDeviceGroupCount, phyiscalDevices.data());
-	// if (result != VK_SUCCESS)
-	// 	throw RuntimeException(fmt::format("vkEnumeratePhysicalDeviceGroups failed fetching groups - %d.", result));
-
-	// /*  TODO add selection function. */
-	// std::vector<VkPhysicalDevice> gpucandiates;
-	// for (int i = 0; i < vulkancore->num_physical_devices; i++) {
-	// 	if (isDeviceSuitable(vulkancore->physical_devices[i])) {
-	// 		vulkancore->gpu = vulkancore->physical_devices[i];
-	// 		gpucandiates.push_back(vulkancore->physical_devices[i]);
-	// 		break;
-	// 	}
-	// }
-
-	// std::vector<VkPhysicalDevice> selectedDevices;
-	// selectDefaultDevices(gpucandiates, selectedDevices);
+	this->device = std::make_shared<VKDevice>(devices, required_device_extensions);
 
 	// /*  */
 	// VkPhysicalDeviceFeatures supportedFeatures;
@@ -250,37 +97,6 @@ VKRenderInterface::VKRenderInterface(IConfig *config) {
 	// 	}
 	// }
 	// vulkancore->graphics_queue_node_index = graphicsQueueNodeIndex;
-
-	// float queue_priorities[1] = {1.0};
-	// const VkDeviceQueueCreateInfo queue = {.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO,
-	// 									   .pNext = nullptr,
-	// 									   .flags = 0,
-	// 									   .queueFamilyIndex = vulkancore->graphics_queue_node_index,
-	// 									   .queueCount = 1,
-	// 									   .pQueuePriorities = queue_priorities};
-
-	// /*  Required extensions.    */
-	// std::vector<const char *> deviceExtensions = {
-	// 	VK_KHR_SWAPCHAIN_EXTENSION_NAME, VK_EXT_CONDITIONAL_RENDERING_EXTENSION_NAME,
-	// 	// VK_NV_RAY_TRACING_EXTENSION_NAME
-	// 	// VK_KHR_GET_MEMORY_REQUIREMENTS_2_EXTENSION_NAME
-	// 	// VK_NV_GLSL_SHADER_EXTENSION_NAME
-	// };
-	// if (vulkancore->enableValidationLayers) {
-	// 	// TODO determine
-	// 	deviceExtensions.push_back(VK_EXT_DEBUG_MARKER_EXTENSION_NAME);
-	// 	// deviceExtensions.push_back(VK_EXT_DEBUG_REPORT_EXTENSION_NAME);
-	// }
-
-	// VkDeviceGroupDeviceCreateInfo deviceGroupDeviceCreateInfo = {
-	// 	.sType = VK_STRUCTURE_TYPE_DEVICE_GROUP_DEVICE_CREATE_INFO,
-	// };
-	// if (phyiscalDevices.size() > 0) {
-	// 	if (phyiscalDevices[0].physicalDeviceCount > 1) {
-	// 		deviceGroupDeviceCreateInfo.physicalDeviceCount = phyiscalDevices[0].physicalDeviceCount;
-	// 		deviceGroupDeviceCreateInfo.pPhysicalDevices = phyiscalDevices[0].physicalDevices;
-	// 	}
-	// }
 
 	// VkPhysicalDeviceShaderDrawParameterFeatures deviceShaderDrawParametersFeatures = {
 	// 	.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_DRAW_PARAMETER_FEATURES,
@@ -1050,7 +866,7 @@ void VKRenderInterface::clear(unsigned int bitflag) {
 
 	const uint32_t currentFrame = currentFrame;
 	return;
-	if (bitflag & eColor) {
+	if (bitflag & (unsigned int)CLEARBITMASK::Color) {
 		// VkClearColorValue clearColor = {color[0], color[1], color[2],
 		// 								color[3]};
 		// /*  */
@@ -1064,7 +880,7 @@ void VKRenderInterface::clear(unsigned int bitflag) {
 		// 					 &clearColor, 1, &imageRange);
 	}
 
-	if (bitflag & eDepth || bitflag & eStencil) {
+	if (bitflag & (unsigned int)CLEARBITMASK::Depth || bitflag & (unsigned int)CLEARBITMASK::eStencil) {
 		VkClearDepthStencilValue depthStencilClear = {0.0f, 0};
 
 		/*  */

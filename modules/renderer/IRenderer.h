@@ -1,21 +1,21 @@
-/**
-	FragEngine, A Two layer Game Engine.
-	Copyright (C) 2018  Valdemar Lindberg
-
-	This program is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-*/
+/*
+ *	FragCore - Core Framework Functionalities for Game Engines
+ *	Copyright (C) 2018  Valdemar Lindberg
+ *
+ *	This program is free software: you can redistribute it and/or modify
+ *	it under the terms of the GNU General Public License as published by
+ *	the Free Software Foundation, either version 3 of the License, or
+ *	(at your option) any later version.
+ *
+ *	This program is distributed in the hope that it will be useful,
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *	GNU General Public License for more details.
+ *
+ *	You should have received a copy of the GNU General Public License
+ *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 #ifndef _FRAG_CORE_IRENDERER_H_
 #define _FRAG_CORE_IRENDERER_H_ 1
 #include "Buffer.h"
@@ -32,10 +32,10 @@ namespace fragcore {
 	/**
 	 *
 	 */
-	enum class CLEARBITMASK { // TODO rename
-		eColor = 0x1,	/*	Clear color.    */
-		eDepth = 0x2,	/*	Clear depth.    */
-		eStencil = 0x4, /*	Clear stencil.  */
+	enum class CLEARBITMASK : uint32_t { // TODO rename
+		Color = 0x1,					 /*	Clear color.    */
+		Depth = 0x2,					 /*	Clear depth.    */
+		eStencil = 0x4,					 /*	Clear stencil.  */
 	};
 
 	/**
@@ -45,41 +45,57 @@ namespace fragcore {
 	  public:
 		/*	TODO rename and fix enum names.	*/
 		enum class State {
-			eDepthTest = 0x1, /*	Perform depth test on pixels.   */
-			eStencilTest,	  /*	Perform stencil test.   */
-			eScissorTest,	  /*  */
-			eAlphaTest,		  /*  */
-			eDepthMask,
+			DepthTest = 0x1, /*	Perform depth test on pixels.   */
+			StencilTest,	 /*	Perform stencil test.   */
+			ScissorTest,	 /*  */
+			AlphaTest,		 /*  */
+			DepthMask,
 			/*	Perform .	*/ // TODO determine how to deal with depth, stencil and etc.
-			eBlend,			   /*	Set Color Blend. */
-			eCullface,		   /*	Set Culling face. */
-			eDither,		   /*	Set Color dithering.    */
-			eSRGB,
-			eMultiSampling,
-			eSampleShading, /*   */
+			Blend,			   /*	Set Color Blend. */
+			Cullface,		   /*	Set Culling face. */
+			Dither,			   /*	Set Color dithering.    */
+			SRGB,
+			MultiSampling,
+			SampleShading, /*   */
 			// GL_SAMPLE_COVERAGE
-			eSampleAlphaCoverage,  /*    */
-			eDiscardRasterization, /*  */
+			SampleAlphaCoverage,  /*    */
+			DiscardRasterization, /*  */
 
 		};
 
 		// TODO make it less state machine and allow it to become more modern.
 		IRenderer() = default;
-		IRenderer(const IRenderer &other) = default;
+		IRenderer(const IRenderer &other) = delete;
 		IRenderer(IRenderer &&other) = delete;
 		virtual ~IRenderer() = default;
 
 		/**
 		 *	Create texture.
 		 *
-		 *	@Return non null texture object if succesfully. Null otherwise.
+		 *	@return non null texture object if succesfully. Null otherwise.
 		 */
 		virtual Texture *createTexture(TextureDesc *desc) noexcept(false) = 0;
 
+		/**
+		 * @brief
+		 *
+		 * @param texture
+		 */
 		virtual void deleteTexture(Texture *texture) noexcept(false) = 0;
 
+		/**
+		 * @brief Create a Sampler object
+		 *
+		 * @param desc
+		 * @return Sampler*
+		 */
 		virtual Sampler *createSampler(SamplerDesc *desc) = 0;
 
+		/**
+		 * @brief
+		 *
+		 * @param texture
+		 */
 		virtual void deleteSampler(Sampler *texture) = 0;
 
 		/**
@@ -99,7 +115,7 @@ namespace fragcore {
 		/**
 		 *	Create shader.
 		 *
-		 *	@Return
+		 *	@return
 		 */
 		virtual Shader *createShader(ShaderDesc *desc) = 0;
 
@@ -117,7 +133,7 @@ namespace fragcore {
 		/**
 		 *	Create geometry.
 		 *
-		 *	@Return
+		 *	@return
 		 */
 		virtual Geometry *createGeometry(GeometryDesc *desc) = 0;
 
@@ -282,7 +298,7 @@ namespace fragcore {
 
 		/**
 		 *	Get shader version.
-		 *	@Return non-null terminated string.
+		 *	@return non-null terminated string.
 		 */
 		virtual const char *getShaderVersion(ShaderLanguage language) const = 0;
 
@@ -300,7 +316,7 @@ namespace fragcore {
 
 		/**
 		 *	Get version of the interface.
-		 *	@Return non-null terminated string.
+		 *	@return non-null terminated string.
 		 */
 		virtual const char *getVersion() const = 0;
 

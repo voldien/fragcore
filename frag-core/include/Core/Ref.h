@@ -1,21 +1,21 @@
-/**
-	FragEngine, A Two layer Game Engine.
-	Copyright (C) 2018  Valdemar Lindberg
-
-	This program is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-*/
+/*
+ *	FragCore - Core Framework Functionalities for Game Engines
+ *	Copyright (C) 2018  Valdemar Lindberg
+ *
+ *	This program is free software: you can redistribute it and/or modify
+ *	it under the terms of the GNU General Public License as published by
+ *	the Free Software Foundation, either version 3 of the License, or
+ *	(at your option) any later version.
+ *
+ *	This program is distributed in the hope that it will be useful,
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *	GNU General Public License for more details.
+ *
+ *	You should have received a copy of the GNU General Public License
+ *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 #ifndef _FRAG_CORE_REF_H_
 #define _FRAG_CORE_REF_H_ 1
 #include "../Def.h"
@@ -32,7 +32,7 @@ namespace fragcore {
 	 */
 	template <class T> class Ref { // TODO perhaps use the RefPtr as base?
 		static_assert(std::is_object<T>::value, "");
-		//static_assert(std::has_virtual_destructor<T>::value, "Must have a virtual deconstructor");
+		// static_assert(std::has_virtual_destructor<T>::value, "Must have a virtual deconstructor");
 
 	  private:
 		T *reference;
@@ -79,6 +79,12 @@ namespace fragcore {
 		}
 
 		Ref(T &&other) { this->p_reference = std::exchange(other.p_reference, nullptr); }
+
+		Ref(const Ref &other) {
+			if (other.reference) {
+				this->ref_pointer(other.reference);
+			}
+		}
 
 		~Ref() { unref(); }
 

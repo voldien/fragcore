@@ -1,36 +1,44 @@
-/**
-	FragEngine, A Two layer Game Engine.
-	Copyright (C) 2018  Valdemar Lindberg
-
-	This program is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-*/
-#ifndef _FRAGVIEW_FRAMEBUFFER_H_
-#define _FRAGVIEW_FRAMEBUFFER_H_ 1
+/*
+ *	FragCore - Core Framework Functionalities for Game Engines
+ *	Copyright (C) 2018  Valdemar Lindberg
+ *
+ *	This program is free software: you can redistribute it and/or modify
+ *	it under the terms of the GNU General Public License as published by
+ *	the Free Software Foundation, either version 3 of the License, or
+ *	(at your option) any later version.
+ *
+ *	This program is distributed in the hope that it will be useful,
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *	GNU General Public License for more details.
+ *
+ *	You should have received a copy of the GNU General Public License
+ *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+#ifndef _FRAGCORE_FRAMEBUFFER_H_
+#define _FRAGCORE_FRAMEBUFFER_H_ 1
 #include "IRenderer.h"
 #include "RenderObject.h"
 #include <vector>
 
 namespace fragcore {
 	/**
+	 * @brief
 	 *
 	 */
 	class FVDECLSPEC FrameBuffer : public RenderObject {
 	  public:
-		enum BlendFunc {
-			eZero = 0, /*  */
-			eOne = 1,  /*  */
+		FrameBuffer() = default;
+		virtual ~FrameBuffer() = default;
+
+		/**
+		 * @brief
+		 *
+		 */
+		enum class BlendFunc {
+			Zero = 0, /*  */
+			eOne = 1, /*  */
 			eSrcColor = 2,
 			eOneMinusSrcColor = 3,
 			eSrcAlpha = 4,
@@ -38,98 +46,98 @@ namespace fragcore {
 			eConstantAlpha = 6,
 		};
 
-		enum BlendEqu {
+		/**
+		 * @brief
+		 *
+		 */
+		enum class BlendEqu {
 			eNoEqu,
-			eAddition,
-			eSubtract,
-			eReverseSubtract,
-			eMin,
-			eMax,
+			Addition,
+			Subtract,
+			ReverseSubtract,
+			Min,
+			Max,
 		};
 
-		enum StencilFunc {
-
-		};
-
-		enum DepthFunc {
+		enum class StencilFunc {
 
 		};
 
-		enum BufferAttachment {
-			eNoAttachment,
-			eDepth,
-			eStencil,
-			eStencilDepth,
-			eColor0,
+		enum class DepthFunc {
+
 		};
 
-		virtual int attachmentCount();
-		virtual std::vector<Texture *> getColorTargets();
+		enum class BufferAttachment : int {
+			NoAttachment,
+			Depth,
+			Stencil,
+			StencilDepth,
+			Color0,
+		};
 
-		virtual void bind();
+		virtual int attachmentCount() = 0;
+		virtual std::vector<Texture *> getColorTargets() = 0;
 
-		virtual void unBind();
+		virtual void bind() = 0;
 
-		virtual void write();
+		virtual void unBind() = 0;
 
-		virtual void read() const;
+		virtual void write() = 0;
+
+		virtual void read() const = 0;
 
 		/**
 		 *	Get texture attached to framebuffer by index.
 		 *
-		 *	@Return Non null texture pointer if successfully.
+		 *	@return Non null texture pointer if successfully.
 		 */
-		virtual Texture *getAttachment(unsigned int index);
+		virtual Texture *getAttachment(unsigned int index) = 0;
 
 		/**
 		 *
 		 * @return
 		 */
-		virtual Texture *getDepthAttachment();
+		virtual Texture *getDepthAttachment() = 0;
 
 		/**
 		 *
 		 * @return
 		 */
-		virtual Texture *getStencilAttachment();
+		virtual Texture *getStencilAttachment() = 0;
 
 		/**
 		 *
 		 */
-		virtual int width() const;
+		virtual int width() const = 0;
 
 		/**
 		 *
 		 */
-		virtual int height() const;
+		virtual int height() const = 0;
 
 		/**
 		 *
 		 */
-		virtual int layers();
+		virtual int layers() = 0;
 
-		virtual int nrSamples();
+		virtual int nrSamples() = 0;
 
 		/*  */
-		virtual void blend(BlendEqu equ, BlendFunc sfactor, BlendFunc dfactor, BufferAttachment bufferAttachment);
+		virtual void blend(BlendEqu equ, BlendFunc sfactor, BlendFunc dfactor, BufferAttachment bufferAttachment) = 0;
 
 		virtual void blendSeperate(BlendEqu equ, BlendFunc srcRGB, BlendFunc dstRGB, BlendFunc srcAlpha,
-								   BlendFunc dstAlpha, BufferAttachment bufferAttachment);
+								   BlendFunc dstAlpha, BufferAttachment bufferAttachment) = 0;
 
-		virtual void clear(unsigned int clear);
+		virtual void clear(unsigned int clear) = 0;
 
-		virtual void clearColor(BufferAttachment colorAttachment, const float *color);
+		virtual void clearColor(BufferAttachment colorAttachment, const float *color) = 0;
 
-		virtual void clearDepthStencil(float depth, int stencil);
+		virtual void clearDepthStencil(float depth, int stencil) = 0;
 
 		/*  */
-		virtual void setDraws(unsigned int nr, BufferAttachment *attachment);
+		virtual void setDraws(unsigned int nr, BufferAttachment *attachment) = 0;
 
-		virtual void setDraw(BufferAttachment attachment);
-
-		virtual intptr_t getNativePtr() const override;
-
-		void setName(const std::string &name) override;
+		virtual void setDraw(BufferAttachment attachment) = 0;
 	};
 } // namespace fragcore
 

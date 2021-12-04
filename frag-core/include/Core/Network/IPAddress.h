@@ -1,21 +1,21 @@
-/**
-	FragEngine, A Two layer Game Engine.
-	Copyright (C) 2018  Valdemar Lindberg
-
-	This program is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-*/
+/*
+ *	FragCore - Core Framework Functionalities for Game Engines
+ *	Copyright (C) 2018  Valdemar Lindberg
+ *
+ *	This program is free software: you can redistribute it and/or modify
+ *	it under the terms of the GNU General Public License as published by
+ *	the Free Software Foundation, either version 3 of the License, or
+ *	(at your option) any later version.
+ *
+ *	This program is distributed in the hope that it will be useful,
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *	GNU General Public License for more details.
+ *
+ *	You should have received a copy of the GNU General Public License
+ *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 #ifndef _FRAG_CORE_IP_ADDRESS_H_
 #define _FRAG_CORE_IP_ADDRESS_H_ 1
 #include "INetAddress.h"
@@ -35,8 +35,9 @@ namespace fragcore {
 			IPAddress_Type_IPV6 = 2,
 			IPAddress_Type_ANY = 3,
 		};
-		IPAddress(); // TODO add binary as the address.
-		//IPAddress(const std::vector<uint8_t>& encoded_address);
+		IPAddress();
+		IPAddress(void *encoded, IPAddressType type); // TODO add binary as the address.
+		IPAddress(const std::vector<uint8_t> &encoded_address);
 		IPAddress(const IPAddress &other) = default;
 		IPAddress &operator=(const IPAddress &other) = default;
 		IPAddress(IPAddress &&other) = default;
@@ -73,9 +74,9 @@ namespace fragcore {
 		IPAddressType type;
 		bool valid;
 		union {
-			uint8_t field8[16];
-			uint16_t field16[8];
-			uint32_t field32[4];
+			uint8_t field8[16];	 /*	Up to 16 bytes, support from IPV4 to IPV6.	*/
+			uint16_t field16[8]; /*	Up to 16 bytes, support from IPV4 to IPV6.	*/
+			uint32_t field32[4]; /*	Up to 16 bytes, support from IPV4 to IPV6.	*/
 		};
 	};
 } // namespace fragcore

@@ -37,7 +37,7 @@ void *StackAllocator::alloc(size_t sizeBytes) {
 	mSize = sizeBytes;
 	mData = realloc(mData, sizeBytes);
 	if (!mData) {
-		// VDDebug::errorLog("Failed to allocate {} kb.\n", ( sizeBytes / 1024 ) );
+		// VDDebug::errorLog("Failed to allocate {} kb.", ( sizeBytes / 1024 ) );
 	}
 	return mData;
 }
@@ -54,7 +54,7 @@ void StackAllocator::clear() { this->mMarker = 0; }
 size_t StackAllocator::getMarker() const { return this->mMarker; }
 
 void *StackAllocator::fetch(size_t sizeBytes) {
-	void *p = ((uint8_t *)this->mData) + getMarker();
+	uint8_t *p = static_cast<uint8_t *>(this->mData) + getMarker();
 	this->mMarker += sizeBytes;
 	return p;
 }

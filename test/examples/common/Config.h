@@ -16,8 +16,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-#ifndef _FRAGVIEW_CONFIG_H_
-#define _FRAGVIEW_CONFIG_H_ 1
+#ifndef _FRAG_CORE_CONFIG_H_
+#define _FRAG_CORE_CONFIG_H_ 1
 #include<Def.h>
 #include<Core/IConfig.h>
 #include<string>
@@ -58,7 +58,7 @@ private:	/*	*/
 public:	/*	Static factory methods.	*/
 
 	/**
-	 * 
+	 *
 	 * @param argc number of argument in argv pointer array.
 	 * @param argv string pointer array.
 	 * @param configpath path for override the default

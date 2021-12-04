@@ -1,21 +1,21 @@
-/**
-	FragEngine, A Two layer Game Engine.
-	Copyright (C) 2014  Valdemar Lindberg
-
-	This program is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-*/
+/*
+ *	FragCore - Core Framework Functionalities for Game Engines
+ *	Copyright (C) 2018  Valdemar Lindberg
+ *
+ *	This program is free software: you can redistribute it and/or modify
+ *	it under the terms of the GNU General Public License as published by
+ *	the Free Software Foundation, either version 3 of the License, or
+ *	(at your option) any later version.
+ *
+ *	This program is distributed in the hope that it will be useful,
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *	GNU General Public License for more details.
+ *
+ *	You should have received a copy of the GNU General Public License
+ *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 #ifndef _FRAG_CORE_QUEUE_H_
 #define _FRAG_CORE_QUEUE_H_ 1
 #include "Iterator.h"
@@ -83,12 +83,12 @@ namespace fragcore {
 		}
 
 		/**
-		 *	@Return true if queue empty.
+		 *	@return true if queue empty.
 		 */
 		inline bool isEmpty() const { return (this->getSize() == 0); }
 
 		/**
-		 *	@Return true if full, false otherwise.
+		 *	@return true if full, false otherwise.
 		 */
 		inline bool isFull() const { return (this->getSize() == this->getReserved()); }
 
@@ -131,7 +131,7 @@ namespace fragcore {
 
 	  public: /*  */
 		/**
-		 *	@Return
+		 *	@return
 		 */
 		Queue &operator=(const Queue &que) {
 			this->mdata = (T *)malloc(que.getReserved() * que.getTypeSize());

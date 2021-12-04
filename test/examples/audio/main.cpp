@@ -19,10 +19,6 @@ class AudioPlayback {
 		Ref<AudioInterface> iaudio =
 			Ref<AudioInterface>(AudioFactory::createAudioInterface(AudioFactory::OpenAL, &config));
 
-		/*  Initialize HPM.  */
-		if (!LIBHPM::Hpm::init(LIBHPM::Hpm::eHPM_SSE2))
-			throw RuntimeException("Failed to initialize the hpm library.");
-
 		Ref<IScheduler> sch = Ref<IScheduler>(NULL);
 		FileSystem *fileSystem = FileSystem::createFileSystem(sch);
 
@@ -30,16 +26,16 @@ class AudioPlayback {
 		std::vector<AudioPhysicalDevice>::iterator it = devices.begin();
 
 		for (; it != devices.end(); it++) {
-			printf(fmt::format("%s\n", (*it).getName().c_str()).c_str());
+			printf(fmt::format("{}\n", (*it).getName().c_str()).c_str());
 		}
 		// printf("Current Device: %s", iaudio->getAudioDevice().getName());
 
-		AudioListenerDesc list_desc = {.position = Vector3(0, 0, 0), .rotation = Quaternion::identity()};
+		AudioListenerDesc list_desc = {.position = Vector3(0, 0, 0), .rotation = Quaternion::Identity()};
 		list_desc.position[10] = 0;
 		Ref<AudioListener> listener = Ref<AudioListener>(iaudio->createAudioListener(&list_desc));
 		listener->setVolume(1.0f);
 		AudioSourceDesc source_desc = {};
-		source_desc.position = Vector3::zero();
+		source_desc.position = Vector3::Zero();
 		Ref<AudioSource> audioSource = Ref<AudioSource>(iaudio->createAudioSource(&source_desc));
 
 		AudioClipDesc clip_desc = {};

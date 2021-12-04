@@ -1,4 +1,6 @@
+#define FRAG_CORE_INTERNAL_IMP
 #include "FTPFileSystem.h"
+#include "FTPIO.h"
 #include <Core/IO/GZFileIO.h>
 #include <Core/SystemInfo.h>
 
@@ -12,7 +14,11 @@
 
 using namespace fragcore;
 
-IO *FTPFileSystem::openFile(const char *path, IO::IOMode mode) { throw NotImplementedException(); }
+IO *FTPFileSystem::openFile(const char *path, IO::IOMode mode) {
+
+	CURL *fileHandle = curl_easy_duphandle(this->handle);
+	return new FTPFileIO(fileHandle, path, mode);
+}
 
 void FTPFileSystem::closeFile(IO *io) { throw NotImplementedException(); }
 const char *FTPFileSystem::getBaseName(const char *path) {
@@ -52,9 +58,12 @@ bool FTPFileSystem::isFile(const char *path) { throw NotImplementedException(); 
 std::vector<std::string> FTPFileSystem::listFiles(const char *directory) const { return std::vector<std::string>(); }
 
 std::vector<std::string> FTPFileSystem::listDirectories(const char *directory) const {
-	CURL *curl = curl_easy_init();
+	CURL *curl = curl_easy_duphandle(this->handle);
 
 	if (curl) {
+
+		// curl_easy_getinfo(this->curl, CURLINFO_FTP_ENTRY_PATH)
+
 		curl_easy_setopt(curl, CURLOPT_URL, fmt::format("ftp://{}/", this->URL).c_str());
 
 		/* list only */

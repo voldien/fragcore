@@ -8,7 +8,7 @@ long BZFileIO::read(long int nbytes, void *pbuffer) {
 	int bzerror;
 	int len = BZ2_bzRead(&bzerror, this->bzFile, pbuffer, nbytes);
 	if (bzerror != BZ_OK) {
-		throw RuntimeException(fmt::format("Failed to read {}", BZ2_bzerror(this->bzFile, &bzerror)));
+		throw RuntimeException("Failed to read {}", BZ2_bzerror(this->bzFile, &bzerror));
 	}
 	return len;
 }
@@ -16,9 +16,9 @@ long BZFileIO::read(long int nbytes, void *pbuffer) {
 long BZFileIO::write(long int nbytes, const void *pbuffer) {
 	int bzerror;
 	int len = nbytes;
-	BZ2_bzWrite(&bzerror, this->bzFile, (void *)pbuffer, (int)nbytes);
+	BZ2_bzWrite(&bzerror, this->bzFile, (void *)pbuffer, static_cast<int>(nbytes));
 	if (bzerror != BZ_OK) {
-		throw RuntimeException(fmt::format("Failed to write {}", BZ2_bzerror(this->bzFile, &bzerror)));
+		throw RuntimeException("Failed to write {}", BZ2_bzerror(this->bzFile, &bzerror));
 	}
 	return len;
 }
@@ -35,10 +35,7 @@ bool BZFileIO::isWriteable() const { return FileIO::isWriteable(); }
 
 bool BZFileIO::isReadable() const { return FileIO::isReadable(); }
 
-bool BZFileIO::flush() {
-	return BZ2_bzflush(this->bzFile);
-	//	return FileIO::flush();
-}
+bool BZFileIO::flush() { return BZ2_bzflush(this->bzFile); }
 
 void BZFileIO::close() {
 	int bzerror;
@@ -69,7 +66,7 @@ void BZFileIO::open(const char *path, IO::IOMode mode) {
 
 	/*  */
 	if (this->bzFile == nullptr)
-		throw RuntimeException(fmt::format("Failed to open {}", BZ2_bzerror(this->bzFile, &bzerror)));
+		throw RuntimeException("Failed to open {}", BZ2_bzerror(this->bzFile, &bzerror));
 }
 
 BZFileIO::BZFileIO(const char *path, IO::IOMode mode) : FileIO(path, mode) { this->open(path, mode); }
