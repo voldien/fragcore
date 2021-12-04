@@ -45,8 +45,6 @@ namespace fragcore {
 		intptr_t getNativePtr() const override;
 		virtual ~AudioClip();
 
-		virtual ~AudioClip();
-
 	  protected:
 		AudioClip();
 	};

@@ -21,6 +21,11 @@
 #include "../../Prerequisites.h"
 #include "FileAccess.h"
 
+/**
+ * @defgroup libfragcore_io IO
+ * @{
+ */
+
 namespace fragcore {
 
 	/**
@@ -106,5 +111,10 @@ namespace fragcore {
 	};
 
 } // namespace fragcore
+
+/**
+ * @}
+ *
+ */
 
 #endif

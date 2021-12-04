@@ -24,9 +24,12 @@
 #include "../TaskScheduler/ISemaphore.h"
 #include "IO.h"
 #include <condition_variable>
-#include <thread>
 #include <map>
-
+#include <thread>
+/**
+ * @addtogroup libfragcore_io IO
+ * @{
+ */
 namespace fragcore {
 
 	typedef long ASyncHandle;										   /*  */
@@ -190,5 +193,10 @@ namespace fragcore {
 		Ref<IScheduler> scheduler;
 	};
 } // namespace fragcore
+
+/**
+ *
+ * @}
+ */
 
 #endif
