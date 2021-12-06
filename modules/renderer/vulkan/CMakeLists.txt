@@ -25,7 +25,7 @@ ADD_DEPENDENCIES(fragcore-rvk-obj fragcore vkcommon-core fragcore-render-interfa
 
 
 # Library target.
-ADD_LIBRARY(fragcore-rvk SHARED $<TARGET_OBJECTS:fragcore-rvk-obj>)
+ADD_LIBRARY(fragcore-rvk $<TARGET_OBJECTS:fragcore-rvk-obj>)
 
 ADD_LIBRARY(fragcore-module-render-vulkan MODULE $<TARGET_OBJECTS:fragcore-rvk-obj>  )
 TARGET_LINK_LIBRARIES(fragcore-module-render-vulkan INTERFACE fragcore-rvk )

@@ -16,20 +16,21 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef _FRAG_CORE_ISEMPAHORE_H_
-#define _FRAG_CORE_ISEMPAHORE_H_ 1
+#ifndef _FRAG_CORE_ISPIN_LOCK_H_
+#define _FRAG_CORE_ISPIN_LOCK_H_ 1
 #include "../UIDObject.h"
+
 namespace fragcore {
 	/**
 	 * @brief
 	 *
 	 */
-	class ISemaphore : public UIDObject {
+	class ISpinLock : public UIDObject {
 	  public:
+		virtual ~ISpinLock() = default;
 		virtual void lock() = 0;
 		virtual void unlock() = 0;
 		virtual void wait(long int nanoTimeout = -1) = 0;
-		//virtual void tryWait() = 0;
 
 		virtual intptr_t getNativePtr() const = 0;
 	};

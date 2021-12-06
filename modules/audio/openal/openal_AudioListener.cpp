@@ -41,8 +41,8 @@ const Vector3 AudioListener::getVelocity() const {
 
 void AudioListener::setOrientation(const Quaternion &orientation) {
 
-	Vector3 forward = orientation.getVector(Vector3::UnitZ());
-	Vector3 up = orientation.getVector(Vector3::UnitY());
+	Vector3 forward = orientation * Vector3::UnitZ();
+	Vector3 up = orientation * Vector3::UnitY();
 
 	ALfloat listenerOri[] = {forward.x(), forward.y(), forward.z(), up.x(), up.y(), up.z()};
 	alListenerfv(AL_ORIENTATION, (const ALfloat *)&forward[0]);
@@ -52,8 +52,8 @@ const Quaternion AudioListener::getOrientation() const {
 	Quaternion orientation;
 	ALfloat listenerOri[6];
 	alGetListenerfv(AL_ORIENTATION, listenerOri);
-	return Quaternion::lookRotation(Vector3(listenerOri[0], listenerOri[1], listenerOri[2]), Vector3::Zero(),
-									Vector3(listenerOri[3], listenerOri[4], listenerOri[5]));
+	return Quaternion::FromTwoVectors(Vector3(listenerOri[0], listenerOri[1], listenerOri[2]),
+									  Vector3(listenerOri[3], listenerOri[4], listenerOri[5]));
 }
 
 AudioListener::AudioListener() {}

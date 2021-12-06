@@ -30,12 +30,16 @@ namespace fragcore {
 	class stdSemaphore : public ISemaphore {
 	  public:
 		stdSemaphore();
+		virtual ~stdSemaphore();
 
 		virtual void lock() override;
 		virtual void unlock() override;
 		virtual void wait(long int nanoTimeout = -1) override;
-		private:
-		  schSemaphore *semaphore; /*  */
+
+		virtual intptr_t getNativePtr() const override;
+
+	  private:
+		schSemaphore *semaphore; /*  */
 	};
 } // namespace fragcore
 
