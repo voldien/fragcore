@@ -33,10 +33,11 @@ TaskScheduler::~TaskScheduler() {
 	this->sch = nullptr;
 }
 
-static int internal_schCallback(struct sch_task_package_t *package) {
+static int internal_schCallback_execute_task(struct sch_task_package_t *package) {
 	/*	extract variables.	*/
 	Task *task = static_cast<Task *>(package->begin);
 	IScheduler *scheduler = reinterpret_cast<IScheduler *>(package->end);
+	/*	*/
 	Task::TaskCallBack callback = task->callback;
 
 	task->Execute();
@@ -53,7 +54,7 @@ void TaskScheduler::addTask(Task *task) {
 	// task->scheduler = Ref<IScheduler>(this);
 	// TODO how to handle the resources.
 
-	packageTask.callback = internal_schCallback;
+	packageTask.callback = internal_schCallback_execute_task;
 	packageTask.begin = task;
 	packageTask.end = this;
 	packageTask.puser = nullptr;

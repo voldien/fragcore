@@ -5,15 +5,10 @@
 #include <condition_variable>
 #include <fmt/core.h>
 #include <mutex>
-#include <taskSch.h> //TOOD remove once semaphore class has been implemented.
 #include <thread>
 using namespace fragcore;
 
-class FVDECLSPEC AsyncTask : public Task {
-  public:
-	virtual void Execute() noexcept override {}
-	virtual void Complete() noexcept override {}
-};
+
 
 ASyncHandle ASyncIO::asyncOpen(Ref<IO> &io) {
 
@@ -69,7 +64,7 @@ void ASyncIO::asyncReadFile(ASyncHandle handle, char *buffer, unsigned int size,
 	ao->status.nbytes = 0;
 	ao->status.offset = 0;
 
-	AsyncTask readTask;
+	AsyncTask readTask(*ao);
 	readTask.callback = async_read;
 	readTask.userData = ao;
 
@@ -120,7 +115,7 @@ void ASyncIO::asyncWriteFile(ASyncHandle handle, char *buffer, unsigned int size
 	ao->status.nbytes = 0;
 	ao->status.offset = 0;
 
-	AsyncTask readTask;
+	AsyncTask readTask(*ao);
 	readTask.callback = async_write;
 	readTask.userData = ao;
 	this->scheduler->addTask(&readTask);
@@ -144,23 +139,17 @@ bool ASyncIO::asyncWait(ASyncHandle handle, long int timeout) {
 	assert(ao);
 
 	if (ao->sem) {
-		ao->sem->wait();
+		/*	Wait	*/
+		ao->sem->wait(timeout);
 	}
 
-	// schCreateSemaphore(ao->semaphore);
-	//	schSemaphorePost((schSemaphore *) ao->semaphore);
-	/*  Set as finished.    */
-	// ao->status.
-
-	return true; // schSemaphoreTimedWait((schSemaphore *)ao->semaphore, timeout) == SCH_OK;
+	// TODO return status.
+	return true;
 }
 
 void ASyncIO::asyncClose(ASyncHandle handle) {
 	AsyncObject *ao = this->getObject(handle);
-
 	assert(ao);
-	/*  Check status of the scheduler.  */
-	// TODO determine.
 
 	this->asyncWait(handle);
 
@@ -168,7 +157,8 @@ void ASyncIO::asyncClose(ASyncHandle handle) {
 	if (ao->ref->deincreemnt())
 		ao->ref->close();
 
-	/*	TODO: Release sync objects.	*/
+	/*	Release sync objects.	*/
+	delete ao->sem;
 
 	/*	*/
 	this->asyncs.erase(this->asyncs.find(handle));
@@ -189,17 +179,22 @@ void ASyncIO::async_open(Task *task) {
 }
 
 void ASyncIO::async_read(Task *task) {
-	AsyncObject *ao = static_cast<AsyncObject *>(task->userData);
+	AsyncTask *asynctask = static_cast<AsyncTask*>(task);
+	AsyncObject *ao = &asynctask->asyncObject;
 	const size_t block_size = 512;
 
 	ao->sem->lock();
 
 	Ref<IO> &io = ao->ref;
+	ao->status.offset = io->getPos();
 	while (ao->status.nbytes < ao->size) {
+		/*	*/
 		long int nread = io->read(block_size, &ao->buffer[ao->status.nbytes]);
 		if (nread <= 0)
 			break;
+
 		ao->status.nbytes += nread;
+		ao->status.offset += nread;
 	}
 
 	/*  Finished.   */
@@ -215,13 +210,15 @@ void ASyncIO::async_read_io(Task *task) {
 
 	ao->sem->lock();
 
-	// TODO update for the IO based..
 	Ref<IO> &io = ao->ref;
+	ao->status.offset = io->getPos();
 	while (ao->status.nbytes < ao->size) {
 		long int nread = io->read(block_size, &ao->buffer[ao->status.nbytes]);
 		if (nread <= 0)
 			break;
+
 		ao->status.nbytes += nread;
+		ao->status.offset += nread;
 	}
 
 	/*  Finished.   */
@@ -237,11 +234,13 @@ void ASyncIO::async_write(Task *task) {
 	ao->sem->lock();
 
 	Ref<IO> &io = ao->ref;
+	ao->status.offset = io->getPos();
 	while (ao->status.nbytes < ao->size) {
 		long int nwritten = io->write(block_size, &ao->buffer[ao->status.nbytes]);
 		if (nwritten <= 0)
 			break;
 		ao->status.nbytes += nwritten;
+		ao->status.offset += nwritten;
 	}
 
 	io->flush();
@@ -257,6 +256,7 @@ void ASyncIO::async_write_io(Task *task) {
 	task->Execute();
 
 	ao->sem->lock();
+
 	ao->sem->unlock();
 	return;
 }

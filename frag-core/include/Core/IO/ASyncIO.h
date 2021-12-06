@@ -26,6 +26,7 @@
 #include <condition_variable>
 #include <map>
 #include <thread>
+
 /**
  * @addtogroup libfragcore_io IO
  * @{
@@ -164,6 +165,7 @@ namespace fragcore {
 		ASyncIO(const ASyncIO &other);
 		virtual void setScheduleReference(const Ref<IScheduler> &sch);
 
+	  protected:
 		/**
 		 * @brief
 		 *
@@ -180,6 +182,14 @@ namespace fragcore {
 			void *userData;			/*  */
 			void *priv;				/*	*/
 		} AsyncObject;
+
+		class FVDECLSPEC AsyncTask : public Task {
+		  public:
+			virtual void Execute() noexcept override {}
+			virtual void Complete() noexcept override {}
+			AsyncTask(AsyncObject &asyncObj) : asyncObject(asyncObj) {}
+			ASyncIO::AsyncObject &asyncObject;
+		};
 
 		/*	*/
 		ASyncHandle generateHandle();
