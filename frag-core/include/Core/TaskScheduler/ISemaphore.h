@@ -26,10 +26,12 @@ namespace fragcore {
 	 */
 	class ISemaphore : public UIDObject {
 	  public:
+		virtual ~ISemaphore();
+
 		virtual void lock() = 0;
 		virtual void unlock() = 0;
 		virtual void wait(long int nanoTimeout = -1) = 0;
-		//virtual void tryWait() = 0;
+		// virtual void tryWait() = 0;
 
 		virtual intptr_t getNativePtr() const = 0;
 	};
