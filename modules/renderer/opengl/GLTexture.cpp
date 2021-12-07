@@ -153,7 +153,7 @@ Texture::WrapMode Texture::getWrapMode() {
 		glGetTexParameteriv(texobj->target, GL_TEXTURE_WRAP_R, &wrapR);
 	}
 
-	if (wrapR == wrapS == wrapT == GL_REPEAT)
+	if (wrapR == GL_REPEAT && wrapS == GL_REPEAT && wrapT == GL_REPEAT)
 		return Sampler::WrapMode::eRepeat;
 	if (wrapR == wrapS == wrapT == GL_MIRRORED_REPEAT)
 		return Sampler::WrapMode::eMirror;
@@ -190,8 +190,9 @@ float Texture::getAnisotropic() const {
 Texture::CompareFunc Texture::getCompare() const {
 	GLTextureObject *texobj = (GLTextureObject *)this->pdata;
 	if (glGetTextureParameterfv) {
-
+		return Texture::CompareFunc::NoCompare;
 	} else {
+		return Texture::CompareFunc::NoCompare;
 	}
 }
 

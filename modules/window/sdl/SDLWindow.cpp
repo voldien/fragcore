@@ -75,7 +75,7 @@ void SDLWindow::setBordered(bool bordered) { SDL_SetWindowBordered(this->window,
 // 	return h;
 // }
 
-float SDLWindow::getGamma() const {}
+float SDLWindow::getGamma() const { return 0; }
 
 void SDLWindow::setGamma(float gamma) {}
 

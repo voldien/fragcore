@@ -4,8 +4,8 @@
 #include "RenderPipeline.h"
 #include <RenderDesc.h>
 
-#include <assert.h>
-#include <fmt/core.h>
+#include <cassert>
+#include <fmt/format.h>
 
 using namespace fragcore;
 

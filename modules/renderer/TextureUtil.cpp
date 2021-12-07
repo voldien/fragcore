@@ -260,7 +260,9 @@ void TextureUtil::saveTexture(const char *filepath, IRenderer *renderer, Texture
 void TextureUtil::saveTexture(Ref<IO> &io, IRenderer *renderer, Texture *texture) {}
 
 Texture *TextureUtil::createTexture(IRenderer *renderer, unsigned int width, unsigned int height, const Ref<IO> &io,
-									TextureFormat format, GraphicFormat graphicformat) {}
+									TextureFormat format, GraphicFormat graphicformat) {
+	return nullptr;
+}
 
 Texture *TextureUtil::createTexture(IRenderer *renderer, unsigned int width, unsigned int height, const void *pixels,
 									unsigned int size, TextureFormat format, GraphicFormat graphicformat) {

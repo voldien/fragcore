@@ -59,18 +59,16 @@ long int ZipFileIO::peek(long int nBytes, void *pbuffer) { return this->read(nBy
 bool ZipFileIO::eof() const { return false; }
 
 long ZipFileIO::length() {
-	zip_int64_t prev;
-	zip_int64_t len;
 
 	struct zip_stat state;
 	// TODO add error check.
-	zip_stat_index((zip_t *)this->zipfile->pzip, this->index, 0, &state);
+	int err = zip_stat_index((zip_t *)this->zipfile->pzip, this->index, 0, &state);
+	if (err != ZIP_ER_OK) {
+		char buf[1024];
+		zip_error_to_str(buf, sizeof(buf), err, errno);
+		throw RuntimeException("Failed to close zip file {}", buf);
+	}
 
-	//	prev = zip_ftell(this->file);
-	//
-	//	zip_fseek(this->file, 0, SEEK_END);
-	//	len = zip_ftell(this->file);
-	//	zip_fseek(this->file, prev, 0);
 	return state.size;
 }
 
@@ -107,9 +105,13 @@ unsigned long ZipFileIO::getPos() {
 
 bool ZipFileIO::isWriteable() const {
 	zip_uint32_t attr;
-	// int err = zip_file_get_external_attributes((zip_t*)this->zipfile->getZipObject(), 0, ZIP_OPSYS_UNIX, nullptr,
-	// &attr);
-
+	int err =
+		zip_file_get_external_attributes((zip_t *)this->zipfile->getZipObject(), 0, ZIP_OPSYS_UNIX, nullptr, &attr);
+	if (err != ZIP_ER_OK) {
+		char buf[1024];
+		zip_error_to_str(buf, sizeof(buf), err, errno);
+		throw RuntimeException("Failed to close zip file {}", buf);
+	}
 	return true;
 }
 

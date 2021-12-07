@@ -41,7 +41,7 @@ namespace fragcore {
 			Unknown = (1 << 31)		/*  */
 		};
 
-		enum class SIMD {
+		enum class SIMD : unsigned int {
 			NONE = (0 << 0),	/*	No HPM SIMD exention flag.	*/
 			MMX = (1 << 1),		/*	MMX. (Yet not supported)	*/
 			SSE = (1 << 2),		/*	SSE (Streaming SIMD Extensions).	*/

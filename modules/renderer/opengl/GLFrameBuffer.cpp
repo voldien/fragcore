@@ -18,8 +18,8 @@ static unsigned int getCurrentFrameBufferRead() {
 	return whichID;
 }
 
-int GLFrameBuffer::attachmentCount() {}
-std::vector<Texture *> GLFrameBuffer::getColorTargets() {}
+int GLFrameBuffer::attachmentCount() { return 0; }
+std::vector<Texture *> GLFrameBuffer::getColorTargets() { return {}; }
 
 void GLFrameBuffer::bind() {
 	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
@@ -55,7 +55,7 @@ Texture *GLFrameBuffer::getStencilAttachment() {
 
 int GLFrameBuffer::width() const {
 	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
-	int width;
+	int width = 0;
 	if (glGetNamedFramebufferParameteriv) {
 		glGetNamedFramebufferParameteriv(fraobj->framebuffer, GL_FRAMEBUFFER_DEFAULT_WIDTH, &width);
 	} else {
@@ -67,7 +67,7 @@ int GLFrameBuffer::width() const {
 
 int GLFrameBuffer::height() const {
 	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
-	int height;
+	int height = 0;
 	if (glGetNamedFramebufferParameteriv) {
 		glGetNamedFramebufferParameteriv(fraobj->framebuffer, GL_FRAMEBUFFER_DEFAULT_HEIGHT, &height);
 	} else {
@@ -78,7 +78,7 @@ int GLFrameBuffer::height() const {
 
 int GLFrameBuffer::layers() {
 	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
-	int layers;
+	int layers = 0;
 	if (glGetNamedFramebufferParameteriv) {
 		glGetNamedFramebufferParameteriv(fraobj->framebuffer, GL_FRAMEBUFFER_DEFAULT_LAYERS, &layers);
 	} else {
@@ -89,7 +89,7 @@ int GLFrameBuffer::layers() {
 
 int GLFrameBuffer::nrSamples() {
 	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
-	int nrSamples;
+	int nrSamples = 0;
 	if (glGetNamedFramebufferParameteriv) {
 		glGetNamedFramebufferParameteriv(fraobj->framebuffer, GL_FRAMEBUFFER_DEFAULT_SAMPLES, &nrSamples);
 	} else {

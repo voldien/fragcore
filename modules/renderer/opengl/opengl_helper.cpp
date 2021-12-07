@@ -357,15 +357,19 @@ unsigned int getInternalTextureFormat(TextureDesc::Format format, bool sRGB, Tex
 	if (!sRGB && compression == TextureDesc::Compression::eNoCompression) {
 		switch (format) {
 		case TextureDesc::eRGB:
-			if (type == TextureDesc::eUnsignedByte)
+			if (type == TextureDesc::eUnsignedByte) {
 				return GL_RGB8;
-			if (type == TextureDesc::eFloat)
+			}
+			if (type == TextureDesc::eFloat) {
 				return GL_RGB32F;
+			}
 		case TextureDesc::eRGBA:
-			if (type == TextureDesc::eUnsignedByte)
+			if (type == TextureDesc::eUnsignedByte) {
 				return GL_RGBA8;
-			if (type == TextureDesc::eFloat)
+			}
+			if (type == TextureDesc::eFloat) {
 				return GL_RGBA32F;
+			}
 		case TextureDesc::eBGR:
 			return GL_BGR;
 		case TextureDesc::eBGRA:
@@ -403,6 +407,8 @@ unsigned int getInternalTextureFormat(TextureDesc::Format format, bool sRGB, Tex
 				case TextureDesc::eETC2:
 					return GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC;
 				}
+			default:
+				break;
 			}
 		}
 
@@ -443,19 +449,21 @@ unsigned int getTextureTarget(TextureDesc::Target target, int nrSamples) {
 	case TextureDesc::eTexture1D:
 		return GL_TEXTURE_1D;
 	case TextureDesc::eTexture2D:
-		if (nrSamples > 0)
+		if (nrSamples > 0) {
 			return GL_TEXTURE_2D_MULTISAMPLE;
-		else
+		} else {
 			return GL_TEXTURE_2D;
+		}
 	case TextureDesc::eTexture3D:
 		return GL_TEXTURE_3D;
 	case TextureDesc::eCubeMap:
 		return GL_TEXTURE_CUBE_MAP;
 	case TextureDesc::eTexture2DArray:
-		if (nrSamples > 0)
+		if (nrSamples > 0) {
 			return GL_TEXTURE_2D_MULTISAMPLE_ARRAY;
-		else
+		} else {
 			return GL_TEXTURE_2D_ARRAY;
+		}
 	case TextureDesc::eCubeMapArray:
 		return GL_TEXTURE_CUBE_MAP_ARRAY;
 	default:

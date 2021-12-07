@@ -62,10 +62,9 @@ long GZFileIO::write(long int nbytes, const void *pbuffer) {
 }
 
 long GZFileIO::length() {
-	long size;
+	// TODO improve!
 	unsigned long curPos = getPos();
-	FileIO::seek(0, SET);
-	// FileIO::read(4, info);
+	gzseek(this->gzFi, curPos, SEEK_SET);
 	return FileIO::length();
 }
 

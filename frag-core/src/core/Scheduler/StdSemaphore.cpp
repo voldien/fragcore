@@ -8,11 +8,7 @@ stdSemaphore::stdSemaphore() {
 		throw RuntimeException("Failed to create semaphore: {}", schErrorMsg(rc));
 }
 
-stdSemaphore::~stdSemaphore() {
-	int rc = schDeleteSemaphore(this->semaphore);
-	if (rc != SCH_OK)
-		throw RuntimeException("Failed to delete semaphore: {}", schErrorMsg(rc));
-}
+stdSemaphore::~stdSemaphore() { schDeleteSemaphore(this->semaphore); }
 
 void stdSemaphore::lock() {
 	int rc = schSemaphoreWait(this->semaphore);

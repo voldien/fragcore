@@ -18,21 +18,19 @@
  */
 #ifndef _FRAG_CORE_DEFAULTFRAMEBUFFERTEXTURE_H_
 #define _FRAG_CORE_DEFAULTFRAMEBUFFERTEXTURE_H_ 1
-#include"../Texture.h"
+#include "../Texture.h"
 
 namespace fragcore {
 
 	class FrameBufferTexture : public Texture {
-	public:
-
-
+	  public:
 		FrameBufferTexture();
 
-		virtual void *mapTexture(Format format, unsigned int level);
+		virtual void *mapTexture(Format format, unsigned int level) override;
 
-		virtual void unMapTexture();
+		virtual void unMapTexture() override;
 
-		virtual Format getFormat() const;
+		virtual Format getFormat() const override;
 
 		void bind(unsigned int index) override;
 
@@ -56,12 +54,13 @@ namespace fragcore {
 
 		void *getPixels(Format format, unsigned int level, unsigned long *nBytes);
 
-		virtual unsigned int width();
+		virtual unsigned int width() override;
 
-		virtual unsigned int height();
-	private:
-		unsigned int pbo;	//TODO determine
+		virtual unsigned int height() override;
+
+	  private:
+		unsigned int pbo; // TODO determine
 	};
-}
+} // namespace fragcore
 
 #endif

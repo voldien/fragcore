@@ -37,9 +37,9 @@ namespace fragcore {
 
 		void close() override;
 
-		virtual void show();
+		virtual void show() override;
 
-		virtual void hide();
+		virtual void hide() override;
 
 		void focus() override;
 
@@ -49,17 +49,17 @@ namespace fragcore {
 
 		void minimize() override;
 
-		virtual void swapBuffer();
+		virtual void swapBuffer() override;
 
-		virtual void setPosition(int x, int y);
+		virtual void setPosition(int x, int y) override;
 
-		virtual void setSize(int width, int height);
+		virtual void setSize(int width, int height) override;
 
 		virtual void vsync(bool state) override;
 
-		virtual void getPosition(int *x, int *y) const;
+		virtual void getPosition(int *x, int *y) const override;
 
-		virtual void getSize(int *width, int *height) const;
+		virtual void getSize(int *width, int *height) const override;
 
 		void resizable(bool resizable) override;
 
@@ -67,26 +67,26 @@ namespace fragcore {
 
 		void *getIcon() const override;
 
-		virtual Display *getCurrentDisplay() const;
+		virtual Display *getCurrentDisplay() const override;
 
 		void setFullScreen(bool fullscreen) override;
-		virtual void setFullScreen(Display &display);
+		virtual void setFullScreen(Display &display) override;
 
-		bool isFullScreen() const;
+		bool isFullScreen() const override;
 
 		void setBordered(bool bordered) override;
 
 		void setMinimumSize(int width, int height) override;
-		virtual void getMinimumSize(int *width, int *height);
+		virtual void getMinimumSize(int *width, int *height) override;
 		void setMaximumSize(int width, int height) override;
-		virtual void getMaximumSize(int *width, int *height);
+		virtual void getMaximumSize(int *width, int *height) override;
 
-		virtual float getGamma() const;
+		virtual float getGamma() const override;
 
-		virtual void setGamma(float);
+		virtual void setGamma(float) override;
 
-		virtual void setTitle(const std::string& title);
-		virtual std::string getTitle() const;
+		virtual void setTitle(const std::string &title) override;
+		virtual std::string getTitle() const override;
 
 		intptr_t getNativePtr() const override;
 

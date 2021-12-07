@@ -18,9 +18,9 @@
  */
 #ifndef _FRAG_CORE_GL_COMMAND_LIST_H_
 #define _FRAG_CORE_GL_COMMAND_LIST_H_ 1
-#include<Core/dataStructure/StackAllactor.h>
 #include "../CommandList.h"
 #include "GLCommandListCommands.h"
+#include <Core/dataStructure/StackAllactor.h>
 #include <vector>
 
 namespace fragcore {
@@ -34,8 +34,8 @@ namespace fragcore {
 		GLCommandList();
 		virtual ~GLCommandList();
 
-		virtual void begin();
-		virtual void end();
+		virtual void begin() override;
+		virtual void end() override;
 
 		virtual void copyTexture(const Texture *src, Texture *dst) override;
 
@@ -43,18 +43,18 @@ namespace fragcore {
 		virtual void bindFramebuffer(Ref<FrameBuffer> &framebuffer) override;
 		virtual void setviewport(int x, int y, int width, int height) override;
 
-		virtual void clearDepth(float depth);
-		virtual void clearColorTarget(uint index, const Color &color);
+		virtual void clearDepth(float depth) override;
+		virtual void clearColorTarget(uint index, const Color &color) override;
 
 		virtual void dispatch(uint groupCountX, uint groupCountY, uint groupCountZ) override;
 		virtual void dispatchIndirect(Buffer *buffer, u_int64_t offset) override;
 
 		virtual void setDepthBounds(float min, float max) override;
 
-		virtual void pushDebugGroup(const char *name);
+		virtual void pushDebugGroup(const char *name) override;
 
-		virtual void popDebugGroup();
-		virtual void insertDebugMarker(const char *name);
+		virtual void popDebugGroup() override;
+		virtual void insertDebugMarker(const char *name) override;
 
 	  private:
 		StackAllocator stackAlloc;

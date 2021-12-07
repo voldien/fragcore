@@ -19,8 +19,8 @@
 #ifndef _FRAG_CORE_DEF_H_
 #define _FRAG_CORE_DEF_H_ 1
 #include <cstdio>
-#include <stdint.h>
-#include <string.h>
+#include <cstdint>
+#include <cstring>
 #include <cstdlib>
 #include <unistd.h>
 #include <cassert>
