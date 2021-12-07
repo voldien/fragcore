@@ -26,7 +26,7 @@ namespace fragcore {
 	 */
 	class ISemaphore : public UIDObject {
 	  public:
-		virtual ~ISemaphore();
+		virtual ~ISemaphore() = default;
 
 		virtual void lock() = 0;
 		virtual void unlock() = 0;
