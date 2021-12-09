@@ -60,8 +60,9 @@ const char *SystemInfo::getOperatingSystemName(SystemInfo::OperatingSystem os) {
 		return "IOS";
 	case SystemInfo::OperatingSystem::FreeBSD:
 		return "FreeBSD";
+	case SystemInfo::OperatingSystem::Unknown:
 	default:
-		throw InvalidArgumentException("Invalid Operating System Enumerator");
+		return "Unkown Operating System";
 	}
 }
 

@@ -5,7 +5,7 @@ FILE(GLOB AUDIO_HEADER_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.h
 
 # Library target.
 ADD_LIBRARY(fragcore-audio-interface SHARED ${AUDIO_SOURCE_FILES} ${AUDIO_HEADER_FILES})
-TARGET_LINK_LIBRARIES(fragcore-audio-interface PUBLIC fragcore vorbis ogg)
+TARGET_LINK_LIBRARIES(fragcore-audio-interface PUBLIC fragcore vorbis ogg vorbisfile )
 TARGET_COMPILE_DEFINITIONS(fragcore-audio-interface PRIVATE FRAG_CORE_INTERNAL_IMP=1)
 
 #
