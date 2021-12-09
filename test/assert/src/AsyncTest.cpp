@@ -18,7 +18,7 @@ class ASyncIOTest : public testing::Test {
 	Ref<IScheduler> sche{nullptr};
 };
 
-TEST_F(ASyncIOTest, Create_NoThrowException) { ASSERT_NO_THROW(ASyncIO async(this->sche)); }
+TEST_F(ASyncIOTest, Create_No_ThrowException) { ASSERT_NO_THROW(ASyncIO async(this->sche)); }
 
 TEST_F(ASyncIOTest, Create_Handle_No_Throw_Exception) { ASSERT_NO_THROW(ASyncHandle handle); }
 
@@ -35,9 +35,10 @@ TEST_F(ASyncIOTest, Read_IO_Async_ThrowException) {
 	ASyncIO async(this->sche);
 
 	Ref<IO> ioRef = SystemInfo::getStdOut();
-	ASyncHandle handle;
+
+	ASyncHandle handle = 0;
 	handle = async.asyncOpen(ioRef);
-	ASSERT_THROW(async.asyncWriteFile(handle, nullptr, 0, nullptr), InvalidPointerException);
+	ASSERT_THROW(async.asyncReadFile(handle, nullptr, 0, nullptr), InvalidPointerException);
 	async.asyncClose(handle);
 }
 

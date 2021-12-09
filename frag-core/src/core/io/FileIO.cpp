@@ -1,6 +1,7 @@
 #include "Core/IO/FileIO.h"
 
 #include <fmt/core.h>
+#include <sys/stat.h>
 #include <utility>
 
 using namespace fragcore;
@@ -14,7 +15,20 @@ FileIO::FileIO(const char *path, IOMode mode) { this->open(path, mode); }
 
 FileIO::FileIO(const std::string &path, IOMode mode) { this->open(path.c_str(), mode); }
 
-FileIO::FileIO(FILE *file) { this->file = file; }
+FileIO::FileIO(FILE *file) {
+	this->file = file;
+	this->mode = (IOMode)0;
+
+	/*	Extract stat of the file.	*/
+	struct stat stat;
+	int rc = fstat(fileno(this->file), &stat);
+	if (rc == 0) {
+		if (stat.st_mode & S_IWUSR)
+			this->mode = (IOMode)(this->mode | (int)IOMode::WRITE);
+		if (stat.st_mode & S_IRUSR)
+			this->mode = (IOMode)((int)IOMode::READ | this->mode);
+	}
+}
 
 FileIO::FileIO(FileIO &&other) {
 	this->file = std::exchange(other.file, nullptr);
@@ -118,17 +132,9 @@ long int FileIO::peek(long int nBytes, void *pbuffer) {
 }
 
 long FileIO::length() {
-	/*	Get size of the file.	*/
-	long int prev = ftell(this->file);
-	if (prev < 0) {
-	}
-	long int flen;
-
-	/*  */
-	int rc = fseek(this->file, 0, SEEK_END);
-	flen = ftell(this->file);
-	rc = fseek(this->file, prev, SEEK_SET);
-	return flen;
+	struct stat stat;
+	fstat(fileno(this->file), &stat);
+	return stat.st_size;
 }
 
 bool FileIO::eof() const { return feof(this->file) != 0; }
@@ -162,9 +168,9 @@ unsigned long FileIO::getPos() {
 	return pos.__pos;
 }
 
-bool FileIO::isWriteable() const { return this->mode & WRITE; }
+bool FileIO::isWriteable() const { return (this->mode & WRITE) != 0; }
 
-bool FileIO::isReadable() const { return this->mode & READ; }
+bool FileIO::isReadable() const { return (this->mode & READ) != 0; }
 
 bool FileIO::flush() {
 	int rc = fflush(this->file);

@@ -10,7 +10,7 @@ TaskScheduler::TaskScheduler(int cores, unsigned int maxPackagesPool) : sch(null
 
 	int rc = schAllocateTaskPool(&taskSch);
 	if (rc != SCH_OK) {
-		throw RuntimeException("Failed to create Scheduler: {}", schErrorMsg(rc));
+		throw RuntimeException("Failed to allocate Scheduler: {}", schErrorMsg(rc));
 	}
 	rc = schCreateTaskPool(taskSch, cores, SCH_FLAG_NO_AFM, maxPackagesPool);
 	if (rc != SCH_OK) {

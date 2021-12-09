@@ -8,18 +8,16 @@
 #include <thread>
 using namespace fragcore;
 
-
-
 ASyncHandle ASyncIO::asyncOpen(Ref<IO> &io) {
 
 	/*	Check if scheduler is initialized.	*/
-	if (*scheduler == nullptr)
+	if (scheduler == nullptr)
 		throw RuntimeException("Async not initialized with a scheduler object");
 	/*  Check parameters.   */
-	if (*io == nullptr)
+	if (io == nullptr)
 		throw InvalidArgumentException("Invalid IO reference.");
 
-	/*	*/
+	/*	Required IO operation to be supported.	*/
 	const IO::IOOperation requiredIOReadSupported = static_cast<IO::IOOperation>(IO::OP_READ | IO::OP_WRITE);
 
 	/*	Check if IO operations are supported.	*/
@@ -50,6 +48,9 @@ void ASyncIO::asyncReadFile(ASyncHandle handle, char *buffer, unsigned int size,
 	/*	Verify that is has read access.	*/
 	if (!ao->ref->isReadable())
 		throw RuntimeException("IO object is not readable {}", ao->ref->getUID());
+
+	if (buffer == nullptr || size == 0)
+		throw InvalidArgumentException("");
 
 	// TODO replace with an abstract version
 	/*  Assign variables.   */
@@ -161,7 +162,8 @@ void ASyncIO::asyncClose(ASyncHandle handle) {
 	delete ao->sem;
 
 	/*	*/
-	this->asyncs.erase(this->asyncs.find(handle));
+	auto it = this->asyncs.find(handle);
+	this->asyncs.erase(it);
 }
 
 void ASyncIO::async_open(Task *task) {
@@ -179,7 +181,7 @@ void ASyncIO::async_open(Task *task) {
 }
 
 void ASyncIO::async_read(Task *task) {
-	AsyncTask *asynctask = static_cast<AsyncTask*>(task);
+	AsyncTask *asynctask = static_cast<AsyncTask *>(task);
 	AsyncObject *ao = &asynctask->asyncObject;
 	const size_t block_size = 512;
 
