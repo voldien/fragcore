@@ -38,8 +38,8 @@ int AR_seekOgg(void *fh, ogg_int64_t to, int type) {
 }
 
 int AR_closeOgg(void *fh) {
-	ogg_file *of = reinterpret_cast<ogg_file *>(fh);
-	// of->io->deincrement(;)
+	// ogg_file *of = reinterpret_cast<ogg_file *>(fh);
+	// of->io->deincrement();
 	return 0;
 }
 
@@ -84,7 +84,7 @@ VorbisAudioDecoder::VorbisAudioDecoder(Ref<IO> &io) : AudioDecoder(io) {
 	vorbis_info *vi = ov_info(ov, -1);
 	vorbis_comment *comment = ov_comment(ov, 0);
 	vorbis_info *info = ov_info(ov, 0);
-	printf("{}\n", info->channels);
+	printf("%d\n", info->channels);
 	assert(vi);
 
 	for (int i = 0; i < ov_streams(ov); i++) {

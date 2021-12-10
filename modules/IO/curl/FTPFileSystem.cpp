@@ -78,6 +78,7 @@ std::vector<std::string> FTPFileSystem::listDirectories(const char *directory) c
 
 		curl_easy_cleanup(curl);
 	}
+	return {};
 }
 
 std::vector<std::string> FTPFileSystem::list(const char *directory) const { throw NotImplementedException(); }

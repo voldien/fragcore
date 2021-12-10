@@ -55,7 +55,7 @@ void AudioSource::setVolume(float volume) {
 }
 
 float AudioSource::getVolume() {
-	float volume;
+	float volume = 0;
 	ALSource *source = (ALSource *)this->getObject();
 	return volume;
 }

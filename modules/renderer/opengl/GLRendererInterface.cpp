@@ -1220,6 +1220,7 @@ FrameBuffer *GLRendererInterface::createFrameBuffer(FrameBufferDesc *desc) {
 	FrameBuffer *frameBuffer = new GLFrameBuffer();
 	// frameBuffer->pdata = glfraobj;
 	frameBuffer->setRenderInterface(this);
+	return frameBuffer;
 }
 
 void GLRendererInterface::deleteFrameBuffer(FrameBuffer *obj) {
@@ -1363,7 +1364,7 @@ void GLRendererInterface::swapBuffer() {
 
 void GLRendererInterface::drawInstance(Geometry *geometry, unsigned int num) {
 
-	GLGeometryObject *glgeo = nullptr;//static_cast<GLGeometryObject *>(geometry);
+	GLGeometryObject *glgeo = nullptr; // static_cast<GLGeometryObject *>(geometry);
 	assert(geometry && num > 0);
 
 	// glgeo = (GLGeometryObject *) geometry->pdata;
@@ -2042,7 +2043,7 @@ void GLRendererInterface::submittCommand(Ref<CommandList> &list) {}
 void GLRendererInterface::execute(CommandList *list) {
 	GLCommandList *glist = (GLCommandList *)list;
 
-	for (int i = 0; i < glist->commands.size(); i++) {
+	for (size_t i = 0; i < glist->commands.size(); i++) {
 		const GLCommandBase *base = glist->commands[i];
 		switch (base->getCommand()) {
 		case GLCommandBufferCmd::ClearColor: {
@@ -2050,6 +2051,39 @@ void GLRendererInterface::execute(CommandList *list) {
 			glClearColor(clearColor->clear.x(), clearColor->clear.x(), clearColor->clear.x(), clearColor->clear.x());
 			// glClearNamedFramebufferfv(fraobj->framebuffer, GL_COLOR, GL_COLOR_ATTACHMENT0 + index, (GLfloat *)color);
 			/* code */
+		} break;
+		case GLCommandBufferCmd::ClearImage: {
+			const GLCommandClear *viewport = (const GLCommandClear *)base;
+			glClear(viewport->mask);
+		} break;
+		case GLCommandBufferCmd::Dispatch: {
+			if (glDispatchCompute) {
+				glDispatchCompute(1, 1, 1);
+			}
+		} break;
+		case GLCommandBufferCmd::DispatchIndirect: {
+			if (glDispatchComputeIndirect) {
+				glDispatchComputeIndirect(0);
+			}
+		} break;
+		case GLCommandBufferCmd::PushGroupMarker: {
+			// glPushDebugGroup();
+		} break;
+		case GLCommandBufferCmd::PopGroupMarker: {
+			if (glPopDebugGroup)
+				glPopDebugGroup();
+		} break;
+		case GLCommandBufferCmd::InsertGroupMarker: {
+			// glDebugMessageInsert();
+		} break;
+
+		case GLCommandBufferCmd::ViewPort: {
+			const GLViewPortCommand *viewport = (const GLViewPortCommand *)base;
+			glViewport(viewport->x, viewport->y, viewport->width, viewport->height);
+		} break;
+		case GLCommandBufferCmd::Scissor: {
+			const GLViewPortCommand *scissor = (const GLViewPortCommand *)base;
+			glScissor(scissor->x, scissor->y, scissor->width, scissor->height);
 		} break;
 
 		default:

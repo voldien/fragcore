@@ -55,6 +55,7 @@ namespace fragcore {
 	class GLCommandClear : public GLCommandBase {
 	  public:
 		GLCommandClear() : GLCommandBase(GLCommandBufferCmd::ClearImage) {}
+		unsigned int mask;
 	};
 
 	class GLPushGroupMarkerCommand : public GLCommandBase {};
@@ -62,6 +63,13 @@ namespace fragcore {
 	class GLViewPortCommand : public GLCommandBase {
 	  public:
 		GLViewPortCommand() : GLCommandBase(GLCommandBufferCmd::ViewPort) {}
+		unsigned int index;
+		unsigned int width, height;
+		unsigned int x, y;
+	};
+	class GLScissorPortCommand : public GLCommandBase {
+	  public:
+		GLScissorPortCommand() : GLCommandBase(GLCommandBufferCmd::Scissor) {}
 		unsigned int index;
 		unsigned int width, height;
 		unsigned int x, y;

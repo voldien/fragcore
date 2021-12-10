@@ -31,7 +31,11 @@ AudioFormat WavAudioDecoder::getFormat() const {
 }
 unsigned int WavAudioDecoder::getSampleRate() const { return 0; }
 
-unsigned int WavAudioDecoder::getNrChannels() const {}
-unsigned int WavAudioDecoder::getSampleBitResolution() const {}
+unsigned int WavAudioDecoder::getNrChannels() const {
+	return 0;
+}
+unsigned int WavAudioDecoder::getSampleBitResolution() const {
+	return 0;
+}
 
 double WavAudioDecoder::getTotalTime() const { return this->length; }

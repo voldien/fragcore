@@ -25,11 +25,12 @@ namespace fragcore {
 	class Module;
 	typedef Module *(*CreateModule)(Module *module);
 	/**
-	 *
+	 * @brief 
+	 * 
 	 */
 	class FVDECLSPEC Module : public SmartReference {
 	  public:
-		Module() = default;
+		Module();
 		virtual ~Module() = default;
 		virtual void OnInitialization() = 0;
 		virtual void OnDestruction() = 0;
@@ -56,7 +57,7 @@ namespace fragcore {
 
 			return module;
 		}
-		static std::string getModuleName(const std::string &name) { return name; }
+		static std::string getModuleName(const std::string &name);
 	};
 } // namespace fragcore
 

@@ -150,7 +150,7 @@ ModbusNetSocket::NetStatus ModbusNetSocket::accept(NetSocket &socket) {
 	int aaccept_socket = ::accept(this->socket, &tobuffer, &aclen);
 	if (aaccept_socket < 0) {
 	}
-	NetStatus::Status_Done;
+	return NetStatus::Status_Done;
 }
 int ModbusNetSocket::read() { return 0; }
 int ModbusNetSocket::write() { return 0; }
