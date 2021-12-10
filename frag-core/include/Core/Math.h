@@ -187,7 +187,7 @@ namespace fragcore {
 			// TODO add support for using vector components.
 			T exponent = static_cast<T>(1.0) / gamma;
 
-			return static_cast<T>(std::pow(x, gamma));
+			return static_cast<T>(std::pow(x, exponent));
 		}
 
 		template <typename T> static T gameSpaceToLinear(T gamma, T exp) noexcept {}

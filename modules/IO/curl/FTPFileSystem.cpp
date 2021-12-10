@@ -72,6 +72,9 @@ std::vector<std::string> FTPFileSystem::listDirectories(const char *directory) c
 		curl_easy_setopt(curl, CURLOPT_DIRLISTONLY, 1L);
 
 		int ret = curl_easy_perform(curl);
+		if(ret != CURLE_OK){
+
+		}
 
 		curl_easy_cleanup(curl);
 	}

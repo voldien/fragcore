@@ -61,7 +61,7 @@ namespace fragcore {
 			BC7,		  //	High quality compressed color texture fvformatf.
 			DXT1Crunched, //	Compressed color texture fvformatf with Crunch compression for smaller storage sizes.
 			DXT5Crunched, //	Compressed color with alpha channel texture fvformatf with Crunch compression for
-						  //smaller storage sizes.
+						  // smaller storage sizes.
 			PVRTC_RGB2,	  //	PowerVR (iOS) 2 bits/pixel compressed color texture fvformatf.
 			PVRTC_RGBA2,  //	PowerVR (iOS) 2 bits/pixel compressed with alpha channel texture fvformatf.
 			PVRTC_RGB4,	  //	PowerVR (iOS) 4 bits/pixel compressed color texture fvformatf.
@@ -71,7 +71,7 @@ namespace fragcore {
 			EAC_R_SIGNED, //	ETC2 / EAC (GL ES 3.0) 4 bits/pixel compressed signed single-channel texture fvformatf.
 			EAC_RG, //	ETC2 / EAC (GL ES 3.0) 8 bits/pixel compressed unsigned dual-channel (RG) texture fvformatf.
 			EAC_RG_SIGNED,		//	ETC2 / EAC (GL ES 3.0) 8 bits/pixel compressed signed dual-channel (RG) texture
-								//fvformatf.
+								// fvformatf.
 			ETC2_RGB,			//	ETC2 (GL ES 3.0) 4 bits/pixel compressed RGB texture fvformatf.
 			ETC2_RGBA1,			//	ETC2 (GL ES 3.0) 4 bits/pixel RGB+1-bit alpha texture fvformatf.
 			ETC2_RGBA8,			//	ETC2 (GL ES 3.0) 8 bits/pixel compressed RGBA texture fvformatf.
@@ -84,9 +84,9 @@ namespace fragcore {
 			RG16,				//	Two color (RG) texture fvformatf, 8-bits per channel.
 			R8,					//	Single channel (R) texture fvformatf, 8 bit integer.
 			ETC_RGB4Crunched,	//	Compressed color texture fvformatf with Crunch compression for smaller storage
-								//sizes.
+								// sizes.
 			ETC2_RGBA8Crunched, //	Compressed color with alpha channel texture fvformatf using Crunch compression for
-								//smaller storage sizes.
+								// smaller storage sizes.
 			ASTC_HDR_4x4,		//	ASTC (4x4 pixel block in 128 bits) compressed RGB(A) HDR texture fvformatf.
 			ASTC_HDR_5x5,		//	ASTC (5x5 pixel block in 128 bits) compressed RGB(A) HDR texture fvformatf.
 			ASTC_HDR_6x6,		//	ASTC (6x6 pixel block in 128 bits) compressed RGB(A) HDR texture fvformatf.

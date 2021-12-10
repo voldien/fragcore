@@ -14,9 +14,11 @@ WavAudioDecoder::~WavAudioDecoder() {}
 
 void WavAudioDecoder::seek(long int microseconds) {}
 
-void *WavAudioDecoder::getData(long int *size) {}
+void *WavAudioDecoder::getData(long int *size) {	return nullptr;}
 
-void *WavAudioDecoder::getPage(int i) {}
+void *WavAudioDecoder::getPage(int i) {
+	return nullptr;
+}
 
 AudioFormat WavAudioDecoder::getFormat() const {
 	switch (this->channels) {

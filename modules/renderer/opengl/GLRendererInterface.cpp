@@ -897,7 +897,8 @@ finished:
 	if (lstatus != GL_TRUE) {
 		char log[4096];
 		glGetProgramInfoLog(program, sizeof(log), nullptr, log);
-		fprintf(stderr, "{}.\n", log);
+		// TODO FIXME
+		fprintf(stderr, "%s.\n", log);
 		return nullptr;
 	}
 
@@ -1263,7 +1264,6 @@ void GLRendererInterface::deleteQuery(QueryObject *query) {
 }
 
 RendererWindow *GLRendererInterface::createWindow(int x, int y, int width, int height) {
-	OpenGLCore *glcore = (OpenGLCore *)this->pdata;
 
 	WindowManager::getInstance();
 	Ref<GLRendererInterface> rendRef = Ref<GLRendererInterface>(this);
@@ -1289,7 +1289,7 @@ RendererWindow *GLRendererInterface::createWindow(int x, int y, int width, int h
 }
 
 void GLRendererInterface::setCurrentWindow(RendererWindow *window) {
-	OpenGLCore *glcore = (OpenGLCore *)this->pdata;
+
 	// window->useWindow(this->openglcontext);
 	this->drawwindow = window;
 
@@ -1302,7 +1302,6 @@ void GLRendererInterface::setCurrentWindow(RendererWindow *window) {
 void GLRendererInterface::createSwapChain() {}
 
 FrameBuffer *GLRendererInterface::getDefaultFramebuffer(void *window) {
-	OpenGLCore *glcore = (OpenGLCore *)this->pdata;
 
 	static FrameBuffer *defaultFrambuffer = nullptr;
 	if (defaultFrambuffer == nullptr) {
@@ -1332,7 +1331,7 @@ void GLRendererInterface::clear(unsigned int bitflag) {
 void GLRendererInterface::clearColor(float r, float g, float b, float a) { glClearColor(r, g, b, a); }
 
 ViewPort *GLRendererInterface::getView(unsigned int i) {
-	OpenGLCore *glcore = (OpenGLCore *)this->pdata;
+
 	/*  Validate the index. */
 	if (i >= this->capability.sMaxViewPorts)
 		throw std::invalid_argument(
@@ -1364,8 +1363,7 @@ void GLRendererInterface::swapBuffer() {
 
 void GLRendererInterface::drawInstance(Geometry *geometry, unsigned int num) {
 
-	GLGeometryObject *glgeo;
-
+	GLGeometryObject *glgeo = nullptr;//static_cast<GLGeometryObject *>(geometry);
 	assert(geometry && num > 0);
 
 	// glgeo = (GLGeometryObject *) geometry->pdata;

@@ -45,7 +45,7 @@ void AudioListener::setOrientation(const Quaternion &orientation) {
 	Vector3 up = orientation * Vector3::UnitY();
 
 	ALfloat listenerOri[] = {forward.x(), forward.y(), forward.z(), up.x(), up.y(), up.z()};
-	alListenerfv(AL_ORIENTATION, (const ALfloat *)&forward[0]);
+	alListenerfv(AL_ORIENTATION, (const ALfloat *)&listenerOri[0]);
 }
 
 const Quaternion AudioListener::getOrientation() const {

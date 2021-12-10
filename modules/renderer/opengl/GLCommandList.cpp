@@ -19,6 +19,9 @@ void GLCommandList::setviewport(int x, int y, int width, int height) {
 	GLViewPortCommand *_command =
 		(GLViewPortCommand *)this->stackAlloc.alloc(command.getCommandSize<GLViewPortCommand>());
 	glViewport(x, y, width, height);
+
+	/*	*/
+	this->commands.push_back(_command);
 }
 
 void GLCommandList::clearDepth(float depth) {}

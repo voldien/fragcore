@@ -37,6 +37,9 @@ long FTPFileIO::write(long int nbytes, const void *pbuffer) {
 long FTPFileIO::length() {
 	double filesize = 0.0;
 	CURLcode res = curl_easy_getinfo(this->handle, CURLINFO_CONTENT_LENGTH_DOWNLOAD, &filesize);
+	if(res != CURLE_OK){
+		
+	}
 	return filesize;
 }
 

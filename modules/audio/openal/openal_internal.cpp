@@ -6,6 +6,8 @@ using namespace fragcore;
 ALenum translate2ALFormat(AudioFormat format) {
 	switch (format) {
 	case eStero:
-		break;
+		return 0;
+	default:
+		return 0;
 	}
 }

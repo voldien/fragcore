@@ -89,7 +89,9 @@ void *Shader::getBinary(long int *size, unsigned int *format) {
 	return pBinary;
 }
 
-void *Shader::getSource(long int *size) {}
+void *Shader::getSource(long int *size) {
+	return nullptr;
+}
 
 void Shader::setName(const std::string &name) {
 	GLShaderObject *shadobj = (GLShaderObject *)this->pdata;

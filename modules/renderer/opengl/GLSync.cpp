@@ -25,6 +25,8 @@ Sync::SyncStatus Sync::waitClient(int timeout) {
 		return TimeOutExpired;
 	case GL_WAIT_FAILED:
 		return Error;
+	default:
+		return Error;
 	}
 }
 

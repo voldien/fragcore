@@ -54,6 +54,13 @@ VorbisAudioDecoder::VorbisAudioDecoder(Ref<IO> &io) : AudioDecoder(io) {
 	t->io = io;
 	// t.fileSize = io->length();
 
+	/*	Required IO operation to be supported.	*/
+	const IO::IOOperation requiredIOReadSupported =
+		static_cast<IO::IOOperation>(IO::OP_READ | IO::OP_SEEK | IO::OP_GETPOS);
+	if (!io->isOperationSupported(requiredIOReadSupported)) {
+		// Must support the following commands.
+	}
+
 	ov = new OggVorbis_File;
 	// mOggFile = ov;
 	memset(ov, 0, sizeof(OggVorbis_File));

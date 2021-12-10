@@ -50,7 +50,7 @@ namespace fragcore {
 
 		float getAnisotropic() const override;
 
-		void setPixels(Format format, unsigned int level, const void *pixels, unsigned long size);
+		void setPixels(Format format, unsigned int level, const void *pixels, unsigned long size) override;
 
 		void *getPixels(Format format, unsigned int level, unsigned long *nBytes);
 

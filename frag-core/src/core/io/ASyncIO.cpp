@@ -86,8 +86,6 @@ void ASyncIO::asyncReadFile(ASyncHandle handle, Ref<IO> &writeIO, AsyncComplete 
 }
 
 void ASyncIO::asyncWriteFile(ASyncHandle handle, char *buffer, unsigned int size, AsyncComplete complete) {
-	int error;
-
 	AsyncObject *ao = getObject(handle);
 
 	assert(ao);

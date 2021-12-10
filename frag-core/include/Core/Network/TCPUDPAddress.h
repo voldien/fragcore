@@ -54,7 +54,6 @@ namespace fragcore {
 		virtual bool isValid() const noexcept override;
 
 	  private:
-		bool valid;
 		unsigned int port;
 		IPAddress ipAddress;
 	};

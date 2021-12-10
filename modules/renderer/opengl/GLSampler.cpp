@@ -19,6 +19,8 @@ Sampler::FilterMode Sampler::getFilterMode() {
 
 	glGetSamplerParameteriv(sampler->sampler, GL_TEXTURE_MAG_FILTER, &wrapS);
 	glGetSamplerParameteriv(sampler->sampler, GL_TEXTURE_MIN_FILTER, &wrapT);
+
+	return Sampler::FilterMode::eBilinear;
 }
 
 void Sampler::setWrapMode(Sampler::WrapMode mode) {
@@ -45,6 +47,8 @@ Sampler::WrapMode Sampler::getWrapMode() {
 		return Sampler::WrapMode::eMirror;
 	if (wrapR == wrapS == wrapT == GL_CLAMP_TO_EDGE)
 		return Sampler::WrapMode::eClamp;
+
+	return Sampler::WrapMode::eClamp;
 }
 
 void Sampler::setAnisotropic(float anisotropy) {
@@ -70,23 +74,23 @@ void Sampler::setCompareFunc(CompareFunc compareFunc) {
 
 void Sampler::setMipMapBaseLevel(unsigned int level) {}
 
-unsigned int Sampler::getMipMapBaseLevel() const {}
+unsigned int Sampler::getMipMapBaseLevel() const { return 0; }
 
 void Sampler::setMipMapBias(float bias) {}
 
-float Sampler::getMipMapBias(float bias) const {}
+float Sampler::getMipMapBias(float bias) const { return 0; }
 
 void Sampler::setBorderColor(float color) {}
 
-float Sampler::getBorderColor() const {}
+float Sampler::getBorderColor() const { return 0; }
 
-unsigned int Sampler::setMaxLod(unsigned int level) {}
+unsigned int Sampler::setMaxLod(unsigned int level) { return 0; }
 
-unsigned int Sampler::getMaxLod() const {}
+unsigned int Sampler::getMaxLod() const { return 0; }
 
-unsigned int Sampler::setMinLod(unsigned int level) {}
+unsigned int Sampler::setMinLod(unsigned int level) { return 0; }
 
-unsigned int Sampler::getMinLod() const {}
+unsigned int Sampler::getMinLod() const { return 0; }
 
 void Sampler::setName(const std::string &name) {
 	GLSamplerObject *sampler = (GLSamplerObject *)this->getObject();

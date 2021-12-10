@@ -11,4 +11,6 @@ const std::string CANAddress::getInterface() const {
 	// struct ifreq ifr;
 	// ifr.ifr_ifindex = ifrIndex;
 	// ioctl(s, SIOCGIFNAME, &ifr);
+
+	return "";
 }

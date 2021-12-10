@@ -85,7 +85,7 @@ std::vector<std::string> ZipFileSystem::listFiles(const char *path) const {
 	ZipFileSystem *zipfile;
 	char buf[4096];
 
-	std::vector<std::string> files = std::vector<std::string>();
+	std::vector<std::string> files;
 
 	/*	Attempt to open the file by file path.	*/
 	zip_int64_t index = zip_name_locate((struct zip *)this->pzip, path, 0);
@@ -94,10 +94,15 @@ std::vector<std::string> ZipFileSystem::listFiles(const char *path) const {
 
 	zip_int64_t num_entries = zip_get_num_entries((struct zip *)this->pzip, 0);
 
+	// files.resize(num_entries);
+
 	for (zip_uint64_t i = 0; i < (zip_uint64_t)num_entries; i++) {
 		const char *name = zip_get_name((struct zip *)this->pzip, i, 0);
-		if (strcmp(path, name) == 0)
-			files.push_back(name);
+		if (name == nullptr) {
+		}
+		if (strcmp(path, name) == 0) {
+			files[i] = name;
+		}
 	}
 
 	return files;

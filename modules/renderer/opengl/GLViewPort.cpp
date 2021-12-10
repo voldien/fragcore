@@ -57,7 +57,7 @@ void ViewPort::getDepthRange(double *near, double *far) {
 	if (near)
 		*near = range[0];
 	if (far)
-		*far = range[2];
+		*far = range[1];
 }
 
 void ViewPort::enable(IRenderer::State state) {
