@@ -2038,7 +2038,7 @@ void GLRendererInterface::getFeatures(Features *features) {
 
 CommandList *GLRendererInterface::createCommandBuffer() { return new GLCommandList(); }
 
-void GLRendererInterface::submittCommand(Ref<CommandList> &list) {}
+void GLRendererInterface::submittCommand(Ref<CommandList> &list) { this->execute(list.ptr()); }
 
 void GLRendererInterface::execute(CommandList *list) {
 	GLCommandList *glist = (GLCommandList *)list;
@@ -2048,12 +2048,16 @@ void GLRendererInterface::execute(CommandList *list) {
 		switch (base->getCommand()) {
 		case GLCommandBufferCmd::ClearColor: {
 			const GLCommandClearColor *clearColor = (const GLCommandClearColor *)base;
-			glClearColor(clearColor->clear.x(), clearColor->clear.x(), clearColor->clear.x(), clearColor->clear.x());
+			glClearColor(clearColor->clear.x(), clearColor->clear.y(), clearColor->clear.z(), clearColor->clear.w());
+			glClear(GL_COLOR_BUFFER_BIT);
+			if (glClearNamedFramebufferfv) {
+			}
 			// glClearNamedFramebufferfv(fraobj->framebuffer, GL_COLOR, GL_COLOR_ATTACHMENT0 + index, (GLfloat *)color);
 			/* code */
 		} break;
 		case GLCommandBufferCmd::ClearImage: {
 			const GLCommandClear *viewport = (const GLCommandClear *)base;
+
 			glClear(viewport->mask);
 		} break;
 		case GLCommandBufferCmd::Dispatch: {
@@ -2068,13 +2072,18 @@ void GLRendererInterface::execute(CommandList *list) {
 		} break;
 		case GLCommandBufferCmd::PushGroupMarker: {
 			// glPushDebugGroup();
+			if (glPushDebugGroup) {
+			}
 		} break;
 		case GLCommandBufferCmd::PopGroupMarker: {
-			if (glPopDebugGroup)
+			if (glPopDebugGroup) {
 				glPopDebugGroup();
+			}
 		} break;
 		case GLCommandBufferCmd::InsertGroupMarker: {
-			// glDebugMessageInsert();
+			if (glDebugMessageInsert) {
+			}
+
 		} break;
 
 		case GLCommandBufferCmd::ViewPort: {

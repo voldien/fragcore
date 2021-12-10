@@ -13,19 +13,32 @@ void GLCommandList::end() {}
 void GLCommandList::copyTexture(const Texture *src, Texture *dst) {}
 
 void GLCommandList::bindPipeline(RenderPipeline *p) {}
-void GLCommandList::bindFramebuffer(Ref<FrameBuffer> &framebuffer) {}
+void GLCommandList::bindFramebuffer(Ref<FrameBuffer> &framebuffer) {
+
+}
 void GLCommandList::setviewport(int x, int y, int width, int height) {
-	GLViewPortCommand command;
+
 	GLViewPortCommand *_command =
-		(GLViewPortCommand *)this->stackAlloc.alloc(command.getCommandSize<GLViewPortCommand>());
-	glViewport(x, y, width, height);
+		(GLViewPortCommand *)this->stackAlloc.alloc(GLCommandBase::getCommandSize<GLViewPortCommand>());
+	*_command = GLViewPortCommand(0,x, y, width, height);
 
 	/*	*/
 	this->commands.push_back(_command);
 }
 
-void GLCommandList::clearDepth(float depth) {}
-void GLCommandList::clearColorTarget(uint index, const Color &color) {}
+void GLCommandList::clearDepth(float depth) {
+
+}
+
+void GLCommandList::clearColorTarget(uint index, const Color &color) {
+
+	GLCommandClearColor *_command =
+		(GLCommandClearColor *)this->stackAlloc.alloc(GLCommandBase::getCommandSize<GLCommandClearColor>());
+	*_command = GLCommandClearColor(index, color);
+
+	/*	*/
+	this->commands.push_back(_command);
+}
 
 void GLCommandList::dispatch(uint groupCountX, uint groupCountY, uint groupCountZ) {
 	uint global[3] = {groupCountX, groupCountY, groupCountZ};

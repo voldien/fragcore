@@ -32,6 +32,7 @@ namespace fragcore {
 		InsertGroupMarker,
 		ViewPort,
 		Scissor,
+		BindFrameBuffer,
 	};
 
 	class GLCommandBase {
@@ -39,7 +40,7 @@ namespace fragcore {
 		GLCommandBase(GLCommandBufferCmd command) { this->cmd = command; }
 		inline GLCommandBufferCmd getCommand() const { return this->cmd; }
 
-		template <typename T> size_t getCommandSize() { return sizeof(T); }
+		template <typename T> static size_t getCommandSize() { return sizeof(T); }
 
 	  private:
 		GLCommandBufferCmd cmd;
@@ -58,11 +59,24 @@ namespace fragcore {
 		unsigned int mask;
 	};
 
+	class GLCommandDispatch : public GLCommandBase {
+	  public:
+		GLCommandDispatch(int x, int y, int z) : GLCommandBase(GLCommandBufferCmd::Dispatch), x(x), y(y), z(z) {}
+		int x, y, z;
+	};
+
+	class GLCommandDispatchIndirect : public GLCommandBase {
+	  public:
+		GLCommandDispatchIndirect(int buffer) : GLCommandBase(GLCommandBufferCmd::DispatchIndirect), buffer(buffer) {}
+		int buffer;
+	};
+
 	class GLPushGroupMarkerCommand : public GLCommandBase {};
 	class GLPopGroupMarkerCommand : public GLCommandBase {};
 	class GLViewPortCommand : public GLCommandBase {
 	  public:
-		GLViewPortCommand() : GLCommandBase(GLCommandBufferCmd::ViewPort) {}
+		GLViewPortCommand(int index, int x, int y, int width, int height)
+			: GLCommandBase(GLCommandBufferCmd::ViewPort), index(index), x(x), y(y), width(width), height(height) {}
 		unsigned int index;
 		unsigned int width, height;
 		unsigned int x, y;
@@ -74,6 +88,13 @@ namespace fragcore {
 		unsigned int width, height;
 		unsigned int x, y;
 	};
+	class GLBindFrameBufferCommand : public GLCommandBase {
+	  public:
+		GLBindFrameBufferCommand(FrameBuffer *framebuffer)
+			: GLCommandBase(GLCommandBufferCmd::BindFrameBuffer), framebuffer(framebuffer) {}
+		FrameBuffer *framebuffer;
+	};
+
 } // namespace fragcore
 
 #endif
