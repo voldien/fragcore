@@ -41,13 +41,13 @@ namespace fragcore {
 		DrawIndex,
 		DrawIndexIndices,
 		DepthBounds,
-		
+
 	};
 
 	class GLCommandBase {
 	  public:
-		GLCommandBase(GLCommandBufferCmd command) { this->cmd = command; }
-		inline GLCommandBufferCmd getCommand() const { return this->cmd; }
+		GLCommandBase(GLCommandBufferCmd command) : cmd(command) {}
+		GLCommandBufferCmd getCommand() const { return this->cmd; }
 
 		template <typename T> static size_t getCommandSize() { return sizeof(T); }
 
@@ -93,8 +93,8 @@ namespace fragcore {
 		GLViewPortCommand(int index, int x, int y, int width, int height)
 			: GLCommandBase(GLCommandBufferCmd::ViewPort), index(index), x(x), y(y), width(width), height(height) {}
 		unsigned int index;
-		unsigned int width, height;
 		unsigned int x, y;
+		unsigned int width, height;
 	};
 	class GLScissorPortCommand : public GLCommandBase {
 	  public:

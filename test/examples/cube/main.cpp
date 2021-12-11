@@ -126,6 +126,5 @@ int main(int argc, const char **argv) {
 	}
 done:
 	window->close();
-	delete *renderer;
 	SDL_Quit();
 }

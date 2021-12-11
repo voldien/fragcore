@@ -329,7 +329,8 @@ GLRendererInterface::~GLRendererInterface() {
 	/*  Release PBO.    */
 
 	/*  Release default framebuffer.    */
-	this->deleteFrameBuffer(this->defaultFrameBuffer);
+	delete this->defaultFrameBuffer;
+	//	this->deleteFrameBuffer(this->defaultFrameBuffer);
 
 	// TODO release all the viewports.
 
@@ -2045,9 +2046,16 @@ void GLRendererInterface::execute(CommandList *list) {
 
 	for (size_t i = 0; i < glist->commands.size(); i++) {
 		const GLCommandBase *base = glist->commands[i];
+
 		switch (base->getCommand()) {
+		case GLCommandBufferCmd::BindFrameBuffer: {
+			const GLBindFrameBufferCommand *bindframebuffer = static_cast<const GLBindFrameBufferCommand *>(base);
+			if (glBindFramebuffer) {
+				bindframebuffer->framebuffer->bind();
+			}
+		} break;
 		case GLCommandBufferCmd::ClearColor: {
-			const GLCommandClearColor *clearColor = (const GLCommandClearColor *)base;
+			const GLCommandClearColor *clearColor = static_cast<const GLCommandClearColor *>(base);
 			glClearColor(clearColor->clear.x(), clearColor->clear.y(), clearColor->clear.z(), clearColor->clear.w());
 			glClear(GL_COLOR_BUFFER_BIT);
 			if (glClearNamedFramebufferfv) {
@@ -2056,9 +2064,8 @@ void GLRendererInterface::execute(CommandList *list) {
 			/* code */
 		} break;
 		case GLCommandBufferCmd::ClearImage: {
-			const GLCommandClear *viewport = (const GLCommandClear *)base;
-
-			glClear(viewport->mask);
+			const GLCommandClear *clearImage = static_cast<const GLCommandClear *>(base);
+			glClear(clearImage->mask);
 		} break;
 		case GLCommandBufferCmd::Dispatch: {
 			if (glDispatchCompute) {

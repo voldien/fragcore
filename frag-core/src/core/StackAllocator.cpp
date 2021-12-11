@@ -17,16 +17,10 @@ StackAllocator::StackAllocator(const StackAllocator &stack) {
 StackAllocator::StackAllocator(StackAllocator &&other) {
 	this->mData = std::exchange(other.mData, nullptr);
 	this->mMarker = std::exchange(other.mMarker, 0);
-
 	this->mSize = std::exchange(other.mSize, 0);
 }
 
-StackAllocator::StackAllocator(size_t stackSizeBytes) {
-	this->mMarker = 0;
-	this->mData = nullptr;
-	this->mSize = 0;
-	this->alloc(stackSizeBytes);
-}
+StackAllocator::StackAllocator(size_t stackSizeBytes) : StackAllocator() { this->alloc(stackSizeBytes); }
 
 StackAllocator::~StackAllocator() { free(this->mData); }
 

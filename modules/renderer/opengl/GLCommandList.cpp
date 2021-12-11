@@ -3,21 +3,23 @@
 #include <GL/glew.h>
 
 using namespace fragcore;
-GLCommandList::GLCommandList() { this->commands.reserve(1024); }
+GLCommandList::GLCommandList() {
+	this->commands.reserve(1024);
+	stackAlloc = StackAllocator(1024);
+}
 
 GLCommandList::~GLCommandList() {}
 
 void GLCommandList::begin() { commands.clear(); }
 void GLCommandList::end() {}
 
-void GLCommandList::copyTexture(const Texture *src, Texture *dst) {
-
-}
+void GLCommandList::copyTexture(const Texture *src, Texture *dst) {}
 
 void GLCommandList::bindPipeline(RenderPipeline *p) {}
 void GLCommandList::bindFramebuffer(Ref<FrameBuffer> &framebuffer) {
 	GLBindFrameBufferCommand *_command =
 		(GLBindFrameBufferCommand *)this->stackAlloc.alloc(GLCommandBase::getCommandSize<GLBindFrameBufferCommand>());
+	*_command = GLBindFrameBufferCommand(*framebuffer);
 	this->commands.push_back(_command);
 }
 void GLCommandList::setViewport(int x, int y, int width, int height) {
