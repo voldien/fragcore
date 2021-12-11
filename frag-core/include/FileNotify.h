@@ -18,56 +18,53 @@
  */
 #ifndef _FRAG_CORE_FILE_NOTIFY_H_
 #define _FRAG_CORE_FILE_NOTIFY_H_ 1
-#include"Prerequisites.h"
-#include"FileChangeEvent.h"
-#include"IFileNotify.h"
-#include"Core/Object.h"
-#include"Core/TaskScheduler/IThreading.h"
-#include"Core/TaskScheduler/TaskScheduler.h"
-#include"Core/dataStructure/PoolAllocator.h"
+#include "Core/Object.h"
+#include "Core/TaskScheduler/IThreading.h"
+#include "Core/TaskScheduler/TaskScheduler.h"
+#include "Core/dataStructure/PoolAllocator.h"
+#include "FileChangeEvent.h"
+#include "IFileNotify.h"
+#include "Prerequisites.h"
 // TODO resolve include path and other solution.
-#include<libfswatch/c/libfswatch_types.h>
-#include<libfswatch/c/cevent.h>
-#include<map>
-#include<vector>
+#include <libfswatch/c/cevent.h>
+#include <libfswatch/c/libfswatch_types.h>
+#include <map>
+#include <vector>
 
 namespace fragcore {
 
 	typedef void *NotifyHandle;
-//	typedef void (*AsyncComplete)(ASync *async, ASyncHandle handle); /*  */
+	//	typedef void (*AsyncComplete)(ASync *async, ASyncHandle handle); /*  */
 	/**
 	 *
 	 */
-	//TODO make it more generic in order to reduce coupling and increase cohession!
+	// TODO make it more generic in order to reduce coupling and increase cohession!
 	class FVDECLSPEC FileNotify : public IFileNotify {
-	public:
-
+	  public:
 		/**
 		 * Start the file notification process.
 		 */
 		void start();
 		void stop();
-		//void restart();
+		// void restart();
 
-	protected:
-
+	  protected:
 		/**
 		 *
 		 */
 		class FVDECLSPEC FileNoticationEntry {
-		public:
-			int key;                /*  */
-			std::string filepath;   /*  */
-			Object *assetObject;    /*  */
+		  public:
+			int key;			  /*  */
+			std::string filepath; /*  */
+			Object *assetObject;  /*  */
 			void *userdata;
-			//TOOD change!
-			//AssetType type;         /*  */
-
+			Ref<IO> refIO;
+			// TOOD change!
+			// AssetType type;         /*  */
 		};
 
-	public:
-
-		//TODO relocate to another class.
+	  public:
+		// TODO relocate to another class.
 		void registerAsset(const char *filepath, Object *object);
 		void registerAsset(Ref<IO> &io);
 		void unregisterAsset(Object *notify);
@@ -76,13 +73,12 @@ namespace fragcore {
 
 		void eventDone(FileNotificationEvent *event);
 
-		//TODO improve
+		// TODO improve
 		bool pollEvent();
 		void eventDone(const std::vector<FileNotificationEvent> &events) const;
 		bool releaseEventBuffer();
 
-	private:
-
+	  private:
 		/**
 		 *
 		 * @param path
@@ -115,9 +111,7 @@ namespace fragcore {
 		 * @param event_num
 		 * @param data
 		 */
-		static void callback(fsw_cevent const *const events,
-		                     const unsigned int event_num,
-		                     void *data);
+		static void callback(fsw_cevent const *const events, const unsigned int event_num, void *data);
 
 		static void fileFetchTask(Task *package);
 
@@ -126,23 +120,21 @@ namespace fragcore {
 		 */
 		static void *fswatch(const void *psession);
 
-	private:
+	  private:
+		std::map<int, FileNoticationEntry> notify; /*  List of update-able assets.  */
+		std::map<std::string, Object *> objectMap; /*  */
+		FSW_HANDLE session;						   /*  */
 
-		std::map<int, FileNoticationEntry> notify;  /*  List of update-able assets.  */
-		std::map<std::string, Object *> objectMap;  /*  */
-		FSW_HANDLE session;                         /*  */
-
-		void *pthread;      /*  Thread for async operations. */
+		void *pthread; /*  Thread for async operations. */
 		Ref<IThreading> thread;
 		Ref<IScheduler> scheduler;
 		PoolAllocator<FileNotificationEvent> fileChangeEvents;
 
-	public: /*  */
+	  public: /*  */
+		FileNotify(Ref<IScheduler> &sch);
 
-		FileNotify(Ref<IScheduler>& sch);
-
-		~FileNotify();
+		virtual ~FileNotify();
 	};
-}
+} // namespace fragcore
 
 #endif

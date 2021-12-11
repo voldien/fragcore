@@ -80,9 +80,25 @@ namespace fragcore {
 		static bool isSupportedInstruction(SIMD instruction) noexcept;
 		static SIMD getSupportedSIMD();
 
+		/**
+		 * @brief Get the Endianness object
+		 *
+		 * @return Endianness
+		 */
 		static Endianness getEndianness() noexcept;
 
+		/**
+		 * @brief
+		 *
+		 * @return unsigned long int
+		 */
 		static unsigned long int systemMemorySize();
+
+		/**
+		 * @brief Get the Page Size object
+		 *
+		 * @return unsigned int
+		 */
 		static unsigned int getPageSize();
 
 		/**

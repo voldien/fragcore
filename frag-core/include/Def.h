@@ -31,8 +31,8 @@
 
 //#define FRAGCORE_USE_HPMCPP_VECTORS
 #ifdef FRAGCORE_USE_HPMCPP_VECTORS
-#include<Hpm.hpp>
-#include<Ext/HCPlane.hpp>
+#include <Hpm.hpp>
+#include <Ext/HCPlane.hpp>
 #include <HCQuaternion.hpp>
 #include <HCVector2.hpp>
 #include <HCVector3.hpp>
@@ -51,7 +51,7 @@ namespace fragcore {
 	using Ray = LIBHPM::Ray ;
 }
 #else
-#include<Eigen/Dense>
+#include <Eigen/Dense>
 namespace fragcore {
 	using Vector3 =  Eigen::Vector3f;
 	using Vector4 = Eigen::Vector4f ;
@@ -63,8 +63,7 @@ namespace fragcore {
 #endif
 /*	Vector data types for rendering geometries.	*/
 
-
-#include<Exception.hpp>
+#include <Exception.hpp>
 namespace fragcore {
 
 	using RuntimeException = cxxexcept::RuntimeException;

@@ -1,5 +1,5 @@
-#ifndef FRAG_CORE_EVENTCONTROLLER_H_
-#define FRAG_CORE_EVENTCONTROLLER_H_ 1
+#ifndef _FRAG_CORE_EVENTCONTROLLER_H_
+#define _FRAG_CORE_EVENTCONTROLLER_H_ 1
 #include "Core/SmartReference.h"
 
 namespace fragcore {
@@ -7,9 +7,8 @@ namespace fragcore {
 	 *
 	 */
 	class EventController : public SmartReference {
-	public:
-
-		//void registerEvent(Event& event);
+	  public:
+		// void registerEvent(Event& event);
 	};
-}
+} // namespace fragcore
 #endif

@@ -23,19 +23,20 @@
 
 namespace fragcore {
 
+	// System memory bound texture data.
 	/**
+	 * @brief
 	 *
 	 */
-	// System memory bound texture data.
 	class FVDECLSPEC Image : public Texture {
 	  public:
 		// TODO determine of Image or surface or both classes will be used.
 		Image(int width, int height, TextureFormat format);
 
 		// TODO set const for the width and height
-		virtual unsigned int width() noexcept { return this->w; }
+		virtual unsigned int width() noexcept override { return this->w; }
 
-		virtual unsigned int height() noexcept { return this->h; }
+		virtual unsigned int height() noexcept override { return this->h; }
 
 		// virtual unsigned int layers() const;
 		Color operator[](unsigned int index) { return Color::black(); }

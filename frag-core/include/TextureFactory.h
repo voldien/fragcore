@@ -18,8 +18,8 @@
  */
 #ifndef _FRAG_CORE_TEXTURE_FACTORY_H_
 #define _FRAG_CORE_TEXTURE_FACTORY_H_ 1
-#include<FragCore.h>
-#include<RenderPrerequisites.h>
+#include <FragCore.h>
+#include <RenderPrerequisites.h>
 
 namespace fragcore {
 
@@ -30,8 +30,33 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC TextureFactory {
 	  public:
+	  	/**
+	  	 * @brief Create a Checker object
+	  	 *
+	  	 * @param renderer
+	  	 * @param width
+	  	 * @param height
+	  	 * @return Texture*
+	  	 */
 		static Texture *createChecker(IRenderer *renderer, int width, int height);
+		/**
+		 * @brief Create a Perlin Noise object
+		 *
+		 * @param renderer
+		 * @param width
+		 * @param height
+		 * @return Texture*
+		 */
 		static Texture *createPerlinNoise(IRenderer *renderer, int width, int height);
+
+		/**
+		 * @brief Create a Noise Texture object
+		 *
+		 * @param renderer
+		 * @param width
+		 * @param height
+		 * @return Texture*
+		 */
 		static Texture *createNoiseTexture(IRenderer *renderer, int width, int height);
 
 	  public:

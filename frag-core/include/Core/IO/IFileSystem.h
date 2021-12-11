@@ -69,21 +69,80 @@ namespace fragcore {
 		 */
 		virtual void createDirectory(const char *path) = 0;
 
+		/**
+		 * @brief
+		 *
+		 * @param path
+		 * @return true
+		 * @return false
+		 */
 		virtual bool isReadable(const char *path) const = 0;
+
+		/**
+		 * @brief
+		 *
+		 * @param path
+		 * @return true
+		 * @return false
+		 */
 		virtual bool isWriteable(const char *path) const = 0;
+
+		/**
+		 * @brief
+		 *
+		 * @param path
+		 * @return true
+		 * @return false
+		 */
 		virtual bool exists(const char *path) const = 0;
 
 		virtual bool isASyncSupported() const = 0;
+
+		/**
+		 * @brief
+		 *
+		 * @param path
+		 * @return true
+		 * @return false
+		 */
 		virtual bool isDirectory(const char *path) = 0;
+
+		/**
+		 * @brief
+		 *
+		 * @param path
+		 * @return true
+		 * @return false
+		 */
 		virtual bool isFile(const char *path) = 0;
 
 		// virtual FileAccess getFileAccess(const std::string& path) = 0;
 		// virtual DirectoryAccess getDirectoryAccess(const std::string& path) = 0;
 
+		/**
+		 * @brief
+		 *
+		 * @param directory
+		 * @return std::vector<std::string>
+		 */
 		virtual std::vector<std::string>
 		listFiles(const char *directory) const = 0; /*  Display only files in directory.    */
+
+		/**
+		 * @brief
+		 *
+		 * @param directory
+		 * @return std::vector<std::string>
+		 */
 		virtual std::vector<std::string>
 		listDirectories(const char *directory) const = 0; /*  Display only directories in directory.  */
+
+		/**
+		 * @brief
+		 *
+		 * @param directory
+		 * @return std::vector<std::string>
+		 */
 		virtual std::vector<std::string> list(const char *directory) const = 0; /*  Display everything in directory. */
 	  public:
 	};

@@ -25,13 +25,15 @@
 #include "Prerequisites.h"
 
 namespace fragcore {
+
+	// TODO relocate to the util directory
 	/**
+	 * @brief
 	 *
 	 */
-	// TODO relocate to the util directory
 	class FVDECLSPEC FontFactory {
 	  public:
-		enum Encoding {
+		enum class Encoding {
 			ASCII, /*	*/
 			UTF8,  /*	*/
 			UTF16, /*	*/

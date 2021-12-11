@@ -18,8 +18,8 @@
  */
 #ifndef _FRAG_CORE_IFILE_NOTIFY_H_
 #define _FRAG_CORE_IFILE_NOTIFY_H_ 1
-#include "Core/SmartReference.h"
 #include "Def.h"
+#include "FileChangeEvent.h"
 
 namespace fragcore {
 	// TOOD Determine name if shalla only be INotify
@@ -37,6 +37,8 @@ namespace fragcore {
 			// TOOD change!
 			// AssetType type;         /*  */
 		};
+
+		virtual ~IFileNotify() {}
 
 		/**
 		 * @brief

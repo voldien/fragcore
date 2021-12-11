@@ -18,32 +18,37 @@
  */
 #ifndef _FRAG_ENGINE_FILECHANGEEVENT_H_
 #define _FRAG_ENGINE_FILECHANGEEVENT_H_ 1
-//#include"AssetType.h"
-#include"Prerequisites.h"
-#include<string>
+#include "Core/SmartReference.h"
+#include "Prerequisites.h"
+#include <string>
 
 namespace fragcore {
 
-	enum FileNotificationType
-	{
-		Update,					/*	*/
-		Removed,				/*	*/
-		Moved,					/*	*/
-		PermissionAltered,		/*	*/
-	};
 	/**
+	 * @brief
+	 *
+	 */
+	enum class FileNotificationType {
+		Update,			   /*	*/
+		Removed,		   /*	*/
+		Moved,			   /*	*/
+		PermissionAltered, /*	*/
+	};
+
+	/**
+	 * @brief
 	 *
 	 */
 	class FileNotificationEvent {
-	public:
+	  public:
 		Object *object;
-//		AssetType type;
+		//		AssetType type;
 		FileNotificationType event;
 		const char *path;
 		long int timestamp;
 		long int size;
 		void *data;
 	};
-}
+} // namespace fragcore
 
 #endif
