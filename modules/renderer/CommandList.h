@@ -32,7 +32,6 @@ namespace fragcore {
 	  public:
 		enum CommandBufferFlag { Single, Continuous };
 		virtual ~CommandList() = default;
-		// virtual void bindPipeline(RenderPipeline *p);
 
 		virtual void begin() = 0;
 		virtual void end() = 0;
@@ -45,7 +44,8 @@ namespace fragcore {
 		// virtual void updateBuffer(Ref<Buffer> &buffer, void *p, int size) = 0;
 		virtual void bindFramebuffer(Ref<FrameBuffer> &framebuffer) = 0;
 
-		virtual void setviewport(int x, int y, int width, int height) = 0;
+		virtual void setViewport(int x, int y, int width, int height) = 0;
+		// virtual void setScissor(int x, int y, int width, int height) = 0;
 		virtual void clearDepth(float depth) = 0;
 		virtual void clearColorTarget(uint index, const Color &color) = 0;
 

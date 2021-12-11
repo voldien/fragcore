@@ -22,7 +22,7 @@ int main(int argc, const char **argv) {
 
 	// RendererWindow *window = renderer->createWindow(primaryDisplay->width() / 4, primaryDisplay->height() / 4,
 	// 												primaryDisplay->width() / 2, primaryDisplay->width() / 2);
-	RendererWindow *window = renderer->createWindow(0,0,100,100);
+	RendererWindow *window = renderer->createWindow(0, 0, 100, 100);
 	window->vsync(true);
 	window->setTitle(fmt::format("Cube Example: {}", renderer->getName()).c_str());
 	window->show();
@@ -32,11 +32,13 @@ int main(int argc, const char **argv) {
 	// Geometry* obj= renderer->createGeometry(NULL);
 
 	CommandList *clc = renderer->createCommandBuffer();
+	clc->begin();
 	Ref<FrameBuffer> defaultFramebuffer = Ref<FrameBuffer>(renderer->getDefaultFramebuffer(NULL));
 	clc->bindFramebuffer(defaultFramebuffer);
 	clc->clearColorTarget(0, Color(1, 0, 0, 1));
-	//clc->bindPipeline()
-	//clc->dispatch(0, 0, 0);
+	clc->end();
+	// clc->bindPipeline()
+	// clc->dispatch(0, 0, 0);
 	// clc->bindPipeline(NULL);
 	// clc->draw
 

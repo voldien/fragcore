@@ -41,7 +41,7 @@ namespace fragcore {
 
 		virtual void bindPipeline(RenderPipeline *p) override;
 		virtual void bindFramebuffer(Ref<FrameBuffer> &framebuffer) override;
-		virtual void setviewport(int x, int y, int width, int height) override;
+		virtual void setViewport(int x, int y, int width, int height) override;
 
 		virtual void clearDepth(float depth) override;
 		virtual void clearColorTarget(uint index, const Color &color) override;

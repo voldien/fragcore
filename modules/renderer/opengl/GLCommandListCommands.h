@@ -33,6 +33,15 @@ namespace fragcore {
 		ViewPort,
 		Scissor,
 		BindFrameBuffer,
+		CopyTexture,
+		Blit,
+		UpdateBuffer,
+		Draw,
+		DrawIndice,
+		DrawIndex,
+		DrawIndexIndices,
+		DepthBounds,
+		
 	};
 
 	class GLCommandBase {
@@ -67,12 +76,18 @@ namespace fragcore {
 
 	class GLCommandDispatchIndirect : public GLCommandBase {
 	  public:
-		GLCommandDispatchIndirect(int buffer) : GLCommandBase(GLCommandBufferCmd::DispatchIndirect), buffer(buffer) {}
-		int buffer;
+		GLCommandDispatchIndirect(Buffer *buffer, size_t offset)
+			: GLCommandBase(GLCommandBufferCmd::DispatchIndirect), buffer(buffer), offset(offset) {}
+		Buffer *buffer;
+		size_t offset;
 	};
 
-	class GLPushGroupMarkerCommand : public GLCommandBase {};
-	class GLPopGroupMarkerCommand : public GLCommandBase {};
+	class GLPushGroupMarkerCommand : public GLCommandBase {
+		GLPushGroupMarkerCommand(const char *name) : GLCommandBase(GLCommandBufferCmd::PushGroupMarker) {}
+	};
+	class GLPopGroupMarkerCommand : public GLCommandBase {
+		GLPopGroupMarkerCommand() : GLCommandBase(GLCommandBufferCmd::PopGroupMarker) {}
+	};
 	class GLViewPortCommand : public GLCommandBase {
 	  public:
 		GLViewPortCommand(int index, int x, int y, int width, int height)

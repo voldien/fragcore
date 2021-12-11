@@ -50,7 +50,7 @@ void VKCommandList::bindPipeline(RenderPipeline *pipeline) {
 	VKPipelineObject *vkpipeline = (VKPipelineObject *)pipeline->getObject();
 	vkCmdBindPipeline(cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipeline->graphicsPipeline);
 	vkCmdBindDescriptorSets(cmdBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, vkpipeline->pipelineLayout, 0, 1,
-							&vkpipeline->descriptorSet, 0, 0);
+							&vkpipeline->descriptorSet, 0, nullptr);
 }
 
 void VKCommandList::beginCurrentRenderPass() {
@@ -72,7 +72,7 @@ void VKCommandList::endCurrentRenderPass() { vkCmdEndRenderPass(cmdBuffer); }
 
 void VKCommandList::bindFramebuffer(Ref<FrameBuffer> &framebuffer) { beginCurrentRenderPass(); }
 
-void VKCommandList::setviewport(int x, int y, int width, int height) {
+void VKCommandList::setViewport(int x, int y, int width, int height) {
 	VkViewport vkViewport = {
 		.x = (float)x,
 		.y = (float)y,
@@ -119,8 +119,6 @@ void VKCommandList::dispatch(uint groupCountX, uint groupCountY, uint groupCount
 void VKCommandList::dispatchIndirect(Buffer *buffer, u_int64_t offset) {
 	VKBufferObject *vkBuffer = (VKBufferObject *)buffer->getObject();
 	vkCmdDispatchIndirect(cmdBuffer, vkBuffer->buffer, offset);
-	// uint global[3] = {groupCountX, groupCountY, groupCountZ};
-	// this->compute->dispatchCompute(global, nullptr, 0);
 }
 
 void VKCommandList::pushDebugGroup(const char *name) {

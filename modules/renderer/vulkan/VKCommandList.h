@@ -37,7 +37,7 @@ namespace fragcore {
 		virtual void bindPipeline(RenderPipeline *p);
 		virtual void bindFramebuffer(Ref<FrameBuffer> &framebuffer);
 
-		virtual void setviewport(int x, int y, int width, int height);
+		virtual void setViewport(int x, int y, int width, int height);
 		virtual void clearDepth(float depth);
 		virtual void clearColorTarget(uint index, const Color &color);
 
