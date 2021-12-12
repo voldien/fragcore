@@ -29,6 +29,10 @@
 
 namespace fragcore {
 
+	/**
+	 * @brief
+	 *
+	 */
 	class VKRenderInterface : public IRenderer {
 		friend class VKRenderWindow;
 
@@ -170,12 +174,12 @@ namespace fragcore {
 		std::shared_ptr<VulkanCore> core;
 
 		/*	*/
-		VkInstance inst;
+		//VkInstance inst;
 		VkDebugUtilsMessengerEXT debugMessenger;
 		VkDebugReportCallbackEXT debugReport;
 		/*  Physical device.    */
-		VkPhysicalDevice gpu;
-		std::vector<VkPhysicalDevice> GPUs;
+		// VkPhysicalDevice gpu;
+		// std::vector<VkPhysicalDevice> GPUs;
 
 		std::vector<RendererWindow *> windows;
 		Capability capabilityCached;

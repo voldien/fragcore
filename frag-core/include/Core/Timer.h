@@ -21,7 +21,16 @@
 
 namespace fragcore {
 
-	class Timer {};
+	/**
+	 * @brief
+	 *
+	 */
+	class Timer {
+	  public:
+		void update() noexcept;
+		float elapsed() noexcept;
+		float delta() noexcept;
+	};
 } // namespace fragcore
 
 #endif

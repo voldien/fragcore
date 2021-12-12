@@ -856,6 +856,7 @@ FrameBuffer *VKRenderInterface::getDefaultFramebuffer(void *window) {
 	static FrameBuffer *defaultFrambuffer = nullptr;
 	/*  TODO add support.   */
 	if (defaultFrambuffer == nullptr) {
+		// defaultFrambuffer = new
 		// FrameBuffer *frameBuffer = new FrameBuffer();
 	}
 
@@ -1055,10 +1056,7 @@ void VKRenderInterface::deleteSync(Sync *sync) {}
 static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
 													VkDebugUtilsMessageTypeFlagsEXT messageType,
 													const VkDebugUtilsMessengerCallbackDataEXT *pCallbackData,
-													void *pUserData) {
-
-	std::cerr << "validation layer: " << pCallbackData->pMessage << std::endl;
-
+													void *pUsinst) {
 	return VK_FALSE;
 }
 
@@ -1066,7 +1064,7 @@ void VKRenderInterface::setDebug(bool enable) {
 
 	VkResult result;
 	PFN_vkCreateDebugReportCallbackEXT vkCreateDebugReportCallbackEXT =
-		(PFN_vkCreateDebugReportCallbackEXT)vkGetInstanceProcAddr(inst, "vkCreateDebugReportCallbackEXT");
+		(PFN_vkCreateDebugReportCallbackEXT)vkGetInstanceProcAddr(core->getHandle(), "vkCreateDebugReportCallbackEXT");
 
 	if (vkCreateDebugReportCallbackEXT) {
 		VkDebugReportCallbackCreateInfoEXT createInfo = {};
@@ -1081,7 +1079,7 @@ void VKRenderInterface::setDebug(bool enable) {
 	}
 
 	PFN_vkCreateDebugUtilsMessengerEXT CreateDebugUtilsMessengerEXT =
-		(PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(inst, "vkCreateDebugUtilsMessengerEXT");
+		(PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(core->getHandle(), "vkCreateDebugUtilsMessengerEXT");
 	if (CreateDebugUtilsMessengerEXT) {
 		VkDebugUtilsMessengerCreateInfoEXT createInfo = {};
 		createInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
@@ -1093,7 +1091,7 @@ void VKRenderInterface::setDebug(bool enable) {
 								 VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
 		createInfo.pfnUserCallback = debugCallback;
 
-		if (CreateDebugUtilsMessengerEXT(inst, &createInfo, nullptr, &debugMessenger) != VK_SUCCESS) {
+		if (CreateDebugUtilsMessengerEXT(core->getHandle(), &createInfo, nullptr, &debugMessenger) != VK_SUCCESS) {
 			throw std::runtime_error("failed to set up debug messenger!");
 		} else {
 			// return VK_ERROR_EXTENSION_NOT_PRESENT;
@@ -1108,7 +1106,7 @@ void VKRenderInterface::getSupportedTextureCompression(TextureDesc::Compression 
 	unsigned int compressions = 0;
 	VkPhysicalDeviceFeatures deviceFeatures;
 
-	vkGetPhysicalDeviceFeatures(gpu, &deviceFeatures);
+	// vkGetPhysicalDeviceFeatures(getDevice()-> gpu, &deviceFeatures);
 
 	if (deviceFeatures.textureCompressionBC)
 		compressions |= TextureDesc::Compression::eNoCompression;
