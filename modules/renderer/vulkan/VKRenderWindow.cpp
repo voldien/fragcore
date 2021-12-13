@@ -144,7 +144,7 @@ void VKRenderWindow::setFullScreen(bool fullscreen) {
 
 void VKRenderWindow::setFullScreen(Display &display) {}
 
-bool VKRenderWindow::isFullScreen() const {}
+bool VKRenderWindow::isFullScreen() const { return false; }
 
 void VKRenderWindow::setBordered(bool bordered) { SDL_SetWindowBordered(this->window, (SDL_bool)bordered); }
 
@@ -171,6 +171,8 @@ intptr_t VKRenderWindow::getNativePtr() const {
 		/* success */
 		switch (info.subsystem) {
 		case SDL_SYSWM_UNKNOWN:
+			return 0;
+		case SDL_SYSWM_OS2:
 			return 0;
 		case SDL_SYSWM_WINDOWS:
 #if defined(SDL_VIDEO_DRIVER_WINDOWS)
@@ -594,7 +596,7 @@ VkPhysicalDevice VKRenderWindow::physicalDevice() const {
 }
 
 void VKRenderWindow::setPhysicalDevice(VkPhysicalDevice device) {}
-std::vector<VkQueue> VKRenderWindow::getQueues() const noexcept {}
+std::vector<VkQueue> VKRenderWindow::getQueues() const noexcept { return {}; }
 
 const std::vector<VkPhysicalDevice> &VKRenderWindow::availablePhysicalDevices() const { return {}; }
 

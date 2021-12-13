@@ -5,7 +5,7 @@ using namespace fragcore;
 
 void RenderPipeline::bind() {}
 
-int RenderPipeline::getLocation(const char *cparamname) {}
+int RenderPipeline::getLocation(const char *cparamname) { return 0; }
 
 void RenderPipeline::setInt(int location, int value) {}
 
@@ -21,7 +21,7 @@ void RenderPipeline::setMatrix4f(int location, const float *pvalue) {}
 
 void RenderPipeline::setMatrix4fv(int location, int n, const float *pvalue) {}
 
-Shader *RenderPipeline::getShader(ShaderType type) {}
+Shader *RenderPipeline::getShader(ShaderType type) { return nullptr; }
 
 void RenderPipeline::setShader(ShaderType type, Shader *shader) {}
 

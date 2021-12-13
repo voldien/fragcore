@@ -26,6 +26,9 @@ ADD_DEPENDENCIES(fragcore-rvk-obj fragcore vkcommon-core fragcore-render-interfa
 
 # Library target.
 ADD_LIBRARY(fragcore-rvk $<TARGET_OBJECTS:fragcore-rvk-obj>)
+TARGET_INCLUDE_DIRECTORIES(fragcore-rvk PRIVATE ${Vulkan_INCLUDE_DIRS} PUBLIC
+											$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+											$<INSTALL_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
 
 ADD_LIBRARY(fragcore-module-render-vulkan MODULE $<TARGET_OBJECTS:fragcore-rvk-obj>  )
 TARGET_LINK_LIBRARIES(fragcore-module-render-vulkan INTERFACE fragcore-rvk )

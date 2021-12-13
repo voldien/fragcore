@@ -8,7 +8,7 @@ void QueryObject::begin(Target target, unsigned int index) {}
 
 void QueryObject::end(Target target, unsigned int index) {}
 
-long int QueryObject::getResult(int index) {}
+long int QueryObject::getResult(int index) { return 0; }
 
 void QueryObject::beginConditionalRenderer(Condition target) {}
 

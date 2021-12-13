@@ -14,18 +14,18 @@ void VKFrameBuffer::write() {}
 
 void VKFrameBuffer::read() const {}
 
-Texture *VKFrameBuffer::getAttachment(unsigned int index) {}
+Texture *VKFrameBuffer::getAttachment(unsigned int index) { return nullptr; }
 
-Texture *VKFrameBuffer::getDepthAttachment() {}
+Texture *VKFrameBuffer::getDepthAttachment() { return nullptr; }
 
-Texture *VKFrameBuffer::getStencilAttachment() {}
+Texture *VKFrameBuffer::getStencilAttachment() { return nullptr; }
 
-int VKFrameBuffer::width() const {}
+int VKFrameBuffer::width() const { return 0; }
 
-int VKFrameBuffer::height() const {}
-int VKFrameBuffer::layers() {}
+int VKFrameBuffer::height() const { return 0; }
+int VKFrameBuffer::layers() { return 0; }
 
-int VKFrameBuffer::nrSamples() {}
+int VKFrameBuffer::nrSamples() { return 0; }
 
 void VKFrameBuffer::blend(BlendEqu equ, BlendFunc sfactor, BlendFunc dfactor, BufferAttachment bufferAttachment) {}
 void VKFrameBuffer::blendSeperate(BlendEqu equ, BlendFunc srcRGB, BlendFunc dstRGB, BlendFunc srcAlpha,
