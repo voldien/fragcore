@@ -313,13 +313,13 @@ SerialIO::SerialIO(const std::string &path, IOMode mode) : port(nullptr) {
 		this->close();
 		throw RuntimeException("Failed get this->port {} - {}  ({})", path, sp_last_error_message(), res);
 	}
+	this->port = serialPort;
 
 	/*	*/
 	res = sp_open(serialPort, serial_mode);
 	if (res != SP_OK) {
 		throw RuntimeException("Failed to open {} in mode: {} - {}  ({})", path, mode, sp_last_error_message(), res);
 	}
-	this->port = serialPort;
 
 	res = sp_set_baudrate(serialPort, 4800);
 	res = sp_set_bits(serialPort, 8);
@@ -371,4 +371,3 @@ std::optional<std::vector<std::string>> SerialIO::getSerialPorts() noexcept {
 		return {};
 	}
 }
-this->close();
