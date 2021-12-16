@@ -14,7 +14,7 @@ FILE(GLOB VULKAN_RENDER_HEADER_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.h)
 
 
 ADD_LIBRARY(fragcore-rvk-obj OBJECT ${VULKAN_RENDER_SOURCE_FILES} ${VULKAN_RENDER_HEADER_FILES})
-TARGET_LINK_LIBRARIES(fragcore-rvk-obj PUBLIC ${Vulkan_LIBRARIES} fragcore-window-sdl fragcore fragcore-render-interface PRIVATE vkcommon-core) #
+TARGET_LINK_LIBRARIES(fragcore-rvk-obj PUBLIC fragcore-window-sdl fragcore fragcore-render-interface vkcommon-core) #
 TARGET_COMPILE_DEFINITIONS(fragcore-rvk-obj PRIVATE FRAG_CORE_INTERNAL_IMP=1)
 
 #
@@ -26,15 +26,17 @@ ADD_DEPENDENCIES(fragcore-rvk-obj fragcore vkcommon-core fragcore-render-interfa
 
 # Library target.
 ADD_LIBRARY(fragcore-rvk $<TARGET_OBJECTS:fragcore-rvk-obj>)
-TARGET_INCLUDE_DIRECTORIES(fragcore-rvk PRIVATE ${Vulkan_INCLUDE_DIRS} PUBLIC
-											$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-											$<INSTALL_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
+TARGET_LINK_LIBRARIES(fragcore-rvk PUBLIC fragcore-rvk-obj )
+ADD_DEPENDENCIES(fragcore-rvk fragcore vkcommon-core fragcore-render-interface fragcore-window-sdl)
 
+
+# Library target.
 ADD_LIBRARY(fragcore-module-render-vulkan MODULE $<TARGET_OBJECTS:fragcore-rvk-obj>  )
 TARGET_LINK_LIBRARIES(fragcore-module-render-vulkan INTERFACE fragcore-rvk )
 
 #
 IF(BUILD_WITH_INSTALL)
+    INSTALL(TARGETS fragcore-module-render-vulkan DESTINATION lib COMPONENT ${LIBFRAGCORE_COMPONENT})
     INSTALL(TARGETS fragcore-rvk DESTINATION lib COMPONENT ${LIBFRAGCORE_COMPONENT})
 ENDIF()
 
