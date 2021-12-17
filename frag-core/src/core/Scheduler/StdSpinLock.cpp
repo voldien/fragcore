@@ -5,29 +5,30 @@ using namespace fragcore;
 StdSpinLock::StdSpinLock() {
 	int rc = schCreateSpinLock(&this->spinlock);
 	if (rc != SCH_OK)
-		throw RuntimeException("Failed to create semaphore: {}", schErrorMsg(rc));
+		throw RuntimeException("Failed to create spinlock: {}", schErrorMsg(rc));
 }
 
 StdSpinLock::~StdSpinLock() {
-	// int rc = schDeleteSemaphore(this->semaphore);
-	// if (rc != SCH_OK)
-	// 	throw RuntimeException("Failed to delete semaphore: {}", schErrorMsg(rc));
+	int rc = schDeleteSpinLock(this->spinlock);
+	if (rc != SCH_OK) {
+		throw RuntimeException("Failed to delete spinlock: {}", schErrorMsg(rc));
+	}
 }
 
 void StdSpinLock::lock() {
-	// int rc = schSemaphoreWait(this->semaphore);
-	// if (rc != SCH_OK)
-	// 	throw RuntimeException("Failed lock semaphore: {}", schErrorMsg(rc));
+
+	int rc = schLockSpinLock(this->spinlock);
+	if (rc != SCH_OK) {
+		throw RuntimeException("Failed lock spinlock: {}", schErrorMsg(rc));
+	}
 }
 void StdSpinLock::unlock() {
-	// int rc = schSemaphorePost(this->semaphore);
-	// if (rc != SCH_OK)
-	// 	throw RuntimeException("Failed to unlock semaphore: {}", schErrorMsg(rc));
+
+	int rc = schUnlockSpinLock(this->spinlock);
+	if (rc != SCH_OK) {
+		throw RuntimeException("Failed to unlock spinlock: {}", schErrorMsg(rc));
+	}
 }
-void StdSpinLock::wait(long int nanoTimeout) {
-	// int rc = schSemaphoreWait(this->semaphore);
-	// if (rc != SCH_OK)
-	// 	throw RuntimeException("Failed to wait semaphore: {}", schErrorMsg(rc));
-}
+void StdSpinLock::wait(long int nanoTimeout) {}
 
 intptr_t StdSpinLock::getNativePtr() const { return reinterpret_cast<intptr_t>(this->spinlock); }
