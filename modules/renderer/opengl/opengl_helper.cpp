@@ -67,6 +67,7 @@ unsigned int getFilterMode(SamplerDesc::FilterMode mode, SamplerDesc::FilterMode
 				return GL_LINEAR_MIPMAP_LINEAR;
 			case SamplerDesc::FilterMode::Nearset:
 				return GL_LINEAR_MIPMAP_NEAREST;
+			case SamplerDesc::FilterMode::NoFilterMode:
 			default:
 				break;
 			}
@@ -77,6 +78,7 @@ unsigned int getFilterMode(SamplerDesc::FilterMode mode, SamplerDesc::FilterMode
 				return GL_NEAREST_MIPMAP_LINEAR;
 			case SamplerDesc::FilterMode::Nearset:
 				return GL_NEAREST_MIPMAP_NEAREST;
+			case SamplerDesc::FilterMode::NoFilterMode:
 			default:
 				break;
 			}
@@ -370,6 +372,7 @@ unsigned int getInternalTextureFormat(TextureDesc::Format format, bool sRGB, Tex
 			if (type == TextureDesc::eFloat) {
 				return GL_RGBA32F;
 			}
+			break;
 		case TextureDesc::eBGR:
 			return GL_BGR;
 		case TextureDesc::eBGRA:
@@ -625,7 +628,7 @@ unsigned int getState(IRenderer::State state) {
 	case IRenderer::State::SampleAlphaCoverage:
 		return GL_SAMPLE_ALPHA_TO_COVERAGE;
 	default:
-		throw InvalidArgumentException(fmt::format("Invalid state - %d.", state));
+		throw InvalidArgumentException(fmt::format("Invalid state - %d.", (int)state));
 	}
 }
 unsigned int getTextureFilterModeNoMip(Texture::FilterMode format) {
@@ -786,5 +789,7 @@ Texture::Format getTextureFormatUserSpace(unsigned int format) {
 	switch (format) {
 	case GL_RGBA8:
 		return Texture::eR8G8B8;
+	default:
+		return Texture::Format::R8;
 	}
 }
