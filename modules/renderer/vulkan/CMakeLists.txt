@@ -1,8 +1,4 @@
-# Add support for compiling with debug tracer enable in the code.
-IF (CMAKE_BUILD_TYPE STREQUAL "Debug")
-	#TODO resolve with another cmake function.
-	ADD_DEFINITIONS(-DDEBUG_TRACKER)
-ENDIF()
+
 
 FIND_PACKAGE(Vulkan QUIET)
 IF(Vulkan_FOUND)
@@ -17,6 +13,11 @@ ADD_LIBRARY(fragcore-rvk-obj OBJECT ${VULKAN_RENDER_SOURCE_FILES} ${VULKAN_RENDE
 TARGET_LINK_LIBRARIES(fragcore-rvk-obj PUBLIC fragcore-window-sdl fragcore fragcore-render-interface vkcommon-core) #
 TARGET_COMPILE_DEFINITIONS(fragcore-rvk-obj PRIVATE FRAG_CORE_INTERNAL_IMP=1)
 
+# Add support for compiling with debug tracer enable in the code.
+IF (CMAKE_BUILD_TYPE STREQUAL "Debug")
+	TARGET_COMPILE_DEFINITIONS(fragcore-rvk-obj PRIVATE DEBUG_TRACKER=1)
+ENDIF()
+
 #
 TARGET_INCLUDE_DIRECTORIES(fragcore-rvk-obj PRIVATE ${Vulkan_INCLUDE_DIRS} PUBLIC
 											$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
@@ -27,7 +28,7 @@ ADD_DEPENDENCIES(fragcore-rvk-obj fragcore vkcommon-core fragcore-render-interfa
 # Library target.
 ADD_LIBRARY(fragcore-rvk $<TARGET_OBJECTS:fragcore-rvk-obj>)
 TARGET_LINK_LIBRARIES(fragcore-rvk PUBLIC fragcore-rvk-obj )
-ADD_DEPENDENCIES(fragcore-rvk fragcore vkcommon-core fragcore-render-interface fragcore-window-sdl)
+ADD_DEPENDENCIES(fragcore-rvk fragcore-rvk-obj)
 
 
 # Library target.
