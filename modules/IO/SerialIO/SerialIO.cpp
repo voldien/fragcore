@@ -5,6 +5,52 @@
 
 using namespace fragcore;
 
+static const char *get_flow_control_symbol(SerialIO::FlowControl flowControl) {
+	switch (flowControl) {
+	case SerialIO::FlowControl::FlowControlNone:
+		return "None";
+	case SerialIO::FlowControl::FlowControlXonXoff:
+		return "XonXoff";
+	case SerialIO::FlowControl::FlowControlRtsCts:
+		return "RtsCts";
+	case SerialIO::FlowControl::FlowControlDtrDsr:
+		return "DrtDsr";
+	default:
+		return "Unknown";
+	}
+}
+
+static const char *get_parity_symbol(SerialIO::Parity parity) {
+	switch (parity) {
+	case SerialIO::Parity::ParityNone:
+		return "None";
+	case SerialIO::Parity::ParityOdd:
+		return "Odd";
+	case SerialIO::Parity::ParityEven:
+		return "Even";
+	case SerialIO::Parity::ParityMark:
+		return "Mark";
+	case SerialIO::Parity::ParitySpace:
+		return "Space";
+	default:
+		return "Unknown";
+	}
+}
+static const char *get_xonxoff_symbol(SerialIO::XonXoff XonXoff) {
+	switch (XonXoff) {
+	case SerialIO::XonXoff::XonXoffDisable:
+		return "Disable";
+	case SerialIO::XonXoff::XonXoffIn:
+		return "In";
+	case SerialIO::XonXoff::XonXoffOut:
+		return "Out";
+	case SerialIO::XonXoff::XonXoffInOut:
+		return "In-Out";
+	default:
+		return "Unknown";
+	}
+}
+
 void SerialIO::close() {
 	struct sp_port *serialPort = static_cast<struct sp_port *>(this->port);
 	if (serialPort != nullptr) {
@@ -29,7 +75,7 @@ long int SerialIO::peek([[maybe_unused]] long int nBytes, [[maybe_unused]] void 
 
 bool SerialIO::eof() const { return false; }
 long int SerialIO::length() { return 0; }
-void SerialIO::seek(long int nbytes, Seek seek) {}
+void SerialIO::seek([[maybe_unused]] long int nbytes, [[maybe_unused]] Seek seek) {}
 unsigned long SerialIO::getPos() { return 0; }
 bool SerialIO::isWriteable() const { return mode & IO::WRITE; }
 bool SerialIO::isReadable() const { return mode & IO::READ; }
@@ -124,7 +170,7 @@ void SerialIO::setFlowControl(FlowControl flowControl) {
 		sp_flowcontrol = SP_FLOWCONTROL_DTRDSR;
 		break;
 	default:
-		throw InvalidArgumentException("Invalid FlowControl {}", flowControl);
+		throw InvalidArgumentException("Invalid FlowControl {}", get_flow_control_symbol(flowControl));
 	}
 
 	sp_return res = sp_get_config(serialPort, this->config);
@@ -133,7 +179,8 @@ void SerialIO::setFlowControl(FlowControl flowControl) {
 	}
 	res = sp_set_config_flowcontrol(config, sp_flowcontrol);
 	if (res != SP_OK)
-		throw RuntimeException("Failed to set flow control {} - {}", flowControl, sp_last_error_message());
+		throw RuntimeException("Failed to set flow control {} - {}", get_flow_control_symbol(flowControl),
+							   sp_last_error_message());
 
 	res = sp_set_config(serialPort, this->config);
 	if (res != SP_OK) {
@@ -171,7 +218,7 @@ void SerialIO::setParity(Parity parity) {
 		sp_parity = SP_PARITY_SPACE;
 		break;
 	default:
-		throw InvalidArgumentException("Invalid Parity {}", parity);
+		throw InvalidArgumentException("Invalid Parity: {}", get_parity_symbol(parity));
 	}
 
 	sp_return res = sp_get_config(serialPort, this->config);
@@ -223,7 +270,7 @@ void SerialIO::setXonXoff(XonXoff XonXoff) {
 		sp_xonoxoff = SP_XONXOFF_INOUT;
 		break;
 	default:
-		throw InvalidArgumentException("Invalid Parity {}", sp_xonoxoff);
+		throw InvalidArgumentException("Invalid XonXoff: {}", get_xonxoff_symbol(XonXoff));
 	}
 
 	sp_return res = sp_get_config(serialPort, this->config);
@@ -273,6 +320,7 @@ void SerialIO::setPayloadBits(unsigned int nrBits) {
 		throw RuntimeException("Failed to set config: {} ({})", sp_last_error_message(), res);
 	}
 }
+
 int SerialIO::getPayloadBits() const {
 	struct sp_port *serialPort = static_cast<struct sp_port *>(this->port);
 	sp_return res = sp_get_config(serialPort, this->config);
@@ -318,7 +366,8 @@ SerialIO::SerialIO(const std::string &path, IOMode mode) : port(nullptr) {
 	/*	*/
 	res = sp_open(serialPort, serial_mode);
 	if (res != SP_OK) {
-		throw RuntimeException("Failed to open {} in mode: {} - {}  ({})", path, mode, sp_last_error_message(), res);
+		throw RuntimeException("Failed to open {} in mode: {} - {}  ({})", path, (int)mode, sp_last_error_message(),
+							   res);
 	}
 
 	res = sp_set_baudrate(serialPort, 4800);
@@ -351,11 +400,12 @@ SerialIO ::~SerialIO() {
 	this->close();
 	sp_free_config(this->config);
 	this->config = nullptr;
-	if (this->port)
+	if (this->port) {
 		sp_free_port(this->port);
+	}
 }
 
-std::optional<std::vector<std::string>> SerialIO::getSerialPorts() noexcept {
+std::optional<std::vector<std::string>> SerialIO::getSerialPorts() {
 	int i;
 	struct sp_port **ports;
 	std::vector<std::string> list;

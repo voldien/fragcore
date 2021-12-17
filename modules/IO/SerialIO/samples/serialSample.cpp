@@ -19,6 +19,7 @@ int main(int argc, const char **argv) {
 		SerialIO io(argv[1], IO::IOMode::ACCESS);
 		io.setBaudRate(baudRate);
 
+		io.write(sizeof(dataPayload), dataPayload);
 		while (io.read(sizeof(dataPayload), dataPayload) > 0) {
 			Log::log("%x", dataPayload[0]);
 			sleep(1);
