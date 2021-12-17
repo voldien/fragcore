@@ -125,6 +125,7 @@ std::vector<std::string> ZipFileSystem::list(const char *path) const {
 	std::vector<std::string> directories = listDirectories(path);
 	/*  merge.  */
 	// files.insert(files.end)
+	return {};
 }
 
 void ZipFileSystem::release() {

@@ -94,7 +94,7 @@ namespace fragcore {
 		 * @return std::vector<Mode>
 		 */
 		virtual std::vector<Mode> getModes() const = 0;
-		virtual void setMode(const Mode &mode) {}
+		virtual void setMode(const Mode &mode) = 0;
 
 		virtual void getDPI(DPI *dpi) = 0;
 

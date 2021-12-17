@@ -61,7 +61,7 @@ namespace fragcore {
 		FV_ALWAYS_INLINE const T *operator*() const { return reference; }
 
 	  public:
-		Ref() { reference = nullptr; }
+		Ref() : reference(nullptr) {}
 
 		Ref(T *p_reference) {
 
@@ -80,10 +80,17 @@ namespace fragcore {
 
 		Ref(T &&other) { this->p_reference = std::exchange(other.p_reference, nullptr); }
 
-		Ref(const Ref &other) {
+		Ref(const Ref &other) : Ref() {
 			if (other.reference) {
 				this->ref_pointer(other.reference);
 			}
+		}
+
+		Ref &operator=(const Ref &other) {
+			if (other.reference) {
+				this->ref_pointer(other.reference);
+			}
+			return *this;
 		}
 
 		~Ref() { unref(); }

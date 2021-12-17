@@ -25,8 +25,8 @@ namespace fragcore {
 	class Module;
 	typedef Module *(*CreateModule)(Module *module);
 	/**
-	 * @brief 
-	 * 
+	 * @brief
+	 *
 	 */
 	class FVDECLSPEC Module : public SmartReference {
 	  public:
@@ -45,8 +45,9 @@ namespace fragcore {
 
 		static Module *loadModule(Library &library, const std::string &moduleEntryPoint = "") {
 			Module *module;
-			//			if (moduleEntryPoint.empty())
-			//				moduleEntryPoint = getModuleName(moduleEntryPoint);
+			if (moduleEntryPoint.empty()) {
+				//				moduleEntryPoint = getModuleName(moduleEntryPoint);
+			}
 
 			CreateModule createModuleFunc = nullptr;
 			if (!library.isValid()) {

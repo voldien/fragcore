@@ -46,6 +46,8 @@ int UDPNetSocket::bind(const INetAddress &p_addr) { return 0; }
 int UDPNetSocket::listen(unsigned int maxListen) {
 	if (::listen(socket, maxListen) < 0) {
 	}
+
+	return 0;
 }
 
 int UDPNetSocket::connect(const INetAddress &p_addr) {
