@@ -22,8 +22,9 @@ int main(int argc, const char **argv) {
 		do {
 
 			int c = net.recv(data, sizeof(data), nr);
-			if (c < 0)
+			if (c < 0) {
 				break;
+			}
 			for (unsigned int i = 0; i < c; i++)
 				printf("%d", data[i]);
 			printf("\n");

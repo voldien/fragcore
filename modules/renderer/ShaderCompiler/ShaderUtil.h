@@ -20,7 +20,7 @@
 #define _FRAG_CORE_SHADERUTIL_H_ 1
 #include <Core/IO/IO.h>
 #include <Core/Ref.h>
-#include "IRenderer.h"
+#include "../IRenderer.h"
 #include <vector>
 
 namespace fragcore {

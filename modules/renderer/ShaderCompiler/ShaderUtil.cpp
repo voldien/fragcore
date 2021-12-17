@@ -1,8 +1,8 @@
 #include "ShaderUtil.h"
 #include "Core/IO/FileSystem.h"
 #include "Core/IO/IOUtil.h"
-#include "RenderPipeline.h"
-#include <RenderDesc.h>
+#include "../RenderPipeline.h"
+#include <../RenderDesc.h>
 
 #include <cassert>
 #include <fmt/format.h>

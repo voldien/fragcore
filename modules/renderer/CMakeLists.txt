@@ -13,6 +13,8 @@ TARGET_INCLUDE_DIRECTORIES(fragcore-render-interface PUBLIC
 
 ADD_DEPENDENCIES(fragcore-render-interface fragcore )
 
+ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/ShaderCompiler)
+
 #
 IF(BUILD_WITH_INSTALL)
     INSTALL(TARGETS fragcore-render-interface DESTINATION lib COMPONENT ${LIBFRAGCORE_COMPONENT})
