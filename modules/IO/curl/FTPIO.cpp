@@ -36,9 +36,10 @@ long FTPFileIO::write(long int nbytes, const void *pbuffer) {
 
 long FTPFileIO::length() {
 	double filesize = 0.0;
-	CURLcode res = curl_easy_getinfo(this->handle, CURLINFO_CONTENT_LENGTH_DOWNLOAD, &filesize);
-	if(res != CURLE_OK){
-		
+	CURLcode rc = curl_easy_getinfo(this->handle, CURLINFO_CONTENT_LENGTH_DOWNLOAD, &filesize);
+	if (rc != CURLE_OK) {
+
+		throw RuntimeException("{}", curl_easy_strerror(rc));
 	}
 	return filesize;
 }
@@ -102,6 +103,7 @@ static int seek_cb(void *userp, curl_off_t offset, int origin) {
 FTPFileIO::FTPFileIO(const char *path, IOMode mode) {
 	//   curl_easy_setopt(CURL *handle, CURLOPT_SEEKFUNCTION, seek_cb);
 	//   curl_easy_setopt(CURL *handle, CURLOPT_SEEKDATA, &seek_data);
+
 	CURL *curl;
 	curl = curl_easy_init();
 	if (curl) {
@@ -117,7 +119,10 @@ FTPFileIO::FTPFileIO(const char *path, IOMode mode) {
 
 		/* Switch on full protocol/debug output */
 		curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+
+		curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 5L);
 	}
+	CURLcode rc = curl_easy_perform(curl);
 }
 
 int debug_callback(CURL *handle, curl_infotype type, char *data, size_t size, void *userptr) {
@@ -131,25 +136,25 @@ FTPFileIO::FTPFileIO(CURL *handle, const char *path, IOMode mode) {
 		throw InvalidArgumentException("");
 	this->handle = handle;
 
-	if (handle) {
-		curl_easy_setopt(handle, CURLOPT_URL,
+	if (this->handle) {
+		curl_easy_setopt(this->handle, CURLOPT_URL,
 						 path); // "ftp://ftp.example.com/curl/curl-7.9.2.tar.gz");
 		this->ioMode = mode;
 
 		if (mode & IOMode::READ) {
-			curl_easy_setopt(handle, CURLOPT_READFUNCTION, ftpio_fwrite);
+			curl_easy_setopt(this->handle, CURLOPT_READFUNCTION, ftpio_fwrite);
 			/* Set a pointer to our struct to pass to the callback */
-			curl_easy_setopt(handle, CURLOPT_READDATA, this);
+			curl_easy_setopt(this->handle, CURLOPT_READDATA, this);
 		}
 		if (mode & IOMode::WRITE) {
-			curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, ftpio_fwrite);
+			curl_easy_setopt(this->handle, CURLOPT_WRITEFUNCTION, ftpio_fwrite);
 			/* Set a pointer to our struct to pass to the callback */
-			curl_easy_setopt(handle, CURLOPT_WRITEDATA, this);
+			curl_easy_setopt(this->handle, CURLOPT_WRITEDATA, this);
 		}
 
-		curl_easy_setopt(handle, CURLOPT_HEADERFUNCTION, throw_away);
+		curl_easy_setopt(this->handle, CURLOPT_HEADERFUNCTION, throw_away);
 
-		curl_easy_setopt(handle, CURLOPT_HEADER, 0L);
+		curl_easy_setopt(this->handle, CURLOPT_HEADER, 0L);
 
 		curl_easy_setopt(this->handle, CURLOPT_SEEKFUNCTION, seek_cb);
 
@@ -159,10 +164,13 @@ FTPFileIO::FTPFileIO(CURL *handle, const char *path, IOMode mode) {
 		curl_easy_setopt(this->handle, CURLOPT_VERBOSE, 1L);
 		curl_easy_setopt(this->handle, CURLOPT_DEBUGFUNCTION, debug_callback);
 
+		curl_easy_setopt(this->handle, CURLOPT_CONNECTTIMEOUT, 5L);
+
 		this->buffer = Ref<IO>(new BufferIO(4096, false));
 	}
+	CURLcode rc = curl_easy_perform(this->handle);
+	if (rc != CURLE_OK) {
+
+		throw RuntimeException("{}", curl_easy_strerror(rc));
+	}
 }
-
-// FTPFileIO::FTPFileIO(Ref<IO> &io){
-
-// }

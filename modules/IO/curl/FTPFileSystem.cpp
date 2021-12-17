@@ -1,5 +1,5 @@
 #ifndef FRAG_CORE_INTERNAL_IMP
-	#define FRAG_CORE_INTERNAL_IMP
+#define FRAG_CORE_INTERNAL_IMP
 #endif
 #include "FTPFileSystem.h"
 #include "FTPIO.h"
@@ -19,6 +19,9 @@ using namespace fragcore;
 IO *FTPFileSystem::openFile(const char *path, IO::IOMode mode) {
 
 	CURL *fileHandle = curl_easy_duphandle(this->handle);
+	if (!fileHandle) {
+		curl_global_cleanup();
+	}
 	return new FTPFileIO(fileHandle, path, mode);
 }
 
@@ -72,8 +75,7 @@ std::vector<std::string> FTPFileSystem::listDirectories(const char *directory) c
 		curl_easy_setopt(curl, CURLOPT_DIRLISTONLY, 1L);
 
 		int ret = curl_easy_perform(curl);
-		if(ret != CURLE_OK){
-
+		if (ret != CURLE_OK) {
 		}
 
 		curl_easy_cleanup(curl);
