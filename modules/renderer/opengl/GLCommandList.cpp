@@ -31,6 +31,12 @@ void GLCommandList::setViewport(int x, int y, int width, int height) {
 	/*	*/
 	this->commands.push_back(_command);
 }
+void GLCommandList::setScissor(int x, int y, int width, int height) {
+	GLScissorPortCommand *_command =
+		(GLScissorPortCommand *)this->stackAlloc.alloc(GLCommandBase::getCommandSize<GLViewPortCommand>());
+	*_command = GLScissorPortCommand(0, x, y, width, height);
+	this->commands.push_back(_command);
+}
 
 void GLCommandList::clearDepth(float depth) {}
 
@@ -68,6 +74,15 @@ void GLCommandList::pushDebugGroup(const char *name) {
 void GLCommandList::popDebugGroup() {
 	GLPopGroupMarkerCommand *_command =
 		(GLPopGroupMarkerCommand *)this->stackAlloc.alloc(GLCommandBase::getCommandSize<GLPopGroupMarkerCommand>());
+		
 	this->commands.push_back(_command);
 }
-void GLCommandList::insertDebugMarker(const char *name) {}
+void GLCommandList::insertDebugMarker(const char *name) {
+	GLInsertGroupMarkerCommand *_command =
+		(GLInsertGroupMarkerCommand *)this->stackAlloc.alloc(GLCommandBase::getCommandSize<GLPopGroupMarkerCommand>());
+
+
+	this->commands.push_back(_command);
+}
+
+void GLCommandList::draw(Ref<Buffer> &buffer, uint32_t vertexCount, uint32_t instanceCount) {}

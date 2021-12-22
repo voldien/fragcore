@@ -31,22 +31,29 @@ namespace fragcore {
 		VKCommandList(const VKCommandList &other);
 		virtual ~VKCommandList();
 
-		virtual void begin();
-		virtual void end();
+		virtual void begin() override;
+		virtual void end() override;
 
-		virtual void bindPipeline(RenderPipeline *p);
-		virtual void bindFramebuffer(Ref<FrameBuffer> &framebuffer);
+		virtual void bindPipeline(RenderPipeline *p) override;
+		virtual void bindFramebuffer(Ref<FrameBuffer> &framebuffer) override;
 
-		virtual void setViewport(int x, int y, int width, int height);
+		virtual void setViewport(int x, int y, int width, int height) override;
+		virtual void setScissor(int x, int y, int width, int height) override;
 		virtual void clearDepth(float depth);
-		virtual void clearColorTarget(uint index, const Color &color);
+		virtual void clearColorTarget(uint index, const Color &color) override;
 
-		virtual void dispatch(uint groupCountX, uint groupCountY, uint groupCountZ);
-		virtual void dispatchIndirect(Buffer *buffer, u_int64_t offset);
+		virtual void dispatch(uint groupCountX, uint groupCountY, uint groupCountZ) override;
+		virtual void dispatchIndirect(Buffer *buffer, u_int64_t offset) override;
 
-		virtual void pushDebugGroup(const char *name);
-		virtual void popDebugGroup();
-		virtual void insertDebugMarker(const char *name);
+		virtual void pushDebugGroup(const char *name) override;
+		virtual void popDebugGroup() override;
+		virtual void insertDebugMarker(const char *name) override;
+
+		virtual void draw(Ref<Buffer> &buffer, uint32_t vertexCount, uint32_t instanceCount) override;
+
+	  public:
+		VkCommandBuffer getCommandBuffer() noexcept { return this->cmdBuffer; }
+		VkCommandPool getCommandPool() noexcept { return this->_pool; }
 
 	  private:
 		void beginCurrentRenderPass();
@@ -60,6 +67,7 @@ namespace fragcore {
 		bool _commandBufferBegun;
 		bool _commandBufferEnded;
 		std::vector<VkCommandBuffer> cmdbuffers;
+		bool isRenderPass;
 	};
 } // namespace fragcore
 

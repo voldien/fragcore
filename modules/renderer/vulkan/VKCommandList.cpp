@@ -41,7 +41,7 @@ void VKCommandList::begin() {
 	beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 	beginInfo.flags = VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
 
-	vkBeginCommandBuffer(cmdBuffer, &beginInfo);
+	VKS_VALIDATE(vkBeginCommandBuffer(cmdBuffer, &beginInfo));
 }
 
 void VKCommandList::end() { vkEndCommandBuffer(cmdBuffer); }
@@ -82,6 +82,15 @@ void VKCommandList::setViewport(int x, int y, int width, int height) {
 
 	vkCmdSetViewport(cmdBuffer, 0, 1, &vkViewport);
 }
+
+void VKCommandList::setScissor(int x, int y, int width, int height) {
+	VkRect2D sissor = {
+		.offset = {x, y},
+		.extent = {width, height},
+	};
+	vkCmdSetScissor(cmdBuffer, 0, 1, &sissor);
+}
+
 void VKCommandList::clearDepth(float depth) {
 	//	this->commmands.push
 	// vkCmdClearAttachments
@@ -139,3 +148,7 @@ void VKCommandList::insertDebugMarker(const char *name) {
 
 	pvkCmdDebugMarkerInsertEXT(cmdBuffer, &markerinfo);
 }
+
+
+
+void VKCommandList::draw(Ref<Buffer> &buffer, uint32_t vertexCount, uint32_t instanceCount) {}

@@ -2094,10 +2094,12 @@ void GLRendererInterface::execute(CommandList *list) {
 		} break;
 
 		case GLCommandBufferCmd::ViewPort: {
+			//TODO add support for the index.
 			const GLViewPortCommand *viewport = (const GLViewPortCommand *)base;
 			glViewport(viewport->x, viewport->y, viewport->width, viewport->height);
 		} break;
 		case GLCommandBufferCmd::Scissor: {
+			// TODO add support for the index.
 			const GLViewPortCommand *scissor = (const GLViewPortCommand *)base;
 			glScissor(scissor->x, scissor->y, scissor->width, scissor->height);
 		} break;

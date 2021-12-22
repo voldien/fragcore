@@ -1,6 +1,6 @@
 #include"GLBuffer.h"
 #include"internal_object_type.h"
-//#include<GL/glew.h>
+
 using namespace fragcore;
 
 //TODO add for retaining current binded buffer.

@@ -45,7 +45,7 @@ namespace fragcore {
 		virtual void bindFramebuffer(Ref<FrameBuffer> &framebuffer) = 0;
 
 		virtual void setViewport(int x, int y, int width, int height) = 0;
-		// virtual void setScissor(int x, int y, int width, int height) = 0;
+		virtual void setScissor(int x, int y, int width, int height) = 0;
 		virtual void clearDepth(float depth) = 0;
 		virtual void clearColorTarget(uint index, const Color &color) = 0;
 
@@ -55,11 +55,10 @@ namespace fragcore {
 
 		// virtual void setGraphicResourcesSlot() = 0;
 
-		// virtual void draw(Ref<Buffer>& buffer ) = 0;
-		// virtual void draw() = 0;
-		// virtual void drawIndexed() = 0;
+		virtual void draw(Ref<Buffer>& buffer, uint32_t vertexCount, uint32_t instanceCount) = 0;
+		// virtual void drawIndexed(Ref<Buffer>& buffer, offset,uint32_t drawCount,uint32_t stride) = 0;
 		// virtual void drawIndirect() = 0;
-		// virtual void drawIndexedIndirect() = 0;
+		// virtual void drawIndexedIndirect(Ref<Buffer>& buffer) = 0;
 
 		// TOOD add support for raytracing
 		//		virtual void generateBVH();

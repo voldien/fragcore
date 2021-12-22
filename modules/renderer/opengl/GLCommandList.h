@@ -41,6 +41,7 @@ namespace fragcore {
 
 		virtual void bindPipeline(RenderPipeline *p) override;
 		virtual void bindFramebuffer(Ref<FrameBuffer> &framebuffer) override;
+		virtual void setScissor(int x, int y, int width, int height) override;
 		virtual void setViewport(int x, int y, int width, int height) override;
 
 		virtual void clearDepth(float depth) override;
@@ -55,6 +56,8 @@ namespace fragcore {
 
 		virtual void popDebugGroup() override;
 		virtual void insertDebugMarker(const char *name) override;
+
+		virtual void draw(Ref<Buffer> &buffer, uint32_t vertexCount, uint32_t instanceCount) override;
 
 	  private:
 		StackAllocator stackAlloc;

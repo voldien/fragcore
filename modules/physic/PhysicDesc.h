@@ -18,7 +18,7 @@
  */
 #ifndef _FV_PHYSIC_DESC_H_ /*	TODO determine if this is the best header name or not.	*/
 #define _FV_PHYSIC_DESC_H_ 1
-//#include "../Renderer/Buffer.h"
+
 #include "Collider.h"
 #include "RigidBody.h"
 

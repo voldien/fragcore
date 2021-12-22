@@ -208,6 +208,7 @@ intptr_t VKRenderWindow::getNativePtr() const {
 		}
 	} else
 		throw RuntimeException(fmt::format("{}", SDL_GetError()));
+	return 0;
 }
 
 void VKRenderWindow::setIcon(void *pVoid) {}
@@ -221,6 +222,7 @@ void VKRenderWindow::swapBuffer() {
 
 	int width, height;
 	this->getSize(&width, &height);
+	// Check if the size is correct.
 	if (this->getSwapChain().width != width || this->getSwapChain().height != height) {
 		this->recreateSwapChain();
 		return;
@@ -595,7 +597,9 @@ VkPhysicalDevice VKRenderWindow::physicalDevice() const {
 	return renderer->device->getPhysicalDevices()[0]->getHandle();
 }
 
-void VKRenderWindow::setPhysicalDevice(VkPhysicalDevice device) {}
+void VKRenderWindow::setPhysicalDevice(VkPhysicalDevice device) {
+	// TODO recreate pipeline.
+}
 std::vector<VkQueue> VKRenderWindow::getQueues() const noexcept { return {}; }
 
 const std::vector<VkPhysicalDevice> &VKRenderWindow::availablePhysicalDevices() const { return {}; }

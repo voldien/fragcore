@@ -381,12 +381,18 @@ namespace fragcore {
 extern "C" {
 #endif
 
-/*	*/
+/**
+ * @brief
+ *
+ */
 typedef float fvvec1f FV_VECTORALIGN(4);
 typedef float fvvec2f FV_VECTORALIGN(8);
 typedef float fvvec4f FV_VECTORALIGN(16);
 
-/*	*/
+/**
+ * @brief
+ *
+ */
 typedef double fvvec1d FV_VECTORALIGN(8);
 typedef double fvvec2d FV_VECTORALIGN(16);
 typedef double fvvec4d FV_VECTORALIGN(32);

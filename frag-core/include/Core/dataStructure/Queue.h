@@ -23,7 +23,10 @@
 
 namespace fragcore {
 	/**
-	 *	Rotating Queue data struct.
+	 * @brief
+	 *
+	 * @tparam T
+	 * @tparam U
 	 */
 	template <class T, int U = 0> class Queue : public std::allocator<T> {
 	  public:
@@ -31,7 +34,7 @@ namespace fragcore {
 			this->mdata = nullptr;
 			this->reserved = 0;
 			this->nrElements = 0;
-			clear();
+			this->clear();
 			this->resize(16);
 		}
 
@@ -41,7 +44,7 @@ namespace fragcore {
 			this->mdata = nullptr;
 			this->reserved = 0;
 			this->nrElements = 0;
-			clear();
+			this->clear();
 			this->resize(nrOfElements);
 		}
 
@@ -118,11 +121,26 @@ namespace fragcore {
 		class QueueIterator : public Iterator<T> {
 		  public:
 			QueueIterator(Queue<T> *queue);
+
+			virtual QueueIterator &operator++() { return *this; }
+
+			virtual QueueIterator &operator++(int) { return *this; }
+
+			virtual QueueIterator &operator--() { return *this; }
+
+			virtual QueueIterator &operator+=(int n) { return *this; }
+
+			virtual QueueIterator &operator-=(int n) { return *this; }
+
+			virtual QueueIterator &operator+(int n) { return *this; }
+
+			virtual QueueIterator &operator-(int n) { return *this; }
+			virtual QueueIterator &operator[](int index) const { return *this; }
 		};
 
-		Iterator<T> begin() {}
+		Iterator<T> begin() { return QueueIterator(this); }
 
-		Iterator<T> end() {}
+		Iterator<T> end() { return QueueIterator(this); }
 
 	  private:
 		inline int getTypeSize() const { return sizeof(T); }

@@ -38,9 +38,10 @@ namespace fragcore {
 		UpdateBuffer,
 		Draw,
 		DrawIndice,
-		DrawIndex,
-		DrawIndexIndices,
+		DrawIndirect,
+		DrawIndirectIndices,
 		DepthBounds,
+		BindPipeline,
 
 	};
 
@@ -83,11 +84,19 @@ namespace fragcore {
 	};
 
 	class GLPushGroupMarkerCommand : public GLCommandBase {
-		GLPushGroupMarkerCommand(const char *name) : GLCommandBase(GLCommandBufferCmd::PushGroupMarker) {}
+		GLPushGroupMarkerCommand(const char *name) : GLCommandBase(GLCommandBufferCmd::PushGroupMarker), name(name) {}
+		std::string name;
 	};
 	class GLPopGroupMarkerCommand : public GLCommandBase {
 		GLPopGroupMarkerCommand() : GLCommandBase(GLCommandBufferCmd::PopGroupMarker) {}
+
 	};
+	class GLInsertGroupMarkerCommand : public GLCommandBase {
+		GLInsertGroupMarkerCommand(const char *name)
+			: GLCommandBase(GLCommandBufferCmd::InsertGroupMarker), name(name) {}
+		std::string name;
+	};
+
 	class GLViewPortCommand : public GLCommandBase {
 	  public:
 		GLViewPortCommand(int index, int x, int y, int width, int height)
@@ -98,7 +107,8 @@ namespace fragcore {
 	};
 	class GLScissorPortCommand : public GLCommandBase {
 	  public:
-		GLScissorPortCommand() : GLCommandBase(GLCommandBufferCmd::Scissor) {}
+		GLScissorPortCommand(int index, int x, int y, int width, int height)
+			: GLCommandBase(GLCommandBufferCmd::Scissor), index(index), x(x), y(y), width(width), height(height) {}
 		unsigned int index;
 		unsigned int width, height;
 		unsigned int x, y;
@@ -108,6 +118,68 @@ namespace fragcore {
 		GLBindFrameBufferCommand(FrameBuffer *framebuffer)
 			: GLCommandBase(GLCommandBufferCmd::BindFrameBuffer), framebuffer(framebuffer) {}
 		FrameBuffer *framebuffer;
+	};
+	class GLCopyTextureCommand : public GLCommandBase {
+	  public:
+		// TODO add src and dest size
+		GLCopyTextureCommand(const Ref<Texture> &src, Ref<Texture> &dst)
+			: GLCommandBase(GLCommandBufferCmd::CopyTexture) {}
+	};
+
+	class GLBlitCommand : public GLCommandBase {
+	  public:
+		// TODO add src and dest size
+		GLBlitCommand(const Ref<FrameBuffer> &src, Ref<FrameBuffer> &dst) : GLCommandBase(GLCommandBufferCmd::Blit) {}
+
+		FrameBuffer *src;
+		FrameBuffer *dst;
+		// TODO add size, filtermode
+	};
+
+	class GLDrawCommand : public GLCommandBase {
+	  public:
+
+		GLDrawCommand(const Ref<Buffer> &buffer, uint32_t nrVertices, uint32_t nrInstances)
+			: GLCommandBase(GLCommandBufferCmd::Draw) {}
+
+		Buffer *src;
+		uint32_t nrVertices;
+		uint32_t nrInstances;
+	};
+
+	class GLDrawIndicesCommand : public GLCommandBase {
+	  public:
+		// TODO add the rest of require param
+		GLDrawIndicesCommand(const Ref<Buffer> &buffer, const Ref<Buffer> &indices, uint32_t nrVertices,
+							 uint32_t nrInstances)
+			: GLCommandBase(GLCommandBufferCmd::DrawIndirect) {}
+
+		Buffer *src;
+		uint32_t nrVertices;
+		uint32_t nrInstances;
+	};
+
+	class GLDrawIndirectCommand : public GLCommandBase {
+	  public:
+		// TODO add the rest of require param
+		GLDrawIndirectCommand(const Ref<Buffer> &buffer, const Ref<Buffer> &indices, uint32_t nrVertices,
+							  uint32_t nrInstances)
+			: GLCommandBase(GLCommandBufferCmd::DrawIndirect) {}
+
+		Buffer *src;
+		uint32_t nrVertices;
+		uint32_t nrInstances;
+	};
+	class GLDrawIndexIndirectCommand : public GLCommandBase {
+	  public:
+		// TODO add the rest of require param
+		GLDrawIndexIndirectCommand(const Ref<Buffer> &buffer, const Ref<Buffer> &indices, uint32_t nrVertices,
+								   uint32_t nrInstances)
+			: GLCommandBase(GLCommandBufferCmd::DrawIndirectIndices) {}
+
+		Buffer *src;
+		uint32_t nrVertices;
+		uint32_t nrInstances;
 	};
 
 } // namespace fragcore
