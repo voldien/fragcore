@@ -4,21 +4,6 @@
 #include <limits>
 using namespace fragcore;
 
-// std::vector<const char*> getRequiredExtensions() {
-//     uint32_t glfwExtensionCount = 0;
-//     const char** glfwExtensions;
-//     glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
-
-//     std::vector<const char*> extensions(glfwExtensions, glfwExtensions +
-//     glfwExtensionCount);
-
-//     if (enableValidationLayers) {
-//         extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
-//     }
-
-//     return extensions;
-// }
-
 // TODO move to the helper file.
 unsigned int getTextureFormat(TextureDesc::Format format) {
 	switch (format) {

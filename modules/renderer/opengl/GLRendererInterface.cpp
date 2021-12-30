@@ -7,7 +7,12 @@
 #include "GLBuffer.h"
 #include "GLCommandList.h"
 #include "GLFrameBuffer.h"
+#include "GLQuery.h"
+#include "GLRenderPipeline.h"
 #include "GLRenderWindow.h"
+#include "GLSampler.h"
+#include "GLSync.h"
+#include "GLTexture.h"
 #include "internal_object_type.h"
 #include <../RenderDesc.h>
 #include <../RendererWindow.h>
@@ -296,8 +301,9 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 
 	// TODO create default framebuffer.
 	// TODO create default texture.
+	// TODO relocate to the window.
 	this->defaultFrameBuffer = new GLFrameBuffer();
-	GLFrameBufferObject *frameBufferObject = new GLFrameBufferObject();
+	GLFrameBuffer *frameBufferObject = new GLFrameBuffer();
 	frameBufferObject->framebuffer = 0;
 	frameBufferObject->numtextures = 1;
 	// this->defaultFrameBuffer->pdata = frameBufferObject;
@@ -379,8 +385,8 @@ Texture *GLRendererInterface::createTexture(TextureDesc *desc) {
 	if (desc->originalTexture) {
 		resetErrorFlag();
 		if (glTextureView) {
-			const GLTextureObject *textureOriginal = (const GLTextureObject *)desc->originalTexture->getObject();
-			glTextureView(texture, target, textureOriginal->texture, internalformat, 0, 1, 0, 1);
+			const GLTexture *textureOriginal = (const GLTexture *)desc->originalTexture;
+			glTextureView(texture, target, textureOriginal->getTexture(), internalformat, 0, 1, 0, 1);
 			checkError();
 			// TODO add reference.
 		} else {
@@ -546,13 +552,13 @@ Texture *GLRendererInterface::createTexture(TextureDesc *desc) {
 	// addMarkerLabel(this, GL_TEXTURE, texture, &desc->marker);
 
 	/*	*/
-	Texture *gltex = new Texture();
-	// gltex->pdata = new GLTextureObject();
-	GLTextureObject *glTextureObject = (GLTextureObject *)gltex->getObject();
-	glTextureObject->texture = texture;
-	glTextureObject->target = target;
-	glTextureObject->desc = *desc;
-	glTextureObject->sampler = sampler;
+	GLTexture *gltex = new GLTexture();
+	// gltex->pdata = new GLTexture();
+	// GLTexture *GLTexture = (GLTexture *)gltex;
+	// GLTexture->texture = texture;
+	// GLTexture->target = target;
+	// GLTexture->desc = *desc;
+	// GLTexture->sampler = sampler;
 	// gltex->iRenderer = this;
 
 	/*	Create mapper object.	*/
@@ -560,11 +566,12 @@ Texture *GLRendererInterface::createTexture(TextureDesc *desc) {
 }
 
 void GLRendererInterface::deleteTexture(Texture *texture) {
-	GLTextureObject *textureObject = (GLTextureObject *)texture->getObject();
+	GLTexture *textureObject = (GLTexture *)texture;
 
-	if (glIsTexture(textureObject->texture)) {
+	if (glIsTexture(textureObject->getTexture())) {
 		checkError();
-		glDeleteTextures(1, &textureObject->texture);
+		unsigned int tex = textureObject->getTexture();
+		glDeleteTextures(1, &tex);
 		checkError();
 	} else
 		throw InvalidArgumentException("Invalid texture object.");
@@ -626,22 +633,20 @@ Sampler *GLRendererInterface::createSampler(SamplerDesc *desc) {
 	// Add debug marker information.
 	// addMarkerLabel(this, GL_SAMPLER, sampler, &desc->marker);
 
-	/*  */
-	GLSamplerObject *samplerObject = new GLSamplerObject();
-	samplerObject->sampler = sampler;
-	Sampler *samplerI = new Sampler();
+	GLSampler *samplerI = new GLSampler();
 	// samplerI->pdata = samplerObject;
 	samplerI->setRenderInterface(this);
 	return samplerI;
 }
 
 void GLRendererInterface::deleteSampler(Sampler *sampler) {
-	GLSamplerObject *samplerObject;
-	samplerObject = (GLSamplerObject *)sampler->getObject();
-	if (glIsSampler(samplerObject->sampler))
-		glDeleteSamplers(1, &samplerObject->sampler);
-	else
+	GLSampler *samplerObject = static_cast<GLSampler *>(sampler);
+	if (glIsSampler(samplerObject->getSampler())) {
+		unsigned int gl_sampler = samplerObject->getSampler();
+		glDeleteSamplers(1, &gl_sampler);
+	} else {
 		throw InvalidArgumentException("Invalid sampler object.");
+	}
 
 	// delete sampler->pdata;
 	delete sampler;
@@ -671,42 +676,41 @@ static void checkShaderError(int shader) {
 RenderPipeline *GLRendererInterface::createPipeline(const ProgramPipelineDesc *desc) {
 	unsigned int pipeline;
 
-	GLProgramPipeline *pipe = new GLProgramPipeline();
-	RenderPipeline *programPipeline = new RenderPipeline();
+	GLRenderPipeline *programPipeline = new GLRenderPipeline();
 
-	glCreateProgramPipelines(1, &pipeline);
-	checkError();
+	// glCreateProgramPipelines(1, &pipeline);
+	// checkError();
 
-	if (desc->v) {
-		GLShaderObject *v = (GLShaderObject *)desc->v->getObject();
-		glUseProgramStages(pipeline, GL_VERTEX_SHADER_BIT, v->program);
-		pipe->v = desc->v;
-	}
-	if (desc->f) {
-		GLShaderObject *f = (GLShaderObject *)desc->f->getObject();
-		glUseProgramStages(pipeline, GL_FRAGMENT_SHADER_BIT, f->program);
-		pipe->f = desc->f;
-	}
-	if (desc->g) {
-		GLShaderObject *g = (GLShaderObject *)desc->g->getObject();
-		glUseProgramStages(pipeline, GL_GEOMETRY_SHADER_BIT, g->program);
-		pipe->g = desc->g;
-	}
-	if (desc->tc) {
-		GLShaderObject *tc = (GLShaderObject *)desc->c->getObject();
-		glUseProgramStages(pipeline, GL_TESS_CONTROL_SHADER_BIT, tc->program);
-		pipe->tc = desc->tc;
-	}
-	if (desc->te) {
-		GLShaderObject *te = (GLShaderObject *)desc->te->getObject();
-		glUseProgramStages(pipeline, GL_TESS_EVALUATION_SHADER_BIT, te->program);
-		pipe->te = desc->te;
-	}
-	if (desc->c) {
-		GLShaderObject *c = (GLShaderObject *)desc->c->getObject();
-		glUseProgramStages(pipeline, GL_COMPUTE_SHADER_BIT, c->program);
-		pipe->c = desc->c;
-	}
+	// if (desc->v) {
+	// 	GLShaderObject *v = (GLShaderObject *)desc->v;
+	// 	glUseProgramStages(pipeline, GL_VERTEX_SHADER_BIT, v->program);
+	// 	pipe->v = desc->v;
+	// }
+	// if (desc->f) {
+	// 	GLShaderObject *f = (GLShaderObject *)desc->f;
+	// 	glUseProgramStages(pipeline, GL_FRAGMENT_SHADER_BIT, f->program);
+	// 	pipe->f = desc->f;
+	// }
+	// if (desc->g) {
+	// 	GLShaderObject *g = (GLShaderObject *)desc->g;
+	// 	glUseProgramStages(pipeline, GL_GEOMETRY_SHADER_BIT, g->program);
+	// 	pipe->g = desc->g;
+	// }
+	// if (desc->tc) {
+	// 	GLShaderObject *tc = (GLShaderObject *)desc->c;
+	// 	glUseProgramStages(pipeline, GL_TESS_CONTROL_SHADER_BIT, tc->program);
+	// 	pipe->tc = desc->tc;
+	// }
+	// if (desc->te) {
+	// 	GLShaderObject *te = (GLShaderObject *)desc->te;
+	// 	glUseProgramStages(pipeline, GL_TESS_EVALUATION_SHADER_BIT, te->program);
+	// 	pipe->te = desc->te;
+	// }
+	// if (desc->c) {
+	// 	GLShaderObject *c = (GLShaderObject *)desc->c;
+	// 	glUseProgramStages(pipeline, GL_COMPUTE_SHADER_BIT, c->program);
+	// 	pipe->c = desc->c;
+	// }
 
 	GLint status;
 	glValidateProgramPipeline(pipeline);
@@ -726,19 +730,18 @@ RenderPipeline *GLRendererInterface::createPipeline(const ProgramPipelineDesc *d
 	// Add debug marker information.
 	// addMarkerLabel(this, GL_PROGRAM_PIPELINE, pipeline, &desc->marker);
 
-	pipe->program = pipeline;
+	// pipe->program = pipeline;
 	// programPipeline->pdata = pipe;
 	programPipeline->setRenderInterface(this);
 	return programPipeline;
 }
 
 void GLRendererInterface::deletePipeline(RenderPipeline *obj) {
-	GLProgramPipeline *pipeline = (GLProgramPipeline *)obj->getObject();
 
-	if (glIsProgramPipeline(pipeline->program))
-		glDeleteProgramPipelines(1, &pipeline->program);
-	else
-		throw InvalidArgumentException("Object is not a valid ProgramPipeline.");
+	// if (glIsProgramPipeline(obj->program))
+	// 	glDeleteProgramPipelines(1, &obj->program);
+	// else
+	// 	throw InvalidArgumentException("Object is not a valid ProgramPipeline.");
 
 	// delete obj->pdata;
 	delete obj;
@@ -746,125 +749,125 @@ void GLRendererInterface::deletePipeline(RenderPipeline *obj) {
 
 Shader *GLRendererInterface::createShader(ShaderDesc *desc) {
 
-	/*  Validate the argument.  */
-	if (desc == nullptr)
-		throw InvalidArgumentException("Descriptor object may not be null.");
+	// 	/*  Validate the argument.  */
+	// 	if (desc == nullptr)
+	// 		throw InvalidArgumentException("Descriptor object may not be null.");
 
-	ShaderLanguage supportedLanguage = this->getShaderLanguage();
-	Shader *shader = new Shader();
-	GLShaderObject *shaobj;
-	GLint lstatus;
+	// 	ShaderLanguage supportedLanguage = this->getShaderLanguage();
+	// //	GLShader *shader = new GLShader();
+	// 	GLShaderObject *shaobj;
+	// 	GLint lstatus;
 
-	/*  */
-	unsigned int program = 0;
-	unsigned int ver = 0;
-	unsigned int fra = 0;
-	unsigned int geo = 0;
-	unsigned int tesse = 0;
-	unsigned int tessc = 0;
-	unsigned int compute = 0;
+	// 	/*  */
+	// 	unsigned int program = 0;
+	// 	unsigned int ver = 0;
+	// 	unsigned int fra = 0;
+	// 	unsigned int geo = 0;
+	// 	unsigned int tesse = 0;
+	// 	unsigned int tessc = 0;
+	// 	unsigned int compute = 0;
 
-	////glCreateShaderProgramv
+	// 	////glCreateShaderProgramv
 
-	program = glCreateProgram();
-	checkError();
+	// 	program = glCreateProgram();
+	// 	checkError();
 
-	if (program <= 0)
-		throw RuntimeException("Internal error, could not create shader program.");
-	/*	Checking for error.	*/
+	// 	if (program <= 0)
+	// 		throw RuntimeException("Internal error, could not create shader program.");
+	// 	/*	Checking for error.	*/
 
-	// TODO determine if validate shader binary fmt::format.
-	// TODO resolve
-	if (desc->separatetable)
-		glProgramParameteri(program, GL_PROGRAM_SEPARABLE, GL_TRUE);
+	// 	// TODO determine if validate shader binary fmt::format.
+	// 	// TODO resolve
+	// 	if (desc->separatetable)
+	// 		glProgramParameteri(program, GL_PROGRAM_SEPARABLE, GL_TRUE);
 
-	if (desc->program.pdata && desc->program.binarySize > 0) {
-		glProgramBinary(program, desc->program.format, desc->program.pdata, desc->program.binarySize);
-		goto finished;
-	}
+	// 	if (desc->program.pdata && desc->program.binarySize > 0) {
+	// 		glProgramBinary(program, desc->program.format, desc->program.pdata, desc->program.binarySize);
+	// 		goto finished;
+	// 	}
 
-	if (desc->Compute.numcompute > 0 || desc->Compute.size > 0 || desc->Compute.type != ShaderCodeType::eNoShaderType) {
-		if (desc->Compute.language & supportedLanguage) {
-			if (desc->Compute.type == ShaderCodeType::eSourceCode) {
-				compute = glCreateShader(GL_COMPUTE_SHADER);
-				glShaderSourceARB(compute, desc->Compute.numcompute, desc->Compute.computeSource, nullptr);
-				glCompileShaderARB(compute);
-				checkShaderError(compute);
-			}
-			if (desc->Compute.type == ShaderCodeType::eBinary) {
-				if (desc->Compute.language == ShaderLanguage::SPIRV)
-					glShaderBinary(1, &compute, GL_SHADER_BINARY_FORMAT_SPIR_V_ARB, desc->Compute.computeBinary,
-								   desc->Compute.size); // glSpecializeShaderARB
-				else
-					glShaderBinary(1, &compute, desc->Compute.binaryFormat, desc->Compute.computeBinary,
-								   desc->Compute.size);
-			}
-			glAttachShader(program, compute);
-		} else
-			throw RuntimeException("Invalid Compute shader.");
-	}
+	// 	if (desc->Compute.numcompute > 0 || desc->Compute.size > 0 || desc->Compute.type !=
+	// ShaderCodeType::eNoShaderType) { 		if (desc->Compute.language & supportedLanguage) { 			if
+	// (desc->Compute.type
+	// == ShaderCodeType::eSourceCode) { 				compute = glCreateShader(GL_COMPUTE_SHADER);
+	// glShaderSourceARB(compute, desc->Compute.numcompute, desc->Compute.computeSource, nullptr);
+	// glCompileShaderARB(compute); 				checkShaderError(compute);
+	// 			}
+	// 			if (desc->Compute.type == ShaderCodeType::eBinary) {
+	// 				if (desc->Compute.language == ShaderLanguage::SPIRV)
+	// 					glShaderBinary(1, &compute, GL_SHADER_BINARY_FORMAT_SPIR_V_ARB, desc->Compute.computeBinary,
+	// 								   desc->Compute.size); // glSpecializeShaderARB
+	// 				else
+	// 					glShaderBinary(1, &compute, desc->Compute.binaryFormat, desc->Compute.computeBinary,
+	// 								   desc->Compute.size);
+	// 			}
+	// 			glAttachShader(program, compute);
+	// 		} else
+	// 			throw RuntimeException("Invalid Compute shader.");
+	// 	}
 
-	if (desc->vertex.numvert > 0 || desc->vertex.size > 0 || desc->vertex.type != ShaderCodeType::eNoShaderType) {
-		if (desc->vertex.language & supportedLanguage) {
-			if (desc->vertex.type == ShaderCodeType::eSourceCode) {
-				ver = glCreateShader(GL_VERTEX_SHADER_ARB);
-				glShaderSourceARB(ver, desc->vertex.numvert, desc->vertex.vertexsource, nullptr);
-				glCompileShaderARB(ver);
-				checkShaderError(ver);
-			}
-			if (desc->vertex.type == eBinary) {
-				if (desc->vertex.language == ShaderLanguage::SPIRV)
-					glShaderBinary(1, &ver, GL_SHADER_BINARY_FORMAT_SPIR_V_ARB, desc->vertex.vertexBinary,
-								   desc->vertex.size);
-				else
-					glShaderBinary(1, &ver, desc->vertex.binaryFormat, desc->vertex.vertexBinary, desc->vertex.size);
-			}
-			glAttachShader(program, ver);
-		} else
-			throw RuntimeException("Invalid Vertex shader.");
-	}
+	// 	if (desc->vertex.numvert > 0 || desc->vertex.size > 0 || desc->vertex.type != ShaderCodeType::eNoShaderType) {
+	// 		if (desc->vertex.language & supportedLanguage) {
+	// 			if (desc->vertex.type == ShaderCodeType::eSourceCode) {
+	// 				ver = glCreateShader(GL_VERTEX_SHADER_ARB);
+	// 				glShaderSourceARB(ver, desc->vertex.numvert, desc->vertex.vertexsource, nullptr);
+	// 				glCompileShaderARB(ver);
+	// 				checkShaderError(ver);
+	// 			}
+	// 			if (desc->vertex.type == eBinary) {
+	// 				if (desc->vertex.language == ShaderLanguage::SPIRV)
+	// 					glShaderBinary(1, &ver, GL_SHADER_BINARY_FORMAT_SPIR_V_ARB, desc->vertex.vertexBinary,
+	// 								   desc->vertex.size);
+	// 				else
+	// 					glShaderBinary(1, &ver, desc->vertex.binaryFormat, desc->vertex.vertexBinary,
+	// desc->vertex.size);
+	// 			}
+	// 			glAttachShader(program, ver);
+	// 		} else
+	// 			throw RuntimeException("Invalid Vertex shader.");
+	// 	}
 
-	if (desc->fragment.numfrag > 0 || desc->fragment.size > 0 || desc->fragment.type != eNoShaderType) {
-		if (desc->fragment.language & supportedLanguage) {
-			if (desc->fragment.type == eSourceCode) {
-				fra = glCreateShader(GL_FRAGMENT_SHADER_ARB);
-				glShaderSourceARB(fra, desc->fragment.numfrag, desc->fragment.fragmentsource, nullptr);
-				glCompileShaderARB(fra);
-				checkShaderError(fra);
-			}
-			if (desc->fragment.type == eBinary) {
-				if (desc->fragment.language == ShaderLanguage::SPIRV)
-					glShaderBinary(1, &fra, GL_SHADER_BINARY_FORMAT_SPIR_V_ARB, desc->fragment.fragmentBinary,
-								   desc->fragment.size);
-				else
-					glShaderBinary(1, &fra, desc->fragment.binaryFormat, desc->fragment.fragmentBinary,
-								   desc->fragment.size);
-			}
-			glAttachShader(program, fra);
-		} else
-			throw RuntimeException("Invalid fragment shader.");
-	}
+	// 	if (desc->fragment.numfrag > 0 || desc->fragment.size > 0 || desc->fragment.type != eNoShaderType) {
+	// 		if (desc->fragment.language & supportedLanguage) {
+	// 			if (desc->fragment.type == eSourceCode) {
+	// 				fra = glCreateShader(GL_FRAGMENT_SHADER_ARB);
+	// 				glShaderSourceARB(fra, desc->fragment.numfrag, desc->fragment.fragmentsource, nullptr);
+	// 				glCompileShaderARB(fra);
+	// 				checkShaderError(fra);
+	// 			}
+	// 			if (desc->fragment.type == eBinary) {
+	// 				if (desc->fragment.language == ShaderLanguage::SPIRV)
+	// 					glShaderBinary(1, &fra, GL_SHADER_BINARY_FORMAT_SPIR_V_ARB, desc->fragment.fragmentBinary,
+	// 								   desc->fragment.size);
+	// 				else
+	// 					glShaderBinary(1, &fra, desc->fragment.binaryFormat, desc->fragment.fragmentBinary,
+	// 								   desc->fragment.size);
+	// 			}
+	// 			glAttachShader(program, fra);
+	// 		} else
+	// 			throw RuntimeException("Invalid fragment shader.");
+	// 	}
 
-	if (desc->geometry.numgeo > 0 || desc->geometry.size > 0 || desc->geometry.type != eNoShaderType) {
-		if (desc->geometry.language & supportedLanguage) {
-			if (desc->geometry.type == ShaderCodeType::eSourceCode) {
-				geo = glCreateShader(GL_GEOMETRY_SHADER_ARB);
-				glShaderSourceARB(geo, desc->geometry.numgeo, desc->geometry.geometrysource, nullptr);
-				glCompileShaderARB(geo);
-				checkShaderError(geo);
-			}
-			if (desc->geometry.type == ShaderCodeType::eBinary) {
-				if (desc->geometry.language == ShaderLanguage::SPIRV)
-					glShaderBinary(1, &geo, GL_SHADER_BINARY_FORMAT_SPIR_V_ARB, desc->geometry.geometryBinary,
-								   desc->geometry.size);
-				else
-					glShaderBinary(1, &geo, desc->geometry.binaryFormat, desc->geometry.geometryBinary,
-								   desc->geometry.size);
-			}
-			glAttachShader(program, geo);
-		} else
-			throw RuntimeException("Invalid Geometry shader.");
-	}
+	// 	if (desc->geometry.numgeo > 0 || desc->geometry.size > 0 || desc->geometry.type != eNoShaderType) {
+	// 		if (desc->geometry.language & supportedLanguage) {
+	// 			if (desc->geometry.type == ShaderCodeType::eSourceCode) {
+	// 				geo = glCreateShader(GL_GEOMETRY_SHADER_ARB);
+	// 				glShaderSourceARB(geo, desc->geometry.numgeo, desc->geometry.geometrysource, nullptr);
+	// 				glCompileShaderARB(geo);
+	// 				checkShaderError(geo);
+	// 			}
+	// 			if (desc->geometry.type == ShaderCodeType::eBinary) {
+	// 				if (desc->geometry.language == ShaderLanguage::SPIRV)
+	// 					glShaderBinary(1, &geo, GL_SHADER_BINARY_FORMAT_SPIR_V_ARB, desc->geometry.geometryBinary,
+	// 								   desc->geometry.size);
+	// 				else
+	// 					glShaderBinary(1, &geo, desc->geometry.binaryFormat, desc->geometry.geometryBinary,
+	// 								   desc->geometry.size);
+	// 			}
+	// 			glAttachShader(program, geo);
+	// 		} else
+	// 			throw RuntimeException("Invalid Geometry shader.");
+	// 	}
 
 	//
 	//	if (desc->geometrysource) {
@@ -890,59 +893,59 @@ Shader *GLRendererInterface::createShader(ShaderDesc *desc) {
 	//
 	//	}
 
-	glLinkProgramARB(program);
-	checkError();
+	// 	glLinkProgramARB(program);
+	// 	checkError();
 
-finished:
-	glGetProgramiv(program, GL_LINK_STATUS, &lstatus);
-	if (lstatus != GL_TRUE) {
-		char log[4096];
-		glGetProgramInfoLog(program, sizeof(log), nullptr, log);
-		// TODO FIXME
-		fprintf(stderr, "%s.\n", log);
-		return nullptr;
-	}
+	// finished:
+	// 	glGetProgramiv(program, GL_LINK_STATUS, &lstatus);
+	// 	if (lstatus != GL_TRUE) {
+	// 		char log[4096];
+	// 		glGetProgramInfoLog(program, sizeof(log), nullptr, log);
+	// 		// TODO FIXME
+	// 		fprintf(stderr, "%s.\n", log);
+	// 		return nullptr;
+	// 	}
 
-	/*	Remove shader resources not needed after linking.	*/
-	if (glIsShader(ver)) {
-		glDetachShader(program, ver);
-		glDeleteShader(ver);
-	}
-	if (glIsShader(fra)) {
-		glDetachShader(program, fra);
-		glDeleteShader(fra);
-	}
-	if (glIsShader(geo)) {
-		glDetachShader(program, geo);
-		glDeleteShader(geo);
-	}
-	if (glIsShader(tesse)) {
-		glDetachShader(program, tesse);
-		glDeleteShader(tesse);
-	}
-	if (glIsShader(tessc)) {
-		glDetachShader(program, tessc);
-		glDeleteShader(tessc);
-	}
-	if (glIsShader(compute)) {
-		glDetachShader(program, compute);
-		glDeleteShader(compute);
-	}
+	// 	/*	Remove shader resources not needed after linking.	*/
+	// 	if (glIsShader(ver)) {
+	// 		glDetachShader(program, ver);
+	// 		glDeleteShader(ver);
+	// 	}
+	// 	if (glIsShader(fra)) {
+	// 		glDetachShader(program, fra);
+	// 		glDeleteShader(fra);
+	// 	}
+	// 	if (glIsShader(geo)) {
+	// 		glDetachShader(program, geo);
+	// 		glDeleteShader(geo);
+	// 	}
+	// 	if (glIsShader(tesse)) {
+	// 		glDetachShader(program, tesse);
+	// 		glDeleteShader(tesse);
+	// 	}
+	// 	if (glIsShader(tessc)) {
+	// 		glDetachShader(program, tessc);
+	// 		glDeleteShader(tessc);
+	// 	}
+	// 	if (glIsShader(compute)) {
+	// 		glDetachShader(program, compute);
+	// 		glDeleteShader(compute);
+	// 	}
 
-	// Add debug marker information.
-	// addMarkerLabel(this, GL_PROGRAM, program, &desc->marker);
+	// 	// Add debug marker information.
+	// 	// addMarkerLabel(this, GL_PROGRAM, program, &desc->marker);
 
-	/*	*/
-	shaobj = new GLShaderObject();
-	shaobj->program = program;
-	// shader->pdata = shaobj;
-	shader->setRenderInterface(this);
+	// 	/*	*/
+	// 	shaobj = new GLShaderObject();
+	// 	shaobj->program = program;
+	// 	// shader->pdata = shaobj;
+	// 	shader->setRenderInterface(this);
 
-	return shader;
+	// 	return shader;
 }
 
 void GLRendererInterface::deleteShader(Shader *shader) {
-	GLShaderObject *glShaderObject = (GLShaderObject *)shader->getObject();
+	GLShaderObject *glShaderObject = (GLShaderObject *)shader;
 
 	if (glIsProgramARB(glShaderObject->program))
 		glDeleteProgram(glShaderObject->program);
@@ -1032,7 +1035,7 @@ Buffer *GLRendererInterface::createBuffer(BufferDesc *desc) {
 
 void GLRendererInterface::deleteBuffer(Buffer *object) {
 
-	// GLBufferObject *glbuf = (GLBufferObject *)object->getObject();
+	// GLBufferObject *glbuf = (GLBufferObject *)object;
 
 	// if (glIsBufferARB(glbuf->buffer)) {
 	// 	glDeleteBuffersARB(1, &glbuf->buffer);
@@ -1077,7 +1080,7 @@ Geometry *GLRendererInterface::createGeometry(GeometryDesc *desc) {
 		glgeoobj->vertexbuffer = createBuffer(&abuffer);
 		//		if(glVertexArrayVertexBuffer){
 		//            //ARB_separate_attrib_format
-		//		    GLBufferObject* vertexBuffer = (GLBufferObject*)glgeoobj->vertexbuffer->getObject();
+		//		    GLBufferObject* vertexBuffer = (GLBufferObject*)glgeoobj->vertexbuffer;
 		//		    glVertexArrayVertexBuffer(0, vertexBuffer->buffer, 0, )
 		//		}else{
 		glgeoobj->vertexbuffer->bind();
@@ -1141,11 +1144,11 @@ void GLRendererInterface::deleteGeometry(Geometry *obj) {}
 
 FrameBuffer *GLRendererInterface::createFrameBuffer(FrameBufferDesc *desc) {
 
-	unsigned int i;							 /*	*/
-	GLFrameBufferObject *glfraobj = nullptr; /*	*/
-	GLenum frstat;							 /*	*/
-	GLenum draw[16];						 /*	*/
-	GLuint numatt = 0;						 /*	*/
+	unsigned int i;					   /*	*/
+	GLFrameBuffer *glfraobj = nullptr; /*	*/
+	GLenum frstat;					   /*	*/
+	GLenum draw[16];				   /*	*/
+	GLuint numatt = 0;				   /*	*/
 
 	/*  Validate the arguments. */
 	if (desc == nullptr)
@@ -1153,7 +1156,7 @@ FrameBuffer *GLRendererInterface::createFrameBuffer(FrameBufferDesc *desc) {
 	if (desc->depth && desc->stencil && desc->depthstencil)
 		throw std::invalid_argument("");
 
-	glfraobj = new GLFrameBufferObject();
+	glfraobj = new GLFrameBuffer();
 	assert(glfraobj);
 
 	memcpy(&glfraobj->desc, desc, sizeof(FrameBufferDesc));
@@ -1164,20 +1167,20 @@ FrameBuffer *GLRendererInterface::createFrameBuffer(FrameBufferDesc *desc) {
 	// TODO add support for named framebuffer.
 	/*  */
 	if (desc->depth) {
-		GLTextureObject *tex = (GLTextureObject *)desc->depth->getObject();
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, tex->target, tex->texture, 0);
+		GLTexture *tex = (GLTexture *)desc->depth;
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, tex->getTarget(), tex->getTexture(), 0);
 	}
 
 	/*  */
 	if (desc->stencil) {
-		GLTextureObject *tex = (GLTextureObject *)desc->stencil->getObject();
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, tex->target, tex->texture, 0);
+		GLTexture *tex = (GLTexture *)desc->stencil;
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, tex->getTarget(), tex->getTexture(), 0);
 	}
 
 	/*  */
 	if (desc->depthstencil) {
-		GLTextureObject *tex = (GLTextureObject *)desc->depthstencil->getObject();
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, tex->target, tex->texture, 0);
+		GLTexture *tex = (GLTexture *)desc->depthstencil;
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, tex->getTarget(), tex->getTexture(), 0);
 	}
 
 	/*  */
@@ -1185,17 +1188,20 @@ FrameBuffer *GLRendererInterface::createFrameBuffer(FrameBufferDesc *desc) {
 
 		/*  */
 		if (desc->attach[i] != nullptr) {
-			GLTextureObject *tex = (GLTextureObject *)desc->attach[i]->getObject();
-			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, tex->target, tex->texture, 0);
+			GLTexture *tex = (GLTexture *)desc->attach[i];
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, tex->getTarget(), tex->getTexture(), 0);
 			/*	*/
 			draw[numatt] = GL_COLOR_ATTACHMENT0 + i;
 			numatt++;
 
 			// TODO improve
 			if (glNamedFramebufferParameteri) {
-				glNamedFramebufferParameteri(glfraobj->framebuffer, GL_FRAMEBUFFER_DEFAULT_WIDTH, tex->desc.width);
-				glNamedFramebufferParameteri(glfraobj->framebuffer, GL_FRAMEBUFFER_DEFAULT_HEIGHT, tex->desc.height);
-				glNamedFramebufferParameteri(glfraobj->framebuffer, GL_FRAMEBUFFER_DEFAULT_LAYERS, tex->desc.depth);
+				glNamedFramebufferParameteri(glfraobj->framebuffer, GL_FRAMEBUFFER_DEFAULT_WIDTH,
+											 desc->attach[i]->width());
+				glNamedFramebufferParameteri(glfraobj->framebuffer, GL_FRAMEBUFFER_DEFAULT_HEIGHT,
+											 desc->attach[i]->height());
+				glNamedFramebufferParameteri(glfraobj->framebuffer, GL_FRAMEBUFFER_DEFAULT_LAYERS,
+											 desc->attach[i]->layers());
 			}
 		}
 	}
@@ -1240,7 +1246,6 @@ void GLRendererInterface::deleteFrameBuffer(FrameBuffer *obj) {
 QueryObject *GLRendererInterface::createQuery(QueryDesc *desc) {
 
 	QueryObject *queryObject;
-	GLQuery *glQuery;
 	GLuint query[8];
 
 	// TODO determine if index is supported or not
@@ -1248,15 +1253,15 @@ QueryObject *GLRendererInterface::createQuery(QueryDesc *desc) {
 	// addMarkerLabel(this, GL_QUERY, query[0], &desc->marker);
 
 	/*  */
-	queryObject = new QueryObject();
+	queryObject = new GLQueryObject();
 	/*  Create internal object. */
 
-	glQuery = new GLQuery();
-	memcpy(glQuery->query, query, sizeof(query));
+	//	glQuery = new GLQuery();
+	//	memcpy(glQuery->query, query, sizeof(query));
 	//    glQuery->query = query;
 
 	// queryObject->pdata = glQuery;
-	queryObject->setRenderInterface(this);
+	//	queryObject->setRenderInterface(this);
 
 	return queryObject;
 }
@@ -1268,7 +1273,8 @@ void GLRendererInterface::deleteQuery(QueryObject *query) {
 RendererWindow *GLRendererInterface::createWindow(int x, int y, int width, int height) {
 
 	WindowManager::getInstance();
-	Ref<GLRendererInterface> rendRef = Ref<GLRendererInterface>(this);
+	Ref<GLRendererInterface> rendRef(this);
+
 	GLRenderWindow *renderWindow = new GLRenderWindow(rendRef);
 	renderWindow->show();
 
@@ -1305,17 +1311,16 @@ void GLRendererInterface::createSwapChain() {}
 
 FrameBuffer *GLRendererInterface::getDefaultFramebuffer(void *window) {
 
-	static FrameBuffer *defaultFrambuffer = nullptr;
+	static GLFrameBuffer *defaultFrambuffer = nullptr;
 	if (defaultFrambuffer == nullptr) {
 
 		defaultFrambuffer = new GLFrameBuffer();
-		GLFrameBufferObject *frameBufferObject = new GLFrameBufferObject();
-		frameBufferObject->framebuffer = 0;
-		frameBufferObject->numtextures = 1;
+		defaultFrambuffer->framebuffer = 0;
+		defaultFrambuffer->numtextures = 1;
 		// defaultFrambuffer->pdata = frameBufferObject;
 		defaultFrambuffer->setRenderInterface(this);
 
-		frameBufferObject->desc.attach[0] = new FrameBufferTexture();
+		defaultFrambuffer->desc.attach[0] = new FrameBufferTexture();
 		// frameBufferObject->desc.attach[0]->iRenderer = this;
 	}
 
@@ -1345,7 +1350,6 @@ ViewPort *GLRendererInterface::getView(unsigned int i) {
 	return this->viewports[i - 1];
 }
 
-void GLRendererInterface::setVSync(int sync) { SDL_GL_SetSwapInterval(sync); }
 
 void GLRendererInterface::setDepthMask(bool flag) { glDepthMask(flag ? GL_TRUE : GL_FALSE); }
 
@@ -1355,13 +1359,6 @@ void GLRendererInterface::disableState(GLRendererInterface::State state) { glDis
 
 bool GLRendererInterface::isStateEnabled(GLRendererInterface::State state) { return glIsEnabled(getState(state)); }
 
-void GLRendererInterface::swapBuffer() {
-
-	OpenGLCore *glcore = (OpenGLCore *)this->pdata;
-
-	this->drawwindow->swapBuffer();
-	// SDL_GL_SwapWindow(this->drawwindow);
-}
 
 void GLRendererInterface::drawInstance(Geometry *geometry, unsigned int num) {
 
@@ -1423,22 +1420,22 @@ void GLRendererInterface::drawIndirect(Geometry *geometry) {
 void GLRendererInterface::setLineWidth(float width) { glLineWidth(width); }
 
 void GLRendererInterface::blit(const FrameBuffer *source, FrameBuffer *dest, Texture::FilterMode filterMode) {
-	GLFrameBufferObject *read = (GLFrameBufferObject *)source->getObject();
-	GLFrameBufferObject *write = (GLFrameBufferObject *)dest->getObject();
+	GLFrameBuffer *read = (GLFrameBuffer *)source;
+	GLFrameBuffer *write = (GLFrameBuffer *)dest;
 
 	GLenum filter = getTextureFilterModeNoMip(filterMode);
 	GLenum attachment = GL_COLOR_BUFFER_BIT;
 
-	if (glBlitNamedFramebuffer) {
+	// if (glBlitNamedFramebuffer) {
 
-		glBlitNamedFramebuffer(read->framebuffer, write->framebuffer, 0, 0, source->width(), source->height(), 0, 0,
-							   dest->width(), dest->height(), attachment, filter);
-	} else {
-		source->read();
-		dest->write();
-		glBlitFramebuffer(0, 0, source->width(), source->height(), 0, 0, dest->width(), dest->height(), attachment,
-						  filter);
-	}
+	// 	glBlitNamedFramebuffer(read->framebuffer, write->framebuffer, 0, 0, source->width(), source->height(), 0, 0,
+	// 						   dest->width(), dest->height(), attachment, filter);
+	// } else {
+	// 	source->read();
+	// 	dest->write();
+	// 	glBlitFramebuffer(0, 0, source->width(), source->height(), 0, 0, dest->width(), dest->height(), attachment,
+	// 					  filter);
+	// }
 }
 
 void GLRendererInterface::bindTextures(unsigned int firstUnit, const std::vector<Texture *> &textures) {
@@ -1448,10 +1445,9 @@ void GLRendererInterface::bindTextures(unsigned int firstUnit, const std::vector
 
 		GLuint texture_list[nTextures];
 		for (int i = 0; i < nTextures; i++) {
-			Texture *texture = textures[i];
+			const GLTexture *texture = (const GLTexture *)textures[i];
 			if (texture) {
-				const GLTextureObject *glTextureObject = (const GLTextureObject *)texture->getObject();
-				texture_list[i] = glTextureObject->texture;
+				texture_list[i] = texture->getTexture();
 			} else
 				texture_list[i] = 0;
 		}
@@ -1459,20 +1455,18 @@ void GLRendererInterface::bindTextures(unsigned int firstUnit, const std::vector
 		glBindTextures(firstUnit, nTextures, &texture_list[0]);
 	} else if (glBindTextureUnit) {
 		for (int i = 0; i < nTextures; i++) {
-			Texture *texture = textures[i];
+			const GLTexture *texture = (const GLTexture *)textures[i];
 			if (texture) {
-				const GLTextureObject *glTextureObject = (const GLTextureObject *)texture->getObject();
-				glBindTextureUnit(firstUnit + i, glTextureObject->texture);
+				glBindTextureUnit(firstUnit + i, texture->getTexture());
 			} else
 				glBindTextureUnit(firstUnit + i, 0);
 		}
 	} else {
 		for (int i = 0; i < nTextures; i++) {
-			Texture *texture = textures[i];
+			const GLTexture *texture = (const GLTexture *)textures[i];
 			if (texture) {
-				const GLTextureObject *glTextureObject = (const GLTextureObject *)texture->getObject();
 				glActiveTextureARB(GL_TEXTURE0_ARB + firstUnit + i);
-				glBindTexture(glTextureObject->target, glTextureObject->texture);
+				glBindTexture(texture->getTarget(), texture->getTexture());
 			}
 		}
 	}
@@ -1486,10 +1480,9 @@ void GLRendererInterface::bindImages(unsigned int firstUnit, const std::vector<T
 	if (glBindImageTextures) {
 		GLuint texture_list[nTextures];
 		for (int i = 0; i < nTextures; i++) {
-			Texture *texture = textures[i];
+			GLTexture *texture = (GLTexture *)textures[i];
 			if (texture) {
-				const GLTextureObject *glTextureObject = (const GLTextureObject *)texture->getObject();
-				texture_list[i] = glTextureObject->texture;
+				texture_list[i] = texture->getTexture();
 			} else
 				texture_list[i] = 0;
 		}
@@ -1516,30 +1509,25 @@ void GLRendererInterface::bindImages(unsigned int firstUnit, const std::vector<T
 }
 
 void GLRendererInterface::copyTexture(const Texture *source, Texture *target) {
-	const GLTextureObject *so = (const GLTextureObject *)source->getObject();
-	GLTextureObject *ta = (GLTextureObject *)target->getObject();
+	const GLTexture *so = static_cast<const GLTexture *>(source);
+	GLTexture *ta = static_cast<GLTexture *>(target);
 
 	if (glCopyImageSubData) {
-		glCopyImageSubData(so->texture, so->target, 0, 0, 0, 0, ta->texture, ta->target, 0, 0, 0, 0, target->width(),
-						   target->height(), 1); // TODO add depth and region.
+		//	glCopyImageSubData(so->texture, so->target, 0, 0, 0, 0, ta->texture, ta->target, 0, 0, 0, 0,
+		// target->width(), 					   target->height(), 1); // TODO add depth and region.
 	} else {
-		throw NotImplementedException();
-		("copyTexture not supported");
+		throw RuntimeException("copyTexture not supported");
 	}
 }
 
 Sync *GLRendererInterface::createSync(SyncDesc *desc) {
-	Sync *sync = new Sync();
 	// sync->iRenderer = this;
 	GLSync *glSync = new GLSync();
 	// sync->pdata = glSync;
-	return sync;
+	return glSync;
 }
 
-void GLRendererInterface::deleteSync(Sync *sync) {
-	delete sync->getObject();
-	delete sync;
-}
+void GLRendererInterface::deleteSync(Sync *sync) { delete sync; }
 
 void GLRendererInterface::dispatchCompute(unsigned int *global, unsigned int *local, unsigned int offset) {
 
@@ -2094,7 +2082,7 @@ void GLRendererInterface::execute(CommandList *list) {
 		} break;
 
 		case GLCommandBufferCmd::ViewPort: {
-			//TODO add support for the index.
+			// TODO add support for the index.
 			const GLViewPortCommand *viewport = (const GLViewPortCommand *)base;
 			glViewport(viewport->x, viewport->y, viewport->width, viewport->height);
 		} break;

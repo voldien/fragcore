@@ -1,42 +1,76 @@
+#include "VKSampler.h"
+#include "VKRenderInterface.h"
 #include "internal_object_type.h"
-#include <../Sampler.h>
-#include <../Texture.h>
 using namespace fragcore;
 
-Sampler::~Sampler() {}
-
-void Sampler::setFilterMode(FilterMode mode) {}
-
-Sampler::FilterMode Sampler::getFilterMode() {}
-
-void Sampler::setWrapMode(Sampler::WrapMode mode) {}
-
-Sampler::WrapMode Sampler::getWrapMode() {}
-
-void Sampler::setAnisotropic(float anisotropy) {}
-
-float Sampler::getAnisotropic() const { return 0; }
-
-Sampler::CompareFunc Sampler::getCompare() const {}
-void Sampler::setCompareFunc(CompareFunc compareFunc) {}
-
-void Sampler::setMipMapBaseLevel(unsigned int level) {}
-unsigned int Sampler::getMipMapBaseLevel() const { return 0; }
-
-void Sampler::setMipMapBias(float bias) {}
-float Sampler::getMipMapBias(float bias) const { return 0; }
-
-void Sampler::setBorderColor(float color) {}
-float Sampler::getBorderColor() const { return 0; }
-
-unsigned int Sampler::setMaxLod(unsigned int level) { return 0; }
-unsigned int Sampler::getMaxLod() const {
-	return 0;
+VKSampler::~VKSampler() {
+	VKRenderInterface *renderInterface = getRenderer<VKRenderInterface>();
+	vkDestroySampler(renderInterface->getDevice()->getHandle(), sampler, nullptr);
 }
 
-unsigned int Sampler::setMinLod(unsigned int level) {}
-unsigned int Sampler::getMinLod() const { return 0; }
+void VKSampler::setFilterMode(FilterMode mode) {
 
-void Sampler::setName(const std::string &name) {}
+}
 
-intptr_t Sampler::getNativePtr() const { return 0; }
+VKSampler::FilterMode VKSampler::getFilterMode() {
+	int wrapS;
+	int wrapT;
+
+	return VKSampler::FilterMode::eBilinear;
+}
+
+void VKSampler::setWrapMode(VKSampler::WrapMode mode) {
+
+}
+
+VKSampler::WrapMode VKSampler::getWrapMode() {
+	int wrapS;
+	int wrapT;
+	int wrapR;
+
+}
+
+void VKSampler::setAnisotropic(float anisotropy) {
+
+
+}
+
+float VKSampler::getAnisotropic() const {
+	float ansio;
+
+
+	return ansio;
+}
+
+VKSampler::CompareFunc VKSampler::getCompare() const {}
+
+void VKSampler::setCompareFunc(CompareFunc compareFunc) {
+
+
+	// TODO resolve.
+	// glGetSamplerParameterfv(this->sampler, GL_TEXTURE_COMPARE_FUNC, glCompareFunc);
+}
+
+void VKSampler::setMipMapBaseLevel(unsigned int level) {}
+
+unsigned int VKSampler::getMipMapBaseLevel() const { return 0; }
+
+void VKSampler::setMipMapBias(float bias) {}
+
+float VKSampler::getMipMapBias(float bias) const { return 0; }
+
+void VKSampler::setBorderColor(float color) {}
+
+float VKSampler::getBorderColor() const { return 0; }
+
+unsigned int VKSampler::setMaxLod(unsigned int level) { return 0; }
+
+unsigned int VKSampler::getMaxLod() const { return 0; }
+
+unsigned int VKSampler::setMinLod(unsigned int level) { return 0; }
+
+unsigned int VKSampler::getMinLod() const { return 0; }
+
+void VKSampler::setName(const std::string &name) {}
+
+intptr_t VKSampler::getNativePtr() const { return 0; }

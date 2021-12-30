@@ -18,10 +18,10 @@
  */
 #ifndef _FRAG_CORE_AUDIO_DECODER_H_
 #define _FRAG_CORE_AUDIO_DECODER_H_ 1
+#include "../AudioTypes.h"
 #include <Core/IO/IO.h>
 #include <Core/Ref.h>
 #include <Core/SmartReference.h>
-#include "../AudioTypes.h"
 #include <ogg/ogg.h>
 #include <opus/opus.h>
 #include <vorbis/codec.h>
@@ -38,6 +38,11 @@ namespace fragcore {
 		AudioDecoder(Ref<IO> &io) { this->io = io; }
 		virtual ~AudioDecoder() {}
 
+		/**
+		 * @brief
+		 *
+		 * @param microseconds
+		 */
 		virtual void seek(long int microseconds) = 0;
 
 		virtual void *getData(long int *size) = 0;
@@ -58,12 +63,30 @@ namespace fragcore {
 		 * @return unsigned int
 		 */
 		virtual unsigned int getSampleRate() const = 0;
+
+		/**
+		 * @brief Get the Nr Channels object
+		 *
+		 * @return unsigned int
+		 */
 		virtual unsigned int getNrChannels() const = 0;
 		// virtual unsigned long getBitRate() const noexcept = 0;
+		/**
+		 * @brief Get the Sample Bit Resolution object
+		 *
+		 * @return unsigned int
+		 */
 		virtual unsigned int getSampleBitResolution() const = 0;
 
 		// TODO add method for checking if stream or not.
+		/**
+		 * @brief Get the Total Time object
+		 *
+		 * @return double
+		 */
 		virtual double getTotalTime() const = 0;
+
+		//	virtual bool isStream() = 0;
 
 		// TODO add more method for getting information and etc.
 

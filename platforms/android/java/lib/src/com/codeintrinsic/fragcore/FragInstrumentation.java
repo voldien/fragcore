@@ -1,10 +1,10 @@
-package org.fragengine.frag;
+package com.codeintrinsic.fragcore;
 
 import android.app.Instrumentation;
 import android.content.Intent;
 import android.os.Bundle;
 
-public class FragInstrumentation extends Instrumentation {
+public class FragCoreInstrumentation extends Instrumentation {
 	private Intent intent;
 
 	@Override

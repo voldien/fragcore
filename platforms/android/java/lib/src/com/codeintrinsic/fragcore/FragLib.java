@@ -1,11 +1,11 @@
-package org.fragengine.frag;
+package com.codeintrinsic.fragcore;
 
 import android.app.Activity;
 
-public class FragLib {
+public class FragCoreLib {
 
 	static {
-		System.loadLibrary("fragengine_android");
+		System.loadLibrary("fragcore-android-native-lib");
 	}
 
 	public static native void initialize(Activity activity);

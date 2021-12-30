@@ -16,3 +16,45 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+#ifndef _FRAG_CORE_GL_SYNC_H_
+#define _FRAG_CORE_GL_SYNC_H_ 1
+#include "../Sync.h"
+#include <GL/glew.h>
+
+namespace fragcore {
+	/**
+	 *
+	 */
+	class FVDECLSPEC GLSync : public Sync {
+		friend class IRenderer;
+
+	  public:
+		/**
+		 * @brief
+		 *
+		 */
+		virtual void fence() override;
+
+		/**
+		 * @brief
+		 *
+		 * @param timeout
+		 */
+		virtual void wait(int timeout = 0) override;
+
+		/**
+		 * @brief
+		 *
+		 * @param timeout
+		 * @return SyncStatus
+		 */
+		virtual SyncStatus waitClient(int timeout) override; /*  Wait in microseconds.   */
+
+		virtual intptr_t getNativePtr() const override;
+
+	  private:
+		GLsync sync;
+	};
+} // namespace fragcore
+
+#endif

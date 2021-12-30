@@ -26,6 +26,7 @@ namespace fragcore {
 	 *
 	 */
 	// TODO check if some polymorpihsm can be used.
+	//TODO relocate
 	class FVDECLSPEC Font : public SmartReference {
 		friend class FontFactory;
 
@@ -49,8 +50,7 @@ namespace fragcore {
 
 	  public:
 		Font();
-
-		~Font();
+		virtual ~Font();
 
 		unsigned int getNumberCharacter() const;
 

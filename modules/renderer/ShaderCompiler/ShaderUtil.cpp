@@ -263,7 +263,7 @@ void ShaderUtil::loadProgramFromMem(const ShaderObject *vshader, const ShaderObj
 void ShaderUtil::loadProgramPipeline(const ShaderObject *vshader, const ShaderObject *fshader,
 									 const ShaderObject *gshader, const ShaderObject *tcshader,
 									 const ShaderObject *teshader, IRenderer *renderer, RenderPipeline **pshader) {
-	ProgramPipelineDesc pipelineDesc = {0};
+	ProgramPipelineDesc pipelineDesc = {};
 	RenderPipeline *pipeline;
 
 	// if (vshader) {
@@ -334,7 +334,7 @@ void ShaderUtil::loadShader(const char *source, const int size, ShaderType type,
 	if (pshader == nullptr)
 		throw InvalidArgumentException("");
 
-	ShaderDesc desc = {0};
+	ShaderDesc desc = {};
 	Shader *shader = nullptr;
 	char *invshad = "";
 	int nsources;
@@ -460,7 +460,7 @@ void ShaderUtil::loadProgram(IO *io, IRenderer *renderer, Shader **pShader, unsi
 void ShaderUtil::loadProgram(const void *pData, long int nBytes, IRenderer *renderer, Shader **pShader,
 							 unsigned int format) {
 
-	ShaderDesc desc = {0};
+	ShaderDesc desc = {};
 	Shader *shader;
 
 	/*  */
@@ -551,7 +551,7 @@ void ShaderUtil::loadComputeProgram(const char *pData, long int nBytes, ShaderLa
 void ShaderUtil::loadComputeShaderSource(ShaderObject *shaderDesc, IRenderer *renderer,
 										 RenderPipeline **programPipeline) {
 	Shader *shader;
-	ProgramPipelineDesc progDes = {0};
+	ProgramPipelineDesc progDes = {};
 
 	/*  */
 	// loadShader(shaderDesc->buf, shaderDesc->size, eCompute, renderer, shaderDesc->language, shaderDesc->type, &

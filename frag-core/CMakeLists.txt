@@ -197,6 +197,10 @@ TARGET_INCLUDE_DIRECTORIES(fragcore PRIVATE ${ZIP_INCLUDE_DIRS} ${JSONC_INCLUDE_
 											$<INSTALL_INTERFACE:${FRAG_CORE_INCLUDE}>
 )
 
+IF (BUILD_SHARED_LIBS AND CMAKE_SIZEOF_VOID_P EQUAL 8) # -fPIC is only required
+	SET_PROPERTY(TARGET fragcore PROPERTY POSITION_INDEPENDENT_CODE ON)
+ENDIF()
+
 # Create package information
 CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/fragcore.pc.in" "${CMAKE_CURRENT_BINARY_DIR}/fragcore.pc" @ONLY)
 # Generate revision for up to date header with version and etc.

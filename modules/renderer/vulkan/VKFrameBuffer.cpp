@@ -14,16 +14,16 @@ void VKFrameBuffer::write() {}
 
 void VKFrameBuffer::read() const {}
 
-Texture *VKFrameBuffer::getAttachment(unsigned int index) { return nullptr; }
+Texture *VKFrameBuffer::getAttachment(unsigned int index) { return desc.attach[index]; }
 
-Texture *VKFrameBuffer::getDepthAttachment() { return nullptr; }
+Texture *VKFrameBuffer::getDepthAttachment() { return desc.depth; }
 
-Texture *VKFrameBuffer::getStencilAttachment() { return nullptr; }
+Texture *VKFrameBuffer::getStencilAttachment() { return desc.stencil; }
 
-int VKFrameBuffer::width() const { return 0; }
+int VKFrameBuffer::width() const { return desc.attach[0]->width(); }
 
-int VKFrameBuffer::height() const { return 0; }
-int VKFrameBuffer::layers() { return 0; }
+int VKFrameBuffer::height() const { return desc.attach[0]->height(); }
+int VKFrameBuffer::layers() { return desc.attach[0]->layers(); }
 
 int VKFrameBuffer::nrSamples() { return 0; }
 
@@ -64,4 +64,4 @@ void VKFrameBuffer::setDraw(BufferAttachment attachment) {}
 
 void VKFrameBuffer::setName(const std::string &name) { Object::setName(name); }
 
-intptr_t VKFrameBuffer::getNativePtr() const { return 0; }
+intptr_t VKFrameBuffer::getNativePtr() const { return reinterpret_cast<intptr_t>(this->framebuffer); }

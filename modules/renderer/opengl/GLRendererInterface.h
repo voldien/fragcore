@@ -147,16 +147,6 @@ namespace fragcore {
 		virtual void clearColor(float r, float g, float b, float a); // TODO relocate to the framebuffer.
 
 		/**
-		 *	Enable VSync.
-		 */
-		virtual void setVSync(int sync); // TODO relocate to the render window.
-
-		/**
-		 *	Swap current window buffer.
-		 */
-		virtual void swapBuffer(); // TODO relocate to the render window.
-
-		/**
 		 *	Set depth mask.
 		 */
 		virtual void setDepthMask(bool flag);

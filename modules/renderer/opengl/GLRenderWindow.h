@@ -18,8 +18,9 @@
  */
 #ifndef _FRAG_CORE_OPENGL_WINDOW_H_
 #define _FRAG_CORE_OPENGL_WINDOW_H_ 1
-#include "GLRendererInterface.h"
 #include "../RendererWindow.h"
+#include "GLFrameBuffer.h"
+#include "GLRendererInterface.h"
 #if defined(FRAG_CORE_INTERNAL_IMP) // TODO resolve to a single file or
 									// something later
 #include <SDL2/SDL_syswm.h>
@@ -103,6 +104,7 @@ namespace fragcore {
 	  private:
 		SDL_Window *window;
 		Ref<GLRendererInterface> renderer;
+		Ref<GLFrameBuffer> defaultFrameBuffer;
 	};
 } // namespace fragcore
 

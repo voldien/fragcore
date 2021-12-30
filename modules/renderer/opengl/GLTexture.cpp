@@ -1,7 +1,5 @@
 
-#include "../IRenderer.h"
-#include "../Sampler.h"
-#include "../Texture.h"
+#include "GLTexture.h"
 #include "internal_object_type.h"
 #include <GL/glew.h>
 
@@ -17,122 +15,119 @@ static int getCurrentTexture() {
 	return whichID;
 }
 
-void Texture::bind(unsigned int index) {
-	GLTextureObject *texobj = (GLTextureObject *)this->pdata;
+GLTexture ::~GLTexture() {}
+
+void GLTexture::bind(unsigned int index) {
 
 	/*  */
 	if (glBindTextureUnit) {
-		glBindTextureUnit(index, texobj->texture);
+		glBindTextureUnit(index, this->texture);
 	} else {
 		glActiveTexture(GL_TEXTURE0_ARB + index);
-		glBindTexture(texobj->target, texobj->texture);
+		glBindTexture(this->target, this->texture);
 	}
 
 	/*  Bind sampler if set.    */
-	if (texobj->sampler) {
-		GLSamplerObject *sample = (GLSamplerObject *)this->getObject();
-		glBindSampler(index, sample->sampler);
+	if (this->sampler) {
+
+		//glBindSampler(index, sample->sampler);
 	}
 }
 
-void Texture::bindImage(unsigned int index, int level, MapTarget target, Format format) {
-	GLTextureObject *texobj = (GLTextureObject *)this->getObject();
+void GLTexture::bindImage(unsigned int index, int level, MapTarget target, Format format) {
+	
 	if (glBindImageTexture) {
 
 		GLenum access = getAccess(target);
 		GLenum gformat = getImageInternalFormat(format);
 
-		glBindImageTexture(index, texobj->texture, level, GL_FALSE, 0, access, gformat);
+		glBindImageTexture(index, this->texture, level, GL_FALSE, 0, access, gformat);
 	} else
 		throw RuntimeException("glBindImageTexture not supported");
 }
 
-bool Texture::isValid() {
-	GLTextureObject *texobj = (GLTextureObject *)this->getObject();
-	return glIsTexture(texobj->texture) == GL_TRUE;
+bool GLTexture::isValid() {
+	
+	return glIsTexture(this->texture) == GL_TRUE;
 }
 
-void Texture::setSampler(Sampler *sampler) {
-	GLTextureObject *texobj = (GLTextureObject *)this->getObject();
-	GLSamplerObject *glSamplerObject = (GLSamplerObject *)sampler->getObject();
+void GLTexture::setSampler(Sampler *sampler) {
 
 	/*  Verify if valid sampler object. */
-	if (glIsSampler(glSamplerObject->sampler)) {
-		texobj->sampler = sampler;
-		// Increase the reference count.
-		sampler->increment();
-	} else
-		throw RuntimeException("Invalid sampler object.");
+	// if (glIsSampler(glSamplerObject->sampler)) {
+	// 	this->sampler = sampler;
+	// 	// Increase the reference count.
+	// 	sampler->increment();
+	// } else
+	// 	throw RuntimeException("Invalid sampler object.");
 }
 
-void Texture::setMipLevel(unsigned int level) {
-	GLTextureObject *texobj = (GLTextureObject *)this->pdata;
+void GLTexture::setMipLevel(unsigned int level) {
+
 	if (glTextureParameteri) {
-		glTextureParameteri(texobj->texture, GL_TEXTURE_LOD_BIAS, level);
+		glTextureParameteri(this->texture, GL_TEXTURE_LOD_BIAS, level);
 	} else {
 		unsigned int c = getCurrentTexture();
 		this->bind(0);
 	}
 }
 
-void Texture::setFilterMode(FilterMode mode) {
-	GLTextureObject *texobj = (GLTextureObject *)this->pdata;
+void GLTexture::setFilterMode(FilterMode mode) {
+
 	// TODO improve.
 	GLuint filter = getTextureFilterMode(mode);
 	if (glTextureParameteri) {
 
-		glTextureParameteri(texobj->texture, GL_TEXTURE_MAG_FILTER, filter);
-		glTextureParameteri(texobj->texture, GL_TEXTURE_MIN_FILTER, filter);
+		glTextureParameteri(this->texture, GL_TEXTURE_MAG_FILTER, filter);
+		glTextureParameteri(this->texture, GL_TEXTURE_MIN_FILTER, filter);
 
 	} else {
 		unsigned int c = getCurrentTexture();
 		this->bind(0);
 
-		glTexParameteri(texobj->target, GL_TEXTURE_MAG_FILTER, filter);
-		glTexParameteri(texobj->target, GL_TEXTURE_MIN_FILTER, filter);
+		glTexParameteri(this->target, GL_TEXTURE_MAG_FILTER, filter);
+		glTexParameteri(this->target, GL_TEXTURE_MIN_FILTER, filter);
 	}
 }
 
-Texture::FilterMode Texture::getFilterMode() {
-	GLTextureObject *texobj = (GLTextureObject *)this->pdata;
+GLTexture::FilterMode GLTexture::getFilterMode() {
 
 	// TODO add logic.
 	GLint magFilter;
 	GLint minFilter;
 	if (glGetTextureParameteriv) {
 
-		glGetTextureParameteriv(texobj->texture, GL_TEXTURE_MAG_FILTER, &magFilter);
-		glGetTextureParameteriv(texobj->texture, GL_TEXTURE_MIN_FILTER, &minFilter);
+		glGetTextureParameteriv(this->texture, GL_TEXTURE_MAG_FILTER, &magFilter);
+		glGetTextureParameteriv(this->texture, GL_TEXTURE_MIN_FILTER, &minFilter);
 	} else {
 		unsigned int c = getCurrentTexture();
 		this->bind(0);
 
-		glGetTexParameteriv(texobj->target, GL_TEXTURE_MAG_FILTER, &magFilter);
-		glGetTexParameteriv(texobj->target, GL_TEXTURE_MIN_FILTER, &minFilter);
+		glGetTexParameteriv(this->target, GL_TEXTURE_MAG_FILTER, &magFilter);
+		glGetTexParameteriv(this->target, GL_TEXTURE_MIN_FILTER, &minFilter);
 	}
 }
 
-void Texture::setWrapMode(Texture::WrapMode mode) {
-	GLTextureObject *texobj = (GLTextureObject *)this->pdata;
+void GLTexture::setWrapMode(GLTexture::WrapMode mode) {
+
 	unsigned int wrapMode = getTextureWrapMode(mode);
 
 	if (glTextureParameteri) {
-		glTextureParameteri(texobj->texture, GL_TEXTURE_WRAP_S, wrapMode);
-		glTextureParameteri(texobj->texture, GL_TEXTURE_WRAP_T, wrapMode);
-		glTextureParameteri(texobj->texture, GL_TEXTURE_WRAP_R, wrapMode);
+		glTextureParameteri(this->texture, GL_TEXTURE_WRAP_S, wrapMode);
+		glTextureParameteri(this->texture, GL_TEXTURE_WRAP_T, wrapMode);
+		glTextureParameteri(this->texture, GL_TEXTURE_WRAP_R, wrapMode);
 	} else {
 		unsigned int c = getCurrentTexture();
 		this->bind(0);
 
-		glTexParameteri(texobj->target, GL_TEXTURE_WRAP_S, wrapMode);
-		glTexParameteri(texobj->target, GL_TEXTURE_WRAP_T, wrapMode);
-		glTexParameteri(texobj->target, GL_TEXTURE_WRAP_R, wrapMode);
+		glTexParameteri(this->target, GL_TEXTURE_WRAP_S, wrapMode);
+		glTexParameteri(this->target, GL_TEXTURE_WRAP_T, wrapMode);
+		glTexParameteri(this->target, GL_TEXTURE_WRAP_R, wrapMode);
 		this->bind(c);
 	}
 }
 
-Texture::WrapMode Texture::getWrapMode() {
-	GLTextureObject *texobj = (GLTextureObject *)this->pdata;
+GLTexture::WrapMode GLTexture::getWrapMode() {
 
 	GLint wrapS;
 	GLint wrapT;
@@ -140,17 +135,17 @@ Texture::WrapMode Texture::getWrapMode() {
 
 	if (glGetTextureParameteriv) {
 
-		glGetTextureParameteriv(texobj->texture, GL_TEXTURE_WRAP_S, &wrapS);
-		glGetTextureParameteriv(texobj->texture, GL_TEXTURE_WRAP_T, &wrapT);
-		glGetTextureParameteriv(texobj->texture, GL_TEXTURE_WRAP_R, &wrapR);
+		glGetTextureParameteriv(this->texture, GL_TEXTURE_WRAP_S, &wrapS);
+		glGetTextureParameteriv(this->texture, GL_TEXTURE_WRAP_T, &wrapT);
+		glGetTextureParameteriv(this->texture, GL_TEXTURE_WRAP_R, &wrapR);
 
 	} else {
 		unsigned int c = getCurrentTexture();
 		this->bind(0);
 
-		glGetTexParameteriv(texobj->target, GL_TEXTURE_WRAP_S, &wrapS);
-		glGetTexParameteriv(texobj->target, GL_TEXTURE_WRAP_T, &wrapT);
-		glGetTexParameteriv(texobj->target, GL_TEXTURE_WRAP_R, &wrapR);
+		glGetTexParameteriv(this->target, GL_TEXTURE_WRAP_S, &wrapS);
+		glGetTexParameteriv(this->target, GL_TEXTURE_WRAP_T, &wrapT);
+		glGetTexParameteriv(this->target, GL_TEXTURE_WRAP_R, &wrapR);
 	}
 
 	if (wrapR == GL_REPEAT && wrapS == GL_REPEAT && wrapT == GL_REPEAT)
@@ -161,83 +156,82 @@ Texture::WrapMode Texture::getWrapMode() {
 		return Sampler::WrapMode::eClamp;
 }
 
-void Texture::setAnisotropic(float anisotropic) {
-	GLTextureObject *texobj = (GLTextureObject *)this->pdata;
+void GLTexture::setAnisotropic(float anisotropic) {
+
 	if (glTextureParameterf) {
-		glTexParameterf(texobj->texture, GL_TEXTURE_MAX_ANISOTROPY_EXT, anisotropic);
+		glTexParameterf(this->texture, GL_TEXTURE_MAX_ANISOTROPY_EXT, anisotropic);
 	} else {
 		GLint prevTex = getCurrentTexture();
-		glBindTexture(texobj->target, texobj->texture);
-		glTexParameterf(texobj->target, GL_TEXTURE_MAX_ANISOTROPY_EXT, anisotropic);
-		glBindTexture(texobj->target, prevTex);
+		glBindTexture(this->target, this->texture);
+		glTexParameterf(this->target, GL_TEXTURE_MAX_ANISOTROPY_EXT, anisotropic);
+		glBindTexture(this->target, prevTex);
 	}
 }
 
-float Texture::getAnisotropic() const {
-	GLTextureObject *texobj = (GLTextureObject *)this->pdata;
+float GLTexture::getAnisotropic() const {
+
 	float anisotropic;
 	if (glGetTextureParameterfv) {
-		glGetTextureParameterfv(texobj->texture, GL_TEXTURE_MAX_ANISOTROPY_EXT, &anisotropic);
+		glGetTextureParameterfv(this->texture, GL_TEXTURE_MAX_ANISOTROPY_EXT, &anisotropic);
 	} else {
 		GLint prevTex = getCurrentTexture();
-		glBindTexture(texobj->target, texobj->texture);
-		glGetTexParameterfv(texobj->target, GL_TEXTURE_MAX_ANISOTROPY_EXT, &anisotropic);
-		glBindTexture(texobj->target, prevTex);
+		glBindTexture(this->target, this->texture);
+		glGetTexParameterfv(this->target, GL_TEXTURE_MAX_ANISOTROPY_EXT, &anisotropic);
+		glBindTexture(this->target, prevTex);
 	}
 	return anisotropic;
 }
 
-Texture::CompareFunc Texture::getCompare() const {
-	GLTextureObject *texobj = (GLTextureObject *)this->pdata;
+GLTexture::CompareFunc GLTexture::getCompare() const {
+
 	if (glGetTextureParameterfv) {
-		return Texture::CompareFunc::NoCompare;
+		return GLTexture::CompareFunc::NoCompare;
 	} else {
-		return Texture::CompareFunc::NoCompare;
+		return GLTexture::CompareFunc::NoCompare;
 	}
 }
 
-void Texture::setCompareFunc(CompareFunc compareFunc) {
-	GLTextureObject *texobj = (GLTextureObject *)this->pdata;
+void GLTexture::setCompareFunc(CompareFunc compareFunc) {
+
 	GLenum glCompareFunc = getTextureCompareMode(compareFunc);
 	if (glTextureParameterf) {
-		glTexParameterf(texobj->texture, GL_TEXTURE_COMPARE_FUNC, glCompareFunc);
+		glTexParameterf(this->texture, GL_TEXTURE_COMPARE_FUNC, glCompareFunc);
 	} else {
 		GLint prevTex = getCurrentTexture();
-		glBindTexture(texobj->target, texobj->texture);
-		glTexParameterf(texobj->target, GL_TEXTURE_MAX_ANISOTROPY_EXT, glCompareFunc);
-		glBindTexture(texobj->target, prevTex);
+		glBindTexture(this->target, this->texture);
+		glTexParameterf(this->target, GL_TEXTURE_MAX_ANISOTROPY_EXT, glCompareFunc);
+		glBindTexture(this->target, prevTex);
 	}
 }
 
-void Texture::setMipMapBaseLevel(unsigned int level) { GLTextureObject *texobj = (GLTextureObject *)this->pdata; }
+void GLTexture::setMipMapBaseLevel(unsigned int level) {}
 
-unsigned int Texture::getMipMapBaseLevel() const { GLTextureObject *texobj = (GLTextureObject *)this->pdata; }
+unsigned int GLTexture::getMipMapBaseLevel() const {}
 
-void Texture::setMipMapBias(float bias) { GLTextureObject *texobj = (GLTextureObject *)this->pdata; }
+void GLTexture::setMipMapBias(float bias) {}
 
-float Texture::getMipMapBias(float bias) const { GLTextureObject *texobj = (GLTextureObject *)this->pdata; }
+float GLTexture::getMipMapBias(float bias) const {}
 
-void Texture::setBorderColor(float color) { GLTextureObject *texobj = (GLTextureObject *)this->pdata; }
+void GLTexture::setBorderColor(float color) {}
 
-float Texture::getBorderColor() const { GLTextureObject *texobj = (GLTextureObject *)this->pdata; }
+float GLTexture::getBorderColor() const {}
 
-unsigned int Texture::setMaxLod(unsigned int level) { GLTextureObject *texobj = (GLTextureObject *)this->pdata; }
+unsigned int GLTexture::setMaxLod(unsigned int level) {}
 
-unsigned int Texture::getMaxLod() const { GLTextureObject *texobj = (GLTextureObject *)this->pdata; }
+unsigned int GLTexture::getMaxLod() const {}
 
-unsigned int Texture::setMinLod(unsigned int level) { GLTextureObject *texobj = (GLTextureObject *)this->pdata; }
+unsigned int GLTexture::setMinLod(unsigned int level) {}
 
-unsigned int Texture::getMinLod() const { GLTextureObject *texobj = (GLTextureObject *)this->pdata; }
+unsigned int GLTexture::getMinLod() const {}
 
-Texture::Format Texture::getFormat() const {
-	GLTextureObject *texobj = (GLTextureObject *)this->pdata;
+GLTexture::Format GLTexture::getFormat() const {
 
 	// glGetTexLevelParameterfv
 	// GL_TEXTURE_INTERNAL_FORMAT
 	// GL_TEXTURE_BUFFER_SIZE
 	// GL_TEXTURE_COMPRESSED_IMAGE_SIZE
 	/*  Get the internal fmt::format.    */
-	switch (texobj->desc.internalformat) {
+	switch (this->desc.internalformat) {
 	case TextureDesc::eRGB:
 		return eR8G8B8;
 	case TextureDesc::eRGBA:
@@ -247,38 +241,28 @@ Texture::Format Texture::getFormat() const {
 	}
 }
 
-unsigned int Texture::width() {
-	GLTextureObject *texobj = (GLTextureObject *)this->pdata;
-	return texobj->desc.width;
-}
+unsigned int GLTexture::width() { return this->desc.width; }
 
-unsigned int Texture::height() {
-	GLTextureObject *texobj = (GLTextureObject *)this->pdata;
-	return texobj->desc.height;
-}
+unsigned int GLTexture::height() { return this->desc.height; }
 
-unsigned int Texture::layers() const {
-	GLTextureObject *texobj = (GLTextureObject *)this->pdata;
-	return texobj->desc.depth;
-}
+unsigned int GLTexture::layers() const { return this->desc.depth; }
 
-void Texture::resize(int width, int height, Texture::Format format, bool hasMipMap) {
-	GLTextureObject *texobj = (GLTextureObject *)this->getObject();
+void GLTexture::resize(int width, int height, GLTexture::Format format, bool hasMipMap) {
 
 	// this->bind(0);
 
 	// GL_TEXTURE_IMMUTABLE_FORMAT'
-	glTexImage2D(texobj->target, 0, getImageInternalFormat(format), width, height, 0, GL_RED, GL_UNSIGNED_BYTE,
+	glTexImage2D(this->target, 0, getImageInternalFormat(format), width, height, 0, GL_RED, GL_UNSIGNED_BYTE,
 				 nullptr);
-	// glTextureStorage2D(texobj->texture, 1, getImageInternalFormat(Texture::Format::eR8G8B8A8), width,
+	// glTextureStorage2D(this->texture, 1, getImageInternalFormat(GLTexture::Format::eR8G8B8A8), width,
 	//               height); // TODO add only if mipmaps is used with nullptr pixel object.
 
-	texobj->desc.width = width;
-	texobj->desc.height = height;
+	this->desc.width = width;
+	this->desc.height = height;
 }
 
-void *Texture::mapTexture(Format format, unsigned int level) {
-	GLTextureObject *texobj = (GLTextureObject *)this->getObject();
+void *GLTexture::mapTexture(Format format, unsigned int level) {
+
 	unsigned int width = this->width();
 	unsigned int height = this->height();
 	unsigned int depth = 1;
@@ -290,16 +274,16 @@ void *Texture::mapTexture(Format format, unsigned int level) {
 	GLenum _format = getTextureGLFormat(format);
 	GLenum _type = GL_UNSIGNED_BYTE;
 
-	glGenBuffersARB(1, &texobj->pbo);
-	glBindBufferARB(GL_PIXEL_PACK_BUFFER, texobj->pbo);
+	glGenBuffersARB(1, &this->pbo);
+	glBindBufferARB(GL_PIXEL_PACK_BUFFER, this->pbo);
 	glBufferDataARB(GL_PIXEL_PACK_BUFFER, bufferSize, nullptr, GL_DYNAMIC_COPY);
 
 	if (glGetTextureImage) {
-		glGetTextureImage(texobj->texture, level, _format, _type, bufferSize, nullptr);
+		glGetTextureImage(this->texture, level, _format, _type, bufferSize, nullptr);
 	} else {
 		/* TODO resolve texture type.   */
-		glBindTexture(texobj->target, texobj->texture);
-		glGetTexImage(texobj->target, level, _format, _type, nullptr);
+		glBindTexture(this->target, this->texture);
+		glGetTexImage(this->target, level, _format, _type, nullptr);
 	}
 
 	// TODO add PBO buffer array in the OpenGL object.
@@ -312,18 +296,16 @@ void *Texture::mapTexture(Format format, unsigned int level) {
 
 // glTextureSubImage2D
 // glTexSubImage2D
-void Texture::unMapTexture() {
-	GLTextureObject *texobj = (GLTextureObject *)this->pdata;
+void GLTexture::unMapTexture() {
 
 	glUnmapBufferARB(GL_PIXEL_PACK_BUFFER);
 	if (glInvalidateBufferData)
-		glInvalidateBufferData(texobj->pbo);
-	glDeleteBuffers(1, &texobj->pbo);
-	texobj->pbo = 0;
+		glInvalidateBufferData(this->pbo);
+	glDeleteBuffers(1, &this->pbo);
+	this->pbo = 0;
 }
 
-void Texture::setPixels(Format format, unsigned int level, const void *pixels, unsigned long size) {
-	GLTextureObject *texobj = (GLTextureObject *)this->pdata;
+void GLTexture::setPixels(Format format, unsigned int level, const void *pixels, unsigned long size) {
 
 	// TODO improve.
 	GLenum gformat = getTextureGLFormat(format);
@@ -332,25 +314,25 @@ void Texture::setPixels(Format format, unsigned int level, const void *pixels, u
 	// GL_PIXEL_UNPACK_BUFFER
 
 	if (glTextureSubImage2D) {
-		glTextureSubImage2D(texobj->texture, level, 0, 0, texobj->desc.width, texobj->desc.height, gformat,
+		glTextureSubImage2D(this->texture, level, 0, 0, this->desc.width, this->desc.height, gformat,
 							GL_UNSIGNED_BYTE, pixels);
 		// Update mipmaps.
-		glGenerateTextureMipmap(texobj->texture);
+		glGenerateTextureMipmap(this->texture);
 
 	} else {
-		glBindTexture(texobj->target, texobj->texture);
+		glBindTexture(this->target, this->texture);
 
-		glTexSubImage2D(texobj->target, level, 0, 0, texobj->desc.width, texobj->desc.height, gformat, GL_UNSIGNED_BYTE,
+		glTexSubImage2D(this->target, level, 0, 0, this->desc.width, this->desc.height, gformat, GL_UNSIGNED_BYTE,
 						pixels);
 
 		// Update mipmaps.
-		glGenerateMipmap(texobj->target);
-		glBindTexture(texobj->target, 0);
+		glGenerateMipmap(this->target);
+		glBindTexture(this->target, 0);
 	}
 }
 
-void *Texture::getPixels(TextureFormat format, unsigned int level, unsigned long *nBytes) {
-	GLTextureObject *texobj = (GLTextureObject *)this->getObject();
+void *GLTexture::getPixels(TextureFormat format, unsigned int level, unsigned long *nBytes) {
+
 	unsigned int width = this->width();
 	unsigned int height = this->height();
 	unsigned int depth = 1;
@@ -366,38 +348,33 @@ void *Texture::getPixels(TextureFormat format, unsigned int level, unsigned long
 	void *pbuffer = malloc(bufferSize);
 
 	if (glGetTextureImage) {
-		glGetTextureImage(texobj->texture, level, _format, _type, bufferSize, pbuffer);
+		glGetTextureImage(this->texture, level, _format, _type, bufferSize, pbuffer);
 	} else {
 		/* TODO resolve texture type.   */
 		GLint prevTex = getCurrentTexture();
-		glBindTexture(texobj->target, texobj->texture);
-		glGetTexImage(texobj->target, level, _format, _type, pbuffer);
-		glBindTexture(texobj->target, prevTex);
+		glBindTexture(this->target, this->texture);
+		glGetTexImage(this->target, level, _format, _type, pbuffer);
+		glBindTexture(this->target, prevTex);
 	}
 
 	return pbuffer;
 }
 
-void Texture::clear() {
-	GLTextureObject *texobj = (GLTextureObject *)this->pdata;
+void GLTexture::clear() {
 
 	if (glClearTexImage)
-		glClearTexImage(texobj->texture, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+		glClearTexImage(this->texture, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
 	else {
 	}
 }
 
-intptr_t Texture::getNativePtr() const {
-	GLTextureObject *texobj = (GLTextureObject *)this->pdata;
-	return texobj->texture;
-}
+intptr_t GLTexture::getNativePtr() const { return this->texture; }
 
-void Texture::setName(const std::string &name) {
-	GLTextureObject *texobj = (GLTextureObject *)this->pdata;
+void GLTexture::setName(const std::string &name) {
 	Object::setName(name);
 
 	/*  Update the marker.  */
 	MarkerDebug marker = {};
 	marker.markerName = name.c_str();
-	// addMarkerLabel((const OpenGLCore *) getRenderer()->getData(), GL_TEXTURE, texobj->texture, &marker);
+	// addMarkerLabel((const OpenGLCore *) getRenderer()->getData(), GL_TEXTURE, this->texture, &marker);
 }

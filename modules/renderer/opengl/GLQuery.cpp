@@ -1,10 +1,9 @@
-#include "../Query.h"
-#include "internal_object_type.h"
+#include"GLQuery.h"
 #include <GL/glew.h>
 
 using namespace fragcore;
 
-QueryObject::~QueryObject() {}
+GLQueryObject::~GLQueryObject() {}
 
 static GLenum getTarget(QueryObject::Target target) {
 	switch (target) {
@@ -24,21 +23,19 @@ static GLenum getTarget(QueryObject::Target target) {
 	}
 }
 
-void QueryObject::begin(Target target, unsigned int index) {
-	GLQuery *query = (GLQuery *)this->getObject();
-	glBeginQueryIndexed(getTarget(target), index, query->query[index]);
+void GLQueryObject::begin(Target target, unsigned int index) {
+	glBeginQueryIndexed(getTarget(target), index, this->query[index]);
 }
 
-void QueryObject::end(Target target, unsigned int index) {
-	GLQuery *query = (GLQuery *)this->getObject();
+void GLQueryObject::end(Target target, unsigned int index) {
+
 	glEndQueryIndexed(getTarget(target), index);
 }
 
-long int QueryObject::getResult(int index) {
-	GLQuery *query = (GLQuery *)this->getObject();
+long int GLQueryObject::getResult(int index) {
 
 	GLuint64 finalResult;
-	glGetQueryObjectui64v(query->query[index], GL_QUERY_RESULT, &finalResult);
+	glGetQueryObjectui64v(this->query[index], GL_QUERY_RESULT, &finalResult);
 	return (long int)finalResult;
 }
 
@@ -53,13 +50,13 @@ static GLenum getConditionTarget(QueryObject::Condition condition) {
 	return GL_QUERY_BY_REGION_WAIT;
 }
 
-void QueryObject::beginConditionalRenderer(Condition target) {
-	GLQuery *query = (GLQuery *)this->getObject();
+void GLQueryObject::beginConditionalRenderer(Condition target) {
+
 
 	GLenum condition = getConditionTarget(target);
-	glBeginConditionalRender(query->query[0], condition);
+	glBeginConditionalRender(query[0], condition);
 }
 
-void QueryObject::endConditionalRenderer() { glEndConditionalRender(); }
+void GLQueryObject::endConditionalRenderer() { glEndConditionalRender(); }
 
-intptr_t QueryObject::getNativePtr() const { return 0; }
+intptr_t GLQueryObject::getNativePtr() const { return 0; }

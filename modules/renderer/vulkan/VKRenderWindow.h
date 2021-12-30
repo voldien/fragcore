@@ -177,6 +177,8 @@ namespace fragcore {
 			std::vector<VkFramebuffer> swapChainFramebuffers;
 			std::vector<VkCommandBuffer> commandBuffers;
 
+			std::vector<VkFramebuffer *> frameBuffers;
+
 			VkImage depthImage;
 			VkDeviceMemory depthImageMemory;
 			VkImageView depthImageView;

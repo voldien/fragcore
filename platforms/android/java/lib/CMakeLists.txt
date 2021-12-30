@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.6)
-project(fragengine)
+project(fragcore)
 
 
 set(FRAGCORE_ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../..)

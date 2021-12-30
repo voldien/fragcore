@@ -18,8 +18,8 @@
  */
 #ifndef _FV_GL_BUFFER_H_
 #define _FV_GL_BUFFER_H_ 1
-#include "internal_object_type.h"
 #include "../Buffer.h"
+#include "internal_object_type.h"
 
 namespace fragcore {
 	/**
@@ -59,6 +59,10 @@ namespace fragcore {
 		void setName(const std::string &name) override;
 
 		intptr_t getNativePtr() const override;
+
+	  public:
+		VkBuffer getBuffer() const noexcept { return this->buffer; }
+		VkDeviceMemory getMemoryBuffer() const noexcept { return this->vertexBufferMemory; }
 
 	  protected:
 		BufferDesc desc;

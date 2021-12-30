@@ -1,108 +1,95 @@
 
+#include "VKTexture.h"
+#include "VKRenderInterface.h"
 #include "internal_object_type.h"
 #include <../IRenderer.h>
-#include <../Texture.h>
-#include <fmt/core.h>
 using namespace fragcore;
 
-void Texture::bind(unsigned int index) {}
+VKTexture ::~VKTexture() {}
 
-void Texture::bindImage(unsigned int index, int level, MapTarget target, Format format) {}
+void VKTexture::bind(unsigned int index) {}
 
-bool Texture::isValid() {}
+void VKTexture::bindImage(unsigned int index, int level, MapTarget target, Format format) {}
 
-void Texture::setSampler(Sampler *sampler) {}
+bool VKTexture::isValid() { return true; }
 
-void Texture::setMipLevel(unsigned int level) {}
+void VKTexture::setSampler(Sampler *sampler) {}
 
-void Texture::setFilterMode(FilterMode mode) {}
+void VKTexture::setMipLevel(unsigned int level) {}
 
-Texture::FilterMode Texture::getFilterMode() {}
+void VKTexture::setFilterMode(FilterMode mode) {}
 
-void Texture::setWrapMode(Texture::WrapMode mode) {}
+VKTexture::FilterMode VKTexture::getFilterMode() {}
 
-Texture::WrapMode Texture::getWrapMode() {}
+void VKTexture::setWrapMode(VKTexture::WrapMode mode) {}
 
-void Texture::setAnisotropic(float anisotropic) {}
+VKTexture::WrapMode VKTexture::getWrapMode() {}
 
-float Texture::getAnisotropic() const {}
+void VKTexture::setAnisotropic(float anisotropic) {}
 
-Texture::CompareFunc Texture::getCompare() const {}
+float VKTexture::getAnisotropic() const {}
 
-void Texture::setCompareFunc(CompareFunc compareFunc) {}
+VKTexture::CompareFunc VKTexture::getCompare() const {}
 
-void Texture::setMipMapBaseLevel(unsigned int level) { Sampler::setMipMapBaseLevel(level); }
+void VKTexture::setCompareFunc(CompareFunc compareFunc) {}
 
-unsigned int Texture::getMipMapBaseLevel() const { return Sampler::getMipMapBaseLevel(); }
+void VKTexture::setMipMapBaseLevel(unsigned int level) {}
 
-void Texture::setMipMapBias(float bias) { Sampler::setMipMapBias(bias); }
+unsigned int VKTexture::getMipMapBaseLevel() const {}
 
-float Texture::getMipMapBias(float bias) const { return Sampler::getMipMapBias(bias); }
+void VKTexture::setMipMapBias(float bias) {}
 
-void Texture::setBorderColor(float color) { Sampler::setBorderColor(color); }
+float VKTexture::getMipMapBias(float bias) const {}
 
-float Texture::getBorderColor() const { return Sampler::getBorderColor(); }
+void VKTexture::setBorderColor(float color) {}
 
-unsigned int Texture::setMaxLod(unsigned int level) { return Sampler::setMaxLod(level); }
+float VKTexture::getBorderColor() const {}
 
-unsigned int Texture::getMaxLod() const { return Sampler::getMaxLod(); }
+unsigned int VKTexture::setMaxLod(unsigned int level) {}
 
-unsigned int Texture::setMinLod(unsigned int level) { return Sampler::setMinLod(level); }
+unsigned int VKTexture::getMaxLod() const {}
 
-unsigned int Texture::getMinLod() const { return Sampler::getMinLod(); }
+unsigned int VKTexture::setMinLod(unsigned int level) {}
 
-Texture::Format Texture::getFormat() const { return eR8G8B8; }
+unsigned int VKTexture::getMinLod() const { ; }
 
-unsigned int Texture::width() {
-	VKTextureObject *texture = (VKTextureObject *)this->pdata;
-	return texture->desc.width;
-}
+VKTexture::Format VKTexture::getFormat() const { return eR8G8B8; }
 
-unsigned int Texture::height() {
-	VKTextureObject *texture = (VKTextureObject *)this->pdata;
-	return texture->desc.height;
-}
-unsigned int Texture::layers() const {
-	VKTextureObject *texobj = (VKTextureObject *)this->pdata;
-	return texobj->desc.depth;
-}
+unsigned int VKTexture::width() { return this->desc.width; }
 
-void Texture::resize(int width, int height, Texture::Format format, bool hasMipMap) {}
+unsigned int VKTexture::height() { return this->desc.height; }
+unsigned int VKTexture::layers() const { return this->desc.depth; }
 
-void *Texture::mapTexture(Format format, unsigned int level) {
+void VKTexture::resize(int width, int height, VKTexture::Format format, bool hasMipMap) {}
+
+void *VKTexture::mapTexture(Format format, unsigned int level) {
 	VkResult result;
-	// VKTextureObject *texture = (VKTextureObject *)this->pdata;
-	// VulkanCore *vulkanCore = texture->vulkanCore;
 
 	VkDeviceSize mapSize = VK_WHOLE_SIZE;
 	// if(size > 0)
 	//	mapSize = (VkDeviceSize)size;
 
-	// void *data;
-	// result = vkMapMemory(vulkanCore->device, texture->imageMemory, 0, mapSize, 0, &data);
-	// if (result != VK_SUCCESS)
-	// 	throw RuntimeException(::fmt::format("Failed to map texture memory - %d", result));
+	void *data;
+	VKRenderInterface *renderer = static_cast<VKRenderInterface *>(this->getRenderer());
+	result = vkMapMemory(renderer->getDevice()->getHandle(), this->imageMemory, 0, mapSize, 0, &data);
+	VKS_VALIDATE(result);
 
-	// return data;
+	return data;
 }
 
-void Texture::unMapTexture() {
+void VKTexture::unMapTexture() {
 
-	VKTextureObject *texture = (VKTextureObject *)this->pdata;
-	// VulkanCore *vulkanCore = texture->vulkanCore;
+	VKRenderInterface *renderer = static_cast<VKRenderInterface *>(this->getRenderer());
 
-	// vkUnmapMemory(vulkanCore->device, texture->imageMemory);
+	vkUnmapMemory(renderer->getDevice()->getHandle(), this->imageMemory);
 }
 
-void Texture::setPixels(Texture::Format format, unsigned int level, const void *pixels, unsigned long size) {}
+void VKTexture::setPixels(Texture::Format format, unsigned int level, const void *pixels, unsigned long size) {}
 
-void *Texture::getPixels(TextureFormat format, unsigned int level, unsigned long *nBytes) {}
+void *VKTexture::getPixels(TextureFormat format, unsigned int level, unsigned long *nBytes) {}
 
-void Texture::clear() {}
+void VKTexture::clear() {}
 
-void Texture::setName(const std::string &name) { Object::setName(name); }
+void VKTexture::setName(const std::string &name) { Object::setName(name); }
 
-intptr_t Texture::getNativePtr() const {
-	VKTextureObject *texture = (VKTextureObject *)this->pdata;
-	return (intptr_t)texture->texture;
-}
+intptr_t VKTexture::getNativePtr() const { return reinterpret_cast<intptr_t>(this->texture); }

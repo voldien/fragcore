@@ -32,7 +32,7 @@ FILE(GLOB OPENGL_RENDERINTERFACE_HEADER_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.h)
 
 #
 ADD_LIBRARY(fragcore-rgl-obj OBJECT ${OPENGL_RENDERINTERFACE_SOURCE_FILES} ${OPENGL_RENDERINTERFACE_HEADER_FILES} )
-TARGET_LINK_LIBRARIES(fragcore-rgl-obj PUBLIC fragcore fragcore-window-sdl OpenGL::OpenGL OpenGL::GLU OpenGL::EGL ${GLEW_LIBRARIES} )
+TARGET_LINK_LIBRARIES(fragcore-rgl-obj PUBLIC fragcore fragcore-window-sdl OpenGL::OpenGL OpenGL::GLU OpenGL::EGL GLEW  )
 TARGET_COMPILE_DEFINITIONS(fragcore-rgl-obj PRIVATE FRAG_CORE_INTERNAL_IMP=1)
 
 
@@ -44,12 +44,16 @@ ADD_DEPENDENCIES(fragcore-rgl-obj fragcore)
 
 
 ADD_LIBRARY(fragcore-rgl $<TARGET_OBJECTS:fragcore-rgl-obj>)
-TARGET_LINK_LIBRARIES(fragcore-rgl PUBLIC fragcore-rgl-obj )
+TARGET_LINK_LIBRARIES(fragcore-rgl PUBLIC fragcore-rgl-obj ${GLEW_LIBRARIES} )
 ADD_DEPENDENCIES(fragcore-rgl fragcore-rgl-obj)
 
 ADD_LIBRARY(fragcore-module-render-opengl MODULE $<TARGET_OBJECTS:fragcore-rgl-obj>  )
 TARGET_LINK_LIBRARIES(fragcore-module-render-opengl INTERFACE fragcore-rgl )
 
+
+IF (BUILD_SHARED_LIBS AND CMAKE_SIZEOF_VOID_P EQUAL 8) # -fPIC is only required
+	SET_PROPERTY(TARGET fragcore-rgl-obj PROPERTY POSITION_INDEPENDENT_CODE ON)
+ENDIF()
 
 IF(BUILD_WITH_INSTALL)
     INSTALL(TARGETS fragcore-module-render-opengl DESTINATION lib COMPONENT ${LIBFRAGCORE_COMPONENT})

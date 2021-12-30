@@ -1,10 +1,10 @@
-#include "../Sync.h"
+#include "VKSync.h"
 using namespace fragcore;
 
-void Sync::fence() {}
+void VKSync::fence() {}
 
-void Sync::wait(int timeout) {}
+void VKSync::wait(int timeout) {}
 
-Sync::SyncStatus Sync::waitClient(int timeout) {}
+Sync::SyncStatus VKSync::waitClient(int timeout) {}
 
-intptr_t Sync::getNativePtr() const {}
+intptr_t VKSync::getNativePtr() const {}

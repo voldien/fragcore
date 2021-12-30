@@ -11,7 +11,7 @@ using namespace fragcore;
 
 void TextureUtil::loadTexture(const char *path, IRenderer *renderer, Texture **texture) {
 
-	TextureDesc desc = {0};
+	TextureDesc desc = {};
 	void *pixeldata = nullptr;
 	TextureDesc::Format format;
 	TextureDesc::Format internalformat;
@@ -267,7 +267,7 @@ Texture *TextureUtil::createTexture(IRenderer *renderer, unsigned int width, uns
 Texture *TextureUtil::createTexture(IRenderer *renderer, unsigned int width, unsigned int height, const void *pixels,
 									unsigned int size, TextureFormat format, GraphicFormat graphicformat) {
 	/*  */
-	TextureDesc desc = {0};
+	TextureDesc desc = {};
 	desc.width = width;
 	desc.height = height;
 	desc.depth = 1;

@@ -23,6 +23,7 @@
 
 namespace fragcore {
 	// TOOD Determine name if shalla only be INotify
+	// filesystemNotify
 	class FVDECLSPEC IFileNotify : public SmartReference {
 	  public:
 		/**

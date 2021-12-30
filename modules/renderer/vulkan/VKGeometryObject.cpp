@@ -5,15 +5,15 @@
 using namespace fragcore;
 
 unsigned int Geometry::getVertexCount() {
-	VKGeometryObject *geobj = (VKGeometryObject *)this->pdata;
+//	VKGeometryObject *geobj = (VKGeometryObject *)this->pdata;
 
-	return geobj->desc.numVerticecs;
+//	return geobj->desc.numVerticecs;
 }
 
 unsigned int Geometry::getIndicesCount() {
-	VKGeometryObject *geobj = (VKGeometryObject *)this->pdata;
+	//VKGeometryObject *geobj = (VKGeometryObject *)this->pdata;
 
-	return geobj->desc.numIndices;
+	//return geobj->desc.numIndices;
 }
 
 intptr_t Geometry::getNativePtr() const { return 0; }

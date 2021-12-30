@@ -19,6 +19,7 @@
 #ifndef _FRAG_CORE_VK_COMMAND_LIST_H_
 #define _FRAG_CORE_VK_COMMAND_LIST_H_ 1
 #include "../CommandList.h"
+#include "VKFrameBuffer.h"
 #include <vulkan/vulkan.h>
 
 namespace fragcore {
@@ -67,6 +68,7 @@ namespace fragcore {
 		bool _commandBufferBegun;
 		bool _commandBufferEnded;
 		std::vector<VkCommandBuffer> cmdbuffers;
+		Ref<VKFrameBuffer> currentFramebuffer;
 		bool isRenderPass;
 	};
 } // namespace fragcore

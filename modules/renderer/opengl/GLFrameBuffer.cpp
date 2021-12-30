@@ -21,43 +21,25 @@ static unsigned int getCurrentFrameBufferRead() {
 int GLFrameBuffer::attachmentCount() { return 0; }
 std::vector<Texture *> GLFrameBuffer::getColorTargets() { return {}; }
 
-void GLFrameBuffer::bind() {
-	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
-	glBindFramebuffer(GL_FRAMEBUFFER, fraobj->framebuffer);
-}
+void GLFrameBuffer::bind() { glBindFramebuffer(GL_FRAMEBUFFER, this->framebuffer); }
 
 void GLFrameBuffer::unBind() { glBindFramebuffer(GL_FRAMEBUFFER, 0); }
 
-void GLFrameBuffer::write() {
-	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fraobj->framebuffer);
-}
+void GLFrameBuffer::write() { glBindFramebuffer(GL_DRAW_FRAMEBUFFER, this->framebuffer); }
 
-void GLFrameBuffer::read() const {
-	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
-	glBindFramebuffer(GL_READ_FRAMEBUFFER, fraobj->framebuffer);
-}
+void GLFrameBuffer::read() const { glBindFramebuffer(GL_READ_FRAMEBUFFER, this->framebuffer); }
 
-Texture *GLFrameBuffer::getAttachment(unsigned int index) {
-	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
-	return fraobj->desc.attach[index];
-}
+Texture *GLFrameBuffer::getAttachment(unsigned int index) { return this->desc.attach[index]; }
 
-Texture *GLFrameBuffer::getDepthAttachment() {
-	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
-	return fraobj->desc.depth;
-}
+Texture *GLFrameBuffer::getDepthAttachment() { return this->desc.depth; }
 
-Texture *GLFrameBuffer::getStencilAttachment() {
-	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
-	return fraobj->desc.stencil;
-}
+Texture *GLFrameBuffer::getStencilAttachment() { return this->desc.stencil; }
 
 int GLFrameBuffer::width() const {
-	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
+
 	int width = 0;
 	if (glGetNamedFramebufferParameteriv) {
-		glGetNamedFramebufferParameteriv(fraobj->framebuffer, GL_FRAMEBUFFER_DEFAULT_WIDTH, &width);
+		glGetNamedFramebufferParameteriv(this->framebuffer, GL_FRAMEBUFFER_DEFAULT_WIDTH, &width);
 	} else {
 		getCurrentFrameBufferRead();
 	}
@@ -66,10 +48,10 @@ int GLFrameBuffer::width() const {
 }
 
 int GLFrameBuffer::height() const {
-	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
+
 	int height = 0;
 	if (glGetNamedFramebufferParameteriv) {
-		glGetNamedFramebufferParameteriv(fraobj->framebuffer, GL_FRAMEBUFFER_DEFAULT_HEIGHT, &height);
+		glGetNamedFramebufferParameteriv(this->framebuffer, GL_FRAMEBUFFER_DEFAULT_HEIGHT, &height);
 	} else {
 	}
 
@@ -77,10 +59,10 @@ int GLFrameBuffer::height() const {
 }
 
 int GLFrameBuffer::layers() {
-	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
+
 	int layers = 0;
 	if (glGetNamedFramebufferParameteriv) {
-		glGetNamedFramebufferParameteriv(fraobj->framebuffer, GL_FRAMEBUFFER_DEFAULT_LAYERS, &layers);
+		glGetNamedFramebufferParameteriv(this->framebuffer, GL_FRAMEBUFFER_DEFAULT_LAYERS, &layers);
 	} else {
 	}
 
@@ -88,10 +70,10 @@ int GLFrameBuffer::layers() {
 }
 
 int GLFrameBuffer::nrSamples() {
-	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
+
 	int nrSamples = 0;
 	if (glGetNamedFramebufferParameteriv) {
-		glGetNamedFramebufferParameteriv(fraobj->framebuffer, GL_FRAMEBUFFER_DEFAULT_SAMPLES, &nrSamples);
+		glGetNamedFramebufferParameteriv(this->framebuffer, GL_FRAMEBUFFER_DEFAULT_SAMPLES, &nrSamples);
 	} else {
 	}
 	return nrSamples;
@@ -129,10 +111,10 @@ void GLFrameBuffer::clear(unsigned int clear) {
 }
 
 void GLFrameBuffer::clearColor(BufferAttachment colorAttachment, const float *color) {
-	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
+
 	int index = (int)colorAttachment - (int)BufferAttachment::Color0;
 	if (glClearNamedFramebufferfv) {
-		glClearNamedFramebufferfv(fraobj->framebuffer, GL_COLOR, GL_COLOR_ATTACHMENT0 + index, (GLfloat *)color);
+		glClearNamedFramebufferfv(this->framebuffer, GL_COLOR, GL_COLOR_ATTACHMENT0 + index, (GLfloat *)color);
 	} else {
 		this->write();
 		glClearBufferfv(GL_COLOR, GL_COLOR_ATTACHMENT0 + index, (const GLfloat *)color);
@@ -140,9 +122,9 @@ void GLFrameBuffer::clearColor(BufferAttachment colorAttachment, const float *co
 }
 
 void GLFrameBuffer::clearDepthStencil(float depth, int stencil) {
-	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
+
 	if (glClearNamedFramebufferfi) {
-		glClearNamedFramebufferfi(fraobj->framebuffer, 0, GL_DEPTH_STENCIL, stencil, depth);
+		glClearNamedFramebufferfi(this->framebuffer, 0, GL_DEPTH_STENCIL, stencil, depth);
 	} else {
 		this->write();
 		glClearBufferfi(0, GL_DEPTH_STENCIL, stencil, depth);
@@ -150,13 +132,13 @@ void GLFrameBuffer::clearDepthStencil(float depth, int stencil) {
 }
 
 void GLFrameBuffer::setDraws(unsigned int nr, BufferAttachment *attachment) {
-	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
+
 	if (glNamedFramebufferDrawBuffers) {
 		GLenum buffers[nr];
 		for (size_t i = 0; i < nr; i++) {
 			buffers[i] = GL_COLOR_ATTACHMENT0 + ((int)attachment[i] - (int)GLFrameBuffer::BufferAttachment::Color0);
 		}
-		glNamedFramebufferDrawBuffers(fraobj->framebuffer, nr, buffers);
+		glNamedFramebufferDrawBuffers(this->framebuffer, nr, buffers);
 	} else {
 
 		//		glDrawBuffers()
@@ -164,28 +146,23 @@ void GLFrameBuffer::setDraws(unsigned int nr, BufferAttachment *attachment) {
 }
 
 void GLFrameBuffer::setDraw(BufferAttachment attachment) {
-	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
+
 	if (glNamedFramebufferDrawBuffer) {
-		glNamedFramebufferDrawBuffer(fraobj->framebuffer,
-									 GL_COLOR_ATTACHMENT0 +
-										 ((int)attachment - (int)GLFrameBuffer::BufferAttachment::Color0));
+		glNamedFramebufferDrawBuffer(
+			this->framebuffer, GL_COLOR_ATTACHMENT0 + ((int)attachment - (int)GLFrameBuffer::BufferAttachment::Color0));
 	} else {
 	}
 }
 
-intptr_t GLFrameBuffer::getNativePtr() const {
-	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
-	return fraobj->framebuffer;
-}
+intptr_t GLFrameBuffer::getNativePtr() const { return this->framebuffer; }
 
 void GLFrameBuffer::setName(const std::string &name) {
-	GLFrameBufferObject *fraobj = (GLFrameBufferObject *)this->getObject();
 	Object::setName(name);
 
 	/*  Update the marker.  */
 	MarkerDebug marker = {};
 	marker.markerName = name.c_str();
-	////addMarkerLabel((const OpenGLCore *) getRenderer()->getData(), GL_FRAMEBUFFER, fraobj->framebuffer, &marker);
+	////addMarkerLabel((const OpenGLCore *) getRenderer()->getData(), GL_FRAMEBUFFER, this->framebuffer, &marker);
 }
 
 // glClearBuffer

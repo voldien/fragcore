@@ -1,17 +1,17 @@
-#include "../Query.h"
+#include "VKQuery.h"
 #include "internal_object_type.h"
 using namespace fragcore;
 
-QueryObject::~QueryObject() {}
+VKQueryObject::~VKQueryObject() {}
 
-void QueryObject::begin(Target target, unsigned int index) {}
+void VKQueryObject::begin(Target target, unsigned int index) {}
 
-void QueryObject::end(Target target, unsigned int index) {}
+void VKQueryObject::end(Target target, unsigned int index) {}
 
-long int QueryObject::getResult(int index) { return 0; }
+long int VKQueryObject::getResult(int index) { return 0; }
 
-void QueryObject::beginConditionalRenderer(Condition target) {}
+void VKQueryObject::beginConditionalRenderer(Condition target) {}
 
-void QueryObject::endConditionalRenderer() {}
+void VKQueryObject::endConditionalRenderer() {}
 
-intptr_t QueryObject::getNativePtr() const { return 0; }
+intptr_t VKQueryObject::getNativePtr() const { return 0; }

@@ -24,12 +24,13 @@
 #include <Core/Object.h>
 
 namespace fragcore {
+
 	/**
-	 *	Texture object.
+	 * @brief Texture object.
+	 *
 	 */
 	class FVDECLSPEC Texture : public Sampler {
 		friend class IRenderer;
-
 	  public:
 		/**
 		 *
@@ -122,13 +123,13 @@ namespace fragcore {
 			eReadWrite = 3, /*  */
 		};
 
-		Texture() = default;
+		virtual ~Texture() = default;
 
 		/**
 		 *
 		 * @param index
 		 */
-		virtual void bind(unsigned int index);
+		virtual void bind(unsigned int index) = 0;
 
 		/**
 		 *
@@ -136,110 +137,110 @@ namespace fragcore {
 		 * @param level
 		 * @param format
 		 */
-		virtual void bindImage(unsigned int index, int level, MapTarget target, Format format);
+		virtual void bindImage(unsigned int index, int level, MapTarget target, Format format) = 0;
 
 		/**
 		 *
 		 * @return
 		 */
-		virtual bool isValid();
+		virtual bool isValid() = 0;
 
 		/**
 		 *
 		 * @param sampler
 		 */
-		virtual void setSampler(Sampler *sampler);
+		virtual void setSampler(Sampler *sampler) = 0;
 
 		/**
 		 *
 		 * @param level
 		 */
-		virtual void setMipLevel(unsigned int level);
+		virtual void setMipLevel(unsigned int level) = 0;
 
 		/**
 		 *
 		 * @param mode
 		 */
-		virtual void setFilterMode(FilterMode mode) override;
+		virtual void setFilterMode(FilterMode mode) = 0;
 
 		/**
 		 *
 		 * @return
 		 */
-		virtual FilterMode getFilterMode() override;
+		virtual FilterMode getFilterMode() = 0;
 
 		/**
 		 *
 		 * @param mode
 		 */
-		virtual void setWrapMode(WrapMode mode) override;
+		virtual void setWrapMode(WrapMode mode) = 0;
 
 		/**
 		 *
 		 * @return
 		 */
-		virtual WrapMode getWrapMode() override;
+		virtual WrapMode getWrapMode() = 0;
 
 		/**
 		 *
 		 * @param anisotropic
 		 */
-		virtual void setAnisotropic(float anisotropic) override;
+		virtual void setAnisotropic(float anisotropic) = 0;
 
 		/**
 		 *
 		 * @return
 		 */
-		virtual float getAnisotropic() const override;
+		virtual float getAnisotropic() const = 0;
 
-		virtual CompareFunc getCompare() const override;
+		virtual CompareFunc getCompare() const = 0;
 
-		virtual void setCompareFunc(CompareFunc compareFunc) override;
+		virtual void setCompareFunc(CompareFunc compareFunc) = 0;
 
-		void setMipMapBaseLevel(unsigned int level) override;
+		virtual void setMipMapBaseLevel(unsigned int level) = 0;
 
-		unsigned int getMipMapBaseLevel() const override;
+		unsigned int getMipMapBaseLevel() const = 0;
 
-		void setMipMapBias(float bias) override;
+		void setMipMapBias(float bias) = 0;
 
-		float getMipMapBias(float bias) const override;
+		float getMipMapBias(float bias) const = 0;
 
-		void setBorderColor(float color) override;
+		void setBorderColor(float color) = 0;
 
-		float getBorderColor() const override;
+		float getBorderColor() const = 0;
 
-		unsigned int setMaxLod(unsigned int level) override;
+		unsigned int setMaxLod(unsigned int level) = 0;
 
-		unsigned int getMaxLod() const override;
+		unsigned int getMaxLod() const = 0;
 
-		unsigned int setMinLod(unsigned int level) override;
+		unsigned int setMinLod(unsigned int level) = 0;
 
-		unsigned int getMinLod() const override;
+		unsigned int getMinLod() const = 0;
 
-		virtual Format getFormat() const;
+		virtual Format getFormat() const = 0;
 
 		// TODO set const for the width and height
-		virtual unsigned int width();
+		virtual unsigned int width() = 0;
 
-		virtual unsigned int height();
+		virtual unsigned int height() = 0;
 
-		virtual unsigned int layers() const;
+		virtual unsigned int layers() const = 0;
 
 		// TODO add mip map streaming.
 
-		virtual void resize(int width, int height, Texture::Format format, bool hasMipMap);
+		virtual void resize(int width, int height, Texture::Format format, bool hasMipMap) = 0;
 
 		/**
 		 *
 		 * @param size
 		 * @return
 		 */
-		virtual void *mapTexture(Format format, unsigned int level); // TODO add map target.
+		virtual void *mapTexture(Format format, unsigned int level) = 0; // TODO add map target.
 
 		/**
 		 *
 		 */
-		virtual void unMapTexture();
+		virtual void unMapTexture() = 0;
 
 		// TOOD determine of range mapping is possible with flushing and etc.
 
@@ -249,22 +250,18 @@ namespace fragcore {
 		 * @param size
 		 */
 		virtual void setPixels(Format format, unsigned int level, const void *pixels,
-							   unsigned long size); // TODO add fvformatf
+							   unsigned long size) = 0; // TODO add fvformatf
 
 		/**
 		 *
 		 * @param mipmap
 		 * @return
 		 */
-		virtual void *getPixels(TextureFormat format, unsigned int level, unsigned long *nBytes); // TOOD add fvformatf.
+		virtual void *getPixels(TextureFormat format, unsigned int level,
+								unsigned long *nBytes) = 0; // TOOD add fvformatf.
 
 		// virtual bool UseSRGB();
-		virtual void clear();
-
-		// TODO add get native ptr object.
-		virtual intptr_t getNativePtr() const override;
-
-		virtual void setName(const std::string &name) override;
+		virtual void clear() = 0;
 	};
 } // namespace fragcore
 

@@ -20,6 +20,7 @@
 #define _FRAG_CORE_VIDEO_TEXTURE_H_ 1
 #include "VideoDecoder.h"
 #include <AudioClip.h>
+#include <AudioDecoder.h>
 #include <Core/SmartReference.h>
 #include <Core/TaskScheduler/IScheduler.h>
 #include <Texture.h>
@@ -35,7 +36,7 @@ namespace fragcore {
 	  public:
 		VideoTexture();
 
-		~VideoTexture();
+		virtual ~VideoTexture();
 
 		virtual bool isPlaying() const;
 
@@ -64,6 +65,7 @@ namespace fragcore {
 		Ref<AudioClip> audioClip;
 		Ref<Texture> texture;
 		Ref<VideoDecoder> decoder;
+		Ref<AudioDecoder> audioDecoder;
 	};
 } // namespace fragcore
 

@@ -24,16 +24,33 @@
 namespace fragcore {
 
 	/**
+	 * @brief
 	 *
 	 */
 	class FVDECLSPEC AudioListener : public AudioObject {
 		friend class AudioInterface;
 
 	  public:
+	  	/**
+	  	 * @brief Set the Volume object
+	  	 *
+	  	 * @param volume
+	  	 */
 		virtual void setVolume(float volume);
+
+		/**
+		 * @brief Get the Volume object
+		 *
+		 * @return float
+		 */
 		virtual float getVolume() const;
 
 		// TODO rename to mute
+		/**
+		 * @brief
+		 *
+		 * @param pause
+		 */
 		virtual void pause(bool pause);
 
 		// virtual void getOutPutData();

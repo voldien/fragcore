@@ -71,37 +71,6 @@ namespace fragcore {
 	/**
 	 *
 	 */
-	typedef struct opengl_texture_object_t {
-		TextureDesc desc;
-		unsigned int target;
-		unsigned int texture;
-		unsigned int pbo; /*  TODO resolve if to relocate.    */
-		Sampler *sampler;
-	} GLTextureObject;
-
-	typedef struct opengl_sampler_object_t {
-		unsigned int sampler;
-	} GLSamplerObject;
-
-	/**
-	 *
-	 */
-	// typedef struct opengl_buffer_object_t {
-	// 	BufferDesc desc;
-	// 	unsigned int target;
-	// 	unsigned int buffer;
-	// 	unsigned int base;
-	// } GLBufferObject;
-
-	typedef struct opengl_program_pipeline_t {
-		unsigned int program;
-
-		Shader *v, *f, *g, *tc, *te, *c;
-	} GLProgramPipeline;
-
-	/**
-	 *
-	 */
 	typedef struct opengl_shader_object_t {
 		unsigned int program;
 		unsigned int shader;
@@ -119,24 +88,6 @@ namespace fragcore {
 		Buffer *vertexbuffer;
 	} GLGeometryObject;
 
-	/**
-	 *
-	 */
-	typedef struct opengl_framebuffer_t {
-		FrameBufferDesc desc;
-		Texture *textures;
-		unsigned int numtextures;
-		unsigned int framebuffer;
-
-	} GLFrameBufferObject;
-
-	typedef struct opengl_query_t {
-		unsigned int query[8];
-	} GLQuery;
-
-	typedef struct opengl_sync_t {
-		void *sync;
-	} GLSync;
 
 } // namespace fragcore
 

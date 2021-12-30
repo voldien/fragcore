@@ -26,9 +26,7 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC QueryObject : public RenderObject {
 	public:
-		inline QueryObject() {}
-
-		virtual ~QueryObject();
+		virtual ~QueryObject() = default;
 
 	public:
 
@@ -62,7 +60,7 @@ namespace fragcore {
 		 * @param target
 		 * @param index
 		 */
-		virtual void begin(Target target, unsigned int index);
+		virtual void begin(Target target, unsigned int index) = 0;
 
 		//TODO add for fetching the result.
 		/**
@@ -70,22 +68,20 @@ namespace fragcore {
 		 * @param target
 		 * @param index
 		 */
-		virtual void end(Target target, unsigned int index);
+		virtual void end(Target target, unsigned int index) = 0;
 
-		virtual long int getResult(int index);
+		virtual long int getResult(int index) = 0;
 
 		/**
 		 *
 		 * @param target
 		 */
-		virtual void beginConditionalRenderer(Condition target);
+		virtual void beginConditionalRenderer(Condition target) = 0;
 
 		/**
 		 *
 		 */
-		virtual void endConditionalRenderer();
-
-		intptr_t getNativePtr() const override;
+		virtual void endConditionalRenderer() = 0;
 
 	};
 }

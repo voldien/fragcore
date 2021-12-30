@@ -27,74 +27,68 @@ namespace fragcore {
 	class FVDECLSPEC Sampler : public RenderObject {
 		friend class IRenderer;
 
-	public:
-	  Sampler() = default;
+	  public:
+		virtual ~Sampler() = default;
 
-	  virtual ~Sampler();
+		enum WrapMode {
+			eClamp = 0x1,  /*  */
+			eRepeat = 0x2, /*  */
+			eMirror = 0x3, /*  */
+		};
 
-	  enum WrapMode {
-		  eClamp = 0x1,	 /*  */
-		  eRepeat = 0x2, /*  */
-		  eMirror = 0x3, /*  */
-	  };
+		enum CompareFunc {
+			NoCompare,	  /*  */
+			lessEqual,	  /*  */
+			greaterEqual, /*  */
+			less,		  /*  */
+			greater,	  /*  */
+			equal,		  /*  */
+			notequal,	  /*  */
+			always,		  /*  */
+			never,		  /*  */
+		};
 
-	  enum CompareFunc {
-		  NoCompare,	/*  */
-		  lessEqual,	/*  */
-		  greaterEqual, /*  */
-		  less,			/*  */
-		  greater,		/*  */
-		  equal,		/*  */
-		  notequal,		/*  */
-		  always,		/*  */
-		  never,		/*  */
-	  };
+		enum FilterMode {
+			eNearest = 0x1,	  /*	*/
+			eBilinear = 0x2,  /*	*/
+			eTrilinear = 0x3, /*  */
+		};
 
-	  enum FilterMode {
-		  eNearest = 0x1,	/*	*/
-		  eBilinear = 0x2,	/*	*/
-		  eTrilinear = 0x3, /*  */
-	  };
+		virtual void setFilterMode(FilterMode mode) = 0;
 
-	  virtual void setFilterMode(FilterMode mode);
+		virtual FilterMode getFilterMode() = 0;
 
-	  virtual FilterMode getFilterMode();
+		virtual void setWrapMode(WrapMode mode) = 0;
 
-	  virtual void setWrapMode(WrapMode mode);
+		virtual WrapMode getWrapMode() = 0;
 
-	  virtual WrapMode getWrapMode();
+		virtual void setAnisotropic(float anisotropy) = 0;
 
-	  virtual void setAnisotropic(float anisotropy);
+		virtual float getAnisotropic() const = 0;
 
-	  virtual float getAnisotropic() const;
+		virtual CompareFunc getCompare() const = 0;
 
-	  virtual CompareFunc getCompare() const;
+		virtual void setCompareFunc(CompareFunc compareFunc) = 0;
 
-	  virtual void setCompareFunc(CompareFunc compareFunc);
+		virtual void setMipMapBaseLevel(unsigned int level) = 0;
 
-	  virtual void setMipMapBaseLevel(unsigned int level);
+		virtual unsigned int getMipMapBaseLevel() const = 0;
 
-	  virtual unsigned int getMipMapBaseLevel() const;
+		virtual void setMipMapBias(float bias) = 0;
 
-	  virtual void setMipMapBias(float bias);
+		virtual float getMipMapBias(float bias) const = 0;
 
-	  virtual float getMipMapBias(float bias) const;
+		virtual void setBorderColor(float color) = 0;
 
-	  virtual void setBorderColor(float color);
+		virtual float getBorderColor() const = 0;
 
-	  virtual float getBorderColor() const;
+		virtual unsigned int setMaxLod(unsigned int level) = 0;
 
-	  virtual unsigned int setMaxLod(unsigned int level);
+		virtual unsigned int getMaxLod() const = 0;
 
-	  virtual unsigned int getMaxLod() const;
+		virtual unsigned int setMinLod(unsigned int level) = 0;
 
-	  virtual unsigned int setMinLod(unsigned int level);
-
-	  virtual unsigned int getMinLod() const;
-
-	  virtual void setName(const std::string &name) override;
-
-	  intptr_t getNativePtr() const override;
+		virtual unsigned int getMinLod() const = 0;
 	};
 } // namespace fragcore
 

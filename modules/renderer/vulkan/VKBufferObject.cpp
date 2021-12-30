@@ -1,40 +1,33 @@
 
-#include "../IRenderer.h"
 #include "../RenderPrerequisites.h"
 #include "VKBuffer.h"
 #include "VKRenderInterface.h"
 #include "internal_object_type.h"
-#include <FragCore.h>
 
 using namespace fragcore;
 
 VKBuffer::~VKBuffer() {}
 
 void VKBuffer::bind() {
-	VKBufferObject *bufobj = static_cast<VKBufferObject *>(this->pdata);
 
-	//vkBindBufferMemory(bufobj->vulkanCore->device, bufobj->buffer, bufobj->vertexBufferMemory, 0);
+	// vkBindBufferMemory(bufobj->vulkanCore->device, bufobj->buffer, bufobj->vertexBufferMemory, 0);
 }
 
 void VKBuffer::bind(unsigned int offset, unsigned int size) {
-	VKBufferObject *bufobj = static_cast<VKBufferObject *>(this->pdata);
+
 	// vkBindBufferMemory(bufobj->vulkanCore->device, bufobj->buffer, bufobj->vertexBufferMemory, offset);
 }
 
-void VKBuffer::bindBase(unsigned int base) { VKBufferObject *bufobj = (VKBufferObject *)this->pdata; }
+void VKBuffer::bindBase(unsigned int base) {}
 
-void VKBuffer::subData(const void *data, unsigned int offset, unsigned int size) {
-	VKBufferObject *bufobj = (VKBufferObject *)this->pdata;
-}
+void VKBuffer::subData(const void *data, unsigned int offset, unsigned int size) {}
 
-void *VKBuffer::getData(unsigned int offset, unsigned int size) {
-	VKBufferObject *bufobj = (VKBufferObject *)this->pdata;
-}
+void *VKBuffer::getData(unsigned int offset, unsigned int size) {}
 
-bool VKBuffer::isValid() { VKBufferObject *bufobj = (VKBufferObject *)this->pdata; }
+bool VKBuffer::isValid() {}
 
 long int VKBuffer::getSize() {
-	VKBufferObject *bufobj = (VKBufferObject *)this->pdata;
+
 	VkMemoryRequirements requirements;
 	// vkGetBufferMemoryRequirements(bufobj->vulkanCore->device, bufobj->buffer, &requirements);
 	return requirements.size;
@@ -45,8 +38,6 @@ void *VKBuffer::mapBuffer(VKBuffer::MapTarget target) {
 	VkResult result;
 	VkMemoryRequirements memRequirements;
 	VkMemoryMapFlags mapTarget = 0;
-
-	VKBufferObject *bufobj = (VKBufferObject *)this->pdata;
 
 	/*  */
 	// vkGetBufferMemoryRequirements(bufobj->vulkanCore->device, bufobj->buffer, &memRequirements);
@@ -62,12 +53,21 @@ void *VKBuffer::mapBuffer(VKBuffer::MapTarget target) {
 
 void *VKBuffer::mapBuffer(MapTarget target, unsigned long int offset, unsigned long int length) {}
 
-void VKBuffer::flush(unsigned long int offset, unsigned long int length) {}
+void VKBuffer::flush(unsigned long int offset, unsigned long int length) {
+
+	VkMappedMemoryRange stagingRange{};
+	stagingRange.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
+	//stagingRange.memory = this->buffer;
+	//->getMemoryBuffer();
+	stagingRange.offset = 0;
+	stagingRange.size = length;
+
+	//vkFlushMappedMemoryRanges(getRenderer<VKRendererInterface>()->getDevice()->getHandle(), 1, &stagingRange);
+}
 
 void VKBuffer::unMapBuffer() {
-	VKBufferObject *bufobj = (VKBufferObject *)this->pdata;
 
-	vkUnmapMemory(this->getRenderer<VKRenderInterface>()->getDevice()->getHandle(), bufobj->vertexBufferMemory);
+	vkUnmapMemory(this->getRenderer<VKRenderInterface>()->getDevice()->getHandle(), this->vertexBufferMemory);
 }
 
 void VKBuffer::setName(const std::string &name) { Object::setName(name); }

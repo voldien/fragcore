@@ -1,28 +1,29 @@
+#include "VKRenderPipeline.h"
 #include "internal_object_type.h"
-#include <../RenderPipeline.h>
-#include <../Shader.h>
 using namespace fragcore;
 
-void RenderPipeline::bind() {}
+VKRenderPipeline ::~VKRenderPipeline() {}
 
-int RenderPipeline::getLocation(const char *cparamname) { return 0; }
+void VKRenderPipeline::bind() {}
 
-void RenderPipeline::setInt(int location, int value) {}
+int VKRenderPipeline::getLocation(const char *cparamname) { return 0; }
 
-void RenderPipeline::setFloat(int location, float value) {}
+void VKRenderPipeline::setInt(int location, int value) {}
 
-void RenderPipeline::setFloatv(int location, int n, const float *values) {}
+void VKRenderPipeline::setFloat(int location, float value) {}
 
-void RenderPipeline::setVec2(int location, const float v1, const float v2) {}
+void VKRenderPipeline::setFloatv(int location, int n, const float *values) {}
 
-void RenderPipeline::setVec2v(int location, int n, const float *values) {}
+void VKRenderPipeline::setVec2(int location, const float v1, const float v2) {}
 
-void RenderPipeline::setMatrix4f(int location, const float *pvalue) {}
+void VKRenderPipeline::setVec2v(int location, int n, const float *values) {}
 
-void RenderPipeline::setMatrix4fv(int location, int n, const float *pvalue) {}
+void VKRenderPipeline::setMatrix4f(int location, const float *pvalue) {}
 
-Shader *RenderPipeline::getShader(ShaderType type) { return nullptr; }
+void VKRenderPipeline::setMatrix4fv(int location, int n, const float *pvalue) {}
 
-void RenderPipeline::setShader(ShaderType type, Shader *shader) {}
+Shader *VKRenderPipeline::getShader(ShaderType type) { return nullptr; }
 
-intptr_t RenderPipeline::getNativePtr() const { return 0; }
+void VKRenderPipeline::setShader(ShaderType type, Shader *shader) {}
+
+intptr_t VKRenderPipeline::getNativePtr() const { return 0; }

@@ -101,6 +101,7 @@ namespace fragcore {
 
 			// if (p_ref->init_ref())
 			this->reference = p_ref;
+			this->reference->increment();
 			//	reference = p_ref;
 		}
 

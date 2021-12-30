@@ -21,7 +21,9 @@
 #include "AudioDecoder.h"
 
 namespace fragcore {
+
 	/**
+	 * @brief
 	 *
 	 */
 	class FVDECLSPEC WavAudioDecoder : public AudioDecoder {
@@ -29,19 +31,19 @@ namespace fragcore {
 		WavAudioDecoder(Ref<IO> &io);
 		virtual ~WavAudioDecoder();
 
-		virtual void seek(long int microseconds);
+		virtual void seek(long int microseconds) override;
 
-		virtual void *getData(long int *size);
+		virtual void *getData(long int *size) override;
 
-		virtual void *getPage(int i);
+		virtual void *getPage(int i) override;
 
-		virtual AudioFormat getFormat() const;
-		virtual unsigned int getSampleRate() const;
+		virtual AudioFormat getFormat() const override;
+		virtual unsigned int getSampleRate() const override;
 
-		virtual unsigned int getNrChannels() const;
-		virtual unsigned int getSampleBitResolution() const;
+		virtual unsigned int getNrChannels() const override;
+		virtual unsigned int getSampleBitResolution() const override;
 
-		virtual double getTotalTime() const;
+		virtual double getTotalTime() const override;
 
 	  protected:
 		double length;

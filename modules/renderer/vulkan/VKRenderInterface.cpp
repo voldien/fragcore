@@ -6,6 +6,8 @@
 #include "VKBuffer.h"
 #include "VKCommandList.h"
 #include "VKRenderWindow.h"
+#include "VKSampler.h"
+#include "VKShader.h"
 #include "Window/WindowManager.h"
 #include "internal_object_type.h"
 #include <SDL2/SDL.h>
@@ -174,108 +176,61 @@ void VKRenderInterface::OnDestruction() {}
 
 Texture *VKRenderInterface::createTexture(TextureDesc *desc) {
 
-	// Texture *texture = new Texture();
-	// VKTextureObject *vktex = new VKTextureObject();
-	// vktex->vulkanCore = vulkanCore;
-	// vktex->desc = *desc;
-	// texture->pdata = vktex;
+	VkPhysicalDevice physicalDevice;
 
-	// VKHelper::createImage()
+	unsigned int texWidth, texHeight, internal, type, format;
+	unsigned long pixelSize;
+	void *pixels;
 
-	// VkDeviceMemory stagingBufferMemory;
-	// VkDeviceSize imageSize = desc->pixelSize;
+	VkDeviceSize imageSize = pixelSize;
+	VkPhysicalDeviceMemoryProperties memProperties;
+	VkCommandPool commandPool;
+	VkImage textureImage;
+	// TODO replace with buffer object.
+	VkDeviceMemory textureImageMemory;
 
-	// /*  Check descriptor.    */
-	// if (!desc->pixel)
-	// 	throw RuntimeException("failed to load texture image!");
+	vkGetPhysicalDeviceMemoryProperties(physicalDevice, &memProperties);
 
-	// VkBuffer stagingBuffer;
-	// ::createBuffer(vulkanCore, imageSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
-	// 			   VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer,
-	// 			   stagingBufferMemory);
+	if (!pixels)
+		throw cxxexcept::RuntimeException("failed to load texture image!");
 
-	// void *data;
-	// vkMapMemory(device->getHandle(), stagingBufferMemory, 0, imageSize, 0, &data);
-	// memcpy(data, desc->pixel, static_cast<size_t>(imageSize));
-	// vkUnmapMemory(device->getHandle(), stagingBufferMemory);
+	VkCommandBuffer cmd = VKHelper::beginSingleTimeCommands(getDevice()->getHandle(), commandPool);
 
-	// /*-------------Create Image --------*/
-	// VkMemoryPropertyFlags properties = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+	/*	*/
+	VkBuffer stagingBuffer;
+	VkDeviceMemory stagingBufferMemory;
+	VKHelper::createBuffer(getDevice()->getHandle(), imageSize, memProperties, VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
+						   VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, stagingBuffer, stagingBufferMemory);
 
-	// /*  Image description.  */
-	// VkImageCreateInfo imageInfo = {};
-	// imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
-	// imageInfo.imageType = (VkImageType)getTextureTarget((TextureDesc::Target)desc->target);
-	// imageInfo.extent.width = static_cast<uint32_t>(desc->width);
-	// imageInfo.extent.height = static_cast<uint32_t>(desc->height);
-	// imageInfo.extent.depth = desc->depth;
-	// imageInfo.mipLevels = desc->numlevel;
-	// imageInfo.arrayLayers = desc->depth;
+	void *stageData;
+	vkMapMemory(getDevice()->getHandle(), stagingBufferMemory, 0, imageSize, 0, &stageData);
+	memcpy(stageData, pixels, static_cast<size_t>(imageSize));
+	vkUnmapMemory(getDevice()->getHandle(), stagingBufferMemory);
 
-	// /*  */
-	// imageInfo.format = VK_FORMAT_R8G8B8A8_UNORM;
-	// imageInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
-	// imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-	// imageInfo.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
-	// imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+	/*	Create staging buffer.	*/
+	VKHelper::createImage(getDevice()->getHandle(), texWidth, texHeight, 1, VK_FORMAT_B8G8R8A8_SRGB,
+						  VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
+						  VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, memProperties, textureImage, textureImageMemory);
+	/*	*/
+	VKHelper::transitionImageLayout(cmd, textureImage, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
 
-	// /*  Shading multisampling.  */
-	// imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
-	// imageInfo.flags = 0; // Optional
+	VKHelper::copyBufferToImageCmd(cmd, stagingBuffer, textureImage,
+								   {static_cast<uint32_t>(texWidth), static_cast<uint32_t>(texHeight), 1});
 
-	// /*  Create image.   */
-	// VkResult result = vkCreateImage(device->getHandle(), &imageInfo, nullptr, &vktex->texture);
-	// if (result != VK_SUCCESS) {
-	// 	throw RuntimeException(fmt::format("Failed creating texture image - %d", result));
-	// }
+	/*	*/
+	VKHelper::transitionImageLayout(cmd, textureImage, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+									VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
-	// /*  */
-	// VkMemoryRequirements memRequirements;
-	// vkGetImageMemoryRequirements(device->getHandle(), vktex->texture, &memRequirements);
+	/*	*/
+	VKHelper::endSingleTimeCommands(getDevice()->getHandle(), queue, cmd, commandPool);
 
-	// VkMemoryAllocateInfo allocInfo = {};
-	// allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-	// allocInfo.allocationSize = memRequirements.size;
-	// allocInfo.memoryTypeIndex = findMemoryType(vulkanCore, memRequirements.memoryTypeBits, properties);
+	vkDestroyBuffer(getDevice()->getHandle(), stagingBuffer, nullptr);
+	vkFreeMemory(getDevice()->getHandle(), stagingBufferMemory, nullptr);
 
-	// /*  Allocate memory for the texture.    */
-	// result = vkAllocateMemory(device->getHandle(), &allocInfo, nullptr, &stagingBufferMemory);
-	// if (result != VK_SUCCESS) {
-	// 	throw RuntimeException("failed to allocate image memory!");
-	// }
-	// vktex->imageMemory = stagingBufferMemory;
+	free(pixels);
 
-	// /*  Bind texture and memory.*/
-	// result = vkBindImageMemory(device->getHandle(), vktex->texture, vktex->imageMemory, 0);
-	// if (result != VK_SUCCESS) {
-	// 	throw RuntimeException("Failed to create ");
-	// }
-
-	// /*  Sampler.    */
-	// VkSamplerCreateInfo samplerInfo = {};
-	// samplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
-	// samplerInfo.magFilter = VK_FILTER_LINEAR;
-	// samplerInfo.minFilter = VK_FILTER_LINEAR;
-	// samplerInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-	// samplerInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-	// samplerInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-	// samplerInfo.anisotropyEnable = desc->sampler.anisotropy > 0.0 ? VK_TRUE : VK_FALSE;
-	// samplerInfo.maxAnisotropy = desc->sampler.anisotropy;
-	// samplerInfo.borderColor = VK_BORDER_COLOR_INT_OPAQUE_BLACK;
-	// samplerInfo.unnormalizedCoordinates = VK_FALSE;
-	// samplerInfo.compareEnable = VK_FALSE;
-	// samplerInfo.compareOp = VK_COMPARE_OP_ALWAYS;
-	// samplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
-	// samplerInfo.mipLodBias = 0.0f;
-	// samplerInfo.minLod = 0.0f;
-	// samplerInfo.maxLod = 0.0f;
-
-	// result = vkCreateSampler(device->getHandle(), &samplerInfo, nullptr, &vktex->sampler);
-	// if (result != VK_SUCCESS) {
-	// 	throw RuntimeException("failed to create texture sampler!");
-	// }
-
-	// return texture;
+	VKTexture *texture = new VKTexture();
+	return texture;
 }
 
 void VKRenderInterface::deleteTexture(Texture *texture) {
@@ -299,7 +254,10 @@ Sampler *VKRenderInterface::createSampler(SamplerDesc *desc) {
 		throw InvalidArgumentException("Invalid sampler description pointer object.");
 
 	/*  */
-	Sampler *sampler = new Sampler();
+
+	VKSampler *sampler = new VKSampler();
+	VkSampler vkSampler;
+	VKHelper::createSampler(getDevice()->getHandle(), vkSampler);
 	// sampler->pdata= samplerObject;
 	return sampler;
 }
@@ -316,7 +274,7 @@ void VKRenderInterface::deletePipeline(RenderPipeline *obj) {}
 Shader *VKRenderInterface::createShader(ShaderDesc *desc) {
 
 	/*  Create shader interface object. */
-	Shader *shader = new Shader();
+	VKShader *shader = new VKShader();
 	VKShaderObject *shaobj = new VKShaderObject();
 	//	shader->pdata = shaobj;
 	// shaobj->vulkanCore = vulkanCore;
@@ -725,63 +683,63 @@ void VKRenderInterface::deleteBuffer(Buffer *object) {
 }
 
 Geometry *VKRenderInterface::createGeometry(GeometryDesc *desc) {
-	Geometry *geometryObject;
-	VKGeometryObject *glgeoobj = nullptr;
-	unsigned int x;
+	// Geometry *geometryObject;
+	// VKGeometryObject *glgeoobj = nullptr;
+	// unsigned int x;
 
-	/*	*/
-	geometryObject = new Geometry();
-	glgeoobj = new VKGeometryObject();
+	// /*	*/
+	// geometryObject = new Geometry();
+	// glgeoobj = new VKGeometryObject();
 
-	/*	Requires array buffer.  */
-	if (desc->numVerticecs > 0) {
-		BufferDesc abuffer;
-		abuffer.size = desc->numVerticecs * desc->vertexStride;
-		abuffer.type = BufferDesc::eArray;
-		abuffer.data = desc->buffer;
-		abuffer.hint = (BufferDesc::BufferHint)(BufferDesc::eWrite | BufferDesc::eStatic);
-		glgeoobj->vertexbuffer = createBuffer(&abuffer);
-		glgeoobj->vertexbuffer->bind();
-	}
+	// /*	Requires array buffer.  */
+	// if (desc->numVerticecs > 0) {
+	// 	BufferDesc abuffer;
+	// 	abuffer.size = desc->numVerticecs * desc->vertexStride;
+	// 	abuffer.type = BufferDesc::eArray;
+	// 	abuffer.data = desc->buffer;
+	// 	abuffer.hint = (BufferDesc::BufferHint)(BufferDesc::eWrite | BufferDesc::eStatic);
+	// 	glgeoobj->vertexbuffer = createBuffer(&abuffer);
+	// 	glgeoobj->vertexbuffer->bind();
+	// }
 
-	/*	Requires element buffer.    */
-	if (desc->numIndices > 0) {
-		BufferDesc abuffer;
-		abuffer.size = desc->numIndices * desc->indicesStride;
-		abuffer.type = BufferDesc::eElementArray;
-		abuffer.data = desc->indices;
-		abuffer.hint = (BufferDesc::BufferHint)(BufferDesc::eWrite | BufferDesc::eStatic);
-		glgeoobj->indicesbuffer = createBuffer(&abuffer);
-		glgeoobj->indicesbuffer->bind();
+	// /*	Requires element buffer.    */
+	// if (desc->numIndices > 0) {
+	// 	BufferDesc abuffer;
+	// 	abuffer.size = desc->numIndices * desc->indicesStride;
+	// 	abuffer.type = BufferDesc::eElementArray;
+	// 	abuffer.data = desc->indices;
+	// 	abuffer.hint = (BufferDesc::BufferHint)(BufferDesc::eWrite | BufferDesc::eStatic);
+	// 	glgeoobj->indicesbuffer = createBuffer(&abuffer);
+	// 	glgeoobj->indicesbuffer->bind();
 
-		/*  Determine indices data size type.   */
-		switch (desc->indicesStride) {
-		case 2:
-		case 1:
-			glgeoobj->indicesType = VK_INDEX_TYPE_UINT16;
-			break;
-		case 4:
-			glgeoobj->indicesType = VK_INDEX_TYPE_UINT32;
-			break;
-		}
-	}
+	// 	/*  Determine indices data size type.   */
+	// 	switch (desc->indicesStride) {
+	// 	case 2:
+	// 	case 1:
+	// 		glgeoobj->indicesType = VK_INDEX_TYPE_UINT16;
+	// 		break;
+	// 	case 4:
+	// 		glgeoobj->indicesType = VK_INDEX_TYPE_UINT32;
+	// 		break;
+	// 	}
+	// }
 
-	/*	*/
-	//	for(x = 0; x < desc->numVertexAttributes; x++){
-	//		glEnableVertexAttribArray(desc->vertexattribute[x].index);
-	//		glVertexAttribPointer(desc->vertexattribute[x].index,
-	//		                      desc->vertexattribute[x].size,
-	//		                      getAttributeDataType((GeometryDesc::AttributeType)desc->vertexattribute[x].datatype),
-	//		                      GL_FALSE,
-	//		                      desc->vertexStride,
-	//		                      (const void*)desc->vertexattribute[x].offset);
-	//	}
+	// /*	*/
+	// //	for(x = 0; x < desc->numVertexAttributes; x++){
+	// //		glEnableVertexAttribArray(desc->vertexattribute[x].index);
+	// //		glVertexAttribPointer(desc->vertexattribute[x].index,
+	// //		                      desc->vertexattribute[x].size,
+	// // getAttributeDataType((GeometryDesc::AttributeType)desc->vertexattribute[x].datatype),
+	// //		                      GL_FALSE,
+	// //		                      desc->vertexStride,
+	// //		                      (const void*)desc->vertexattribute[x].offset);
+	// //	}
 
-	// glgeoobj->mode = getPrimitive((GeometryDesc::Primitive)desc->primitive);
-	glgeoobj->desc = *desc;
+	// // glgeoobj->mode = getPrimitive((GeometryDesc::Primitive)desc->primitive);
+	// glgeoobj->desc = *desc;
 
-	//	geometryObject->pdata = glgeoobj;
-	return geometryObject;
+	// //	geometryObject->pdata = glgeoobj;
+	// return geometryObject;
 }
 
 void VKRenderInterface::deleteGeometry(Geometry *obj) {
@@ -979,39 +937,39 @@ void VKRenderInterface::swapBuffer() {
 
 void VKRenderInterface::drawInstance(Geometry *geometry, unsigned int num) {
 
-	VKGeometryObject *glgeo;
-	assert(geometry && num > 0);
-
-	/*  */
-	//	const uint32_t curFrame = currentFrame;
-	//	glgeo = (VKGeometryObject *)geometry->pdata;
+	// VKGeometryObject *glgeo;
+	// assert(geometry && num > 0);
 
 	// /*  */
-	// VKBufferObject *vertexBuffer = (VKBufferObject *)glgeo->vertexbuffer->pdata;
-	// VkBuffer vertexBuffers[] = {vertexBuffer->buffer};
+	// //	const uint32_t curFrame = currentFrame;
+	// //	glgeo = (VKGeometryObject *)geometry->pdata;
 
-	/*  */
-	if (glgeo->desc.numIndices > 0) {
-		assert(glgeo->vertexbuffer && glgeo->indicesbuffer);
-		VkDeviceSize offsets[] = {0};
+	// // /*  */
+	// // VKBufferObject *vertexBuffer = (VKBufferObject *)glgeo->vertexbuffer->pdata;
+	// // VkBuffer vertexBuffers[] = {vertexBuffer->buffer};
 
-		// VKBufferObject *indexBuffer = (VKBufferObject *)glgeo->indicesbuffer->pdata;
-		// vkCmdBindVertexBuffers(swapChain->commandBuffers[curFrame], 0, 1, vertexBuffers, offsets);
-		// vkCmdBindIndexBuffer(swapChain->commandBuffers[curFrame], indexBuffer->buffer, offsets[0],
-		// VK_INDEX_TYPE_UINT16);
+	// /*  */
+	// if (glgeo->desc.numIndices > 0) {
+	// 	assert(glgeo->vertexbuffer && glgeo->indicesbuffer);
+	// 	VkDeviceSize offsets[] = {0};
 
-		// vkCmdDrawIndexed(swapChain->commandBuffers[curFrame],
-		// static_cast<uint32_t>(geometry->getIndicesCount()), 1, 0, 0, 0);
+	// 	// VKBufferObject *indexBuffer = (VKBufferObject *)glgeo->indicesbuffer->pdata;
+	// 	// vkCmdBindVertexBuffers(swapChain->commandBuffers[curFrame], 0, 1, vertexBuffers, offsets);
+	// 	// vkCmdBindIndexBuffer(swapChain->commandBuffers[curFrame], indexBuffer->buffer, offsets[0],
+	// 	// VK_INDEX_TYPE_UINT16);
 
-	} else {
-		assert(glgeo->vertexbuffer);
+	// 	// vkCmdDrawIndexed(swapChain->commandBuffers[curFrame],
+	// 	// static_cast<uint32_t>(geometry->getIndicesCount()), 1, 0, 0, 0);
 
-		VkDeviceSize offsets[] = {0};
-		// vkCmdBindVertexBuffers(swapChain->commandBuffers[curFrame], 0, 1, vertexBuffers, offsets);
+	// } else {
+	// 	assert(glgeo->vertexbuffer);
 
-		// vkCmdDraw(swapChain->commandBuffers[curFrame], static_cast<uint32_t>(geometry->getVertexCount()),
-		// 1, 0, 0);
-	}
+	// 	VkDeviceSize offsets[] = {0};
+	// 	// vkCmdBindVertexBuffers(swapChain->commandBuffers[curFrame], 0, 1, vertexBuffers, offsets);
+
+	// 	// vkCmdDraw(swapChain->commandBuffers[curFrame], static_cast<uint32_t>(geometry->getVertexCount()),
+	// 	// 1, 0, 0);
+	// }
 }
 
 void VKRenderInterface::drawMultiInstance(Geometry &geometries, const unsigned int *first, const unsigned int *count,

@@ -114,6 +114,10 @@ ADD_DEFINITIONS(-DFV_VERSION="${VERSION}")
 #############################################
 #  Extract git hash and branch information.
 #############################################
+FIND_PACKAGE(Git QUIET)
+IF(GIT_FOUND)
+	MESSAGE(STATUS "git found: ${GIT_EXECUTABLE} -- ${GIT_VERSION_STRING}")
+ENDIF()
 IF(NOT FRAG_IGNORE_GIT_HASH)
   # Get the current working branch
   EXECUTE_PROCESS(
@@ -182,9 +186,6 @@ ENDIF()
 
 # GCC compiler flag options.
 IF((CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX) AND NOT CMAKE_COMPILER_IS_MINGW)
-	IF (BUILD_SHARED_LIBS AND CMAKE_SIZEOF_VOID_P EQUAL 8) # -fPIC is only required
-		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
-	ENDIF()
 
 	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -Wpedantic -Wextra  -Wall -Wno-attributes -std=c++17")
 
@@ -302,7 +303,6 @@ SET( FRAGCORE_BIN_INSTALL_DIR "bin" CACHE STRING
 
 # Find all required libaries for the program.
 FIND_PACKAGE(ZLIB QUIET)
-FIND_PACKAGE(Git QUIET)
 FIND_PACKAGE(Backtrace QUIET)
 FIND_PACKAGE(PkgConfig QUIET)
 FIND_PACKAGE(OpenSSL QUIET)
@@ -327,26 +327,6 @@ ELSE()
 	SET(CMAKE_INSTALL_FULL_BINDIR ${CMAKE_INSTALL_PREFIX}/${FRAGCORE_BIN_INSTALL_DIR})
 ENDIF()
 
-IF(GIT_FOUND)
-	MESSAGE(STATUS "git found: ${GIT_EXECUTABLE} -- ${GIT_VERSION_STRING}")
-ENDIF()
-IF(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
-	# Update submodules as needed
-	OPTION(FRAGCORE_GIT_SUBMODULE "Check submodules during build" OFF)
-	IF(FRAGCORE_GIT_SUBMODULE)
-		MESSAGE(STATUS "Submodule update --recursive")
-		EXECUTE_PROCESS(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive
-						WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-						RESULT_VARIABLE GIT_SUBMOD_RESULT)
-		IF(NOT GIT_SUBMOD_RESULT EQUAL "0")
-			MESSAGE(FATAL_ERROR "git submodule update --init failed with ${GIT_SUBMOD_RESULT}, please checkout submodules")
-		ENDIF()
-
-	ENDIF()
-ELSE()
-
-ENDIF()
-
 
 #################################
 # Inlucde external resources.
@@ -364,6 +344,17 @@ ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/frag-core)
 IF(BUILD_WITH_TEST)
 	ENABLE_TESTING()
 ENDIF()
+
+
+################################
+# Platform
+#################################
+IF(ANDROID)
+	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/platforms/android)
+ELSEIF(UNIX)
+	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/platforms/unix)
+ENDIF()
+
 
 ##########################################################
 #	Seperate Modules, based on the core library.
@@ -397,6 +388,8 @@ IF(BUILD_MODULES)
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/IO/can)
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/IO/modbus)
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/IO/SerialIO)
+
+	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/font)
 
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/videoplayback)
 

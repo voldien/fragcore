@@ -45,6 +45,11 @@ namespace fragcore {
 	class VKTexture;
 	class VKSampler;
 	class VKShader;
+	class VKFrameBuffer;
+	class VKViewport;
+	class VKQuery;
+	class VKCommandList;
+	class VKRenderPipeline;
 	class VKRenderInterface;
 } // namespace fragcore
 
@@ -144,23 +149,10 @@ namespace fragcore {
 	// 	Capability capability;
 	// } VulkanCore;
 
-	typedef struct opengl_viewport_t {
+	typedef struct vulkan_viewport_t {
 		unsigned int viewport;
 	} VKViewPort;
 
-	/**
-	 *
-	 */
-	typedef struct vulkan_texture_object_t {
-		std::shared_ptr<VKDevice> device;
-		// VulkanCore *vulkanCore;
-		TextureDesc desc;
-		unsigned int target;
-		VkImage texture;
-		VkDeviceMemory imageMemory;
-		VkSampler sampler;
-		VkImageView view;
-	} VKTextureObject;
 
 	/**
 	 *
@@ -185,106 +177,23 @@ namespace fragcore {
 		VkDescriptorSet descriptorSet;
 	} VKPipelineObject;
 
-	/**
-	 *
-	 */
-	typedef struct vulkan_buffer_object_t {
-		VulkanCore *vulkanCore;
-		BufferDesc desc;
-		unsigned int target;
-		unsigned int base;
-		VkBuffer buffer;
-		VkDeviceMemory vertexBufferMemory;
-	} VKBufferObject;
+	extern FVDECLSPEC unsigned int getTextureFormat(fragcore::TextureDesc::Format format);
 
-	/**
-	 *
-	 */
-	typedef struct vulkan_geometry_object_t {
-		VulkanCore *vulkanCore;
-		GeometryDesc desc;
-		unsigned int mode;
-		unsigned int vao;
-		unsigned int indicesType;
-		Buffer *indicesbuffer;
-		Buffer *vertexbuffer;
+	extern FVDECLSPEC unsigned int getTextureTarget(fragcore::TextureDesc::Target target);
 
-	} VKGeometryObject;
+	extern FVDECLSPEC unsigned int getTextureType(fragcore::TextureDesc::Type type);
 
-	/**
-	 *
-	 */
-	typedef struct vulkan_framebuffer_object_t {
-		VulkanCore *vulkanCore;
-		FrameBufferDesc desc;
-		unsigned int framebuffer;
-		VKTextureObject *textures;
-	} VKFrameBufferObject;
+	extern FVDECLSPEC unsigned int getBufferType(fragcore::BufferDesc::BufferType type);
+
+	extern FVDECLSPEC unsigned int getBufferHint(fragcore::BufferDesc::BufferHint hint);
+
+	extern FVDECLSPEC unsigned int getPrimitive(fragcore::GeometryDesc::Primitive primitive);
+
+	extern FVDECLSPEC unsigned int getAttributeDataType(fragcore::GeometryDesc::AttributeType type);
+
+	extern FVDECLSPEC unsigned int getState(unsigned int state);
+
 } // namespace fragcore
 
-// extern void createInstance(fragcore::VulkanCore *vulkanCore, IConfig *config);
-// extern void createDebugMessenger(fragcore::VulkanCore *vulkanCore, IConfig  *config);
-// extern void createSurface(fragcore::VulkanCore *vulkanCore, IConfig *config);
-
-// /*  Helper functions.   */
-// extern uint32_t findMemoryType(fragcore::VulkanCore *vulkanCore, uint32_t typeFilter, VkMemoryPropertyFlags
-// properties);
-
-// extern void
-// createBuffer(fragcore::VulkanCore *vulkanCore, VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags
-// properties, 			 VkBuffer &buffer, VkDeviceMemory &bufferMemory);
-
-// extern VkImageView createImageView(fragcore::VulkanCore *vulkanCore, VkImage image, VkFormat format);
-
-// extern VkShaderModule createShaderModule(VkDevice device, const char *pdata, size_t size);
-
-// //
-// extern bool isDeviceSuitable(VkPhysicalDevice device);
-
-// extern void selectDefaultDevices(std::vector<VkPhysicalDevice> &devices, std::vector<VkPhysicalDevice>
-// &selectDevices);
-
-// //TODO improve to accomudate the configurations.
-// extern VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR> &availableFormats);
-
-// extern VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR> &availablePresentModes);
-
-// extern VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR &capabilities);
-
-// struct QueueFamilyIndices {
-// 	uint32_t graphicsFamily = -1;
-// 	uint32_t presentFamily = -1;
-
-// 	bool isComplete() {
-// 		return graphicsFamily != -1 && presentFamily != -1;
-// 	}
-// };
-
-// extern QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device,
-// 											VkSurfaceKHR surface);
-
-// struct SwapChainSupportDetails {
-// 	VkSurfaceCapabilitiesKHR capabilities;
-// 	std::vector<VkSurfaceFormatKHR> formats;
-// 	std::vector<VkPresentModeKHR> presentModes;
-// };
-
-// extern SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device, VkSurfaceKHR surface);
-// // TODO move to the helper file.
-extern unsigned int getTextureFormat(fragcore::TextureDesc::Format format);
-
-extern unsigned int getTextureTarget(fragcore::TextureDesc::Target target);
-
-extern unsigned int getTextureType(fragcore::TextureDesc::Type type);
-
-extern unsigned int getBufferType(fragcore::BufferDesc::BufferType type);
-
-extern unsigned int getBufferHint(fragcore::BufferDesc::BufferHint hint);
-
-extern unsigned int getPrimitive(fragcore::GeometryDesc::Primitive primitive);
-
-extern unsigned int getAttributeDataType(fragcore::GeometryDesc::AttributeType type);
-
-extern unsigned int getState(unsigned int state);
 
 #endif

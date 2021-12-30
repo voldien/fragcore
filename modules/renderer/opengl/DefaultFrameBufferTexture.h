@@ -18,11 +18,11 @@
  */
 #ifndef _FRAG_CORE_DEFAULTFRAMEBUFFERTEXTURE_H_
 #define _FRAG_CORE_DEFAULTFRAMEBUFFERTEXTURE_H_ 1
-#include "../Texture.h"
+#include "GLTexture.h"
 
 namespace fragcore {
 
-	class FrameBufferTexture : public Texture {
+	class FrameBufferTexture : public GLTexture {
 	  public:
 		FrameBufferTexture();
 

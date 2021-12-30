@@ -1,105 +1,101 @@
-#include "../Sampler.h"
+#include "GLSampler.h"
 #include "../Texture.h"
 #include "internal_object_type.h"
 #include <GL/glew.h>
 using namespace fragcore;
-Sampler::~Sampler() {}
+GLSampler::~GLSampler() {}
 
-void Sampler::setFilterMode(FilterMode mode) {
-	GLSamplerObject *sampler = (GLSamplerObject *)this->getObject();
+void GLSampler::setFilterMode(FilterMode mode) {
 
-	glSamplerParameteri(sampler->sampler, GL_TEXTURE_MAG_FILTER, getTextureFilterMode(mode));
-	glSamplerParameteri(sampler->sampler, GL_TEXTURE_MIN_FILTER, getTextureFilterMode(mode));
+	glSamplerParameteri(this->sampler, GL_TEXTURE_MAG_FILTER, getTextureFilterMode(mode));
+	glSamplerParameteri(this->sampler, GL_TEXTURE_MIN_FILTER, getTextureFilterMode(mode));
 }
 
-Sampler::FilterMode Sampler::getFilterMode() {
-	GLSamplerObject *sampler = (GLSamplerObject *)this->getObject();
+GLSampler::FilterMode GLSampler::getFilterMode() {
 	int wrapS;
 	int wrapT;
 
-	glGetSamplerParameteriv(sampler->sampler, GL_TEXTURE_MAG_FILTER, &wrapS);
-	glGetSamplerParameteriv(sampler->sampler, GL_TEXTURE_MIN_FILTER, &wrapT);
+	glGetSamplerParameteriv(this->sampler, GL_TEXTURE_MAG_FILTER, &wrapS);
+	glGetSamplerParameteriv(this->sampler, GL_TEXTURE_MIN_FILTER, &wrapT);
 
-	return Sampler::FilterMode::eBilinear;
+	return GLSampler::FilterMode::eBilinear;
 }
 
-void Sampler::setWrapMode(Sampler::WrapMode mode) {
-	GLSamplerObject *sampler = (GLSamplerObject *)this->getObject();
+void GLSampler::setWrapMode(GLSampler::WrapMode mode) {
 	unsigned int wrapMode = getTextureWrapMode(mode);
 
 	/*  */
-	glSamplerParameteri(sampler->sampler, GL_TEXTURE_WRAP_S, wrapMode);
-	glSamplerParameteri(sampler->sampler, GL_TEXTURE_WRAP_T, wrapMode);
-	glSamplerParameteri(sampler->sampler, GL_TEXTURE_WRAP_R, wrapMode);
+	glSamplerParameteri(this->sampler, GL_TEXTURE_WRAP_S, wrapMode);
+	glSamplerParameteri(this->sampler, GL_TEXTURE_WRAP_T, wrapMode);
+	glSamplerParameteri(this->sampler, GL_TEXTURE_WRAP_R, wrapMode);
 }
 
-Sampler::WrapMode Sampler::getWrapMode() {
+GLSampler::WrapMode GLSampler::getWrapMode() {
 	int wrapS;
 	int wrapT;
 	int wrapR;
-	GLSamplerObject *sampler = (GLSamplerObject *)this->getObject();
-	glGetSamplerParameteriv(sampler->sampler, GL_TEXTURE_WRAP_S, &wrapS);
-	glGetSamplerParameteriv(sampler->sampler, GL_TEXTURE_WRAP_T, &wrapT);
-	glGetSamplerParameteriv(sampler->sampler, GL_TEXTURE_WRAP_R, &wrapR);
+
+	glGetSamplerParameteriv(this->sampler, GL_TEXTURE_WRAP_S, &wrapS);
+	glGetSamplerParameteriv(this->sampler, GL_TEXTURE_WRAP_T, &wrapT);
+	glGetSamplerParameteriv(this->sampler, GL_TEXTURE_WRAP_R, &wrapR);
 	if (wrapR == wrapS == wrapT == GL_REPEAT)
-		return Sampler::WrapMode::eRepeat;
+		return GLSampler::WrapMode::eRepeat;
 	if (wrapR == wrapS == wrapT == GL_MIRRORED_REPEAT)
-		return Sampler::WrapMode::eMirror;
+		return GLSampler::WrapMode::eMirror;
 	if (wrapR == wrapS == wrapT == GL_CLAMP_TO_EDGE)
-		return Sampler::WrapMode::eClamp;
+		return GLSampler::WrapMode::eClamp;
 
-	return Sampler::WrapMode::eClamp;
+	return GLSampler::WrapMode::eClamp;
 }
 
-void Sampler::setAnisotropic(float anisotropy) {
-	GLSamplerObject *sample = (GLSamplerObject *)this->getObject();
-	glSamplerParameterf(sample->sampler, GL_TEXTURE_MAX_ANISOTROPY_EXT, anisotropy);
+void GLSampler::setAnisotropic(float anisotropy) {
+
+	glSamplerParameterf(this->sampler, GL_TEXTURE_MAX_ANISOTROPY_EXT, anisotropy);
 }
 
-float Sampler::getAnisotropic() const {
+float GLSampler::getAnisotropic() const {
 	float ansio;
-	GLSamplerObject *sampler = (GLSamplerObject *)this->getObject();
-	glGetSamplerParameterfv(sampler->sampler, GL_TEXTURE_MAX_ANISOTROPY_EXT, &ansio);
+
+	glGetSamplerParameterfv(this->sampler, GL_TEXTURE_MAX_ANISOTROPY_EXT, &ansio);
 	return ansio;
 }
 
-Sampler::CompareFunc Sampler::getCompare() const { GLSamplerObject *sampler = (GLSamplerObject *)this->getObject(); }
+GLSampler::CompareFunc GLSampler::getCompare() const { }
 
-void Sampler::setCompareFunc(CompareFunc compareFunc) {
-	GLSamplerObject *sampler = (GLSamplerObject *)this->getObject();
+void GLSampler::setCompareFunc(CompareFunc compareFunc) {
+
 	GLenum glCompareFunc = getTextureCompareMode(compareFunc);
 	// TODO resolve.
-	// glGetSamplerParameterfv(sampler->sampler, GL_TEXTURE_COMPARE_FUNC, glCompareFunc);
+	// glGetSamplerParameterfv(this->sampler, GL_TEXTURE_COMPARE_FUNC, glCompareFunc);
 }
 
-void Sampler::setMipMapBaseLevel(unsigned int level) {}
+void GLSampler::setMipMapBaseLevel(unsigned int level) {}
 
-unsigned int Sampler::getMipMapBaseLevel() const { return 0; }
+unsigned int GLSampler::getMipMapBaseLevel() const { return 0; }
 
-void Sampler::setMipMapBias(float bias) {}
+void GLSampler::setMipMapBias(float bias) {}
 
-float Sampler::getMipMapBias(float bias) const { return 0; }
+float GLSampler::getMipMapBias(float bias) const { return 0; }
 
-void Sampler::setBorderColor(float color) {}
+void GLSampler::setBorderColor(float color) {}
 
-float Sampler::getBorderColor() const { return 0; }
+float GLSampler::getBorderColor() const { return 0; }
 
-unsigned int Sampler::setMaxLod(unsigned int level) { return 0; }
+unsigned int GLSampler::setMaxLod(unsigned int level) { return 0; }
 
-unsigned int Sampler::getMaxLod() const { return 0; }
+unsigned int GLSampler::getMaxLod() const { return 0; }
 
-unsigned int Sampler::setMinLod(unsigned int level) { return 0; }
+unsigned int GLSampler::setMinLod(unsigned int level) { return 0; }
 
-unsigned int Sampler::getMinLod() const { return 0; }
+unsigned int GLSampler::getMinLod() const { return 0; }
 
-void Sampler::setName(const std::string &name) {
-	GLSamplerObject *sampler = (GLSamplerObject *)this->getObject();
+void GLSampler::setName(const std::string &name) {
 	Object::setName(name);
 
 	/*  Update the marker.  */
 	MarkerDebug marker = {};
 	marker.markerName = name.c_str();
-	// addMarkerLabel((const OpenGLCore *) getRenderer()->getData(), GL_SAMPLER, sampler->sampler, &marker);
+	// addMarkerLabel((const OpenGLCore *) getRenderer()->getData(), GL_SAMPLER, this->sampler, &marker);
 }
 
-intptr_t Sampler::getNativePtr() const { return 0; }
+intptr_t GLSampler::getNativePtr() const { return 0; }

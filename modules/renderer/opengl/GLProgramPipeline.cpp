@@ -1,120 +1,119 @@
-#include "../RenderPipeline.h"
 #include "../Shader.h"
+#include "GLRenderPipeline.h"
 #include "internal_object_type.h"
 #include <GL/glew.h>
 using namespace fragcore;
 
-void RenderPipeline::bind() {
-	GLProgramPipeline *pipeline = (GLProgramPipeline *)this->pdata;
-	glBindProgramPipeline(pipeline->program);
+void GLRenderPipeline::bind() {
+
+	glBindProgramPipeline(this->program);
 	// glActiveShaderProgram
 }
 
-int RenderPipeline::getLocation(const char *name) {
-	GLProgramPipeline *shadobj = (GLProgramPipeline *)this->pdata;
-	return glGetUniformLocation(shadobj->program, name);
+int GLRenderPipeline::getLocation(const char *name) {
+
+	return glGetUniformLocation(this->program, name);
 }
 
-void RenderPipeline::setInt(int location, int value) {
-	GLProgramPipeline *shadobj = (GLProgramPipeline *)this->pdata;
-	glProgramUniform1i(shadobj->program, location, value);
+void GLRenderPipeline::setInt(int location, int value) {
+
+	glProgramUniform1i(this->program, location, value);
 }
 
-void RenderPipeline::setFloat(int location, float value) {
-	GLProgramPipeline *shadobj = (GLProgramPipeline *)this->pdata;
-	glProgramUniform1f(shadobj->program, location, value);
+void GLRenderPipeline::setFloat(int location, float value) {
+
+	glProgramUniform1f(this->program, location, value);
 }
 
-void RenderPipeline::setFloatv(int location, int n, const float *values) {
-	GLProgramPipeline *shadobj = (GLProgramPipeline *)this->pdata;
-	glProgramUniform1fv(shadobj->program, location, n, values);
+void GLRenderPipeline::setFloatv(int location, int n, const float *values) {
+
+	glProgramUniform1fv(this->program, location, n, values);
 }
 
-void RenderPipeline::setVec2(int location, const float v1, const float v2) {
-	GLProgramPipeline *shadobj = (GLProgramPipeline *)this->pdata;
-	glProgramUniform2f(shadobj->program, location, v1, v2);
+void GLRenderPipeline::setVec2(int location, const float v1, const float v2) {
+
+	glProgramUniform2f(this->program, location, v1, v2);
 }
 
-void RenderPipeline::setVec2v(int location, int n, const float *values) {
-	GLProgramPipeline *shadobj = (GLProgramPipeline *)this->pdata;
-	glProgramUniform2fv(shadobj->program, location, n, values);
+void GLRenderPipeline::setVec2v(int location, int n, const float *values) {
+	glProgramUniform2fv(this->program, location, n, values);
 }
 
-void RenderPipeline::setMatrix4f(int location, const float *pvalue) {
-	GLProgramPipeline *shadobj = (GLProgramPipeline *)this->pdata;
-	glProgramUniformMatrix4fv(shadobj->program, location, 1, GL_FALSE, pvalue);
+void GLRenderPipeline::setMatrix4f(int location, const float *pvalue) {
+
+	glProgramUniformMatrix4fv(this->program, location, 1, GL_FALSE, pvalue);
 }
 
-void RenderPipeline::setMatrix4fv(int location, int n, const float *pvalue) {
-	GLProgramPipeline *shadobj = (GLProgramPipeline *)this->pdata;
-	glProgramUniformMatrix4fv(shadobj->program, location, n, GL_FALSE, pvalue);
+void GLRenderPipeline::setMatrix4fv(int location, int n, const float *pvalue) {
+
+	glProgramUniformMatrix4fv(this->program, location, n, GL_FALSE, pvalue);
 }
 
-static GLenum getShaderFlag(RenderPipeline::ShaderType type) {
+static GLenum getShaderFlag(GLRenderPipeline::ShaderType type) {
 	GLenum flag = 0;
 
-	if (type & RenderPipeline::VERTEX_SHADER)
+	if (type & GLRenderPipeline::VERTEX_SHADER)
 		flag |= GL_VERTEX_SHADER_BIT;
-	if (type & RenderPipeline::FRAGMENT_SHADER)
+	if (type & GLRenderPipeline::FRAGMENT_SHADER)
 		flag |= GL_FRAGMENT_SHADER_BIT;
-	if (type & RenderPipeline::GEOMETRY_SHADER)
+	if (type & GLRenderPipeline::GEOMETRY_SHADER)
 		flag |= GL_GEOMETRY_SHADER_BIT;
-	if (type & RenderPipeline::TESSELLATION_CONTROL_SHADER)
+	if (type & GLRenderPipeline::TESSELLATION_CONTROL_SHADER)
 		flag |= GL_TESS_CONTROL_SHADER_BIT;
-	if (type & RenderPipeline::TESSELLATION_EVOLUTION_SHADER)
+	if (type & GLRenderPipeline::TESSELLATION_EVOLUTION_SHADER)
 		flag |= GL_TESS_EVALUATION_SHADER_BIT;
-	if (type & RenderPipeline::COMPUTE_SHADER)
+	if (type & GLRenderPipeline::COMPUTE_SHADER)
 		flag |= GL_COMPUTE_SHADER_BIT;
 
 	return flag;
 }
 
-Shader *RenderPipeline::getShader(ShaderType type) {
-	GLProgramPipeline *shadobj = (GLProgramPipeline *)this->pdata;
+Shader *GLRenderPipeline::getShader(ShaderType type) {
 
-	switch (type) {
-	case VERTEX_SHADER:
-		return shadobj->v;
-	case FRAGMENT_SHADER:
-		return shadobj->f;
-	case GEOMETRY_SHADER:
-		return shadobj->g;
-	case TESSELLATION_CONTROL_SHADER:
-		return shadobj->tc;
-	case TESSELLATION_EVOLUTION_SHADER:
-		return shadobj->te;
-	case COMPUTE_SHADER:
-		return shadobj->c;
-	default:
-		assert(0);
-	}
+
+	// switch (type) {
+	// case VERTEX_SHADER:
+	// 	return this->v;
+	// case FRAGMENT_SHADER:
+	// 	return this->f;
+	// case GEOMETRY_SHADER:
+	// 	return this->g;
+	// case TESSELLATION_CONTROL_SHADER:
+	// 	return this->tc;
+	// case TESSELLATION_EVOLUTION_SHADER:
+	// 	return this->te;
+	// case COMPUTE_SHADER:
+	// 	return this->c;
+	// default:
+	// 	assert(0);
+	// }
 
 	return nullptr;
 }
 
-void RenderPipeline::setShader(ShaderType type, Shader *shader) {
-	GLProgramPipeline *shadobj = (GLProgramPipeline *)this->pdata;
-	GLShaderObject *glShader = (GLShaderObject *)shader->getObject();
+void GLRenderPipeline::setShader(ShaderType type, Shader *shader) {
+	// GLProgramPipeline *this = (GLProgramPipeline *)this->pdata;
+	// GLShaderObject *glShader = (GLShaderObject *)shader->getObject();
 
-	/*  Get flag.   */
-	GLenum shaderflag = getShaderFlag(type);
+	// /*  Get flag.   */
+	// GLenum shaderflag = getShaderFlag(type);
 
-	/*  Update new shader.  */
-	glUseProgramStages(shadobj->program, shaderflag, glShader->program);
+	// /*  Update new shader.  */
+	// glUseProgramStages(this->program, shaderflag, glShader->program);
 
-	/*  Update shader reference. */
-	if (type & RenderPipeline::VERTEX_SHADER)
-		shadobj->v = shader;
-	if (type & RenderPipeline::FRAGMENT_SHADER)
-		shadobj->f = shader;
-	if (type & RenderPipeline::GEOMETRY_SHADER)
-		shadobj->g = shader;
-	if (type & RenderPipeline::TESSELLATION_CONTROL_SHADER)
-		shadobj->tc = shader;
-	if (type & RenderPipeline::TESSELLATION_EVOLUTION_SHADER)
-		shadobj->te = shader;
-	if (type & RenderPipeline::COMPUTE_SHADER)
-		shadobj->c = shader;
+	// /*  Update shader reference. */
+	// if (type & GLRenderPipeline::VERTEX_SHADER)
+	// 	this->v = shader;
+	// if (type & GLRenderPipeline::FRAGMENT_SHADER)
+	// 	this->f = shader;
+	// if (type & GLRenderPipeline::GEOMETRY_SHADER)
+	// 	this->g = shader;
+	// if (type & GLRenderPipeline::TESSELLATION_CONTROL_SHADER)
+	// 	this->tc = shader;
+	// if (type & GLRenderPipeline::TESSELLATION_EVOLUTION_SHADER)
+	// 	this->te = shader;
+	// if (type & GLRenderPipeline::COMPUTE_SHADER)
+	// 	this->c = shader;
 }
 
-intptr_t RenderPipeline::getNativePtr() const { return 0; }
+intptr_t GLRenderPipeline::getNativePtr() const { return this->program; }

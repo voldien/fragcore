@@ -20,7 +20,9 @@
 #define _FRAGCORE_VULKAN_FRAMEBUFFER_H_ 1
 #include "../IRenderer.h"
 #include "../RenderObject.h"
+#include "VKTexture.h"
 #include <vector>
+#include <vulkan/vulkan.h>
 
 namespace fragcore {
 	/**
@@ -77,6 +79,11 @@ namespace fragcore {
 		 */
 		virtual int layers() override;
 
+		/**
+		 * @brief 
+		 *
+		 * @return int
+		 */
 		virtual int nrSamples() override;
 
 		/*  */
@@ -100,6 +107,17 @@ namespace fragcore {
 		virtual intptr_t getNativePtr() const override;
 
 		virtual void setName(const std::string &name) override;
+
+	  public:
+		VkRenderPass getRenderPass() const noexcept { return this->pass; }
+		VkFramebuffer getFramebuffer() const noexcept { return this->framebuffer; }
+
+	  private:
+		std::vector<VKTexture *> textures;
+		VKTexture *depth_stencil;
+		VkFramebuffer framebuffer;
+		FrameBufferDesc desc;
+		VkRenderPass pass;
 	};
 } // namespace fragcore
 #endif

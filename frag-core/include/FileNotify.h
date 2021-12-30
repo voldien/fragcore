@@ -39,6 +39,7 @@ namespace fragcore {
 	 *
 	 */
 	// TODO make it more generic in order to reduce coupling and increase cohession!
+	//TODO rename to filesystemNotify
 	class FVDECLSPEC FileNotify : public IFileNotify {
 	  public:
 		/**

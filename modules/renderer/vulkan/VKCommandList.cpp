@@ -1,7 +1,9 @@
 #include "VKCommandList.h"
 #include "../RenderPipeline.h"
+#include "VKBuffer.h"
+#include "VKFrameBuffer.h"
+#include "VKTexture.h"
 #include "internal_object_type.h"
-#include <GL/glew.h>
 
 #include <vulkan/vulkan.h>
 
@@ -70,7 +72,12 @@ void VKCommandList::beginCurrentRenderPass() {
 }
 void VKCommandList::endCurrentRenderPass() { vkCmdEndRenderPass(cmdBuffer); }
 
-void VKCommandList::bindFramebuffer(Ref<FrameBuffer> &framebuffer) { beginCurrentRenderPass(); }
+void VKCommandList::bindFramebuffer(Ref<FrameBuffer> &framebuffer) {
+	VKFrameBuffer *vkFrame = static_cast<VKFrameBuffer *>(framebuffer.ptr());
+
+	/*	*/
+	beginCurrentRenderPass();
+}
 
 void VKCommandList::setViewport(int x, int y, int width, int height) {
 	VkViewport vkViewport = {
@@ -126,8 +133,8 @@ void VKCommandList::dispatch(uint groupCountX, uint groupCountY, uint groupCount
 	// 					 nullptr);
 }
 void VKCommandList::dispatchIndirect(Buffer *buffer, u_int64_t offset) {
-	VKBufferObject *vkBuffer = (VKBufferObject *)buffer->getObject();
-	vkCmdDispatchIndirect(cmdBuffer, vkBuffer->buffer, offset);
+	VKBuffer *vkBuffer = (VKBuffer *)buffer;
+	vkCmdDispatchIndirect(cmdBuffer, vkBuffer->getBuffer(), offset);
 }
 
 void VKCommandList::pushDebugGroup(const char *name) {
@@ -148,7 +155,5 @@ void VKCommandList::insertDebugMarker(const char *name) {
 
 	pvkCmdDebugMarkerInsertEXT(cmdBuffer, &markerinfo);
 }
-
-
 
 void VKCommandList::draw(Ref<Buffer> &buffer, uint32_t vertexCount, uint32_t instanceCount) {}

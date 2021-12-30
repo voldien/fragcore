@@ -29,19 +29,33 @@ namespace fragcore {
 
 	public:
 
-		enum SyncStatus {
+		enum class SyncStatus {
 			Complete = 0x0,
 			TimeOutExpired = 0x1,
 			Error = 0x2,
 		};
 
-		virtual void fence();
+		/**
+		 * @brief
+		 *
+		 */
+		virtual void fence() = 0;
 
-		virtual void wait(int timeout = 0);
+		/**
+		 * @brief
+		 *
+		 * @param timeout
+		 */
+		virtual void wait(int timeout = 0) = 0;
 
-		virtual SyncStatus waitClient(int timeout); /*  Wait in microseconds.   */
+		/**
+		 * @brief
+		 *
+		 * @param timeout
+		 * @return SyncStatus
+		 */
+		virtual SyncStatus waitClient(int timeout) = 0; /*  Wait in microseconds.   */
 
-		virtual intptr_t getNativePtr() const;
 	};
 }
 

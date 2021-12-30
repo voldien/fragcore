@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="org.fragengine.frag"
+	package="com.codeintrinsic.fragcore"
 	android:versionCode="1"
 	android:versionName="1.0">
 
@@ -9,8 +9,8 @@
 	</application>
 
 	<instrumentation
-		android:name="org.fragengine.frag.FragInstrumentation"
-		android:targetPackage="org.fragengine.frag">
+		android:name="org.codeintrinsic.fragcore.FragCoreInstrumentation"
+		android:targetPackage="com.codeintrinsic.fragcore">
 	</instrumentation>
 
 </manifest>

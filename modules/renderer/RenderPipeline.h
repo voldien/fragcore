@@ -38,32 +38,33 @@ namespace fragcore {
 			COMPUTE_SHADER = 0x20					/*	*/
 		};
 
+		virtual ~RenderPipeline() = default;
+
 		/**
 		 *
 		 */
-		virtual void bind();
+		virtual void bind() = 0;
 
-		virtual int getLocation(const char *name);
+		virtual int getLocation(const char *name) = 0;
 
-		virtual void setInt(int location, int value);
+		virtual void setInt(int location, int value) = 0;
 
-		virtual void setFloat(int location, float value);
+		virtual void setFloat(int location, float value) = 0;
 
-		virtual void setFloatv(int location, int n, const float *values);
+		virtual void setFloatv(int location, int n, const float *values) = 0;
 
-		virtual void setVec2(int location, const float v1, const float v2);
+		virtual void setVec2(int location, const float v1, const float v2) = 0;
 
-		virtual void setVec2v(int location, int n, const float *values);
+		virtual void setVec2v(int location, int n, const float *values) = 0;
 
-		virtual void setMatrix4f(int location, const float *pvalue);
+		virtual void setMatrix4f(int location, const float *pvalue) = 0;
 
-		virtual void setMatrix4fv(int location, int n, const float *pvalue);
+		virtual void setMatrix4fv(int location, int n, const float *pvalue) = 0;
 
-		virtual Shader *getShader(ShaderType type);
+		virtual Shader *getShader(ShaderType type) = 0;
 
-		virtual void setShader(ShaderType type, Shader *shader);
+		virtual void setShader(ShaderType type, Shader *shader) = 0;
 
-		intptr_t getNativePtr() const override;
 	};
 }
 

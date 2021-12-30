@@ -4,6 +4,7 @@
 #include <RendererFactory.h>
 #include <RendererWindow.h>
 #include <SDL2/SDL.h>
+#include <VKRenderInterface.h>
 #include <ViewPort.h>
 #include <Window/WindowManager.h>
 
@@ -14,17 +15,23 @@ int main(int argc, const char **argv) {
 	// Config* config = Config::createConfig(argc, argv,
 	// Config::getConfigFilePath(argc, argv));
 
-	//	SDL_Init(SDL_INIT_EVERYTHING);
 	Display *primaryDisplay = WindowManager::getInstance()->getDisplay(0);
 
-	Ref<IRenderer> renderer = Ref<IRenderer>(new GLRendererInterface(nullptr));
-	// Ref<IRenderer>(RenderingFactory::createRendering(RenderingFactory::RenderingAPI::OpenGL, NULL));
-
+	int renderOpt = atoi(argv[1]);
+	Ref<IRenderer> renderer = nullptr;
+	if (renderOpt == 0) {
+		renderer = Ref<IRenderer>(new VKRenderInterface(nullptr));
+	} else if (renderOpt == 1) {
+		renderer = Ref<IRenderer>(new GLRendererInterface(nullptr));
+	} else {
+		return EXIT_FAILURE;
+	}
 	// RendererWindow *window = renderer->createWindow(primaryDisplay->width() / 4, primaryDisplay->height() / 4,
 	// 												primaryDisplay->width() / 2, primaryDisplay->width() / 2);
 	RendererWindow *window = renderer->createWindow(0, 0, 100, 100);
+
 	window->vsync(true);
-	window->setTitle(fmt::format("Cube Example: {}", renderer->getName()).c_str());
+	// window->setTitle(fmt::format("Cube Example: {}", renderer->getName()));
 	window->show();
 
 	// ShaderUtil::loadProgram()
@@ -33,8 +40,9 @@ int main(int argc, const char **argv) {
 
 	CommandList *clc = renderer->createCommandBuffer();
 	clc->begin();
-	Ref<FrameBuffer> defaultFramebuffer = Ref<FrameBuffer>(renderer->getDefaultFramebuffer(NULL));
+	Ref<FrameBuffer> defaultFramebuffer = Ref<FrameBuffer>(window->getDefaultFrameBuffer());
 	clc->bindFramebuffer(defaultFramebuffer);
+	clc->setViewport(0, 0, 100, 100);
 	clc->clearColorTarget(0, Color(1, 0, 0, 1));
 	clc->end();
 	// clc->bindPipeline()

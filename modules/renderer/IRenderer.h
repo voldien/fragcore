@@ -178,21 +178,6 @@ namespace fragcore {
 		// TODO add viewobject for handling as a object
 		virtual ViewPort *getView(unsigned int i) = 0;
 
-		// /**
-		//  *
-		//  * @param bitflag
-		//  */
-		// virtual void clear(unsigned int bitflag);   //TODO relocate to the default framebuffer.
-
-		// /**
-		//  * Set clear color RGBA.
-		//  * @param r
-		//  * @param g
-		//  * @param b
-		//  * @param a
-		//  */
-		// virtual void clearColor(float r, float g, float b, float a);    // TODO relocate to the framebuffer
-
 		/**
 		 *	Set depth mask.
 		 */

@@ -18,7 +18,7 @@
  */
 #ifndef _FRAG_CORE_SHADER_H_
 #define _FRAG_CORE_SHADER_H_ 1
-#include"Buffer.h"
+#include "Buffer.h"
 
 namespace fragcore {
 	/**
@@ -27,29 +27,30 @@ namespace fragcore {
 	class FVDECLSPEC Shader : public RenderObject {
 		friend class IRenderer;
 
-	public:
+	  public:
+		virtual ~Shader() = default;
 
-		virtual void bind();
+		virtual void bind() = 0;
 
-		virtual int getLocation(const char *cparamname);
+		virtual int getLocation(const char *cparamname) = 0;
 
-		virtual void setInt(int location, int value);
-		//virtual void setIntv(int location, int n, const float *values);
+		virtual void setInt(int location, int value) = 0;
+		// virtual void setIntv(int location, int n, const float *values);
 
-		virtual void setFloat(int location, float value);
+		virtual void setFloat(int location, float value) = 0;
 
-		virtual void setFloatv(int location, int n, const float *values);
+		virtual void setFloatv(int location, int n, const float *values) = 0;
 
-		virtual void setVec2(int location, const float v1, const float v2);
+		virtual void setVec2(int location, const float v1, const float v2) = 0;
 
-		virtual void setVec2v(int location, int n, const float *values);
+		virtual void setVec2v(int location, int n, const float *values) = 0;
 
-		virtual void setMatrix4f(int location, const float *pvalue);
+		virtual void setMatrix4f(int location, const float *pvalue) = 0;
 
-		virtual void setMatrix4fv(int location, int n, const float *pvalue);
+		virtual void setMatrix4fv(int location, int n, const float *pvalue) = 0;
 
-		//virtual int getNumberUniform();
-		//virtual void getUniform(int location);
+		// virtual int getNumberUniform();
+		// virtual void getUniform(int location);
 
 		//	virtual void getAttributeLocatoin(const char* cparamname);
 		//	virtual void getFragmentLocation(const char* cparamname);
@@ -66,30 +67,25 @@ namespace fragcore {
 		//	};
 		//	virtual ShaderPrecision getShaderPrecision();
 
-		//virtual void bindBuffer(const char*  name,
+		// virtual void bindBuffer(const char*  name,
 		//                       Buffer * buffer);
 
-		//virtual void bindUniformBuffer(const char* name, Buffer* buffer);
+		// virtual void bindUniformBuffer(const char* name, Buffer* buffer);
 
-		//virtual void* mapBindingUniform(int location);
-		//virtual void unMapBindingUniform(int location);
+		// virtual void* mapBindingUniform(int location);
+		// virtual void unMapBindingUniform(int location);
 
-//	virtual void setFragLocation(const char* name, int index);
-//	virtual void setAttributeLocation(const char* name, int index);
+		//	virtual void setFragLocation(const char* name, int index);
+		//	virtual void setAttributeLocation(const char* name, int index);
 
+		virtual void getLocalGroupSize(int *sizes) = 0;
 
-		virtual void getLocalGroupSize(int *sizes);
+		// TODO determine if relocate or not!
+		virtual void *getBinary(long int *size, unsigned int *format) = 0;
 
-		//TODO determine if relocate or not!
-		virtual void *getBinary(long int *size, unsigned int *format);
-
-		//virtual void* getBinaryShader(long int* size, unsigned int* fvformatf, int p);
-		virtual void *getSource(long int *size);//TODO rename to the shader version instead of program.
-
-		void setName(const std::string &name) override;
-
-		intptr_t getNativePtr() const override;
+		// virtual void* getBinaryShader(long int* size, unsigned int* fvformatf, int p);
+		virtual void *getSource(long int *size) = 0; // TODO rename to the shader version instead of program.
 	};
-}
+} // namespace fragcore
 
 #endif

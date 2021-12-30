@@ -16,3 +16,12 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
+#include <AudioDecoder.h>
+
+namespace fragcore {
+	class AVAudioDecoder : public AudioDecoder {
+	  public:
+	  private:
+	};
+} // namespace fragcore

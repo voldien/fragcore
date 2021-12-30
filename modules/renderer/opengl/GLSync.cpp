@@ -1,36 +1,31 @@
-#include "../Sync.h"
-#include "internal_object_type.h"
+#include "GLSync.h"
 #include <GL/glew.h>
 using namespace fragcore;
 
-void Sync::fence() {
-	GLSync *glSync = (GLSync *)this->getObject();
-	glSync->sync = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+void GLSync::fence() {
+	this->sync = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
 }
 
-void Sync::wait(int timeout) {
-	GLSync *glSync = (GLSync *)this->getObject();
-	glWaitSync((GLsync)glSync->sync, GL_SYNC_FLUSH_COMMANDS_BIT, timeout);
+void GLSync::wait(int timeout) {
+	glWaitSync((GLsync)this->sync, GL_SYNC_FLUSH_COMMANDS_BIT, timeout);
 }
 
-Sync::SyncStatus Sync::waitClient(int timeout) {
-	GLSync *glSync = (GLSync *)this->getObject();
-	GLenum status = glClientWaitSync((GLsync)glSync->sync, GL_SYNC_FLUSH_COMMANDS_BIT, timeout * 1000000);
+Sync::SyncStatus GLSync::waitClient(int timeout) {
+	GLenum status = glClientWaitSync((GLsync)this->sync, GL_SYNC_FLUSH_COMMANDS_BIT, timeout * 1000000);
 
 	switch (status) {
 	case GL_CONDITION_SATISFIED:
 	case GL_ALREADY_SIGNALED:
-		return Complete;
+		return Sync::SyncStatus::Complete;
 	case GL_TIMEOUT_EXPIRED:
-		return TimeOutExpired;
+		return Sync::SyncStatus::TimeOutExpired;
 	case GL_WAIT_FAILED:
-		return Error;
+		return Sync::SyncStatus::Error;
 	default:
-		return Error;
+		return Sync::SyncStatus::Error;
 	}
 }
 
-intptr_t Sync::getNativePtr() const {
-	GLSync *glSync = (GLSync *)this->getObject();
-	return (intptr_t)glSync->sync;
+intptr_t GLSync::getNativePtr() const {
+	return (intptr_t)this->sync;
 }

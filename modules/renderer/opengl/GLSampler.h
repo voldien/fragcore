@@ -16,3 +16,68 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+#ifndef _FRAG_CORE_GL_SAMPLER_H_
+#define _FRAG_CORE_GL_SAMPLER_H_ 1
+#include "../Sampler.h"
+
+namespace fragcore {
+	/**
+	 *
+	 */
+	class FVDECLSPEC GLSampler : public Sampler {
+		friend class IRenderer;
+
+	  public:
+		GLSampler() = default;
+
+		virtual ~GLSampler();
+
+		virtual void setFilterMode(FilterMode mode) override;
+
+		virtual FilterMode getFilterMode() override;
+
+		virtual void setWrapMode(WrapMode mode) override;
+
+		virtual WrapMode getWrapMode() override;
+
+		virtual void setAnisotropic(float anisotropy) override;
+
+		virtual float getAnisotropic() const override;
+
+		virtual CompareFunc getCompare() const override;
+
+		virtual void setCompareFunc(CompareFunc compareFunc) override;
+
+		virtual void setMipMapBaseLevel(unsigned int level) override;
+
+		virtual unsigned int getMipMapBaseLevel() const override;
+
+		virtual void setMipMapBias(float bias) override;
+
+		virtual float getMipMapBias(float bias) const override;
+
+		virtual void setBorderColor(float color) override;
+
+		virtual float getBorderColor() const override;
+
+		virtual unsigned int setMaxLod(unsigned int level) override;
+
+		virtual unsigned int getMaxLod() const override;
+
+		virtual unsigned int setMinLod(unsigned int level) override;
+
+		virtual unsigned int getMinLod() const override;
+
+		virtual void setName(const std::string &name) override;
+
+		intptr_t getNativePtr() const override;
+
+	  public:
+		unsigned int getSampler() const noexcept { return this->sampler; }
+
+	  private:
+		unsigned int sampler;
+	};
+} // namespace fragcore
+
+#endif

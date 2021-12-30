@@ -1,51 +1,51 @@
-#include "../Shader.h"
+#include "GLShader.h"
 #include "internal_object_type.h"
 #include <GL/glew.h>
 using namespace fragcore;
 
-void Shader::bind() {
-	GLShaderObject *shadobj = (GLShaderObject *)this->pdata;
-	glUseProgram(shadobj->program);
+void GLShader::bind() {
+
+	glUseProgram(this->program);
 }
 
-int Shader::getLocation(const char *cparamname) {
-	GLShaderObject *shadobj = (GLShaderObject *)this->pdata;
-	return glGetUniformLocation(shadobj->program, cparamname);
+int GLShader::getLocation(const char *cparamname) {
+
+	return glGetUniformLocation(this->program, cparamname);
 }
 
-void Shader::setInt(int location, int value) {
-	GLShaderObject *shadobj = (GLShaderObject *)this->pdata;
-	glProgramUniform1i(shadobj->program, location, value);
+void GLShader::setInt(int location, int value) {
+
+	glProgramUniform1i(this->program, location, value);
 }
 
-void Shader::setFloat(int location, float value) {
-	GLShaderObject *shadobj = (GLShaderObject *)this->pdata;
-	glProgramUniform1f(shadobj->program, location, value);
+void GLShader::setFloat(int location, float value) {
+
+	glProgramUniform1f(this->program, location, value);
 }
 
-void Shader::setFloatv(int location, int n, const float *values) {
-	GLShaderObject *shadobj = (GLShaderObject *)this->pdata;
-	glProgramUniform1fv(shadobj->program, location, n, values);
+void GLShader::setFloatv(int location, int n, const float *values) {
+
+	glProgramUniform1fv(this->program, location, n, values);
 }
 
-void Shader::setVec2(int location, const float v1, const float v2) {
-	GLShaderObject *shadobj = (GLShaderObject *)this->pdata;
-	glProgramUniform2f(shadobj->program, location, v1, v2);
+void GLShader::setVec2(int location, const float v1, const float v2) {
+
+	glProgramUniform2f(this->program, location, v1, v2);
 }
 
-void Shader::setVec2v(int location, int n, const float *values) {
-	GLShaderObject *shadobj = (GLShaderObject *)this->pdata;
-	glProgramUniform2fv(shadobj->program, location, n, values);
+void GLShader::setVec2v(int location, int n, const float *values) {
+
+	glProgramUniform2fv(this->program, location, n, values);
 }
 
-void Shader::setMatrix4f(int location, const float *pvalue) {
-	GLShaderObject *shadobj = (GLShaderObject *)this->pdata;
-	glProgramUniformMatrix4fv(shadobj->program, location, 1, GL_FALSE, pvalue);
+void GLShader::setMatrix4f(int location, const float *pvalue) {
+
+	glProgramUniformMatrix4fv(this->program, location, 1, GL_FALSE, pvalue);
 }
 
-void Shader::setMatrix4fv(int location, int n, const float *pvalue) {
-	GLShaderObject *shadobj = (GLShaderObject *)this->pdata;
-	glProgramUniformMatrix4fv(shadobj->program, location, n, GL_FALSE, pvalue);
+void GLShader::setMatrix4fv(int location, int n, const float *pvalue) {
+
+	glProgramUniformMatrix4fv(this->program, location, n, GL_FALSE, pvalue);
 }
 
 // TODO determine how to deal with it.
@@ -56,31 +56,31 @@ void Shader::setMatrix4fv(int location, int n, const float *pvalue) {
 // glGetProgramResourceiv
 /*
 
-void Shader::bindUniformBuffer(const char* name, BufferObject* buffer){
+void GLShader::bindUniformBuffer(const char* name, BufferObject* buffer){
 
 	GLShaderObject* shadobj = (GLShaderObject*)pobj;
 	GLBufferObject* glbuf =  (GLBufferObject*)buffer->getMappedObject();
 
-	GLuint blockindex = glGetUniformBlockIndex(shadobj->program, name);
-	glUniformBlockBinding(shadobj->program, blockindex, glbuf->base);
+	GLuint blockindex = glGetUniformBlockIndex(this->program, name);
+	glUniformBlockBinding(this->program, blockindex, glbuf->base);
 
 }
 */
-void Shader::getLocalGroupSize(int *sizes) {
-	GLShaderObject *shadobj = (GLShaderObject *)this->pdata;
-	glGetProgramiv(shadobj->program, GL_COMPUTE_WORK_GROUP_SIZE, (GLint *)sizes);
+void GLShader::getLocalGroupSize(int *sizes) {
+
+	glGetProgramiv(this->program, GL_COMPUTE_WORK_GROUP_SIZE, (GLint *)sizes);
 }
 
 // glGetAttachedShaders
 // GL_ATTACHED_SHADERS
-void *Shader::getBinary(long int *size, unsigned int *format) {
-	GLShaderObject *shadobj = (GLShaderObject *)this->pdata;
+void *GLShader::getBinary(long int *size, unsigned int *format) {
+
 	GLsizei pBsize;
 	GLenum pBformat;
 
-	glGetProgramiv(shadobj->program, GL_PROGRAM_BINARY_LENGTH, &pBsize);
+	glGetProgramiv(this->program, GL_PROGRAM_BINARY_LENGTH, &pBsize);
 	void *pBinary = malloc(pBsize);
-	glGetProgramBinary(shadobj->program, pBsize, nullptr, &pBformat, pBinary);
+	glGetProgramBinary(this->program, pBsize, nullptr, &pBformat, pBinary);
 
 	if (size)
 		*size = pBsize;
@@ -89,17 +89,17 @@ void *Shader::getBinary(long int *size, unsigned int *format) {
 	return pBinary;
 }
 
-void *Shader::getSource(long int *size) {
+void *GLShader::getSource(long int *size) {
 	return nullptr;
 }
 
-void Shader::setName(const std::string &name) {
-	GLShaderObject *shadobj = (GLShaderObject *)this->pdata;
+void GLShader::setName(const std::string &name) {
+
 	Object::setName(name);
 	/*  Update the marker.  */
 	MarkerDebug marker = {};
 	marker.markerName = name.c_str();
-	// addMarkerLabel((const OpenGLCore *) getRenderer()->getData(), GL_SHADER, shadobj->shader, &marker);
+	// addMarkerLabel((const OpenGLCore *) getRenderer()->getData(), GL_SHADER, this->shader, &marker);
 }
 
-intptr_t Shader::getNativePtr() const { return 0; }
+intptr_t GLShader::getNativePtr() const { return 0; }
