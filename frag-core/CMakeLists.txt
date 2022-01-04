@@ -208,6 +208,7 @@ CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/include/fragcore_revision.h.in" "${C
 
 IF(BUILD_WITH_INSTALL)
 	INSTALL(TARGETS fragcore DESTINATION lib COMPONENT ${LIBFRAGCORE_COMPONENT})
+	INSTALL(TARGETS infoware taskSch DESTINATION lib)
 
 	INSTALL(DIRECTORY ${FRAG_CORE_INCLUDE_SUB_DIR} # source directory
 			DESTINATION include/fragcore # target directory
