@@ -9,10 +9,7 @@ StdSpinLock::StdSpinLock() {
 }
 
 StdSpinLock::~StdSpinLock() {
-	int rc = schDeleteSpinLock(this->spinlock);
-	if (rc != SCH_OK) {
-		throw RuntimeException("Failed to delete spinlock: {}", schErrorMsg(rc));
-	}
+	schDeleteSpinLock(this->spinlock);
 }
 
 void StdSpinLock::lock() {
