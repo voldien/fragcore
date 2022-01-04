@@ -6,7 +6,7 @@ env:
   BUILD_TYPE: Release
 jobs:
   linuxbuild:
-    runs-on: "ubuntu-18.04"
+    runs-on: "ubuntu-20.04"
     name: Linux FragCore Library
     steps:
       - uses: actions/checkout@v2
@@ -43,7 +43,7 @@ jobs:
         # The CMake binaries on the Github Actions machines are (as of this writing) 3.12
         run: |
           cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_WITH_TEST=ON -DBUILD_WITH_UBSAN=ON \
-          -DBUILD_WITH_ASAN=ON -DBUILD_WITH_INSTALL=OFF -DBUILD_WITH_COVERAGE=ON -DBUILD_OPT_BUILD_PACKAGES=ON \
+          -DBUILD_WITH_ASAN=ON -DBUILD_WITH_INSTALL=ON -DBUILD_WITH_COVERAGE=ON -DBUILD_OPT_BUILD_PACKAGES=ON \
           -DBUILD_MODULES=ON
 
       - name: Build-Core

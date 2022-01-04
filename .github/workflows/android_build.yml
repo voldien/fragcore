@@ -8,7 +8,7 @@ env:
   ANDROID_NDK_VERSION: 21.4.7075529
 
 jobs:
-  android:
+  android_build:
     runs-on: "ubuntu-18.04"
     name: Android FragCore Library
 

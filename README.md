@@ -72,9 +72,56 @@ apt install libyaml-dev libjson-c-dev libxml2-dev libsdl2-dev libglew-dev libvul
   sudo apt-get install -y libsdl2-dev libglew-dev libvulkan-dev libgl1-mesa-dev opencl-headers libzip-dev libfswatch-dev libfreeimage-dev libfswatch-dev libxml2-dev 
 ```
 
+## Modules
+
+### AudioDecoder
+
+### OpenAL
+
 ```bash
-apt install libopenal-dev libalut-dev libbullet-dev
+apt install libopenal-dev libalut-dev
 ```
+
+### OpenGL
+```bash
+apt install 
+```
+
+### Vulkan
+```bash
+apt install 
+```
+
+### VideoPlayback
+```bash
+apt install 
+```
+
+### Bullet Physic
+```bash
+apt install libbullet-dev
+```
+
+### Font
+```bash
+apt install libfreetype-dev 
+```
+
+### Modbus
+```bash
+apt install libmodbus-dev
+```
+
+### Serial
+```bash
+apt install libserialport-dev 
+```
+
+### Curl FileSystem
+```bash
+apt install 
+```
+
 
 ## Assert
 

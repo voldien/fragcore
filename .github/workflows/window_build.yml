@@ -23,7 +23,7 @@ jobs:
       run: cmake -E make_directory ${{runner.workspace}}/build
 
     - name: Install chocolatey packages
-      run: choco install cmake eigen vulkan-sdk glfw3 -y --x86
+      run: choco install cmake eigen vulkan-sdk glfw3 curl -y --x86
 
     - name: Configure CMake
       # Use a bash shell so we can use the same syntax for environment variable
@@ -35,7 +35,7 @@ jobs:
       # The CMake binaries on the Github Actions machines are (as of this writing) 3.12
       run: |
         cmake $GITHUB_WORKSPACE -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_WITH_TEST=ON \
-        -DBUILD_WITH_INSTALL=OFF -DBUILD_WITH_UBSAN=ON -DBUILD_WITH_ASAN=ON -DBUILD_WITH_COVERAGE=ON
+        -DBUILD_WITH_INSTALL=ON -DBUILD_WITH_UBSAN=ON -DBUILD_WITH_ASAN=ON -DBUILD_WITH_COVERAGE=ON
      
     - name: Build-Core
       working-directory: ${{runner.workspace}}/build
