@@ -1256,9 +1256,9 @@ const char *VKRenderInterface::getVersion() const {
 void VKRenderInterface::getStatus(MemoryInfo *memoryInfo) {}
 
 CommandList *VKRenderInterface::createCommandBuffer() {
-	// Ref<IRenderer> ref = Ref<IRenderer>(this);
+	Ref<VKRenderInterface> ref = Ref<VKRenderInterface>(this);
 
-	// return new VKCommandList(ref);
+	return new VKCommandList(ref);
 }
 
 void VKRenderInterface::submittCommand(Ref<CommandList> &list) {

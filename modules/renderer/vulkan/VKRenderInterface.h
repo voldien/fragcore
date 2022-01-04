@@ -33,7 +33,7 @@ namespace fragcore {
 	 * @brief
 	 *
 	 */
-	class VKRenderInterface : public IRenderer {
+	class FVDECLSPEC VKRenderInterface : public IRenderer {
 		friend class VKRenderWindow;
 
 	  public:

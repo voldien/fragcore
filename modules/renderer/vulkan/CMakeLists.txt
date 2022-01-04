@@ -13,7 +13,7 @@ ADD_LIBRARY(fragcore-rvk-obj OBJECT ${VULKAN_RENDER_SOURCE_FILES} ${VULKAN_RENDE
 TARGET_LINK_LIBRARIES(fragcore-rvk-obj PUBLIC fragcore-window-sdl fragcore fragcore-render-interface fvkcore) #
 TARGET_COMPILE_DEFINITIONS(fragcore-rvk-obj PRIVATE FRAG_CORE_INTERNAL_IMP=1)
 
-IF (BUILD_SHARED_LIBS AND CMAKE_SIZEOF_VOID_P EQUAL 8) # -fPIC is only required
+IF (BUILD_SHARED_LIBS AND CMAKE_SIZEOF_VOID_P EQUAL 8)
 	SET_PROPERTY(TARGET fragcore-rvk-obj PROPERTY POSITION_INDEPENDENT_CODE ON)
 ENDIF()
 
@@ -33,6 +33,10 @@ ADD_DEPENDENCIES(fragcore-rvk-obj fragcore fvkcore fragcore-render-interface fra
 ADD_LIBRARY(fragcore-rvk $<TARGET_OBJECTS:fragcore-rvk-obj>)
 TARGET_LINK_LIBRARIES(fragcore-rvk PUBLIC fragcore-rvk-obj )
 ADD_DEPENDENCIES(fragcore-rvk fragcore-rvk-obj)
+
+IF (BUILD_SHARED_LIBS AND CMAKE_SIZEOF_VOID_P EQUAL 8)
+	SET_PROPERTY(TARGET fragcore-rvk PROPERTY POSITION_INDEPENDENT_CODE ON)
+ENDIF()
 
 
 # Library target.

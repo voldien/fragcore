@@ -20,6 +20,7 @@
 #define _FRAG_CORE_VK_COMMAND_LIST_H_ 1
 #include "../CommandList.h"
 #include "VKFrameBuffer.h"
+#include "VKRenderInterface.h"
 #include <vulkan/vulkan.h>
 
 namespace fragcore {
@@ -28,20 +29,24 @@ namespace fragcore {
 	 */
 	class VKCommandList : public CommandList {
 	  public:
-		VKCommandList(Ref<IRenderer> &renderer);
+		VKCommandList(Ref<VKRenderInterface> &renderer);
 		VKCommandList(const VKCommandList &other);
 		virtual ~VKCommandList();
 
 		virtual void begin() override;
 		virtual void end() override;
 
+		virtual void copyTexture(const Texture *src, Texture *dst) override;
+
 		virtual void bindPipeline(RenderPipeline *p) override;
 		virtual void bindFramebuffer(Ref<FrameBuffer> &framebuffer) override;
 
-		virtual void setViewport(int x, int y, int width, int height) override;
-		virtual void setScissor(int x, int y, int width, int height) override;
+		virtual void setViewport(int x, int y, unsigned int width, unsigned int height) override;
+		virtual void setScissor(int x, int y, unsigned int width, unsigned int height) override;
 		virtual void clearDepth(float depth);
 		virtual void clearColorTarget(uint index, const Color &color) override;
+
+		virtual void setDepthBounds(float min, float max) override;
 
 		virtual void dispatch(uint groupCountX, uint groupCountY, uint groupCountZ) override;
 		virtual void dispatchIndirect(Buffer *buffer, u_int64_t offset) override;
@@ -70,6 +75,7 @@ namespace fragcore {
 		std::vector<VkCommandBuffer> cmdbuffers;
 		Ref<VKFrameBuffer> currentFramebuffer;
 		bool isRenderPass;
+		Ref<VKRenderInterface> &renderer;
 	};
 } // namespace fragcore
 

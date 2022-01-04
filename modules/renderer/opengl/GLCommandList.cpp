@@ -22,7 +22,7 @@ void GLCommandList::bindFramebuffer(Ref<FrameBuffer> &framebuffer) {
 	*_command = GLBindFrameBufferCommand(*framebuffer);
 	this->commands.push_back(_command);
 }
-void GLCommandList::setViewport(int x, int y, int width, int height) {
+void GLCommandList::setViewport(int x, int y, unsigned int width, unsigned int height) {
 
 	GLViewPortCommand *_command =
 		(GLViewPortCommand *)this->stackAlloc.alloc(GLCommandBase::getCommandSize<GLViewPortCommand>());
@@ -31,7 +31,7 @@ void GLCommandList::setViewport(int x, int y, int width, int height) {
 	/*	*/
 	this->commands.push_back(_command);
 }
-void GLCommandList::setScissor(int x, int y, int width, int height) {
+void GLCommandList::setScissor(int x, int y, unsigned int width, unsigned int height) {
 	GLScissorPortCommand *_command =
 		(GLScissorPortCommand *)this->stackAlloc.alloc(GLCommandBase::getCommandSize<GLViewPortCommand>());
 	*_command = GLScissorPortCommand(0, x, y, width, height);

@@ -2,6 +2,7 @@
 #include "../RenderPipeline.h"
 #include "VKBuffer.h"
 #include "VKFrameBuffer.h"
+#include "VKRenderInterface.h"
 #include "VKTexture.h"
 #include "internal_object_type.h"
 
@@ -13,29 +14,34 @@ PFN_vkCmdDebugMarkerBeginEXT pvkCmdDebugMarkerBeginEXT;
 PFN_vkCmdDebugMarkerEndEXT pvkCmdDebugMarkerEndEXT;
 PFN_vkCmdDebugMarkerInsertEXT pvkCmdDebugMarkerInsertEXT;
 
-VKCommandList::VKCommandList(Ref<IRenderer> &renderer) {
-	// VulkanCore *vulkancore = (VulkanCore *)(*renderer)->getData();
+VKCommandList::VKCommandList(Ref<VKRenderInterface> &renderer) : renderer(renderer) {
 
-	// /*  Create command pool.    */
-	// VkCommandPoolCreateInfo cmdPoolCreateInfo = {};
-	// cmdPoolCreateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-	// cmdPoolCreateInfo.queueFamilyIndex = vulkancore->graphics_queue_node_index;
-	// cmdPoolCreateInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+	/*  Create command pool.    */
+	VkCommandPoolCreateInfo cmdPoolCreateInfo = {};
+	cmdPoolCreateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+	cmdPoolCreateInfo.queueFamilyIndex = renderer->getDevice()->getDefaultGraphicQueueIndex();
+	cmdPoolCreateInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
 
-	// /*  Create command pool.    */
-	// checkError(vkCreateCommandPool(vulkancore->device, &cmdPoolCreateInfo, nullptr, &_pool));
+	/*  Create command pool.    */
+	VKS_VALIDATE(vkCreateCommandPool(renderer->getDevice()->getHandle(), &cmdPoolCreateInfo, nullptr, &_pool));
 
-	// VkCommandBufferAllocateInfo cbAI = {};
-	// cbAI.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-	// cbAI.commandPool = _pool;
-	// cbAI.commandBufferCount = 1;
-	// cbAI.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-	// VkResult result = vkAllocateCommandBuffers(vulkancore->device, &cbAI, &cmdbuffers[0]);
-	// checkError(result);
+	cmdbuffers.resize(1);
+
+	VkCommandBufferAllocateInfo cbAI = {};
+	cbAI.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+	cbAI.commandPool = _pool;
+	cbAI.commandBufferCount = 1;
+	cbAI.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+	VkResult result = vkAllocateCommandBuffers(renderer->getDevice()->getHandle(), &cbAI, &cmdbuffers[0]);
+	VKS_VALIDATE(result);
+	cmdBuffer = cmdbuffers[0];
 }
-VKCommandList::VKCommandList(const VKCommandList &other) {}
+VKCommandList::VKCommandList(const VKCommandList &other) : renderer(other.renderer) {}
 
-VKCommandList::~VKCommandList() {}
+VKCommandList::~VKCommandList() {
+	// Delete
+	vkFreeCommandBuffers(renderer->getDevice()->getHandle(), this->_pool, 1, &cmdBuffer);
+}
 
 void VKCommandList::begin() {
 
@@ -47,6 +53,8 @@ void VKCommandList::begin() {
 }
 
 void VKCommandList::end() { vkEndCommandBuffer(cmdBuffer); }
+
+void VKCommandList::copyTexture(const Texture *src, Texture *dst) {}
 
 void VKCommandList::bindPipeline(RenderPipeline *pipeline) {
 	VKPipelineObject *vkpipeline = (VKPipelineObject *)pipeline->getObject();
@@ -79,7 +87,7 @@ void VKCommandList::bindFramebuffer(Ref<FrameBuffer> &framebuffer) {
 	beginCurrentRenderPass();
 }
 
-void VKCommandList::setViewport(int x, int y, int width, int height) {
+void VKCommandList::setViewport(int x, int y, unsigned int width, unsigned int height) {
 	VkViewport vkViewport = {
 		.x = (float)x,
 		.y = (float)y,
@@ -90,7 +98,7 @@ void VKCommandList::setViewport(int x, int y, int width, int height) {
 	vkCmdSetViewport(cmdBuffer, 0, 1, &vkViewport);
 }
 
-void VKCommandList::setScissor(int x, int y, int width, int height) {
+void VKCommandList::setScissor(int x, int y, unsigned int width, unsigned int height) {
 	VkRect2D sissor = {
 		.offset = {x, y},
 		.extent = {width, height},
@@ -104,6 +112,8 @@ void VKCommandList::clearDepth(float depth) {
 }
 
 void VKCommandList::clearColorTarget(uint index, const Color &color) {}
+
+void VKCommandList::setDepthBounds(float min, float max) {}
 
 void VKCommandList::dispatch(uint groupCountX, uint groupCountY, uint groupCountZ) {
 	uint global[3] = {groupCountX, groupCountY, groupCountZ};
