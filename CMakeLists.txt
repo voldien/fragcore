@@ -40,7 +40,7 @@ OPTION(BUILD_WITH_COVERAGE "Enable profiling and coverage report analysis." OFF)
 OPTION(BUILD_WITH_PROFILER "Enable profiling." OFF)
 OPTION(BUILD_WITH_EXTERNAL_PROJECT "Enable external project build." ON)
 OPTION(BUILD_WITH_INSTALL "Will installs the target associated with the project." ON )
-OPTION(BUILD_WITH_UBSAN "" OFF)
+OPTION(BUILD_WITH_UBSAN "Enable Undefined Behavior Sanitizer." OFF)
 OPTION(BUILD_WITH_ASAN "Enable AddressSanitizer." OFF )
 OPTION(BUILD_OPT_BUILD_PACKAGES "Set to ON to generate CPack configuration files and packaging targets" OFF)
 OPTION(BUILD_WITH_DEBUG_BOUNDSCHECK "Array/Pointer BoundsChecking, buffer overflow protection. Used in debug only." OFF)
@@ -60,9 +60,9 @@ ELSE()
 ENDIF(NOT BUILD_SHARED_LIBS)
 
 #
-OPTION(BUILD_WITH_TEST "Enable Testing." ON)
+OPTION(BUILD_WITH_TEST "Enable Testing." OFF)
 OPTION(BUILD_WITH_DOCS "Build documentation." OFF)
-OPTION(BUILD_WITH_SAMPLES "Build sample codes" ON)
+OPTION(BUILD_WITH_SAMPLES "Build sample codes" OFF)
 
 # Build external interface plugin.
 OPTION(BUILD_MODULES "Build module plugins" ON)
@@ -98,17 +98,16 @@ IF(MSVC)
   ENDIF()
 ENDIF()
 
-
 # Set version of the project.
-SET(VERSION_MAJOR 0)
-SET(VERSION_MINOR 11)
-SET(VERSION_REVISION 0)
-SET(VERSION_STATE a)
-SET(VERSION ${VERSION_MAJOR}.${VERSION_MINOR}${VERSION_STATE}${VERSION_REVISION} )
-SET(PROJECT_VERSION "${VERSION}")
+SET(FRAGCORE_VERSION_MAJOR 0)
+SET(FRAGCORE_VERSION_MINOR 11)
+SET(FRAGCORE_VERSION_REVISION 0)
+SET(FRAGCORE_VERSION_STATE a)
+SET(FRAGCORE_VERSION ${FRAGCORE_VERSION_MAJOR}.${FRAGCORE_VERSION_MINOR}${FRAGCORE_VERSION_STATE}${FRAGCORE_VERSION_REVISION} )
+SET(FRAGCORE_PROJECT_VERSION "${FRAGCORE_VERSION}")
 
 # Set predefined macro for version.
-ADD_DEFINITIONS(-DFV_VERSION="${VERSION}")
+ADD_DEFINITIONS(-DFRAGCORE_VERSION="${FRAGCORE_VERSION}")
 
 
 #############################################
@@ -123,7 +122,7 @@ IF(NOT FRAG_IGNORE_GIT_HASH)
   EXECUTE_PROCESS(
 	COMMAND git rev-parse --abbrev-ref HEAD
 	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-	OUTPUT_VARIABLE GIT_BRANCH
+	OUTPUT_VARIABLE FRAGCORE_GIT_BRANCH
 	OUTPUT_STRIP_TRAILING_WHITESPACE
 	ERROR_QUIET
   )
@@ -132,14 +131,14 @@ IF(NOT FRAG_IGNORE_GIT_HASH)
   EXECUTE_PROCESS(
 	COMMAND git rev-parse --short=8 HEAD
 	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-	OUTPUT_VARIABLE GIT_COMMIT_HASH
+	OUTPUT_VARIABLE FRAGCORE_GIT_COMMIT_HASH
 	OUTPUT_STRIP_TRAILING_WHITESPACE
 	ERROR_QUIET
   )
   EXECUTE_PROCESS(
     COMMAND git describe --exact-match --tags 2> /dev/null || git rev-parse --short HEAD
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    OUTPUT_VARIABLE GIT_TAG
+    OUTPUT_VARIABLE FRAGCORE_GIT_TAG
     OUTPUT_STRIP_TRAILING_WHITESPACE
     ERROR_QUIET
     )
@@ -147,10 +146,8 @@ ENDIF()
 
 LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake-modules" )
 
-SET(LIBFRAGCORE_COMPONENT "libfragcore{VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_REVISION}")
-SET(LIBFRAGCORE-DEV_COMPONENT "libfragcore{VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_REVISION}-dev")
-
-SET(CPACK_COMPONENTS_ALL fragview-bin ${LIBFRAGCORE_COMPONENT} ${LIBFRAGCORE-DEV_COMPONENT} )
+SET(LIBFRAGCORE_COMPONENT "libfragcore{FRAGCORE_VERSION_MAJOR}.${FRAGCORE_VERSION_MINOR}.${FRAGCORE_VERSION_REVISION}")
+SET(LIBFRAGCORE-DEV_COMPONENT "libfragcore{FRAGCORE_VERSION_MAJOR}.${FRAGCORE_VERSION_MINOR}.${FRAGCORE_VERSION_REVISION}-dev")
 
 # Macro that sets a default (path) if one wasn't specified
 MACRO(SET_PATH variable default)
@@ -166,10 +163,6 @@ SET_PATH( BIN_DIR ${CMAKE_INSTALL_PREFIX} )
 SET_PATH( SYSCONF_DIR ${CMAKE_INSTALL_PREFIX} )
 SET_PATH( LIB_DIR ${CMAKE_INSTALL_PREFIX} )
 SET_PATH( DOC_DIR ${CMAKE_INSTALL_PREFIX}/doc )
-SET_PATH( ICON_DIR ${CMAKE_INSTALL_PREFIX} )
-SET_PATH( SVG_DIR ${CMAKE_INSTALL_PREFIX} )
-SET_PATH( MENU_DIR ${CMAKE_INSTALL_PREFIX} )
-SET_PATH( EXAMPLE_CONF_DIR ${CMAKE_INSTALL_PREFIX} )
 
 # Project uses C++17
 SET(CMAKE_CXX_STANDARD 17)
@@ -187,7 +180,7 @@ ENDIF()
 # GCC compiler flag options.
 IF((CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX) AND NOT CMAKE_COMPILER_IS_MINGW)
 
-	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -Wpedantic -Wextra  -Wall -Wno-attributes -std=c++17")
+	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -Wpedantic -Wextra  -Wall -Wno-attributes")
 
 	IF (CMAKE_BUILD_TYPE STREQUAL "Release")
 		MESSAGE(STATUS "Compile for release.")
@@ -220,12 +213,14 @@ IF((CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX) AND NOT CMAKE_COMPILER_
 		SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -pg")
 	ENDIF()
 
-
+	#
+	IF (BUILD_WITH_UBSAN)
+		MESSAGE(STATUS "Undefined Behavior sanitizer enabled")
+		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined,shift,shift-exponent,integer-divide-by-zero,unreachable,vla-bound,null,return,signed-integer-overflow,bounds,float-divide-by-zero,float-cast-overflow,nonnull-attribute,returns-nonnull-attribute,bool,enum,vptr,pointer-overflow,builtin -fno-sanitize-recover=all")
+		SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=undefined,shift,shift-exponent,integer-divide-by-zero,unreachable,vla-bound,null,return,signed-integer-overflow,bounds,float-divide-by-zero,float-cast-overflow,nonnull-attribute,returns-nonnull-attribute,bool,enum,vptr,pointer-overflow,builtin -fno-sanitize-recover=all")
+	ENDIF()
 
 ELSEIF ( "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang" )
-	IF (BUILD_SHARED_LIBS AND CMAKE_SIZEOF_VOID_P EQUAL 8) # -fPIC is only required
-		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
-	ENDIF()
 
 	SET(CMAKE_CXX_FLAGS "-fvisibility=hidden -fno-strict-aliasing -Wall -Wno-long-long ${CMAKE_CXX_FLAGS}" )
 	SET(CMAKE_C_FLAGS "-fno-strict-aliasing ${CMAKE_C_FLAGS}")
@@ -273,7 +268,7 @@ IF(UNIX AND NOT APPLE)
 ENDIF()
 
 #
-IF ( IOS)
+IF (IOS)
 		IF (CMAKE_BUILD_TYPE STREQUAL "Debug")
 		SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fembed-bitcode -Og")
 		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fembed-bitcode -Og")
@@ -283,14 +278,6 @@ IF ( IOS)
 		# Experimental for pdb generation
 	ENDIF()
 ENDIF()
-
-#
-IF (BUILD_WITH_UBSAN)
-	MESSAGE(STATUS "Undefined Behavior sanitizer enabled")
-	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined,shift,shift-exponent,integer-divide-by-zero,unreachable,vla-bound,null,return,signed-integer-overflow,bounds,float-divide-by-zero,float-cast-overflow,nonnull-attribute,returns-nonnull-attribute,bool,enum,vptr,pointer-overflow,builtin -fno-sanitize-recover=all")
-	SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=undefined,shift,shift-exponent,integer-divide-by-zero,unreachable,vla-bound,null,return,signed-integer-overflow,bounds,float-divide-by-zero,float-cast-overflow,nonnull-attribute,returns-nonnull-attribute,bool,enum,vptr,pointer-overflow,builtin -fno-sanitize-recover=all")
-ENDIF()
-
 
 
 # Cache these to allow the user to override them manually.
@@ -307,7 +294,7 @@ FIND_PACKAGE(Backtrace QUIET)
 FIND_PACKAGE(PkgConfig QUIET)
 FIND_PACKAGE(OpenSSL QUIET)
 #TODO relocate to the compute plugin.
-FIND_PACKAGE(CUDA QUIET)
+#FIND_PACKAGE(CUDA QUIET)
 IF( UNIX )
 
 	SET( FRAGCORE_LIB_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR})

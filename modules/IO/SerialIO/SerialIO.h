@@ -29,7 +29,7 @@ namespace fragcore {
 	 * @brief
 	 *
 	 */
-	class SerialIO : public IO {
+	class FVDECLSPEC SerialIO : public IO {
 	  public:
 		SerialIO(const std::string &path, IOMode mode);
 		virtual ~SerialIO();
