@@ -40,7 +40,7 @@ TEST_F(BufferIOTest, Create_Constant_Pointer_Ref_No_Execption) {
 
 TEST_F(BufferIOTest, Create_Correct_Buffer_Size) {
 	const char *buffer = "hello world!";
-	const unsigned int bufLen = strlen(buffer);
+	unsigned int bufLen = strlen(buffer);
 	BufferIO bufferIO(buffer, bufLen);
 
 	ASSERT_EQ(bufferIO.length(), bufLen);

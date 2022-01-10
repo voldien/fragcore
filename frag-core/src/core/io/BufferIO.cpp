@@ -59,9 +59,9 @@ void BufferIO::seek(long int nbytes, Seek seek) {
 
 unsigned long BufferIO::getPos() { return this->marker; }
 
-bool BufferIO::isWriteable() const { return (this->ioMode & IOMode::READ) != 0; }
+bool BufferIO::isWriteable() const { return (this->ioMode & IOMode::WRITE) != 0; }
 
-bool BufferIO::isReadable() const { return (this->ioMode & IOMode::WRITE) != 0; }
+bool BufferIO::isReadable() const { return (this->ioMode & IOMode::READ) != 0; }
 
 bool BufferIO::flush() { return true; }
 

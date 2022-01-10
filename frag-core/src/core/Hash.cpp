@@ -69,6 +69,7 @@ void Hash::final(std::vector<unsigned char> &hash) {
 
 	/**/
 }
+
 void Hash::reset() noexcept {
 	this->nbytes = 0;
 	initHash(getAlgorithm());
@@ -77,10 +78,13 @@ void Hash::reset() noexcept {
 unsigned int Hash::getResultSize() const {
 	switch (this->getAlgorithm()) {
 	case Hash::ALGORITHM::MD5:
+		return MD5_DIGEST_LENGTH;
 	case Hash::ALGORITHM::SHA128:
+		return SHA_DIGEST_LENGTH;
 	case Hash::ALGORITHM::SHA256:
+		return SHA256_DIGEST_LENGTH;
 	case Hash::ALGORITHM::SHA512:
-		return 0;
+		return SHA512_DIGEST_LENGTH;
 	default:
 		assert(0);
 		return 0;
@@ -114,6 +118,6 @@ void Hash::initHash(ALGORITHM algorithm) {
 		SHA512_Init(static_cast<SHA512_CTX *>(this->context));
 		throw NotSupportedException();
 	default:
-		throw InvalidArgumentException("Invalid hash algorithm - {}", static_cast<int>(algorithm));
+		throw InvalidArgumentException("Invalid hash algorithm - {}", static_cast<int>(this->algorithm));
 	}
 }
