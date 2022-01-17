@@ -74,9 +74,7 @@ namespace fragcore {
 		CURL *handle;
 #endif
 		Ref<IO> ref;
-		Ref<IO> buffer;
 		IO::IOMode ioMode;
-		// GZFileIO(Ref<IO> &io);
 	};
 } // namespace fragcore
 

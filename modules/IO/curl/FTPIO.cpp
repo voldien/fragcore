@@ -20,7 +20,7 @@ long FTPFileIO::read(long int nbytes, void *pbuffer) {
 	if (rc == CURLE_OK)
 		return nRecv;
 	else {
-		return 0;
+		return -1;
 	}
 }
 
@@ -30,7 +30,7 @@ long FTPFileIO::write(long int nbytes, const void *pbuffer) {
 	if (rc == CURLE_OK)
 		return nRecv;
 	else {
-		return 0;
+		return -1;
 	}
 }
 
@@ -59,9 +59,9 @@ unsigned long FTPFileIO::getPos() {
 	return 0;
 }
 
-bool FTPFileIO::isWriteable() const { return false; }
+bool FTPFileIO::isWriteable() const { return (this->ioMode & IOMode::READ) != 0; }
 
-bool FTPFileIO::isReadable() const { return false; }
+bool FTPFileIO::isReadable() const { return (this->ioMode & IOMode::WRITE) != 0; }
 
 bool FTPFileIO::flush() {
 
@@ -135,40 +135,40 @@ FTPFileIO::FTPFileIO(CURL *handle, const char *path, IOMode mode) {
 	if (handle == nullptr)
 		throw InvalidArgumentException("");
 	this->handle = handle;
-
+	CURLcode rc;
 	if (this->handle) {
-		curl_easy_setopt(this->handle, CURLOPT_URL,
-						 path); // "ftp://ftp.example.com/curl/curl-7.9.2.tar.gz");
+		// "ftp://ftp.example.com/curl/curl-7.9.2.tar.gz");
+		rc = curl_easy_setopt(this->handle, CURLOPT_URL, path);
 		this->ioMode = mode;
 
 		if (mode & IOMode::READ) {
-			curl_easy_setopt(this->handle, CURLOPT_READFUNCTION, ftpio_fwrite);
+			rc = curl_easy_setopt(this->handle, CURLOPT_READFUNCTION, ftpio_fwrite);
 			/* Set a pointer to our struct to pass to the callback */
-			curl_easy_setopt(this->handle, CURLOPT_READDATA, this);
+			rc = curl_easy_setopt(this->handle, CURLOPT_READDATA, this);
 		}
 		if (mode & IOMode::WRITE) {
-			curl_easy_setopt(this->handle, CURLOPT_WRITEFUNCTION, ftpio_fwrite);
+			rc = curl_easy_setopt(this->handle, CURLOPT_WRITEFUNCTION, ftpio_fwrite);
 			/* Set a pointer to our struct to pass to the callback */
-			curl_easy_setopt(this->handle, CURLOPT_WRITEDATA, this);
+			rc = curl_easy_setopt(this->handle, CURLOPT_WRITEDATA, this);
 		}
 
-		curl_easy_setopt(this->handle, CURLOPT_HEADERFUNCTION, throw_away);
+		rc = curl_easy_setopt(this->handle, CURLOPT_HEADERFUNCTION, throw_away);
 
-		curl_easy_setopt(this->handle, CURLOPT_HEADER, 0L);
+		rc = curl_easy_setopt(this->handle, CURLOPT_HEADER, 0L);
 
-		curl_easy_setopt(this->handle, CURLOPT_SEEKFUNCTION, seek_cb);
+		rc = curl_easy_setopt(this->handle, CURLOPT_SEEKFUNCTION, seek_cb);
 
-		curl_easy_setopt(this->handle, CURLOPT_SEEKDATA, (void *)this);
+		rc = curl_easy_setopt(this->handle, CURLOPT_SEEKDATA, (void *)this);
 
 		/* Switch on full protocol/debug output */
-		curl_easy_setopt(this->handle, CURLOPT_VERBOSE, 1L);
-		curl_easy_setopt(this->handle, CURLOPT_DEBUGFUNCTION, debug_callback);
+		rc = curl_easy_setopt(this->handle, CURLOPT_VERBOSE, 1L);
+		rc = curl_easy_setopt(this->handle, CURLOPT_DEBUGFUNCTION, debug_callback);
 
-		curl_easy_setopt(this->handle, CURLOPT_CONNECTTIMEOUT, 5L);
+		rc = curl_easy_setopt(this->handle, CURLOPT_CONNECTTIMEOUT, 5L);
 
-		this->buffer = Ref<IO>(new BufferIO(4096, false));
+		rc = curl_easy_setopt(this->handle, CURLOPT_CONNECT_ONLY, 1L);
 	}
-	CURLcode rc = curl_easy_perform(this->handle);
+	rc = curl_easy_perform(this->handle);
 	if (rc != CURLE_OK) {
 
 		throw RuntimeException("{}", curl_easy_strerror(rc));

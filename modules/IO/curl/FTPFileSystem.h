@@ -103,15 +103,15 @@ namespace fragcore {
 		void setCredentials(const std::string &username, const std::string &password);
 
 	  protected:
-		// TODO add support for TFTP/SFTP
+		FTPFileSystem() = default;
 		FTPFileSystem(const char *ip, int port, const char *username, const char *password, const Ref<IScheduler> &sch);
 		FTPFileSystem(const char *ip, int port, const char *username, const char *password);
-		~FTPFileSystem();
+		virtual ~FTPFileSystem();
 
 	  private:
 		CURL *handle;
 		CURL *multi;
-		char *URL;
+		std::string URL;
 		int port;
 	};
 } // namespace fragcore

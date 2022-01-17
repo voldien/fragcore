@@ -22,7 +22,7 @@ IO *FTPFileSystem::openFile(const char *path, IO::IOMode mode) {
 	if (!fileHandle) {
 		curl_global_cleanup();
 	}
-	return new FTPFileIO(fileHandle, path, mode);
+	return new FTPFileIO(fileHandle, fmt::format("{}{}", this->URL, path).c_str(), mode);
 }
 
 void FTPFileSystem::closeFile(IO *io) { throw NotImplementedException(); }
@@ -176,7 +176,11 @@ FTPFileSystem::FTPFileSystem(const char *ip, int port, const char *username, con
 		// return CURLE_OUT_OF_MEMORY;
 	}
 
-	curl_easy_setopt(handle, CURLOPT_URL, fmt::format("ftp://{}/", ip).c_str());
+	rc = curl_easy_setopt(handle, CURLOPT_URL, fmt::format("ftp://{}/", ip).c_str());
+
+	char *url;
+	rc = curl_easy_getinfo(handle, CURLINFO_EFFECTIVE_URL, &url);
+	this->URL = url;
 
 	if (password && username)
 		setCredentials(username, password);
