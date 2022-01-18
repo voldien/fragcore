@@ -73,7 +73,7 @@ namespace fragcore {
 		/**
 		 *	Convert degree to radian.
 		 */
-		template <typename T> inline constexpr static T deg2Rad(T deg) noexcept {
+		template <typename T> inline constexpr static T degToRad(T deg) noexcept {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
 			return deg * static_cast<T>(Deg2Rad);
 		}
@@ -87,7 +87,14 @@ namespace fragcore {
 		}
 
 		/**
-		 * Linear interpolation.
+		 * @brief Linear interpolation.
+		 *
+		 * @tparam T
+		 * @param a Start point.
+		 * @param b End point.
+		 * @param t normalized interpolation, between [0,1], a value greater than 1 will not be clamped
+		 * 	and will thus exceed eitehr the start or the end point.
+		 * @return constexpr T
 		 */
 		template <typename T> inline constexpr static T lerp(T a, T b, T t) noexcept {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
@@ -108,10 +115,10 @@ namespace fragcore {
 		 */
 		inline static constexpr double E = 2.718281828459045235;
 		inline static constexpr double PI = 3.141592653589793238462643383279502884;
-		inline static constexpr double PI_half = PI / 2.0;
-		inline static constexpr double PI_2 = PI * 2.0;
+		inline static constexpr double PI_half = Math::PI / 2.0;
+		inline static constexpr double PI_2 = Math::PI * 2.0;
 		inline static constexpr double Epsilon = FLT_EPSILON;
-		inline static constexpr double Deg2Rad = Math::PI / 180.0f;
+		inline static constexpr double Deg2Rad = Math::PI / 180.0;
 		inline static constexpr double Rad2Deg = 180 / Math::PI;
 		inline static constexpr double NegativeInfinity = 0;
 
