@@ -75,6 +75,7 @@ namespace fragcore {
 #endif
 		Ref<IO> ref;
 		IO::IOMode ioMode;
+		int sockfd;
 	};
 } // namespace fragcore
 

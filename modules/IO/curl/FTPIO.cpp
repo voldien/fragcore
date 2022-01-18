@@ -10,13 +10,48 @@
 #include <fmt/core.h>
 using namespace fragcore;
 
+// TODO move to the network impl later.
+/* Auxiliary function that waits on the socket. */
+static int wait_on_socket(curl_socket_t sockfd, int for_recv, long timeout_ms) {
+	struct timeval tv;
+	fd_set infd, outfd, errfd;
+	int res;
+
+	tv.tv_sec = timeout_ms / 1000;
+	tv.tv_usec = (timeout_ms % 1000) * 1000;
+
+	FD_ZERO(&infd);
+	FD_ZERO(&outfd);
+	FD_ZERO(&errfd);
+
+	FD_SET(sockfd, &errfd); /* always check for error */
+
+	if (for_recv) {
+		FD_SET(sockfd, &infd);
+	} else {
+		FD_SET(sockfd, &outfd);
+	}
+
+	/* select() returns the number of signalled sockets or -1 */
+	res = select((int)sockfd + 1, &infd, &outfd, &errfd, &tv);
+	return res;
+}
+
 void FTPFileIO::open(const char *path, IOMode mode) {}
 
 void FTPFileIO::close() { curl_easy_cleanup(this->handle); }
 
 long FTPFileIO::read(long int nbytes, void *pbuffer) {
 	size_t nRecv;
-	CURLcode rc = curl_easy_recv(this->handle, pbuffer, nbytes, &nRecv);
+	CURLcode rc;
+	do {
+		rc = curl_easy_recv(this->handle, pbuffer, nbytes, &nRecv);
+
+		if (rc == CURLE_AGAIN && !wait_on_socket(this->sockfd, 1, 1000L)) {
+			return -1;
+		}
+	} while (rc == CURLE_AGAIN);
+
 	if (rc == CURLE_OK)
 		return nRecv;
 	else {
@@ -44,7 +79,7 @@ long FTPFileIO::length() {
 	return filesize;
 }
 
-bool FTPFileIO::eof() const { return 0; }
+bool FTPFileIO::eof() const { return false; }
 
 void FTPFileIO::seek(long int nbytes, Seek seek) {
 	// curl_easy_setopt(SEEK_CO)
@@ -131,14 +166,14 @@ int debug_callback(CURL *handle, curl_infotype type, char *data, size_t size, vo
 	return 0;
 }
 
-FTPFileIO::FTPFileIO(CURL *handle, const char *path, IOMode mode) {
+FTPFileIO::FTPFileIO(CURL *handle, const char *URL, IOMode mode) {
 	if (handle == nullptr)
 		throw InvalidArgumentException("");
 	this->handle = handle;
 	CURLcode rc;
 	if (this->handle) {
 		// "ftp://ftp.example.com/curl/curl-7.9.2.tar.gz");
-		rc = curl_easy_setopt(this->handle, CURLOPT_URL, path);
+		rc = curl_easy_setopt(this->handle, CURLOPT_URL, URL);
 		this->ioMode = mode;
 
 		if (mode & IOMode::READ) {
@@ -170,7 +205,8 @@ FTPFileIO::FTPFileIO(CURL *handle, const char *path, IOMode mode) {
 	}
 	rc = curl_easy_perform(this->handle);
 	if (rc != CURLE_OK) {
-
 		throw RuntimeException("{}", curl_easy_strerror(rc));
 	}
+
+	rc = curl_easy_getinfo(this->handle, CURLINFO_ACTIVESOCKET, &this->sockfd);
 }
