@@ -61,7 +61,15 @@ long FTPFileIO::read(long int nbytes, void *pbuffer) {
 
 long FTPFileIO::write(long int nbytes, const void *pbuffer) {
 	size_t nRecv;
-	CURLcode rc = curl_easy_send(this->handle, pbuffer, nbytes, &nRecv);
+	CURLcode rc;
+	do {
+		rc = curl_easy_send(this->handle, pbuffer, nbytes, &nRecv);
+
+		if (rc == CURLE_AGAIN && !wait_on_socket(this->sockfd, 0, 1000L)) {
+			return -1;
+		}
+	} while (rc == CURLE_AGAIN);
+
 	if (rc == CURLE_OK)
 		return nRecv;
 	else {
@@ -201,7 +209,7 @@ FTPFileIO::FTPFileIO(CURL *handle, const char *URL, IOMode mode) {
 
 		rc = curl_easy_setopt(this->handle, CURLOPT_CONNECTTIMEOUT, 5L);
 
-		rc = curl_easy_setopt(this->handle, CURLOPT_CONNECT_ONLY, 1L);
+		//rc = curl_easy_setopt(this->handle, CURLOPT_CONNECT_ONLY, 1L);
 	}
 	rc = curl_easy_perform(this->handle);
 	if (rc != CURLE_OK) {

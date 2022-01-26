@@ -163,7 +163,7 @@ FTPFileSystem::FTPFileSystem(const char *ip, int port, const char *username, con
 	this->setScheduleReference(ref);
 }
 
-FTPFileSystem::FTPFileSystem(const char *ip, int port, const char *username, const char *password) {
+FTPFileSystem::FTPFileSystem(const char *hostname, int port, const char *username, const char *password) {
 	CURLcode rc = curl_global_init(CURL_GLOBAL_ALL);
 	if (rc) {
 		throw RuntimeException("Failed: {}", curl_easy_strerror(rc));
@@ -176,7 +176,7 @@ FTPFileSystem::FTPFileSystem(const char *ip, int port, const char *username, con
 		// return CURLE_OUT_OF_MEMORY;
 	}
 
-	rc = curl_easy_setopt(handle, CURLOPT_URL, fmt::format("ftp://{}/", ip).c_str());
+	rc = curl_easy_setopt(handle, CURLOPT_URL, fmt::format("ftp://{}/", hostname).c_str());
 
 	char *url;
 	rc = curl_easy_getinfo(handle, CURLINFO_EFFECTIVE_URL, &url);
