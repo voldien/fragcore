@@ -1,6 +1,8 @@
+name: FragCore
+on:
+  push:
+  pull_request:
 
-name: Android Build
-on: [push, pull_request]
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
@@ -9,7 +11,7 @@ env:
 
 jobs:
   android_build:
-    runs-on: "ubuntu-18.04"
+    runs-on: "ubuntu-20.04"
     name: Android FragCore Library
 
     steps:

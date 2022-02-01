@@ -16,16 +16,12 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef PHYSIC_COMMANDMOUSE_H_
-#define PHYSIC_COMMANDMOUSE_H_ 1
-#include"Command.h"
+#ifndef _FRAG_CORE_I_COMPRESSION_H_
+#define _FRAG_CORE_I_COMPRESSION_H_ 1
+#include "../Def.h"
 
-/**
- *
- */
-class CommandMouse : public Command{
-public:
-
-};
+namespace fragcore {
+	class FVDECLSPEC ICompression {};
+} // namespace fragcore
 
 #endif

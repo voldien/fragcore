@@ -20,10 +20,10 @@
 #define _FRAG_CORE_VIDEO_TEXTURE_H_ 1
 #include "VideoDecoder.h"
 #include <AudioClip.h>
-#include <AudioDecoder.h>
 #include <Core/SmartReference.h>
 #include <Core/TaskScheduler/IScheduler.h>
 #include <Texture.h>
+#include <decoder/AudioDecoder.h>
 
 namespace fragcore {
 	/**

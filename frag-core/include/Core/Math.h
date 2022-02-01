@@ -113,6 +113,7 @@ namespace fragcore {
 		/**
 		 *
 		 */
+		//TODO add macro for inline.
 		inline static constexpr double E = 2.718281828459045235;
 		inline static constexpr double PI = 3.141592653589793238462643383279502884;
 		inline static constexpr double PI_half = Math::PI / 2.0;

@@ -28,6 +28,8 @@ namespace fragcore {
 	// TODO name class to match the file name.
 	class FVDECLSPEC GeometryUtility {
 	  public:
+		static Vector3 lineEquation() { return Vector3(); }
+
 		// static bool TestPlanesAABB(const Plane &plane, const AABB &bound){
 
 		// }

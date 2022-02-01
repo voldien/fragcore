@@ -455,7 +455,7 @@ void libAVComputeVideoTask(Task *task) {
 					av_get_channel_layout_nb_channels(header.frame->channel_layout);
 					header.frame->format != AV_SAMPLE_FMT_S16P;
 					header.frame->channel_layout;
-					AudioClip *clip;
+					AudioClip *clip = nullptr;
 					clip->setData(header.frame->extended_data[0], header.frame->linesize[0], 0);
 				}
 			}
