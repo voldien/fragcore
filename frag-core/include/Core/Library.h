@@ -31,6 +31,7 @@ namespace fragcore {
 		Library();
 
 		Library(const char *clibrary);
+		Library(const std::string &clibrary);
 		Library(const Library &other);
 		Library(Library &&other);
 

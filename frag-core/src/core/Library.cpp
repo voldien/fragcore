@@ -13,6 +13,8 @@ Library::Library(const char *clibrary) {
 	this->name = clibrary;
 }
 
+Library::Library(const std::string &clibrary) : Library(clibrary.c_str()) {}
+
 Library::Library(const Library &library) : Library(library.name.c_str()) {}
 
 Library::Library(Library &&other) { std::exchange(this->mlib, other.mlib); }
