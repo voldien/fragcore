@@ -7,3 +7,6 @@
 [submodule "extern/fvkcore"]
 	path = extern/fvkcore
 	url = https://github.com/voldien/fvkcore.git
+[submodule "extern/cxx-config"]
+	path = extern/cxx-config
+	url = https://github.com/voldien/cxx-config.git

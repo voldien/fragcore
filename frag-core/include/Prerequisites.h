@@ -23,7 +23,6 @@ namespace fragcore {
 
 	/*  Core.   */
 	class FileNotify;
-	class IConfig;
 	class Object;
 
 	/*	*/

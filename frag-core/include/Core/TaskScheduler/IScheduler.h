@@ -29,6 +29,8 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC Task : public Object {
 	  public:
+		Task() = default;
+		template <class Function, class... Args> explicit Task(Function &&f, Args &&... args);
 		virtual ~Task() = default;
 
 		typedef void (*TaskCallBack)(Task *task);
@@ -57,6 +59,8 @@ namespace fragcore {
 		 */
 		virtual void addTask(Task *task) = 0;
 
+		template <class Function, class... Args> void addTask(Function &&f, Args &&... args) {}
+
 		/**
 		 * @brief Set the User Data object
 		 *
@@ -76,6 +80,11 @@ namespace fragcore {
 		 *
 		 */
 		virtual void run() = 0;
+
+		/**
+		 * @brief
+		 *
+		 */
 		virtual void terminate() = 0;
 
 		/**

@@ -19,6 +19,7 @@
 #ifndef _FRAG_CORE_MATH_H_
 #define _FRAG_CORE_MATH_H_ 1
 #include "../Def.h"
+#include "Math3D.h"
 #include <cfloat>
 #include <cmath>
 #include <vector>

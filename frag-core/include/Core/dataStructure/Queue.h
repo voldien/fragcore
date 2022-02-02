@@ -152,7 +152,7 @@ namespace fragcore {
 		 *	@return
 		 */
 		Queue &operator=(const Queue &que) {
-			this->mdata = (T *)malloc(que.getReserved() * que.getTypeSize());
+			this->mdata = static_cast<T *>(malloc(que.getReserved() * que.getTypeSize()));
 			memcpy(mdata, que.getData(), que.getReserved());
 			this->head = que.head;
 			this->tail = que.tail;
