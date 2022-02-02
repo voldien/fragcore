@@ -16,11 +16,12 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef _FRAG_ENGINE_FILECHANGEEVENT_H_
-#define _FRAG_ENGINE_FILECHANGEEVENT_H_ 1
-#include "Core/SmartReference.h"
-#include "Prerequisites.h"
-#include <string>
+#ifndef _FRAG_CORE_LIN_ALG_H_
+#define _FRAG_CORE_LIN_ALG_H_ 1
+#include "Math.h"
+#include <cfloat>
+#include <cmath>
+#include <vector>
 
 namespace fragcore {
 
@@ -28,26 +29,13 @@ namespace fragcore {
 	 * @brief
 	 *
 	 */
-	enum class FileNotificationType {
-		Update,			   /*	*/
-		Removed,		   /*	*/
-		Moved,			   /*	*/
-		PermissionAltered, /*	*/
-	};
-
-	/**
-	 * @brief
-	 *
-	 */
-	class FileNotificationEvent {
+	class FVDECLSPEC LinAlg {
 	  public:
-		Object *object;
-		//		AssetType type;
-		FileNotificationType event;
-		const char *path;
-		long int timestamp;
-		long int size;
-		void *data;
+		template <typename T> std::vector<T> PCA(std::vector<T> &p) {
+			float nInverse = (1.0f / p.size());
+			T m = nInverse * Math::sum<T>(p);
+			Matrix3x3 C = nInverse;
+		}
 	};
 } // namespace fragcore
 

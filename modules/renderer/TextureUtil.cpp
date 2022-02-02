@@ -110,7 +110,7 @@ void *TextureUtil::loadTextureDataFromMem(const void *pbuf, long int size, unsig
 	/*	1 byte for the size in order, Because it crash otherwise if set to 0.	*/
 	stream = FreeImage_OpenMemory((BYTE *)pbuf, size);
 	if (stream == nullptr)
-		throw RuntimeException(fmt::format("Failed to open freeimage memory stream. \n"));
+		throw RuntimeException("Failed to open freeimage memory stream. \n");
 
 	/*	Seek to beginning of the memory stream.	*/
 	FreeImage_SeekMemory(stream, 0, SEEK_SET);
@@ -121,7 +121,7 @@ void *TextureUtil::loadTextureDataFromMem(const void *pbuf, long int size, unsig
 	firsbitmap = FreeImage_LoadFromMemory(imgtype, stream, 0);
 	if (firsbitmap == nullptr) {
 		FreeImage_CloseMemory(stream);
-		throw RuntimeException(fmt::format("Failed to create free-image from memory.\n"));
+		throw RuntimeException("Failed to create free-image from memory.\n");
 	}
 
 	/*	Reset to beginning of stream.	*/
@@ -178,13 +178,13 @@ void *TextureUtil::loadTextureDataFromMem(const void *pbuf, long int size, unsig
 	if (pixel == nullptr || size == 0) {
 		FreeImage_Unload(firsbitmap);
 		FreeImage_CloseMemory(stream);
-		throw RuntimeException(fmt::format("Failed getting pixel data from FreeImage.\n"));
+		throw RuntimeException("Failed getting pixel data from FreeImage.\n");
 	}
 
 	/*	Make a copy of pixel data.	*/
 	void *pixels = malloc(*pixelSize);
 	if (pixels == nullptr)
-		throw RuntimeException(fmt::format("Failed to allocate {}, %s.\n", size, strerror(errno)));
+		throw RuntimeException("Failed to allocate {}, %s.\n", size, strerror(errno));
 
 	memcpy(pixels, pixel, *pixelSize);
 

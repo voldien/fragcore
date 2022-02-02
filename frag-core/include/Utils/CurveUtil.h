@@ -20,5 +20,18 @@
 #define _FRAG_CORE_CURVE_UTIL_H_ 1
 #include "../Def.h"
 
-
+namespace fragcore {
+	class FVDECLSPEC CurveUtil {
+	  public:
+		template <typename T, class U>
+		std::vector<U> BezierCurve(std::vector<U> &points, int start, float t, int degree) {
+			if (points.size() < degree)
+				return points[0];
+			for (int i = 0; i < degree; i++) {
+				std::pow(1.0f - t, i) * pow(t, i) * points[(i + start)];
+			}
+			return {}
+		}
+	};
+} // namespace fragcore
 #endif

@@ -20,6 +20,14 @@
 #define _FRAG_CORE_FRAG_CORECORE_H_ 1
 #include "Prerequisites.h"
 
+/**
+ * @file FragCore.h
+ * @
+ * @brief
+ * @version 0.1
+ *
+ */
+
 /*  */
 #include "Core/IConfig.h"
 #include "Core/SystemInfo.h"

@@ -16,47 +16,28 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef _FRAG_CORE_PREREQUISITES_H_
-#define _FRAG_CORE_PREREQUISITES_H_ 1
+#ifndef _FRAG_CORE_SHAPE_H_
+#define _FRAG_CORE_SHAPE_H_ 1
+#include "../../Def.h"
 
 namespace fragcore {
+	/**
+	 *
+	 */
+	class FVDECLSPEC Shape {
+	  public:
+		/**
+		 *
+		 *	@Return
+		 */
+		bool intersect(const Vector3 &orig, const Vector3 dir, RaycastHit &hit) const;
 
-	/*  Core.   */
-	class FileSystemNotify;
-	class IConfig;
-	class Object;
-
-	/*	*/
-	class IScheduler;
-
-	/*  IO  */
-	class IO;
-	class FileIO;
-	class ZipFileIO;
-	class BufferIO;
-	class FileAccess;
-	class ASyncIO;
-	class GZFileIO;
-	class ZipFileSystem;
-	class IFileSystem;
-	class FileSystem;
-	/*	*/
-	class Hash;
-	class Random;
-	class Base64;
-	class Base32;
-	class Base16;
-	/*  Network.    */
-	class IPInterface;
-	class NetSocket;
-	class TCPNetSocket;
-	class UDPNetSocket;
-	class INetAddress;
-	class IPAddress;
-
-	class Font;
-	class FontFactory;
-
+		/**
+		 *
+		 *	@Return
+		 */
+		bool intersect(const Ray &ray, RaycastHit &hit) const;
+	};
 } // namespace fragcore
 
 #endif

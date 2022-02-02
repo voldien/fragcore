@@ -18,7 +18,7 @@
  */
 #ifndef _FRAG_CORE_IFILE_NOTIFY_H_
 #define _FRAG_CORE_IFILE_NOTIFY_H_ 1
-#include "Def.h"
+#include "../../Def.h"
 #include "FileChangeEvent.h"
 
 namespace fragcore {

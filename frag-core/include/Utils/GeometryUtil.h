@@ -18,6 +18,7 @@
  */
 #ifndef _FRAG_CORE_GEOMETRYUTIL_H_
 #define _FRAG_CORE_GEOMETRYUTIL_H_ 1
+#include "../Core/dataStructure/Triangle.h"
 #include "../Def.h"
 
 namespace fragcore {
@@ -28,11 +29,15 @@ namespace fragcore {
 	// TODO name class to match the file name.
 	class FVDECLSPEC GeometryUtility {
 	  public:
-		static Vector3 lineEquation() { return Vector3(); }
 
 		// static bool TestPlanesAABB(const Plane &plane, const AABB &bound){
 
 		// }
+
+		static std::vector<Triangle> createPolygon(const std::vector<Vector3> &points);
+
+		static bool isConvex(std::vector<Vector3> &points);
+		static bool isConcave(std::vector<Vector3> &points);
 	};
 } // namespace fragcore
 #endif

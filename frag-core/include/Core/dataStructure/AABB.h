@@ -56,9 +56,6 @@ namespace fragcore {
 			return !(this->mhalfsize.x() != 0.0f || this->mhalfsize.y() != 0.0f || this->mhalfsize.z() != 0.0f);
 		}
 
-		/**
-		 *
-		 */
 		inline float maxX() const noexcept { return (this->mcenter.x() + this->mhalfsize.x()); }
 		inline float minX() const noexcept { return (this->mcenter.x() - this->mhalfsize.x()); }
 		inline float maxY() const noexcept { return (this->mcenter.y() + this->mhalfsize.y()); }

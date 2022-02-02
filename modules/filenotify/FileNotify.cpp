@@ -1,12 +1,12 @@
-#include "FileNotify.h"
-#include "Core/IO/FileSystem.h"
+#include "FileSystemNotify.h"
+#include <Core/IO/FileSystem.h>
+#include <taskSch.h>
 
 #include <libfswatch/c/libfswatch.h>
 
-
 using namespace fragcore;
 
-FileNotify::FileNotify(Ref<IScheduler> &sch) {
+FileSystemNotify::FileSystemNotify(Ref<IScheduler> &sch) {
 
 	if (sch == nullptr)
 		throw InvalidArgumentException("Requires scheduler object.");
@@ -14,16 +14,16 @@ FileNotify::FileNotify(Ref<IScheduler> &sch) {
 	/*	Initilize the notification library.	*/
 	FSW_STATUS ret = fsw_init_library();
 	if (ret != FSW_OK)
-		throw RuntimeException(fmt::format("Failed to initialize the Filesystem watch: {}.", ret));
+		throw RuntimeException("Failed to initialize the Filesystem watch: {}.", ret);
 	this->session = fsw_init_session(system_default_monitor_type);
 	if (this->session == nullptr)
-		throw RuntimeException(fmt::format("Failed to create session for Filesystem watch: {}.", fsw_last_error()));
+		throw RuntimeException("Failed to create session for Filesystem watch: {}.", fsw_last_error());
 	ret = fsw_set_follow_symlinks(this->session, true);
 	if (ret != FSW_OK)
-		throw RuntimeException(fmt::format("Failed to enable follow symlinks with Filesystem watch: {}.", ret));
+		throw RuntimeException("Failed to enable follow symlinks with Filesystem watch: {}.", ret);
 	ret = fsw_set_allow_overflow(this->session, false);
 	if (ret != FSW_OK)
-		throw RuntimeException(fmt::format("Failed to disable overflow with Filesystem watch: {}.", ret));
+		throw RuntimeException("Failed to disable overflow with Filesystem watch: {}.", ret);
 	fsw_set_verbose(false);
 
 	/*	*/
@@ -33,17 +33,17 @@ FileNotify::FileNotify(Ref<IScheduler> &sch) {
 	fileChangeEvents.resize(32);
 }
 
-FileNotify::~FileNotify() {
+FileSystemNotify::~FileSystemNotify() {
 	this->stop();
 	fsw_destroy_session(this->session);
 	schDeleteThread(this->pthread);
 }
 
-void FileNotify::registerAsset(const char *filepath, Object *object) {
+void FileSystemNotify::registerAsset(const char *filepath, Object *object) {
 
 	/*  TODO resolve and make part of the filesystem or IO.	*/
 	if (access(filepath, R_OK))
-		throw InvalidArgumentException("Not a valid file - {}", filepath));
+		throw InvalidArgumentException("Not a valid file - {}", filepath);
 
 	/*  Get key.    */
 	int uid = object->getUID();
@@ -52,10 +52,10 @@ void FileNotify::registerAsset(const char *filepath, Object *object) {
 	FSW_STATUS ret;
 	ret = fsw_add_path(this->session, filepath);
 	if (ret != FSW_OK)
-		throw RuntimeException(fmt::format("Failed to initialize the Filesystem watch: {}.", ret));
-	ret = fsw_set_callback(this->session, FileNotify::callback, this);
+		throw RuntimeException("Failed to initialize the Filesystem watch: {}.", ret);
+	ret = fsw_set_callback(this->session, FileSystemNotify::callback, this);
 	if (ret != FSW_OK)
-		throw RuntimeException(fmt::format("Failed to initialize the Filesystem watch: {}.", ret));
+		throw RuntimeException("Failed to initialize the Filesystem watch: {}.", ret);
 
 	/*  Create file notification entry.  */
 	FileNoticationEntry entry;
@@ -69,7 +69,7 @@ void FileNotify::registerAsset(const char *filepath, Object *object) {
 	addFilePath(filepath, object);
 }
 
-void FileNotify::unregisterAsset(Object *object) {
+void FileSystemNotify::unregisterAsset(Object *object) {
 	std::map<int, FileNoticationEntry> *list = &this->notify;
 	std::map<int, FileNoticationEntry>::iterator it;
 	int key = object->getUID();
@@ -81,11 +81,11 @@ void FileNotify::unregisterAsset(Object *object) {
 		removeFilePath(entry->filepath.c_str(), object);
 		list->erase(key);
 	} else {
-		throw RuntimeException(fmt::format("Could not find object with GID: {}", key));
+		throw RuntimeException("Could not find object with GID: {}", key);
 	}
 }
 
-void FileNotify::unRegisterAllAsset() {
+void FileSystemNotify::unRegisterAllAsset() {
 	std::map<int, FileNoticationEntry>::iterator it = this->notify.begin();
 
 	/*  */
@@ -95,22 +95,24 @@ void FileNotify::unRegisterAllAsset() {
 	}
 }
 
-void FileNotify::eventDone(FileNotificationEvent *event) {
+void FileSystemNotify::eventDone(FileNotificationEvent *event) {
 	/*  Release resources.    */
 	if (event->data)
 		free(event->data);
 	this->fileChangeEvents.Return(event);
 }
 
-void FileNotify::addFilePath(const char *path, Object *object) { objectMap[path] = object; }
+void FileSystemNotify::addFilePath(const char *path, Object *object) { objectMap[path] = object; }
 
-Object *FileNotify::getObject(const char *path) { return this->objectMap[path]; }
+Object *FileSystemNotify::getObject(const char *path) { return this->objectMap[path]; }
 
-void FileNotify::removeFilePath(const char *path, Object *object) { this->notify.erase(object->getUID()); }
+void FileSystemNotify::removeFilePath(const char *path, Object *object) { this->notify.erase(object->getUID()); }
 
-FileNotify::FileNoticationEntry *FileNotify::getEntry(Object *object) { return &this->notify[object->getUID()]; }
+FileSystemNotify::FileNoticationEntry *FileSystemNotify::getEntry(Object *object) {
+	return &this->notify[object->getUID()];
+}
 
-void FileNotify::fileFetchTask(Task *package) {
+void FileSystemNotify::fileFetchTask(Task *package) {
 	// TODO reolcate to the application specific.
 
 	// std::string *path = (std::string *) package->puser;
@@ -149,14 +151,14 @@ void FileNotify::fileFetchTask(Task *package) {
 
 class FVDECLSPEC FileNotifyTask : public Task {
   public:
-	virtual void Execute() override {}
-	virtual void Complete() override {}
+	virtual void Execute() noexcept override {}
+	virtual void Complete() noexcept override {}
 };
 
-void FileNotify::callback(fsw_cevent const *const events, const unsigned int event_num, void *data) {
+void FileSystemNotify::callback(fsw_cevent const *const events, const unsigned int event_num, void *data) {
 
 	/*  */
-	FileNotify *notify = (FileNotify *)data;
+	FileSystemNotify *notify = (FileSystemNotify *)data;
 
 	/*  */
 	for (int i = 0; i < event_num; i++) {
@@ -182,7 +184,7 @@ void FileNotify::callback(fsw_cevent const *const events, const unsigned int eve
 			if (flag & Updated) {
 
 				FileNotifyTask task;
-				task.callback = FileNotify::fileFetchTask;
+				task.callback = FileSystemNotify::fileFetchTask;
 				task.userData = entry;
 				// package.puser = &entry->filepath;
 				// package.begin = notify;
@@ -218,27 +220,27 @@ void FileNotify::callback(fsw_cevent const *const events, const unsigned int eve
 	}
 }
 
-void *FileNotify::fswatch(const void *psession) {
+void *FileSystemNotify::fswatch(const void *psession) {
 	const FSW_HANDLE session = (const FSW_HANDLE)psession;
 
 	FSW_STATUS ret = fsw_start_monitor(session);
 	if (ret != FSW_OK)
-		throw RuntimeException(fmt::format("Error on starting monitoring with the Filesystem watch: {}.", ret));
+		throw RuntimeException("Error on starting monitoring with the Filesystem watch: {}.", ret);
 }
 
-void FileNotify::start() {
+void FileSystemNotify::start() {
 	/*  Create monitoring thread.   */
 	if (!fsw_is_running(this->session)) {
 		// TODO make use of the thread wrapper method.
-		this->pthread = schCreateThread(-1, (schFunc *)FileNotify::fswatch, this->session);
+		this->pthread = schCreateThread(-1, (schFunc)FileSystemNotify::fswatch, this->session);
 	}
 }
 
-void FileNotify::stop() {
+void FileSystemNotify::stop() {
 	FSW_STATUS ret;
 	if (fsw_is_running(this->session)) {
 		ret = fsw_stop_monitor(this->session);
 		if (ret != FSW_OK)
-			throw RuntimeException(fmt::format("Error on stopping monitoring with the Filesystem watch: {}.", ret));
+			throw RuntimeException("Error on stopping monitoring with the Filesystem watch: {}.", ret);
 	}
 }

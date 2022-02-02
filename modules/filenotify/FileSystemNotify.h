@@ -18,13 +18,11 @@
  */
 #ifndef _FRAG_CORE_FILE_NOTIFY_H_
 #define _FRAG_CORE_FILE_NOTIFY_H_ 1
-#include "Core/Object.h"
-#include "Core/TaskScheduler/IThreading.h"
-#include "Core/TaskScheduler/TaskScheduler.h"
-#include "Core/dataStructure/PoolAllocator.h"
-#include "FileChangeEvent.h"
-#include "IFileNotify.h"
-#include "Prerequisites.h"
+#include <Core/Object.h>
+#include <Core/TaskScheduler/IThreading.h>
+#include <Core/TaskScheduler/TaskScheduler.h>
+#include <Core/dataStructure/PoolAllocator.h>
+#include <Core/event/IFileNotify.h>
 // TODO resolve include path and other solution.
 #include <libfswatch/c/cevent.h>
 #include <libfswatch/c/libfswatch_types.h>
@@ -36,11 +34,10 @@ namespace fragcore {
 	typedef void *NotifyHandle;
 	//	typedef void (*AsyncComplete)(ASync *async, ASyncHandle handle); /*  */
 	/**
+	 * @brief
 	 *
 	 */
-	// TODO make it more generic in order to reduce coupling and increase cohession!
-	//TODO rename to filesystemNotify
-	class FVDECLSPEC FileNotify : public IFileNotify {
+	class FVDECLSPEC FileSystemNotify : public IFileNotify {
 	  public:
 		/**
 		 * Start the file notification process.
@@ -66,6 +63,7 @@ namespace fragcore {
 
 	  public:
 		// TODO relocate to another class.
+		// TODO use std::string
 		void registerAsset(const char *filepath, Object *object);
 		void registerAsset(Ref<IO> &io);
 		void unregisterAsset(Object *notify);
@@ -84,27 +82,27 @@ namespace fragcore {
 		 *
 		 * @param path
 		 */
-		void addFilePath(const char *path, Object *object);
+		virtual void addFilePath(const char *path, Object *object);
 
 		/**
 		 *
 		 * @param path
 		 */
-		void removeFilePath(const char *path, Object *object);
+		virtual void removeFilePath(const char *path, Object *object);
 
 		/**
 		 *
 		 * @param path
 		 * @return
 		 */
-		Object *getObject(const char *path);
+		virtual Object *getObject(const char *path);
 
 		/**
 		 *
 		 * @param object
 		 * @return
 		 */
-		FileNoticationEntry *getEntry(Object *object);
+		virtual FileNoticationEntry *getEntry(Object *object);
 
 		/**
 		 *
@@ -132,9 +130,9 @@ namespace fragcore {
 		PoolAllocator<FileNotificationEvent> fileChangeEvents;
 
 	  public: /*  */
-		FileNotify(Ref<IScheduler> &sch);
+		FileSystemNotify(Ref<IScheduler> &sch);
 
-		virtual ~FileNotify();
+		virtual ~FileSystemNotify();
 	};
 } // namespace fragcore
 
