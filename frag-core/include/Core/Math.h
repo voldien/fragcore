@@ -63,8 +63,9 @@ namespace fragcore {
 		}
 
 		template <typename T> constexpr static T sum(const std::vector<T> &list) noexcept {
+			//TODO add check if support adding assign operation.
 			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
-						  "Must Suppot additiona operation.");
+						  "Type Must Support addition operation.");
 			T sum = 0;
 			for (unsigned int i = 0; i < list.size(); i++)
 				sum += list[i];

@@ -137,13 +137,13 @@ VideoTexture *VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IR
 	if (result != 0) {
 		char buf[AV_ERROR_MAX_STRING_SIZE];
 		av_strerror(result, buf, sizeof(buf));
-		throw RuntimeException(fmt::format("Failed to open input : %s", buf));
+		throw RuntimeException("Failed to open input : {}", buf);
 	}
 
 	if ((result = avformat_find_stream_info(header.pformatCtx, nullptr)) < 0) {
 		char buf[AV_ERROR_MAX_STRING_SIZE];
 		av_strerror(result, buf, sizeof(buf));
-		throw RuntimeException(fmt::format("Failed to retrieve info from stream info : %s", buf));
+		throw RuntimeException("Failed to retrieve info from stream info : {}", buf);
 	}
 	struct AVStream *video_st = nullptr;
 	struct AVStream *audio_st = nullptr;
@@ -187,14 +187,14 @@ VideoTexture *VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IR
 		if (result < 0) {
 			char buf[AV_ERROR_MAX_STRING_SIZE];
 			av_strerror(result, buf, sizeof(buf));
-			throw RuntimeException(fmt::format("Failed to set codec parameters : %s", buf));
+			throw RuntimeException("Failed to set codec parameters : {}", buf);
 		}
 
 		result = avcodec_open2(header.pAudioCtx, audioCodec, nullptr);
 		if (result < 0) {
 			char buf[AV_ERROR_MAX_STRING_SIZE];
 			av_strerror(result, buf, sizeof(buf));
-			throw RuntimeException(fmt::format("Failed to retrieve info from stream info : %s", buf));
+			throw RuntimeException(fmt::format("Failed to retrieve info from stream info : {}", buf));
 		}
 	}
 
@@ -217,7 +217,7 @@ VideoTexture *VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IR
 	if (result < 0) {
 		char buf[AV_ERROR_MAX_STRING_SIZE];
 		av_strerror(result, buf, sizeof(buf));
-		throw RuntimeException(fmt::format("Failed to set codec parameters : %s", buf));
+		throw RuntimeException(fmt::format("Failed to set codec parameters : {}", buf));
 	}
 	// av_find_best_pix_fmt_of_2
 	// avcodec_default_get_format()
@@ -225,7 +225,7 @@ VideoTexture *VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IR
 	if ((result = avcodec_open2(header.pVideoCtx, pVideoCodec, nullptr)) != 0) {
 		char buf[AV_ERROR_MAX_STRING_SIZE];
 		av_strerror(result, buf, sizeof(buf));
-		throw RuntimeException(fmt::format("Failed to retrieve info from stream info : %s", buf));
+		throw RuntimeException(fmt::format("Failed to retrieve info from stream info : {}", buf));
 	}
 
 	header.frame = av_frame_alloc();
@@ -265,7 +265,7 @@ VideoTexture *VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IR
 				if (result < 0) {
 					char buf[AV_ERROR_MAX_STRING_SIZE];
 					av_strerror(result, buf, sizeof(buf));
-					throw RuntimeException(fmt::format("Failed to send packet for decoding picture frame : %s", buf));
+					throw RuntimeException(fmt::format("Failed to send packet for decoding picture frame : {}", buf));
 				}
 
 				while (result >= 0) {
@@ -275,7 +275,7 @@ VideoTexture *VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IR
 					if (result < 0) {
 						char buf[AV_ERROR_MAX_STRING_SIZE];
 						av_strerror(result, buf, sizeof(buf));
-						throw RuntimeException(fmt::format(" : %s", buf));
+						throw RuntimeException(fmt::format(" : {}", buf));
 					}
 					if (header.frame->format != AV_PIX_FMT_BGRA) {
 
@@ -301,7 +301,7 @@ VideoTexture *VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IR
 				if (result < 0) {
 					char buf[AV_ERROR_MAX_STRING_SIZE];
 					av_strerror(result, buf, sizeof(buf));
-					throw RuntimeException(fmt::format("Failed to send packet for decoding audio frame : %s", buf));
+					throw RuntimeException(fmt::format("Failed to send packet for decoding audio frame : {}", buf));
 				}
 
 				while (result >= 0) {
@@ -311,7 +311,7 @@ VideoTexture *VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IR
 					if (result < 0) {
 						char buf[AV_ERROR_MAX_STRING_SIZE];
 						av_strerror(result, buf, sizeof(buf));
-						throw RuntimeException(fmt::format(" : %s", buf));
+						throw RuntimeException(fmt::format(" : {}", buf));
 					}
 
 					av_get_channel_layout_nb_channels(header.frame->channel_layout);
@@ -402,7 +402,7 @@ void libAVComputeVideoTask(Task *task) {
 				if (result < 0) {
 					char buf[AV_ERROR_MAX_STRING_SIZE];
 					av_strerror(result, buf, sizeof(buf));
-					throw RuntimeException(fmt::format("Failed to send packet for decoding picture frame : %s", buf));
+					throw RuntimeException(fmt::format("Failed to send packet for decoding picture frame : {}", buf));
 				}
 
 				while (result >= 0) {
@@ -439,7 +439,7 @@ void libAVComputeVideoTask(Task *task) {
 				if (result < 0) {
 					char buf[AV_ERROR_MAX_STRING_SIZE];
 					av_strerror(result, buf, sizeof(buf));
-					throw RuntimeException(fmt::format("Failed to send packet for decoding audio frame : %s", buf));
+					throw RuntimeException(fmt::format("Failed to send packet for decoding audio frame : {}", buf));
 				}
 
 				while (result >= 0) {
@@ -449,7 +449,7 @@ void libAVComputeVideoTask(Task *task) {
 					if (result < 0) {
 						char buf[AV_ERROR_MAX_STRING_SIZE];
 						av_strerror(result, buf, sizeof(buf));
-						throw RuntimeException(fmt::format(" : %s", buf));
+						throw RuntimeException(fmt::format(" : {}", buf));
 					}
 
 					av_get_channel_layout_nb_channels(header.frame->channel_layout);

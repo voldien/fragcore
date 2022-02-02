@@ -16,45 +16,39 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef _FRAG_CORE_PREREQUISITES_H_
-#define _FRAG_CORE_PREREQUISITES_H_ 1
+#ifndef _FRAG_ENGINE_FILECHANGEEVENT_H_
+#define _FRAG_ENGINE_FILECHANGEEVENT_H_ 1
+#include "../SmartReference.h"
+#include "../../Prerequisites.h"
+#include <string>
 
 namespace fragcore {
 
-	/*  Core.   */
-	class Object;
+	/**
+	 * @brief
+	 *
+	 */
+	enum class FileNotificationType {
+		Update,			   /*	*/
+		Removed,		   /*	*/
+		Moved,			   /*	*/
+		PermissionAltered, /*	*/
+	};
 
-	/*	*/
-	class IScheduler;
-
-	/*  IO  */
-	class IO;
-	class FileIO;
-	class ZipFileIO;
-	class BufferIO;
-	class FileAccess;
-	class ASyncIO;
-	class GZFileIO;
-	class ZipFileSystem;
-	class IFileSystem;
-	class FileSystem;
-	/*	*/
-	class Hash;
-	class Random;
-	class Base64;
-	class Base32;
-	class Base16;
-	/*  Network.    */
-	class IPInterface;
-	class NetSocket;
-	class TCPNetSocket;
-	class UDPNetSocket;
-	class INetAddress;
-	class IPAddress;
-
-	class Font;
-	class FontFactory;
-
+	/**
+	 * @brief
+	 *
+	 */
+	class FileNotificationEvent {
+	  public:
+		Object *object;
+		//		AssetType type;
+		FileNotificationType event;
+		const char *path;
+		long int timestamp;
+		long int size;
+		void *data;
+	};
 } // namespace fragcore
 
 #endif

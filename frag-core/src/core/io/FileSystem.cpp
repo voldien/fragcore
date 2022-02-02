@@ -39,7 +39,7 @@ void FileSystem::remove(const char *path) {
 #else
 	throw NotImplementedException();
 // if (::remove(path) != 0)
-// throw RuntimeException(fmt::format("{}", strerror(errno)));
+// throw RuntimeException"{}", strerror(errno));
 #endif
 }
 
@@ -49,7 +49,7 @@ void FileSystem::rename(const char *oldPath, const char *newPath) {
 #else
 	throw NotImplementedException();
 // if (::rename(oldPath, newPath) != 0)
-//     throw RuntimeException(fmt::format("{}", strerror(errno)));
+//     throw RuntimeException("{}", strerror(errno));
 #endif
 }
 

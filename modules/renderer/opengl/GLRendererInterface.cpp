@@ -1734,7 +1734,7 @@ const char *GLRendererInterface::getShaderVersion(ShaderLanguage language) const
 			return "460";
 		// Add the rest of the mapping as each new version is released.
 		default:
-			throw RuntimeException(fmt::format("OpenGL version {} is not supported", glVersion));
+			throw RuntimeException("OpenGL version {} is not supported", glVersion);
 		}
 		// TODO add core and compatibility on the name.
 		profile = this->useCoreProfile;

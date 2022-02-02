@@ -19,13 +19,14 @@
 #ifndef _FRAG_CORE_LINE_H_
 #define _FRAG_CORE_LINE_H_ 1
 #include "../../Def.h"
+#include "Shape.h"
 #include <iostream>
 
 namespace fragcore {
 	/**
 	 *
 	 */
-	struct FVDECLSPEC Line {
+	struct FVDECLSPEC Line : public Shape {
 	  public:
 		Line() = default;
 		Line(const Vector2 &normal) noexcept {
@@ -87,7 +88,7 @@ namespace fragcore {
 		 */
 		void setNormalAndPoint(const Vector2 &normal, const Vector2 &point) noexcept {
 			this->normal = normal.normalized();
-			this->d = point.dot(this->normal);
+			this->d = -point.dot(this->normal);
 		}
 
 		/**
@@ -131,11 +132,12 @@ namespace fragcore {
 		 * @return
 		 */
 		static Line fromPoints(const Vector3 &v1, const Vector3 &v2) noexcept {
-			Plane tmp;
-			Vector3 e1 = v2 - v1;
+			Line tmp;
+			Vector3 e1 = (v2 - v1);
+			/**/
 			Vec2 e2{e1[1], -e1[0]};
 
-			tmp.d = -tmp.normal.dot(e2);
+			tmp.d = -tmp.normal.dot(v1);
 			return tmp;
 		}
 	};
