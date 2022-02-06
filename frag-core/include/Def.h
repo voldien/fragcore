@@ -31,7 +31,8 @@ namespace fragcore {
 
 	using RuntimeException = cxxexcept::RuntimeException;
 	using DivideByZeroException = cxxexcept::DivideByZeroException ;
-	using IOException = cxxexcept::IOException ;
+	using PermissionDeniedException = cxxexcept::PermissionDeniedException;
+	using IOException = cxxexcept::IOException;
 	using NotImplementedException = cxxexcept::NotImplementedException ;
 	using InvalidArgumentException = cxxexcept::InvalidArgumentException ;
 	using NotSupportedException = cxxexcept::NotSupportedException ;

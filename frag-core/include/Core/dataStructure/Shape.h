@@ -19,6 +19,7 @@
 #ifndef _FRAG_CORE_SHAPE_H_
 #define _FRAG_CORE_SHAPE_H_ 1
 #include "../../Def.h"
+#include "Ray.h"
 
 namespace fragcore {
 	/**
@@ -30,13 +31,13 @@ namespace fragcore {
 		 *
 		 *	@Return
 		 */
-		bool intersect(const Vector3 &orig, const Vector3 dir, RaycastHit &hit) const;
+		//bool intersect(const Vector3 &orig, const Vector3 dir, RaycastHit &hit) const;
 
 		/**
 		 *
 		 *	@Return
 		 */
-		bool intersect(const Ray &ray, RaycastHit &hit) const;
+		//bool intersect(const Ray &ray, RaycastHit &hit) const;
 	};
 } // namespace fragcore
 

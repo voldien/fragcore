@@ -94,7 +94,6 @@ namespace fragcore {
 
 	inline Vector3 Triangle::getEdge3() const { return (p2 - p1); }
 
-	inline Vector3 Triangle::getNormal() const { /* return cross(p0 - p1, p0 - p2) / dot(p0 - p1, p0 - p2);*/
-	}
+	inline Vector3 Triangle::getNormal() const { return (p0 - p1).cross(p0 - p2) / (p0 - p1).dot(p0 - p2); }
 } // namespace fragcore
 #endif

@@ -22,13 +22,10 @@
 #include "../Ref.h"
 
 namespace fragcore {
+
 	/**
-	 *	Simple abstract Iterator class for
-	 *	generic classes.
-	 */
-	/**
-	 * @brief
-	 *
+	 * @brief Simple abstract Iterator class for
+	 * generic classes.
 	 * @tparam T
 	 */
 	template <class T> class Iterator {
@@ -91,7 +88,9 @@ namespace fragcore {
 		/**
 		 *	@return
 		 */
-		virtual inline bool operator==(const Iterator &iterator) noexcept { return this->iterator == iterator.iterator; }
+		virtual inline bool operator==(const Iterator &iterator) noexcept {
+			return this->iterator == iterator.iterator;
+		}
 
 		/**
 		 *	@return

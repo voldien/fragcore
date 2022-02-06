@@ -24,6 +24,7 @@
 
 namespace fragcore {
 	/**
+	 * @brief
 	 *
 	 */
 	struct FVDECLSPEC Line : public Shape {
@@ -38,8 +39,12 @@ namespace fragcore {
 			this->normal = other.normal;
 			this->d = other.d;
 		}
+		Line(const Vector2 &normal, float d) noexcept {
+			this->normal = normal;
+			this->d = d;
+		}
 
-		Line &operator=(const Line &other) {
+		Line &operator=(const Line &other) noexcept {
 			this->normal = other.normal;
 			this->d = other.d;
 			return *this;
@@ -96,8 +101,8 @@ namespace fragcore {
 		 */
 		void set2DPoints(const Vector2 &p1, const Vector2 &p2) noexcept {
 			Vector2 delta = (p2 - p1);
-			Vec2 peru{delta[1], -delta[0]};
-			this->normal = peru.normalize();
+			Vector2 peru{delta[1], -delta[0]};
+			this->normal = peru.normalized();
 			this->d = this->normal.dot(p2);
 		}
 
@@ -105,7 +110,7 @@ namespace fragcore {
 		 * Compare if plane equal each other.
 		 * @return true if equal.
 		 */
-		friend bool operator==(const Plane &o1, const Plane &o2) noexcept {
+		friend bool operator==(const Line &o1, const Line &o2) noexcept {
 			if (&o1 == &o2)
 				return true;
 			else if (o1.normal == o2.normal && o1.d == o2.d)
@@ -118,7 +123,7 @@ namespace fragcore {
 		 * Compare if plane not equal each other.
 		 * @return true if equal.
 		 */
-		friend bool operator!=(const Plane &o1, const Plane &o2) noexcept { return !(o1 == o2); }
+		friend bool operator!=(const Line &o1, const Line &o2) noexcept { return !(o1 == o2); }
 
 	  protected:		/*	Attributes.	*/
 		Vector2 normal; /*	*/
@@ -131,11 +136,11 @@ namespace fragcore {
 		 * @param v2
 		 * @return
 		 */
-		static Line fromPoints(const Vector3 &v1, const Vector3 &v2) noexcept {
+		static Line fromPoints(const Vector2 &v1, const Vector2 &v2) noexcept {
 			Line tmp;
-			Vector3 e1 = (v2 - v1);
+			Vector2 e1 = (v2 - v1);
 			/**/
-			Vec2 e2{e1[1], -e1[0]};
+			Vector2 e2{e1[1], -e1[0]};
 
 			tmp.d = -tmp.normal.dot(v1);
 			return tmp;

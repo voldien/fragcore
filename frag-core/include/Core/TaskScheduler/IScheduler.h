@@ -29,8 +29,6 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC Task : public Object {
 	  public:
-		Task() = default;
-		template <class Function, class... Args> explicit Task(Function &&f, Args &&... args);
 		virtual ~Task() = default;
 
 		typedef void (*TaskCallBack)(Task *task);
@@ -47,8 +45,20 @@ namespace fragcore {
 		Ref<IScheduler> scheduler;
 	};
 
-	// TODO rename so that it includes the name task.
+	/**
+	 * @brief
+	 *
+	 */
 	class FVDECLSPEC IScheduler : public SmartReference {
+	  public:
+		// TODO determine where it shall be located within the project.
+		class FVDECLSPEC TaskFunc : public Task {
+		  public:
+			template <class Function, class... Args> explicit TaskFunc(Function &&f, Args &&... args) {}
+			virtual void Execute() noexcept override {}
+			virtual void Complete() noexcept override {}
+		};
+
 	  public:
 		virtual ~IScheduler() = default;
 
@@ -59,7 +69,11 @@ namespace fragcore {
 		 */
 		virtual void addTask(Task *task) = 0;
 
-		template <class Function, class... Args> void addTask(Function &&f, Args &&... args) {}
+		template <class Function, class... Args> void addTask(Function &&f, Args &&... args) {
+
+			TaskFunc task(f, args...);
+			this->addTask(&task);
+		}
 
 		/**
 		 * @brief Set the User Data object
@@ -92,7 +106,8 @@ namespace fragcore {
 		 *
 		 */
 		virtual void wait() = 0;
-		// virtual void wait(Task *task);
+		// TODO add support.
+		virtual void wait(Task *task) {}
 
 		/**
 		 * @brief

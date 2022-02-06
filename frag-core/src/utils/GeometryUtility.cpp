@@ -10,6 +10,7 @@ std::vector<Triangle> GeometryUtility::createPolygon(const std::vector<Vector3> 
 	for (int i = 0; i < points.size(); i++) {
 		poly[i] = {points[i].x(), points[i].y(), 0};
 	}
+	return {};
 }
 
 bool GeometryUtility::isConvex(std::vector<Vector3> &polygon) {

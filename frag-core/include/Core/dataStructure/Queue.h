@@ -30,13 +30,7 @@ namespace fragcore {
 	 */
 	template <class T, int U = 0> class Queue : public std::allocator<T> {
 	  public:
-		Queue() {
-			this->mdata = nullptr;
-			this->reserved = 0;
-			this->nrElements = 0;
-			this->clear();
-			this->resize(16);
-		}
+		Queue() : Queue(16) {}
 
 		Queue(unsigned int nrOfElements) {
 			if (nrOfElements <= 0)
@@ -67,11 +61,12 @@ namespace fragcore {
 
 		// TODO resolve circluar queue for enqueue and dequeue.
 		T &enqueue(const T &item) {
-			if (getSize() >= getReserved() - 1)
-				resize(getReserved() * 2);
+			if (this->getSize() >= this->getReserved() - 1)
+				this->resize(this->getReserved() * 2);
 			T *obj = &this->getData()[tail];
 
-			memcpy(obj, &item, getTypeSize());
+			*obj = item;
+			// memcpy(obj, &item, getTypeSize());
 			tail = (tail + 1) % getReserved();
 			this->nrElements++;
 			return *obj;
@@ -80,7 +75,7 @@ namespace fragcore {
 		/**
 		 *
 		 */
-		inline void clear() {
+		inline void clear() noexcept {
 			this->head = 0;
 			this->tail = 0;
 		}
@@ -88,19 +83,19 @@ namespace fragcore {
 		/**
 		 *	@return true if queue empty.
 		 */
-		inline bool isEmpty() const { return (this->getSize() == 0); }
+		inline bool isEmpty() const noexcept { return (this->getSize() == 0); }
 
 		/**
 		 *	@return true if full, false otherwise.
 		 */
-		inline bool isFull() const { return (this->getSize() == this->getReserved()); }
+		inline bool isFull() const noexcept { return (this->getSize() == this->getReserved()); }
 
 		/**
 		 *	Resize queue.
 		 */
 		void resize(unsigned int size) {
 			if (this->mdata == nullptr) {
-				this->mdata = (T *)malloc(this->getTypeSize() * size);
+				this->mdata = new T[size]();
 			} else {
 				this->mdata = (T *)realloc(this->mdata, this->getTypeSize() * size);
 
@@ -113,9 +108,9 @@ namespace fragcore {
 			this->reserved = size;
 		}
 
-		unsigned int getSize() const { return nrElements; }
+		unsigned int getSize() const noexcept { return nrElements; }
 
-		unsigned int getReserved() const { return this->reserved; }
+		unsigned int getReserved() const noexcept { return this->reserved; }
 
 		/*  */
 		class QueueIterator : public Iterator<T> {
@@ -148,9 +143,6 @@ namespace fragcore {
 		inline T *getData() const { return this->mdata; }
 
 	  public: /*  */
-		/**
-		 *	@return
-		 */
 		Queue &operator=(const Queue &que) {
 			this->mdata = static_cast<T *>(malloc(que.getReserved() * que.getTypeSize()));
 			memcpy(mdata, que.getData(), que.getReserved());

@@ -69,7 +69,8 @@ void FileIO::open(const char *path, IOMode mode) {
 		switch (errno) {
 		case ENOENT:
 			throw InvalidArgumentException("Failed to open file {}, {}.", path, strerror(errno));
-		case EPERM:	 // TODO add support for exception for permission.
+		case EPERM: // TODO add support for exception for permission.
+			throw PermissionDeniedException("Failed to open file {}, {}.", path, strerror(errno));
 		case EACCES: // TODO add support for exception for permission.
 		case EBUSY:
 		case ENFILE:
@@ -128,8 +129,7 @@ long int FileIO::peek(long int nBytes, void *pbuffer) {
 	long int nrBytes = this->read(nBytes, pbuffer);
 
 	int rc = fseek(this->file, cur_pos, SEEK_SET);
-	if(rc != 0){
-
+	if (rc != 0) {
 	}
 	return nrBytes;
 }
@@ -168,8 +168,7 @@ void FileIO::seek(long int nbytes, Seek seek) {
 unsigned long FileIO::getPos() {
 	fpos_t pos;
 	int rc = fgetpos(this->file, &pos);
-	if(rc != 0){
-		
+	if (rc != 0) {
 	}
 	return pos.__pos;
 }
