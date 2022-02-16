@@ -27,6 +27,7 @@
 #include "RenderPrerequisites.h"
 #include "Shader.h"
 #include "Texture.h"
+#include <Core/IConfig.h>
 #include <vector>
 namespace fragcore {
 	/**

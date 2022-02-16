@@ -65,7 +65,7 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 		setupConfig.set("anti-aliasing", false);
 		setupConfig.set("gamma-correction", false);
 	} else {
-		// setupConfig = *config
+		setupConfig = *config;
 	}
 
 	// Check all required config variables.
@@ -1350,7 +1350,6 @@ ViewPort *GLRendererInterface::getView(unsigned int i) {
 	return this->viewports[i - 1];
 }
 
-
 void GLRendererInterface::setDepthMask(bool flag) { glDepthMask(flag ? GL_TRUE : GL_FALSE); }
 
 void GLRendererInterface::enableState(GLRendererInterface::State state) { glEnable(getState(state)); }
@@ -1358,7 +1357,6 @@ void GLRendererInterface::enableState(GLRendererInterface::State state) { glEnab
 void GLRendererInterface::disableState(GLRendererInterface::State state) { glDisable(getState(state)); }
 
 bool GLRendererInterface::isStateEnabled(GLRendererInterface::State state) { return glIsEnabled(getState(state)); }
-
 
 void GLRendererInterface::drawInstance(Geometry *geometry, unsigned int num) {
 

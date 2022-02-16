@@ -20,6 +20,7 @@
 #define _FRAG_CORE_MATH_H_ 1
 #include "../Def.h"
 #include "Math3D.h"
+#include "Random.h"
 #include <cfloat>
 #include <cmath>
 #include <vector>
@@ -63,7 +64,7 @@ namespace fragcore {
 		}
 
 		template <typename T> constexpr static T sum(const std::vector<T> &list) noexcept {
-			//TODO add check if support adding assign operation.
+			// TODO add check if support adding assign operation.
 			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
 						  "Type Must Support addition operation.");
 			T sum = 0;
@@ -115,7 +116,7 @@ namespace fragcore {
 		/**
 		 *
 		 */
-		//TODO add macro for inline.
+		// TODO add macro for inline.
 		inline static constexpr double E = 2.718281828459045235;
 		inline static constexpr double PI = 3.141592653589793238462643383279502884;
 		inline static constexpr double PI_half = Math::PI / 2.0;
@@ -209,6 +210,69 @@ namespace fragcore {
 		static float PerlinNoise(const Vector2 &point) noexcept;
 		static float PerlinNoise(float x, float y, float z) noexcept;
 		static float PerlinNoise(const Vector3 &point) noexcept;
+
+		template <typename T> T random() {
+			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
+			return {drand48(), drand48()};
+		}
+
+		template <typename T> std::vector<T> &random(std::vector<T> &samples) {
+			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
+			for (int i = 0; i < samples.size(); i++) {
+				samples[i] = Random::rand<T>();
+			}
+			return samples;
+		}
+
+		template <typename T> std::vector<T> &jitter(std::vector<T> &samples) {
+			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
+
+			int sqrt_samples = (int)(std::sqrt(samples.size()));
+			for (int i = 0; i < sqrt_samples; i++) {
+				for (int j = 0; j < sqrt_samples; j++) {
+					T x = ((T)i + Random::rand<T>()) / (T)sqrt_samples;
+					T y = ((T)j + Random::rand<T>()) / (T)sqrt_samples;
+
+					samples[i * sqrt_samples + j] = x;
+					samples[i * sqrt_samples + j] = y;
+				}
+			}
+			return samples;
+		}
+
+		template <typename T> std::vector<T> &nrooks(std::vector<T> &samples) {
+			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
+			int num_samples = samples.size();
+			for (int i = 0; i < num_samples; i++) {
+				samples[i].setX(((double)i + drand48()) / (double)num_samples);
+				samples[i].setY(((double)i + drand48()) / (double)num_samples);
+			}
+
+			for (int i = num_samples - 2; i >= 0; i--) {
+				int target = int(drand48() * (double)i);
+				float temp = samples[i + 1].x();
+				samples[i + 1].setX(samples[target].x());
+				samples[target].setX(temp);
+				continue;
+			}
+			return samples;
+		}
+		double phi(int j) {
+			double x = 0.0;
+			double f = 0.5;
+			while (j) {
+				// x += j /= f *=
+
+				// 	f * (double)(!j & 1);
+				// 2;
+				// 0.5;
+			}
+			return (x);
+		}
+
+		template <typename T> std::vector<T> &hammersley(std::vector<T> &samples) {}
+
+		// void multijitter(Vector2 *samples, int num_samples) { int sqrt_samples = (int)sqrt(num_samples); }
 	};
 } // namespace fragcore
 

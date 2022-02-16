@@ -19,6 +19,7 @@
 #ifndef _FRAG_CORE_RANDOM_H_
 #define _FRAG_CORE_RANDOM_H_ 1
 #include "../Def.h"
+#include <climits>
 
 namespace fragcore {
 
@@ -26,48 +27,25 @@ namespace fragcore {
 	 * @brief
 	 *
 	 */
-	template <typename T = float> class FVDECLSPEC Random {
+	class FVDECLSPEC Random {
 	  public:
 		Random() = default;
 		Random(const Random &other) = default;
 		Random(Random &&other) = default;
 		~Random() = default;
 
-		/**
-		 *	Override the seed.
-		 */
-		void setSeed(unsigned long long seed) noexcept;
+		template <typename U> static U rand() { return (float)rand_internal(); }
 
-		/**
-		 *	Get next random value.
-		 */
-		unsigned int rand() noexcept;
-
-		/**
-		 *	Get next normalized random value.
-		 */
-		float randfNormalize() noexcept;
-
-		/**
-		 *	Get next random float value.
-		 */
-		float randf() const noexcept;
-
-		/**
-		 * @brief
-		 *
-		 * @param min
-		 * @param max
-		 * @return float
-		 */
-		float range(float min, float max) noexcept;
+		template <typename U> static constexpr U normalizeRand() noexcept { return rand<U>() / RAND_MAX; }
+		template <typename U> static constexpr U range(U start, U end) noexcept {
+			return start + (Random::rand<U>() % (start - end + static_cast<U>(1)));
+		}
+		template <typename U> static U insideUnitCircle() noexcept { return 0; }
+		template <typename U> static U insideUnitSphere() noexcept { return 0; }
+		template <typename U> static void setSet() noexcept {}
 
 	  private: /*	Attributes.	*/
-			   //
-			   //		unsigned long long seed;	/*	*/
-			   //		unsigned long long mult;	/*	*/
-			   //		unsigned long long llong_max;	/*	*/
-			   //		float float_max;		/*	*/
+		static unsigned int rand_internal() noexcept;
 	};
 } // namespace fragcore
 
