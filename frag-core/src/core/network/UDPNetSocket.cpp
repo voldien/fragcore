@@ -57,7 +57,7 @@ int UDPNetSocket::connect(const INetAddress &p_addr) {
 		struct sockaddr_in addr4;  /*	*/
 		struct sockaddr_in6 addr6; /*	*/
 	} addrU;
-	struct hostent *hosten = NULL; /*	*/
+	struct hostent *hosten = nullptr; /*	*/
 	int domain;
 	struct timeval tv;
 

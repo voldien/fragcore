@@ -1,4 +1,4 @@
-name: Task-Scheduler Linux
+name: FragCore Deployment
 on:
   push:
     branches:

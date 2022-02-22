@@ -19,7 +19,7 @@
 #ifndef _FRAG_CORE_PHYSIC_COLLISION_H_
 #define _FRAG_CORE_PHYSIC_COLLISION_H_ 1
 
-namespace fragcore{
+namespace fragcore {
 	// class VDDECLSPEC VDCollision
 	// {
 	// public:
@@ -60,6 +60,6 @@ namespace fragcore{
 	// 	void *pair;
 	// 	void *shape;
 	// };
-}
+} // namespace fragcore
 
 #endif

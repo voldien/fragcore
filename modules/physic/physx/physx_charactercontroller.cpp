@@ -1,14 +1,8 @@
-#include"physic/CharacterController.h"
+#include "physic/CharacterController.h"
 using namespace fragcore;
 
-CharacterController::~CharacterController(){
+CharacterController::~CharacterController() {}
 
-}
+Vector3 CharacterController::getCenter() {}
 
-Vector3 CharacterController::getCenter(){
-
-}
-
-void CharacterController::setCenter(const Vector3& center){
-
-}
+void CharacterController::setCenter(const Vector3 &center) {}

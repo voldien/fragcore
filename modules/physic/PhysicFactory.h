@@ -18,18 +18,19 @@
  */
 #ifndef _PHYSIC_FACTORY_H_
 #define _PHYSIC_FACTORY_H_ 1
-#include"PhysicInterface.h"
+#include "PhysicInterface.h"
 
 namespace fragcore {
 	/**
 	 *	Responsible for creating the physic interface.
 	 */
 	class FVDECLSPEC PhysicFactory {
-	public:
-		enum PhysicAPI {	/*  Official physic api.  */
-			Bullet,			/*	Bullet physic API.	*/
-			Bullet3,		/*	Bullet3 physic API. support GPU acceleration.	*/
-			PhysX,			/*	Nvidia PhysicX.	*/
+	  public:
+		/*  Official physic api.  */
+		enum class PhysicAPI {
+			Bullet,	 /*	Bullet physic API.	*/
+			Bullet3, /*	Bullet3 physic API. support GPU acceleration.	*/
+			PhysX,	 /*	Nvidia PhysicX.	*/
 		};
 
 		/**
@@ -44,7 +45,7 @@ namespace fragcore {
 		 *	\resource
 		 *
 		 */
-		static PhysicInterface* createPhysic(PhysicAPI api, IConfig* overrideOption);
+		static PhysicInterface *createPhysic(PhysicAPI api, IConfig *overrideOption);
 
 		/**
 		 *	Load physicinterface by its library filename.
@@ -54,18 +55,17 @@ namespace fragcore {
 		 *	\connection
 		 *
 		 */
-		static PhysicInterface* createPhysic(const char* libpath, IConfig* overrideOption);
+		static PhysicInterface *createPhysic(const char *libpath, IConfig *overrideOption);
 
 		/**
 		 * @return
 		 */
-		static const char* getInterfaceLibraryPath(PhysicAPI api);
-	private:	/*	Prevent one from creating an instance of this class.	*/
+		static const char *getInterfaceLibraryPath(PhysicAPI api);
 
+	  private: /*	Prevent one from creating an instance of this class.	*/
 		PhysicFactory();
-		PhysicFactory(const PhysicFactory& other);
-
+		PhysicFactory(const PhysicFactory &other);
 	};
-}
+} // namespace fragcore
 
 #endif

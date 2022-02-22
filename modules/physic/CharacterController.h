@@ -25,22 +25,18 @@ namespace fragcore {
 	 *
 	 */
 	class FVDECLSPEC CharacterController {
-		//friend class DynamicInterface;
-	private:
-		inline CharacterController(){}
+		// friend class DynamicInterface;
+	  private:
+		inline CharacterController() {}
 
 		virtual ~CharacterController();
 
-	public:	/*	Public methods.	*/
-
-
-
-	protected:	/*	Protected virtual methods.	*/
-
+	  public:	 /*	Public methods.	*/
+	  protected: /*	Protected virtual methods.	*/
 		virtual Vector3 getCenter();
-		//virtual const Vector3 &getConter() const;
+		// virtual const Vector3 &getConter() const;
 		virtual void setCenter(const Vector3 &center);
 	};
-}
+} // namespace fragcore
 
 #endif

@@ -18,7 +18,8 @@
  */
 #ifndef _FRAG_CORE_MODBUS_NETSOCKET_H_
 #define _FRAG_CORE_MODBUS_NETSOCKET_H_ 1
-#include "Core/Network/TCPSocket.h"
+#include "ModBusAddress.h"
+#include <Core/Network/TCPSocket.h>
 #include <sys/socket.h>
 
 namespace fragcore {
@@ -26,6 +27,7 @@ namespace fragcore {
 	 * @brief
 	 *
 	 */
+	// TODO determine if add support for RTU
 	class FVDECLSPEC ModbusNetSocket : public TCPNetSocket {
 	  public:
 		ModbusNetSocket();
@@ -43,7 +45,7 @@ namespace fragcore {
 
 		virtual int recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddress &r_ip,
 							 bool p_peek = false) override;
-		virtual int recv( void *pbuffer, int p_len, int &sent, bool peek = false) override;
+		virtual int recv(void *pbuffer, int p_len, int &sent, bool peek = false) override;
 		virtual int send(const uint8_t *p_buffer, int p_len, int &r_sent) override;
 		virtual int sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const INetAddress &p_ip) override;
 		virtual long int send(const void *pbuffer, int p_len, int &sent) override;
@@ -57,6 +59,7 @@ namespace fragcore {
 
 		virtual NetStatus getStatus() const noexcept override;
 
+	  public: /*	Modbus specific methods.	*/
 	  private:
 		ModbusNetSocket(int socket);
 

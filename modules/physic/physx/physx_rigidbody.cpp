@@ -7,21 +7,18 @@ using namespace fragcore;
 
 RigidBody::~RigidBody() {}
 
-float RigidBody::getMass()
-{
+float RigidBody::getMass() {
 	btRigidBody *body = (btRigidBody *)this->getObject();
 	return 1.0f / body->getInvMass();
 }
-void RigidBody::setMass(float mass)
-{
+void RigidBody::setMass(float mass) {
 	btRigidBody *body = (btRigidBody *)this->getObject();
 
 	btVector3 inertia;
 	body->getCollisionShape()->calculateLocalInertia(mass, inertia);
 }
 
-Vector3 RigidBody::getPosition()
-{
+Vector3 RigidBody::getPosition() {
 
 	btRigidBody *body;
 	btTransform trans;
@@ -35,16 +32,14 @@ Vector3 RigidBody::getPosition()
 
 	return *(Vector3 *)&trans.getOrigin();
 }
-void RigidBody::setPosition(const Vector3 &position)
-{
+void RigidBody::setPosition(const Vector3 &position) {
 	btRigidBody *body;
 	body = (btRigidBody *)this->getObject();
 
 	/*  Both internal and rigidbody.    */
 }
 
-Quaternion RigidBody::getOrientation()
-{
+Quaternion RigidBody::getOrientation() {
 
 	btRigidBody *body;
 	btQuaternion oritention;
@@ -52,19 +47,14 @@ Quaternion RigidBody::getOrientation()
 
 	oritention = body->getOrientation();
 
-	return Quaternion(oritention.getW(),
-						oritention.getX(),
-						oritention.getY(),
-						oritention.getZ());
+	return Quaternion(oritention.getW(), oritention.getX(), oritention.getY(), oritention.getZ());
 }
-void RigidBody::setOrientation(const Quaternion &quat)
-{
+void RigidBody::setOrientation(const Quaternion &quat) {
 	btRigidBody *body;
 	body = (btRigidBody *)this->getObject();
 }
 
-Vector3 RigidBody::getScale()
-{
+Vector3 RigidBody::getScale() {
 	btRigidBody *body;
 	body = (btRigidBody *)this->getObject();
 
@@ -72,8 +62,7 @@ Vector3 RigidBody::getScale()
 
 	return Vector3(scale.x(), scale.y(), scale.z());
 }
-void RigidBody::setScale(const Vector3 &scale)
-{
+void RigidBody::setScale(const Vector3 &scale) {
 	btRigidBody *body;
 	body = (btRigidBody *)this->getObject();
 
@@ -81,45 +70,39 @@ void RigidBody::setScale(const Vector3 &scale)
 	body->getCollisionShape()->setLocalScaling(sc);
 }
 
-void RigidBody::addForce(const Vector3 &force)
-{
+void RigidBody::addForce(const Vector3 &force) {
 	physx::PxRigidActor *body;
 	body = (physx::PxRigidActor *)this->getObject();
 	((PxRigidDynamic *)this->actor)->addForce(*dynamic_cast<const PxVec3 *>&force));
 }
 
-float RigidBody::getDrag()
-{
+float RigidBody::getDrag() {
 	btRigidBody *body;
 	body = (btRigidBody *)this->getObject();
 
 	return body->getLinearDamping();
 }
-void RigidBody::setDrag(float drag)
-{
+void RigidBody::setDrag(float drag) {
 	btRigidBody *body;
 	body = (btRigidBody *)this->getObject();
 
 	body->setDamping(drag, body->getAngularDamping());
 }
 
-float RigidBody::getAngularDrag()
-{
+float RigidBody::getAngularDrag() {
 	btRigidBody *body;
 	body = (btRigidBody *)this->getObject();
 
 	return body->getAngularDamping();
 }
-void RigidBody::setAngularDrag(float angularDrag)
-{
+void RigidBody::setAngularDrag(float angularDrag) {
 	btRigidBody *body;
 	body = (btRigidBody *)this->getObject();
 
 	body->setDamping(body->getLinearDamping(), angularDrag);
 }
 
-Vector3 RigidBody::getVelocity()
-{
+Vector3 RigidBody::getVelocity() {
 	btRigidBody *body;
 	body = (btRigidBody *)this->getObject();
 
@@ -127,17 +110,9 @@ Vector3 RigidBody::getVelocity()
 	return Vector3(linear.x(), linear.y(), linear.z());
 }
 
+VDRigidBody::VDRigidBody() : VDPhysicActor() { this->actor = nullptr; }
 
-
-
-
-VDRigidBody::VDRigidBody() : VDPhysicActor()
-{
-	this->actor = nullptr;
-}
-
-void VDRigidBody::instanceInitilize()
-{
+void VDRigidBody::instanceInitilize() {
 	VDPhysic::addActor(this->actor);
 
 	if (getActor())
@@ -145,8 +120,7 @@ void VDRigidBody::instanceInitilize()
 	rigidBodyCollection.push_back(this);
 }
 
-void VDRigidBody::initializeComponent()
-{
+void VDRigidBody::initializeComponent() {
 	VDPhysicActor::initializeComponent();
 	this->initVDPhysicObject((this->collider() != nullptr) ? true : false, true);
 	this->kinect(false);
@@ -161,24 +135,15 @@ void VDRigidBody::initializeComponent()
 	this->gameObject()->setActive(this->gameObject()->getActiveFlag() | VDGameObject::eRigidbody);
 }
 
-void VDRigidBody::onEnable()
-{
-	this->GetDynamicActor()->setActorFlag(PxActorFlag::eDISABLE_SIMULATION, false);
-}
+void VDRigidBody::onEnable() { this->GetDynamicActor()->setActorFlag(PxActorFlag::eDISABLE_SIMULATION, false); }
 
-void VDRigidBody::onDisable()
-{
-	this->GetDynamicActor()->setActorFlag(PxActorFlag::eDISABLE_SIMULATION, true);
-}
+void VDRigidBody::onDisable() { this->GetDynamicActor()->setActorFlag(PxActorFlag::eDISABLE_SIMULATION, true); }
 
-void VDRigidBody::onDestroy()
-{
-	for (std::vector<VDRigidBody *>::iterator x = rigidBodyCollection.begin(); x != rigidBodyCollection.end(); x++)
-	{
-		if ((*x) == this)
-		{
+void VDRigidBody::onDestroy() {
+	for (std::vector<VDRigidBody *>::iterator x = rigidBodyCollection.begin(); x != rigidBodyCollection.end(); x++) {
+		if ((*x) == this) {
 			rigidBodyCollection.erase(x);
-			//TODO Clean Actor Data and Collider Information
+			// TODO Clean Actor Data and Collider Information
 			VDPhysic::removeActor(this->getActor());
 			// Remove All Data Releated to this.
 			if (!this->isColliderAttached())
@@ -188,8 +153,7 @@ void VDRigidBody::onDestroy()
 	}
 }
 
-VDBehavior *VDRigidBody::copyComponent(unsigned int &dataSize)
-{
+VDBehavior *VDRigidBody::copyComponent(unsigned int &dataSize) {
 	VDRigidBody *rigid = (VDRigidBody *)malloc(sizeof(VDRigidBody));
 	memcpy(rigid, this, sizeof(VDRigidBody));
 	dataSize = sizeof(VDRigidBody);
@@ -197,66 +161,38 @@ VDBehavior *VDRigidBody::copyComponent(unsigned int &dataSize)
 	return (VDBehavior *)rigid;
 }
 
-void VDRigidBody::addForce(const VDVector3 &force)
-{
+void VDRigidBody::addForce(const VDVector3 &force) {
 	((PxRigidDynamic *)this->actor)->addForce(*VDCASTP(const PxVec3 *, &force));
 }
 
-void VDRigidBody::addForceAtPosition(const VDVector3 &force, const VDVector3 &position)
-{
+void VDRigidBody::addForceAtPosition(const VDVector3 &force, const VDVector3 &position) {
 	PxRigidBodyExt::addForceAtPos(*(PxRigidBody *)this->actor, *(PxVec3 *)&force, *(PxVec3 *)&position);
 }
 
-void VDRigidBody::addRelativeForce(const VDVector3 &force)
-{
-}
+void VDRigidBody::addRelativeForce(const VDVector3 &force) {}
 
-void VDRigidBody::addRelativeTorque(const VDVector3 &force)
-{
-	
-}
+void VDRigidBody::addRelativeTorque(const VDVector3 &force) {}
 
-void VDRigidBody::addTorque(const VDVector3 &force)
-{
+void VDRigidBody::addTorque(const VDVector3 &force) {
 	((PxRigidDynamic *)this->actor)->addTorque(*VDCASTP(const PxVec3 *, &force));
 }
 
-void VDRigidBody::setMass(float Mass)
-{
-	this->GetDynamicActor()->setMass(Mass);
-}
+void VDRigidBody::setMass(float Mass) { this->GetDynamicActor()->setMass(Mass); }
 
-float VDRigidBody::getMass() const
-{
-	return ((PxRigidDynamic *)this->actor)->getMass();
-}
+float VDRigidBody::getMass() const { return ((PxRigidDynamic *)this->actor)->getMass(); }
 
-void VDRigidBody::setDrag(float drag)
-{
-	((PxRigidDynamic *)this->actor)->setLinearDamping(drag);
-}
+void VDRigidBody::setDrag(float drag) { ((PxRigidDynamic *)this->actor)->setLinearDamping(drag); }
 
-float VDRigidBody::getDrag() const
-{
-	return ((PxRigidDynamic *)this->actor)->getLinearDamping();
-}
+float VDRigidBody::getDrag() const { return ((PxRigidDynamic *)this->actor)->getLinearDamping(); }
 
-void VDRigidBody::sleep()
-{
-	this->GetDynamicActor()->putToSleep();
-}
+void VDRigidBody::sleep() { this->GetDynamicActor()->putToSleep(); }
 
-void VDRigidBody::wake()
-{
-	this->GetDynamicActor()->wakeUp();
-}
+void VDRigidBody::wake() { this->GetDynamicActor()->wakeUp(); }
 
-void VDRigidBody::useGraivity(bool useGravity)
-{
+void VDRigidBody::useGraivity(bool useGravity) {
 	this->GetRigidActor()->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, (useGravity == true) ? false : true);
 }
 
-void VDRigidBody::kinect(bool kinect)
-{
+void VDRigidBody::kinect(bool kinect) {
 	this->GetDynamicActor()->setRigidDynamicFlag(PxRigidDynamicFlag::eKINEMATIC, kinect);
 }

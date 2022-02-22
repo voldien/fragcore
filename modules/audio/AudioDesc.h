@@ -20,6 +20,7 @@
 #define _FRAG_CORE_AUDIODESC_H_ 1
 #include "AudioTypes.h"
 #include <Core/IO/IO.h>
+#include <Core/Math.h>
 #include <Core/Ref.h>
 #include <Def.h>
 

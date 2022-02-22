@@ -16,3 +16,17 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+#ifndef _FRAG_CORE_MODBUS_ADDRESS_H_
+#define _FRAG_CORE_MODBUS_ADDRESS_H_ 1
+#include <Core/Network/INetAddress.h>
+namespace fragcore {
+	/**
+	 * @brief
+	 *
+	 */
+	class FVDECLSPEC ModBusAddress : public INetAddress {
+	  public:
+		ModBusAddress() : INetAddress(INetAddress::NetworkProtocol::NetWorkProtocol_ModBus) {}
+	};
+} // namespace fragcore
+#endif
