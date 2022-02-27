@@ -74,11 +74,11 @@ PhysicInterface *PhysicFactory::createPhysic(const char *libpath, IConfig *confi
 const char *PhysicFactory::getInterfaceLibraryPath(PhysicAPI api) {
 #ifdef FV_UNIX
 	switch (api) {
-	case PhysicFactory::Bullet:
+	case PhysicFactory::PhysicAPI::Bullet:
 		return bulletlibpath;
-	case PhysicFactory::Bullet3:
+	case PhysicFactory::PhysicAPI::Bullet3:
 		return bullet3libpath;
-	case PhysicFactory::PhysX:
+	case PhysicFactory::PhysicAPI::PhysX:
 		return physxlibpath;
 	default:
 		throw InvalidArgumentException("");

@@ -23,7 +23,6 @@
 #include <optional>
 #include <vector>
 
-// TODO move to a module.
 namespace fragcore {
 	/**
 	 * @brief
@@ -62,6 +61,10 @@ namespace fragcore {
 		};
 
 	  public:
+		/**
+		 * @brief
+		 *
+		 */
 		enum class FlowControl {
 			FlowControlNone = 0,
 			FlowControlXonXoff = 1,
@@ -69,10 +72,22 @@ namespace fragcore {
 			FlowControlDtrDsr = 3
 		};
 
+		/**
+		 * @brief
+		 *
+		 */
 		enum class Parity { ParityNone, ParityOdd, ParityEven, ParityMark, ParitySpace };
 
+		/**
+		 * @brief
+		 *
+		 */
 		enum class StopBits { ONEBIT = 1, TWOBIT = 2 };
 
+		/**
+		 * @brief
+		 *
+		 */
 		enum class XonXoff {
 			XonXoffDisable,
 			XonXoffIn,
@@ -111,13 +126,34 @@ namespace fragcore {
 		void setXonXoff(XonXoff XonXoff);
 		XonXoff getXonXoff();
 
+		/**
+		 * @brief Set the number of bits for each payload.
+		 *
+		 * @param nrBits
+		 */
 		void setPayloadBits(unsigned int nrBits);
+
+		/**
+		 * @brief Get the number of bits for each payload.
+		 *
+		 * @return int
+		 */
 		int getPayloadBits() const;
 
 	  public:
+	  	/**
+	  	 * @brief
+	  	 *
+	  	 * @param baudRate
+	  	 * @return true
+	  	 * @return false
+	  	 */
 		static bool supportedBaudRate(unsigned int baudRate);
+
 		/**
+		 * @brief Get the Serial Ports object
 		 *
+		 * @return std::optional<std::vector<std::string>>
 		 */
 		static std::optional<std::vector<std::string>> getSerialPorts();
 

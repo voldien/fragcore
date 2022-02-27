@@ -83,7 +83,8 @@ void GLRenderWindow::getSize(int *width, int *height) const { SDL_GetWindowSize(
 fragcore::Display *GLRenderWindow::getCurrentDisplay() const {
 	int index;
 	index = SDL_GetWindowDisplayIndex(this->window);
-	return WindowManager::getInstance()->getDisplay(index);
+	return nullptr;
+	// WindowManager::getInstance()->getDisplay(index);
 }
 
 void GLRenderWindow::createWindow(int x, int y, int width, int height, const char *api) {

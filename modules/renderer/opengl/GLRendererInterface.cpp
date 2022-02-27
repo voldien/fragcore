@@ -1272,7 +1272,7 @@ void GLRendererInterface::deleteQuery(QueryObject *query) {
 
 RendererWindow *GLRendererInterface::createWindow(int x, int y, int width, int height) {
 
-	WindowManager::getInstance();
+	//WindowManager::getInstance();
 	Ref<GLRendererInterface> rendRef(this);
 
 	GLRenderWindow *renderWindow = new GLRenderWindow(rendRef);

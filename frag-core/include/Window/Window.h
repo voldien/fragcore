@@ -62,7 +62,6 @@ namespace fragcore {
 
 		virtual void getSize(int *width, int *height) const = 0;
 
-
 		virtual Display *getCurrentDisplay() const = 0;
 
 		virtual float getGamma() const = 0;
@@ -88,6 +87,8 @@ namespace fragcore {
 		FV_ALWAYS_INLINE virtual void *getUserData() const noexcept { return this->userData; }
 
 		virtual intptr_t getNativePtr() const = 0; /*  Get native window reference object. */
+
+		// TODO add getWindowManager()
 
 	  protected: /*  Internal utility methods.   */
 		// TODO determine how to handle it.

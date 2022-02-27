@@ -29,7 +29,8 @@ namespace fragcore {
 	 * @brief
 	 *
 	 */
-	class FVDECLSPEC WindowManager : public Singleton<WindowManager> {
+	// TOOD remove singleton
+	class FVDECLSPEC WindowManager : public SmartReference {
 	  public:
 		/**
 		 * @brief Get the Display object
@@ -37,14 +38,14 @@ namespace fragcore {
 		 * @param index
 		 * @return Display*
 		 */
-		Display *getDisplay(unsigned int index) noexcept(true);
+		virtual Display *getDisplay(unsigned int index) = 0;
 
 		/**
 		 * @brief Get the Num Displays object
 		 *
 		 * @return unsigned int
 		 */
-		unsigned int getNumDisplays() const noexcept;
+		virtual unsigned int getNumDisplays() const noexcept = 0;
 
 		/**
 		 * @brief Get the Associated Display object
@@ -52,7 +53,7 @@ namespace fragcore {
 		 * @param window
 		 * @return Display*
 		 */
-		Display *getAssociatedDisplay(Ref<Window> &window);
+		virtual Display *getAssociatedDisplay(Ref<Window> &window) = 0;
 
 		/**
 		 * @brief Create a Window object
@@ -60,20 +61,20 @@ namespace fragcore {
 		 * @param title
 		 * @return Window*
 		 */
-		Window *createWindow(const std::string &title);
+		virtual Window *createWindow(const std::string &title) = 0;
 
 		/**
 		 * @brief
 		 *
 		 * @return Display*
 		 */
-		Display *primaryDisplay() const noexcept;
-		// Window* createWindow()
+		virtual Display *primaryDisplay() const noexcept = 0;
+
+		virtual const std::vector<Display *> &getDisplays() const = 0;
 		/*	TODO get the event.	*/
 
-		// protected:
-		void onCreation(Ref<WindowManager> &instance) override;
-		WindowManager();
+	  protected:
+		WindowManager() = default;
 	};
 } // namespace fragcore
 

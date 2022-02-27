@@ -114,7 +114,8 @@ void VKRenderWindow::getSize(int *width, int *height) const { SDL_GetWindowSize(
 fragcore::Display *VKRenderWindow::getCurrentDisplay() const {
 	int index;
 	index = SDL_GetWindowDisplayIndex(this->window);
-	return WindowManager::getInstance()->getDisplay(index);
+	// return WindowManager::getInstance()->getDisplay(index);
+	return nullptr;
 }
 
 void VKRenderWindow::createWindow(int x, int y, int width, int height, const char *api) {
