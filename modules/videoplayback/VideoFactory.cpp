@@ -301,7 +301,7 @@ VideoTexture *VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IR
 				if (result < 0) {
 					char buf[AV_ERROR_MAX_STRING_SIZE];
 					av_strerror(result, buf, sizeof(buf));
-					throw RuntimeException(fmt::format("Failed to send packet for decoding audio frame : {}", buf));
+					throw RuntimeException("Failed to send packet for decoding audio frame : {}", buf);
 				}
 
 				while (result >= 0) {
@@ -311,7 +311,7 @@ VideoTexture *VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IR
 					if (result < 0) {
 						char buf[AV_ERROR_MAX_STRING_SIZE];
 						av_strerror(result, buf, sizeof(buf));
-						throw RuntimeException(fmt::format(" : {}", buf));
+						throw RuntimeException(" : {}", buf);
 					}
 
 					av_get_channel_layout_nb_channels(header.frame->channel_layout);

@@ -19,14 +19,14 @@ class AudioPlayback {
 		Ref<AudioInterface> iaudio =
 			Ref<AudioInterface>(AudioFactory::createAudioInterface(AudioFactory::OpenAL, &config));
 
-		Ref<IScheduler> sch = Ref<IScheduler>(NULL);
+		Ref<IScheduler> sch = Ref<IScheduler>(nullptr);
 		FileSystem *fileSystem = FileSystem::createFileSystem(sch);
 
 		std::vector<AudioPhysicalDevice> devices = iaudio->getDevices();
 		std::vector<AudioPhysicalDevice>::iterator it = devices.begin();
 
 		for (; it != devices.end(); it++) {
-			printf(fmt::format("{}\n", (*it).getName().c_str()).c_str());
+			std::cout << fmt::format("{}", (*it).getName().c_str()) << std::endl;
 		}
 		// printf("Current Device: %s", iaudio->getAudioDevice().getName());
 
@@ -66,22 +66,14 @@ class AudioPlayback {
 		sleep(10);
 		delete *iaudio;
 	}
-	~AudioPlayback(void) {}
+	~AudioPlayback() {}
 };
 
 int main(int argc, const char **argv) {
 
 	try {
 		AudioPlayback(argc, argv);
-	} /*catch (fragcore::Exception &ex) {
-		std::cerr << "Internal exception - " << ex.getName() << std::endl;
-		std::cerr << ex.what() << std::endl;
-		std::cerr << ex.getBackTrace() << std::endl;
-		return EXIT_FAILURE;
-
-	} */
-	catch (std::exception &ex) {
-		std::cerr << "External library error" << std::endl;
+	} catch (std::exception &ex) {
 		std::cerr << ex.what() << std::endl;
 		return EXIT_FAILURE;
 	}

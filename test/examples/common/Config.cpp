@@ -426,7 +426,7 @@ Config *Config::createConfig(int argc, const char **argv, const char *configpath
 	if (configpath) {
 		Ref<IO> Ref_io = Ref<IO>(FileSystem::getFileSystem()->openFile(configpath, IO::READ));
 		/*  */
-		config->parseConfigFile(Ref_io);
+		//config->parseConfigFile(Ref_io);
 		FileSystem::getFileSystem()->closeFile(*Ref_io);
 	}
 

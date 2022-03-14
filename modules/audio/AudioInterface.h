@@ -18,10 +18,13 @@
  */
 #ifndef _FRAG_CORE_AUDIOINTERFACE_H_
 #define _FRAG_CORE_AUDIOINTERFACE_H_ 1
+#include "AudioCapture.h"
 #include "AudioClip.h"
 #include "AudioDesc.h"
+#include "AudioListener.h"
 #include "AudioPhysicalDevice.h"
 #include "AudioReverb.h"
+#include "AudioSource.h"
 #include <Core/IConfig.h>
 #include <Core/Module.h>
 #include <vector>
@@ -36,64 +39,61 @@ namespace fragcore {
 		// virtual void initAllocate(InitAllocateTableInfo *table);
 
 	  public:
-		AudioInterface(IConfig *config);
-		virtual ~AudioInterface();
-
-		virtual void OnInitialization();
-		virtual void OnDestruction();
+		AudioInterface() = default;
+		virtual ~AudioInterface() = default;
 
 		/**
 		 *
 		 * @param desc
 		 * @return
 		 */
-		virtual AudioClip *createAudioClip(AudioClipDesc *desc);
-		virtual void deleteAudioClip(AudioClip *audioClip);
+		virtual AudioClip *createAudioClip(AudioClipDesc *desc) = 0;
+		virtual void deleteAudioClip(AudioClip *audioClip) = 0;
 
 		/**
 		 *
 		 * @param desc
 		 * @return
 		 */
-		virtual AudioSource *createAudioSource(AudioSourceDesc *desc);
-		virtual void deleteAudioSource(AudioSource *audioSource);
+		virtual AudioSource *createAudioSource(AudioSourceDesc *desc) = 0;
+		virtual void deleteAudioSource(AudioSource *audioSource) = 0;
 
-		virtual AudioReverb *createAudioReverb(AudioReverbDesc *desc);
-		virtual void deleteAudioReverb(AudioReverb *reverb);
+		virtual AudioReverb *createAudioReverb(AudioReverbDesc *desc) = 0;
+		virtual void deleteAudioReverb(AudioReverb *reverb) = 0;
 
 		/**
 		 *
 		 * @param desc
 		 * @return
 		 */
-		virtual AudioListener *createAudioListener(AudioListenerDesc *desc);
+		virtual AudioListener *createAudioListener(AudioListenerDesc *desc) = 0;
 
 		/**
 		 *
 		 * @param listener
 		 */
-		virtual void deleteAudioListener(AudioListener *listener);
+		virtual void deleteAudioListener(AudioListener *listener) = 0;
 
 		/**
 		 *
 		 * @param listener
 		 */
-		virtual void setAudioListener(AudioListener *listener);
+		virtual void setAudioListener(AudioListener *listener) = 0;
 
 		/**/
-		virtual AudioCapture *createAudioCapture();
-		virtual void deleteAudioCapture(AudioCapture *capture);
+		virtual AudioCapture *createAudioCapture() = 0;
+		virtual void deleteAudioCapture(AudioCapture *capture) = 0;
 
-		virtual std::vector<AudioPhysicalDevice> getDevices() const;
-
-		/*	*/
-		virtual void setAudioDevice(const AudioPhysicalDevice &device);
-		virtual const AudioPhysicalDevice &getAudioDevice() const;
+		virtual std::vector<AudioPhysicalDevice> getDevices() const = 0;
 
 		/*	*/
-		virtual const char *getVersion() const;
+		virtual void setAudioDevice(const AudioPhysicalDevice &device) = 0;
+		virtual const AudioPhysicalDevice &getAudioDevice() const = 0;
 
-	  private:
+		/*	*/
+		virtual const char *getVersion() const = 0;
+
+	  protected:
 		void *pdata;
 	};
 

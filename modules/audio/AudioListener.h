@@ -31,19 +31,22 @@ namespace fragcore {
 		friend class AudioInterface;
 
 	  public:
-	  	/**
-	  	 * @brief Set the Volume object
-	  	 *
-	  	 * @param volume
-	  	 */
-		virtual void setVolume(float volume);
+		virtual ~AudioListener() = default;
+		AudioListener() = default;
+
+		/**
+		 * @brief Set the Volume object
+		 *
+		 * @param volume
+		 */
+		virtual void setVolume(float volume) = 0;
 
 		/**
 		 * @brief Get the Volume object
 		 *
 		 * @return float
 		 */
-		virtual float getVolume() const;
+		virtual float getVolume() const = 0;
 
 		// TODO rename to mute
 		/**
@@ -51,25 +54,18 @@ namespace fragcore {
 		 *
 		 * @param pause
 		 */
-		virtual void pause(bool pause);
+		virtual void pause(bool pause) = 0;
 
 		// virtual void getOutPutData();
 
-		virtual void setPosition(const Vector3 &position);
-		virtual const Vector3 getPosition() const;
+		virtual void setPosition(const Vector3 &position) = 0;
+		virtual const Vector3 getPosition() const = 0;
 
-		virtual void setVelocity(const Vector3 &velocity);
-		virtual const Vector3 getVelocity() const;
+		virtual void setVelocity(const Vector3 &velocity) = 0;
+		virtual const Vector3 getVelocity() const = 0;
 
-		virtual void setOrientation(const Quaternion &orientation);
-		virtual const Quaternion getOrientation() const;
-
-		virtual intptr_t getNativePtr() const override;
-		virtual ~AudioListener();
-
-	  protected:
-		AudioListener();
-
+		virtual void setOrientation(const Quaternion &orientation) = 0;
+		virtual const Quaternion getOrientation() const = 0;
 	};
 } // namespace fragcore
 

@@ -1,16 +1,11 @@
-#include"internal_object_type.h"
-#include"../AudioReverb.h"
+#include "ALAudioReverb.h"
 using namespace fragcore;
 
-intptr_t AudioReverb::getNativePtr() const  {
-	ALReverb *reverb= (ALReverb*) this->getObject();
-	return reverb->reverb;
+intptr_t OpenALAudioReverb::getNativePtr() const {
+
+	return this->reverb;
 }
 
-AudioReverb::AudioReverb() {
+OpenALAudioReverb::OpenALAudioReverb() {}
 
-}
-
-AudioReverb::~AudioReverb() {
-
-}
+OpenALAudioReverb::~OpenALAudioReverb() {}

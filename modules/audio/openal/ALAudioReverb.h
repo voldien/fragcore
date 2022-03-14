@@ -16,24 +16,26 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef _FRAG_CORE_AUDIOREVERB_H_
-#define _FRAG_CORE_AUDIOREVERB_H_ 1
+#ifndef _FRAG_CORE_OPENAL_AUDIOREVERB_H_
+#define _FRAG_CORE_OPENAL_AUDIOREVERB_H_ 1
 
-#include "AudioObject.h"
+#include "../AudioReverb.h"
 
 namespace fragcore {
 
 	/**
 	 *
 	 */
-	class FVDECLSPEC AudioReverb : public AudioObject {
+	class FVDECLSPEC OpenALAudioReverb : public AudioReverb {
 		friend class AudioInterface;
 
 	  public:
-		virtual ~AudioReverb() = default;
+		virtual ~OpenALAudioReverb();
+		OpenALAudioReverb();
+		intptr_t getNativePtr() const override;
 
 	  protected:
-		AudioReverb() = default;
+		unsigned int reverb;
 	};
 
 } // namespace fragcore

@@ -30,23 +30,20 @@ namespace fragcore {
 		friend class AudioInterface;
 
 	  public:
-		virtual unsigned long int getSampleRate() const;
-		virtual unsigned long int getFrequency() const;
-		virtual AudioFormat getAudioFormat() const;
-		virtual unsigned int getNumberChannels() const;
-		virtual unsigned long getSize() const;
-		virtual float length() const;
+		AudioClip() = default;
+		virtual ~AudioClip() = default;
 
-		virtual AudioDataMode clipType() const;
+		virtual unsigned long int getSampleRate() const = 0;
+		virtual unsigned long int getFrequency() const = 0;
+		virtual AudioFormat getAudioFormat() const = 0;
+		virtual unsigned int getNumberChannels() const = 0;
+		virtual unsigned long getSize() const = 0;
+		virtual float length() const = 0;
 
-		virtual void getData(void *pData, unsigned int nsamples, unsigned int offset);
-		virtual void setData(const void *pData, unsigned int nsamples, unsigned int offset);
+		virtual AudioDataMode clipType() const = 0;
 
-		intptr_t getNativePtr() const override;
-		virtual ~AudioClip();
-
-	  protected:
-		AudioClip();
+		virtual void getData(void *pData, unsigned int nsamples, unsigned int offset) = 0;
+		virtual void setData(const void *pData, unsigned int nsamples, unsigned int offset) = 0;
 	};
 } // namespace fragcore
 

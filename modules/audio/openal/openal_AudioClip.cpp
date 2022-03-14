@@ -1,35 +1,32 @@
-#include "../AudioClip.h"
+#include "ALAudioClip.h"
 #include "internal_object_type.h"
 
 using namespace fragcore;
 
-AudioClip::~AudioClip() {}
+OpenALAudioClip::~OpenALAudioClip() {}
 
-AudioClip::AudioClip() {}
+OpenALAudioClip::OpenALAudioClip(AudioClipDesc &desc) : desc(desc) { alGenBuffers((ALuint)1, &this->source); }
 
-intptr_t AudioClip::getNativePtr() const {
-	ALClip *alClip = (ALClip *)this->getObject();
-	return alClip->source;
-}
+intptr_t OpenALAudioClip::getNativePtr() const { return this->source; }
 
-unsigned long int AudioClip::getSampleRate() const {
-	ALClip *alClip = (ALClip *)this->getObject();
+unsigned long int OpenALAudioClip::getSampleRate() const {
+
 	ALint sampleRate;
-	alGetBufferi(alClip->source, AL_BITS, &sampleRate);
+	alGetBufferi(this->source, AL_BITS, &sampleRate);
 	return sampleRate;
 }
 
-unsigned long int AudioClip::getFrequency() const {
-	ALClip *alClip = (ALClip *)this->getObject();
+unsigned long int OpenALAudioClip::getFrequency() const {
+
 	ALint freq;
-	alGetBufferi(alClip->source, AL_FREQUENCY, &freq);
+	alGetBufferi(this->source, AL_FREQUENCY, &freq);
 	return freq;
 }
 
-AudioFormat AudioClip::getAudioFormat() const {
-	ALClip *alClip = (ALClip *)this->getObject();
+AudioFormat OpenALAudioClip::getAudioFormat() const {
+
 	ALint format;
-	alGetBufferi(alClip->source, AL_INTERNAL_FORMAT_SOFT, &format);
+	alGetBufferi(this->source, AL_INTERNAL_FORMAT_SOFT, &format);
 	switch (format) {
 	case AL_MONO_SOFT:
 		return eMono;
@@ -42,55 +39,57 @@ AudioFormat AudioClip::getAudioFormat() const {
 	}
 }
 
-unsigned int AudioClip::getNumberChannels() const {
-	ALClip *alClip = (ALClip *)this->getObject();
+unsigned int OpenALAudioClip::getNumberChannels() const {
+
 	ALint channels;
-	alGetBufferi(alClip->source, AL_CHANNELS, &channels);
+	alGetBufferi(this->source, AL_CHANNELS, &channels);
 	return channels;
 }
 
-unsigned long AudioClip::getSize() const {
-	ALClip *alClip = (ALClip *)this->getObject();
+unsigned long OpenALAudioClip::getSize() const {
 	ALint size;
-	alGetBufferi(alClip->source, AL_SIZE, &size);
+	alGetBufferi(this->source, AL_SIZE, &size);
 	return size;
 }
 
-float AudioClip::length() const {
-	ALClip *alClip = (ALClip *)this->getObject();
-	if (alClip->mode == LoadedInMemory) {
+float OpenALAudioClip::length() const {
+
+	if (this->mode == AudioDataMode::LoadedInMemory) {
 
 		ALint sizeInBytes;
 		ALint channels;
 		ALint bits;
 		ALint frequency;
 
-		alGetBufferi(alClip->source, AL_SIZE, &sizeInBytes);
-		alGetBufferi(alClip->source, AL_CHANNELS, &channels);
-		alGetBufferi(alClip->source, AL_BITS, &bits);
-		alGetBufferi(alClip->source, AL_FREQUENCY, &frequency);
+		alGetBufferi(this->source, AL_SIZE, &sizeInBytes);
+		alGetBufferi(this->source, AL_CHANNELS, &channels);
+		alGetBufferi(this->source, AL_BITS, &bits);
+		alGetBufferi(this->source, AL_FREQUENCY, &frequency);
 
 		/*	Compute the length of the buffer.	*/
 		float lengthInSamples = sizeInBytes * 8 / (channels * bits);
 		return (float)lengthInSamples / (float)frequency;
 
 	} else {
-		return alClip->decoder->getTotalTime();
+		if (this->decoder != nullptr)
+			return this->decoder->getTotalTime();
+		return 0;
 	}
 }
 
-void AudioClip::getData(void *pData, unsigned int nsamples, unsigned int offset) {
+void OpenALAudioClip::getData(void *pData, unsigned int nsamples, unsigned int offset) {
 	// alBufferData
 }
 
-AudioDataMode AudioClip::clipType() const {
-	ALClip *alClip = (ALClip *)this->getObject();
+AudioDataMode OpenALAudioClip::clipType() const {
+
 	// TODO add equation for compute length from sample, format and size and etc.
-	return (AudioDataMode)0;
+	return this->desc.datamode;
 }
 
-void AudioClip::setData(const void *pData, unsigned int nsamples, unsigned int offset) {
-	ALClip *alClip = (ALClip *)this->getObject();
-	alBufferData(alClip->source, 0, pdata, nsamples, this->getFrequency());
-	// alBufferData()
+void OpenALAudioClip::setData(const void *pData, unsigned int nsamples, unsigned int offset) {
+
+	// TODO queue buffer.
+	alBufferData(this->source, 0, pdata, nsamples, this->getFrequency());
+	// TODO validate if succesful.
 }

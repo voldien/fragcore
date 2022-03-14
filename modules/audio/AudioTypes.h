@@ -26,7 +26,7 @@ namespace fragcore {
 		eStero,
 	};
 
-	enum AudioSpeakerMode {
+	enum class AudioSpeakerMode {
 		Mono,
 		Stero,
 		Quad,
@@ -35,7 +35,7 @@ namespace fragcore {
 		Mode7Point1,
 	};
 
-	enum AudioDataMode { LoadedInMemory, Streaming, DecompressOnLoad };
+	enum class AudioDataMode { LoadedInMemory, Streaming, DecompressOnLoad };
 
 	typedef struct audio_capabilities_t {
 		/*	*/

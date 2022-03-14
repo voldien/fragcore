@@ -1,124 +1,104 @@
-#include "../AudioSource.h"
+#include "ALAudioClip.h"
+#include "ALAudioSource.h"
 #include "internal_object_type.h"
 
 #include <AL/al.h>
 #include <fmt/core.h>
 using namespace fragcore;
 
-AudioSource::~AudioSource() {}
+OpenALAudioSource::~OpenALAudioSource() {}
 
-void AudioSource::setClip(AudioClip *clip) {
-	ALSource *source = (ALSource *)this->getObject();
-	const ALClip *alClip = (const ALClip *)clip->getObject();
+void OpenALAudioSource::setClip(AudioClip *clip) {
 
+	OpenALAudioClip *openal_clip = static_cast<OpenALAudioClip *>(clip);
 	// Verify the clio
-	if (!alIsBuffer(alClip->source))
+	if (!alIsBuffer(openal_clip->getCurrentBuffer()))
 		throw InvalidArgumentException("{}", alGetError());
 
-	alSourcei(source->source, AL_BUFFER, alClip->source);
+	alSourcei(this->source, AL_BUFFER, openal_clip->getCurrentBuffer());
 	int err = alGetError();
 	if (err != AL_NO_ERROR)
 		throw InvalidArgumentException("{}", alGetError());
-	// source->clip = alClip;
+	this->clip = clip;
 }
 
-void AudioSource::play() {
-	ALSource *source = (ALSource *)this->getObject();
-	alSourcePlay(source->source);
+void OpenALAudioSource::play() {
+	alSourcePlay(this->source);
 	int err = alGetError();
 	if (err != AL_NO_ERROR)
 		throw InvalidArgumentException("{}", alGetError());
-	if (source->clip->mode == Streaming) {
+
+	if (this->clip->clipType() == AudioDataMode::Streaming) {
 		// alSourceQueueBuffers
 	}
 }
 
-void AudioSource::stop() {
-	ALSource *source = (ALSource *)this->getObject();
-	alSourceStop(source->source);
+void OpenALAudioSource::stop() {
+
+	alSourceStop(this->source);
 	int err = alGetError();
 	if (err != AL_NO_ERROR)
 		throw InvalidArgumentException("{}", alGetError());
 }
 
-void AudioSource::pause() {
-	ALSource *source = (ALSource *)this->getObject();
+void OpenALAudioSource::pause() { alSourcePause(this->source); }
 
-	alSourcePause(source->source);
+void OpenALAudioSource::setVolume(float volume) {
+
+	alSourcef(this->source, AL_GAIN, volume);
+	// alSourcef(this->source, AL_PITCH)
 }
 
-void AudioSource::setVolume(float volume) {
-	ALSource *source = (ALSource *)this->getObject();
-
-	alSourcef(source->source, AL_GAIN, volume);
-	// alSourcef(source->source, AL_PITCH)
-}
-
-float AudioSource::getVolume() {
+float OpenALAudioSource::getVolume() {
 	float volume = 0;
-	ALSource *source = (ALSource *)this->getObject();
+
 	return volume;
 }
 
-void AudioSource::setDistance(float distance) {
-	ALSource *source = (ALSource *)this->getObject();
+void OpenALAudioSource::setDistance(float distance) { alSourcef(this->source, AL_MAX_DISTANCE, distance); }
 
-	alSourcef(source->source, AL_MAX_DISTANCE, distance);
-}
+float OpenALAudioSource::getDistance() {
 
-float AudioSource::getDistance() {
-	ALSource *source = (ALSource *)this->getObject();
 	float distance;
 
-	alGetSourcefv(source->source, AL_MAX_DISTANCE, &distance);
+	alGetSourcefv(this->source, AL_MAX_DISTANCE, &distance);
 	return distance;
 }
 
-void AudioSource::mute(bool mute) {
-	ALSource *source = (ALSource *)this->getObject();
+void OpenALAudioSource::mute(bool mute) {
+
 	if (mute)
-		alSourcei(source->source, AL_GAIN, 0.0f);
+		alSourcei(this->source, AL_GAIN, 0.0f);
 	else
-		alSourcei(source->source, AL_GAIN, 1.0f);
+		alSourcei(this->source, AL_GAIN, 1.0f);
 }
 
-void AudioSource::loop(bool loop) {
-	ALSource *source = (ALSource *)this->getObject();
+void OpenALAudioSource::loop(bool loop) { alSourcei(this->source, AL_LOOPING, loop ? AL_TRUE : AL_FALSE); }
 
-	alSourcei(source->source, AL_LOOPING, loop ? AL_TRUE : AL_FALSE);
-}
-
-bool AudioSource::isLooping() {
-	ALSource *source = (ALSource *)this->getObject();
+bool OpenALAudioSource::isLooping() {
 
 	int loop;
-	alGetSourcei(source->source, AL_LOOPING, &loop);
+	alGetSourcei(this->source, AL_LOOPING, &loop);
 	return loop;
 }
 
-bool AudioSource::isPlaying() {
-	ALSource *source = (ALSource *)this->getObject();
+bool OpenALAudioSource::isPlaying() {
+
 	int playing;
 
-	alGetSourcei(source->source, AL_SOURCE_STATE, &playing);
+	alGetSourcei(this->source, AL_SOURCE_STATE, &playing);
 	return playing == AL_PLAYING;
 }
 
-float AudioSource::getPos() const {
+float OpenALAudioSource::getPos() const {
 	float pos;
-	ALSource *source = (ALSource *)this->getObject();
-	alGetSourcef(source->source, AL_SEC_OFFSET, &pos);
+
+	alGetSourcef(this->source, AL_SEC_OFFSET, &pos);
 	return pos;
 }
 
-void AudioSource::setPos(float position) {
-	ALSource *source = (ALSource *)this->getObject();
-	alSourcef(source->source, AL_SEC_OFFSET, position);
-}
+void OpenALAudioSource::setPos(float position) { alSourcef(this->source, AL_SEC_OFFSET, position); }
 
-intptr_t AudioSource::getNativePtr() const {
-	ALSource *source = (ALSource *)this->getObject();
-	return source->source;
-}
+intptr_t OpenALAudioSource::getNativePtr() const { return (intptr_t)this->source; }
 
-AudioSource::AudioSource() {}
+OpenALAudioSource::OpenALAudioSource(AudioSourceDesc &desc, unsigned int source) : desc(desc), source(source) {}

@@ -16,57 +16,61 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef _FRAG_CORE_OPENAL_AUDIOLISTENER_H_
-#define _FRAG_CORE_OPENAL_AUDIOLISTENER_H_ 1
-#include "../AudioListener.h"
+#ifndef _FRAG_CORE_OPENAL_AUDIOSOURCE_H_
+#define _FRAG_CORE_OPENAL_AUDIOSOURCE_H_ 1
+#include "../AudioSource.h"
 
 namespace fragcore {
-
 	/**
-	 * @brief
 	 *
 	 */
-	class FVDECLSPEC OpenALAudioListener : public AudioListener {
+	class FVDECLSPEC OpenALAudioSource : public AudioSource {
 		friend class AudioInterface;
+		friend class AudioClip;
 
 	  public:
-		virtual ~OpenALAudioListener();
-		OpenALAudioListener();
+		OpenALAudioSource(AudioSourceDesc &desc, unsigned int source);
+		virtual ~OpenALAudioSource();
 
-		/**
-		 * @brief Set the Volume object
-		 *
-		 * @param volume
-		 */
+		virtual void setClip(AudioClip *clip);
+		// virtual AudioClip* getClip() const;
+
+		virtual void play();
+
+		virtual void stop();
+
+		virtual void pause();
+
 		virtual void setVolume(float volume);
 
-		/**
-		 * @brief Get the Volume object
-		 *
-		 * @return float
-		 */
-		virtual float getVolume() const;
+		virtual float getVolume();
 
-		// TODO rename to mute
-		/**
-		 * @brief
-		 *
-		 * @param pause
-		 */
-		virtual void pause(bool pause);
+		virtual void setDistance(float distance);
 
-		// virtual void getOutPutData();
+		virtual float getDistance();
 
-		virtual void setPosition(const Vector3 &position);
-		virtual const Vector3 getPosition() const;
+		virtual void mute(bool mute);
 
-		virtual void setVelocity(const Vector3 &velocity);
-		virtual const Vector3 getVelocity() const;
+		virtual void loop(bool loop);
+		virtual bool isLooping();
 
-		virtual void setOrientation(const Quaternion &orientation);
-		virtual const Quaternion getOrientation() const;
+		virtual bool isPlaying();
+
+		//		virtual void setTime(float time);
+		//		virtual void getTime() const;
+
+		virtual float getPos() const;
+		virtual void setPos(float position);
 
 		virtual intptr_t getNativePtr() const override;
+
+	  protected:
+		unsigned int source;
+		unsigned long currnet_seek_page;
+		AudioSourceDesc desc;
+		AudioClip *clip;
+
+		AudioDataMode loadMode;
 	};
 } // namespace fragcore
 
