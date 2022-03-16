@@ -85,6 +85,8 @@ namespace fragcore {
 		virtual void deleteAudioCapture(AudioCapture *capture) = 0;
 
 		virtual std::vector<AudioPhysicalDevice> getDevices() const = 0;
+		// TODO add
+		// virtual AudioPhysicalDevice &getCurrentAudioPlayback() const = 0;
 
 		/*	*/
 		virtual void setAudioDevice(const AudioPhysicalDevice &device) = 0;

@@ -58,6 +58,12 @@ namespace fragcore {
 
 	} AudioGeometryDesc;
 
+	typedef struct audio_capture_desc_t {
+		char *device;
+		AudioFormat format;	  /*  */
+		unsigned int samples; /*  */
+	} AudioCaptureDesc;
+
 } // namespace fragcore
 
 #endif

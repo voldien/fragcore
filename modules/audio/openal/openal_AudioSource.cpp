@@ -15,31 +15,20 @@ void OpenALAudioSource::setClip(AudioClip *clip) {
 	if (!alIsBuffer(openal_clip->getCurrentBuffer()))
 		throw InvalidArgumentException("{}", alGetError());
 
-	alSourcei(this->source, AL_BUFFER, openal_clip->getCurrentBuffer());
-	int err = alGetError();
-	if (err != AL_NO_ERROR)
-		throw InvalidArgumentException("{}", alGetError());
+	FAOPAL_VALIDATE(alSourcei(this->source, AL_BUFFER, openal_clip->getCurrentBuffer()));
+
 	this->clip = clip;
 }
 
 void OpenALAudioSource::play() {
-	alSourcePlay(this->source);
-	int err = alGetError();
-	if (err != AL_NO_ERROR)
-		throw InvalidArgumentException("{}", alGetError());
+	FAOPAL_VALIDATE(alSourcePlay(this->source));
 
 	if (this->clip->clipType() == AudioDataMode::Streaming) {
 		// alSourceQueueBuffers
 	}
 }
 
-void OpenALAudioSource::stop() {
-
-	alSourceStop(this->source);
-	int err = alGetError();
-	if (err != AL_NO_ERROR)
-		throw InvalidArgumentException("{}", alGetError());
-}
+void OpenALAudioSource::stop() { FAOPAL_VALIDATE(alSourceStop(this->source)); }
 
 void OpenALAudioSource::pause() { alSourcePause(this->source); }
 
@@ -61,24 +50,28 @@ float OpenALAudioSource::getDistance() {
 
 	float distance;
 
-	alGetSourcefv(this->source, AL_MAX_DISTANCE, &distance);
+	FAOPAL_VALIDATE(alGetSourcefv(this->source, AL_MAX_DISTANCE, &distance));
 	return distance;
 }
 
 void OpenALAudioSource::mute(bool mute) {
 
-	if (mute)
-		alSourcei(this->source, AL_GAIN, 0.0f);
-	else
-		alSourcei(this->source, AL_GAIN, 1.0f);
+	if (mute){
+		FAOPAL_VALIDATE(alSourcei(this->source, AL_GAIN, 0.0f));
+	}
+	else{
+		FAOPAL_VALIDATE(alSourcei(this->source, AL_GAIN, 1.0f));
+	}
 }
 
-void OpenALAudioSource::loop(bool loop) { alSourcei(this->source, AL_LOOPING, loop ? AL_TRUE : AL_FALSE); }
+void OpenALAudioSource::loop(bool loop) {
+	FAOPAL_VALIDATE(alSourcei(this->source, AL_LOOPING, loop ? AL_TRUE : AL_FALSE));
+}
 
 bool OpenALAudioSource::isLooping() {
 
 	int loop;
-	alGetSourcei(this->source, AL_LOOPING, &loop);
+	FAOPAL_VALIDATE(alGetSourcei(this->source, AL_LOOPING, &loop));
 	return loop;
 }
 
@@ -86,18 +79,18 @@ bool OpenALAudioSource::isPlaying() {
 
 	int playing;
 
-	alGetSourcei(this->source, AL_SOURCE_STATE, &playing);
+	FAOPAL_VALIDATE(alGetSourcei(this->source, AL_SOURCE_STATE, &playing));
 	return playing == AL_PLAYING;
 }
 
 float OpenALAudioSource::getPos() const {
 	float pos;
 
-	alGetSourcef(this->source, AL_SEC_OFFSET, &pos);
+	FAOPAL_VALIDATE(alGetSourcef(this->source, AL_SEC_OFFSET, &pos));
 	return pos;
 }
 
-void OpenALAudioSource::setPos(float position) { alSourcef(this->source, AL_SEC_OFFSET, position); }
+void OpenALAudioSource::setPos(float position) { FAOPAL_VALIDATE(alSourcef(this->source, AL_SEC_OFFSET, position)); }
 
 intptr_t OpenALAudioSource::getNativePtr() const { return (intptr_t)this->source; }
 

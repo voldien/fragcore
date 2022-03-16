@@ -16,20 +16,41 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef _FRAG_CORE_AUDIO_CAPTURE_H_
-#define _FRAG_CORE_AUDIO_CAPTURE_H_ 1
-#include "AudioObject.h"
+#ifndef _FRAG_CORE_OPENAL_AUDIOCAPTURE_H_
+#define _FRAG_CORE_OPENAL_AUDIOCAPTURE_H_ 1
+#include "../AudioCapture.h"
+#include "internal_object_type.h"
 
 namespace fragcore {
-
 	/**
 	 * @brief
 	 *
 	 */
-	class FVDECLSPEC AudioCapture : public AudioObject {
+	class FVDECLSPEC OpenALAudioCapture : public AudioCapture {
+		friend class AudioInterface;
+
 	  public:
-		AudioCapture() = default;
-		virtual ~AudioCapture() = default;
+		OpenALAudioCapture(AudioCaptureDesc &desc);
+		virtual ~OpenALAudioCapture();
+
+		virtual unsigned long int getSampleRate() const;
+		virtual unsigned long int getFrequency() const;
+		virtual unsigned int getNumberChannels() const;
+
+		virtual void getData(void *pData, unsigned int nsamples, unsigned int offset);
+		virtual void setData(const void *pData, unsigned int nsamples, unsigned int offset);
+
+		// TODO add queue data.
+
+		intptr_t getNativePtr() const override;
+
+	  public:
+
+	  protected:
+		AudioCaptureDesc &desc;
+		unsigned int source;
+		AudioDataMode mode;
+		Ref<AudioDecoder> decoder;
 	};
 } // namespace fragcore
 

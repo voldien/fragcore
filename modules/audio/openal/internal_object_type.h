@@ -25,16 +25,34 @@
 #include <AL/alext.h>
 #include <AL/alut.h>
 #include <AL/efx-presets.h>
-#include <Core/dataStructure/PoolAllocator.h>
+
+#ifdef __cplusplus /*	C++ Environment	*/
+extern "C" {
+#endif
 
 namespace fragcore {
 
-	typedef struct openal_audio_capture_t {
-		friend class OpenALAudioInterface;
-		unsigned int source;
-	} ALAudioCapture;
+	// typedef struct openal_audio_capture_t {
+	// 	friend class OpenALAudioInterface;
+	// 	unsigned int source;
+	// } ALAudioCapture;
 
 	extern FVDECLSPEC ALenum translate2ALFormat(AudioFormat format);
+	extern FVDECLSPEC ALenum to_al_format(short channels, short samples);
+	extern FVDECLSPEC const char *openAlErrorToString(int err);
+#define FAOPAL_VALIDATE(x)                                                                                             \
+	do {                                                                                                               \
+		x;                                                                                                             \
+		ALenum _err = alGetError();                                                                                    \
+		if (_err != AL_NO_ERROR) {                                                                                     \
+			throw cxxexcept::RuntimeException("{} {} {} - {}", __FILE__, __LINE__, _err, openAlErrorToString(_err));   \
+		}                                                                                                              \
+	} while (0)
+
 } // namespace fragcore
+
+#ifdef __cplusplus /*	C++ Environment	*/
+}
+#endif
 
 #endif

@@ -77,7 +77,11 @@ namespace fragcore {
 		 */
 		virtual void setAudioListener(AudioListener *listener);
 
-		/**/
+		/**
+		 * @brief Create a Audio Capture object
+		 *
+		 * @return AudioCapture*
+		 */
 		virtual AudioCapture *createAudioCapture();
 		virtual void deleteAudioCapture(AudioCapture *capture);
 

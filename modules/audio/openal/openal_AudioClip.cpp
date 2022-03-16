@@ -12,21 +12,21 @@ intptr_t OpenALAudioClip::getNativePtr() const { return this->source; }
 unsigned long int OpenALAudioClip::getSampleRate() const {
 
 	ALint sampleRate;
-	alGetBufferi(this->source, AL_BITS, &sampleRate);
+	FAOPAL_VALIDATE(alGetBufferi(this->source, AL_BITS, &sampleRate));
 	return sampleRate;
 }
 
 unsigned long int OpenALAudioClip::getFrequency() const {
 
 	ALint freq;
-	alGetBufferi(this->source, AL_FREQUENCY, &freq);
+	FAOPAL_VALIDATE(alGetBufferi(this->source, AL_FREQUENCY, &freq));
 	return freq;
 }
 
 AudioFormat OpenALAudioClip::getAudioFormat() const {
 
 	ALint format;
-	alGetBufferi(this->source, AL_INTERNAL_FORMAT_SOFT, &format);
+	FAOPAL_VALIDATE(alGetBufferi(this->source, AL_INTERNAL_FORMAT_SOFT, &format));
 	switch (format) {
 	case AL_MONO_SOFT:
 		return eMono;
@@ -42,13 +42,13 @@ AudioFormat OpenALAudioClip::getAudioFormat() const {
 unsigned int OpenALAudioClip::getNumberChannels() const {
 
 	ALint channels;
-	alGetBufferi(this->source, AL_CHANNELS, &channels);
+	FAOPAL_VALIDATE(alGetBufferi(this->source, AL_CHANNELS, &channels));
 	return channels;
 }
 
 unsigned long OpenALAudioClip::getSize() const {
 	ALint size;
-	alGetBufferi(this->source, AL_SIZE, &size);
+	FAOPAL_VALIDATE(alGetBufferi(this->source, AL_SIZE, &size));
 	return size;
 }
 
@@ -61,10 +61,10 @@ float OpenALAudioClip::length() const {
 		ALint bits;
 		ALint frequency;
 
-		alGetBufferi(this->source, AL_SIZE, &sizeInBytes);
-		alGetBufferi(this->source, AL_CHANNELS, &channels);
-		alGetBufferi(this->source, AL_BITS, &bits);
-		alGetBufferi(this->source, AL_FREQUENCY, &frequency);
+		FAOPAL_VALIDATE(alGetBufferi(this->source, AL_SIZE, &sizeInBytes));
+		FAOPAL_VALIDATE(alGetBufferi(this->source, AL_CHANNELS, &channels));
+		FAOPAL_VALIDATE(alGetBufferi(this->source, AL_BITS, &bits));
+		FAOPAL_VALIDATE(alGetBufferi(this->source, AL_FREQUENCY, &frequency));
 
 		/*	Compute the length of the buffer.	*/
 		float lengthInSamples = sizeInBytes * 8 / (channels * bits);
@@ -90,6 +90,7 @@ AudioDataMode OpenALAudioClip::clipType() const {
 void OpenALAudioClip::setData(const void *pData, unsigned int nsamples, unsigned int offset) {
 
 	// TODO queue buffer.
-	alBufferData(this->source, 0, pdata, nsamples, this->getFrequency());
+	FAOPAL_VALIDATE(alBufferData(this->source, 0, pdata, nsamples, this->getFrequency()));
+	// alSourceQueueBuffers(this->)
 	// TODO validate if succesful.
 }
