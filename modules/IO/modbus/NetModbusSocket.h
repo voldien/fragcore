@@ -60,6 +60,11 @@ namespace fragcore {
 		virtual NetStatus getStatus() const noexcept override;
 
 	  public: /*	Modbus specific methods.	*/
+		int writeRegister(unsigned int address, unsigned int nbytes, void *pdata);
+		int readRegister(unsigned int address, unsigned int nbytes, void *pdata);
+
+		void *getModbusContext() const noexcept { return this->ctx; }
+
 	  private:
 		ModbusNetSocket(int socket);
 

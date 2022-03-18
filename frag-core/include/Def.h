@@ -328,6 +328,15 @@ namespace fragcore {
 #endif
 
 
+#if defined(FV_GCC) || defined(FV_CLANG)
+	#define FV_PACKED( __Declaration__ ) __Declaration__ __attribute__ ((__packed__))
+#elif defined(FV_VC)
+	#define FV_PACKED( __Declaration__ ) __pragma( pack(push, 1) ) __Declaration__ __pragma( pack(pop))
+#else
+	#define FV_PACKED( __Declaration__ ) __Declaration__
+#endif
+
+
 
 /**
  *	String macros.

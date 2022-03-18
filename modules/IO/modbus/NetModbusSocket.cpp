@@ -35,6 +35,7 @@ int ModbusNetSocket::close() {
 		modbus_free((modbus_t *)this->ctx);
 	}
 	this->socket = 0;
+	this->ctx = nullptr;
 	netStatus = NetStatus::Status_Disconnected;
 	return 0;
 }
@@ -58,6 +59,9 @@ int ModbusNetSocket::bind(const INetAddress &p_addr) {
 	}
 
 	rc = modbus_set_debug(static_cast<modbus_t *>(this->ctx), 1);
+	if (rc == -1) {
+		throw RuntimeException("{}", modbus_strerror(errno));
+	}
 	if (modbus_set_error_recovery(static_cast<modbus_t *>(this->ctx),
 								  static_cast<modbus_error_recovery_mode>(MODBUS_ERROR_RECOVERY_PROTOCOL)) == -1) {
 		/*	*/
@@ -160,4 +164,16 @@ bool ModbusNetSocket::isBlocking() { /*	*/
 void ModbusNetSocket::setBlocking(bool blocking) { /*	*/
 												   // modbus_set_response_timeout()
 }
+
+int ModbusNetSocket::writeRegister(unsigned int address, unsigned int nbytes, void *pdata) {
+	auto rc = modbus_write_registers((modbus_t *)this->getModbusContext(), static_cast<int>(address), nbytes,
+									 (uint16_t *)pdata);
+	return rc;
+}
+int ModbusNetSocket::readRegister(unsigned int address, unsigned int nbytes, void *pdata) {
+	auto rc = modbus_read_registers((modbus_t *)this->getModbusContext(), static_cast<int>(address), nbytes,
+									(uint16_t *)pdata);
+	return rc;
+}
+
 ModbusNetSocket::NetStatus ModbusNetSocket::getStatus() const noexcept { return this->netStatus; }
