@@ -70,12 +70,7 @@ int ModbusNetSocket::bind(const INetAddress &p_addr) {
 	return 0;
 }
 
-int ModbusNetSocket::listen(unsigned int maxListen) {
-	if (modbus_tcp_listen((modbus_t *)this->ctx, maxListen) < 0) {
-		SystemException ex(errno, std::system_category(), "ModBus socket: Failed to set listen {} ", maxListen);
-	}
-	return 0;
-}
+int ModbusNetSocket::listen(unsigned int maxListen) { return TCPNetSocket::listen(maxListen); }
 
 int ModbusNetSocket::connect(const INetAddress &addr) {
 	uint32_t old_response_to_sec;
@@ -148,21 +143,15 @@ long int ModbusNetSocket::send(const void *pbuffer, int p_len, int &sent) {
 
 Ref<NetSocket> ModbusNetSocket::accept(INetAddress &r_ip) { return TCPNetSocket::accept(r_ip); }
 
-ModbusNetSocket::NetStatus ModbusNetSocket::accept(NetSocket &socket) {
-	struct sockaddr tobuffer; /*	*/
-	socklen_t aclen = 0;	  /*	*/
-	int aaccept_socket = ::accept(this->socket, &tobuffer, &aclen);
-	if (aaccept_socket < 0) {
-	}
-	return NetStatus::Status_Done;
-}
+ModbusNetSocket::NetStatus ModbusNetSocket::accept(NetSocket &socket) { return TCPNetSocket::accept(socket); }
 int ModbusNetSocket::read() { return 0; }
 int ModbusNetSocket::write() { return 0; }
 bool ModbusNetSocket::isBlocking() { /*	*/
 	return false;
 }
 void ModbusNetSocket::setBlocking(bool blocking) { /*	*/
-												   // modbus_set_response_timeout()
+	TCPNetSocket::setBlocking(blocking);
+	// modbus_set_response_timeout()
 }
 
 int ModbusNetSocket::writeRegister(unsigned int address, unsigned int nbytes, void *pdata) {

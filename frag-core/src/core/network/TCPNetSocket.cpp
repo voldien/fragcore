@@ -60,7 +60,9 @@ size_t TCPNetSocket::setupIPAddress(struct sockaddr *addr, const INetAddress &p_
 }
 
 TCPNetSocket::TCPNetSocket() : socket(0), netStatus(NetStatus::Status_Disconnected) {}
-TCPNetSocket::TCPNetSocket(int socket) : socket(socket) {}
+TCPNetSocket::TCPNetSocket(int socket) : socket(socket) {
+	// TODO set status.
+}
 TCPNetSocket::~TCPNetSocket() { this->close(); }
 
 NetSocket::TransportProtocol TCPNetSocket::getTransportProtocol() const noexcept {
@@ -231,12 +233,16 @@ long int TCPNetSocket::send(const void *pbuffer, int p_len, int &sent) {
 }
 
 Ref<NetSocket> TCPNetSocket::accept(INetAddress &r_ip) {
-	struct sockaddr tobuffer; /*	*/
-	socklen_t aclen = 0;	  /*	*/
-	int aaccept_socket = ::accept(this->socket, &tobuffer, &aclen);
+	struct sockaddr_storage addr;
+	socklen_t addrlen;
+
+	addrlen = sizeof(addr);
+	int aaccept_socket = ::accept(this->socket, (struct sockaddr *)&addr, &addrlen);
 	if (aaccept_socket < 0) {
 		throw SystemException(errno, std::system_category(), "Failed to accept TCP connection");
 	}
+
+	// TODO assign r_ip
 
 	TCPNetSocket *_newsocket = new TCPNetSocket(aaccept_socket);
 	return Ref<NetSocket>(_newsocket);
@@ -249,6 +255,7 @@ TCPNetSocket::NetStatus TCPNetSocket::accept(NetSocket &socket) {
 	// socket = std::move(*netSocket);
 	return netSocket->getStatus();
 }
+
 int TCPNetSocket::read() { return 0; }
 int TCPNetSocket::write() { return 0; }
 bool TCPNetSocket::isBlocking() { /*	*/

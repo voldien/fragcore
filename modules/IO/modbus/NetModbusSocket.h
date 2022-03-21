@@ -63,6 +63,7 @@ namespace fragcore {
 		int writeRegister(unsigned int address, unsigned int nbytes, void *pdata);
 		int readRegister(unsigned int address, unsigned int nbytes, void *pdata);
 
+
 		void *getModbusContext() const noexcept { return this->ctx; }
 
 	  private:
