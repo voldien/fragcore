@@ -60,7 +60,9 @@ namespace fragcore {
 		/*	TODO get info about connection IP and etc.	*/
 
 	  public:
-		void setTimeout(long int nanoSeconds);
+		void setTimeout(long int microsec);
+		int getSocket();
+		int getPort();
 
 	  protected:
 		TCPNetSocket(int socket);

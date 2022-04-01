@@ -283,15 +283,32 @@ bool TCPNetSocket::isValidNetworkAddress(const INetAddress &address) {
 	return address.getNetworkProtocol() == INetAddress::NetworkProtocol::NetWorkProtocol_TCP_UDP && address.isValid();
 }
 
-void TCPNetSocket::setTimeout(long int nanoSeconds) {
+void TCPNetSocket::setTimeout(long int microsec) {
 	struct timeval tv;
 
 	/*	Set timeout for client.	*/
-	tv.tv_sec = nanoSeconds / 1000000000;
-	tv.tv_usec = nanoSeconds % 1000000000;
+	tv.tv_sec = microsec / 1000000;
+	tv.tv_usec = microsec % 1000000;
+
 	int rc = setsockopt(this->socket, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv));
-	if (rc < 0) {
+	if (rc != 0) {
+		throw SystemException(errno, std::system_category(), "Failed to set recv timeout");
 	}
+	rc = setsockopt(this->socket, SOL_SOCKET, SO_SNDTIMEO, &tv, sizeof(tv));
+
+	if (rc != 0) {
+		throw SystemException(errno, std::system_category(), "Failed to set send timeout");
+	}
+}
+
+int TCPNetSocket::getSocket() { return this->socket; }
+
+int TCPNetSocket::getPort() {
+	struct sockaddr_in sin;
+	socklen_t addrlen = sizeof(sin);
+	getsockname(getSocket(), (struct sockaddr *)&sin, &addrlen); // read binding
+
+	return ntohs(sin.sin_port); // get the port number
 }
 
 int TCPNetSocket::getDomain(const INetAddress &address) {

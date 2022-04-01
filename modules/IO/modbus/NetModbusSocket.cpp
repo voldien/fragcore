@@ -22,7 +22,29 @@
 using namespace fragcore;
 
 ModbusNetSocket::ModbusNetSocket() : ctx(nullptr) {}
-ModbusNetSocket::ModbusNetSocket(int socket) : TCPNetSocket(socket), ctx(nullptr) {}
+ModbusNetSocket::ModbusNetSocket(int socket) : TCPNetSocket(socket), ctx(nullptr) {
+
+	if (this->ctx == nullptr) {
+		this->ctx = modbus_new_tcp(nullptr, getPort());
+		if (this->ctx == nullptr) {
+			throw RuntimeException("{}", modbus_strerror(errno));
+		}
+	}
+	int rc = modbus_set_socket(static_cast<modbus_t *>(this->ctx), this->getSocket());
+	if (rc == -1) {
+		throw RuntimeException("Failed to set Socket: {}", modbus_strerror(errno));
+	}
+
+	rc = modbus_set_debug(static_cast<modbus_t *>(this->ctx), 0);
+	if (rc == -1) {
+		throw RuntimeException("{}", modbus_strerror(errno));
+	}
+	if (modbus_set_error_recovery(static_cast<modbus_t *>(this->ctx),
+								  static_cast<modbus_error_recovery_mode>(MODBUS_ERROR_RECOVERY_PROTOCOL)) == -1) {
+		/*	*/
+		throw RuntimeException("{}", modbus_strerror(errno));
+	}
+}
 ModbusNetSocket::~ModbusNetSocket() { this->close(); }
 
 ModbusNetSocket::TransportProtocol ModbusNetSocket::getTransportProtocol() const noexcept {
@@ -58,7 +80,7 @@ int ModbusNetSocket::bind(const INetAddress &p_addr) {
 		throw RuntimeException("{}", modbus_strerror(errno));
 	}
 
-	rc = modbus_set_debug(static_cast<modbus_t *>(this->ctx), 1);
+	rc = modbus_set_debug(static_cast<modbus_t *>(this->ctx), 0);
 	if (rc == -1) {
 		throw RuntimeException("{}", modbus_strerror(errno));
 	}
@@ -141,26 +163,34 @@ long int ModbusNetSocket::send(const void *pbuffer, int p_len, int &sent) {
 	return res;
 }
 
-Ref<NetSocket> ModbusNetSocket::accept(INetAddress &r_ip) { return TCPNetSocket::accept(r_ip); }
+Ref<NetSocket> ModbusNetSocket::accept(INetAddress &r_ip) {
+	Ref<NetSocket> base_socket = TCPNetSocket::accept(r_ip);
+
+	TCPNetSocket *tcp_net_socket = static_cast<TCPNetSocket *>(*base_socket);
+
+	ModbusNetSocket *_newsocket = new ModbusNetSocket(tcp_net_socket->getSocket());
+	/*	*/
+	return Ref<NetSocket>(_newsocket);
+}
 
 ModbusNetSocket::NetStatus ModbusNetSocket::accept(NetSocket &socket) { return TCPNetSocket::accept(socket); }
 int ModbusNetSocket::read() { return 0; }
 int ModbusNetSocket::write() { return 0; }
 bool ModbusNetSocket::isBlocking() { /*	*/
-	return false;
-}
-void ModbusNetSocket::setBlocking(bool blocking) { /*	*/
-	TCPNetSocket::setBlocking(blocking);
-	// modbus_set_response_timeout()
+	return TCPNetSocket::isBlocking();
 }
 
-int ModbusNetSocket::writeRegister(unsigned int address, unsigned int nbytes, void *pdata) {
-	auto rc = modbus_write_registers((modbus_t *)this->getModbusContext(), static_cast<int>(address), nbytes,
+void ModbusNetSocket::setBlocking(bool blocking) { /*	*/
+	TCPNetSocket::setBlocking(blocking);
+}
+
+int ModbusNetSocket::writeRegister(unsigned int address, unsigned int nWords, void *pdata) {
+	auto rc = modbus_write_registers((modbus_t *)this->getModbusContext(), static_cast<int>(address), nWords,
 									 (uint16_t *)pdata);
 	return rc;
 }
-int ModbusNetSocket::readRegister(unsigned int address, unsigned int nbytes, void *pdata) {
-	auto rc = modbus_read_registers((modbus_t *)this->getModbusContext(), static_cast<int>(address), nbytes,
+int ModbusNetSocket::readRegister(unsigned int address, unsigned int nWords, void *pdata) {
+	auto rc = modbus_read_registers((modbus_t *)this->getModbusContext(), static_cast<int>(address), nWords,
 									(uint16_t *)pdata);
 	return rc;
 }
