@@ -25,6 +25,11 @@ endif()
 
 PROJECT(FragCore)
 
+# Check if project is a standalone and not part of another project.
+IF( CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR )
+	SET(FRAGCORE_PROJECT_ROOT TRUE)
+ENDIF()
+
 # Use GNUInstallDirs for Unix predefined directories
 INCLUDE(GNUInstallDirs)
 
@@ -47,6 +52,7 @@ OPTION(BUILD_WITH_DEBUG_BOUNDSCHECK "Array/Pointer BoundsChecking, buffer overfl
 option(BUILD_INSTALL_RESOURCES "Installs the Resources directory" ON)
 
 
+
 # Debug
 OPTION(WITH_CXX_GUARDEDALLOC "Enable GuardedAlloc for C++ memory allocation tracking (only enable for development)" OFF)
 MARK_AS_ADVANCED(WITH_CXX_GUARDEDALLOC)
@@ -65,11 +71,18 @@ OPTION(BUILD_WITH_DOCS "Build documentation." OFF)
 OPTION(BUILD_WITH_SAMPLES "Build sample codes" OFF)
 
 # Build external interface plugin.
-OPTION(BUILD_MODULES "Build module plugins" ON)
+OPTION(BUILD_MODULES "Build module plugins" OFF)
 OPTION(BUILD_WITH_EXTERNAL_PLUGINS "" ON)
 OPTION(BUILD_EXTERNAL_RENDERER "Building external renderer libraries" ON)
 OPTION(BUILD_EXTERNAL_AUDIO "Building external audio libraries" ON)
 OPTION(BUILD_EXTERNAL_PHYSIC "Building external physic libraries" ON)
+
+
+IF(FRAGCORE_PROJECT_ROOT)
+	SET(BUILD_MODULES ON)
+	SET(BUILD_WITH_TEST ON)
+	SET(BUILD_WITH_SAMPLES ON)
+ENDIF()
 
 OPTION(WITH_CPU_SSE              "Enable SIMD instruction if they're detected on the host machine" ON)
 MARK_AS_ADVANCED(WITH_CPU_SSE)
@@ -348,28 +361,24 @@ ENDIF()
 ##########################################################
 IF(BUILD_MODULES)
 	# Rendering interfaces.
-	IF(BUILD_EXTERNAL_RENDERER)
-		ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/renderer/)
-		ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/renderer/opengl/)
-		ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/renderer/directx/)
-		ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/renderer/vulkan/)
-		#TODO changed to a compute base class and module extension.
-		#ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/frag-core/src/renderer/opencl/)
-	ENDIF()
+	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/renderer/)
+	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/renderer/opengl/)
+	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/renderer/directx/)
+	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/renderer/vulkan/)
+	#TODO changed to a compute base class and module extension.
+	#ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/frag-core/src/renderer/opencl/)
+
 
 	# Build FragCore Audio modules
-	IF(BUILD_EXTERNAL_AUDIO)
-		ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/audio)
-		ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/audio/openal/)
-		ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/audio/fmod/)
-	ENDIF()
+	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/audio)
+	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/audio/openal/)
+	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/audio/fmod/)
 
 	# Build FragCore Physic modules
-	IF(BUILD_EXTERNAL_PHYSIC)
-		ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/physic/)
-		ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/physic/bullet/)
-		#ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/physic/physx/)
-	ENDIF()
+	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/physic/)
+	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/physic/bullet/)
+	#ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/physic/physx/)
+
 
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/filenotify)
 
