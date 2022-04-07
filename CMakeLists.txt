@@ -360,6 +360,9 @@ ENDIF()
 #	Seperate Modules, based on the core library.
 ##########################################################
 IF(BUILD_MODULES)
+
+	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/imageloader/)
+
 	# Rendering interfaces.
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/renderer/)
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/renderer/opengl/)

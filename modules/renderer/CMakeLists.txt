@@ -3,7 +3,7 @@ FILE(GLOB RENDERER_HEADER_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.h)
 
 # Library target.
 ADD_LIBRARY(fragcore-render-interface ${RENDERER_SOURCE_FILES} ${RENDERER_HEADER_FILES})
-TARGET_LINK_LIBRARIES(fragcore-render-interface fragcore freeimage) #
+TARGET_LINK_LIBRARIES(fragcore-render-interface fragcore fragcore-imageloader freeimage) #
 TARGET_COMPILE_DEFINITIONS(fragcore-render-interface PRIVATE FRAG_CORE_INTERNAL_IMP=1)
 
 #
@@ -13,6 +13,12 @@ TARGET_INCLUDE_DIRECTORIES(fragcore-render-interface PUBLIC
 
 ADD_DEPENDENCIES(fragcore-render-interface fragcore )
 
+IF (BUILD_SHARED_LIBS AND CMAKE_SIZEOF_VOID_P EQUAL 8)
+	SET_PROPERTY(TARGET fragcore-render-interface PROPERTY POSITION_INDEPENDENT_CODE ON)
+ENDIF()
+
+
+
 ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/ShaderCompiler)
 
 #
@@ -21,6 +27,6 @@ IF(BUILD_WITH_INSTALL)
 ENDIF()
 
 IF(CMAKE_TESTING_ENABLED)
-	#ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/test)
+	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/test)
 ENDIF()
 

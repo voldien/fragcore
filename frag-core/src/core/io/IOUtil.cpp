@@ -8,6 +8,8 @@ long int IOUtil::loadFileMem(Ref<IO> &io, char **data) {
 	char *d = nullptr;
 	long dataSize = 0;
 
+	size_t current_pos = io->getPos();
+
 	/*  Check if file is readable.  */
 	if (!io->isReadable())
 		throw InvalidArgumentException("Failed to read from IO: {}", io->getName());

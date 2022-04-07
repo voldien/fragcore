@@ -18,9 +18,10 @@
  */
 #ifndef _FRAG_CORE_TEXTURE_UTIL_H_
 #define _FRAG_CORE_TEXTURE_UTIL_H_ 1
-#include <Core/Ref.h>
 #include "IRenderer.h"
 #include "Texture.h"
+#include <Core/Ref.h>
+#include <ImageFormat.h>
 
 namespace fragcore {
 	/**

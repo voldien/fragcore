@@ -52,9 +52,6 @@ namespace fragcore {
 	class INetAddress;
 	class IPAddress;
 
-	class Font;
-	class FontFactory;
-
 } // namespace fragcore
 
 #endif

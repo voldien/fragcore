@@ -11,8 +11,10 @@ IF(PKG_CONFIG_FOUND)
 ELSE()
 	MESSAGE(ERROR "")
 	# TODO add logic for handling if pkg-config not available.
-ENDIF()
 
+	LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" )
+	INCLUDE(libffmpeg)
+ENDIF()
 
 
 FILE(GLOB VIDEO_SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
