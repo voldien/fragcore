@@ -43,5 +43,5 @@ IF(NOT libserialport_source)
 	set_target_properties(serialport PROPERTIES IMPORTED_LOCATION ${SERIALPORT_LIB})
 	set_target_properties(serialport PROPERTIES INTERFACE_INCLUDE_DIRECTORIES ${SERIALPORT_INCLUDE_DIRS})
 ELSE()
-	MESSAGE( WARNING "Could not find Serialport source code");
+	MESSAGE( WARNING "Could not find Serialport source code")
 ENDIF()	
