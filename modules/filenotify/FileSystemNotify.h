@@ -26,13 +26,13 @@
 // TODO resolve include path and other solution.
 #include <libfswatch/c/cevent.h>
 #include <libfswatch/c/libfswatch_types.h>
+#include <libfswatch/libfswatch_config.h>
 #include <map>
 #include <vector>
 
 namespace fragcore {
 
 	typedef void *NotifyHandle;
-	//	typedef void (*AsyncComplete)(ASync *async, ASyncHandle handle); /*  */
 	/**
 	 * @brief
 	 *

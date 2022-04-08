@@ -1,5 +1,5 @@
-#include <Core/datastructure/AABB.h>
-#include <Core/datastructure/Line.h>
+#include <Core/dataStructure/AABB.h>
+#include <Core/dataStructure/Line.h>
 #include <gtest/gtest.h>
 
 using namespace fragcore;

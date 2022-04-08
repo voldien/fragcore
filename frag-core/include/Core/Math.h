@@ -211,6 +211,12 @@ namespace fragcore {
 		static float PerlinNoise(float x, float y, float z) noexcept;
 		static float PerlinNoise(const Vector3 &point) noexcept;
 
+		/**
+		 * @brief
+		 *
+		 * @tparam T
+		 * @return T
+		 */
 		template <typename T> T random() {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
 			return {drand48(), drand48()};
@@ -257,9 +263,9 @@ namespace fragcore {
 			}
 			return samples;
 		}
-		double phi(int j) {
-			double x = 0.0;
-			double f = 0.5;
+		template <typename T> T phi(int j) {
+			T x = 0.0;
+			T f = 0.5;
 			while (j) {
 				// x += j /= f *=
 
@@ -270,7 +276,10 @@ namespace fragcore {
 			return (x);
 		}
 
-		template <typename T> std::vector<T> &hammersley(std::vector<T> &samples) {}
+		template <typename T> std::vector<T> &hammersley(std::vector<T> &samples) {
+			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
+			return {};
+		}
 
 		// void multijitter(Vector2 *samples, int num_samples) { int sqrt_samples = (int)sqrt(num_samples); }
 	};

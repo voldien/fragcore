@@ -161,7 +161,7 @@ void FileSystemNotify::callback(fsw_cevent const *const events, const unsigned i
 	FileSystemNotify *notify = (FileSystemNotify *)data;
 
 	/*  */
-	for (int i = 0; i < event_num; i++) {
+	for (unsigned int i = 0; i < event_num; i++) {
 		fsw_cevent const *const event = &events[i];
 
 		for (int j = 0; j < event->flags_num; j++) {
@@ -226,6 +226,7 @@ void *FileSystemNotify::fswatch(const void *psession) {
 	FSW_STATUS ret = fsw_start_monitor(session);
 	if (ret != FSW_OK)
 		throw RuntimeException("Error on starting monitoring with the Filesystem watch: {}.", ret);
+	return nullptr;
 }
 
 void FileSystemNotify::start() {

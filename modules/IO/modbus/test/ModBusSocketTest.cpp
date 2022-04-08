@@ -18,8 +18,6 @@ class ModBusServerClientTest : public testing::Test {
   protected:
 	void SetUp() override {
 
-		const char *ipAddress = "localhost";
-
 		/*	*/
 		TCPUDPAddress tcpAddress(IPAddress(ipAddress), this->port);
 
@@ -30,6 +28,7 @@ class ModBusServerClientTest : public testing::Test {
 	}
 	void TearDown() override { delete modbusNetSocket; }
 	const int port = 43323;
+	const char *ipAddress = "localhost";
 	ModbusNetSocket *modbusNetSocket;
 };
 

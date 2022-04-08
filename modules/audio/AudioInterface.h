@@ -104,7 +104,7 @@ namespace fragcore {
 	 * @param config
 	 * @return non-null renderinginterface object.
 	 */
-	extern "C" AudioInterface *createInternalAudioInterface(IConfig *config);
+	extern "C" FVDECLSPEC AudioInterface *createInternalAudioInterface(IConfig *config);
 } // namespace fragcore
 
 #endif

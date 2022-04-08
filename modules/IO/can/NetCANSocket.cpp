@@ -58,7 +58,7 @@ int CANNetSocket::bind(const INetAddress &p_addr) {
 		throw RuntimeException("Failed to create CAN socket, {}", strerror(errno));
 	}
 
-	struct sockaddr_can addr = {0};
+	struct sockaddr_can addr = {};
 	size_t addrlen = this->setupAddress(reinterpret_cast<struct sockaddr *>(&addr), p_addr);
 
 	int rc = ::bind(this->socket, (struct sockaddr *)&addr, addrlen);
@@ -85,13 +85,12 @@ int CANNetSocket::connect(const INetAddress &p_addr) {
 	int domain = getDomain(p_addr);
 
 	/*	*/
-
 	this->socket = ::socket(domain, SOCK_DGRAM, CAN_BCM);
 	if (this->socket < 0) {
 		throw RuntimeException("Failed to create CAN socket, {}", strerror(errno));
 	}
 
-	struct sockaddr_can addr = {0};
+	struct sockaddr_can addr = {};
 	size_t addrlen = setupAddress(reinterpret_cast<struct sockaddr *>(&addr), p_addr);
 
 	int rc = ::connect(this->socket, (struct sockaddr *)&addr, addrlen);
@@ -102,9 +101,11 @@ int CANNetSocket::connect(const INetAddress &p_addr) {
 	}
 
 	this->netStatus = NetStatus::Status_Done;
+	return 0;
 }
 
 int CANNetSocket::poll(int p_type, int timeout) const { /*	*/
+	return 0;
 }
 
 int CANNetSocket::recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddress &r_ip, bool p_peek) {

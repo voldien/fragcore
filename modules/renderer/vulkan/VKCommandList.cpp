@@ -116,7 +116,7 @@ void VKCommandList::clearColorTarget(uint index, const Color &color) {}
 void VKCommandList::setDepthBounds(float min, float max) {}
 
 void VKCommandList::dispatch(uint groupCountX, uint groupCountY, uint groupCountZ) {
-	uint global[3] = {groupCountX, groupCountY, groupCountZ};
+
 	// this->compute->dispatchCompute(global, nullptr, 0);
 	// vkCmdBindPipeline
 	vkCmdDispatch(cmdBuffer, groupCountX, groupCountY, groupCountZ);

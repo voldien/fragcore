@@ -182,6 +182,12 @@ SET(CMAKE_CXX_STANDARD 17)
 SET(CMAKE_CXX_STANDARD_REQUIRED ON)
 SET(CMAKE_CXX_EXTENSIONS OFF)
 
+#################################
+# Inlucde external resources.
+#################################
+ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/extern)
+
+
 # Compiler toolchain
 IF(CMAKE_COMPILER_IS_GNUCC)
 	OPTION(WITH_LINKER_GOLD "Use ld.gold linker which is usually faster than ld.bfd" ON)
@@ -308,8 +314,8 @@ FIND_PACKAGE(PkgConfig QUIET)
 FIND_PACKAGE(OpenSSL QUIET)
 #TODO relocate to the compute plugin.
 #FIND_PACKAGE(CUDA QUIET)
-IF( UNIX )
 
+IF( UNIX )
 	SET( FRAGCORE_LIB_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR})
 	SET( FRAGCORE_INCLUDE_INSTALL_DIR ${CMAKE_INSTALL_INCLUDEDIR})
 	SET( FRAGCORE_BIN_INSTALL_DIR ${CMAKE_INSTALL_BINDIR})
@@ -327,27 +333,18 @@ ELSE()
 	SET(CMAKE_INSTALL_FULL_BINDIR ${CMAKE_INSTALL_PREFIX}/${FRAGCORE_BIN_INSTALL_DIR})
 ENDIF()
 
-
-#################################
-# Inlucde external resources.
-#################################
-ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/extern)
-
-
 #########################################
 # Main core library.
 #########################################
 ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/frag-core)
-
 
 # Testing and assertion and other.
 IF(BUILD_WITH_TEST)
 	ENABLE_TESTING()
 ENDIF()
 
-
 ################################
-# Platform
+# Platform specific
 #################################
 IF(ANDROID)
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/platforms/android)
@@ -361,6 +358,7 @@ ENDIF()
 ##########################################################
 IF(BUILD_MODULES)
 
+	#
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/imageloader/)
 
 	# Rendering interfaces.
@@ -383,26 +381,29 @@ IF(BUILD_MODULES)
 	#ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/physic/physx/)
 
 
-	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/filenotify)
+	# File watcher.
+	#ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/filenotify)
 
+	# IO 
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/IO/curl)
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/IO/can)
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/IO/modbus)
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/IO/SerialIO)
 
+	# Font Creation.
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/font)
 
+	# Video playback.
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/videoplayback)
 
+	# Windows
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/window/sdl)
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/window/glfw3)
 
 ENDIF(BUILD_MODULES)
 
-
-
 ##########################################
-# Add Tests if Enabled.
+# Add Tests if Enabled for core library.
 #########################################
 IF(NOT ANDROID)
 	IF(BUILD_WITH_TEST)

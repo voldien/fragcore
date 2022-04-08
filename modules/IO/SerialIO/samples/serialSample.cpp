@@ -1,6 +1,6 @@
 
-#include <Core/Log.h>
 #include "SerialIO.h"
+#include <Core/Log.h>
 
 using namespace fragcore;
 
@@ -9,7 +9,7 @@ int main(int argc, const char **argv) {
 		int baudRate = 4800;
 		unsigned int dataPayload[10];
 		if (argc < 2) {
-			std::cerr << "Must provide a Path";
+			std::cerr << "Must provide a Path to a valid serial device." << std::endl;
 			return EXIT_FAILURE;
 		}
 		if (argc == 3) {

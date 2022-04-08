@@ -3,9 +3,8 @@
 #include <IRenderer.h>
 #include <Texture.h>
 #include <TextureUtil.h>
-#include <libnoise/noise.h>
+
 using namespace fragcore;
-using namespace noise;
 
 Texture *TextureFactory::createChecker(IRenderer *renderer, int width, int height) {
 	void *pixels;

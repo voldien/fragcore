@@ -24,7 +24,6 @@
 
 namespace fragcore {
 
-	// System memory bound texture data.
 	/**
 	 * @brief
 	 *

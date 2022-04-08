@@ -3,7 +3,7 @@ FILE(GLOB SHADER_COMPILER_HEADER_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.h)
 
 # Library target.
 ADD_LIBRARY(fragcore-shader-compiler ${SHADER_COMPILER_SOURCE_FILES} ${SHADER_COMPILER_HEADER_FILES})
-TARGET_LINK_LIBRARIES(fragcore-shader-compiler PUBLIC fragcore spirv-cross-glsl spirv-cross-core spirv-cross-util) #
+TARGET_LINK_LIBRARIES(fragcore-shader-compiler PUBLIC fragcore fragcore-imageloader spirv-cross-glsl spirv-cross-core spirv-cross-util) #
 TARGET_COMPILE_DEFINITIONS(fragcore-shader-compiler PRIVATE FRAG_CORE_INTERNAL_IMP=1)
 
 #
