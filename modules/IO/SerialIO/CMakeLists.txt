@@ -18,7 +18,7 @@ TARGET_INCLUDE_DIRECTORIES(fragcore-io-serial PUBLIC
 							${CMAKE_CURRENT_SOURCE_DIR}
 							$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 							$<INSTALL_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}> )
-ADD_DEPENDENCIES(fragcore-io-serial fragcore)
+ADD_DEPENDENCIES(fragcore-io-serial fragcore serialport)
 
 # Sample Program
 ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/samples)

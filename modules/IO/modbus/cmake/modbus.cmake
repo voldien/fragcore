@@ -43,5 +43,6 @@ IF(NOT libmodbus_source)
   set_target_properties(modbus PROPERTIES IMPORTED_LOCATION ${MODBUS_STATIC_LIB})
   set_target_properties(modbus PROPERTIES INTERFACE_INCLUDE_DIRECTORIES ${MODBUS_INCLUDES})
   
-
+ELSE()
+  MESSAGE( WARNING "Could not find modbus source code");
 ENDIF()

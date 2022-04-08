@@ -31,16 +31,17 @@ IF(NOT libserialport_source)
 		PREFIX ${SERIALPORT_BIN}
 		SOURCE_DIR ${SERIALPORT_DIR}
 		DOWNLOAD_COMMAND cd ${SERIALPORT_DIR} && git clean -dfX && ${SERIALPORT_DIR}/autogen.sh
-		CONFIGURE_COMMAND ${SERIALPORT_DIR}/configure --srcdir=${SERIALPORT_DIR} --prefix=${SERIALPORT_BIN}   --enable-static --enable-static=yes --disable-shared  CFLAGS=-fPIC CXXFLAGS=-fPIC
+		CONFIGURE_COMMAND ${SERIALPORT_DIR}/configure --srcdir=${SERIALPORT_DIR} --prefix=${SERIALPORT_BIN} --enable-static=yes --disable-shared  CFLAGS=-fPIC CXXFLAGS=-fPIC
 		BUILD_COMMAND make
 		BUILD_BYPRODUCTS ${SERIALPORT_LIB}
 	)
 
-	add_library(serialport STATIC IMPORTED)
+	add_library(serialport STATIC IMPORTED GLOBAL)
 
 	add_dependencies(serialport libserialport)
 
 	set_target_properties(serialport PROPERTIES IMPORTED_LOCATION ${SERIALPORT_LIB})
 	set_target_properties(serialport PROPERTIES INTERFACE_INCLUDE_DIRECTORIES ${SERIALPORT_INCLUDE_DIRS})
-
+ELSE()
+	MESSAGE( WARNING "Could not find Serialport source code");
 ENDIF()	

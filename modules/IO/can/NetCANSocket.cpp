@@ -12,8 +12,6 @@
 #include <cstdlib>
 #include <cstring>
 #include <ctime>
-#include <modbus/modbus-tcp.h>
-#include <modbus/modbus.h>
 #include <net/if.h>
 #include <netdb.h>
 #include <netinet/in.h>
