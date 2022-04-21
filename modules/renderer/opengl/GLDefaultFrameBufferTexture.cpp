@@ -1,9 +1,9 @@
-#include "DefaultFrameBufferTexture.h"
-#include "GLRendererInterface.h"
 #include "../IRenderer.h"
 #include "../RenderObject.h"
 #include "../RendererWindow.h"
 #include "../Texture.h"
+#include "DefaultFrameBufferTexture.h"
+#include "GLRendererInterface.h"
 #include "internal_object_type.h"
 #include <GL/glew.h>
 
@@ -78,9 +78,9 @@ void *FrameBufferTexture::getPixels(Format format, unsigned int level, unsigned 
 unsigned int FrameBufferTexture::width() {
 	int width;
 	int height;
-	OpenGLCore *glcore = (OpenGLCore *)this->getRenderer<GLRendererInterface>()->getData();
-	fragcore::Window *window = (fragcore::Window *)glcore->drawwindow;
-	window->getSize(&width, &height);
+
+	// fragcore::Window *window = (fragcore::Window *)glcore->drawwindow;
+	// window->getSize(&width, &height);
 	// SDL_GetWindowSize(glcore->drawwindow, &width, &height);
 	return width;
 }
@@ -88,9 +88,9 @@ unsigned int FrameBufferTexture::width() {
 unsigned int FrameBufferTexture::height() {
 	int width;
 	int height;
-	OpenGLCore *glcore = (OpenGLCore *)this->getRenderer()->getData();
-	fragcore::Window *window = (fragcore::Window *)glcore->drawwindow;
-	window->getSize(&width, &height);
+
+	// fragcore::Window *window = (fragcore::Window *)glcore->drawwindow;
+	// window->getSize(&width, &height);
 	// SDL_GetWindowSize(glcore->drawwindow, &width, &height);
 	return height;
 }

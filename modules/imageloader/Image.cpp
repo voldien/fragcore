@@ -26,6 +26,7 @@ void Image::allocateMemory(unsigned int width, unsigned int height, unsigned dep
 	this->bufferSize = getTextureSize(width, height, depth, format);
 	this->pixelData = malloc(this->bufferSize);
 	if (this->pixelData == nullptr) {
+		throw RuntimeException("Failed to allocate {}", bufferSize);
 	}
 }
 
@@ -37,7 +38,7 @@ size_t Image::getFormatPixelSize(TextureFormat format) {
 		return 1 * 8;
 	case TextureFormat::ARGB4444:
 	case TextureFormat::RGBA4444:
-		return 2 * 8;
+		return 4 * 4;
 	case TextureFormat::RGB24:
 	case TextureFormat::BGR24:
 		return 3 * 8;

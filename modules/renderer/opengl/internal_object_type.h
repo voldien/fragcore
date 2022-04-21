@@ -29,48 +29,6 @@ namespace fragcore {
 	/**
 	 *
 	 */
-	typedef struct OpenGLCore_t {
-		void *openglcontext;
-		void *tpmwindow;
-		fragcore::RendererWindow *drawwindow;
-
-		bool useCoreProfile;
-		bool useCompatibility;
-
-		/*  */
-		// TODO determine if to use pool or something .
-		Buffer *pboUnPack;
-		Buffer *pboPack;
-
-		/*  Cached internal capabilities.   */
-		Capability capability;
-		TextureDesc::Compression compression;
-		Features features;
-
-		/*  Context version.    */
-		int majorVersion;
-		int minorVersion;
-		int profile;
-		int cflag;
-
-		bool debug;
-		bool alpha;
-
-		ViewPort *defaultViewport;
-		std::vector<ViewPort *> viewports; // TODO remove pointer.
-		FrameBuffer *defaultFrameBuffer;
-		/*  Texture gamma corrections.  */
-		bool gamma;
-		ShaderLanguage supportedLanguages;
-	} OpenGLCore;
-
-	typedef struct opengl_viewport_t {
-		unsigned int viewport;
-	} GLViewPort;
-
-	/**
-	 *
-	 */
 	typedef struct opengl_shader_object_t {
 		unsigned int program;
 		unsigned int shader;
@@ -88,75 +46,67 @@ namespace fragcore {
 		Buffer *vertexbuffer;
 	} GLGeometryObject;
 
-
 } // namespace fragcore
-
-#define CHECK_OPENGL_ERROR checkError();
-
-#define VALIDATE_OPENGL_CALL(x)                                                                                        \
-	{ x checkError(); }
 
 // TODO change name to resolve potential symbol name conflict.
 /**
  * Helper functions.
  */
-extern void addMarkerLabel(const fragcore::OpenGLCore *glcore, unsigned int identifier, unsigned int object,
-						   const fragcore::MarkerDebug *debug);
+extern FVDECLSPEC void addMarkerLabel(unsigned int identifier, unsigned int object, const fragcore::MarkerDebug *debug);
 
-extern void checkError();
-extern void resetErrorFlag();
-extern unsigned int getWrapMode(fragcore::SamplerDesc::AddressMode mode);
+extern FVDECLSPEC unsigned int getWrapMode(fragcore::SamplerDesc::AddressMode mode);
 
-extern unsigned int getFilterMode(fragcore::SamplerDesc::FilterMode mode, fragcore::SamplerDesc::FilterMode mips);
+extern FVDECLSPEC unsigned int getFilterMode(fragcore::SamplerDesc::FilterMode mode,
+											 fragcore::SamplerDesc::FilterMode mips);
 
-extern unsigned int getCompareMode(fragcore::SamplerDesc::CompareFunc mode);
+extern FVDECLSPEC unsigned int getCompareMode(fragcore::SamplerDesc::CompareFunc mode);
 
-extern unsigned int getGraphicFormat(fragcore::GraphicFormat graphicFormat);
-extern unsigned int getTextureFormat(fragcore::TextureFormat textureFormat, unsigned int *pixelType);
+extern FVDECLSPEC unsigned int getGraphicFormat(fragcore::GraphicFormat graphicFormat);
+extern FVDECLSPEC unsigned int getTextureFormat(fragcore::TextureFormat textureFormat, unsigned int *pixelType);
 
-extern unsigned int getTextureFormat(fragcore::TextureDesc::Format format);
-extern unsigned int getInternalTextureFormat(fragcore::TextureDesc::Format format, bool sRGB,
-											 fragcore::TextureDesc::Compression compression,
-											 fragcore::TextureDesc::Type type);
+extern FVDECLSPEC unsigned int getTextureFormat(fragcore::TextureDesc::Format format);
+extern FVDECLSPEC unsigned int getInternalTextureFormat(fragcore::TextureDesc::Format format, bool sRGB,
+														fragcore::TextureDesc::Compression compression,
+														fragcore::TextureDesc::Type type);
 
-extern unsigned int getTextureTarget(fragcore::TextureDesc::Target target, int nrSamples);
+extern FVDECLSPEC unsigned int getTextureTarget(fragcore::TextureDesc::Target target, int nrSamples);
 
-extern unsigned int getTextureType(fragcore::TextureDesc::Type type);
+extern FVDECLSPEC unsigned int getTextureType(fragcore::TextureDesc::Type type);
 
-extern unsigned int getTextureSwizzle(fragcore::TextureDesc::Swizzle swizzle);
+extern FVDECLSPEC unsigned int getTextureSwizzle(fragcore::TextureDesc::Swizzle swizzle);
 
-extern unsigned int getBufferType(fragcore::BufferDesc::BufferType type);
+extern FVDECLSPEC unsigned int getBufferType(fragcore::BufferDesc::BufferType type);
 
-extern unsigned int getBufferHint(fragcore::BufferDesc::BufferHint hint);
+extern FVDECLSPEC unsigned int getBufferHint(fragcore::BufferDesc::BufferHint hint);
 
-extern unsigned int getPrimitive(fragcore::GeometryDesc::Primitive primitive);
+extern FVDECLSPEC unsigned int getPrimitive(fragcore::GeometryDesc::Primitive primitive);
 
-extern unsigned int getAttributeDataType(fragcore::GeometryDesc::AttributeType type);
+extern FVDECLSPEC unsigned int getAttributeDataType(fragcore::GeometryDesc::AttributeType type);
 
-extern unsigned int getState(fragcore::IRenderer::State state);
+extern FVDECLSPEC unsigned int getState(fragcore::IRenderer::State state);
 
-extern unsigned int getTextureFilterModeNoMip(fragcore::Texture::FilterMode format);
+extern FVDECLSPEC unsigned int getTextureFilterModeNoMip(fragcore::Texture::FilterMode format);
 
 // FrameBuffer
-extern unsigned int getBlendEqu(fragcore::FrameBuffer::BlendEqu equ);
+extern FVDECLSPEC unsigned int getBlendEqu(fragcore::FrameBuffer::BlendEqu equ);
 
-extern unsigned int getBlendFunc(fragcore::FrameBuffer::BlendFunc func);
+extern FVDECLSPEC unsigned int getBlendFunc(fragcore::FrameBuffer::BlendFunc func);
 
-extern unsigned int getClearBitMask(fragcore::CLEARBITMASK clearbitmask);
+extern FVDECLSPEC unsigned int getClearBitMask(fragcore::CLEARBITMASK clearbitmask);
 
 // Texture.
-extern unsigned int getTextureWrapMode(fragcore::Texture::WrapMode mode);
+extern FVDECLSPEC unsigned int getTextureWrapMode(fragcore::Texture::WrapMode mode);
 
-extern unsigned int getTextureFilterMode(fragcore::Texture::FilterMode mode);
+extern FVDECLSPEC unsigned int getTextureFilterMode(fragcore::Texture::FilterMode mode);
 
-extern unsigned int getTextureCompareMode(fragcore::Texture::CompareFunc compareFunc);
+extern FVDECLSPEC unsigned int getTextureCompareMode(fragcore::Texture::CompareFunc compareFunc);
 
-extern unsigned getImageInternalFormat(fragcore::Texture::Format format);
+extern FVDECLSPEC unsigned getImageInternalFormat(fragcore::Texture::Format format);
 
-extern unsigned int getAccess(fragcore::Texture::MapTarget target);
+extern FVDECLSPEC unsigned int getAccess(fragcore::Texture::MapTarget target);
 
-extern unsigned int getTextureGLFormat(fragcore::Texture::Format format);
+extern FVDECLSPEC unsigned int getTextureGLFormat(fragcore::Texture::Format format);
 
-extern fragcore::Texture::Format getTextureFormatUserSpace(unsigned int format);
+extern FVDECLSPEC fragcore::Texture::Format getTextureFormatUserSpace(unsigned int format);
 
 #endif

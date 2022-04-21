@@ -16,39 +16,31 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef _FRAG_CORE_VIEWPORT_H_
-#define _FRAG_CORE_VIEWPORT_H_ 1
-#include "IRenderer.h"
-#include "RenderObject.h"
+#ifndef _FRAG_CORE_GEOMETRYUTIL_H_
+#define _FRAG_CORE_GEOMETRYUTIL_H_ 1
+#include <Core/dataStructure/Triangle.h>
 
 namespace fragcore {
 
 	/**
-	 * @brief Abstraction layar of the viewport.
 	 *
 	 */
-	class FVDECLSPEC ViewPort : public RenderObject {
-		friend class IRenderer;
-
+	// TODO name class to match the file name.
+	class FVDECLSPEC GeometryUtility {
 	  public:
-		virtual void depthRange(double near, double far) = 0;
+		// static bool TestPlanesAABB(const Plane &plane, const AABB &bound){
 
-		virtual void setDimensions(int x, int y, int width, int height) = 0;
+		// }
 
-		virtual void setscissorView(int x, int y, int width, int height) = 0;
+		//TODO  Transform
 
-		virtual void getViewPort(int *x, int *y, int *width, int *height) = 0;
+		//
+		static std::vector<Triangle> subdivide(const std::vector<Triangle> &points);
 
-		virtual void getScissorView(int *x, int *y, int *width, int *height) = 0;
+		static std::vector<Triangle> createPolygon(const std::vector<Vector3> &points);
 
-		virtual void getDepthRange(double *near, double *far) = 0;
-
-		virtual void enable(IRenderer::State state) = 0;
-
-		virtual void disable(IRenderer::State state) = 0;
-
-		virtual bool isStateEnabled(IRenderer::State state) = 0;
+		static bool isConvex(std::vector<Vector3> &points);
+		static bool isConcave(std::vector<Vector3> &points);
 	};
 } // namespace fragcore
-
 #endif

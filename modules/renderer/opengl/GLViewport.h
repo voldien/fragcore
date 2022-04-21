@@ -16,3 +16,40 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+#ifndef _FRAG_CORE_GL_VIEWPORT_H_
+#define _FRAG_CORE_GL_VIEWPORT_H_ 1
+#include "../ViewPort.h"
+
+namespace fragcore {
+	/**
+	 *
+	 */
+	class FVDECLSPEC GLViewPort : public ViewPort {
+		friend class IRenderer;
+	  public:
+		virtual void depthRange(double near, double far) override;
+
+		virtual void setDimensions(int x, int y, int width, int height) override;
+
+		virtual void setscissorView(int x, int y, int width, int height) override;
+
+		virtual void getViewPort(int *x, int *y, int *width, int *height) override;
+
+		virtual void getScissorView(int *x, int *y, int *width, int *height) override;
+
+		virtual void getDepthRange(double *near, double *far) override;
+
+		virtual void enable(IRenderer::State state) override;
+
+		virtual void disable(IRenderer::State state) override;
+
+		virtual bool isStateEnabled(IRenderer::State state) override;
+
+		virtual intptr_t getNativePtr() const override;
+
+	  private:
+		unsigned int viewport;
+	};
+} // namespace fragcore
+
+#endif

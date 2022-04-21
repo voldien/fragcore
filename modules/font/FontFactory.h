@@ -22,6 +22,7 @@
 #include "Core/Ref.h"
 #include "Def.h"
 #include "Font.h"
+#include "FontEncoding.h"
 #include "Prerequisites.h"
 
 namespace fragcore {
@@ -33,12 +34,6 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC FontFactory {
 	  public:
-		enum class Encoding {
-			ASCII, /*	*/
-			UTF8,  /*	*/
-			UTF16, /*	*/
-		};
-
 		// TODO add support for generating the font and its texture without the dependent of a rendering API.
 		// static Font *createFont(Ref<IRenderer> &renderer, Ref<IO> &io, float size, Encoding encoding = ASCII);
 		// static Font *createSDFFont(Ref<IRenderer> &renderer, Ref<IO> &io, float size, Encoding encoding = ASCII);

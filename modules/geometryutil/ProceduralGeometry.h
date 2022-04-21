@@ -16,39 +16,31 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef _FRAG_CORE_VIEWPORT_H_
-#define _FRAG_CORE_VIEWPORT_H_ 1
-#include "IRenderer.h"
-#include "RenderObject.h"
+#ifndef _FRAG_CORE_PROCEDURAL_GEOMETRY_H_
+#define _FRAG_CORE_PROCEDURAL_GEOMETRY_H_ 1
+#include <FragCore.h>
 
 namespace fragcore {
 
-	/**
-	 * @brief Abstraction layar of the viewport.
-	 *
-	 */
-	class FVDECLSPEC ViewPort : public RenderObject {
-		friend class IRenderer;
-
+	class FVDECLSPEC ProceduralGeometry {
 	  public:
-		virtual void depthRange(double near, double far) = 0;
+		typedef struct _vertex_t {
+			float vertex[3];
+			float uv[2];
+			float normal[3];
+			float tangent[3];
+		} Vertex;
 
-		virtual void setDimensions(int x, int y, int width, int height) = 0;
+		void generatePlan(float scale, std::vector<Vertex> &vertices, std::vector<unsigned int> &indices);
 
-		virtual void setscissorView(int x, int y, int width, int height) = 0;
+		void generateGrid2D();
 
-		virtual void getViewPort(int *x, int *y, int *width, int *height) = 0;
+		void generateBoundingBox();
+		void generateSphere();
 
-		virtual void getScissorView(int *x, int *y, int *width, int *height) = 0;
-
-		virtual void getDepthRange(double *near, double *far) = 0;
-
-		virtual void enable(IRenderer::State state) = 0;
-
-		virtual void disable(IRenderer::State state) = 0;
-
-		virtual bool isStateEnabled(IRenderer::State state) = 0;
+		void generateCube(float scale, std::vector<Vertex> &vertices, std::vector<unsigned int> &indices);
 	};
+
 } // namespace fragcore
 
 #endif

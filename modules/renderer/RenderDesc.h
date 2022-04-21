@@ -419,7 +419,7 @@ namespace fragcore {
 		Texture *stencil;	   /*	Stencil attachment.	*/
 		Texture *depthstencil; /*	depth stencil attachment.	*/
 		/*  Debug attributes.   */
-		MarkerDebug marker;
+		MarkerDebug marker;	//TODO add as pointer.
 	} FrameBufferDesc;
 
 	// TODO determine if packing compiler qualifier needed.

@@ -24,6 +24,7 @@
 #include <ImageFormat.h>
 
 namespace fragcore {
+	// TODO rename
 	/**
 	 *
 	 */

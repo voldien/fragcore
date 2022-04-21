@@ -43,33 +43,48 @@ namespace fragcore {
 		DepthBounds,
 		BindPipeline,
 
+		LineWidth,
+		DepthBias,
+		BlendConstant,
+		StencilCompare,
+		StencilWriteMask,
+		StencilReference,
+
+		QueryBegin,
+		QueryEnd,
+		BufferArrayBind,
+		BufferIndexBind,
+		SetTopology,
+		BegingConditionalRendering,
+		EndConditionalRendering,
 	};
 
-	class GLCommandBase {
+	class FVDECLSPEC GLCommandBase {
 	  public:
 		GLCommandBase(GLCommandBufferCmd command) : cmd(command) {}
 		GLCommandBufferCmd getCommand() const { return this->cmd; }
 
 		template <typename T> static size_t getCommandSize() { return sizeof(T); }
+		template <typename T> const T *as() const { return reinterpret_cast<const T *>(this); }
 
 	  private:
 		GLCommandBufferCmd cmd;
 	};
 
-	class GLCommandClearColor : public GLCommandBase {
+	class FVDECLSPEC GLCommandClearColor : public GLCommandBase {
 	  public:
 		GLCommandClearColor(uint index, const Color &color)
 			: GLCommandBase(GLCommandBufferCmd::ClearColor), index(index), clear(color) {}
 		uint index;
 		Color clear;
 	};
-	class GLCommandClear : public GLCommandBase {
+	class FVDECLSPEC GLCommandClear : public GLCommandBase {
 	  public:
 		GLCommandClear() : GLCommandBase(GLCommandBufferCmd::ClearImage) {}
 		unsigned int mask;
 	};
 
-	class GLCommandDispatch : public GLCommandBase {
+	class FVDECLSPEC GLCommandDispatch : public GLCommandBase {
 	  public:
 		GLCommandDispatch(int x, int y, int z) : GLCommandBase(GLCommandBufferCmd::Dispatch), x(x), y(y), z(z) {}
 		int x, y, z;
@@ -83,21 +98,20 @@ namespace fragcore {
 		size_t offset;
 	};
 
-	class GLPushGroupMarkerCommand : public GLCommandBase {
+	class FVDECLSPEC GLPushGroupMarkerCommand : public GLCommandBase {
 		GLPushGroupMarkerCommand(const char *name) : GLCommandBase(GLCommandBufferCmd::PushGroupMarker), name(name) {}
 		std::string name;
 	};
-	class GLPopGroupMarkerCommand : public GLCommandBase {
+	class FVDECLSPEC GLPopGroupMarkerCommand : public GLCommandBase {
 		GLPopGroupMarkerCommand() : GLCommandBase(GLCommandBufferCmd::PopGroupMarker) {}
-
 	};
-	class GLInsertGroupMarkerCommand : public GLCommandBase {
+	class FVDECLSPEC GLInsertGroupMarkerCommand : public GLCommandBase {
 		GLInsertGroupMarkerCommand(const char *name)
 			: GLCommandBase(GLCommandBufferCmd::InsertGroupMarker), name(name) {}
 		std::string name;
 	};
 
-	class GLViewPortCommand : public GLCommandBase {
+	class FVDECLSPEC GLViewPortCommand : public GLCommandBase {
 	  public:
 		GLViewPortCommand(int index, int x, int y, int width, int height)
 			: GLCommandBase(GLCommandBufferCmd::ViewPort), index(index), x(x), y(y), width(width), height(height) {}
@@ -105,7 +119,7 @@ namespace fragcore {
 		unsigned int x, y;
 		unsigned int width, height;
 	};
-	class GLScissorPortCommand : public GLCommandBase {
+	class FVDECLSPEC GLScissorPortCommand : public GLCommandBase {
 	  public:
 		GLScissorPortCommand(int index, int x, int y, int width, int height)
 			: GLCommandBase(GLCommandBufferCmd::Scissor), index(index), x(x), y(y), width(width), height(height) {}
@@ -113,20 +127,20 @@ namespace fragcore {
 		unsigned int width, height;
 		unsigned int x, y;
 	};
-	class GLBindFrameBufferCommand : public GLCommandBase {
+	class FVDECLSPEC GLBindFrameBufferCommand : public GLCommandBase {
 	  public:
 		GLBindFrameBufferCommand(FrameBuffer *framebuffer)
 			: GLCommandBase(GLCommandBufferCmd::BindFrameBuffer), framebuffer(framebuffer) {}
 		FrameBuffer *framebuffer;
 	};
-	class GLCopyTextureCommand : public GLCommandBase {
+	class FVDECLSPEC GLCopyTextureCommand : public GLCommandBase {
 	  public:
 		// TODO add src and dest size
 		GLCopyTextureCommand(const Ref<Texture> &src, Ref<Texture> &dst)
 			: GLCommandBase(GLCommandBufferCmd::CopyTexture) {}
 	};
 
-	class GLBlitCommand : public GLCommandBase {
+	class FVDECLSPEC GLBlitCommand : public GLCommandBase {
 	  public:
 		// TODO add src and dest size
 		GLBlitCommand(const Ref<FrameBuffer> &src, Ref<FrameBuffer> &dst) : GLCommandBase(GLCommandBufferCmd::Blit) {}
@@ -136,9 +150,8 @@ namespace fragcore {
 		// TODO add size, filtermode
 	};
 
-	class GLDrawCommand : public GLCommandBase {
+	class FVDECLSPEC GLDrawCommand : public GLCommandBase {
 	  public:
-
 		GLDrawCommand(const Ref<Buffer> &buffer, uint32_t nrVertices, uint32_t nrInstances)
 			: GLCommandBase(GLCommandBufferCmd::Draw) {}
 
@@ -147,7 +160,7 @@ namespace fragcore {
 		uint32_t nrInstances;
 	};
 
-	class GLDrawIndicesCommand : public GLCommandBase {
+	class FVDECLSPEC GLDrawIndicesCommand : public GLCommandBase {
 	  public:
 		// TODO add the rest of require param
 		GLDrawIndicesCommand(const Ref<Buffer> &buffer, const Ref<Buffer> &indices, uint32_t nrVertices,
@@ -159,7 +172,7 @@ namespace fragcore {
 		uint32_t nrInstances;
 	};
 
-	class GLDrawIndirectCommand : public GLCommandBase {
+	class FVDECLSPEC GLDrawIndirectCommand : public GLCommandBase {
 	  public:
 		// TODO add the rest of require param
 		GLDrawIndirectCommand(const Ref<Buffer> &buffer, const Ref<Buffer> &indices, uint32_t nrVertices,
@@ -170,7 +183,7 @@ namespace fragcore {
 		uint32_t nrVertices;
 		uint32_t nrInstances;
 	};
-	class GLDrawIndexIndirectCommand : public GLCommandBase {
+	class FVDECLSPEC GLDrawIndexIndirectCommand : public GLCommandBase {
 	  public:
 		// TODO add the rest of require param
 		GLDrawIndexIndirectCommand(const Ref<Buffer> &buffer, const Ref<Buffer> &indices, uint32_t nrVertices,
@@ -180,6 +193,16 @@ namespace fragcore {
 		Buffer *src;
 		uint32_t nrVertices;
 		uint32_t nrInstances;
+	};
+	class FVDECLSPEC GLDepthBoundsCommand : public GLCommandBase {
+	  public:
+		// TODO add the rest of require param
+		GLDepthBoundsCommand(float min, float max) : GLCommandBase(GLCommandBufferCmd::DepthBounds) {
+			this->min = min;
+			this->max = max;
+		}
+
+		float min, max;
 	};
 
 } // namespace fragcore

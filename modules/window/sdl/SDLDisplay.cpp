@@ -68,6 +68,8 @@ void SDLDisplay::getDPI(Display::DPI *dpi) {
 		throw RuntimeException(fmt::format("Failed to retrieve display {} DPI, %s", this->index, SDL_GetError()));
 }
 
+void SDLDisplay::setMode(const Mode &mode) {}
+
 // TextureFormat SDLDisplay::getFormat() {
 // 	SDL_DisplayMode mode;
 // 	SDL_GetCurrentDisplayMode(this->index, &mode);

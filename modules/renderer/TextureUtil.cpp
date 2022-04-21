@@ -3,9 +3,9 @@
 #include "Core/IO/IOUtil.h"
 #include "Core/Math.h"
 #include "Texture.h"
-
 #include <Core/IO/FileSystem.h>
 #include <FreeImage.h>
+#include <ImageLoader.h>
 #include <fmt/core.h>
 using namespace fragcore;
 

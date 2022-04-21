@@ -1,9 +1,10 @@
-#include"GLBuffer.h"
-#include"internal_object_type.h"
+#include "GLBuffer.h"
+#include "GLHelper.h"
+#include "internal_object_type.h"
 
 using namespace fragcore;
 
-//TODO add for retaining current binded buffer.
+// TODO add for retaining current binded buffer.
 
 void GLBuffer::bind() {
 
@@ -11,7 +12,7 @@ void GLBuffer::bind() {
 	checkError();
 }
 
-void GLBuffer::bind(unsigned int offset, unsigned int size){
+void GLBuffer::bind(unsigned int offset, unsigned int size) {
 
 	glBindBufferRange(this->target, this->base, this->buffer, offset, size);
 	checkError();
@@ -28,14 +29,13 @@ void GLBuffer::subData(const void *data, unsigned int offset, unsigned int size)
 	char *pmap;
 
 	this->bind();
-	pmap = (char *) this->mapBuffer(GLBuffer::eWrite);
+	pmap = (char *)this->mapBuffer(GLBuffer::eWrite);
 	checkError();
 	if (pmap) {
 		memcpy(pmap + offset, data, size);
 		this->unMapBuffer();
 	} else
 		glBufferSubDataARB(this->target, offset, size, data);
-
 }
 
 void *GLBuffer::getData(unsigned int offset, unsigned int size) {
@@ -57,11 +57,9 @@ void *GLBuffer::getData(unsigned int offset, unsigned int size) {
 	return pbuffer;
 }
 
-bool GLBuffer::isValid() {
-	return glIsBufferARB(this->buffer) == GL_TRUE;
-}
+bool GLBuffer::isValid() { return glIsBufferARB(this->buffer) == GL_TRUE; }
 
-long int GLBuffer::getSize(){
+long int GLBuffer::getSize() {
 	GLint size;
 	this->bind();
 	glGetBufferParameteriv(this->target, GL_BUFFER_SIZE, &size);
@@ -69,7 +67,7 @@ long int GLBuffer::getSize(){
 	return size;
 }
 
-//TODO relocate to the helper header.
+// TODO relocate to the helper header.
 static GLenum getAccessEnum(GLBuffer::MapTarget target) {
 	GLenum access = 0;
 
@@ -83,7 +81,7 @@ static GLenum getAccessEnum(GLBuffer::MapTarget target) {
 		access |= GL_MAP_UNSYNCHRONIZED_BIT;
 	if (target & GLBuffer::MapTarget::ePERSISTENT)
 		access |= GL_MAP_PERSISTENT_BIT;
-	if(target & GLBuffer::MapTarget::eFlushExplicit)
+	if (target & GLBuffer::MapTarget::eFlushExplicit)
 		access |= GL_MAP_FLUSH_EXPLICIT_BIT;
 	return access;
 }
@@ -137,7 +135,7 @@ void GLBuffer::flush(unsigned long int offset, unsigned long int length) {
 }
 
 void GLBuffer::unMapBuffer() {
-	
+
 	if (glUnmapNamedBuffer) {
 		glUnmapNamedBuffer(this->buffer);
 	} else {
@@ -150,9 +148,9 @@ void GLBuffer::setName(const std::string &name) {
 	Object::setName(name);
 
 	/*  Update the marker.  */
-	//MarkerDebug marker = {};
-	//marker.markerName = name.c_str();
-	////addMarkerLabel((const OpenGLCore *)getRenderer()->getData(), GL_BUFFER, this->buffer, &marker);
+	MarkerDebug marker = {};
+	marker.markerName = name.c_str();
+	addMarkerLabel(GL_BUFFER, this->buffer, &marker);
 }
 
 intptr_t GLBuffer::getNativePtr() const { return this->buffer; }

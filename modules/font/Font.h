@@ -46,6 +46,7 @@ namespace fragcore {
 			float offset_y; /*  */
 			/*  Size of the font.   */
 			float size; /*  */
+			
 		};
 
 	  public:

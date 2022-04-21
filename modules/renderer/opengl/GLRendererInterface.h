@@ -19,6 +19,7 @@
 #ifndef _FRAG_CORE_GL_RENDERER_INTERFACE_H_
 #define _FRAG_CORE_GL_RENDERER_INTERFACE_H_ 1
 #include "../IRenderer.h"
+#include "GLHelper.h"
 
 namespace fragcore {
 
@@ -130,7 +131,7 @@ namespace fragcore {
 
 		// TODO add viewobject for handling as a object
 		virtual ViewPort *getView(unsigned int i);
-
+		//TODO relocate to the render pipeline queue 
 		/**
 		 *
 		 * @param bitflag
@@ -282,6 +283,8 @@ namespace fragcore {
 		// virtual void getSupportedTextureFormat(TextureFormat* textureFormat);
 		// virtual void getSupportedGraphicTextureFormat(TextureFormat* textureFormat);
 
+		// TODO add debug callback support
+
 		/**
 		 * Get capability of the rendering API.
 		 * @param capability non-null object.
@@ -311,7 +314,7 @@ namespace fragcore {
 
 	  public: /*	OpenGL Specific methods.	*/
 		void *getOpenGLContext() noexcept;
-		void bindWindowContext(void* window, void* context);
+		void bindWindowContext(void *window, void *context);
 
 	  protected: /*  */
 		void *pdata;

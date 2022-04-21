@@ -16,45 +16,15 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef _FRAG_CORE_SDLDISPLAY_H_
-#define _FRAG_CORE_SDLDISPLAY_H_ 1
-#include<Window/Display.h>
+#ifndef _FRAG_CORE_FONT_ENCODING_H_
+#define _FRAG_CORE_FONT_ENCODING_H_ 1
 
 namespace fragcore {
-
-	/**
-	 *
-	 */
-	class FVDECLSPEC SDLDisplay : public Display {
-	  public:
-		SDLDisplay(int index);
-
-		unsigned int x() const override;
-
-		unsigned int y() const override;
-
-		unsigned int width() const override;
-
-		unsigned int height() const override;
-
-		unsigned int refreshRate() const override;
-
-		std::vector<Mode> getModes() const override;
-
-		void getDPI(DPI *dpi) override;
-		void setMode(const Mode &mode) override;
-
-		// fragcore::TextureFormat getFormat() override;
-
-	  protected:
-		unsigned int translateFormat(unsigned int format);
-
-	  private:
-		unsigned int index;
-
-	  public:
-		static int getNumDisplays();
+	enum class FontEncoding {
+		ASCII, /*	*/
+		UTF8,  /*	*/
+		UTF16, /*	*/
 	};
-} // namespace fragcore
+}
 
 #endif

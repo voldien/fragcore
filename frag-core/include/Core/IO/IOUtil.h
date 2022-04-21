@@ -58,7 +58,7 @@ namespace fragcore {
 		static long int loadStringMem(Ref<IO> &io, char **data);
 
 		/**
-		 * @brief 
+		 * @brief
 		 *
 		 * @param in
 		 * @param out
@@ -79,6 +79,41 @@ namespace fragcore {
 			std::string formatted = fmt::format(format, args...);
 			// TODO allow to perform chunk if needed
 			return io->write(formatted.length(), formatted.data());
+		}
+
+		/**
+		 * @brief
+		 *
+		 * @tparam T
+		 * @param io
+		 * @return std::vector<T>
+		 */
+		template <typename T> static std::vector<T> readFile(Ref<IO> &io) {
+
+			size_t fileSize = (size_t)io->length();
+			std::vector<T> buffer(fileSize / sizeof(T));
+
+			io->read(fileSize, buffer.data());
+
+			return buffer;
+		}
+
+		/**
+		 * @brief
+		 *
+		 * @tparam T
+		 * @param io
+		 * @return std::vector<T>
+		 */
+		template <typename T> static std::vector<T> readString(Ref<IO> &io) {
+
+			size_t fileSize = (size_t)io->length();
+			std::vector<T> buffer(fileSize / sizeof(T) + 1);
+
+			io->read(fileSize, buffer.data());
+			buffer.data()[fileSize] = '\0';
+
+			return buffer;
 		}
 	};
 } // namespace fragcore

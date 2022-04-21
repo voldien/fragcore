@@ -13,6 +13,7 @@
 #include "GLSampler.h"
 #include "GLSync.h"
 #include "GLTexture.h"
+#include "GLViewport.h"
 #include "internal_object_type.h"
 #include <../RenderDesc.h>
 #include <../RendererWindow.h>
@@ -285,19 +286,19 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 	// TODO improve
 	// TODO, add support for version without viewports.
 	/*  Create default viewport object. */
-	this->defaultViewport = new ViewPort();
-	// this->defaultViewport->iRenderer = this;
-	GLViewPort *glViewPort = new GLViewPort();
-	glViewPort->viewport = 0;
-	// this->defaultViewport->pdata = glViewPort;
-	for (int i = 0; i < this->capability.sMaxViewPorts - 1; i++) {
-		ViewPort *virtualView = new ViewPort();
-		// virtualView->iRenderer = this;
-		GLViewPort *glViewPort = new GLViewPort();
-		glViewPort->viewport = i + 1;
-		// virtualView->pdata = glViewPort;
-		this->viewports.push_back(virtualView);
-	}
+	// this->defaultViewport = new ViewPort();
+	// // this->defaultViewport->iRenderer = this;
+	// GLViewPort *glViewPort = new GLViewPort();
+	// glViewPort->viewport = 0;
+	// // this->defaultViewport->pdata = glViewPort;
+	// for (int i = 0; i < this->capability.sMaxViewPorts - 1; i++) {
+	// 	ViewPort *virtualView = new ViewPort();
+	// 	// virtualView->iRenderer = this;
+	// 	GLViewPort *glViewPort = new GLViewPort();
+	// 	glViewPort->viewport = i + 1;
+	// 	// virtualView->pdata = glViewPort;
+	// 	this->viewports.push_back(virtualView);
+	// }
 
 	// TODO create default framebuffer.
 	// TODO create default texture.
@@ -1152,9 +1153,9 @@ FrameBuffer *GLRendererInterface::createFrameBuffer(FrameBufferDesc *desc) {
 
 	/*  Validate the arguments. */
 	if (desc == nullptr)
-		throw std::invalid_argument("Descriptor object must not be null");
+		throw InvalidArgumentException("Descriptor object must not be null");
 	if (desc->depth && desc->stencil && desc->depthstencil)
-		throw std::invalid_argument("");
+		throw InvalidArgumentException("");
 
 	glfraobj = new GLFrameBuffer();
 	assert(glfraobj);
@@ -1214,18 +1215,20 @@ FrameBuffer *GLRendererInterface::createFrameBuffer(FrameBufferDesc *desc) {
 		/*  Delete  */
 		glDeleteFramebuffers(1, &glfraobj->framebuffer);
 		delete glfraobj;
-		throw RuntimeException(fmt::format("Failed to create framebuffer, {}.\n", frstat));
+		throw RuntimeException("Failed to create framebuffer, {}.\n", frstat);
 	}
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	// Add debug marker information.
-	// addMarkerLabel(this, GL_FRAMEBUFFER, glfraobj->framebuffer, &desc->marker);
+	if (addMarkerLabel) {
+		addMarkerLabel(GL_FRAMEBUFFER, glfraobj->framebuffer, &desc->marker);
+	}
 
 	/*  */
 	glfraobj->desc = *desc;
 	FrameBuffer *frameBuffer = new GLFrameBuffer();
-	// frameBuffer->pdata = glfraobj;
+
 	frameBuffer->setRenderInterface(this);
 	return frameBuffer;
 }
@@ -1234,11 +1237,11 @@ void GLRendererInterface::deleteFrameBuffer(FrameBuffer *obj) {
 
 	GLFrameBuffer *glfFramebuffer = static_cast<GLFrameBuffer *>(obj);
 
-	if (glIsFramebuffer(glfFramebuffer->framebuffer))
+	if (glIsFramebuffer(glfFramebuffer->framebuffer)) {
 		glDeleteFramebuffers(1, &glfFramebuffer->framebuffer);
-	else if (glfFramebuffer->framebuffer != 0) // Check for default framebuffer object.
+	} else if (glfFramebuffer->framebuffer != 0) { // Check for default framebuffer object.
 		throw std::invalid_argument("None valid framebuffer object.");
-
+	}
 	/*  Delete memory.  */
 	delete obj;
 }
@@ -1272,7 +1275,7 @@ void GLRendererInterface::deleteQuery(QueryObject *query) {
 
 RendererWindow *GLRendererInterface::createWindow(int x, int y, int width, int height) {
 
-	//WindowManager::getInstance();
+	// WindowManager::getInstance();
 	Ref<GLRendererInterface> rendRef(this);
 
 	GLRenderWindow *renderWindow = new GLRenderWindow(rendRef);
@@ -1341,8 +1344,8 @@ ViewPort *GLRendererInterface::getView(unsigned int i) {
 
 	/*  Validate the index. */
 	if (i >= this->capability.sMaxViewPorts)
-		throw std::invalid_argument(
-			fmt::format("Does not support viewport index {}, max index {}.", i, this->capability.sMaxViewPorts));
+		throw InvalidArgumentException("Does not support viewport index {}, max index {}.", i,
+									   this->capability.sMaxViewPorts);
 
 	// If the view does not exits. Create it.
 	if (i == 0)
@@ -1375,9 +1378,9 @@ void GLRendererInterface::drawInstance(Geometry *geometry, unsigned int num) {
 	}
 
 	GLenum errorStatus = glGetError();
-	if (errorStatus != GL_NO_ERROR)
-		throw RuntimeException(
-			::fmt::format("Error when dispatching compute - {}, {}", errorStatus, gluErrorString(errorStatus)));
+	if (errorStatus != GL_NO_ERROR) {
+		throw RuntimeException("Error when dispatching compute - {}, {}", errorStatus, gluErrorString(errorStatus));
+	}
 
 	glBindVertexArray(0);
 }
@@ -1409,8 +1412,7 @@ void GLRendererInterface::drawIndirect(Geometry *geometry) {
 
 	GLenum errorStatus = glGetError();
 	if (errorStatus != GL_NO_ERROR)
-		throw RuntimeException(
-			::fmt::format("Error when dispatching compute - {}, {}", errorStatus, gluErrorString(errorStatus)));
+		throw RuntimeException("Error when dispatching compute - {}, {}", errorStatus, gluErrorString(errorStatus));
 
 	glBindVertexArray(0);
 }
@@ -1697,7 +1699,6 @@ void GLRendererInterface::setDebug(bool enable) {
 // GL_ARB_fragment_program: SM 2.0 or better
 const char *GLRendererInterface::getShaderVersion(ShaderLanguage language) const {
 	const char *strcore;
-	OpenGLCore *glcore = (OpenGLCore *)this->getData();
 	bool profile;
 
 	if (language == GLSL) {
@@ -1741,7 +1742,7 @@ const char *GLRendererInterface::getShaderVersion(ShaderLanguage language) const
 	if (language == SPIRV) {
 		return "100";
 	}
-	throw std::invalid_argument("Invalid shader language);");
+	throw std::invalid_argument("Invalid shader language");
 }
 
 ShaderLanguage GLRendererInterface::getShaderLanguage() const { return this->supportedLanguages; }
@@ -2065,6 +2066,7 @@ void GLRendererInterface::execute(CommandList *list) {
 		} break;
 		case GLCommandBufferCmd::PushGroupMarker: {
 			// glPushDebugGroup();
+
 			if (glPushDebugGroup) {
 			}
 		} break;
@@ -2081,7 +2083,7 @@ void GLRendererInterface::execute(CommandList *list) {
 
 		case GLCommandBufferCmd::ViewPort: {
 			// TODO add support for the index.
-			const GLViewPortCommand *viewport = (const GLViewPortCommand *)base;
+			const GLViewPortCommand *viewport = base->as<GLViewPortCommand>();
 			glViewport(viewport->x, viewport->y, viewport->width, viewport->height);
 		} break;
 		case GLCommandBufferCmd::Scissor: {

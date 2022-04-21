@@ -19,6 +19,7 @@
 #ifndef _FRAG_CORE_PLANE_H_
 #define _FRAG_CORE_PLANE_H_ 1
 #include "../../Def.h"
+#include "../Math3D.h"
 #include <iostream>
 
 namespace fragcore {

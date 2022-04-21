@@ -16,3 +16,28 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+#ifndef _FRAG_CORE_GL_HELPER_H_
+#define _FRAG_CORE_GL_HELPER_H_ 1
+#include <FragCore.h>
+#include <GL/glew.h>
+
+#if _NDEBUG
+#define FVALIDATE_GL_CALL(x)                                                                                           \
+	{                                                                                                                  \
+		x;                                                                                                             \
+		GLenum gl_error = glGetError();                                                                                \
+		if (gl_error != GL_NO_ERROR) {                                                                                 \
+			throw cxxexcept::RuntimeException("{} {} {} - {}", __FILE__, __LINE__, _err, gluErrorString(gl_error));    \
+		}                                                                                                              \
+	}
+#else
+#define FVALIDATE_GL_CALL(x) x
+#endif
+
+namespace fragcore {
+
+	extern FVDECLSPEC void checkError();
+	extern FVDECLSPEC void resetErrorFlag();
+} // namespace fragcore
+
+#endif
