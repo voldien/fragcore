@@ -58,9 +58,9 @@ namespace fragcore {
 
 		virtual void vsync(bool state) override;
 
-		virtual void getPosition(int *x, int *y) const;
+		virtual void getPosition(int *x, int *y) const override;
 
-		virtual void getSize(int *width, int *height) const;
+		virtual void getSize(int *width, int *height) const override;
 
 		void resizable(bool resizable) override;
 
@@ -71,7 +71,7 @@ namespace fragcore {
 		virtual Display *getCurrentDisplay() const;
 
 		void setFullScreen(bool fullscreen) override;
-		virtual void setFullScreen(Display &display);
+		virtual void setFullScreen(Display &display) override;
 
 		bool isFullScreen() const;
 
@@ -190,7 +190,7 @@ namespace fragcore {
 			VkExtent2D chainExtend;	  /*  */
 			int currentFrame = 0;
 			bool vsync = false;
-			int width,height;
+			int width, height;
 		} SwapchainBuffers;
 
 		SwapchainBuffers swapChain;

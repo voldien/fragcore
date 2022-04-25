@@ -23,6 +23,7 @@
 #include <Core/Ref.h>
 #include <Def.h>
 #include <map>
+#include <string>
 #include <vector>
 
 namespace fragcore {
@@ -67,11 +68,13 @@ namespace fragcore {
 			std::vector<CompilerOption> option;
 		};
 
-		std::map<long int, ShaderResult> CompilePermutation(Ref<IRenderer> &renderer, CompilerSources *references,
-															const CompilerOptionSet &optionset);
+		static std::vector<char> convertSPIRV(const std::vector<char> &source, ShaderLanguage shaderLanguage);
+
+		// std::map<long int, ShaderResult> CompilePermutation(Ref<IRenderer> &renderer, CompilerSources *references,
+		// 													const CompilerOptionSet &optionset);
 
 		/**/
-		void CompileCrossShader(Ref<IO> &io, Ref<IO> &out);
+		// void CompileCrossShader(Ref<IO> &io, Ref<IO> &out);
 	};
 } // namespace fragcore
 #endif

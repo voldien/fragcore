@@ -20,20 +20,10 @@
 #define _FRAG_CORE_RENDER_DESC_H_ 1
 #include "GraphicFormat.h"
 #include "RenderPrerequisites.h"
+#include "ShaderLanguage.h"
 #include <ImageFormat.h>
 
 namespace fragcore {
-	/**
-	 *  Support languages.
-	 */
-	enum ShaderLanguage {
-		GLSL = 0x1,			   /*  OpenGL GLSL.    */
-		SPIRV = 0x2,		   /*  SPIRV.  */
-		HLSL = 0x4,			   /*  High Level Shading Language.    */
-		CLC = 0x8,			   /*  OpenCL C language.  */
-		CG = 0x10,			   /*  Legacy. */
-		unKnownLanguage = 0x0, /*	*/
-	};
 
 	typedef struct marker_debug_t {
 		const char *markerName;
@@ -419,7 +409,7 @@ namespace fragcore {
 		Texture *stencil;	   /*	Stencil attachment.	*/
 		Texture *depthstencil; /*	depth stencil attachment.	*/
 		/*  Debug attributes.   */
-		MarkerDebug marker;	//TODO add as pointer.
+		MarkerDebug marker; // TODO add as pointer.
 	} FrameBufferDesc;
 
 	// TODO determine if packing compiler qualifier needed.

@@ -2,50 +2,85 @@
 #include "Core/IO/BufferIO.h"
 #include "Core/dataStructure/StackAllactor.h"
 #include "ShaderUtil.h"
+#include <spirv_cross/spirv_glsl.hpp>
 
 #include <fmt/core.h>
 using namespace fragcore;
 
-std::map<long int, ShaderCompiler::ShaderResult>
-ShaderCompiler::CompilePermutation(Ref<IRenderer> &renderer, CompilerSources *references,
-								   const CompilerOptionSet &optionset) {
-	std::vector<CompilerOption>::const_iterator it = optionset.option.cbegin();
+std::vector<char> ShaderCompiler::convertSPIRV(const std::vector<char> &source, ShaderLanguage shaderLanguage) {
+	// Read SPIR-V from disk or similar.
 
-	std::map<long int, ShaderCompiler::ShaderResult> result;
+	spirv_cross::CompilerGLSL glsl(reinterpret_cast<const uint32_t *>(source.data()), source.size() / sizeof(uint32_t));
 
-	StackAllocator alloctor(128000);
+	// The SPIR-V is now parsed, and we can perform reflection on it.
+	spirv_cross::ShaderResources resources = glsl.get_shader_resources();
 
-	size_t cbuffer = 4096;
-	it = optionset.option.cbegin();
-	for (; it != optionset.option.cend(); it++) {
+	// Get all sampled images in the shader.
+	for (auto &resource : resources.sampled_images) {
+		unsigned set = glsl.get_decoration(resource.id, spv::DecorationDescriptorSet);
+		unsigned binding = glsl.get_decoration(resource.id, spv::DecorationBinding);
+		printf("Image %s at set = %u, binding = %u\n", resource.name.c_str(), set, binding);
 
-		/*	Write whole macro definition for all the options.	*/
-		void *string_options = alloctor.allocateAligned(cbuffer, 8);
-		BufferIO bufferIO(string_options, cbuffer);
+		// Modify the decoration to prepare it for GLSL.
+		glsl.unset_decoration(resource.id, spv::DecorationDescriptorSet);
 
-		std::vector<CompilerOption>::const_iterator eit = optionset.option.cbegin();
-		for (; eit != optionset.option.cend(); eit++) {
-
-			std::string macro = fmt::format("#define %s %s", (*eit).name, (*eit).value);
-			bufferIO.write(macro.size() + 1, macro.c_str());
-		}
-
-		/*	Load source and combine.	*/
-
-		// ShaderUtil::ShaderObjectDesc _v = {};
-		//		ShaderUtil::ShaderObjectDesc _g, _f, _tc, _te, _c;
-
-		long int resultID = 0;
-		Shader *shader;
-		ShaderUtil::loadProgram(references->vertex, references->fragment, references->geometry, references->tesseC,
-								references->tesseT, references->compute, renderer, &shader);
-		result[resultID].shader = shader;
-		// result[resultID].option
-		alloctor.clear();
+		// Some arbitrary remapping if we want.
+		glsl.set_decoration(resource.id, spv::DecorationBinding, set * 16 + binding);
 	}
 
-	return result;
+	// Set some options.
+	spirv_cross::CompilerGLSL::Options options;
+	options.version = 330;
+	options.es = false;
+	glsl.set_common_options(options);
+
+	// Compile to GLSL, ready to give to GL driver.
+
+	std::string converted_source = glsl.compile();
+	/*	*/
+	return std::vector<char>(converted_source.begin(), converted_source.end());
 }
+
+// std::map<long int, ShaderCompiler::ShaderResult>
+// ShaderCompiler::CompilePermutation(Ref<IRenderer> &renderer, CompilerSources *references,
+// 								   const CompilerOptionSet &optionset) {
+// 	std::vector<CompilerOption>::const_iterator it = optionset.option.cbegin();
+
+// 	std::map<long int, ShaderCompiler::ShaderResult> result;
+
+// 	StackAllocator alloctor(128000);
+
+// 	size_t cbuffer = 4096;
+// 	it = optionset.option.cbegin();
+// 	for (; it != optionset.option.cend(); it++) {
+
+// 		/*	Write whole macro definition for all the options.	*/
+// 		void *string_options = alloctor.allocateAligned(cbuffer, 8);
+// 		BufferIO bufferIO(string_options, cbuffer);
+
+// 		std::vector<CompilerOption>::const_iterator eit = optionset.option.cbegin();
+// 		for (; eit != optionset.option.cend(); eit++) {
+
+// 			std::string macro = fmt::format("#define %s %s", (*eit).name, (*eit).value);
+// 			bufferIO.write(macro.size() + 1, macro.c_str());
+// 		}
+
+// 		/*	Load source and combine.	*/
+
+// 		// ShaderUtil::ShaderObjectDesc _v = {};
+// 		//		ShaderUtil::ShaderObjectDesc _g, _f, _tc, _te, _c;
+
+// 		long int resultID = 0;
+// 		Shader *shader;
+// 		ShaderUtil::loadProgram(references->vertex, references->fragment, references->geometry, references->tesseC,
+// 								references->tesseT, references->compute, renderer, &shader);
+// 		result[resultID].shader = shader;
+// 		// result[resultID].option
+// 		alloctor.clear();
+// 	}
+
+// 	return result;
+// }
 
 //#include <spirv_cross/spirv_cross_c.h>
 

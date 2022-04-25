@@ -72,12 +72,11 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 	// Check all required config variables.
 	for (int i = 0; i < numReqConfigKeys; i++) {
 		if (!setupConfig.isSet(reqConfigKey[i]))
-			throw RuntimeException(
-				fmt::format("None valid configuration node - missing attribute {}", reqConfigKey[i]));
+			throw RuntimeException("None valid configuration node - missing attribute {}", reqConfigKey[i]);
 	}
 
 	if (SDL_InitSubSystem(SDL_INIT_VIDEO) != 0) {
-		throw RuntimeException(fmt::format("SDL_InitSubSystem failed, {}.\n", SDL_GetError()));
+		throw RuntimeException("SDL_InitSubSystem failed, {}.\n", SDL_GetError());
 	}
 
 	/*  */
@@ -145,7 +144,7 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 	this->tpmwindow = window;
 
 	if (window == nullptr) {
-		throw RuntimeException(fmt::format("Could not create an OpenGL window - {}.", SDL_GetError()));
+		throw RuntimeException("Could not create an OpenGL window - {}.", SDL_GetError());
 	}
 
 	/*	Create OpenGL context.	*/ // TODO add config attribute for auto or force the version.
@@ -200,7 +199,7 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 			/*  Final check.    */
 			if (this->openglcontext == nullptr) {
 				SDL_DestroyWindow(window);
-				throw RuntimeException(fmt::format("Failed to create compatibility context: {}.", SDL_GetError()));
+				throw RuntimeException("Failed to create compatibility context: {}.", SDL_GetError());
 			}
 		}
 	}
@@ -239,15 +238,15 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 	if (status != GLEW_OK) {
 		SDL_GL_DeleteContext(this->openglcontext);
 		SDL_DestroyWindow(window);
-		throw RuntimeException(fmt::format("Could not Initialize GLEW - {}.", glewGetErrorString(status)));
+		throw RuntimeException("Could not Initialize GLEW - {}.", glewGetErrorString(status));
 	}
 
 	/*  TODO add function for checking if context is supported. */
 	for (int i = 0; i < numMinReqExtensions; i++) {
 		const char *extension = minRequiredExtensions[i];
 		if (!glewIsExtensionSupported(extension)) {
-			throw RuntimeException(fmt::format("Non supported GPU - {} using OpenGL version: {}\nGLSL: {}", extension,
-											   getVersion(), glGetString(GL_SHADING_LANGUAGE_VERSION)));
+			throw RuntimeException("Non supported GPU - {} using OpenGL version: {}\nGLSL: {}", extension, getVersion(),
+								   glGetString(GL_SHADING_LANGUAGE_VERSION));
 		}
 	}
 
@@ -360,7 +359,7 @@ Texture *GLRendererInterface::createTexture(TextureDesc *desc) {
 	if (desc->numlevel < 0 && desc->usemipmaps)
 		throw InvalidArgumentException("Mips number count must be greater than or equal to 0.");
 	if (desc->compression & ~this->compression)
-		throw InvalidArgumentException(fmt::format("Invalid compression format - {}.", desc->compression));
+		throw InvalidArgumentException("Invalid compression format - {}.", desc->compression);
 	if (desc->srgb) {
 		if (!this->capability.sSRGB)
 			throw InvalidArgumentException("sRGB is not supported.");
@@ -541,8 +540,7 @@ Texture *GLRendererInterface::createTexture(TextureDesc *desc) {
 	GLenum errorStatus = glGetError();
 	if (errorStatus != GL_NO_ERROR) {
 		glDeleteTextures(1, &texture);
-		throw RuntimeException(
-			::fmt::format("Error when allocating the texture - {}, {}", errorStatus, gluErrorString(errorStatus)));
+		throw RuntimeException("Error when allocating the texture - {}, {}", errorStatus, gluErrorString(errorStatus));
 	}
 
 	// Unbound texture.
@@ -994,7 +992,7 @@ Buffer *GLRendererInterface::createBuffer(BufferDesc *desc) {
 		if (error != GL_NO_ERROR) {
 			glDeleteBuffers(1, &buf);
 			checkError();
-			throw RuntimeException(fmt::format("Failed to create buffer - {}", glewGetErrorString(error)));
+			throw RuntimeException("Failed to create buffer - {}", glewGetErrorString(error));
 		}
 
 		glBindBufferARB(target, 0);
@@ -1013,7 +1011,7 @@ Buffer *GLRendererInterface::createBuffer(BufferDesc *desc) {
 		error = glGetError();
 		if (error != GL_NO_ERROR) {
 			glDeleteBuffers(1, &buf);
-			throw RuntimeException(fmt::format("Failed to create buffer - {}", glewGetErrorString(error)));
+			throw RuntimeException("Failed to create buffer - {}", glewGetErrorString(error));
 		}
 
 		glBindBuffer(target, 0);
@@ -1544,9 +1542,9 @@ void GLRendererInterface::dispatchCompute(unsigned int *global, unsigned int *lo
 	}
 
 	GLenum errorStatus = glGetError();
-	if (errorStatus != GL_NO_ERROR)
-		throw RuntimeException(
-			::fmt::format("Error when dispatching compute - {}, {}", errorStatus, gluErrorString(errorStatus)));
+	if (errorStatus != GL_NO_ERROR) {
+		throw RuntimeException("Error when dispatching compute - {}, {}", errorStatus, gluErrorString(errorStatus));
+	}
 
 	// TODO relocate
 	glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
@@ -1674,18 +1672,10 @@ void GLRendererInterface::setDebug(bool enable) {
 
 		/*	Load function pointer by their symbol name.	*/
 		callback = (PROC)SDL_GL_GetProcAddress("glDebugMessageCallback");
-		callbackARB = (PROC)SDL_GL_GetProcAddress("glDebugMessageCallbackARB");
-		callbackAMD = (PROC)SDL_GL_GetProcAddress("glDebugMessageCallbackAMD");
 
 		/*	Set Debug message callback.	*/
 		if (callback) {
 			callback(callback_debug_gl, nullptr);
-		}
-		if (callbackARB) {
-			callbackARB(callback_debug_gl, nullptr);
-		}
-		if (callbackAMD) {
-			callbackAMD(callback_debug_gl, nullptr);
 		}
 
 		/*	*/
