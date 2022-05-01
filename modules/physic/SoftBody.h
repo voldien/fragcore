@@ -18,25 +18,22 @@
  */
 #ifndef _FRAG_CORE_SOFTBODY_H_
 #define _FRAG_CORE_SOFTBODY_H_ 1
-#include"../Def.h"
-#include"Prerequisites.h"
+#include "../FragDef.h"
+#include "Prerequisites.h"
 
 namespace fragcore {
 	/**
 	 *
 	 */
 	class FVDECLSPEC SoftBody {
-	private:
+	  private:
 		inline SoftBody() {}
 
 		virtual ~SoftBody();
 
-	public:    /*	Public methods.	*/
-
-
-	protected:    /*	Protected virtual methods.	*/
-
+	  public:	 /*	Public methods.	*/
+	  protected: /*	Protected virtual methods.	*/
 	};
-}
+} // namespace fragcore
 
 #endif

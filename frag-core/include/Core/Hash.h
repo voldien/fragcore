@@ -18,7 +18,7 @@
  */
 #ifndef _FRAG_CORE_HASH_H_
 #define _FRAG_CORE_HASH_H_ 1
-#include "../Def.h"
+#include "../FragDef.h"
 #include "IO/IO.h"
 #include "Object.h"
 #include "Ref.h"
@@ -33,6 +33,7 @@ namespace fragcore {
 	  public:
 		enum class ALGORITHM {
 			HashNone = 0,
+			MD4,	/*  */
 			MD5,	/*  */
 			SHA128, /*  */
 			SHA224, /*  */

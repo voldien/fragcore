@@ -39,6 +39,8 @@ namespace fragcore {
 		virtual void copyTexture(const Texture *src, Texture *dst) override;
 
 		virtual void bindPipeline(RenderPipeline *p) override;
+		virtual void bindComputePipeline(RenderPipeline *pipeline) override;
+
 		virtual void bindFramebuffer(Ref<FrameBuffer> &framebuffer) override;
 
 		virtual void setViewport(int x, int y, unsigned int width, unsigned int height) override;

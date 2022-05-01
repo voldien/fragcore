@@ -28,7 +28,7 @@ namespace fragcore {
 	 * @brief
 	 *
 	 */
-	class CommandList : public SmartReference /*: public NoCopyable */ {
+	class FVDECLSPEC CommandList : public SmartReference {
 	  public:
 		enum CommandBufferFlag { Single, Continuous };
 		virtual ~CommandList() = default;
@@ -39,7 +39,7 @@ namespace fragcore {
 		virtual void copyTexture(const Texture *src, Texture *dst) = 0;
 
 		virtual void bindPipeline(RenderPipeline *pipline) = 0;
-		// virtual void bindComputePipeline(RenderPipeline *pipeline) = 0;
+		virtual void bindComputePipeline(RenderPipeline *pipeline) = 0;
 
 		// virtual void updateBuffer(Ref<Buffer> &buffer, void *p, int size) = 0;
 		virtual void bindFramebuffer(Ref<FrameBuffer> &framebuffer) = 0;

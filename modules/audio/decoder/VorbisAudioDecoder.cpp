@@ -37,11 +37,7 @@ int AR_seekOgg(void *fh, ogg_int64_t to, int type) {
 	return 0;
 }
 
-int AR_closeOgg(void *fh) {
-	// ogg_file *of = reinterpret_cast<ogg_file *>(fh);
-	// of->io->deincrement();
-	return 0;
-}
+int AR_closeOgg(void *fh) { return 0; }
 
 long AR_tellOgg(void *fh) {
 	ogg_file *of = reinterpret_cast<ogg_file *>(fh);

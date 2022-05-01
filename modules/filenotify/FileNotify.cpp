@@ -16,14 +16,17 @@ FileSystemNotify::FileSystemNotify(Ref<IScheduler> &sch) {
 	if (ret != FSW_OK)
 		throw RuntimeException("Failed to initialize the Filesystem watch: {}.", ret);
 	this->session = fsw_init_session(system_default_monitor_type);
-	if (this->session == nullptr)
+	if (this->session == nullptr) {
 		throw RuntimeException("Failed to create session for Filesystem watch: {}.", fsw_last_error());
+	}
 	ret = fsw_set_follow_symlinks(this->session, true);
-	if (ret != FSW_OK)
+	if (ret != FSW_OK) {
 		throw RuntimeException("Failed to enable follow symlinks with Filesystem watch: {}.", ret);
+	}
 	ret = fsw_set_allow_overflow(this->session, false);
-	if (ret != FSW_OK)
+	if (ret != FSW_OK) {
 		throw RuntimeException("Failed to disable overflow with Filesystem watch: {}.", ret);
+	}
 	fsw_set_verbose(false);
 
 	/*	*/

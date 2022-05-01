@@ -18,8 +18,8 @@
  */
 #ifndef _FRAG_CORE_PHYSICOBJECT_H_
 #define _FRAG_CORE_PHYSICOBJECT_H_ 1
-#include <Core/SmartReference.h>
 #include "PhysicPrerequisites.h"
+#include <Core/SmartReference.h>
 
 namespace fragcore {
 	/**

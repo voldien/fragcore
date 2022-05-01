@@ -10,7 +10,8 @@
 using namespace fragcore;
 
 FrameBufferTexture::FrameBufferTexture() {
-	// this->setName("Default frambuffer back color attachment");
+	this->setName("Default frambuffer back color attachment");
+
 	glGenBuffersARB(1, &this->pbo);
 	glBindBufferARB(GL_PIXEL_PACK_BUFFER, pbo);
 	// TODO improve
@@ -25,7 +26,7 @@ void *FrameBufferTexture::mapTexture(Format format, unsigned int level) {
 	if (level != 0)
 		throw InvalidArgumentException("Level 0 is only available.");
 
-	/*  */
+	/*  Bind pixel pack to create memory mapping from GPU to CPU memory.	*/
 	glReadBuffer(GL_BACK_LEFT);
 	glBindBuffer(GL_PIXEL_PACK_BUFFER, this->pbo);
 
@@ -35,10 +36,11 @@ void *FrameBufferTexture::mapTexture(Format format, unsigned int level) {
 }
 
 void FrameBufferTexture::unMapTexture() {
-	if (glUnmapNamedBuffer)
+	if (glUnmapNamedBuffer) {
 		glUnmapNamedBuffer(pbo);
-	else
+	} else {
 		glUnmapBufferARB(GL_PIXEL_PACK_BUFFER_ARB);
+	}
 }
 
 Texture::Format FrameBufferTexture::getFormat() const { return Texture::eR8G8B8A8; }
@@ -76,21 +78,22 @@ void *FrameBufferTexture::getPixels(Format format, unsigned int level, unsigned 
 }
 
 unsigned int FrameBufferTexture::width() {
-	int width;
-	int height;
+	int width = 0;
+	if (glGetNamedFramebufferParameteriv) {
+		glGetNamedFramebufferParameteriv(0, GL_FRAMEBUFFER_DEFAULT_WIDTH, &width);
+	} else {
+		// getCurrentFrameBufferRead();
+	}
 
-	// fragcore::Window *window = (fragcore::Window *)glcore->drawwindow;
-	// window->getSize(&width, &height);
-	// SDL_GetWindowSize(glcore->drawwindow, &width, &height);
 	return width;
 }
 
 unsigned int FrameBufferTexture::height() {
-	int width;
-	int height;
+	int height = 0;
+	if (glGetNamedFramebufferParameteriv) {
+		glGetNamedFramebufferParameteriv(0, GL_FRAMEBUFFER_DEFAULT_HEIGHT, &height);
+	} else {
+	}
 
-	// fragcore::Window *window = (fragcore::Window *)glcore->drawwindow;
-	// window->getSize(&width, &height);
-	// SDL_GetWindowSize(glcore->drawwindow, &width, &height);
 	return height;
 }

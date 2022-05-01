@@ -104,14 +104,14 @@ namespace fragcore {
 		 * @param desc
 		 * @return
 		 */
-		virtual RenderPipeline *createPipeline(const ProgramPipelineDesc *desc) = 0;
+		virtual RenderPipeline *createRenderPipeline(const RenderPipelineDesc *desc) = 0;
 
 		/**
 		 *
 		 * @param obj
 		 * @return
 		 */
-		virtual void deletePipeline(RenderPipeline *obj) = 0;
+		virtual void deleteRenderPipeline(RenderPipeline *obj) = 0;
 
 		/**
 		 *	Create shader.

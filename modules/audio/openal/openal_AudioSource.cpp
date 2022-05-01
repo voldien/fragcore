@@ -11,16 +11,21 @@ OpenALAudioSource::~OpenALAudioSource() {}
 void OpenALAudioSource::setClip(AudioClip *clip) {
 
 	OpenALAudioClip *openal_clip = static_cast<OpenALAudioClip *>(clip);
-	// Verify the clio
+
+	// Verify the clip
 	if (!alIsBuffer(openal_clip->getCurrentBuffer()))
 		throw InvalidArgumentException("{}", alGetError());
 
+	/*	*/
+	unsigned int al_buffer = openal_clip->getCurrentBuffer();
+	// FAOPAL_VALIDATE(alSourceQueueBuffers(this->source, 1, &al_buffer));
 	FAOPAL_VALIDATE(alSourcei(this->source, AL_BUFFER, openal_clip->getCurrentBuffer()));
 
 	this->clip = clip;
 }
 
 void OpenALAudioSource::play() {
+	/*	*/
 	FAOPAL_VALIDATE(alSourcePlay(this->source));
 
 	if (this->clip->clipType() == AudioDataMode::Streaming) {
@@ -30,11 +35,11 @@ void OpenALAudioSource::play() {
 
 void OpenALAudioSource::stop() { FAOPAL_VALIDATE(alSourceStop(this->source)); }
 
-void OpenALAudioSource::pause() { alSourcePause(this->source); }
+void OpenALAudioSource::pause() { FAOPAL_VALIDATE(alSourcePause(this->source)); }
 
 void OpenALAudioSource::setVolume(float volume) {
 
-	alSourcef(this->source, AL_GAIN, volume);
+	FAOPAL_VALIDATE(alSourcef(this->source, AL_GAIN, volume));
 	// alSourcef(this->source, AL_PITCH)
 }
 
@@ -44,7 +49,9 @@ float OpenALAudioSource::getVolume() {
 	return volume;
 }
 
-void OpenALAudioSource::setDistance(float distance) { alSourcef(this->source, AL_MAX_DISTANCE, distance); }
+void OpenALAudioSource::setDistance(float distance) {
+	FAOPAL_VALIDATE(alSourcef(this->source, AL_MAX_DISTANCE, distance));
+}
 
 float OpenALAudioSource::getDistance() {
 
@@ -55,11 +62,10 @@ float OpenALAudioSource::getDistance() {
 }
 
 void OpenALAudioSource::mute(bool mute) {
-
-	if (mute){
+	// TODO add support for previous volume.
+	if (mute) {
 		FAOPAL_VALIDATE(alSourcei(this->source, AL_GAIN, 0.0f));
-	}
-	else{
+	} else {
 		FAOPAL_VALIDATE(alSourcei(this->source, AL_GAIN, 1.0f));
 	}
 }

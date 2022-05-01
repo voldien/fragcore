@@ -34,13 +34,13 @@ unsigned int getTextureFormat(TextureDesc::Format format) {
 
 unsigned int getTextureTarget(TextureDesc::Target target) {
 	switch (target) {
-	case TextureDesc::eTexture1D:
+	case TextureDesc::Target::Texture1D:
 		return VK_IMAGE_TYPE_1D;
-	case TextureDesc::eTexture2D:
+	case TextureDesc::Target::Texture2D:
 		return VK_IMAGE_TYPE_2D;
-	case TextureDesc::eTexture3D:
+	case TextureDesc::Target::Texture3D:
 		return VK_IMAGE_TYPE_3D;
-	case TextureDesc::eCubeMap:
+	case TextureDesc::Target::CubeMap:
 	default:
 		throw InvalidArgumentException("Invalid Texture target");
 	}
@@ -71,13 +71,13 @@ unsigned int getBufferHint(BufferDesc::BufferHint hint) { return 0; }
 
 unsigned int getPrimitive(GeometryDesc::Primitive primitive) {
 	switch (primitive) {
-	case GeometryDesc::ePoint:
+	case GeometryDesc::Primitive::ePoint:
 		return VK_PRIMITIVE_TOPOLOGY_POINT_LIST;
-	case GeometryDesc::eLines:
+	case GeometryDesc::Primitive::eLines:
 		return VK_PRIMITIVE_TOPOLOGY_LINE_LIST;
-	case GeometryDesc::eTriangles:
+	case GeometryDesc::Primitive::eTriangles:
 		return VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
-	case GeometryDesc::eTriangleStrips:
+	case GeometryDesc::Primitive::eTriangleStrips:
 		return VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP;
 	default:
 		return -1;

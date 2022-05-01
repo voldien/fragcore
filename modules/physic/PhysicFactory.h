@@ -16,8 +16,8 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef _PHYSIC_FACTORY_H_
-#define _PHYSIC_FACTORY_H_ 1
+#ifndef _FRAG_CORE_PHYSIC_FACTORY_H_
+#define _FRAG_CORE_PHYSIC_FACTORY_H_ 1
 #include "PhysicInterface.h"
 
 namespace fragcore {
@@ -28,9 +28,9 @@ namespace fragcore {
 	  public:
 		/*  Official physic api.  */
 		enum class PhysicAPI {
-			Bullet,	 /*	Bullet physic API.	*/
-			Bullet3, /*	Bullet3 physic API. support GPU acceleration.	*/
-			PhysX,	 /*	Nvidia PhysicX.	*/
+			Bullet, /*	Bullet physic API.	*/
+			PhysX,	/*	Nvidia PhysicX.	*/
+			RPC,
 		};
 
 		/**
@@ -65,6 +65,7 @@ namespace fragcore {
 	  private: /*	Prevent one from creating an instance of this class.	*/
 		PhysicFactory();
 		PhysicFactory(const PhysicFactory &other);
+		PhysicFactory(PhysicFactory &&other);
 	};
 } // namespace fragcore
 

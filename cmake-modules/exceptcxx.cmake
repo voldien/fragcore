@@ -10,7 +10,6 @@ FetchContent_GetProperties(exceptcxx_source)
 IF(NOT exceptcxx_source)
 	FetchContent_Populate(exceptcxx_source)
 	ADD_SUBDIRECTORY(${exceptcxx_source_SOURCE_DIR} ${exceptcxx_source_BINARY_DIR} EXCLUDE_FROM_ALL)
-  
 ELSE()
   MESSAGE( WARNING "Could not find exceptcxx source code")
 ENDIF()

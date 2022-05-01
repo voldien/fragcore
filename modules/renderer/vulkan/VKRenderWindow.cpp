@@ -6,7 +6,7 @@
 #include <SDL2/SDL_syswm.h>
 #include <SDL2/SDL_vulkan.h>
 
-#include <Window/WindowManager.h>
+#include <SDLWindowManager.h>
 #include <fmt/core.h>
 #include <vulkan/vulkan.h>
 using namespace fragcore;
@@ -88,21 +88,22 @@ void VKRenderWindow::vsync(bool state) { SDL_GL_SetSwapInterval(state); }
 bool VKRenderWindow::assertConfigAttributes(const fragcore::IConfig *iConfig) { return false; }
 
 float VKRenderWindow::getGamma() const {
-	ushort ramp[256 * 3];
+	uint16_t ramp[256 * 3];
 	int err = SDL_GetWindowGammaRamp(this->window, &ramp[256 * 0], &ramp[256 * 1], &ramp[256 * 2]);
 	if (err == -1)
 		throw NotSupportedException(SDL_GetError());
 
-	return this->computeGammaExponent(ramp);
+	return this->computeGammaExponent<float, uint16_t>(ramp);
 }
 
 void VKRenderWindow::setGamma(float gamma) {
-	Uint16 ramp[256 * 3] = {0};
+	uint16_t ramp[256 * 3] = {0};
 
-	this->calculateGammaLookupTable(gamma, ramp);
+	this->calculateGammaLookupTable<float, uint16_t>(gamma, ramp);
 	int err = SDL_SetWindowGammaRamp(this->window, &ramp[256 * 0], &ramp[256 * 1], &ramp[256 * 2]);
-	if (err == -1)
+	if (err == -1) {
 		throw NotSupportedException("Failed to set window gamma {}: {}", gamma, SDL_GetError());
+	}
 }
 
 // VKRenderWindow::~RendererWindow() {}
@@ -110,6 +111,17 @@ void VKRenderWindow::setGamma(float gamma) {
 void VKRenderWindow::getPosition(int *x, int *y) const { SDL_GetWindowPosition(this->window, x, y); }
 
 void VKRenderWindow::getSize(int *width, int *height) const { SDL_GetWindowSize(this->window, width, height); }
+
+int VKRenderWindow::width() const {
+	int width, height;
+	getSize(&width, &height);
+	return width;
+}
+int VKRenderWindow::height() const {
+	int width, height;
+	getSize(&width, &height);
+	return height;
+}
 
 fragcore::Display *VKRenderWindow::getCurrentDisplay() const {
 	int index;

@@ -18,38 +18,35 @@
  */
 #ifndef _FRAG_CORE_RAY_CAST_HIT_H_
 #define _FRAG_CORE_RAY_CAST_HIT_H_ 1
-#include"PhysicInterface.h"
+#include "PhysicInterface.h"
+#include "PhysicObject.h"
 
 namespace fragcore {
 	/**
 	 *	RayCastHit.
 	 */
-	class FVDECLSPEC RayCastHit {
-	public:
-	//TODO add parmaters and methods.
-		inline RayCastHit(){}
-		~RayCastHit(){
+	class FVDECLSPEC RayCastHit : public PhysicObject  {
+	  public:
+		// TODO add parmaters and methods.
+		RayCastHit();
+		virtual ~RayCastHit();
 
-		}
+		// Collider*  collider() const;
 
-		//Collider*  collider() const;
+		// RigidBody*  rigidBody() const;
 
-		//RigidBody*  rigidBody() const;
+		//	VDGameObject*  gameObject() const;
 
-	//	VDGameObject*  gameObject() const;
+		// VDTransform*  transform() const;
 
-		//VDTransform*  transform() const;
+		// Vector3& point() const;
 
-		//Vector3& point() const;
+		// Vector3 &normal() const;
 
-		//Vector3 &normal() const;
+		// float distance() const;
 
-		//float distance() const;
-
-		//PVVector2& barycentric() const;
-	protected:
-		void *hitdata;
+		// PVVector2& barycentric() const;
 	};
-}
+} // namespace fragcore
 
 #endif

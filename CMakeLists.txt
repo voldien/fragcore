@@ -36,10 +36,10 @@ INCLUDE(GNUInstallDirs)
 SET(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin CACHE INTERNAL "" FORCE)
 SET(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib CACHE INTERNAL "" FORCE)
 
-#-----------------------------------------------------------------------------
+#####################################
 # Options
+#####################################
 
-# Build shared/dynamic library option
 OPTION(BUILD_SHARED_LIBS "Build package with shared libraries." ON)
 OPTION(BUILD_WITH_COVERAGE "Enable profiling and coverage report analysis." OFF)
 OPTION(BUILD_WITH_PROFILER "Enable profiling." OFF)
@@ -51,20 +51,9 @@ OPTION(BUILD_OPT_BUILD_PACKAGES "Set to ON to generate CPack configuration files
 OPTION(BUILD_WITH_DEBUG_BOUNDSCHECK "Array/Pointer BoundsChecking, buffer overflow protection. Used in debug only." OFF)
 option(BUILD_INSTALL_RESOURCES "Installs the Resources directory" ON)
 
-
-
 # Debug
 OPTION(WITH_CXX_GUARDEDALLOC "Enable GuardedAlloc for C++ memory allocation tracking (only enable for development)" OFF)
 MARK_AS_ADVANCED(WITH_CXX_GUARDEDALLOC)
-
-IF(NOT BUILD_SHARED_LIBS)
-	SET(CMAKE_EXE_LINKER_FLAGS "-static")
-	MESSAGE(STATUS "Static libraries enabled.")
-	SET(LINK_SEARCH_START_STATIC TRUE)
-ELSE()
-	MESSAGE(STATUS "Shared libraries enabled.")
-ENDIF(NOT BUILD_SHARED_LIBS)
-
 #
 OPTION(BUILD_WITH_TEST "Enable Testing." OFF)
 OPTION(BUILD_WITH_DOCS "Build documentation." OFF)
@@ -77,12 +66,19 @@ OPTION(BUILD_EXTERNAL_RENDERER "Building external renderer libraries" ON)
 OPTION(BUILD_EXTERNAL_AUDIO "Building external audio libraries" ON)
 OPTION(BUILD_EXTERNAL_PHYSIC "Building external physic libraries" ON)
 
-
 IF(FRAGCORE_PROJECT_ROOT)
 	SET(BUILD_MODULES ON)
 	SET(BUILD_WITH_TEST ON)
 	SET(BUILD_WITH_SAMPLES ON)
 ENDIF()
+
+IF(NOT BUILD_SHARED_LIBS)
+	SET(CMAKE_EXE_LINKER_FLAGS "-static")
+	MESSAGE(STATUS "Static libraries enabled.")
+	SET(LINK_SEARCH_START_STATIC TRUE)
+ELSE()
+	MESSAGE(STATUS "Shared libraries enabled.")
+ENDIF(NOT BUILD_SHARED_LIBS)
 
 OPTION(WITH_CPU_SSE              "Enable SIMD instruction if they're detected on the host machine" ON)
 MARK_AS_ADVANCED(WITH_CPU_SSE)
@@ -90,7 +86,7 @@ MARK_AS_ADVANCED(WITH_CPU_SSE)
 # LLVM
 OPTION(WITH_LLVM                    "Use LLVM" OFF)
 IF(APPLE)
-	OPTION(LLVM_STATIC                  "Link with LLVM static libraries" ON) # we prefer static llvm build on Apple, dyn build possible though
+	OPTION(LLVM_STATIC                  "Link with LLVM static libraries" ON)
 ELSE()
 	OPTION(LLVM_STATIC                  "Link with LLVM static libraries" OFF)
 ENDIF()
@@ -101,19 +97,19 @@ OPTION(WITH_MEM_JEMALLOC   "Enable malloc replacement (http://www.canonware.com/
 MARK_AS_ADVANCED(WITH_MEM_JEMALLOC)
 
 IF(MSVC)
-  OPTION( BUILD_INSTALL_PDB
-	"Install MSVC debug files."
-	ON
-  )
-  IF(NOT (MSVC_VERSION LESS 1900))
-	# Multibyte character set is deprecated since at least MSVC2015 (possibly earlier)
-	ADD_DEFINITIONS( -DUNICODE -D_UNICODE )
-  ENDIF()
+	OPTION( BUILD_INSTALL_PDB
+		"Install MSVC debug files."
+		ON
+	)
+	IF(NOT (MSVC_VERSION LESS 1900))
+		# Multibyte character set is deprecated since at least MSVC2015 (possibly earlier)
+		ADD_DEFINITIONS( -DUNICODE -D_UNICODE )
+  	ENDIF()
 ENDIF()
 
 # Set version of the project.
 SET(FRAGCORE_VERSION_MAJOR 0)
-SET(FRAGCORE_VERSION_MINOR 11)
+SET(FRAGCORE_VERSION_MINOR 12)
 SET(FRAGCORE_VERSION_REVISION 0)
 SET(FRAGCORE_VERSION_STATE a)
 SET(FRAGCORE_VERSION ${FRAGCORE_VERSION_MAJOR}.${FRAGCORE_VERSION_MINOR}${FRAGCORE_VERSION_STATE}${FRAGCORE_VERSION_REVISION} )
@@ -121,7 +117,6 @@ SET(FRAGCORE_PROJECT_VERSION "${FRAGCORE_VERSION}")
 
 # Set predefined macro for version.
 ADD_DEFINITIONS(-DFRAGCORE_VERSION="${FRAGCORE_VERSION}")
-
 
 #############################################
 #  Extract git hash and branch information.
@@ -187,7 +182,7 @@ SET(CMAKE_CXX_EXTENSIONS OFF)
 #################################
 ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/extern)
 IF(NOT TARGET cxxexcept)
-INCLUDE(exceptcxx)
+	INCLUDE(exceptcxx)
 ENDIF()
 
 
@@ -276,7 +271,9 @@ ENDIF()
 
 IF(WITH_CPU_SSE)
 	INCLUDE(FindSSE)
-	#TEST_SSE_SUPPORT(COMPILER_SSE_FLAG COMPILER_SSE2_FLAG)
+	IF(FOUND_FindSEE)
+		TEST_SSE_SUPPORT(COMPILER_SSE_FLAG COMPILER_SSE2_FLAG)
+	ENDIF()
 ELSE()
 	MESSAGE(STATUS "SSE and SSE2 optimizations are DISABLED!")
 	SET(COMPILER_SSE_FLAG)
@@ -291,7 +288,7 @@ ENDIF()
 
 #
 IF (IOS)
-		IF (CMAKE_BUILD_TYPE STREQUAL "Debug")
+	IF (CMAKE_BUILD_TYPE STREQUAL "Debug")
 		SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fembed-bitcode -Og")
 		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fembed-bitcode -Og")
 	ELSE()
@@ -315,8 +312,9 @@ FIND_PACKAGE(ZLIB QUIET)
 FIND_PACKAGE(Backtrace QUIET)
 FIND_PACKAGE(PkgConfig QUIET)
 FIND_PACKAGE(OpenSSL QUIET)
-#TODO relocate to the compute plugin.
-#FIND_PACKAGE(CUDA QUIET)
+FIND_PACKAGE(JeMalloc QUIET)
+FIND_PACKAGE(LLVM QUIET)
+FIND_PACKAGE(LZO QUIET)
 
 IF( UNIX )
 	SET( FRAGCORE_LIB_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR})
@@ -351,27 +349,32 @@ ENDIF()
 #################################
 IF(ANDROID)
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/platforms/android)
-ELSEIF(UNIX)
-	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/platforms/unix)
 ENDIF()
 
+IF(UNIX)
+	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/platforms/unix)
+ENDIF()
 
 ##########################################################
 #	Seperate Modules, based on the core library.
 ##########################################################
 IF(BUILD_MODULES)
 
-	#
+	# Image Loader
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/imageloader/)
+
+	# Windows
+	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/window)
+	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/window/sdl)
+	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/window/glfw3)
 
 	# Rendering interfaces.
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/renderer/)
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/renderer/opengl/)
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/renderer/directx/)
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/renderer/vulkan/)
-	#TODO changed to a compute base class and module extension.
-	#ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/frag-core/src/renderer/opencl/)
-
+	# OpenCL 
+	#ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/renderer/opencl/)
 
 	# Build FragCore Audio modules
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/audio)
@@ -382,6 +385,7 @@ IF(BUILD_MODULES)
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/physic/)
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/physic/bullet/)
 	#ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/physic/physx/)
+	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/physic/rpc/)
 
 
 	# File watcher.
@@ -399,9 +403,7 @@ IF(BUILD_MODULES)
 	# Video playback.
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/videoplayback)
 
-	# Windows
-	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/window/sdl)
-	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/window/glfw3)
+
 
 ENDIF(BUILD_MODULES)
 

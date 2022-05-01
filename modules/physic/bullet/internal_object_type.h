@@ -16,8 +16,8 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef _INTERNAL_OBJECT_TYPE_H_
-#define _INTERNAL_OBJECT_TYPE_H_ 1
+#ifndef _FRAG_CORE_PHYSIC_BULLET_INTERNAL_OBJECT_TYPE_H_
+#define _FRAG_CORE_PHYSIC_BULLET_INTERNAL_OBJECT_TYPE_H_ 1
 
 #include <bullet/BulletCollision/CollisionShapes/btHeightfieldTerrainShape.h>
 #include <bullet/BulletDynamics/Character/btKinematicCharacterController.h>
@@ -29,17 +29,7 @@
 #include <bullet/BulletSoftBody/btSoftRigidDynamicsWorld.h>
 
 namespace fragcore {
-	typedef struct engine_physic_core_t {
-		btBroadphaseInterface *broadphase;
-		btDefaultCollisionConfiguration *collisionConfiguration;
-		btCollisionDispatcher *dispatcher;
-		btSequentialImpulseConstraintSolver *solver;
-		btSoftRigidDynamicsWorld *dynamicsWorld;
-		btSoftBodyWorldInfo softBodyWorldInfo;
-		btIDebugDraw *drawDebugger;
-		//	std::vector<btKinematicCharacterController*> characterControllers;
-		bool debug;
-	} PhysicCore;
+
 } // namespace fragcore
 
 #endif

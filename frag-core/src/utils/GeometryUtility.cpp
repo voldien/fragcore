@@ -1,16 +1,15 @@
 #include "Core/Math.h"
 #include "Utils/GeometryUtil.h"
-#include <polypartition.h>
 
 using namespace fragcore;
 
 std::vector<Triangle> GeometryUtility::createPolygon(const std::vector<Vector3> &points) {
-	TPPLPoly poly;
-	poly.Init(points.size());
-	for (int i = 0; i < points.size(); i++) {
-		poly[i] = {points[i].x(), points[i].y(), 0};
-	}
-	return {};
+	// TPPLPoly poly;
+	// poly.Init(points.size());
+	// for (int i = 0; i < points.size(); i++) {
+	// 	poly[i] = {points[i].x(), points[i].y(), 0};
+	// }
+	// return {};
 }
 
 bool GeometryUtility::isConvex(std::vector<Vector3> &polygon) {
@@ -21,7 +20,7 @@ bool GeometryUtility::isConvex(std::vector<Vector3> &polygon) {
 	Vector3 v;
 	Vector3 u;
 	int res = 0;
-	for (int i = 0; i < polygon.size(); i++) {
+	for (size_t i = 0; i < polygon.size(); i++) {
 		p = polygon[i];
 		Vector3 tmp = polygon[(i + 1) % polygon.size()];
 		v = Vector3::Zero();

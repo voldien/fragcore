@@ -22,7 +22,7 @@
 #include <GL/glew.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_video.h>
-#include <Window/WindowManager.h>
+#include <SDLWindowManager.h>
 #include <fmt/core.h>
 #include <vector>
 using namespace fragcore;
@@ -379,6 +379,7 @@ Texture *GLRendererInterface::createTexture(TextureDesc *desc) {
 	target = getTextureTarget((TextureDesc::Target)desc->target, desc->nrSamples);
 
 	// TODO add release logic for when failing.
+	resetErrorFlag();
 
 	/*	*/
 	glGenTextures(1, &texture);
@@ -411,8 +412,9 @@ Texture *GLRendererInterface::createTexture(TextureDesc *desc) {
 						getFilterMode(desc->sampler.magFilter, SamplerDesc::FilterMode::NoFilterMode));
 		checkError();
 
-		const GLint compareMode =
-			desc->sampler.compareMode == SamplerDesc::eNoCompare ? GL_NONE : GL_COMPARE_REF_TO_TEXTURE;
+		const GLint compareMode = desc->sampler.compareMode == (int)SamplerDesc::CompareFunc::eNoCompare
+									  ? GL_NONE
+									  : GL_COMPARE_REF_TO_TEXTURE;
 		glTexParameteri(target, GL_TEXTURE_COMPARE_MODE, compareMode);
 		checkError();
 
@@ -441,14 +443,18 @@ Texture *GLRendererInterface::createTexture(TextureDesc *desc) {
 		glTexParameteri(target, GL_TEXTURE_BASE_LEVEL, 0);
 		checkError();
 
-		if (desc->Swizzler != TextureDesc::eNoSwizzle)
+		if (desc->Swizzler != TextureDesc::Swizzle::eNoSwizzle) {
 			glTexParameteri(target, GL_TEXTURE_SWIZZLE_R, getTextureSwizzle(desc->Swizzler));
-		if (desc->Swizzleg != TextureDesc::eNoSwizzle)
+		}
+		if (desc->Swizzleg != TextureDesc::Swizzle::eNoSwizzle) {
 			glTexParameteri(target, GL_TEXTURE_SWIZZLE_G, getTextureSwizzle(desc->Swizzleg));
-		if (desc->Swizzleb != TextureDesc::eNoSwizzle)
+		}
+		if (desc->Swizzleb != TextureDesc::Swizzle::eNoSwizzle) {
 			glTexParameteri(target, GL_TEXTURE_SWIZZLE_B, getTextureSwizzle(desc->Swizzleb));
-		if (desc->Swizzlea != TextureDesc::eNoSwizzle)
+		}
+		if (desc->Swizzlea != TextureDesc::Swizzle::eNoSwizzle) {
 			glTexParameteri(target, GL_TEXTURE_SWIZZLE_A, getTextureSwizzle(desc->Swizzlea));
+		}
 
 		// if (errorStatus != GL_NO_ERROR)
 		// 	throw RuntimeException(::fmt::format("Error when setting texture parameters - {}, {}", errorStatus,
@@ -613,7 +619,8 @@ Sampler *GLRendererInterface::createSampler(SamplerDesc *desc) {
 						getFilterMode(desc->magFilter, SamplerDesc::FilterMode::NoFilterMode));
 	checkError();
 
-	const GLint compareMode = desc->compareMode == SamplerDesc::eNoCompare ? GL_NONE : GL_COMPARE_REF_TO_TEXTURE;
+	const GLint compareMode =
+		desc->compareMode == (int)SamplerDesc::CompareFunc::eNoCompare ? GL_NONE : GL_COMPARE_REF_TO_TEXTURE;
 	glSamplerParameteri(sampler, GL_TEXTURE_COMPARE_MODE, compareMode);
 	if (desc->compareMode)
 		glSamplerParameteri(sampler, GL_TEXTURE_COMPARE_FUNC, getCompareMode(desc->compareFunc));
@@ -672,7 +679,7 @@ static void checkShaderError(int shader) {
 	}
 }
 
-RenderPipeline *GLRendererInterface::createPipeline(const ProgramPipelineDesc *desc) {
+RenderPipeline *GLRendererInterface::createRenderPipeline(const RenderPipelineDesc *desc) {
 	unsigned int pipeline;
 
 	GLRenderPipeline *programPipeline = new GLRenderPipeline();
@@ -735,7 +742,7 @@ RenderPipeline *GLRendererInterface::createPipeline(const ProgramPipelineDesc *d
 	return programPipeline;
 }
 
-void GLRendererInterface::deletePipeline(RenderPipeline *obj) {
+void GLRendererInterface::deleteRenderPipeline(RenderPipeline *obj) {
 
 	// if (glIsProgramPipeline(obj->program))
 	// 	glDeleteProgramPipelines(1, &obj->program);
@@ -788,7 +795,7 @@ Shader *GLRendererInterface::createShader(ShaderDesc *desc) {
 	// 	if (desc->Compute.numcompute > 0 || desc->Compute.size > 0 || desc->Compute.type !=
 	// ShaderCodeType::eNoShaderType) { 		if (desc->Compute.language & supportedLanguage) { 			if
 	// (desc->Compute.type
-	// == ShaderCodeType::eSourceCode) { 				compute = glCreateShader(GL_COMPUTE_SHADER);
+	// == ShaderCodeType::SourceCode) { 				compute = glCreateShader(GL_COMPUTE_SHADER);
 	// glShaderSourceARB(compute, desc->Compute.numcompute, desc->Compute.computeSource, nullptr);
 	// glCompileShaderARB(compute); 				checkShaderError(compute);
 	// 			}
@@ -807,7 +814,7 @@ Shader *GLRendererInterface::createShader(ShaderDesc *desc) {
 
 	// 	if (desc->vertex.numvert > 0 || desc->vertex.size > 0 || desc->vertex.type != ShaderCodeType::eNoShaderType) {
 	// 		if (desc->vertex.language & supportedLanguage) {
-	// 			if (desc->vertex.type == ShaderCodeType::eSourceCode) {
+	// 			if (desc->vertex.type == ShaderCodeType::SourceCode) {
 	// 				ver = glCreateShader(GL_VERTEX_SHADER_ARB);
 	// 				glShaderSourceARB(ver, desc->vertex.numvert, desc->vertex.vertexsource, nullptr);
 	// 				glCompileShaderARB(ver);
@@ -828,7 +835,7 @@ Shader *GLRendererInterface::createShader(ShaderDesc *desc) {
 
 	// 	if (desc->fragment.numfrag > 0 || desc->fragment.size > 0 || desc->fragment.type != eNoShaderType) {
 	// 		if (desc->fragment.language & supportedLanguage) {
-	// 			if (desc->fragment.type == eSourceCode) {
+	// 			if (desc->fragment.type == SourceCode) {
 	// 				fra = glCreateShader(GL_FRAGMENT_SHADER_ARB);
 	// 				glShaderSourceARB(fra, desc->fragment.numfrag, desc->fragment.fragmentsource, nullptr);
 	// 				glCompileShaderARB(fra);
@@ -849,7 +856,7 @@ Shader *GLRendererInterface::createShader(ShaderDesc *desc) {
 
 	// 	if (desc->geometry.numgeo > 0 || desc->geometry.size > 0 || desc->geometry.type != eNoShaderType) {
 	// 		if (desc->geometry.language & supportedLanguage) {
-	// 			if (desc->geometry.type == ShaderCodeType::eSourceCode) {
+	// 			if (desc->geometry.type == ShaderCodeType::SourceCode) {
 	// 				geo = glCreateShader(GL_GEOMETRY_SHADER_ARB);
 	// 				glShaderSourceARB(geo, desc->geometry.numgeo, desc->geometry.geometrysource, nullptr);
 	// 				glCompileShaderARB(geo);
@@ -974,6 +981,9 @@ Buffer *GLRendererInterface::createBuffer(BufferDesc *desc) {
 
 	// TODO add for checking if target is supported.
 
+	/*	Reset error flags to prevent previous call to throw error.	*/
+	fragcore::resetErrorFlag();
+
 	// TODO improve the extension usage.
 	/*	Create buffer object.	*/
 	if (glGenBuffersARB) {
@@ -1049,9 +1059,9 @@ void GLRendererInterface::deleteBuffer(Buffer *object) {
 Geometry *GLRendererInterface::createGeometry(GeometryDesc *desc) {
 
 	/*  Validate the argument.  */
-	if (desc->primitive &
-		~(GeometryDesc::ePoint | GeometryDesc::eLines | GeometryDesc::eTriangles | GeometryDesc::eTriangleStrips))
-		throw std::invalid_argument("Invalid primitive");
+	// if (desc->primitive & ~(GeometryDesc::Primitive::ePoint | GeometryDesc::Primitive::eLines |
+	// 						GeometryDesc::Primitive::eTriangles | GeometryDesc::Primitive::eTriangleStrips))
+	// 	throw std::invalid_argument("Invalid primitive");
 	// GL_TRIANGLES_ADJACENCY
 	// GL_PATCHES
 
@@ -1160,6 +1170,9 @@ FrameBuffer *GLRendererInterface::createFrameBuffer(FrameBufferDesc *desc) {
 
 	memcpy(&glfraobj->desc, desc, sizeof(FrameBufferDesc));
 
+	/*	Reset error flags to prevent previous call to throw error.	*/
+	fragcore::resetErrorFlag();
+
 	/*  */
 	glGenFramebuffers(1, &glfraobj->framebuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, glfraobj->framebuffer);
@@ -1219,8 +1232,8 @@ FrameBuffer *GLRendererInterface::createFrameBuffer(FrameBufferDesc *desc) {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	// Add debug marker information.
-	if (addMarkerLabel) {
-		addMarkerLabel(GL_FRAMEBUFFER, glfraobj->framebuffer, &desc->marker);
+	if (desc->marker) {
+		addMarkerLabel(GL_FRAMEBUFFER, glfraobj->framebuffer, desc->marker);
 	}
 
 	/*  */
@@ -1248,6 +1261,9 @@ QueryObject *GLRendererInterface::createQuery(QueryDesc *desc) {
 
 	QueryObject *queryObject;
 	GLuint query[8];
+
+	/*	Reset error flags to prevent previous call to throw error.	*/
+	fragcore::resetErrorFlag();
 
 	// TODO determine if index is supported or not
 	glGenQueries(8, &query[0]);
@@ -1364,11 +1380,11 @@ void GLRendererInterface::drawInstance(Geometry *geometry, unsigned int num) {
 	GLGeometryObject *glgeo = nullptr; // static_cast<GLGeometryObject *>(geometry);
 	assert(geometry && num > 0);
 
-	// glgeo = (GLGeometryObject *) geometry->pdata;
-
+	/*	Reset error flags to prevent previous call to throw error.	*/
+	fragcore::resetErrorFlag();
 	/*  */
 	glBindVertexArray(glgeo->vao);
-	resetErrorFlag();
+
 	if (glgeo->desc.numIndices > 0) {
 		glDrawElementsInstancedARB(glgeo->mode, glgeo->desc.numIndices, glgeo->indicesType, nullptr, num);
 	} else {
@@ -2036,6 +2052,9 @@ void GLRendererInterface::execute(CommandList *list) {
 			glClearColor(clearColor->clear.x(), clearColor->clear.y(), clearColor->clear.z(), clearColor->clear.w());
 			glClear(GL_COLOR_BUFFER_BIT);
 			if (glClearNamedFramebufferfv) {
+
+			} else if (glClearNamedFramebufferfv) {
+			} else {
 			}
 			// glClearNamedFramebufferfv(fraobj->framebuffer, GL_COLOR, GL_COLOR_ATTACHMENT0 + index, (GLfloat *)color);
 			/* code */
@@ -2045,19 +2064,23 @@ void GLRendererInterface::execute(CommandList *list) {
 			glClear(clearImage->mask);
 		} break;
 		case GLCommandBufferCmd::Dispatch: {
+			const GLCommandDispatch *dispatchCommand = base->as<const GLCommandDispatch>();
 			if (glDispatchCompute) {
-				glDispatchCompute(1, 1, 1);
+				glDispatchCompute(dispatchCommand->x, dispatchCommand->y, dispatchCommand->z);
 			}
 		} break;
 		case GLCommandBufferCmd::DispatchIndirect: {
+			const GLCommandDispatchIndirect *dispatchIndirectCommand = base->as<const GLCommandDispatchIndirect>();
+			dispatchIndirectCommand->buffer->bind();
 			if (glDispatchComputeIndirect) {
 				glDispatchComputeIndirect(0);
 			}
 		} break;
 		case GLCommandBufferCmd::PushGroupMarker: {
-			// glPushDebugGroup();
-
+			const GLPushGroupMarkerCommand *glPushGroupMarker = base->as<const GLPushGroupMarkerCommand>();
 			if (glPushDebugGroup) {
+				glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, 0, glPushGroupMarker->name.size(),
+								 glPushGroupMarker->name.data());
 			}
 		} break;
 		case GLCommandBufferCmd::PopGroupMarker: {

@@ -22,10 +22,10 @@
 #include "RenderObject.h"
 #include <Core/Ref.h>
 #include <Core/SmartReference.h>
-#include <Def.h>
+#include <Display.h>
+#include <FragDef.h>
 #include <Prerequisites.h>
-#include <Window/Display.h>
-#include <Window/Window.h>
+#include <Window.h>
 
 namespace fragcore {
 	/**

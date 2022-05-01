@@ -21,7 +21,7 @@
 #include "../Shader.h"
 #include "ShaderUtil.h"
 #include <Core/Ref.h>
-#include <Def.h>
+#include <FragDef.h>
 #include <map>
 #include <string>
 #include <vector>

@@ -32,6 +32,14 @@ void SDLWindow::setTitle(const std::string &title) { SDL_SetWindowTitle(window, 
 
 std::string SDLWindow::getTitle() const { return SDL_GetWindowTitle(window); }
 
+// TODO change the type to image.
+void SDLWindow::setIcon(void *) {}
+//		virtual void setIcon(Image& image) = 0;
+
+void *SDLWindow::getIcon() const {}
+// virtual Image getIcon() const = 0;
+//		virtual Image* setIcon(Image* image) = 0;
+
 void SDLWindow::setPosition(int x, int y) noexcept { SDL_SetWindowPosition(this->window, x, y); }
 
 void SDLWindow::setSize(int width, int height) noexcept { SDL_SetWindowSize(this->window, width, height); }
@@ -59,21 +67,22 @@ void SDLWindow::setFullScreen(bool fullscreen) {
 	else
 		SDL_SetWindowFullscreen(this->window, 0);
 }
+void SDLWindow::setFullScreen(fragcore::Display &display) {}
 
 bool SDLWindow::isFullScreen() const { return false; }
 
 void SDLWindow::setBordered(bool bordered) { SDL_SetWindowBordered(this->window, (SDL_bool)bordered); }
 
-// int SDLWindow::width() const {
-// 	int w, h;
-// 	getSize(&w, &h);
-// 	return w;
-// }
-// int SDLWindow::height() const {
-// 	int w, h;
-// 	getSize(&w, &h);
-// 	return h;
-// }
+int SDLWindow::width() const {
+	int w, h;
+	getSize(&w, &h);
+	return w;
+}
+int SDLWindow::height() const {
+	int w, h;
+	getSize(&w, &h);
+	return h;
+}
 
 float SDLWindow::getGamma() const { return 0; }
 
@@ -92,6 +101,8 @@ void SDLWindow::restore() { SDL_RestoreWindow(this->window); }
 void SDLWindow::maximize() { SDL_MaximizeWindow(this->window); }
 
 void SDLWindow::minimize() { SDL_MinimizeWindow(this->window); }
+
+fragcore::Display *SDLWindow::getCurrentDisplay() const { return nullptr; }
 
 intptr_t SDLWindow::getNativePtr() const {
 	return (intptr_t)this->window;

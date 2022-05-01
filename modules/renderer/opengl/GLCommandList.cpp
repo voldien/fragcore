@@ -15,7 +15,13 @@ void GLCommandList::end() {}
 
 void GLCommandList::copyTexture(const Texture *src, Texture *dst) {}
 
-void GLCommandList::bindPipeline(RenderPipeline *p) {}
+void GLCommandList::bindPipeline(RenderPipeline *p) {
+	
+}
+ void GLCommandList::bindComputePipeline(RenderPipeline *pipeline) {
+
+ }
+
 void GLCommandList::bindFramebuffer(Ref<FrameBuffer> &framebuffer) {
 	GLBindFrameBufferCommand *_command =
 		(GLBindFrameBufferCommand *)this->stackAlloc.alloc(GLCommandBase::getCommandSize<GLBindFrameBufferCommand>());

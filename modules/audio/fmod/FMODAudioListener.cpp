@@ -5,7 +5,7 @@
 #include <malloc.h>
 #include <Scene/VDTransform.h>
 #include <vl/Quaternion.h>
-#include <VDDef.h>
+#include <VDFragDef.h>
 #include <VDSimpleType.h>
 #include <cstring>
 

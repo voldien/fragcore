@@ -19,7 +19,7 @@
 #ifndef _FRAG_CORE_OPENAL_AUDIOINTERFACE_H_
 #define _FRAG_CORE_OPENAL_AUDIOINTERFACE_H_ 1
 #include "../AudioInterface.h"
-//TODO rename
+// TODO rename
 #include "internal_object_type.h"
 
 namespace fragcore {
@@ -33,7 +33,7 @@ namespace fragcore {
 		// virtual void initAllocate(InitAllocateTableInfo *table);
 
 	  public:
-		OpenALAudioInterface(IConfig *config);
+		OpenALAudioInterface(IConfig *config = nullptr);
 		virtual ~OpenALAudioInterface();
 
 		virtual void OnInitialization();
@@ -110,7 +110,7 @@ namespace fragcore {
 		// PoolAllocator<ALSource> source;
 		// PoolAllocator<ALReverb> reverbs;
 		// PoolAllocator<ALReverb> capture;
-		AudioPhysicalDevice *current_device;
+		AudioPhysicalDevice current_device;
 		Ref<IScheduler> scheduler;
 	};
 

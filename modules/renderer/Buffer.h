@@ -18,7 +18,7 @@
  */
 #ifndef _FV_BUFFER_H_
 #define _FV_BUFFER_H_ 1
-#include "Def.h"
+#include "FragDef.h"
 #include "RenderObject.h"
 #include "RenderPrerequisites.h"
 

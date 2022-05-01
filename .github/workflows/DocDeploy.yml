@@ -1,4 +1,4 @@
-name: FragCore Deployment
+name: Fragcore Website Deployment
 on:
   push:
     branches:
@@ -36,8 +36,8 @@ jobs:
         # Execute the build.  You can specify a specific target with "--target <NAME>"
         run: cmake --build . --target Doxygen
 
-      #- name: Deploy
-      #  uses: JamesIves/github-pages-deploy-action@4.1.7
-      #  with:
-      #    branch: gh-pages # The branch the action should deploy to.
-      #    folder: ${{runner.workspace}}/build/docs/html # The folder the action should deploy.
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@4.1.7
+        with:
+          branch: gh-pages # The branch the action should deploy to.
+          folder: ${{runner.workspace}}/build/doxygen/html # The folder the action should deploy.

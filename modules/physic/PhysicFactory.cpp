@@ -12,7 +12,6 @@ typedef PhysicInterface *(*pcreateInternalPhysicInterface)(IConfig *overrideOpti
 
 /*	TODO update with the new naming.	*/
 const char *bulletlibpath = "libfragcore-pbu.so";  /*	Default bullet library.	*/
-const char *bullet3libpath = "libfragcore-pbu.so"; /*	Bullet library with OpenCL support.	*/
 const char *physxlibpath = "libfragcore-pbu.so";   /*	Nvidia's physic library. ( Not supported ) */
 
 PhysicInterface *PhysicFactory::createPhysic(PhysicAPI api, IConfig *overrideOption) {
@@ -53,7 +52,7 @@ PhysicInterface *PhysicFactory::createPhysic(const char *libpath, IConfig *confi
 	//		apirequest.offset = sizeof(apirequest);
 	//		apirequest.type = -1;
 	//		apirequest.pathlen = strlen(libpath);
-	//		//connection->sendPacket(ProtocolCommand::ePhysicAPIRequest, &apirequest, sizeof(PacketPhysicAPIRequest));
+	//		//connection->sendPacket(RPCProtocolCommand::ePhysicAPIRequest, &apirequest, sizeof(PacketPhysicAPIRequest));
 	//		connection->send(libpath, apirequest.pathlen);
 	//
 	//	}else
@@ -76,8 +75,6 @@ const char *PhysicFactory::getInterfaceLibraryPath(PhysicAPI api) {
 	switch (api) {
 	case PhysicFactory::PhysicAPI::Bullet:
 		return bulletlibpath;
-	case PhysicFactory::PhysicAPI::Bullet3:
-		return bullet3libpath;
 	case PhysicFactory::PhysicAPI::PhysX:
 		return physxlibpath;
 	default:

@@ -18,7 +18,7 @@
  */
 #ifndef _FRAG_CORE_CURVE_UTIL_H_
 #define _FRAG_CORE_CURVE_UTIL_H_ 1
-#include "../Def.h"
+#include "../FragDef.h"
 
 namespace fragcore {
 	class FVDECLSPEC CurveUtil {

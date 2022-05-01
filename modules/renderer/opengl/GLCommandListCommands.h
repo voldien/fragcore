@@ -19,7 +19,7 @@
 #ifndef _FRAG_CORE_GL_COMMAND_LIST_COMMANDS_H_
 #define _FRAG_CORE_GL_COMMAND_LIST_COMMANDS_H_ 1
 #include "Core/Color.h"
-#include <Def.h>
+#include <FragDef.h>
 
 namespace fragcore {
 	enum class GLCommandBufferCmd {
@@ -41,7 +41,8 @@ namespace fragcore {
 		DrawIndirect,
 		DrawIndirectIndices,
 		DepthBounds,
-		BindPipeline,
+		BindGraphicPipeline,
+		BindComputePipeline,
 
 		LineWidth,
 		DepthBias,
@@ -78,6 +79,7 @@ namespace fragcore {
 		uint index;
 		Color clear;
 	};
+
 	class FVDECLSPEC GLCommandClear : public GLCommandBase {
 	  public:
 		GLCommandClear() : GLCommandBase(GLCommandBufferCmd::ClearImage) {}
@@ -99,13 +101,18 @@ namespace fragcore {
 	};
 
 	class FVDECLSPEC GLPushGroupMarkerCommand : public GLCommandBase {
+	  public:
 		GLPushGroupMarkerCommand(const char *name) : GLCommandBase(GLCommandBufferCmd::PushGroupMarker), name(name) {}
 		std::string name;
 	};
+
 	class FVDECLSPEC GLPopGroupMarkerCommand : public GLCommandBase {
+	  public:
 		GLPopGroupMarkerCommand() : GLCommandBase(GLCommandBufferCmd::PopGroupMarker) {}
 	};
+
 	class FVDECLSPEC GLInsertGroupMarkerCommand : public GLCommandBase {
+	  public:
 		GLInsertGroupMarkerCommand(const char *name)
 			: GLCommandBase(GLCommandBufferCmd::InsertGroupMarker), name(name) {}
 		std::string name;
@@ -119,6 +126,7 @@ namespace fragcore {
 		unsigned int x, y;
 		unsigned int width, height;
 	};
+
 	class FVDECLSPEC GLScissorPortCommand : public GLCommandBase {
 	  public:
 		GLScissorPortCommand(int index, int x, int y, int width, int height)
@@ -127,12 +135,14 @@ namespace fragcore {
 		unsigned int width, height;
 		unsigned int x, y;
 	};
+
 	class FVDECLSPEC GLBindFrameBufferCommand : public GLCommandBase {
 	  public:
 		GLBindFrameBufferCommand(FrameBuffer *framebuffer)
 			: GLCommandBase(GLCommandBufferCmd::BindFrameBuffer), framebuffer(framebuffer) {}
 		FrameBuffer *framebuffer;
 	};
+
 	class FVDECLSPEC GLCopyTextureCommand : public GLCommandBase {
 	  public:
 		// TODO add src and dest size
@@ -183,17 +193,22 @@ namespace fragcore {
 		uint32_t nrVertices;
 		uint32_t nrInstances;
 	};
+
 	class FVDECLSPEC GLDrawIndexIndirectCommand : public GLCommandBase {
 	  public:
 		// TODO add the rest of require param
 		GLDrawIndexIndirectCommand(const Ref<Buffer> &buffer, const Ref<Buffer> &indices, uint32_t nrVertices,
 								   uint32_t nrInstances)
-			: GLCommandBase(GLCommandBufferCmd::DrawIndirectIndices) {}
+			: GLCommandBase(GLCommandBufferCmd::DrawIndirectIndices) {
+			this->nrVertices = nrVertices;
+			this->nrInstances = nrInstances;
+		}
 
 		Buffer *src;
 		uint32_t nrVertices;
 		uint32_t nrInstances;
 	};
+
 	class FVDECLSPEC GLDepthBoundsCommand : public GLCommandBase {
 	  public:
 		// TODO add the rest of require param
@@ -203,6 +218,26 @@ namespace fragcore {
 		}
 
 		float min, max;
+	};
+
+	class FVDECLSPEC GLGraphicPipelineCommand : public GLCommandBase {
+	  public:
+		// TODO add the rest of require param
+		GLGraphicPipelineCommand(RenderPipeline *pipeline) : GLCommandBase(GLCommandBufferCmd::BindGraphicPipeline) {
+			this->pipeline = pipeline;
+		}
+
+		RenderPipeline *pipeline;
+	};
+
+	class FVDECLSPEC GLComputePipelineCommand : public GLCommandBase {
+	  public:
+		// TODO add the rest of require param
+		GLComputePipelineCommand(RenderPipeline *pipeline) : GLCommandBase(GLCommandBufferCmd::BindComputePipeline) {
+			this->pipeline = pipeline;
+		}
+
+		RenderPipeline *pipeline;
 	};
 
 } // namespace fragcore

@@ -16,8 +16,8 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef _FRAG_CORE_WINDOW_MANAGER_H_
-#define _FRAG_CORE_WINDOW_MANAGER_H_ 1
+#ifndef _FRAG_CORE_SDL_WINDOW_MANAGER_H_
+#define _FRAG_CORE_SDL_WINDOW_MANAGER_H_ 1
 #include "../WindowManager.h"
 
 namespace fragcore {
@@ -27,17 +27,18 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC SDLWindowManager : public WindowManager {
 	  public:
-		Display *getDisplay(unsigned int index) noexcept(true);
-		unsigned int getNumDisplays() const noexcept;
-		Display *getAssociatedDisplay(Ref<Window> &window);
-		Window *createWindow(const std::string &title);
-		Display *primaryDisplay() const noexcept;
-		// Window* createWindow()
+		virtual Display *getDisplay(unsigned int index) override;
+		virtual unsigned int getNumDisplays() const noexcept override;
+		virtual Display *getAssociatedDisplay(Ref<Window> &window) override;
+		virtual Window *createWindow(const std::string &title) override;
+		virtual Display *primaryDisplay() const noexcept override;
+
 		/*	TODO get the event.	*/
 
 		// protected:
-		void onCreation(Ref<WindowManager> &instance) override;
-		WindowManager();
+
+		SDLWindowManager();
+		virtual ~SDLWindowManager();
 	};
 } // namespace fragcore
 

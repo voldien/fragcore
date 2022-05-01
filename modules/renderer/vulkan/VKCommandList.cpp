@@ -59,6 +59,13 @@ void VKCommandList::copyTexture(const Texture *src, Texture *dst) {}
 void VKCommandList::bindPipeline(RenderPipeline *pipeline) {
 	VKPipelineObject *vkpipeline = (VKPipelineObject *)pipeline->getObject();
 	vkCmdBindPipeline(cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipeline->graphicsPipeline);
+	vkCmdBindDescriptorSets(cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipeline->pipelineLayout, 0, 1,
+							&vkpipeline->descriptorSet, 0, nullptr);
+}
+
+void VKCommandList::bindComputePipeline(RenderPipeline *pipeline) {
+	VKPipelineObject *vkpipeline = (VKPipelineObject *)pipeline->getObject();
+	vkCmdBindPipeline(cmdBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, vkpipeline->graphicsPipeline);
 	vkCmdBindDescriptorSets(cmdBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, vkpipeline->pipelineLayout, 0, 1,
 							&vkpipeline->descriptorSet, 0, nullptr);
 }
@@ -113,7 +120,7 @@ void VKCommandList::clearDepth(float depth) {
 
 void VKCommandList::clearColorTarget(uint index, const Color &color) {}
 
-void VKCommandList::setDepthBounds(float min, float max) {}
+void VKCommandList::setDepthBounds(float min, float max) { vkCmdSetDepthBounds(cmdBuffer, min, max); }
 
 void VKCommandList::dispatch(uint groupCountX, uint groupCountY, uint groupCountZ) {
 
@@ -142,6 +149,7 @@ void VKCommandList::dispatch(uint groupCountX, uint groupCountY, uint groupCount
 	// 					 0,
 	// 					 nullptr);
 }
+
 void VKCommandList::dispatchIndirect(Buffer *buffer, u_int64_t offset) {
 	VKBuffer *vkBuffer = (VKBuffer *)buffer;
 	vkCmdDispatchIndirect(cmdBuffer, vkBuffer->getBuffer(), offset);
@@ -155,6 +163,7 @@ void VKCommandList::pushDebugGroup(const char *name) {
 
 	pvkCmdDebugMarkerBeginEXT(cmdBuffer, &markerinfo);
 }
+
 void VKCommandList::popDebugGroup() { pvkCmdDebugMarkerEndEXT(cmdBuffer); }
 
 void VKCommandList::insertDebugMarker(const char *name) {

@@ -34,7 +34,7 @@ namespace fragcore {
 	class FVDECLSPEC GLRenderWindow : public RendererWindow {
 	  public:
 		GLRenderWindow(Ref<GLRendererInterface> &renderer);
-		~GLRenderWindow();
+		virtual ~GLRenderWindow();
 
 		void close() override;
 
@@ -62,35 +62,39 @@ namespace fragcore {
 
 		virtual void getSize(int *width, int *height) const override;
 
-		void resizable(bool resizable) override;
+		virtual int width() const override;
+		virtual int height() const override;
 
-		void setIcon(void *pVoid) override;
+		virtual void resizable(bool resizable) override;
 
-		void *getIcon() const override;
+		virtual void setIcon(void *pVoid) override;
+
+		virtual void *getIcon() const override;
 
 		virtual Display *getCurrentDisplay() const override;
 
-		void setFullScreen(bool fullscreen) override;
+		virtual void setFullScreen(bool fullscreen) override;
 		virtual void setFullScreen(Display &display) override;
 
-		bool isFullScreen() const override;
+		virtual bool isFullScreen() const override;
 
-		void setBordered(bool bordered) override;
+		virtual void setBordered(bool bordered) override;
 
-		void setMinimumSize(int width, int height) override;
+		virtual void setMinimumSize(int width, int height) override;
 		virtual void getMinimumSize(int *width, int *height) override;
-		void setMaximumSize(int width, int height) override;
+		virtual void setMaximumSize(int width, int height) override;
 		virtual void getMaximumSize(int *width, int *height) override;
 
 		virtual float getGamma() const override;
 
-		virtual void setGamma(float) override;
+		virtual void setGamma(float gamma) override;
 
 		virtual void setTitle(const std::string &title) override;
 		virtual std::string getTitle() const override;
 
 		intptr_t getNativePtr() const override;
 
+	  public:
 		virtual ViewPort *getViewPort() override;
 		virtual FrameBuffer *getDefaultFrameBuffer() override;
 
@@ -102,6 +106,7 @@ namespace fragcore {
 		virtual void createSwapChain();
 
 	  private:
+		// TODO add proxy window.
 		SDL_Window *window;
 		Ref<GLRendererInterface> renderer;
 		Ref<GLFrameBuffer> defaultFrameBuffer;

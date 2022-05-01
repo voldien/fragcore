@@ -93,7 +93,7 @@ void ShaderUtil::loadProgramFromMem(const ShaderObject *vshader, const ShaderObj
 		desc.vertex.size = vshader->size;
 		desc.vertex.type = vshader->type;
 		desc.vertex.numvert = nsources;
-		if (vshader->type == eSourceCode)
+		if (vshader->type == SourceCode)
 			desc.vertex.vertexsource = (const char **)&vsources;
 		else {
 			desc.vertex.vertexBinary = (const char *)vshader->buf;
@@ -127,7 +127,7 @@ void ShaderUtil::loadProgramFromMem(const ShaderObject *vshader, const ShaderObj
 		desc.fragment.size = fshader->size;
 		desc.fragment.type = fshader->type;
 		desc.fragment.numfrag = nsources;
-		if (fshader->type == eSourceCode)
+		if (fshader->type == SourceCode)
 			desc.fragment.fragmentsource = (const char **)&fsources;
 		else {
 			desc.fragment.fragmentBinary = (const char *)fshader->buf;
@@ -161,7 +161,7 @@ void ShaderUtil::loadProgramFromMem(const ShaderObject *vshader, const ShaderObj
 		desc.geometry.size = gshader->size;
 		desc.geometry.type = gshader->type;
 		desc.geometry.numgeo = nsources;
-		if (gshader->type == eSourceCode)
+		if (gshader->type == SourceCode)
 			desc.geometry.geometrysource = (const char **)&gsources;
 		else {
 			desc.geometry.geometryBinary = (const char *)gshader->buf;
@@ -195,7 +195,7 @@ void ShaderUtil::loadProgramFromMem(const ShaderObject *vshader, const ShaderObj
 		desc.Compute.size = compute->size;
 		desc.Compute.type = compute->type;
 		desc.Compute.numcompute = nsources;
-		if (fshader->type == eSourceCode)
+		if (fshader->type == SourceCode)
 			desc.Compute.computeSource = (const char **)&csources;
 		else {
 			desc.Compute.computeBinary = (const char *)compute->buf;
@@ -263,7 +263,7 @@ void ShaderUtil::loadProgramFromMem(const ShaderObject *vshader, const ShaderObj
 void ShaderUtil::loadProgramPipeline(const ShaderObject *vshader, const ShaderObject *fshader,
 									 const ShaderObject *gshader, const ShaderObject *tcshader,
 									 const ShaderObject *teshader, IRenderer *renderer, RenderPipeline **pshader) {
-	ProgramPipelineDesc pipelineDesc = {};
+	RenderPipelineDesc pipelineDesc = {};
 	RenderPipeline *pipeline;
 
 	// if (vshader) {
@@ -293,7 +293,7 @@ void ShaderUtil::loadProgramPipeline(const ShaderObject *vshader, const ShaderOb
 	// }
 
 	/*	Create pipeline.	*/
-	pipeline = renderer->createPipeline(&pipelineDesc);
+	pipeline = renderer->createRenderPipeline(&pipelineDesc);
 
 	/*	*/
 	// defaultUniformMap(pipeline);
@@ -310,7 +310,7 @@ static void validateShaderArguments(ShaderType type, ShaderLanguage language, Sh
 	if (language & ~(GLSL | SPIRV | HLSL | CLC))
 		throw InvalidArgumentException("None supported shader language by the application - {}",
 									   language); // TODO add enumerator to string for shader language.
-	if (codetype <= ShaderCodeType::eNoShaderType || codetype > ShaderCodeType::eBinary)
+	if (codetype <= ShaderCodeType::NoShaderType || codetype > ShaderCodeType::Binary)
 		throw InvalidArgumentException("None supported shader code format - {}",
 									   codetype); // TODO add enumerator to string for shader language.
 }
@@ -551,7 +551,7 @@ void ShaderUtil::loadComputeProgram(const char *pData, long int nBytes, ShaderLa
 void ShaderUtil::loadComputeShaderSource(ShaderObject *shaderDesc, IRenderer *renderer,
 										 RenderPipeline **programPipeline) {
 	Shader *shader;
-	ProgramPipelineDesc progDes = {};
+	RenderPipelineDesc progDes = {};
 
 	/*  */
 	// loadShader(shaderDesc->buf, shaderDesc->size, eCompute, renderer, shaderDesc->language, shaderDesc->type, &
@@ -559,13 +559,13 @@ void ShaderUtil::loadComputeShaderSource(ShaderObject *shaderDesc, IRenderer *re
 
 	/*  */
 	progDes.c = shader;
-	*programPipeline = renderer->createPipeline(&progDes);
+	*programPipeline = renderer->createRenderPipeline(&progDes);
 }
 
 ShaderCodeType ShaderUtil::getCodeType(const char *filePath) {
 	const char *basename = FileSystem::getBaseName(filePath);
 
-	return ShaderCodeType::eSourceCode;
+	return ShaderCodeType::SourceCode;
 }
 
 ShaderLanguage ShaderUtil::getFileLanguage(const char *filePath) {
@@ -580,7 +580,7 @@ ShaderLanguage ShaderUtil::getFileLanguage(const char *filePath) {
 		return GLSL;
 	if (strcmp(buf, "frag") == 0)
 		return GLSL;
-	if (strcmp(buf, "geo") == 0)
+	if (strcmp(buf, "geom") == 0)
 		return GLSL;
 	if (strcmp(buf, "tesc") == 0)
 		return GLSL;

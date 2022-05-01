@@ -18,9 +18,10 @@
  */
 #ifndef _FRAG_CORE_SDL_WINDOW_H_
 #define _FRAG_CORE_SDL_WINDOW_H_ 1
+#include "../Display.h"
+#include "../Window.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_video.h>
-#include <Window/Window.h>
 #include <string>
 
 namespace fragcore {
@@ -48,11 +49,20 @@ namespace fragcore {
 
 		virtual std::string getTitle() const override;
 
+				// TODO change the type to image.
+		virtual void setIcon(void *) override;
+		//		virtual void setIcon(Image& image) = 0;
+
+		virtual void *getIcon() const override;
+		// virtual Image getIcon() const = 0;
+		//		virtual Image* setIcon(Image* image) = 0;
+
+
 		// virtual int x() const noexcept override;
 		// virtual int y() const noexcept override;
 
-		// virtual int width() const override;
-		// virtual int height() const override;
+		virtual int width() const override;
+		virtual int height() const override;
 
 		virtual void getPosition(int *x, int *y) const override;
 
@@ -65,6 +75,7 @@ namespace fragcore {
 		virtual void resizable(bool resizable) noexcept override;
 
 		virtual void setFullScreen(bool fullscreen) override;
+		virtual void setFullScreen(fragcore::Display &display) override;
 
 		virtual bool isFullScreen() const override;
 
@@ -78,6 +89,8 @@ namespace fragcore {
 		virtual void getMinimumSize(int *width, int *height) override;
 		virtual void setMaximumSize(int width, int height) override;
 		virtual void getMaximumSize(int *width, int *height) override;
+
+		virtual fragcore::Display *getCurrentDisplay() const override;
 
 		virtual intptr_t getNativePtr() const override; /*  Get native window reference object. */
 

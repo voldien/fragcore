@@ -18,7 +18,7 @@
  */
 #ifndef _FRAG_CORE_ZIP_FILE_IO_H_
 #define _FRAG_CORE_ZIP_FILE_IO_H_ 1
-#include "../../Def.h"
+#include "../../FragDef.h"
 #include "../Ref.h"
 #include "IO.h"
 #include "ZipFileSystem.h"

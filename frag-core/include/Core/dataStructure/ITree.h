@@ -18,7 +18,7 @@
  */
 #ifndef _FRAG_CORE_TREE_H_
 #define _FRAG_CORE_TREE_H_ 1
-#include "../../Def.h"
+#include "../../FragDef.h"
 #include "Iterator.h"
 
 namespace fragcore {

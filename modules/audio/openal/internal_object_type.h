@@ -26,10 +26,6 @@
 #include <AL/alut.h>
 #include <AL/efx-presets.h>
 
-#ifdef __cplusplus /*	C++ Environment	*/
-extern "C" {
-#endif
-
 namespace fragcore {
 
 	// typedef struct openal_audio_capture_t {
@@ -50,9 +46,5 @@ namespace fragcore {
 	} while (0)
 
 } // namespace fragcore
-
-#ifdef __cplusplus /*	C++ Environment	*/
-}
-#endif
 
 #endif

@@ -56,9 +56,9 @@ namespace fragcore {
 
 		virtual void deleteSampler(Sampler *texture) override;
 
-		virtual RenderPipeline *createPipeline(const ProgramPipelineDesc *desc) override;
+		virtual RenderPipeline *createRenderPipeline(const RenderPipelineDesc *desc) override;
 
-		virtual void deletePipeline(RenderPipeline *obj) override;
+		virtual void deleteRenderPipeline(RenderPipeline *obj) override;
 
 		virtual Shader *createShader(ShaderDesc *desc) override;
 

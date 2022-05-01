@@ -3,7 +3,7 @@ FILE(GLOB RENDERER_HEADER_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.h)
 
 # Library target.
 ADD_LIBRARY(fragcore-render-interface ${RENDERER_SOURCE_FILES} ${RENDERER_HEADER_FILES})
-TARGET_LINK_LIBRARIES(fragcore-render-interface PUBLIC fragcore fragcore-imageloader)
+TARGET_LINK_LIBRARIES(fragcore-render-interface PUBLIC fragcore fragcore-imageloader fragcore-window)
 TARGET_COMPILE_DEFINITIONS(fragcore-render-interface PRIVATE FRAG_CORE_INTERNAL_IMP=1)
 
 #
@@ -28,6 +28,8 @@ IF(CMAKE_TESTING_ENABLED)
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/test)
 ENDIF()
 
+
+ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/samples)
 
 #####################
 #

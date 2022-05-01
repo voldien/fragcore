@@ -19,7 +19,7 @@
 #ifndef _FRAG_CORE_GEOMETRYUTIL_H_
 #define _FRAG_CORE_GEOMETRYUTIL_H_ 1
 #include "../Core/dataStructure/Triangle.h"
-#include "../Def.h"
+#include "../FragDef.h"
 
 namespace fragcore {
 

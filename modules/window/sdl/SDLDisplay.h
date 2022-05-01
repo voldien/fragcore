@@ -18,7 +18,7 @@
  */
 #ifndef _FRAG_CORE_SDLDISPLAY_H_
 #define _FRAG_CORE_SDLDISPLAY_H_ 1
-#include<Window/Display.h>
+#include "../Display.h"
 
 namespace fragcore {
 
@@ -28,6 +28,7 @@ namespace fragcore {
 	class FVDECLSPEC SDLDisplay : public Display {
 	  public:
 		SDLDisplay(int index);
+		virtual ~SDLDisplay() = default;
 
 		unsigned int x() const override;
 
@@ -44,16 +45,17 @@ namespace fragcore {
 		void getDPI(DPI *dpi) override;
 		void setMode(const Mode &mode) override;
 
-		// fragcore::TextureFormat getFormat() override;
+		DisplayFormat getFormat() override;
 
 	  protected:
-		unsigned int translateFormat(unsigned int format);
+		DisplayFormat translateFormat(unsigned int format);
 
 	  private:
 		unsigned int index;
 
 	  public:
 		static int getNumDisplays();
+		static SDLDisplay getPrimaryDisplay();
 	};
 } // namespace fragcore
 

@@ -18,7 +18,7 @@
  */
 #ifndef _FRAG_CORE_ZIP_FILESYSTEM_H_
 #define _FRAG_CORE_ZIP_FILESYSTEM_H_ 1
-#include "../../Def.h"
+#include "../../FragDef.h"
 #include "../../Prerequisites.h"
 #include "../RefPtr.h"
 #include "IFileSystem.h"

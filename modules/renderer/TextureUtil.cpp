@@ -33,7 +33,7 @@ void TextureUtil::loadTexture(const char *path, IRenderer *renderer, Texture **t
 		desc.compression = TextureDesc::eNoCompression;
 
 		/*  Texture.    */
-		desc.target = TextureDesc::eTexture2D;
+		desc.target = TextureDesc::Target::Texture2D;
 		desc.format = format;
 		desc.pixelFormat = (TextureFormat)format;
 		desc.internalformat = internalformat;
@@ -44,15 +44,15 @@ void TextureUtil::loadTexture(const char *path, IRenderer *renderer, Texture **t
 		desc.srgb = 0;
 
 		/*  sampler.    */
-		desc.sampler.AddressU = SamplerDesc::Repeat;
-		desc.sampler.AddressV = SamplerDesc::Repeat;
-		desc.sampler.AddressW = SamplerDesc::Repeat;
+		desc.sampler.AddressU = SamplerDesc::AddressMode::Repeat;
+		desc.sampler.AddressV = SamplerDesc::AddressMode::Repeat;
+		desc.sampler.AddressW = SamplerDesc::AddressMode::Repeat;
 		desc.sampler.anisotropy = 8.0f;
 		desc.sampler.minFilter = SamplerDesc::FilterMode::Linear;
 		desc.sampler.magFilter = SamplerDesc::FilterMode::Linear;
 		desc.sampler.mipmapFilter = SamplerDesc::FilterMode::Linear;
 
-		desc.marker.markerName = path;
+		//desc.marker.markerName = path;
 
 		*texture = renderer->createTexture(&desc);
 		/*  TODO rename.    */
@@ -223,7 +223,7 @@ void TextureUtil::saveTexture(const char *filepath, IRenderer *renderer, Texture
 	image_format = FreeImage_GetFIFFromFilename(filepath);
 	if (image_format == FIF_UNKNOWN) {
 		texture->unMapTexture();
-		throw InvalidArgumentException("filepath file fmt::format is not supported : {}", filepath);
+		throw InvalidArgumentException("filepath file format is not supported : {}", filepath);
 	}
 
 	// TODO resolve color swizzle issue.
@@ -277,7 +277,7 @@ Texture *TextureUtil::createTexture(IRenderer *renderer, unsigned int width, uns
 	desc.nrSamples = 0;
 
 	/*  Texture.    */
-	desc.target = TextureDesc::eTexture2D;
+	desc.target = TextureDesc::Target::Texture2D;
 	desc.format = TextureDesc::eSingleColor;
 	desc.internalformat = TextureDesc::eRGBA;
 
@@ -288,9 +288,9 @@ Texture *TextureUtil::createTexture(IRenderer *renderer, unsigned int width, uns
 	desc.srgb = 0;
 
 	/*  Sampler.    */
-	desc.sampler.AddressU = SamplerDesc::Repeat;
-	desc.sampler.AddressV = SamplerDesc::Repeat;
-	desc.sampler.AddressW = SamplerDesc::Repeat;
+	desc.sampler.AddressU = SamplerDesc::AddressMode::Repeat;
+	desc.sampler.AddressV = SamplerDesc::AddressMode::Repeat;
+	desc.sampler.AddressW = SamplerDesc::AddressMode::Repeat;
 	desc.sampler.anisotropy = 8.0f;
 	desc.sampler.minFilter = SamplerDesc::FilterMode::Linear;
 	desc.sampler.magFilter = SamplerDesc::FilterMode::Linear;

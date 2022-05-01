@@ -19,7 +19,6 @@ ENDIF()
 # 	# https://github.com/mborgerding/kissfft.git
 # 	# https://github.com/NVIDIAGameWorks/PhysX.git
 
-# 	# https://github.com/jemalloc/jemalloc.git
 # 	# https://github.com/turbulenz/NvTriStrip.git
 # 	# https://github.com/microsoft/ShaderConductor.git
 # 	# https://github.com/AcademySoftwareFoundation/openexr.git

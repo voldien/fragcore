@@ -3,25 +3,13 @@
 #include <GL/glew.h>
 using namespace fragcore;
 
-void GLShader::bind() {
+void GLShader::bind() { glUseProgram(this->program); }
 
-	glUseProgram(this->program);
-}
+int GLShader::getLocation(const char *cparamname) { return glGetUniformLocation(this->program, cparamname); }
 
-int GLShader::getLocation(const char *cparamname) {
+void GLShader::setInt(int location, int value) { glProgramUniform1i(this->program, location, value); }
 
-	return glGetUniformLocation(this->program, cparamname);
-}
-
-void GLShader::setInt(int location, int value) {
-
-	glProgramUniform1i(this->program, location, value);
-}
-
-void GLShader::setFloat(int location, float value) {
-
-	glProgramUniform1f(this->program, location, value);
-}
+void GLShader::setFloat(int location, float value) { glProgramUniform1f(this->program, location, value); }
 
 void GLShader::setFloatv(int location, int n, const float *values) {
 
@@ -89,9 +77,7 @@ void *GLShader::getBinary(long int *size, unsigned int *format) {
 	return pBinary;
 }
 
-void *GLShader::getSource(long int *size) {
-	return nullptr;
-}
+void *GLShader::getSource(long int *size) { return nullptr; }
 
 void GLShader::setName(const std::string &name) {
 

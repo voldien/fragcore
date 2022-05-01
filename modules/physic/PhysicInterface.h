@@ -35,8 +35,8 @@ namespace fragcore {
 		friend class PhysicFactory;
 
 	  public:
-		PhysicInterface(IConfig *config);
-		virtual ~PhysicInterface();
+		PhysicInterface();
+		virtual ~PhysicInterface() = default;
 
 		virtual void OnInitialization();
 		virtual void OnDestruction();

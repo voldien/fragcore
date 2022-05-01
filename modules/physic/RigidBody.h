@@ -20,49 +20,47 @@
 #define _FRAG_CORE_RIGIDBODY_H_ 1
 #include "PhysicObject.h"
 #include "PhysicPrerequisites.h"
-#include <Core/Math.h>
+#include <Core/Math3D.h>
 
 namespace fragcore {
-	/**
-	 *	Rigidbody.
-	 */
+
 	class FVDECLSPEC RigidBody : public PhysicObject {
 		friend class DynamicInterface;
 
 	  private:
-		inline RigidBody() {}
+		inline RigidBody();
 
-		virtual ~RigidBody();
+		virtual ~RigidBody() = 0;
 
 	  public: /*	Public methods.	*/
-		virtual void useGravity(bool use);
-		virtual bool useGravity();
-		virtual float getMass();
-		virtual void setMass(float mass);
+		virtual void useGravity(bool use) = 0;
+		virtual bool useGravity() = 0;
+		virtual float getMass() = 0;
+		virtual void setMass(float mass) = 0;
 
 		// virtual void setInertia(void* pobj);
 
-		virtual Vector3 getPosition();
-		virtual void setPosition(const Vector3 &position);
+		virtual Vector3 getPosition() = 0;
+		virtual void setPosition(const Vector3 &position) = 0;
 
-		virtual Quaternion getOrientation();
-		virtual void setOrientation(const Quaternion &quat);
+		virtual Quaternion getOrientation() = 0;
+		virtual void setOrientation(const Quaternion &quat) = 0;
 
-		virtual Vector3 getScale();
-		virtual void setScale(const Vector3 &scale);
+		virtual Vector3 getScale() = 0;
+		virtual void setScale(const Vector3 &scale) = 0;
 
-		virtual void addForce(const Vector3 &force);
+		virtual void addForce(const Vector3 &force) = 0;
 
 		/**/
-		virtual float getDrag();
-		virtual void setDrag(float drag);
+		virtual float getDrag() = 0;
+		virtual void setDrag(float drag) = 0;
 
-		virtual float getAngularDrag();
-		virtual void setAngularDrag(float angularDrag);
+		virtual float getAngularDrag() = 0;
+		virtual void setAngularDrag(float angularDrag) = 0;
 
-		virtual Vector3 getVelocity();
+		virtual Vector3 getVelocity() = 0;
 
-		intptr_t getNativePtr() const;
+		intptr_t getNativePtr() const = 0;
 	};
 
 } // namespace fragcore

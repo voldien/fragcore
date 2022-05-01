@@ -23,15 +23,15 @@ void addMarkerLabel(unsigned int identifier, unsigned int object, const MarkerDe
 
 unsigned int getWrapMode(SamplerDesc::AddressMode mode) {
 	switch (mode) {
-	case SamplerDesc::Repeat:
+	case SamplerDesc::AddressMode::Repeat:
 		return GL_REPEAT;
-	case SamplerDesc::RepeatMirror:
+	case SamplerDesc::AddressMode::RepeatMirror:
 		return GL_MIRRORED_REPEAT;
-	case SamplerDesc::Clamp:
+	case SamplerDesc::AddressMode::Clamp:
 		return GL_CLAMP_TO_EDGE;
-	case SamplerDesc::ClampBorder:
+	case SamplerDesc::AddressMode::ClampBorder:
 		return GL_CLAMP_TO_BORDER;
-	case SamplerDesc::NoAddressMode:
+	case SamplerDesc::AddressMode::NoAddressMode:
 	default:
 		throw InvalidArgumentException("Invalid address mode.");
 	}
@@ -78,21 +78,21 @@ unsigned int getFilterMode(SamplerDesc::FilterMode mode, SamplerDesc::FilterMode
 
 unsigned int getCompareMode(SamplerDesc::CompareFunc mode) {
 	switch (mode) {
-	case SamplerDesc::lessEqual:
+	case SamplerDesc::CompareFunc::lessEqual:
 		return GL_LEQUAL;
-	case SamplerDesc::greaterEqual:
+	case SamplerDesc::CompareFunc::greaterEqual:
 		return GL_GEQUAL;
-	case SamplerDesc::less:
+	case SamplerDesc::CompareFunc::less:
 		return GL_LESS;
-	case SamplerDesc::greater:
+	case SamplerDesc::CompareFunc::greater:
 		return GL_GREATER;
-	case SamplerDesc::equal:
+	case SamplerDesc::CompareFunc::equal:
 		return GL_EQUAL;
-	case SamplerDesc::notequal:
+	case SamplerDesc::CompareFunc::notequal:
 		return GL_NOTEQUAL;
-	case SamplerDesc::always:
+	case SamplerDesc::CompareFunc::always:
 		return GL_ALWAYS;
-	case SamplerDesc::never:
+	case SamplerDesc::CompareFunc::never:
 		return GL_NEVER;
 	default:
 		throw InvalidArgumentException("Invalid address mode.");
@@ -317,8 +317,10 @@ unsigned int getGraphicFormat(GraphicFormat graphicFormat) {
 											  // component in bits 1..5: and a 1-bit A component in bit 0.
 	case GraphicFormat::A1R5G5B5_UNormPack16: //	A four-component, 16-bit packed unsigned normalized fvformatf that
 											  // has a 1-bi
-		throw InvalidArgumentException("Invalid texture format.");
+	default:
+		break;
 	}
+	throw InvalidArgumentException("Invalid texture format.");
 }
 
 unsigned int getTextureFormat(TextureFormat textureFormat, unsigned int *pixelType) {
@@ -415,6 +417,7 @@ unsigned int getInternalTextureFormat(TextureDesc::Format format, bool sRGB, Tex
 			if (type == TextureDesc::eFloat) {
 				return GL_RGB32F;
 			}
+			break;
 		case TextureDesc::eRGBA:
 			if (type == TextureDesc::eUnsignedByte) {
 				return GL_RGBA8;
@@ -457,7 +460,7 @@ unsigned int getInternalTextureFormat(TextureDesc::Format format, bool sRGB, Tex
 				switch (compression) {
 				case TextureDesc::Compression::eCompression:
 					return GL_COMPRESSED_SRGB_ALPHA;
-				case TextureDesc::eETC2:
+				case TextureDesc::Compression::eETC2:
 					return GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC;
 				}
 			default:
@@ -488,39 +491,39 @@ unsigned int getInternalTextureFormat(TextureDesc::Format format, bool sRGB, Tex
 			case TextureDesc::eRGBA:
 				return GL_SRGB8_ALPHA8;
 			case TextureDesc::eSingleColor:
-				GL_SLUMINANCE8;
+				return GL_SLUMINANCE8;
 			default:
 				break;
 			}
 		}
 	}
-	throw InvalidArgumentException(::fmt::format("Invalid texture fvformatf %d.", format));
+	throw InvalidArgumentException("Invalid texture format {}.", format);
 }
 
 unsigned int getTextureTarget(TextureDesc::Target target, int nrSamples) {
 	switch (target) {
-	case TextureDesc::eTexture1D:
+	case TextureDesc::Target::Texture1D:
 		return GL_TEXTURE_1D;
-	case TextureDesc::eTexture2D:
+	case TextureDesc::Target::Texture2D:
 		if (nrSamples > 0) {
 			return GL_TEXTURE_2D_MULTISAMPLE;
 		} else {
 			return GL_TEXTURE_2D;
 		}
-	case TextureDesc::eTexture3D:
+	case TextureDesc::Target::Texture3D:
 		return GL_TEXTURE_3D;
-	case TextureDesc::eCubeMap:
+	case TextureDesc::Target::CubeMap:
 		return GL_TEXTURE_CUBE_MAP;
-	case TextureDesc::eTexture2DArray:
+	case TextureDesc::Target::Texture2DArray:
 		if (nrSamples > 0) {
 			return GL_TEXTURE_2D_MULTISAMPLE_ARRAY;
 		} else {
 			return GL_TEXTURE_2D_ARRAY;
 		}
-	case TextureDesc::eCubeMapArray:
+	case TextureDesc::Target::CubeMapArray:
 		return GL_TEXTURE_CUBE_MAP_ARRAY;
 	default:
-		throw InvalidArgumentException(fmt::format("Invalid texture target %d.", target));
+		throw InvalidArgumentException("Invalid texture target {}.", target);
 	}
 }
 
@@ -537,23 +540,23 @@ unsigned int getTextureType(TextureDesc::Type type) {
 	case TextureDesc::eUnsigned24_8:
 		return GL_UNSIGNED_INT_24_8;
 	default:
-		throw InvalidArgumentException(fmt::format("Invalid texture type %d.", type));
+		throw InvalidArgumentException("Invalid texture type {}.", type);
 	}
 }
 
 unsigned int getTextureSwizzle(TextureDesc::Swizzle swizzle) {
 	switch (swizzle) {
-	case TextureDesc::eZero:
+	case TextureDesc::Swizzle::eZero:
 		return GL_ZERO;
-	case TextureDesc::eOne:
+	case TextureDesc::Swizzle::eOne:
 		return GL_ONE;
-	case TextureDesc::eRed:
+	case TextureDesc::Swizzle::eRed:
 		return GL_RED;
-	case TextureDesc::eGreen:
+	case TextureDesc::Swizzle::eGreen:
 		return GL_GREEN;
-	case TextureDesc::eBlue:
+	case TextureDesc::Swizzle::eBlue:
 		return GL_BLUE;
-	case TextureDesc::eAlpha:
+	case TextureDesc::Swizzle::eAlpha:
 		return GL_ALPHA;
 	default:
 		throw InvalidArgumentException("");
@@ -583,7 +586,7 @@ unsigned int getBufferType(BufferDesc::BufferType type) {
 	case BufferDesc::eIndirectDispatch:
 		return GL_DISPATCH_INDIRECT_BUFFER;
 	default:
-		throw InvalidArgumentException(fmt::format("Invalid buffer type %d.", type));
+		throw InvalidArgumentException("Invalid buffer type {}.", type);
 	}
 }
 
@@ -617,37 +620,37 @@ unsigned int getBufferHint(BufferDesc::BufferHint hint) {
 		}
 	}
 	assert(0);
-	throw InvalidArgumentException(fmt::format("None matching buffer hint - %d", hint));
+	throw InvalidArgumentException("None matching buffer hint - {}", hint);
 }
 
 unsigned int getPrimitive(GeometryDesc::Primitive primitive) {
 
 	switch (primitive) {
-	case GeometryDesc::ePoint:
+	case GeometryDesc::Primitive::ePoint:
 		return GL_POINTS;
-	case GeometryDesc::eLines:
+	case GeometryDesc::Primitive::eLines:
 		return GL_LINES;
-	case GeometryDesc::eTriangles:
+	case GeometryDesc::Primitive::eTriangles:
 		return GL_TRIANGLES;
-	case GeometryDesc::eTriangleStrips:
+	case GeometryDesc::Primitive::eTriangleStrips:
 		return GL_TRIANGLE_STRIP;
 	default:
-		throw InvalidArgumentException(fmt::format("None matching primitive type - %d.", primitive));
+		throw InvalidArgumentException("None matching primitive type - {}.", primitive);
 	}
 }
 
 unsigned int getAttributeDataType(GeometryDesc::AttributeType type) {
 	switch (type) {
-	case GeometryDesc::eInt:
+	case GeometryDesc::AttributeType::eInt:
 		return GL_INT;
-	case GeometryDesc::eFloat:
+	case GeometryDesc::AttributeType::eFloat:
 		return GL_FLOAT;
-	case GeometryDesc::eDouble:
+	case GeometryDesc::AttributeType::eDouble:
 		return GL_DOUBLE;
-	case GeometryDesc::eHalf:
+	case GeometryDesc::AttributeType::eHalf:
 		return GL_HALF_FLOAT;
 	default:
-		throw InvalidArgumentException(fmt::format("Invalid attribute type- %d.", type));
+		throw InvalidArgumentException("Invalid attribute type- {}.", type);
 	}
 }
 
@@ -678,7 +681,7 @@ unsigned int getState(IRenderer::State state) {
 	case IRenderer::State::SampleAlphaCoverage:
 		return GL_SAMPLE_ALPHA_TO_COVERAGE;
 	default:
-		throw InvalidArgumentException(fmt::format("Invalid state - %d.", (int)state));
+		throw InvalidArgumentException("Invalid state - {}.", (int)state);
 	}
 }
 unsigned int getTextureFilterModeNoMip(Texture::FilterMode format) {

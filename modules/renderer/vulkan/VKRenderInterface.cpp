@@ -8,13 +8,13 @@
 #include "VKRenderWindow.h"
 #include "VKSampler.h"
 #include "VKShader.h"
-#include "Window/WindowManager.h"
 #include "internal_object_type.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_surface.h>
 #include <SDL2/SDL_syswm.h>
 #include <SDL2/SDL_video.h>
 #include <SDL2/SDL_vulkan.h>
+#include <SDLWindowManager.h>
 
 #include <VKHelper.h>
 #include <VKUtil.h>
@@ -49,6 +49,7 @@ VKRenderInterface::VKRenderInterface(IConfig *config) {
 
 	VulkanCore *vulkancore = nullptr;
 	IConfig setupConfig;
+	/*	Default config parameters.	*/
 	if (config == nullptr) {
 		setupConfig.set("debug", true);
 		setupConfig.set("debug-tracer", true);
@@ -61,6 +62,7 @@ VKRenderInterface::VKRenderInterface(IConfig *config) {
 	if (SDL_InitSubSystem(SDL_INIT_VIDEO) != 0) {
 		throw RuntimeException(fmt::format("SDL_InitSubSystem failed, %s.\n", SDL_GetError()));
 	}
+
 	/*  Store reference with the object. */
 	std::unordered_map<const char *, bool> required_instance_extensions = {{VK_KHR_SURFACE_EXTENSION_NAME, true},
 																		   {"VK_KHR_xlib_surface", true}};
@@ -72,95 +74,6 @@ VKRenderInterface::VKRenderInterface(IConfig *config) {
 	std::vector<std::shared_ptr<PhysicalDevice>> devices = core->createPhysicalDevices();
 	this->device = std::make_shared<VKDevice>(devices, required_device_extensions);
 
-	// /*  */
-	// VkPhysicalDeviceFeatures supportedFeatures;
-	// vkGetPhysicalDeviceFeatures(vulkancore->gpu, &supportedFeatures);
-	// /*  Fetch memory properties.   */
-	// vkGetPhysicalDeviceMemoryProperties(vulkancore->gpu, &vulkancore->memProperties);
-
-	// /*  Select queue family.    */
-	// /*  TODO improve queue selection.   */
-	// vkGetPhysicalDeviceQueueFamilyProperties(vulkancore->gpu, &vulkancore->queue_count, nullptr);
-
-	// vulkancore->queue_props =
-	// 	(VkQueueFamilyProperties *)malloc(sizeof(VkQueueFamilyProperties) * vulkancore->queue_count);
-	// vkGetPhysicalDeviceQueueFamilyProperties(vulkancore->gpu, &vulkancore->queue_count, vulkancore->queue_props);
-	// assert(vulkancore->queue_count >= 1);
-
-	// VkPhysicalDeviceFeatures features;
-	// vkGetPhysicalDeviceFeatures(vulkancore->gpu, &features);
-
-	// /*  Select queue with graphic.  */ // TODO add queue for compute and etc.
-	// uint32_t graphicsQueueNodeIndex = UINT32_MAX;
-	// for (uint32_t i = 0; i < vulkancore->queue_count; i++) {
-	// 	if ((vulkancore->queue_props[i].queueFlags & VK_QUEUE_GRAPHICS_BIT) != 0) {
-	// 		if (graphicsQueueNodeIndex == UINT32_MAX)
-	// 			graphicsQueueNodeIndex = i;
-	// 	}
-	// }
-	// vulkancore->graphics_queue_node_index = graphicsQueueNodeIndex;
-
-	// VkPhysicalDeviceShaderDrawParameterFeatures deviceShaderDrawParametersFeatures = {
-	// 	.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_DRAW_PARAMETER_FEATURES,
-	// 	.pNext = nullptr,
-	// 	.shaderDrawParameters = VK_TRUE};
-	// VkPhysicalDeviceMultiviewFeatures deviceMultiviewFeatures = {
-	// 	.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MULTIVIEW_FEATURES,
-	// 	.pNext = &deviceShaderDrawParametersFeatures,
-	// 	.multiview = VK_TRUE,
-	// 	.multiviewGeometryShader = VK_TRUE,
-	// 	.multiviewTessellationShader = VK_TRUE};
-	// VkPhysicalDeviceConditionalRenderingFeaturesEXT conditionalRenderingFeaturesExt = {
-	// 	.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_CONDITIONAL_RENDERING_FEATURES_EXT,
-	// 	.pNext = &deviceMultiviewFeatures,
-	// 	.conditionalRendering = VK_TRUE,
-	// 	.inheritedConditionalRendering = VK_TRUE};
-
-	// VkDeviceCreateInfo device = {};
-	// VkPhysicalDeviceFeatures deviceFeatures{};
-	// device.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-	// device.pNext = &conditionalRenderingFeaturesExt;
-	// device.queueCreateInfoCount = 1;
-	// device.pQueueCreateInfos = &queue;
-	// if (vulkancore->enableValidationLayers) {
-	// 	device.enabledLayerCount = vulkancore->enabled_layer_count;
-	// 	device.ppEnabledLayerNames =
-	// 		(const char *const *)((vulkancore->validate) ? vulkancore->device_validation_layers : nullptr);
-	// } else {
-	// 	device.enabledLayerCount = 0;
-	// }
-
-	// /*	Enable group.	*/
-	// if (deviceGroupDeviceCreateInfo.physicalDeviceCount > 1) {
-	// 	deviceShaderDrawParametersFeatures.pNext = &deviceGroupDeviceCreateInfo;
-	// }
-	// device.enabledExtensionCount = deviceExtensions.size();
-	// device.ppEnabledExtensionNames = deviceExtensions.data();
-	// device.pEnabledFeatures = &deviceFeatures;
-
-	// /*  Create device.  */
-	// result = vkCreateDevice(vulkancore->gpu, &device, nullptr, &vulkancore->device);
-	// if (result != VK_SUCCESS)
-	// 	throw RuntimeException(fmt::format("Failed to create logical Device - %d", result));
-
-	// /*  Get all queues.    */
-	// vkGetDeviceQueue(vulkancore->device, vulkancore->graphics_queue_node_index, 0, &vulkancore->queue);
-	// vkGetDeviceQueue(vulkancore->device, vulkancore->graphics_queue_node_index, 0, &vulkancore->presentQueue);
-
-	// /*  Create command pool.    */
-	// VkCommandPoolCreateInfo cmdPoolCreateInfo = {};
-	// cmdPoolCreateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-	// cmdPoolCreateInfo.queueFamilyIndex = vulkancore->graphics_queue_node_index;
-	// cmdPoolCreateInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
-
-	// /*  Create command pool.    */
-	// result = vkCreateCommandPool(vulkancore->device, &cmdPoolCreateInfo, nullptr, &vulkancore->cmd_pool);
-	// if (result != VK_SUCCESS)
-	// 	throw RuntimeException(fmt::format("failed to create command pool %d", result));
-
-	/*  TODO determine which languages are supported.   */
-	//    uint32_t nExtensions;
-	//    result = vkEnumerateDeviceExtensionProperties(vulkancore->device , nullptr, &nExtensions, nullptr);
 	this->languageSupport = SPIRV;
 	this->getCapability(&this->capability);
 }
@@ -264,12 +177,12 @@ Sampler *VKRenderInterface::createSampler(SamplerDesc *desc) {
 
 void VKRenderInterface::deleteSampler(Sampler *sampler) {}
 
-RenderPipeline *VKRenderInterface::createPipeline(const ProgramPipelineDesc *desc) {
+RenderPipeline *VKRenderInterface::createRenderPipeline(const RenderPipelineDesc *desc) {
 
 	//    desc.
 }
 
-void VKRenderInterface::deletePipeline(RenderPipeline *obj) {}
+void VKRenderInterface::deleteRenderPipeline(RenderPipeline *obj) {}
 
 Shader *VKRenderInterface::createShader(ShaderDesc *desc) {
 

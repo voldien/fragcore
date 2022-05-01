@@ -23,7 +23,7 @@
 #include <Core/Module.h>
 #include <Core/Ref.h>
 #include <Core/SmartReference.h>
-#include <Def.h>
+#include <FragDef.h>
 
 namespace fragcore {
 	/**

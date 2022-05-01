@@ -18,7 +18,7 @@
  */
 #ifndef _FRAG_CORE_SMART_REFERENCE_H_
 #define _FRAG_CORE_SMART_REFERENCE_H_ 1
-#include "../Def.h"
+#include "../FragDef.h"
 #include "AtomicRefCount.h"
 #include "NoCopyable.h"
 #include "Object.h"

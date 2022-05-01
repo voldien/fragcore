@@ -19,7 +19,7 @@
 #ifndef _FRAG_CORE_GLFW_WINDOW_H_
 #define _FRAG_CORE_GLFW_WINDOW_H_ 1
 #include <GLFW/glfw3.h>
-#include <Window/Window.h>
+#include "../Window.h"
 #include <string>
 
 namespace fragcore {

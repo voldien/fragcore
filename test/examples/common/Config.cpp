@@ -142,8 +142,8 @@ void Config::setDefaultOption(void) {
 	/*TODO determine if to relocate.    */
 	/*	Engine default configuration.	*/
 	IConfig &renderingConfig = this->getSubConfig("render-driver");
-	renderingConfig.set("extensions", "");
-	renderingConfig.set("layers", "");
+	renderingConfig.set<std::string>("extensions", "");
+	renderingConfig.set<std::string>("layers", "");
 	// OpenGL configuration.
 	renderingConfig.set("opengl", -1);
 	renderingConfig.set("core", 1);
@@ -159,7 +159,7 @@ void Config::setDefaultOption(void) {
 	renderingConfig.set("debug-tracer", true);
 	renderingConfig.set("anti-aliasing-samples", 0);
 	renderingConfig.set("anti-aliasing", false);
-	renderingConfig.set("version", "auto"); // TODO check if a better name is better.
+	renderingConfig.set<std::string>("version", "auto"); // TODO check if a better name is better.
 
 	/*  Global main window settings.    */
 	IConfig &renderWindowSetting = this->getSubConfig("render-window-settings");
@@ -214,39 +214,6 @@ void Config::setDefaultOption(void) {
 	sceneConfig.set("free-rotation", true);
 	sceneConfig.set("free-rotation-speed", 3.14f / 10.0f);
 	sceneConfig.set("default-focus", true);
-
-	/*  */
-	IConfig &resourceConfig = this->getSubConfig("resource-settings");
-	/*	Resources default configuration.	*/
-	resourceConfig.set("shaddir", "/usr/share/fragview");
-	resourceConfig.set("settings", "");
-	resourceConfig.set("dump-configuration", "fragview.xml");
-	resourceConfig.set("save-configuration", false);
-	resourceConfig.set("fragview-internal-shaders-files", "fragview-internal-shaders.zip");
-	resourceConfig.set("cache-directory", ".");
-
-	IConfig &sandboxConfig = this->getSubConfig("sandbox");
-	/*  Assets import.  */
-	// sandboxConfig.set("texture0", 0);
-	// sandboxConfig.set("shader0", 0);
-	// sandboxConfig.set("compression", false);
-	/*  Variables.  */
-	sandboxConfig.set("num_textures", 0);
-	sandboxConfig.set("num_shaders", 0);
-	sandboxConfig.set("num_compute", 0);
-	sandboxConfig.set("num_program_shaders", 0);
-
-	/*  sandbox rendering settings. */
-	IConfig &renderSandboxSettingsConfig = this->getSubConfig("render-sandbox-graphic-settings");
-
-	/*	Rendering default configuration.	*/
-	renderSandboxSettingsConfig.set("anti-aliasing-samples", 0);
-	renderSandboxSettingsConfig.set("anti-aliasing", false);
-	renderSandboxSettingsConfig.set("texture-quality", 4);
-	renderSandboxSettingsConfig.set("resolution-scale", 1.0f);
-	renderSandboxSettingsConfig.set("coverage", 0);
-
-	IConfig &sceneAsset = this->getSubConfig("scene-asset");
 }
 
 void Config::parseGetOpt(int argc, const char **argv) {

@@ -18,7 +18,7 @@
  */
 #ifndef _FRAG_CORE_DISJOINT_SET_H_
 #define _FRAG_CORE_DISJOINT_SET_H_ 1
-#include "../../Def.h"
+#include "../../FragDef.h"
 #include "Iterator.h"
 
 namespace fragcore {

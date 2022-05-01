@@ -29,21 +29,12 @@ namespace fragcore {
 	class FVDECLSPEC Constraints {
 		friend class DynamicInterface;
 
-	  private:
-		inline Constraints() {}
-
-		virtual ~Constraints();
+	  public:
+		Constraints() = default;
+		virtual ~Constraints() = default;
 
 	  public:
-		/**
-		 *
-		 * @param r1
-		 * @param r2
-		 */
-		inline void attachRigidbody(RigidBody *r1, RigidBody *r2) {}
-
-	  protected:
-		virtual void attachRigidbody(void *pobj, RigidBody *r1, RigidBody *r2);
+		virtual void attachRigidbody(RigidBody *r1, RigidBody *r2) = 0;
 	};
 } // namespace fragcore
 #endif

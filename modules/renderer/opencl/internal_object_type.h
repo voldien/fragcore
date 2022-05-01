@@ -18,11 +18,10 @@
  */
 #ifndef _FRAGCORE_INTERNAL_OPENCL_OBJECT_TYPE_H_
 #define _FRAGCORE_INTERNAL_OPENCL_OBJECT_TYPE_H_ 1
-#include "Renderer/Buffer.h"
-#include "Renderer/IRenderer.h"
-#include "Renderer/RenderDesc.h"
+#include "../Buffer.h"
+#include "../IRenderer.h"
+#include "../RenderDesc.h"
 #include <CL/opencl.h>
-#include <SDL2/SDL.h>
 
 namespace fragcore {
 

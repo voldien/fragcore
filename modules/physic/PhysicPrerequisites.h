@@ -18,7 +18,6 @@
  */
 #ifndef _FRAG_CORE_PHYSIC_PREREQUISITES_H_
 #define _FRAG_CORE_PHYSIC_PREREQUISITES_H_ 1
-#include <Prerequisites.h>
 
 namespace fragcore {
 	class PhysicInterface;

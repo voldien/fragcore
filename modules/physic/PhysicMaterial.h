@@ -18,7 +18,13 @@
  */
 #ifndef _FRAG_CORE_PHYSIC_MATERIAL_H_
 #define _FRAG_CORE_PHYSIC_MATERIAL_H_ 1
+#include "PhysicObject.h"
 
-namespace fragcore {}
+namespace fragcore {
+
+	class FVDECLSPEC PhysicMaterial {
+	  public:
+	};
+} // namespace fragcore
 
 #endif

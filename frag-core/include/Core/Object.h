@@ -18,7 +18,7 @@
  */
 #ifndef _FRAG_CORE_OBJECT_H_
 #define _FRAG_CORE_OBJECT_H_ 1
-#include "../Def.h"
+#include "../FragDef.h"
 #include "UIDObject.h"
 #include <string>
 
@@ -30,10 +30,10 @@ namespace fragcore {
 	class FVDECLSPEC Object : public UIDObject {
 	  public:
 		Object() = default;
-		Object(const std::string &name) { setName(name); }
+		Object(const std::string &_name) { this->setName(_name); }
 		Object(Object &&other) { this->name = std::exchange(other.name, nullptr); }
 		Object &operator=(Object &&other) {
-			this->setName(std::move(other.name));
+			this->name = std::exchange(other.name, nullptr);
 			return *this;
 		}
 		~Object() = default;
@@ -41,7 +41,7 @@ namespace fragcore {
 		virtual void setName(const std::string &name) { this->name.assign(name); }
 
 		virtual void setName(std::string &&name) { this->name = std::move(name); }
-		virtual void setName(const char *name) { this->name.assign(name); }
+		virtual void setName(const char *c_name) { this->name = c_name; }
 
 		virtual std::string getName() noexcept { return this->name; }
 
@@ -50,7 +50,6 @@ namespace fragcore {
 	  protected: /*	*/
 		Object &operator=(const Object &object) {
 			this->setName(object.getName());
-			this->name = object.name;
 			return *this;
 		}
 

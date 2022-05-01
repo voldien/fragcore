@@ -18,7 +18,7 @@
  */
 #ifndef _FRAG_CORE_ATOMIC_REF_COUNT_H_
 #define _FRAG_CORE_ATOMIC_REF_COUNT_H_ 1
-#include "../Def.h"
+#include "../FragDef.h"
 #include <atomic>
 
 namespace fragcore {

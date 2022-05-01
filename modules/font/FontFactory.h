@@ -20,7 +20,7 @@
 #define _FRAG_CORE_FONTFACTORY_H_ 1
 #include "Core/IO/IO.h"
 #include "Core/Ref.h"
-#include "Def.h"
+#include "FragDef.h"
 #include "Font.h"
 #include "FontEncoding.h"
 #include "Prerequisites.h"

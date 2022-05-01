@@ -2,10 +2,10 @@
 #include "GLRenderWindow.h"
 #include "internal_object_type.h"
 
-#include "Window/WindowManager.h"
 #include <SDL2/SDL_egl.h>
 #include <SDL2/SDL_opengl.h>
 #include <SDL2/SDL_syswm.h>
+#include <SDLWindowManager.h>
 
 #include <fmt/core.h>
 
@@ -17,12 +17,13 @@ GLRenderWindow::GLRenderWindow(Ref<GLRendererInterface> &renderer) {
 	this->window = SDL_CreateWindow("", 0, 0, 800, 600, SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN | SDL_WINDOW_RESIZABLE);
 
 	/*  */
-	if (window == nullptr)
-		throw RuntimeException(fmt::format("Failed to create window %s for API %s", SDL_GetError(), api));
+	if (window == nullptr) {
+		throw RuntimeException("Failed to create window {} for API {}", SDL_GetError(), api);
+	}
 
 	// TODO make it part of the framebuffer bind
 	if (SDL_GL_MakeCurrent(this->window, renderer->getOpenGLContext()) != 0) {
-		throw RuntimeException(::fmt::format("%s", SDL_GetError()));
+		throw RuntimeException("{}", SDL_GetError());
 	}
 }
 
@@ -52,26 +53,32 @@ void GLRenderWindow::setSize(int width, int height) {
 	SDL_SetWindowSize(this->window, width, height);
 }
 
+int GLRenderWindow::width() const {}
+int GLRenderWindow::height() const {}
+
 void GLRenderWindow::vsync(bool state) { SDL_GL_SetSwapInterval(state); }
 
 bool GLRenderWindow::assertConfigAttributes(const fragcore::IConfig *iConfig) { return false; }
 
 float GLRenderWindow::getGamma() const {
-	ushort ramp[256 * 3];
+	uint16_t ramp[256 * 3];
 	int err = SDL_GetWindowGammaRamp(this->window, &ramp[256 * 0], &ramp[256 * 1], &ramp[256 * 2]);
-	if (err == -1)
+	if (err == -1) {
 		throw NotSupportedException(SDL_GetError());
+	}
 
-	return this->computeGammaExponent(ramp);
+	return this->computeGammaExponent<float, uint16_t>(ramp);
 }
 
 void GLRenderWindow::setGamma(float gamma) {
-	Uint16 ramp[256 * 3] = {0};
+	uint16_t ramp[256 * 3] = {0};
 
-	this->calculateGammaLookupTable(gamma, ramp);
+	this->calculateGammaLookupTable<float, uint16_t>(gamma, ramp);
 	int err = SDL_SetWindowGammaRamp(this->window, &ramp[256 * 0], &ramp[256 * 1], &ramp[256 * 2]);
-	if (err == -1)
-		throw NotSupportedException(fmt::format("Failed to set window gamma %f: %s", gamma, SDL_GetError()));
+
+	if (err == -1) {
+		throw NotSupportedException("Failed to set window gamma {}: {}", gamma, SDL_GetError());
+	}
 }
 
 // GLRenderWindow::~RendererWindow() {}
@@ -91,8 +98,9 @@ void GLRenderWindow::createWindow(int x, int y, int width, int height, const cha
 	window = SDL_CreateWindow("", x, y, width, height, SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN);
 
 	/*  */
-	if (window == nullptr)
-		throw RuntimeException(fmt::format("Failed to create window %s for API %s", SDL_GetError(), api));
+	if (window == nullptr) {
+		throw RuntimeException("Failed to create window {} for API {}", SDL_GetError(), api);
+	}
 	// this->api = api;
 }
 
@@ -180,7 +188,7 @@ intptr_t GLRenderWindow::getNativePtr() const {
 	// #endif
 	//         }
 	//     } else
-	//         throw RuntimeException(fmt::format("%s", SDL_GetError()));
+	//         throw RuntimeException(fmt::format("{}", SDL_GetError()));
 	//     throw NotImplementedException("Window format not implemented");
 }
 

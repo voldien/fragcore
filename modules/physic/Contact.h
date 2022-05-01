@@ -18,44 +18,39 @@
  */
 #ifndef _FRAG_CORE_PHYSIC_CONTACT_H_
 #define _FRAG_CORE_PHYSIC_CONTACT_H_ 1
+#include <Core/Math3D.h>
 
 namespace fragcore {
 
-	// class FVDECLSPEC Contact
-	// {
-	// public:
-	// 	Contact();
-	// 	Contact(const Contact &contact);
+	class FVDECLSPEC Contact {
+	  public:
+		Contact();
+		Contact(const Contact &contact);
+		/**
+		 *	@return
+		 */
+		unsigned int getCount() const;
+		/**
+		 *	@return
+		 */
+		Vector3 impulse(int index) const;
+		/**
+		 *	@return
+		 */
+		Vector3 point(int index) const;
+		/**
+		 *	@return
+		 */
+		Vector3 normal(int index) const;
+		/**
+		 *	@return
+		 */
+		float distance(int index) const;
 
-	// 	/**
-	// 	 *	@return
-	// 	*/
-	// 	unsigned int VDAPIFASTENTRY getCount() const;
-
-	// 	/**
-	// 	 *	@return
-	// 	*/
-	// 	VDVector3 VDAPIENTRY impulse(int index) const;
-
-	// 	/**
-	// 	 *	@return
-	// 	*/
-	// 	VDVector3 VDAPIENTRY point(int index) const;
-
-	// 	/**
-	// 	 *	@return
-	// 	*/
-	// 	VDVector3 VDAPIENTRY normal(int index) const;
-
-	// 	/**
-	// 	 *	@return
-	// 	*/
-	// 	float VDAPIENTRY distance(int index) const;
-
-	// private:				/*	Attributes.	*/
-	// 	void *pcontact;		/*	*/
-	// 	unsigned int count; /*	*/
-	// };
+	  private:				/*	Attributes.	*/
+		void *pcontact;		/*	*/
+		unsigned int count; /*	*/
+	};
 } // namespace fragcore
 
 #endif

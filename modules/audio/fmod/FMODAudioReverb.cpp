@@ -2,7 +2,7 @@
 #include <Core/VDEngineCore.h>
 #include <malloc.h>
 #include <Scene/VDTransform.h>
-#include <VDDef.h>
+#include <VDFragDef.h>
 #include <VDSimpleType.h>
 #include <cstring>
 

@@ -51,7 +51,7 @@ namespace fragcore {
 		/**
 		 *
 		 */
-		enum AddressMode {
+		enum class AddressMode {
 			NoAddressMode,
 			Repeat,		  /*  */
 			RepeatMirror, /*  */
@@ -59,7 +59,7 @@ namespace fragcore {
 			ClampBorder,  /*  */
 		};
 
-		enum CompareFunc {
+		enum class CompareFunc {
 			eNoCompare, /*  */
 			lessEqual,
 			greaterEqual,
@@ -87,20 +87,20 @@ namespace fragcore {
 		CompareFunc compareFunc; /*  */
 
 		/*  Debug attributes.   */
-		MarkerDebug marker; // TODo add support for adding after creating the object.
+		MarkerDebug *marker; // TODo add support for adding after creating the object.
 	} SamplerDesc;
 
 	/**
 	 *	Texture descriptor.
 	 */
 	typedef struct texture_desc_t {
-		enum Target {
-			eTexture1D = 0x1,		/*	1D texture.	*/
-			eTexture2D = 0x2,		/*	2D texture.	*/
-			eTexture3D = 0x4,		/*	3D texture.	*/
-			eCubeMap = 0x8,			/*	Cubemap texture.	*/
-			eCubeMapArray = 0x10,	/*	Cubemap array texture.	*/
-			eTexture2DArray = 0x20, /*  */
+		enum class Target {
+			Texture1D = 0x1,	   /*	1D texture.	*/
+			Texture2D = 0x2,	   /*	2D texture.	*/
+			Texture3D = 0x4,	   /*	3D texture.	*/
+			CubeMap = 0x8,		   /*	Cubemap texture.	*/
+			CubeMapArray = 0x10,   /*	Cubemap array texture.	*/
+			Texture2DArray = 0x20, /*  */
 		};
 
 		/**
@@ -160,7 +160,7 @@ namespace fragcore {
 		Texture *originalTexture; /*  Use viewport.   */
 
 		/*  Target. */
-		unsigned int target; /*	Texture target.	*/
+		Target target;		 /*	Texture target.	*/
 		unsigned int width;	 /*	Texture width in pixels.	*/
 		unsigned int height; /*	Texture height in pixels.	*/
 		unsigned int depth;	 /*	Texture depth in pixels.	*/
@@ -190,7 +190,7 @@ namespace fragcore {
 		// TODO decouple to the graphic fvformatf.
 		unsigned int srgb; /*  Enable gamma correction.    */
 
-		enum Swizzle {
+		enum class Swizzle {
 			eNoSwizzle = 0x0, /*  */
 			eZero = 0x1,	  /*  */
 			eOne = 0x2,		  /*  */
@@ -218,7 +218,7 @@ namespace fragcore {
 		SamplerDesc sampler;	 /*  Texture sampling.   */
 
 		/*  Debug attributes.   */
-		MarkerDebug marker;
+		MarkerDebug *marker;
 	} TextureDesc;
 
 	/**
@@ -234,23 +234,23 @@ namespace fragcore {
 		Shader *c;
 		/*  Debug attributes.   */
 		MarkerDebug marker;
-	} ProgramPipelineDesc;
+	} RenderPipelineDesc;
 
 	// TOOD rename all enum without the e infront.
-	enum ShaderType {
+	enum class ShaderType {
 		eUnknownShader,
-		eVertex,  /*  */
-		eFrag,	  /*  */
-		eGeom,	  /*  */
-		eTesseC,  /*  */
-		eTesseE,  /*  */
-		eCompute, /*  */
+		Vertex,  /*  */
+		Frag,	  /*  */
+		Geom,	  /*  */
+		TesseC,  /*  */
+		TesseE,  /*  */
+		Compute, /*  */
 	};
 
-	enum ShaderCodeType {
-		eNoShaderType, /*  Undefined.	*/
-		eSourceCode,   /*  Source code.    */
-		eBinary,	   /*  Binary code.    */
+	enum class ShaderCodeType {
+		NoShaderType, /*  Undefined.	*/
+		SourceCode,   /*  Source code.    */
+		Binary,	   /*  Binary code.    */
 	};
 
 	/**
@@ -350,7 +350,7 @@ namespace fragcore {
 		bool separatetable; /*	TODO evoluate if supported on all the API.	*/
 
 		/*  Debug attributes.   */
-		MarkerDebug marker;
+		MarkerDebug *marker;
 	} ShaderDesc;
 
 	/**
@@ -397,19 +397,20 @@ namespace fragcore {
 		void *data;		   /*	Buffer host data pointer.	*/
 		BufferHint hint;   /*	Buffer hint of usages.	*/
 		/*  Debug attributes.   */
-		MarkerDebug marker;
+		MarkerDebug *marker;
 	} BufferDesc;
 
 	/**
 	 *	Framebuffer description.
 	 */
 	typedef struct framebuffer_desc_t {
+		unsigned int nrAttachments;
 		Texture *attach[16];   /*	Texture attachment.	*/
 		Texture *depth;		   /*	Depth attachment.	*/
 		Texture *stencil;	   /*	Stencil attachment.	*/
 		Texture *depthstencil; /*	depth stencil attachment.	*/
 		/*  Debug attributes.   */
-		MarkerDebug marker; // TODO add as pointer.
+		MarkerDebug *marker; // TODO add as pointer.
 	} FrameBufferDesc;
 
 	// TODO determine if packing compiler qualifier needed.
@@ -444,7 +445,7 @@ namespace fragcore {
 	 *	Geometry description.
 	 */
 	typedef struct geometry_desc_t {
-		enum Primitive {
+		enum class Primitive {
 			ePoint = 0x1,			 /**/
 			eLines = 0x2,			 /**/
 			eTriangles = 0x3,		 /**/
@@ -452,7 +453,7 @@ namespace fragcore {
 			eTriangleAdjacant = 0x5, /**/
 		};
 
-		enum AttributeType {
+		enum class AttributeType {
 			eFloat = 0x1,  /*	*/
 			eInt = 0x2,	   /*	*/
 			eDouble = 0x3, /*  */
@@ -483,7 +484,7 @@ namespace fragcore {
 		bool autoBound;
 
 		/*  Debug attributes.   */
-		MarkerDebug marker;
+		MarkerDebug *marker;
 	} GeometryDesc;
 
 	/**
@@ -491,12 +492,12 @@ namespace fragcore {
 	 */
 	typedef struct query_desc_t {
 		/*  Debug attributes.   */
-		MarkerDebug marker;
+		MarkerDebug *marker;
 	} QueryDesc;
 
 	typedef struct sync_desc_t {
 		/*  Debug attributes.   */
-		MarkerDebug marker;
+		MarkerDebug *marker;
 	} SyncDesc;
 
 	/**

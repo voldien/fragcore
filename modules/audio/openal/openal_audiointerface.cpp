@@ -36,15 +36,15 @@ OpenALAudioInterface::OpenALAudioInterface(IConfig *config) {
 	if (config == nullptr) {
 		/*	TODO construct default configuration.	*/
 	}
-
 	// AL_SOURCE_TYPE
 	// TODO add support
 	// const char* device = config->get<const char*>("device");
 
 	const ALchar *defaultDevice = alcGetString(nullptr, ALC_DEFAULT_DEVICE_SPECIFIER);
-	AudioPhysicalDevice audioPhysicalDevices;
-	audioPhysicalDevices.setName(defaultDevice);
-	setAudioDevice(audioPhysicalDevices);
+	current_device.setName(defaultDevice);
+
+	/*	*/
+	setAudioDevice(current_device);
 
 	/*	Internal.	*/
 	this->scheduler = Ref<IScheduler>(new TaskScheduler(Math::clamp<int>(SystemInfo::getCPUCoreCount(), 1, 2), 48));
@@ -65,6 +65,7 @@ OpenALAudioInterface::~OpenALAudioInterface() {
 
 void OpenALAudioInterface::OnInitialization() {
 
+	// TODO allocate pool.
 	/*	Allocate data.	*/
 	// this->source.resize(32);
 	// this->clips.resize(32);
@@ -78,7 +79,7 @@ AudioClip *OpenALAudioInterface::createAudioClip(AudioClipDesc *desc) {
 
 	std::vector<ALuint> buffers(1);
 
-	alGenBuffers((ALuint)1, &buffers[0]);
+	FAOPAL_VALIDATE(alGenBuffers((ALuint)1, &buffers[0]));
 
 	/*	TODO based on the loading type.	*/
 	if (desc->datamode == AudioDataMode::LoadedInMemory) {
@@ -87,10 +88,7 @@ AudioClip *OpenALAudioInterface::createAudioClip(AudioClipDesc *desc) {
 		void *data = desc->decoder->getData(&size);
 		/*	*/
 		ALenum format = to_al_format(desc->format, desc->samples);
-		alBufferData(buffers[0], format, data, size, desc->sampleRate);
-		int err = alGetError();
-		if (err != ALC_NO_ERROR)
-			throw RuntimeException("Failed load memory to buffer {}", openAlErrorToString(err));
+		FAOPAL_VALIDATE(alBufferData(buffers[0], format, data, size, desc->sampleRate));
 
 		free(data);
 		desc->decoder->deincreemnt();
@@ -103,7 +101,7 @@ AudioClip *OpenALAudioInterface::createAudioClip(AudioClipDesc *desc) {
 
 void OpenALAudioInterface::deleteAudioClip(AudioClip *AudioClip) {
 
-	alDeleteBuffers(1, nullptr);
+	FAOPAL_VALIDATE(alDeleteBuffers(1, nullptr));
 	delete AudioClip;
 }
 
@@ -112,17 +110,17 @@ AudioSource *OpenALAudioInterface::createAudioSource(AudioSourceDesc *desc) {
 
 	// TODO add validation/error check.
 	ALuint source;
-	alGenSources(1, &source);
+	FAOPAL_VALIDATE(alGenSources(1, &source));
 
-	alSourcef(source, AL_PITCH, 1);
+	FAOPAL_VALIDATE(alSourcef(source, AL_PITCH, 1));
 	// check for errors
-	alSourcef(source, AL_GAIN, 1);
+	FAOPAL_VALIDATE(alSourcef(source, AL_GAIN, 1));
 	// check for errors
-	alSource3f(source, AL_POSITION, 0, 0, 0);
+	FAOPAL_VALIDATE(alSource3f(source, AL_POSITION, 0, 0, 0));
 	// check for errors
-	alSource3f(source, AL_VELOCITY, 0, 0, 0);
+	FAOPAL_VALIDATE(alSource3f(source, AL_VELOCITY, 0, 0, 0));
 	// check for errors
-	alSourcei(source, AL_LOOPING, AL_FALSE);
+	FAOPAL_VALIDATE(alSourcei(source, AL_LOOPING, AL_FALSE));
 
 	OpenALAudioSource *audioSource = new OpenALAudioSource(*desc, source);
 
@@ -184,8 +182,10 @@ std::vector<AudioPhysicalDevice> OpenALAudioInterface::getDevices() const {
 	size_t len = 0;
 
 	while (device && *device != '\0' && next && *next != '\0') {
+
 		AudioPhysicalDevice audioPhysicalDevices;
-		audioPhysicalDevices.setName(device);
+		std::string deviceName = std::string(device);
+		audioPhysicalDevices.setName(deviceName);
 		listDevices.push_back(audioPhysicalDevices);
 
 		/*	*/
@@ -205,22 +205,25 @@ void OpenALAudioInterface::setAudioDevice(const AudioPhysicalDevice &device) {
 		ALCdevice *curDevice = alcGetContextsDevice(context);
 
 		// Same device.
-		if (strcmp(alcGetString(curDevice, ALC_DEVICE_SPECIFIER), device.getName().c_str()) == 0)
+		if (strcmp(alcGetString(curDevice, ALC_DEVICE_SPECIFIER), device.getName().c_str()) == 0) {
 			return;
+		}
 
 		// Not same device. continue with selecting audio device.
 	}
 
 	if (alcGetCurrentContext() != nullptr) {
 		/*  */
-		if (!alcCloseDevice(this->device))
+		if (!alcCloseDevice(this->device)) {
 			throw RuntimeException("Failed to open audio device {}", device.getName().c_str());
+		}
 	}
 
 	/*  */
 	this->device = alcOpenDevice(device.getName().c_str());
-	if (!this->device)
+	if (!this->device) {
 		throw RuntimeException("Failed to open audio device {}", device.getName().c_str());
+	}
 
 	if (alcIsExtensionPresent(this->device, ALC_EXT_EFX_NAME)) {
 
@@ -253,12 +256,7 @@ void OpenALAudioInterface::setAudioDevice(const AudioPhysicalDevice &device) {
 
 const char *OpenALAudioInterface::getVersion() const { return FV_STR_VERSION(1, 0, 0); }
 
-const AudioPhysicalDevice &OpenALAudioInterface::getAudioDevice() const {
-	ALCdevice *dv = alcGetContextsDevice(alcGetCurrentContext());
-	AudioPhysicalDevice device = AudioPhysicalDevice();
-	device.setName(alcGetString(dv, ALC_DEVICE_SPECIFIER));
-	return device;
-}
+const AudioPhysicalDevice &OpenALAudioInterface::getAudioDevice() const { return current_device; }
 
 extern "C" OpenALAudioInterface *createInternalAudioInterface(IConfig *config) {
 	return new OpenALAudioInterface(config);

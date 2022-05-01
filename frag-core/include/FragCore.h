@@ -48,8 +48,7 @@
 /*  */
 #include "Core/TaskScheduler/IScheduler.h"
 #include "Core/TaskScheduler/TaskScheduler.h"
-/*  */
-#include "Window/WindowFactory.h"
+
 /*  */
 #include "Core/Network/NetSocket.h"
 

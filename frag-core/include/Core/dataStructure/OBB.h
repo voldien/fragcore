@@ -37,15 +37,13 @@ namespace fragcore {
 			this->setSize(size);
 		}
 
-		OBB(const Vector3 &u, const Vector3 &v, const Vector3 &w, const Vector3 &center, const Vector3 &size){
-
-		}
+		OBB(const Vector3 &u, const Vector3 &v, const Vector3 &w, const Vector3 &center, const Vector3 &size) {}
 
 		/**
 		 * Get U axis.
 		 * @return normalized axis.
 		 */
-		const Vector3 & getU() const { return onb.u(); }
+		const Vector3 &getU() const { return onb.u(); }
 
 		/**
 		 *	Get V axis.
@@ -56,13 +54,13 @@ namespace fragcore {
 		 *
 		 * @return
 		 */
-		const Vector3 & getV() const { return onb.v(); }
+		const Vector3 &getV() const { return onb.v(); }
 
 		/**
 		 * Get W axis.
 		 * @return normalized axis.
 		 */
-		const Vector3 & getW() const { return onb.w(); }
+		const Vector3 &getW() const { return onb.w(); }
 
 		/**
 		 * Set size of box.
@@ -99,22 +97,6 @@ namespace fragcore {
 			this->setSize(obb.getSize());
 			return *this;
 		}
-
-		/**
-		 *
-		 * @param is
-		 * @param t
-		 * @return stream reference.
-		 */
-		friend std::istream &operator>>(std::istream &is, OBB &t) { return is; }
-
-		/**
-		 *
-		 * @param is
-		 * @param t
-		 * @return stream reference.
-		 */
-		friend std::ostream &operator<<(std::ostream &os, const OBB &t) { return os; }
 
 	  private:		  /*	Attributes.	*/
 		ONB onb;	  /*	*/

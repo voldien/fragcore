@@ -18,7 +18,7 @@
  */
 #ifndef _FV_NO_COPYABLE_H_
 #define _FV_NO_COPYABLE_H_ 1
-#include "../Def.h"
+#include "../FragDef.h"
 
 namespace fragcore {
 	/**

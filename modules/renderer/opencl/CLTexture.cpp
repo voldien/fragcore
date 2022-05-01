@@ -1,43 +1,40 @@
-#include "Renderer/IRenderer.h"
-#include "Renderer/Texture.h"
-#include <Renderer/opencl/internal_object_type.h>
+#include "CLTexture.h"
 
 using namespace fragcore;
 
-void Texture::bind(unsigned int index) {}
+void CLTexture::bind(unsigned int index) {}
 
-bool Texture::isValid() {}
+bool CLTexture::isValid() {}
 
-void Texture::setMipLevel(unsigned int level) {}
+void CLTexture::setMipLevel(unsigned int level) {}
 
-void Texture::setFilterMode(FilterMode mode) {}
+void CLTexture::setFilterMode(FilterMode mode) {}
 
-Texture::FilterMode Texture::getFilterMode() {}
+CLTexture::FilterMode CLTexture::getFilterMode() {}
 
-void Texture::setWrapMode(Texture::WrapMode mode) {}
+void CLTexture::setWrapMode(CLTexture::WrapMode mode) {}
 
-Texture::WrapMode Texture::getWrapMode() {}
+CLTexture::WrapMode CLTexture::getWrapMode() {}
 
-void Texture::setAnisotropic(float anisotropic) {}
+void CLTexture::setAnisotropic(float anisotropic) {}
 
-float Texture::getAnisotropic() const {}
+float CLTexture::getAnisotropic() const {}
 
-Texture::Format Texture::getFormat() const { return eR8G8B8; }
+CLTexture::Format CLTexture::getFormat() const { return eR8G8B8; }
 
-unsigned int Texture::width() {}
+unsigned int CLTexture::width() { return 0; }
 
-unsigned int Texture::height() {}
+unsigned int CLTexture::height() { return 0; }
 
-void *Texture::mapTexture(Format format, unsigned int leve) {
-	CLTextureObject *textureObject = (CLTextureObject *)this->pdata;
+void *CLTexture::mapCLTexture(Format format, unsigned int leve) {
 
 	// void* pdata = clEnqueueMapImage()
 }
 
-void Texture::unMapTexture() {}
+void CLTexture::unMapCLTexture() {}
 
-void Texture::setPixels(Texture::Format format, unsigned int level, const void *pixels, unsigned long size) {}
+void CLTexture::setPixels(CLTexture::Format format, unsigned int level, const void *pixels, unsigned long size) {}
 
-void *Texture::getPixels(TextureFormat format, unsigned int level, unsigned long *nBytes) {}
+void *CLTexture::getPixels(CLTextureFormat format, unsigned int level, unsigned long *nBytes) {}
 
-intptr_t Texture::getNativePtr() const { return 0; }
+intptr_t CLTexture::getNativePtr() const { return 0; }

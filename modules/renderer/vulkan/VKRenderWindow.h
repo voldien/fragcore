@@ -62,6 +62,9 @@ namespace fragcore {
 
 		virtual void getSize(int *width, int *height) const override;
 
+		virtual int width() const override;
+		virtual int height() const override;
+
 		void resizable(bool resizable) override;
 
 		void setIcon(void *pVoid) override;

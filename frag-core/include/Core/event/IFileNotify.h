@@ -18,12 +18,11 @@
  */
 #ifndef _FRAG_CORE_IFILE_NOTIFY_H_
 #define _FRAG_CORE_IFILE_NOTIFY_H_ 1
-#include "../../Def.h"
+#include "../../FragDef.h"
 #include "FileChangeEvent.h"
 
 namespace fragcore {
 	// TOOD Determine name if shalla only be INotify
-	// filesystemNotify
 	class FVDECLSPEC IFileNotify : public SmartReference {
 	  public:
 		/**

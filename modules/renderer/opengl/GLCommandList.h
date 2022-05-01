@@ -27,7 +27,7 @@ namespace fragcore {
 	/**
 	 *
 	 */
-	class GLCommandList : public CommandList {
+	class FVDECLSPEC GLCommandList : public CommandList {
 		friend class GLRendererInterface;
 
 	  public:
@@ -40,6 +40,9 @@ namespace fragcore {
 		virtual void copyTexture(const Texture *src, Texture *dst) override;
 
 		virtual void bindPipeline(RenderPipeline *p) override;
+		virtual void bindComputePipeline(RenderPipeline *pipeline) override;
+
+
 		virtual void bindFramebuffer(Ref<FrameBuffer> &framebuffer) override;
 		virtual void setScissor(int x, int y, unsigned int width, unsigned int height) override;
 		virtual void setViewport(int x, int y, unsigned int width, unsigned int height) override;
@@ -58,6 +61,7 @@ namespace fragcore {
 		virtual void insertDebugMarker(const char *name) override;
 
 		virtual void draw(Ref<Buffer> &buffer, uint32_t vertexCount, uint32_t instanceCount) override;
+		// virtual void drawIndexed(Ref<Buffer>& buffer, offset,uint32_t drawCount,uint32_t stride) = 0;
 
 	  private:
 		StackAllocator stackAlloc;

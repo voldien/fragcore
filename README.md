@@ -68,10 +68,11 @@ make install
 In order to compile the program on Linux based machine, the following Debian packages are required.
 
 ```bash
-apt install libyaml-dev libjson-c-dev libxml2-dev libsdl2-dev libglew-dev libvulkan-dev libgl1-mesa-dev opencl-headers libzip-dev libfswatch-dev libfreeimage-dev libavcodec-dev libavfilter-dev libavformat-dev  libassimp-dev libfreetype6-dev  libspdlog-dev
-  sudo apt-get install -y libegl1-mesa-dev libgles2-mesa-dev
-  sudo apt-get install -y libglew-dev libgtest-dev libsdl2-dev libsubunit-dev
-  sudo apt-get install -y libsdl2-dev libglew-dev libvulkan-dev libgl1-mesa-dev opencl-headers libzip-dev libfswatch-dev libfreeimage-dev libfswatch-dev libxml2-dev 
+  sudo apt-get install g++-10 pkg-config libjson-c-dev libxml2-dev libyaml-dev libsdl2-dev libfreeimage-dev libssl-dev
+  sudo apt-get install libsdl2-dev libglew-dev libvulkan-dev libgl1-mesa-dev opencl-headers \
+  libgtest-dev libsubunit-dev libogg-dev libopus-dev libvorbis-dev \
+  libzip-dev libbullet-dev libopenal-dev mesa-common-dev ocl-icd-opencl-dev libnoise-dev libvdpau-dev \
+  libalut-dev libspdlog-dev libbz2-dev libcurl4 libcurl4-gnutls-dev libfmt-dev binutils-dev libeigen3-dev
 ```
 
 ## Testing

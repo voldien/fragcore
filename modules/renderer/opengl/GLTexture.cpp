@@ -30,12 +30,12 @@ void GLTexture::bind(unsigned int index) {
 	/*  Bind sampler if set.    */
 	if (this->sampler) {
 
-		//glBindSampler(index, sample->sampler);
+		// glBindSampler(index, sample->sampler);
 	}
 }
 
 void GLTexture::bindImage(unsigned int index, int level, MapTarget target, Format format) {
-	
+
 	if (glBindImageTexture) {
 
 		GLenum access = getAccess(target);
@@ -46,10 +46,7 @@ void GLTexture::bindImage(unsigned int index, int level, MapTarget target, Forma
 		throw RuntimeException("glBindImageTexture not supported");
 }
 
-bool GLTexture::isValid() {
-	
-	return glIsTexture(this->texture) == GL_TRUE;
-}
+bool GLTexture::isValid() { return glIsTexture(this->texture) == GL_TRUE; }
 
 void GLTexture::setSampler(Sampler *sampler) {
 
@@ -150,7 +147,7 @@ GLTexture::WrapMode GLTexture::getWrapMode() {
 
 	if (wrapR == GL_REPEAT && wrapS == GL_REPEAT && wrapT == GL_REPEAT)
 		return Sampler::WrapMode::eRepeat;
-	if (wrapR == wrapS == wrapT == GL_MIRRORED_REPEAT)
+	if (wrapR == GL_MIRRORED_REPEAT && wrapS == GL_MIRRORED_REPEAT && wrapT == GL_MIRRORED_REPEAT)
 		return Sampler::WrapMode::eMirror;
 	if (wrapR == wrapS == wrapT == GL_CLAMP_TO_EDGE)
 		return Sampler::WrapMode::eClamp;
@@ -252,8 +249,7 @@ void GLTexture::resize(int width, int height, GLTexture::Format format, bool has
 	// this->bind(0);
 
 	// GL_TEXTURE_IMMUTABLE_FORMAT'
-	glTexImage2D(this->target, 0, getImageInternalFormat(format), width, height, 0, GL_RED, GL_UNSIGNED_BYTE,
-				 nullptr);
+	glTexImage2D(this->target, 0, getImageInternalFormat(format), width, height, 0, GL_RED, GL_UNSIGNED_BYTE, nullptr);
 	// glTextureStorage2D(this->texture, 1, getImageInternalFormat(GLTexture::Format::eR8G8B8A8), width,
 	//               height); // TODO add only if mipmaps is used with nullptr pixel object.
 
@@ -314,8 +310,8 @@ void GLTexture::setPixels(Format format, unsigned int level, const void *pixels,
 	// GL_PIXEL_UNPACK_BUFFER
 
 	if (glTextureSubImage2D) {
-		glTextureSubImage2D(this->texture, level, 0, 0, this->desc.width, this->desc.height, gformat,
-							GL_UNSIGNED_BYTE, pixels);
+		glTextureSubImage2D(this->texture, level, 0, 0, this->desc.width, this->desc.height, gformat, GL_UNSIGNED_BYTE,
+							pixels);
 		// Update mipmaps.
 		glGenerateTextureMipmap(this->texture);
 

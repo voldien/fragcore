@@ -18,48 +18,44 @@
  */
 #ifndef _FRAG_CORE_PHYSIC_COLLISION_H_
 #define _FRAG_CORE_PHYSIC_COLLISION_H_ 1
+#include "PhysicObject.h"
 
 namespace fragcore {
-	// class VDDECLSPEC VDCollision
-	// {
-	// public:
-	// 	VDCollision();
-	// 	VDCollision(const VDCollision &collision);
+	class FVDECLSPEC Collision {
+	  public:
+		Collision();
+		Collision(const Collision &collision);
+		virtual ~Collision();
 
-	// 	/**
-	//  *	Get collider object.
-	//  */
-	// 	VDCollider *VDAPIENTRY collider() const;
+		/**
+		 *	Get collider object.
+		 */
+		Collider *collider() const;
 
-	// 	/**
-	//  *	Get relative velocity magnitude.
-	//  */
-	// 	float VDAPIENTRY relativeVelocity() const;
+		/**
+		 *	Get relative velocity magnitude.
+		 */
+		float relativeVelocity() const;
 
-	// 	/**
-	//  *	Get transform object.
-	//  */
-	// 	VDTransform *VDAPIENTRY transform() const;
+		/**
+		 *	Get transform object.
+		 */
+		//VDTransform *transform() const;
 
-	// 	/**
-	//  *	Get gameobject.
-	//  */
-	// 	VDGameObject *VDAPIENTRY gameObject() const;
+		/**
+		 *	Get rigidbodt object.
+		 */
+		RigidBody *rigidBody() const;
 
-	// 	/**
-	//  *	Get rigidbodt object.
-	//  */
-	// 	VDRigidBody *VDAPIENTRY rigidBody() const;
+		/**
+		 *	Get contact.
+		 */
+		Contact contacts() const;
 
-	// 	/**
-	//  *	Get contact.
-	//  */
-	// 	VDContact VDAPIENTRY contacts() const;
-
-	// private: /*	Attributes.	*/
-	// 	void *pair;
-	// 	void *shape;
-	// };
+	  private: /*	Attributes.	*/
+		void *pair;
+		void *shape;
+	};
 } // namespace fragcore
 
 #endif

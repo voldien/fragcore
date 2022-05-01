@@ -52,14 +52,14 @@ namespace fragcore {
 		 * @param desc
 		 * @return
 		 */
-		virtual RenderPipeline *createPipeline(const ProgramPipelineDesc *desc);
+		virtual RenderPipeline *createRenderPipeline(const RenderPipelineDesc *desc);
 
 		/**
 		 *
 		 * @param obj
 		 * @return
 		 */
-		virtual void deletePipeline(RenderPipeline *obj);
+		virtual void deleteRenderPipeline(RenderPipeline *obj);
 
 		/**
 		 *	Create shader.
@@ -131,7 +131,7 @@ namespace fragcore {
 
 		// TODO add viewobject for handling as a object
 		virtual ViewPort *getView(unsigned int i);
-		//TODO relocate to the render pipeline queue 
+		// TODO relocate to the render pipeline queue
 		/**
 		 *
 		 * @param bitflag
