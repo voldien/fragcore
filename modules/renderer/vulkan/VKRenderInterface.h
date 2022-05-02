@@ -174,7 +174,7 @@ namespace fragcore {
 		std::shared_ptr<VulkanCore> core;
 
 		/*	*/
-		//VkInstance inst;
+		// VkInstance inst;
 		VkDebugUtilsMessengerEXT debugMessenger;
 		VkDebugReportCallbackEXT debugReport;
 		/*  Physical device.    */

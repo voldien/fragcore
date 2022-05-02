@@ -6,7 +6,6 @@
 #include <Core/IO/ZipFileSystem.h>
 #include <Core/RefPtr.h>
 #include <FragCore.h>
-#include <Window/Display.h>
 #include <gtest/gtest.h>
 
 #include "Core/IO/GZFileIO.h"

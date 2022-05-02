@@ -22,6 +22,7 @@
 #include "RenderPrerequisites.h"
 #include "ShaderLanguage.h"
 #include <ImageFormat.h>
+#include <stddef.h>
 
 namespace fragcore {
 
@@ -239,18 +240,18 @@ namespace fragcore {
 	// TOOD rename all enum without the e infront.
 	enum class ShaderType {
 		eUnknownShader,
-		Vertex,  /*  */
-		Frag,	  /*  */
-		Geom,	  /*  */
-		TesseC,  /*  */
-		TesseE,  /*  */
+		Vertex,	 /*  */
+		Frag,	 /*  */
+		Geom,	 /*  */
+		TesseC,	 /*  */
+		TesseE,	 /*  */
 		Compute, /*  */
 	};
 
 	enum class ShaderCodeType {
 		NoShaderType, /*  Undefined.	*/
-		SourceCode,   /*  Source code.    */
-		Binary,	   /*  Binary code.    */
+		SourceCode,	  /*  Source code.    */
+		Binary,		  /*  Binary code.    */
 	};
 
 	/**
@@ -393,7 +394,7 @@ namespace fragcore {
 		 *
 		 */
 		unsigned int type; /*	Buffer data type.	*/
-		unsigned int size; /*	Buffer size in bytes.	*/
+		size_t size;	   /*	Buffer size in bytes.	*/
 		void *data;		   /*	Buffer host data pointer.	*/
 		BufferHint hint;   /*	Buffer hint of usages.	*/
 		/*  Debug attributes.   */

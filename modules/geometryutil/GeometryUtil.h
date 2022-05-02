@@ -32,7 +32,7 @@ namespace fragcore {
 
 		// }
 
-		//TODO  Transform
+		// TODO  Transform
 
 		//
 		static std::vector<Triangle> subdivide(const std::vector<Triangle> &points);
@@ -41,6 +41,11 @@ namespace fragcore {
 
 		static bool isConvex(std::vector<Vector3> &points);
 		static bool isConcave(std::vector<Vector3> &points);
+
+	  private:
+		GeometryUtility() = default;
+		GeometryUtility(const GeometryUtility &other) = default;
+		GeometryUtility(GeometryUtility &&other) = default;
 	};
 } // namespace fragcore
 #endif

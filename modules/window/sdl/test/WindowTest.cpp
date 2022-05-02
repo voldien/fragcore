@@ -1,7 +1,5 @@
 
 #include <Core/RefPtr.h>
-#include <Window/Display.h>
-#include <Window/WindowManager.h>
 #include <gtest/gtest.h>
 
 using namespace fragcore;

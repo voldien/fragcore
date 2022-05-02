@@ -27,7 +27,7 @@ namespace fragcore {
 	/**
 	 *
 	 */
-	class VKCommandList : public CommandList {
+	class FVDECLSPEC VKCommandList : public CommandList {
 	  public:
 		VKCommandList(Ref<VKRenderInterface> &renderer);
 		VKCommandList(const VKCommandList &other);

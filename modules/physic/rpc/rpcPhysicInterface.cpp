@@ -1,8 +1,8 @@
 #include "rpcPhysicInterface.h"
 #include "ProtocolHeaders.h"
-#include"rpcConstraints.h"
-#include"rpcCollision.h"
-#include"rpcRigidBody.h"
+#include "rpcCollision.h"
+#include "rpcConstraints.h"
+#include "rpcRigidBody.h"
 
 using namespace fragcore;
 
@@ -84,7 +84,7 @@ Collision *RPCPhysicInterface::createCollision(const CollisionDesc *desc) {
 
 	// this->dispatcher->send(eCreateCollision, sizeof(*desc), desc, desc);
 
-	//return this->obtainMappedObject<Collision>(nullptr);
+	// return this->obtainMappedObject<Collision>(nullptr);
 }
 void RPCPhysicInterface::deleteCollision(Collision *collision) {
 
@@ -118,4 +118,4 @@ void *RPCPhysicInterface::getState(unsigned int *len) { return nullptr; }
 
 const char *RPCPhysicInterface::getVersion() const { return ""; }
 
-extern "C" RPCPhysicInterface *createInternalPhysicInterface(IConfig *config) { return new RPCPhysicInterface(config); }
+extern "C" PhysicInterface *createInternalPhysicInterface(IConfig *config) { return new RPCPhysicInterface(config); }

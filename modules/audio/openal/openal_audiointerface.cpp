@@ -167,8 +167,8 @@ void OpenALAudioInterface::deleteAudioCapture(AudioCapture *capture) {}
 std::vector<AudioPhysicalDevice> OpenALAudioInterface::getDevices() const {
 	std::vector<AudioPhysicalDevice> listDevices;
 
-	const ALCchar *devices;
-	const ALCchar *mices;
+	const ALCchar *devices = nullptr;
+	const ALCchar *mices = nullptr;
 	if (alcIsExtensionPresent(nullptr, "ALC_enumeration_EXT") == AL_TRUE) {
 		if (alcIsExtensionPresent(nullptr, "ALC_enumerate_all_EXT") == AL_FALSE)
 			devices = (char *)alcGetString(nullptr, ALC_DEVICE_SPECIFIER);
@@ -258,6 +258,4 @@ const char *OpenALAudioInterface::getVersion() const { return FV_STR_VERSION(1, 
 
 const AudioPhysicalDevice &OpenALAudioInterface::getAudioDevice() const { return current_device; }
 
-extern "C" OpenALAudioInterface *createInternalAudioInterface(IConfig *config) {
-	return new OpenALAudioInterface(config);
-}
+extern "C" AudioInterface *createInternalAudioInterface(IConfig *config) { return new OpenALAudioInterface(config); }

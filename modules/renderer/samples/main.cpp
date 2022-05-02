@@ -88,7 +88,7 @@ int main(int argc, const char **argv) {
 	Ref<CommandList> refClc = Ref<CommandList>(clc);
 	SDL_Event event = {};
 	const int timeout = 0;
-	while (1) {
+	while (true) {
 		while (SDL_WaitEventTimeout(&event, timeout)) {
 			switch (event.type) {
 			case SDL_QUIT:

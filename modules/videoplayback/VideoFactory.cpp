@@ -348,7 +348,7 @@ VideoTexture *VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IR
 	desc.compression = TextureDesc::eNoCompression;
 
 	/*  Texture.    */
-	desc.target = TextureDesc::eTexture2D;
+	desc.target = TextureDesc::Target::Texture2D;
 	desc.pixelFormat = TextureFormat::BGRA32;
 	desc.graphicFormat = GraphicFormat::R8G8B8A8_SRGB;
 	desc.type = TextureDesc::eUnsignedByte;
@@ -357,15 +357,17 @@ VideoTexture *VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IR
 	desc.srgb = 0;
 
 	/*  sampler.    */
-	desc.sampler.AddressU = SamplerDesc::Repeat;
-	desc.sampler.AddressV = SamplerDesc::Repeat;
-	desc.sampler.AddressW = SamplerDesc::Repeat;
+	desc.sampler.AddressU = SamplerDesc::AddressMode::Repeat;
+	desc.sampler.AddressV = SamplerDesc::AddressMode::Repeat;
+	desc.sampler.AddressW = SamplerDesc::AddressMode::Repeat;
 	desc.sampler.anisotropy = 8.0f;
 	desc.sampler.minFilter = SamplerDesc::FilterMode::Linear;
 	desc.sampler.magFilter = SamplerDesc::FilterMode::Linear;
 	desc.sampler.mipmapFilter = SamplerDesc::FilterMode::Linear;
 
-	desc.marker.markerName = ref->getName().c_str();
+	MarkerDebug marker{};
+	marker.markerName = ref->getName().c_str();
+	desc.marker = &marker;
 	Texture *texture = renderer->createTexture(&desc);
 
 	VideoTexture *videoTexture = nullptr;
