@@ -38,9 +38,12 @@ long int IOUtil::loadFile(Ref<IO> &in, Ref<IO> &out) {
 	long dataSize = 0;
 	while ((nbytes = in->read(sizeof(buf), buf)) > 0) {
 		int outbytes = out->write(nbytes, buf);
-		if (outbytes != nbytes) {
+		if (outbytes > 0) {
+			/*	*/
+			dataSize += nbytes;
+		} else {
+			throw RuntimeException("Error while reading IO: {}", out->getName());
 		}
-		dataSize += nbytes;
 	}
 
 	return dataSize;

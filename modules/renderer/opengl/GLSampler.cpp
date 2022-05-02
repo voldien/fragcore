@@ -60,7 +60,7 @@ float GLSampler::getAnisotropic() const {
 	return ansio;
 }
 
-GLSampler::CompareFunc GLSampler::getCompare() const { }
+GLSampler::CompareFunc GLSampler::getCompare() const { return GLSampler::CompareFunc::NoCompare; }
 
 void GLSampler::setCompareFunc(CompareFunc compareFunc) {
 

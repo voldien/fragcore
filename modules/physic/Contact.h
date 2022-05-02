@@ -24,28 +24,28 @@ namespace fragcore {
 
 	class FVDECLSPEC Contact {
 	  public:
-		Contact();
-		Contact(const Contact &contact);
+		Contact() = default
+		Contact(const Contact &contact) = default;
 		/**
 		 *	@return
 		 */
-		unsigned int getCount() const;
+		virtual unsigned int getCount() const = 0;
 		/**
 		 *	@return
 		 */
-		Vector3 impulse(int index) const;
+		virtual Vector3 impulse(int index) const = 0;
 		/**
 		 *	@return
 		 */
-		Vector3 point(int index) const;
+		virtual Vector3 point(int index) const = 0;
 		/**
 		 *	@return
 		 */
-		Vector3 normal(int index) const;
+		virtual Vector3 normal(int index) const = 0;
 		/**
 		 *	@return
 		 */
-		float distance(int index) const;
+		virtual float distance(int index) const = 0;
 
 	  private:				/*	Attributes.	*/
 		void *pcontact;		/*	*/

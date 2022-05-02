@@ -16,8 +16,8 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef _FV_GL_BUFFER_H_
-#define _FV_GL_BUFFER_H_ 1
+#ifndef _FRAG_CORE_VK_BUFFER_H_
+#define _FRAG_CORE_VK_BUFFER_H_ 1
 #include "../Buffer.h"
 #include "internal_object_type.h"
 

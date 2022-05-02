@@ -565,8 +565,10 @@ VkSurfaceKHR VKRenderWindow::createSurface() {
 
 	return surface;
 }
-ViewPort *VKRenderWindow::getViewPort() { this->renderer->getView(0); }
-FrameBuffer *VKRenderWindow::getDefaultFrameBuffer() { this->swapChain.frameBuffers[this->swapChain.currentFrame]; }
+ViewPort *VKRenderWindow::getViewPort() { return this->renderer->getView(0); }
+FrameBuffer *VKRenderWindow::getDefaultFrameBuffer() {
+	return nullptr; // this->swapChain.frameBuffers[this->swapChain.currentFrame];
+}
 
 uint32_t VKRenderWindow::getSwapChainImageCount() const noexcept { return this->swapChain.swapChainImages.size(); }
 

@@ -1,23 +1,24 @@
-#include "../RigidBody.h"
+#include "bulletRigidBody.h"
 
 #include <bullet/btBulletCollisionCommon.h>
 #include <bullet/btBulletDynamicsCommon.h>
+
 using namespace fragcore;
 
-RigidBody::~RigidBody() {}
+BulletRigidBody::~BulletRigidBody() {}
 
-float RigidBody::getMass() {
+float BulletRigidBody::getMass() {
 	btRigidBody *body = (btRigidBody *)this->getObject();
 	return 1.0f / body->getInvMass();
 }
-void RigidBody::setMass(float mass) {
+void BulletRigidBody::setMass(float mass) {
 	btRigidBody *body = (btRigidBody *)this->getObject();
 
 	btVector3 inertia;
 	body->getCollisionShape()->calculateLocalInertia(mass, inertia);
 }
 
-Vector3 RigidBody::getPosition() {
+Vector3 BulletRigidBody::getPosition() {
 
 	btRigidBody *body;
 	btTransform trans;
@@ -31,14 +32,14 @@ Vector3 RigidBody::getPosition() {
 
 	return *(Vector3 *)&trans.getOrigin();
 }
-void RigidBody::setPosition(const Vector3 &position) {
+void BulletRigidBody::setPosition(const Vector3 &position) {
 	btRigidBody *body;
 	body = (btRigidBody *)this->getObject();
 
-	/*  Both internal and rigidbody.    */
+	/*  Both internal and BulletRigidBody.    */
 }
 
-Quaternion RigidBody::getOrientation() {
+Quaternion BulletRigidBody::getOrientation() {
 
 	btRigidBody *body;
 	btQuaternion oritention;
@@ -48,12 +49,12 @@ Quaternion RigidBody::getOrientation() {
 
 	return Quaternion(oritention.getW(), oritention.getX(), oritention.getY(), oritention.getZ());
 }
-void RigidBody::setOrientation(const Quaternion &quat) {
+void BulletRigidBody::setOrientation(const Quaternion &quat) {
 	btRigidBody *body;
 	body = (btRigidBody *)this->getObject();
 }
 
-Vector3 RigidBody::getScale() {
+Vector3 BulletRigidBody::getScale() {
 	btRigidBody *body;
 	body = (btRigidBody *)this->getObject();
 
@@ -61,7 +62,7 @@ Vector3 RigidBody::getScale() {
 
 	return Vector3(scale.x(), scale.y(), scale.z());
 }
-void RigidBody::setScale(const Vector3 &scale) {
+void BulletRigidBody::setScale(const Vector3 &scale) {
 	btRigidBody *body;
 	body = (btRigidBody *)this->getObject();
 
@@ -69,38 +70,38 @@ void RigidBody::setScale(const Vector3 &scale) {
 	body->getCollisionShape()->setLocalScaling(sc);
 }
 
-void RigidBody::addForce(const Vector3 &force) {
+void BulletRigidBody::addForce(const Vector3 &force) {
 	btRigidBody *body;
 	body = (btRigidBody *)this->getObject();
 }
 
-float RigidBody::getDrag() {
+float BulletRigidBody::getDrag() {
 	btRigidBody *body;
 	body = (btRigidBody *)this->getObject();
 
 	return body->getLinearDamping();
 }
-void RigidBody::setDrag(float drag) {
+void BulletRigidBody::setDrag(float drag) {
 	btRigidBody *body;
 	body = (btRigidBody *)this->getObject();
 
 	body->setDamping(drag, body->getAngularDamping());
 }
 
-float RigidBody::getAngularDrag() {
+float BulletRigidBody::getAngularDrag() {
 	btRigidBody *body;
 	body = (btRigidBody *)this->getObject();
 
 	return body->getAngularDamping();
 }
-void RigidBody::setAngularDrag(float angularDrag) {
+void BulletRigidBody::setAngularDrag(float angularDrag) {
 	btRigidBody *body;
 	body = (btRigidBody *)this->getObject();
 
 	body->setDamping(body->getLinearDamping(), angularDrag);
 }
 
-Vector3 RigidBody::getVelocity() {
+Vector3 BulletRigidBody::getVelocity() {
 	btRigidBody *body;
 	body = (btRigidBody *)this->getObject();
 

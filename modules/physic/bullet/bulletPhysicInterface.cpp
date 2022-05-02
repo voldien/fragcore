@@ -280,6 +280,7 @@ void *BulletPhysicInterface::createSoftBody(SoftbodyDesc *softbodyDesc) {
 
 	btSoftBody *softBody = btSoftBodyHelpers::CreateFromTriMesh(this->softBodyWorldInfo, softbodyDesc->vertices,
 																softbodyDesc->indices, softbodyDesc->nVertices / 3);
+	return nullptr;
 }
 void BulletPhysicInterface::deleteSoftBody(void *softbody) {}
 
@@ -293,12 +294,14 @@ void *BulletPhysicInterface::createCloth(ClothDesc *clothDesc) {
 	//	                                                   btVector3(+s / 2, s + 1, +s),
 	//	                                                   numX, numY,
 	//	                                                   fixed, true);
+	return nullptr;
 }
 void BulletPhysicInterface::deleteCloth(void *cloth) {}
 
 void *BulletPhysicInterface::createTerrain(const TerrainDesc *desc) {
 	// btHeightfieldTerrainShape
 	// btHeightfieldTerrainShape = new
+	return nullptr;
 }
 
 void BulletPhysicInterface::deleteTerrain(void *terrain) {}
@@ -315,6 +318,7 @@ CharacterController *BulletPhysicInterface::createCharacterController(CharacterC
 
 	/*	*/
 	// return obtainMappedObject<CharacterController>(m_pTommyController);
+	return nullptr;
 }
 
 void BulletPhysicInterface::deleteCharacterController(CharacterController *characterController) {}

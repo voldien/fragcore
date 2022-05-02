@@ -40,6 +40,8 @@ namespace fragcore {
 
 		virtual WrapMode getWrapMode() override;
 
+		//
+
 		virtual void setAnisotropic(float anisotropy) override;
 
 		virtual float getAnisotropic() const override;

@@ -36,7 +36,7 @@ namespace fragcore {
 			eMirror = 0x3, /*  */
 		};
 
-		enum CompareFunc {
+		enum class CompareFunc {
 			NoCompare,	  /*  */
 			lessEqual,	  /*  */
 			greaterEqual, /*  */
@@ -48,7 +48,7 @@ namespace fragcore {
 			never,		  /*  */
 		};
 
-		enum FilterMode {
+		enum class FilterMode {
 			eNearest = 0x1,	  /*	*/
 			eBilinear = 0x2,  /*	*/
 			eTrilinear = 0x3, /*  */

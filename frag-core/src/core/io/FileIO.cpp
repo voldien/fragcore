@@ -113,8 +113,9 @@ long FileIO::read(long int nbytes, void *pbuffer) {
 long FileIO::write(long int nbytes, const void *pbuffer) {
 	long int nreadBytes;
 	nreadBytes = fwrite(pbuffer, 1, nbytes, this->file);
-	if (nreadBytes != nbytes)
+	if (nreadBytes != nbytes) {
 		throw RuntimeException("Failed to write to file, {}.", strerror(errno));
+	}
 
 	int err = ferror(this->file);
 
@@ -169,6 +170,7 @@ unsigned long FileIO::getPos() {
 	fpos_t pos;
 	int rc = fgetpos(this->file, &pos);
 	if (rc != 0) {
+		throw SystemException(errno, std::system_category(), fmt::format("{}", strerror(errno)));
 	}
 	return pos.__pos;
 }

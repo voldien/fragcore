@@ -8,9 +8,7 @@ VKSampler::~VKSampler() {
 	vkDestroySampler(renderInterface->getDevice()->getHandle(), sampler, nullptr);
 }
 
-void VKSampler::setFilterMode(FilterMode mode) {
-
-}
+void VKSampler::setFilterMode(FilterMode mode) {}
 
 VKSampler::FilterMode VKSampler::getFilterMode() {
 	int wrapS;
@@ -19,33 +17,25 @@ VKSampler::FilterMode VKSampler::getFilterMode() {
 	return VKSampler::FilterMode::eBilinear;
 }
 
-void VKSampler::setWrapMode(VKSampler::WrapMode mode) {
-
-}
+void VKSampler::setWrapMode(VKSampler::WrapMode mode) {}
 
 VKSampler::WrapMode VKSampler::getWrapMode() {
 	int wrapS;
 	int wrapT;
 	int wrapR;
-
 }
 
-void VKSampler::setAnisotropic(float anisotropy) {
-
-
-}
+void VKSampler::setAnisotropic(float anisotropy) {}
 
 float VKSampler::getAnisotropic() const {
 	float ansio;
 
-
 	return ansio;
 }
 
-VKSampler::CompareFunc VKSampler::getCompare() const {}
+VKSampler::CompareFunc VKSampler::getCompare() const { return VKSampler::CompareFunc::NoCompare; }
 
 void VKSampler::setCompareFunc(CompareFunc compareFunc) {
-
 
 	// TODO resolve.
 	// glGetSamplerParameterfv(this->sampler, GL_TEXTURE_COMPARE_FUNC, glCompareFunc);

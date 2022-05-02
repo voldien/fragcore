@@ -25,31 +25,22 @@ namespace fragcore {
 	 *	Collision object.
 	 *
 	 */
-	class FVDECLSPEC Collision {
+	class FVDECLSPEC Collider {
 		friend class DynamicInterface;
 
 	  private:
-		Collision() {}
+		Collision() = default;
 
-		virtual ~Collision();
+		virtual ~Collision() = default;
 
 	  public: /*	Public methods.	*/
-		Vector3 getCenter() {
-			// return getCenter(getMappedObject());
-		}
+		virtual Vector3 getCenter() = 0;
 
 		/**
 		 *
 		 * @param center
 		 */
-		void setCenter(const Vector3 &center) {
-			// setCenter(getMappedObject(), center);
-		}
-
-	  protected: /*	Protected virtual methods.	*/
-		virtual Vector3 getCenter(void *pobj);
-
-		virtual void setCenter(void *pobj, const Vector3 &center);
+		virtual void setCenter(const Vector3 &center) = 0;
 	};
 } // namespace fragcore
 

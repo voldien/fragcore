@@ -381,8 +381,9 @@ unsigned int getTextureFormat(TextureFormat textureFormat, unsigned int *pixelTy
 		return GL_RGBA;
 	case TextureFormat::YUY2:
 	default:
-		throw InvalidArgumentException("Invalid texture format.");
+		break;
 	}
+	throw InvalidArgumentException("Invalid texture format.");
 }
 
 unsigned int getTextureFormat(TextureDesc::Format format) {

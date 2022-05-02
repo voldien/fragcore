@@ -20,8 +20,8 @@ long int ModbusRegisterIO::read(long int nbytes, void *pbuffer) {
 }
 
 long int ModbusRegisterIO::write(long int nbytes, const void *pbuffer) {
-	auto rc =
-		modbus_write_registers((modbus_t *)socket.getModbusContext(), static_cast<int>(this->address), nbytes, (uint16_t*)pbuffer);
+	auto rc = modbus_write_registers((modbus_t *)socket.getModbusContext(), static_cast<int>(this->address), nbytes,
+									 (uint16_t *)pbuffer);
 	return rc;
 }
 
@@ -39,4 +39,4 @@ bool ModbusRegisterIO::isWriteable() const { return true; }
 
 bool ModbusRegisterIO::isReadable() const { return true; }
 
-bool ModbusRegisterIO::flush() {}
+bool ModbusRegisterIO::flush() { return true; }

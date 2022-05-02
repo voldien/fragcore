@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # Convert text to header files and c source file.
-# Copyright (C) 2018  Valdemar Lindberg
+# Copyright (C) 2018 Valdemar Lindberg
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,8 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import os
 import sys
-from os.path import isfile, join
-from shutil import copyfile, move
+from os.path import isfile
+from shutil import move
 import codecs
 
 HEADERNAME = "Shaders.h"

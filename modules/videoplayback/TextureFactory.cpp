@@ -22,7 +22,7 @@ Texture *TextureFactory::createChecker(IRenderer *renderer, int width, int heigh
 
 Texture *TextureFactory::createPerlinNoise(IRenderer *renderer, int width, int height) {
 	char *pixels;
-	int pixelSize = width * height * 1;
+	size_t pixelSize = static_cast<size_t>(width) * static_cast<size_t>(height) * 1;
 
 	assert(renderer && width > 0 && height > 0);
 	if (renderer == nullptr)
@@ -45,8 +45,9 @@ void TextureFactory::createChecker(int width, int Height, char **pixelsResult) {
 	/*  TODO perform cleaning. */
 
 	unsigned int x, y, Xpatter, Ypatter, bpp = 4;
+	size_t pixelSize = static_cast<size_t>(width) * static_cast<size_t>(height) * static_cast<size_t>(bpp);
 
-	*pixelsResult = (char *)malloc(width * Height * bpp);
+	*pixelsResult = (char *)malloc(pixelSize);
 
 	int CheckerXDimension = 32;
 	int CheckerYDimension = 32;

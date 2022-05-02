@@ -30,6 +30,8 @@ namespace fragcore {
 		Triangle(const Triangle &triangle);
 		Triangle(const Vector3 &p1, const Vector3 &p2, const Vector3 &p3);
 
+		Triangle &operator=(const Triangle &triangle) = default;
+
 		/**
 		 *	Get normal from right hand.
 		 *

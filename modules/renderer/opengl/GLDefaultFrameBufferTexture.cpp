@@ -53,7 +53,7 @@ void FrameBufferTexture::setMipLevel(unsigned int level) {}
 
 void FrameBufferTexture::setFilterMode(FilterMode mode) {}
 
-Texture::FilterMode FrameBufferTexture::getFilterMode() { return Texture::eNearest; }
+Texture::FilterMode FrameBufferTexture::getFilterMode() { return Texture::FilterMode::eNearest; }
 
 void FrameBufferTexture::setWrapMode(WrapMode mode) {}
 

@@ -22,7 +22,7 @@
 
 namespace fragcore {
 
-	class FVDECLSPEC PhysicMaterial {
+	class FVDECLSPEC PhysicMaterial : public PhysicObject {
 	  public:
 	};
 } // namespace fragcore

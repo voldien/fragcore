@@ -16,28 +16,32 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef _FRAG_CORE_PHYSIC_INTERPRETOR_H_
-#define _FRAG_CORE_PHYSIC_INTERPRETOR_H_ 1
-#include "../PhysicInterface.h"
-#include "ProtocolHeaders.h"
+#ifndef _FRAG_CORE_BULLET_RAY_CAST_HIT_H_
+#define _FRAG_CORE_BULLET_RAY_CAST_HIT_H_ 1
+#include "../RayCastHit.h"
+
 
 namespace fragcore {
 	/**
-	 *	Responsible for interpreting
-	 *	physic interface packets.
+	 *	RayCastHit.
 	 */
-	class FVDECLSPEC RPCPhysicInterpreter {
+	class FVDECLSPEC BulletRayCastHit : public RayCastHit  {
 	  public:
-		RPCPhysicInterpreter();
-		RPCPhysicInterpreter(const RPCPhysicInterpreter &other);
-		virtual ~RPCPhysicInterpreter();
+		// TODO add parmaters and methods.
+		BulletRayCastHit();
+		virtual ~BulletRayCastHit();
 
-		/**
-		 *
-		 * @param interface
-		 * @param header
-		 */
-		void interpret(RPCPhysicInterpreter *interface, PacketHeader *header);
+		// Collider*  collider() const;
+
+		// RigidBody*  rigidBody() const;
+
+		// Vector3& point() const;
+
+		// Vector3 &normal() const;
+
+		// float distance() const;
+
+		// PVVector2& barycentric() const;
 	};
 } // namespace fragcore
 

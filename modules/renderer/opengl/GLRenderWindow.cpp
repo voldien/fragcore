@@ -53,8 +53,16 @@ void GLRenderWindow::setSize(int width, int height) {
 	SDL_SetWindowSize(this->window, width, height);
 }
 
-int GLRenderWindow::width() const {}
-int GLRenderWindow::height() const {}
+int GLRenderWindow::width() const {
+	int width, height;
+	getSize(&width, &height);
+	return width;
+}
+int GLRenderWindow::height() const {
+	int width, height;
+	getSize(&width, &height);
+	return height;
+}
 
 void GLRenderWindow::vsync(bool state) { SDL_GL_SetSwapInterval(state); }
 
@@ -122,7 +130,7 @@ void GLRenderWindow::setFullScreen(bool fullscreen) {
 
 void GLRenderWindow::setFullScreen(Display &display) {}
 
-bool GLRenderWindow::isFullScreen() const {}
+bool GLRenderWindow::isFullScreen() const { return false; }
 
 void GLRenderWindow::setBordered(bool bordered) { SDL_SetWindowBordered(this->window, (SDL_bool)bordered); }
 

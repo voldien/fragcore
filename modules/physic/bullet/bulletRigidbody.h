@@ -16,21 +16,19 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef _FRAG_CORE_RIGIDBODY_H_
-#define _FRAG_CORE_RIGIDBODY_H_ 1
-#include "PhysicObject.h"
-#include "PhysicPrerequisites.h"
-#include <Core/Math3D.h>
+#ifndef _FRAG_CORE_BULLET_RIGIDBODY_H_
+#define _FRAG_CORE_BULLET_RIGIDBODY_H_ 1
+#include "../RigidBody.h"
 
 namespace fragcore {
 
-	class FVDECLSPEC RigidBody : public PhysicObject {
+	class FVDECLSPEC BulletRigidBody : public RigidBody {
 		friend class DynamicInterface;
 
 	  private:
-		RigidBody() = default;
+		BulletRigidBody() = default;
 
-		virtual ~RigidBody() = 0;
+		virtual ~BulletRigidBody();
 
 	  public: /*	Public methods.	*/
 		virtual void useGravity(bool use) = 0;
@@ -51,7 +49,6 @@ namespace fragcore {
 
 		virtual void addForce(const Vector3 &force) = 0;
 
-		/**/
 		virtual float getDrag() = 0;
 		virtual void setDrag(float drag) = 0;
 
@@ -60,6 +57,7 @@ namespace fragcore {
 
 		virtual Vector3 getVelocity() = 0;
 
+	  public:
 		intptr_t getNativePtr() const = 0;
 	};
 

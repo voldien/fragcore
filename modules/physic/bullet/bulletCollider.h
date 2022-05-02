@@ -16,28 +16,24 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef _FRAG_CORE_PHYSIC_INTERPRETOR_H_
-#define _FRAG_CORE_PHYSIC_INTERPRETOR_H_ 1
-#include "../PhysicInterface.h"
-#include "ProtocolHeaders.h"
+#ifndef _FRAG_CORE_BULLET_COLLIDER_H_
+#define _FRAG_CORE_BULLET_COLLIDER_H_ 1
+#include "../Collider.h"
 
 namespace fragcore {
 	/**
-	 *	Responsible for interpreting
-	 *	physic interface packets.
+	 *	Collision object.
+	 *
 	 */
-	class FVDECLSPEC RPCPhysicInterpreter {
-	  public:
-		RPCPhysicInterpreter();
-		RPCPhysicInterpreter(const RPCPhysicInterpreter &other);
-		virtual ~RPCPhysicInterpreter();
+	class FVDECLSPEC BulletCollider : public Collider {
+		friend class DynamicInterface;
 
-		/**
-		 *
-		 * @param interface
-		 * @param header
-		 */
-		void interpret(RPCPhysicInterpreter *interface, PacketHeader *header);
+	  private:
+		BulletCollider();
+
+		virtual ~BulletCollider();
+
+		virtual Vector3 getCenter() = 0;
 	};
 } // namespace fragcore
 

@@ -33,7 +33,6 @@ namespace fragcore {
 		Constraints() = default;
 		virtual ~Constraints() = default;
 
-	  public:
 		virtual void attachRigidbody(RigidBody *r1, RigidBody *r2) = 0;
 	};
 } // namespace fragcore

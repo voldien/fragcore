@@ -36,7 +36,7 @@ namespace fragcore {
 			this->name = std::exchange(other.name, nullptr);
 			return *this;
 		}
-		~Object() = default;
+		virtual ~Object() = default;
 
 		virtual void setName(const std::string &name) { this->name.assign(name); }
 

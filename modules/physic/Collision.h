@@ -23,19 +23,18 @@
 namespace fragcore {
 	class FVDECLSPEC Collision {
 	  public:
-		Collision();
-		Collision(const Collision &collision);
-		virtual ~Collision();
+		Collision() = default;
+		virtual ~Collision() = default;
 
 		/**
 		 *	Get collider object.
 		 */
-		Collider *collider() const;
+		virtual Collider *collider() const = 0; 
 
 		/**
 		 *	Get relative velocity magnitude.
 		 */
-		float relativeVelocity() const;
+		float relativeVelocity() const = 0;
 
 		/**
 		 *	Get transform object.
@@ -45,12 +44,12 @@ namespace fragcore {
 		/**
 		 *	Get rigidbodt object.
 		 */
-		RigidBody *rigidBody() const;
+		RigidBody *rigidBody() const = 0;
 
 		/**
 		 *	Get contact.
 		 */
-		Contact contacts() const;
+	//	Contact contacts() const;
 
 	  private: /*	Attributes.	*/
 		void *pair;

@@ -103,6 +103,7 @@ GLTexture::FilterMode GLTexture::getFilterMode() {
 		glGetTexParameteriv(this->target, GL_TEXTURE_MAG_FILTER, &magFilter);
 		glGetTexParameteriv(this->target, GL_TEXTURE_MIN_FILTER, &minFilter);
 	}
+	return GLTexture::FilterMode::eBilinear;
 }
 
 void GLTexture::setWrapMode(GLTexture::WrapMode mode) {

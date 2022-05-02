@@ -75,7 +75,7 @@ size_t Image::getFormatPixelSize(TextureFormat format) {
 
 size_t Image::getTextureSize(unsigned int width, unsigned int height, unsigned depth, TextureFormat format) {
 
-	size_t imageRes = width * height * depth;
+	size_t imageRes = static_cast<size_t>(width) * static_cast<size_t>(height) * static_cast<size_t>(depth);
 
 	imageRes = (imageRes * getFormatPixelSize(format)) / 8;
 

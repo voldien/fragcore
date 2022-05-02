@@ -16,28 +16,45 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef _FRAG_CORE_PHYSIC_INTERPRETOR_H_
-#define _FRAG_CORE_PHYSIC_INTERPRETOR_H_ 1
-#include "../PhysicInterface.h"
-#include "ProtocolHeaders.h"
+#ifndef _FRAG_CORE_BULLET_PHYSIC_COLLISION_H_
+#define _FRAG_CORE_BULLET_PHYSIC_COLLISION_H_ 1
+#include "../Collision.h"
 
 namespace fragcore {
-	/**
-	 *	Responsible for interpreting
-	 *	physic interface packets.
-	 */
-	class FVDECLSPEC RPCPhysicInterpreter {
+	class FVDECLSPEC BulletCollision : public Collision {
 	  public:
-		RPCPhysicInterpreter();
-		RPCPhysicInterpreter(const RPCPhysicInterpreter &other);
-		virtual ~RPCPhysicInterpreter();
+		BulletCollision();
+		BulletCollision(const BulletCollision &collision);
+		virtual ~BulletCollision();
 
 		/**
-		 *
-		 * @param interface
-		 * @param header
+		 *	Get collider object.
 		 */
-		void interpret(RPCPhysicInterpreter *interface, PacketHeader *header);
+		virtual Collider *collider() const override;
+
+		/**
+		 *	Get relative velocity magnitude.
+		 */
+		virtual float relativeVelocity() const override;
+
+		/**
+		 *	Get transform object.
+		 */
+		// VDTransform *transform() const;
+
+		/**
+		 *	Get rigidbodt object.
+		 */
+		virtual RigidBody *rigidBody() const override;
+
+		/**
+		 *	Get contact.
+		 */
+		// Contact contacts() const;
+
+	  private: /*	Attributes.	*/
+		void *pair;
+		void *shape;
 	};
 } // namespace fragcore
 

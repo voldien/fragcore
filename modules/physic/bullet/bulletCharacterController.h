@@ -16,28 +16,24 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef _FRAG_CORE_PHYSIC_INTERPRETOR_H_
-#define _FRAG_CORE_PHYSIC_INTERPRETOR_H_ 1
-#include "../PhysicInterface.h"
-#include "ProtocolHeaders.h"
+#ifndef _FRAG_CORE_BULLET_CHARACTERCONTROLLER_H_
+#define _FRAG_CORE_BULLET_CHARACTERCONTROLLER_H_ 1
+#include "../CharacterController.h"
 
 namespace fragcore {
 	/**
-	 *	Responsible for interpreting
-	 *	physic interface packets.
+	 *
 	 */
-	class FVDECLSPEC RPCPhysicInterpreter {
-	  public:
-		RPCPhysicInterpreter();
-		RPCPhysicInterpreter(const RPCPhysicInterpreter &other);
-		virtual ~RPCPhysicInterpreter();
+	class FVDECLSPEC BulletCharacterController : public CharacterController {
+	  private:
+		BulletCharacterController();
 
-		/**
-		 *
-		 * @param interface
-		 * @param header
-		 */
-		void interpret(RPCPhysicInterpreter *interface, PacketHeader *header);
+		virtual ~BulletCharacterController();
+
+	  public: /*	Public methods.	*/
+		virtual Vector3 getCenter() override;
+		// virtual const Vector3 &getConter() const;
+		virtual void setCenter(const Vector3 &center) override;
 	};
 } // namespace fragcore
 

@@ -17,7 +17,7 @@ SDLWindowManager::~SDLWindowManager() {
 }
 
 Display *SDLWindowManager::getDisplay(unsigned int index) { return new SDLDisplay(0); }
-unsigned int SDLWindowManager::getNumDisplays() const noexcept { SDLDisplay::getNumDisplays(); }
+unsigned int SDLWindowManager::getNumDisplays() const noexcept { return SDLDisplay::getNumDisplays(); }
 Display *SDLWindowManager::getAssociatedDisplay(Ref<Window> &window) { return nullptr; }
 Window *SDLWindowManager::createWindow(const std::string &title) {
 	Window *window = new SDLWindow();

@@ -25,13 +25,11 @@ StackAllocator::StackAllocator(size_t stackSizeBytes) : StackAllocator() { this-
 StackAllocator::~StackAllocator() { free(this->mData); }
 
 void *StackAllocator::alloc(size_t sizeBytes) {
-	// TODO determine if allocaing smaller memory.
-	if (sizeBytes < getSize()) {
-	}
-	mSize = sizeBytes;
-	mData = realloc(mData, sizeBytes);
+
+	this->mSize = sizeBytes;
+	this->mData = realloc(mData, sizeBytes);
 	if (!mData) {
-		// VDDebug::errorLog("Failed to allocate {} kb.", ( sizeBytes / 1024 ) );
+		throw RuntimeException("Failed to allocate {} kb.", (sizeBytes / 1024));
 	}
 	return mData;
 }

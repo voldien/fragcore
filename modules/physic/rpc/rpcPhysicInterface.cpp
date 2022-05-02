@@ -109,9 +109,13 @@ void RPCPhysicInterface::deleteRigibody(RigidBody *collision) {
 
 bool RPCPhysicInterface::rayTest(const Ray &ray, RayCastHit *hit) {
 	this->dispatcher->send(RPCProtocolCommand::eRayTest, 0, nullptr);
+
+	return false;
 }
 bool RPCPhysicInterface::raySphereTest(const Ray &ray, RayCastHit *hit) {
 	this->dispatcher->send(RPCProtocolCommand::eRayTest, 0, nullptr);
+
+	return false;
 }
 
 void *RPCPhysicInterface::getState(unsigned int *len) { return nullptr; }
