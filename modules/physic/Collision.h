@@ -34,7 +34,7 @@ namespace fragcore {
 		/**
 		 *	Get relative velocity magnitude.
 		 */
-		float relativeVelocity() const = 0;
+		virtual float relativeVelocity() const = 0;
 
 		/**
 		 *	Get transform object.
@@ -44,7 +44,7 @@ namespace fragcore {
 		/**
 		 *	Get rigidbodt object.
 		 */
-		RigidBody *rigidBody() const = 0;
+		virtual RigidBody *rigidBody() const = 0;
 
 		/**
 		 *	Get contact.

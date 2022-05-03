@@ -41,7 +41,7 @@ Texture *TextureFactory::createPerlinNoise(IRenderer *renderer, int width, int h
 	return texture;
 }
 
-void TextureFactory::createChecker(int width, int Height, char **pixelsResult) {
+void TextureFactory::createChecker(int width, int height, char **pixelsResult) {
 	/*  TODO perform cleaning. */
 
 	unsigned int x, y, Xpatter, Ypatter, bpp = 4;
@@ -54,9 +54,9 @@ void TextureFactory::createChecker(int width, int Height, char **pixelsResult) {
 
 	Xpatter = (width / CheckerXDimension); // pattern count in X
 
-	Ypatter = (Height / CheckerYDimension); // pattern count in Y
+	Ypatter = (height / CheckerYDimension); // pattern count in Y
 	for (x = 0; x < width; x++) {
-		for (y = 0; y < Height; y++) {
+		for (y = 0; y < height; y++) {
 
 			float patternIndexX = (float)x / (float)CheckerXDimension;
 			float patternIndexY = (float)y / (float)CheckerYDimension;
@@ -64,35 +64,35 @@ void TextureFactory::createChecker(int width, int Height, char **pixelsResult) {
 			switch (bpp) {
 			case 1:
 				if ((int)patternIndexX % 2 == 0) { // black
-					pixelsResult[0][x * Height * 1 + y * 1] = (((int)patternIndexY % 2 == 0) ? 0 : 255);
+					pixelsResult[0][x * height * 1 + y * 1] = (((int)patternIndexY % 2 == 0) ? 0 : 255);
 				} else { // white
-					pixelsResult[0][x * Height * 1 + y * 1] = (((int)patternIndexY % 2 == 0) ? 255 : 0);
+					pixelsResult[0][x * height * 1 + y * 1] = (((int)patternIndexY % 2 == 0) ? 255 : 0);
 				}
 
 				continue;
 			case 3:
 				if ((int)patternIndexX % 2 == 0) {
-					pixelsResult[0][x * Height * 3 + y * 3] = (((int)patternIndexY % 2 == 0) ? 0 : 255);
-					pixelsResult[0][x * Height * 3 + y * 3 + 1] = (((int)patternIndexY % 2 == 0) ? 0 : 255);
-					pixelsResult[0][x * Height * 3 + y * 3 + 2] = (((int)patternIndexY % 2 == 0) ? 0 : 255);
+					pixelsResult[0][x * height * 3 + y * 3] = (((int)patternIndexY % 2 == 0) ? 0 : 255);
+					pixelsResult[0][x * height * 3 + y * 3 + 1] = (((int)patternIndexY % 2 == 0) ? 0 : 255);
+					pixelsResult[0][x * height * 3 + y * 3 + 2] = (((int)patternIndexY % 2 == 0) ? 0 : 255);
 				} else {
-					pixelsResult[0][x * Height * 3 + y * 3] = (((int)patternIndexY % 2 == 0) ? 255 : 0);
-					pixelsResult[0][x * Height * 3 + y * 3 + 1] = (((int)patternIndexY % 2 == 0) ? 255 : 0);
-					pixelsResult[0][x * Height * 3 + y * 3 + 2] = (((int)patternIndexY % 2 == 0) ? 255 : 0);
+					pixelsResult[0][x * height * 3 + y * 3] = (((int)patternIndexY % 2 == 0) ? 255 : 0);
+					pixelsResult[0][x * height * 3 + y * 3 + 1] = (((int)patternIndexY % 2 == 0) ? 255 : 0);
+					pixelsResult[0][x * height * 3 + y * 3 + 2] = (((int)patternIndexY % 2 == 0) ? 255 : 0);
 				}
 
 				continue;
 			case 4:
 				if ((int)patternIndexX % 2 == 0) {
-					pixelsResult[0][x * Height * 4 + y * 4] = (((int)patternIndexY % 2 == 0) ? 0 : 255);
-					pixelsResult[0][x * Height * 4 + y * 4 + 1] = (((int)patternIndexY % 2 == 0) ? 0 : 255);
-					pixelsResult[0][x * Height * 4 + y * 4 + 2] = (((int)patternIndexY % 2 == 0) ? 0 : 255);
-					pixelsResult[0][x * Height * 4 + y * 4 + 3] = 255;
+					pixelsResult[0][x * height * 4 + y * 4] = (((int)patternIndexY % 2 == 0) ? 0 : 255);
+					pixelsResult[0][x * height * 4 + y * 4 + 1] = (((int)patternIndexY % 2 == 0) ? 0 : 255);
+					pixelsResult[0][x * height * 4 + y * 4 + 2] = (((int)patternIndexY % 2 == 0) ? 0 : 255);
+					pixelsResult[0][x * height * 4 + y * 4 + 3] = 255;
 				} else {
-					pixelsResult[0][x * Height * 4 + y * 4] = (((int)patternIndexY % 2 == 0) ? 255 : 0);
-					pixelsResult[0][x * Height * 4 + y * 4 + 1] = (((int)patternIndexY % 2 == 0) ? 255 : 0);
-					pixelsResult[0][x * Height * 4 + y * 4 + 2] = (((int)patternIndexY % 2 == 0) ? 255 : 0);
-					pixelsResult[0][x * Height * 4 + y * 4 + 3] = 255;
+					pixelsResult[0][x * height * 4 + y * 4] = (((int)patternIndexY % 2 == 0) ? 255 : 0);
+					pixelsResult[0][x * height * 4 + y * 4 + 1] = (((int)patternIndexY % 2 == 0) ? 255 : 0);
+					pixelsResult[0][x * height * 4 + y * 4 + 2] = (((int)patternIndexY % 2 == 0) ? 255 : 0);
+					pixelsResult[0][x * height * 4 + y * 4 + 3] = 255;
 				}
 				continue;
 			} // iteration of bpp

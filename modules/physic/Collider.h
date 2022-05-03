@@ -16,8 +16,9 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef _FRAG_CORE_COLLIDER_H_
-#define _FRAG_CORE_COLLIDER_H_ 1
+#ifndef _FRAG_CORE_PHYSIC_COLLIDER_H_
+#define _FRAG_CORE_PHYSIC_COLLIDER_H_ 1
+#include "PhysicObject.h"
 #include <FragCore.h>
 
 namespace fragcore {
@@ -25,13 +26,13 @@ namespace fragcore {
 	 *	Collision object.
 	 *
 	 */
-	class FVDECLSPEC Collider {
+	class FVDECLSPEC Collider : public PhysicObject {
 		friend class DynamicInterface;
 
-	  private:
-		Collision() = default;
+	  public:
+		Collider() = default;
 
-		virtual ~Collision() = default;
+		virtual ~Collider() = default;
 
 	  public: /*	Public methods.	*/
 		virtual Vector3 getCenter() = 0;

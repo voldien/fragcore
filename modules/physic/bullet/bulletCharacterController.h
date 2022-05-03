@@ -25,7 +25,7 @@ namespace fragcore {
 	 *
 	 */
 	class FVDECLSPEC BulletCharacterController : public CharacterController {
-	  private:
+	  public:
 		BulletCharacterController();
 
 		virtual ~BulletCharacterController();

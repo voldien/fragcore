@@ -27,10 +27,10 @@ namespace fragcore {
 	class FVDECLSPEC RigidBody : public PhysicObject {
 		friend class DynamicInterface;
 
-	  private:
+	  public:
 		RigidBody() = default;
 
-		virtual ~RigidBody() = 0;
+		virtual ~RigidBody() = default;
 
 	  public: /*	Public methods.	*/
 		virtual void useGravity(bool use) = 0;

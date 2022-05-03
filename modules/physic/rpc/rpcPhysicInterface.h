@@ -133,8 +133,8 @@ namespace fragcore {
 		 * @param softbodyDesc
 		 * @return
 		 */
-		virtual void *createSoftBody(SoftbodyDesc *softbodyDesc);
-		override virtual void deleteSoftBody(void *softbody) override;
+		virtual void *createSoftBody(SoftbodyDesc *softbodyDesc) override;
+		virtual void deleteSoftBody(void *softbody) override;
 
 		virtual void *createCloth(ClothDesc *clothDesc) override;
 		virtual void deleteCloth(void *cloth) override;

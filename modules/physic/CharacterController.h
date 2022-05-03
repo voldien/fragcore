@@ -18,18 +18,19 @@
  */
 #ifndef _FRAG_CORE_CHARACTERCONTROLLER_H_
 #define _FRAG_CORE_CHARACTERCONTROLLER_H_ 1
+#include "PhysicObject.h"
 #include <FragCore.h>
 
 namespace fragcore {
 	/**
 	 *
 	 */
-	class FVDECLSPEC CharacterController {
+	class FVDECLSPEC CharacterController : public PhysicObject {
 		// friend class DynamicInterface;
-	  private:
-		inline CharacterController() {}
+	  public:
+		CharacterController() = default;
 
-		virtual ~CharacterController();
+		virtual ~CharacterController() = default;
 
 	  public:	 /*	Public methods.	*/
 	  protected: /*	Protected virtual methods.	*/
