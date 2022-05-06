@@ -22,37 +22,19 @@
 #include "Texture.h"
 #include <Core/Ref.h>
 #include <ImageFormat.h>
+#include <ImageLoader.h>
 
 namespace fragcore {
-	// TODO rename
 	/**
 	 *
 	 */
-	class FVDECLSPEC TextureUtil {
+	class FVDECLSPEC TextureUtil : public ImageLoader {
 	  public:
 		static void loadTexture(Ref<IO> &io, IRenderer *renderer, Texture **texture);
-		static void loadTexture(const char *path, IRenderer *renderer, Texture **texture);
-		static void loadTexture(const void *pbuf, long int size, IRenderer *renderer, Texture **texture);
-
-		static void *loadTextureData(const char *cfilename, unsigned int *pwidth, unsigned int *pheight,
-									 TextureDesc::Format *pformat, TextureDesc::Format *pinternalformat,
-									 TextureDesc::Type *ptype, unsigned long *pixelSize);
-		static void *loadTextureData(const char *cfilename, unsigned int *pwidth, unsigned int *pheight,
-									 unsigned long *pixelSize);
-		static void *loadTextureData(const void *pbuf, long int size, unsigned int *width, unsigned int *height);
+		static void loadTexture(const std::string &path, IRenderer *renderer, Texture **texture);
 
 		/*	*/
-		// static void *loadTextureDataFromIO(Ref<IO> &io, unsigned int *width, unsigned int *height,
-		// 								   TextureDesc::Format *pformat,
-		// 								   TextureDesc::Format *pinternalformat, TextureDesc::Type *ptype,
-		// 								   unsigned long *pixelSize);
-		static void *loadTextureDataFromMem(const void *pbuf, long int size, unsigned int *width, unsigned int *height,
-											TextureDesc::Format *pformat, TextureDesc::Format *pinternalformat,
-											TextureDesc::Type *ptype, unsigned long *pixelSize);
-
-		// TODO remove the filepath.
-		/*	*/
-		static void saveTexture(const char *filepath, IRenderer *renderer, Texture *texture);
+		static void saveTexture(const std::string &filepath, IRenderer *renderer, Texture *texture);
 		static void saveTexture(Ref<IO> &io, IRenderer *renderer, Texture *texture);
 
 		/*	*/
@@ -62,7 +44,7 @@ namespace fragcore {
 									  unsigned int size, TextureFormat format, GraphicFormat graphicformat);
 
 	  private: /*	Prevent one from creating an instance of this class.	*/
-		TextureUtil();
+		TextureUtil() = default;
 		TextureUtil(IFileSystem *fileSystem);
 		TextureUtil(const TextureUtil &other);
 

@@ -47,8 +47,7 @@ namespace fragcore {
 		void loadImageData(const std::string &path, unsigned int *width, unsigned int *height);
 
 		void saveImage(const std::string &path, Image &image);
-
-	  private:
+		void saveImage(Ref<IO> &IO, Image &image);
 	};
 } // namespace fragcore
 

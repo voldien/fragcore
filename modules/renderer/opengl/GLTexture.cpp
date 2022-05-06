@@ -152,6 +152,7 @@ GLTexture::WrapMode GLTexture::getWrapMode() {
 		return Sampler::WrapMode::eMirror;
 	if (wrapR == wrapS == wrapT == GL_CLAMP_TO_EDGE)
 		return Sampler::WrapMode::eClamp;
+	return Sampler::WrapMode::eClamp;
 }
 
 void GLTexture::setAnisotropic(float anisotropic) {
@@ -204,23 +205,33 @@ void GLTexture::setCompareFunc(CompareFunc compareFunc) {
 
 void GLTexture::setMipMapBaseLevel(unsigned int level) {}
 
-unsigned int GLTexture::getMipMapBaseLevel() const {}
+unsigned int GLTexture::getMipMapBaseLevel() const {
+	return 0;
+}
 
 void GLTexture::setMipMapBias(float bias) {}
 
-float GLTexture::getMipMapBias(float bias) const {}
+float GLTexture::getMipMapBias(float bias) const {
+		return 0;
+}
 
 void GLTexture::setBorderColor(float color) {}
 
-float GLTexture::getBorderColor() const {}
+float GLTexture::getBorderColor() const {
+		return 0;
+}
 
-unsigned int GLTexture::setMaxLod(unsigned int level) {}
+unsigned int GLTexture::setMaxLod(unsigned int level) {
+		return 0;
+}
 
-unsigned int GLTexture::getMaxLod() const {}
+unsigned int GLTexture::getMaxLod() const {
+		return 0;
+}
 
-unsigned int GLTexture::setMinLod(unsigned int level) {}
+unsigned int GLTexture::setMinLod(unsigned int level) {	return 0;}
 
-unsigned int GLTexture::getMinLod() const {}
+unsigned int GLTexture::getMinLod() const {	return 0;}
 
 GLTexture::Format GLTexture::getFormat() const {
 

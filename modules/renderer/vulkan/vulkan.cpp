@@ -28,7 +28,7 @@ unsigned int getTextureFormat(TextureDesc::Format format) {
 	case TextureDesc::eDepthStencil:
 		return VK_FORMAT_R8G8_UNORM;
 	default:
-		throw InvalidArgumentException("Invalid texture format.");
+		throw InvalidArgumentException("Invalid texture format");
 	}
 }
 
@@ -42,8 +42,9 @@ unsigned int getTextureTarget(TextureDesc::Target target) {
 		return VK_IMAGE_TYPE_3D;
 	case TextureDesc::Target::CubeMap:
 	default:
-		throw InvalidArgumentException("Invalid Texture target");
+		break;
 	}
+	throw InvalidArgumentException("Invalid Texture target");
 }
 
 unsigned int getTextureType(TextureDesc::Type type) {}
@@ -64,20 +65,22 @@ unsigned int getBufferType(BufferDesc::BufferType type) {
 		return VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
 	default:
 		assert(0);
+		break;
 	}
+	throw InvalidArgumentException("Invalid Texture target");
 }
 
 unsigned int getBufferHint(BufferDesc::BufferHint hint) { return 0; }
 
 unsigned int getPrimitive(GeometryDesc::Primitive primitive) {
 	switch (primitive) {
-	case GeometryDesc::Primitive::ePoint:
+	case GeometryDesc::Primitive::Point:
 		return VK_PRIMITIVE_TOPOLOGY_POINT_LIST;
-	case GeometryDesc::Primitive::eLines:
+	case GeometryDesc::Primitive::Lines:
 		return VK_PRIMITIVE_TOPOLOGY_LINE_LIST;
-	case GeometryDesc::Primitive::eTriangles:
+	case GeometryDesc::Primitive::Triangles:
 		return VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
-	case GeometryDesc::Primitive::eTriangleStrips:
+	case GeometryDesc::Primitive::TriangleStrips:
 		return VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP;
 	default:
 		return -1;

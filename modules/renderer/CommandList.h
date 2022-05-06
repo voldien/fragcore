@@ -49,6 +49,10 @@ namespace fragcore {
 		virtual void clearDepth(float depth) = 0;
 		virtual void clearColorTarget(uint index, const Color &color) = 0;
 
+		// virtual void
+		// blit(const FrameBuffer *source, FrameBuffer *dest,
+		// 	 Texture::FilterMode filterMode) = 0; 
+		//virtual void memoryBarrier() = 0;
 		virtual void setDepthBounds(float min, float max) = 0;
 
 		// virtual void executeCommand(CommandList &list);
@@ -59,6 +63,10 @@ namespace fragcore {
 		// virtual void drawIndexed(Ref<Buffer>& buffer, offset,uint32_t drawCount,uint32_t stride) = 0;
 		// virtual void drawIndirect() = 0;
 		// virtual void drawIndexedIndirect(Ref<Buffer>& buffer) = 0;
+		// virtual void drawMultiInstance(Geometry &geometries, const unsigned int *first, const unsigned int *count,
+		// 							   unsigned int num) = 0;
+
+		// virtual void drawMultiIndirect(Geometry &geometries, unsigned int offset, unsigned int indirectCount) = 0;
 
 		// TOOD add support for raytracing
 		//		virtual void generateBVH();

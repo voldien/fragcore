@@ -80,7 +80,7 @@ namespace fragcore {
 		virtual int layers() override;
 
 		/**
-		 * @brief 
+		 * @brief
 		 *
 		 * @return int
 		 */

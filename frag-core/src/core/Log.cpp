@@ -10,12 +10,12 @@ using namespace fragcore;
 
 static Log::VERBOSITY g_verbosity = Log::Quite;
 static IO *verboseIO = nullptr;
-std::list<Ref<IO>> ios;
+std::list<Ref<IO>> g_ios;
 typedef struct log_io_buf_t {
 	Log::VERBOSITY verbosity;
 	Ref<IO> io;
 } LogIOMap;
-// static Queue<Ref<IO>> iosQueue;
+// static Queue<Ref<IO>> g_iosQueue;
 // TOOD determine if queue, should be used.
 
 void Log::setVerbosity(VERBOSITY verbosity) {
@@ -70,10 +70,10 @@ int Log::error(const char *format, ...) {
 
 int Log::logv(VERBOSITY verbosity, const char *format, va_list va) {
 	// TODO add IO object support.
-	if (ios.size() > 0) {
-		std::list<Ref<IO>>::iterator it = ios.begin();
+	if (g_ios.size() > 0) {
+		std::list<Ref<IO>>::iterator it = g_ios.begin();
 
-		for (; it != ios.end(); it++) {
+		for (; it != g_ios.end(); it++) {
 			Ref<IO> &ioRef = (*it);
 
 			// TODO resolve for variable list variable.
@@ -92,16 +92,16 @@ int Log::logv(VERBOSITY verbosity, const char *format, va_list va) {
 void Log::addIOOutput(Ref<IO> &io, const VERBOSITY mapping) {
 
 	io->increment();
-	ios.push_back(io);
+	g_ios.push_back(io);
 }
 
 void Log::removeIOOutPut(Ref<IO> &io) {
-	std::list<Ref<IO>>::iterator it = ios.begin();
+	std::list<Ref<IO>>::iterator it = g_ios.begin();
 
-	for (; it != ios.end(); it++) {
+	for (; it != g_ios.end(); it++) {
 		if (*io == *(*it)) {
 			(*it)->deincreemnt();
-			ios.erase(it);
+			g_ios.erase(it);
 			break;
 		}
 	}

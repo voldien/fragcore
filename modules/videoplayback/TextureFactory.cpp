@@ -28,7 +28,7 @@ Texture *TextureFactory::createPerlinNoise(IRenderer *renderer, int width, int h
 	if (renderer == nullptr)
 		throw InvalidArgumentException();
 
-	for (int x = 0; x < width; x) {
+	for (int x = 0; x < width; x++) {
 		for (int y = 0; y < height; y++) {
 			pixels[y * width + x] = Math::PerlinNoise(x * 0.001f, y * 0.001f);
 		}

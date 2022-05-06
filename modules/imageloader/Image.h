@@ -33,10 +33,10 @@ namespace fragcore {
 		Image(unsigned int width, unsigned int height, TextureFormat format);
 		Image(unsigned int width, unsigned int height, unsigned int layer, TextureFormat format);
 
-		Image(const Image &other) = default;
-		Image(Image &&other) = default;
+		Image(const Image &other) {}
+		Image(Image &&other) {}
 
-		~Image();
+		virtual ~Image();
 
 		// TODO set const for the width and height
 		virtual unsigned int width() const noexcept { return this->w; }

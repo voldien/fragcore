@@ -85,6 +85,7 @@ Collision *RPCPhysicInterface::createCollision(const CollisionDesc *desc) {
 	// this->dispatcher->send(eCreateCollision, sizeof(*desc), desc, desc);
 
 	// return this->obtainMappedObject<Collision>(nullptr);
+	return nullptr;
 }
 void RPCPhysicInterface::deleteCollision(Collision *collision) {
 

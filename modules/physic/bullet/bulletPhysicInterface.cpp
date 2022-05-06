@@ -398,6 +398,7 @@ bool BulletPhysicInterface::raySphereTest(const Ray &ray, RayCastHit *hit) {
 	btSoftRigidDynamicsWorld *world = this->dynamicsWorld;
 
 	// world->convexSweepTest
+	return false;
 }
 
 // void BulletPhysicInterface::setDebugRenderer(Ref <IRenderer>& renderer) {

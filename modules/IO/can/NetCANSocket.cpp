@@ -231,6 +231,7 @@ CANNetSocket::NetStatus CANNetSocket::accept(NetSocket &socket) {
 	int aaccept_socket = ::accept(this->socket, &tobuffer, &aclen);
 	if (aaccept_socket < 0) {
 	}
+	return NetStatus::Status_Disconnected;
 }
 
 int CANNetSocket::read() { return 0; }

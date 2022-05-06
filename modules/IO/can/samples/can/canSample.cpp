@@ -20,8 +20,9 @@ int main(int argc, const char **argv) {
 		do {
 			CANAddress recvAddr(0);
 			int c = net.recvfrom((uint8_t *)data, sizeof(data), nr, recvAddr) / 1;
-			if (c < 0)
+			if (c < 0) {
 				break;
+			}
 			printf("Adddress: 0x%x - ", recvAddr.getID());
 			for (int i = 0; i < c; i++)
 				printf("%c", data[i]);
@@ -33,6 +34,6 @@ int main(int argc, const char **argv) {
 		std::cerr << ex.what() << std::endl;
 		return EXIT_FAILURE;
 	}
-	std::cout << "Bye Bye";
+	std::cout << "Bye Bye" << std::endl;
 	return EXIT_SUCCESS;
 }

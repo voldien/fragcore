@@ -33,27 +33,27 @@ namespace fragcore {
 
 		virtual ~VKBuffer();
 
-		virtual void bind();
+		virtual void bind() override;
 
-		virtual void bind(unsigned int offset, unsigned int size);
+		virtual void bind(unsigned int offset, unsigned int size) override;
 
-		virtual void bindBase(unsigned int base);
+		virtual void bindBase(unsigned int base) override;
 
-		virtual void subData(const void *data, unsigned int offset, unsigned int size);
+		virtual void subData(const void *data, unsigned int offset, unsigned int size) override;
 
-		virtual void *getData(unsigned int offset, unsigned int size);
+		virtual void *getData(unsigned int offset, unsigned int size) override;
 
-		virtual bool isValid();
+		virtual bool isValid() override;
 
-		virtual long int getSize();
+		virtual long int getSize() override;
 
-		virtual void *mapBuffer(MapTarget target);
+		virtual void *mapBuffer(MapTarget target) override;
 
-		virtual void *mapBuffer(MapTarget target, unsigned long int offset, unsigned long int length);
+		virtual void *mapBuffer(MapTarget target, unsigned long int offset, unsigned long int length) override;
 
-		virtual void flush(unsigned long int offset, unsigned long int length);
+		virtual void flush(unsigned long int offset, unsigned long int length) override;
 
-		virtual void unMapBuffer();
+		virtual void unMapBuffer() override;
 
 		// virtual void clear(uint32_t i);
 		void setName(const std::string &name) override;

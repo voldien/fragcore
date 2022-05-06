@@ -119,3 +119,65 @@ Image ImageLoader::loadImage(Ref<IO> &io) {
 
 	return image;
 }
+
+void ImageLoader::saveImage(Ref<IO> &IO, Image &image) {
+	// void *pixels = nullptr;
+	// FIMEMORY *fimemory = nullptr;
+	// FIBITMAP *image = nullptr;
+	// FIBITMAP *finalImage = nullptr;
+	// FREE_IMAGE_FORMAT image_format = FIF_UNKNOWN;
+
+	// assert(renderer && texture);
+
+	// Texture::Format textureformat = Texture::eR8G8B8;
+	// const unsigned int Bpp = textureformat == Texture::eR8G8B8 ? 3 : 4; /*  TODO improve logic. */
+	// const unsigned long size = texture->width() * texture->height() * Bpp;
+
+	// /*  Validate argument.  */
+	// if (size <= 0)
+	// 	throw RuntimeException("Invalid texture, yield invalid size.");
+
+	// /*  Read current pixels from mandelbrot set.    */
+	// pixels = texture->mapTexture(textureformat, 0);
+	// if (pixels == nullptr)
+	// 	throw RuntimeException("Texture pixel mapping failed.");
+
+	// FreeImage_Initialise(FALSE);
+
+	// /*  Get file fmt::format.    */
+	// image_format = FreeImage_GetFIFFromFilename(filepath.c_str());
+	// if (image_format == FIF_UNKNOWN) {
+	// 	texture->unMapTexture();
+	// 	throw InvalidArgumentException("filepath file format is not supported : {}", filepath);
+	// }
+
+	// // TODO resolve color swizzle issue.
+	// /*  Allocate image buffer.  */
+	// image = FreeImage_ConvertFromRawBits((BYTE *)pixels, texture->width(), texture->height(), Bpp * texture->width(),
+	// 									 Bpp * 8, 0x000000FF, 0x0000FF00, 0x00FF0000, FALSE);
+	// if (image == nullptr) {
+	// 	FreeImage_DeInitialise();
+	// 	throw RuntimeException("FreeImage_ConvertFromRawBits failed: {}", filepath);
+	// }
+
+	// /*  */
+	// finalImage = FreeImage_ConvertTo32Bits(image);
+	// if (finalImage == nullptr) {
+	// 	throw RuntimeException("Failed convert image: {}", filepath);
+	// }
+
+	// /*  Save to file.   */
+	// // FreeImage_SaveToHandle()
+
+	// // FIMEMORY* mem = FreeImage_OpenMemory(nullptr, FreeImage_GetMemorySize(image));
+	// // FreeImage_SaveToMemory(image_format, image, mem);
+
+	// if (!FreeImage_Save(image_format, image, filepath.c_str(), 0))
+	// 	throw RuntimeException("Failed save image: {}", filepath);
+
+	// /*  */
+	// FreeImage_CloseMemory(fimemory);
+	// texture->unMapTexture();
+	// FreeImage_Unload(image);
+	// FreeImage_DeInitialise();
+}

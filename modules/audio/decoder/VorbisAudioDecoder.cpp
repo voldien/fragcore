@@ -104,7 +104,7 @@ VorbisAudioDecoder::~VorbisAudioDecoder() { ov_clear(ov); }
 
 void VorbisAudioDecoder::seek(long int microseconds) { ov_time_seek(ov, microseconds * 1000.0); }
 
-void *VorbisAudioDecoder::getData(long int *size) {
+void *VorbisAudioDecoder::getData(long int *psize) {
 	vorbis_info *vi = ov_info(ov, -1);
 	size_t data_len = ov_pcm_total(ov, -1) * vi->channels * 4;
 
@@ -123,7 +123,7 @@ void *VorbisAudioDecoder::getData(long int *size) {
 			throw RuntimeException("");
 	}
 
-	*size = data_len;
+	*psize = data_len;
 	return pcmout1;
 }
 char pcmout[4096 * 16];

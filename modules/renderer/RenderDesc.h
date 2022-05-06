@@ -161,10 +161,10 @@ namespace fragcore {
 		Texture *originalTexture; /*  Use viewport.   */
 
 		/*  Target. */
-		Target target;		 /*	Texture target.	*/
-		unsigned int width;	 /*	Texture width in pixels.	*/
-		unsigned int height; /*	Texture height in pixels.	*/
-		unsigned int depth;	 /*	Texture depth in pixels.	*/
+		Target target; /*	Texture target.	*/
+		int width;	   /*	Texture width in pixels.	*/
+		int height;	   /*	Texture height in pixels.	*/
+		int depth;	   /*	Texture depth in pixels.	*/
 
 		/*  */
 		// Input format.
@@ -192,13 +192,13 @@ namespace fragcore {
 		unsigned int srgb; /*  Enable gamma correction.    */
 
 		enum class Swizzle {
-			eNoSwizzle = 0x0, /*  */
-			eZero = 0x1,	  /*  */
-			eOne = 0x2,		  /*  */
-			eRed = 0x3,		  /*  */
-			eGreen = 0x4,	  /*  */
-			eBlue = 0x5,	  /*  */
-			eAlpha = 0x6,	  /*  */
+			NoSwizzle = 0x0, /*  */
+			Zero = 0x1,		 /*  */
+			One = 0x2,		 /*  */
+			Red = 0x3,		 /*  */
+			Green = 0x4,	 /*  */
+			Blue = 0x5,		 /*  */
+			eAlpha = 0x6,	 /*  */
 		};
 
 		/*  Set swizzle.    */
@@ -239,7 +239,7 @@ namespace fragcore {
 
 	// TOOD rename all enum without the e infront.
 	enum class ShaderType {
-		eUnknownShader,
+		Unknown,
 		Vertex,	 /*  */
 		Frag,	 /*  */
 		Geom,	 /*  */
@@ -390,9 +390,6 @@ namespace fragcore {
 
 		};
 
-		/**
-		 *
-		 */
 		unsigned int type; /*	Buffer data type.	*/
 		size_t size;	   /*	Buffer size in bytes.	*/
 		void *data;		   /*	Buffer host data pointer.	*/
@@ -447,11 +444,11 @@ namespace fragcore {
 	 */
 	typedef struct geometry_desc_t {
 		enum class Primitive {
-			ePoint = 0x1,			 /**/
-			eLines = 0x2,			 /**/
-			eTriangles = 0x3,		 /**/
-			eTriangleStrips = 0x4,	 /**/
-			eTriangleAdjacant = 0x5, /**/
+			Point = 0x1,			 /**/
+			Lines = 0x2,			 /**/
+			Triangles = 0x3,		 /**/
+			TriangleStrips = 0x4,	 /**/
+			TriangleAdjacant = 0x5, /**/
 		};
 
 		enum class AttributeType {

@@ -443,16 +443,16 @@ Texture *GLRendererInterface::createTexture(TextureDesc *desc) {
 		glTexParameteri(target, GL_TEXTURE_BASE_LEVEL, 0);
 		checkError();
 
-		if (desc->Swizzler != TextureDesc::Swizzle::eNoSwizzle) {
+		if (desc->Swizzler != TextureDesc::Swizzle::NoSwizzle) {
 			glTexParameteri(target, GL_TEXTURE_SWIZZLE_R, getTextureSwizzle(desc->Swizzler));
 		}
-		if (desc->Swizzleg != TextureDesc::Swizzle::eNoSwizzle) {
+		if (desc->Swizzleg != TextureDesc::Swizzle::NoSwizzle) {
 			glTexParameteri(target, GL_TEXTURE_SWIZZLE_G, getTextureSwizzle(desc->Swizzleg));
 		}
-		if (desc->Swizzleb != TextureDesc::Swizzle::eNoSwizzle) {
+		if (desc->Swizzleb != TextureDesc::Swizzle::NoSwizzle) {
 			glTexParameteri(target, GL_TEXTURE_SWIZZLE_B, getTextureSwizzle(desc->Swizzleb));
 		}
-		if (desc->Swizzlea != TextureDesc::Swizzle::eNoSwizzle) {
+		if (desc->Swizzlea != TextureDesc::Swizzle::NoSwizzle) {
 			glTexParameteri(target, GL_TEXTURE_SWIZZLE_A, getTextureSwizzle(desc->Swizzlea));
 		}
 
@@ -1348,7 +1348,7 @@ void GLRendererInterface::clear(unsigned int bitflag) {
 	GLbitfield mask = 0;
 	mask |= (bitflag & (unsigned int)CLEARBITMASK::Color) != 0 ? GL_COLOR_BUFFER_BIT : 0;
 	mask |= (bitflag & (unsigned int)CLEARBITMASK::Depth) != 0 ? GL_DEPTH_BUFFER_BIT : 0;
-	mask |= (bitflag & (unsigned int)CLEARBITMASK::eStencil) != 0 ? GL_STENCIL_BUFFER_BIT : 0;
+	mask |= (bitflag & (unsigned int)CLEARBITMASK::Stencil) != 0 ? GL_STENCIL_BUFFER_BIT : 0;
 	glClear(mask);
 }
 

@@ -6,4 +6,4 @@ BulletCollider::BulletCollider() {}
 
 BulletCollider::~BulletCollider() {}
 
-Vector3 BulletCollider::getCenter() {}
+Vector3 BulletCollider::getCenter() { return Vector3(); }

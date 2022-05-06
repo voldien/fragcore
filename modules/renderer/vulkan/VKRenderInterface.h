@@ -81,66 +81,17 @@ namespace fragcore {
 
 		virtual void deleteQuery(QueryObject *query) override;
 
+		virtual Sync *createSync(SyncDesc *desc) override;
+
+		virtual void deleteSync(Sync *sync) override;
+
 		virtual RendererWindow *createWindow(int x, int y, int width, int height) override;
 
 		virtual void setCurrentWindow(RendererWindow *window) override;
 
 		virtual FrameBuffer *getDefaultFramebuffer(void *window) override;
 
-		// TODO add viewobject for handling as a object
 		virtual ViewPort *getView(unsigned int i) override;
-
-		virtual void clear(unsigned int bitflag); // TODO relocate to the default framebuffer.
-
-		virtual void clearColor(float r, float g, float b, float a); // TODO relocate to the framebuffer.
-
-		virtual void setVSync(int sync); // TODO relocate to the render window.
-
-		virtual void swapBuffer(); // TODO relocate to the render window.
-
-		virtual void setDepthMask(bool flag) override;
-
-		virtual void enableState(IRenderer::State state) override;
-
-		virtual void disableState(IRenderer::State state) override;
-
-		virtual bool isStateEnabled(IRenderer::State state) override;
-
-		virtual void drawInstance(Geometry *geometry, unsigned int num) override;
-		// virtual void drawInstance(Shader* pipeline, GeometryObject* geometry, unsigned int num);
-
-		virtual void drawMultiInstance(Geometry &geometries, const unsigned int *first, const unsigned int *count,
-									   unsigned int num) override;
-
-		virtual void drawMultiIndirect(Geometry &geometries, unsigned int offset, unsigned int indirectCount) override;
-
-		virtual void drawIndirect(Geometry *geometry) override;
-
-		virtual void setLineWidth(float width) override;
-
-		virtual void blit(
-			const FrameBuffer *source, FrameBuffer *dest,
-			Texture::FilterMode filterMode) override; // TODO add filter mode.    /*  TODO add filter and buffer bit. */
-		// virtual void blit(const FrameBuffer* source, FrameBuffer* dest, int* source, int* dest, Texture::FilterMode
-		// filterMode, FrameBuffer::BufferAttachment attachment);
-		// TODO add additional version of the blit for sub image specifiction.
-
-		virtual void bindTextures(unsigned int firstUnit, const std::vector<Texture *> &textures) override;
-
-		virtual void bindImages(unsigned int firstUnit, const std::vector<Texture *> &textures,
-								const std::vector<Texture::MapTarget> &mapping,
-								const std::vector<Texture::Format> &formats) override;
-
-		virtual void copyTexture(const Texture *source, Texture *target) override;
-
-		virtual void dispatchCompute(unsigned int *global, unsigned int *local, unsigned int offset = 0) override;
-
-		// TODO add memory barrier.
-		virtual void memoryBarrier() override;
-
-		virtual Sync *createSync(SyncDesc *desc) override;
-
-		virtual void deleteSync(Sync *sync) override;
 
 		virtual void setDebug(bool enable) override;
 

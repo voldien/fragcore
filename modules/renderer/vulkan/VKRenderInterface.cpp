@@ -28,7 +28,6 @@ using namespace fragcore;
 #define RENDER_VULKAN_MINOR 1
 #define RENDER_VULKAN_PATCH 0
 
-// TODO enable
 static bool validate_object_memeber(VKRenderInterface *renderer, RenderObject *object) {
 	return renderer == object->getRenderer();
 }
@@ -70,6 +69,7 @@ VKRenderInterface::VKRenderInterface(IConfig *config) {
 	std::unordered_map<const char *, bool> required_instance_layer = {{"VK_LAYER_KHRONOS_validation", true}};
 	std::unordered_map<const char *, bool> required_device_extensions = {{VK_KHR_SWAPCHAIN_EXTENSION_NAME, true}};
 
+	/*	*/
 	this->core = std::make_shared<VulkanCore>(required_instance_extensions, required_instance_layer);
 	std::vector<std::shared_ptr<PhysicalDevice>> devices = core->createPhysicalDevices();
 	this->device = std::make_shared<VKDevice>(devices, required_device_extensions);
@@ -104,8 +104,9 @@ Texture *VKRenderInterface::createTexture(TextureDesc *desc) {
 
 	vkGetPhysicalDeviceMemoryProperties(physicalDevice, &memProperties);
 
-	if (!pixels)
+	if (!pixels) {
 		throw cxxexcept::RuntimeException("failed to load texture image!");
+	}
 
 	VkCommandBuffer cmd = VKHelper::beginSingleTimeCommands(getDevice()->getHandle(), commandPool);
 
@@ -146,20 +147,7 @@ Texture *VKRenderInterface::createTexture(TextureDesc *desc) {
 	return texture;
 }
 
-void VKRenderInterface::deleteTexture(Texture *texture) {
-
-	// VKTextureObject *vkTextureObject = (VKTextureObject *)texture->pdata;
-
-	// /*  Release resources.  */
-	// if (vkTextureObject->texture)
-	// 	vkDestroyImage(device->getHandle(), vkTextureObject->texture, nullptr);
-	// if (vkTextureObject->sampler)
-	// 	vkDestroySampler(device->getHandle(), vkTextureObject->sampler, nullptr);
-
-	// /*  Release objects.    */
-	// //delete texture->pdata;
-	// delete texture;
-}
+void VKRenderInterface::deleteTexture(Texture *texture) { delete texture; }
 
 Sampler *VKRenderInterface::createSampler(SamplerDesc *desc) {
 
@@ -167,7 +155,6 @@ Sampler *VKRenderInterface::createSampler(SamplerDesc *desc) {
 		throw InvalidArgumentException("Invalid sampler description pointer object.");
 
 	/*  */
-
 	VKSampler *sampler = new VKSampler();
 	VkSampler vkSampler;
 	VKHelper::createSampler(getDevice()->getHandle(), vkSampler);
@@ -667,27 +654,6 @@ void VKRenderInterface::deleteGeometry(Geometry *obj) {
 	delete obj;
 }
 
-// void VKRenderInterface::setViewport(int x, int y, int width, int height) {
-//
-//	VulkanCore *vulkanCore = (VulkanCore *) this->pdata;
-//
-//	VkViewport viewport = {};
-//	viewport.x = x;
-//	viewport.y = y;
-//	viewport.width = (float) width;
-//	viewport.height = (float) height;
-//	viewport.minDepth = 0.0f;
-//	viewport.maxDepth = 1.0f;
-//
-//	return;
-//
-//	/*  */
-//	for(uint32_t i = 0; i < swapChain->swapchainImageCount; i++)
-//		vkCmdSetViewport(swapChain->commandBuffers[i], 0, 1, &viewport);
-//
-//	/*  Create swapchain.   */
-//}
-
 ViewPort *VKRenderInterface::getView(unsigned int i) {
 
 	/*  Validate the index. */
@@ -733,193 +699,6 @@ FrameBuffer *VKRenderInterface::getDefaultFramebuffer(void *window) {
 
 	return defaultFrambuffer;
 }
-
-void VKRenderInterface::clear(unsigned int bitflag) {
-
-	const uint32_t currentFrame = currentFrame;
-	return;
-	if (bitflag & (unsigned int)CLEARBITMASK::Color) {
-		// VkClearColorValue clearColor = {color[0], color[1], color[2],
-		// 								color[3]};
-		// /*  */
-		// VkImageSubresourceRange imageRange = {};
-		// imageRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-		// imageRange.levelCount = 1;
-		// imageRange.layerCount = 1;
-
-		// vkCmdClearColorImage(swapChain->commandBuffers[currentFrame],
-		// 					 swapChain->swapChainImages[currentFrame], VK_IMAGE_LAYOUT_GENERAL,
-		// 					 &clearColor, 1, &imageRange);
-	}
-
-	if (bitflag & (unsigned int)CLEARBITMASK::Depth || bitflag & (unsigned int)CLEARBITMASK::eStencil) {
-		VkClearDepthStencilValue depthStencilClear = {0.0f, 0};
-
-		/*  */
-		VkImageSubresourceRange imageRange = {};
-		imageRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-		imageRange.levelCount = 1;
-		imageRange.layerCount = 1;
-
-		// vkCmdClearDepthStencilImage(swapChain->commandBuffers[currentFrame],
-		// 							swapChain->swapChainImages[currentFrame],
-		// VK_IMAGE_LAYOUT_GENERAL, 							&depthStencilClear, 1, &imageRange);
-	}
-}
-
-void VKRenderInterface::clearColor(float r, float g, float b, float a) {
-
-	/*  Cache the clear color.  */
-	// color[0] = r;
-	// color[1] = g;
-	// color[2] = b;
-	// color[3] = a;
-}
-
-void VKRenderInterface::setVSync(int sync) { /*  Change the toolchain.   */
-}
-
-void VKRenderInterface::setDepthMask(bool flag) { /*  */
-}
-
-void VKRenderInterface::enableState(VKRenderInterface::State state) { /*  */
-}
-
-void VKRenderInterface::disableState(VKRenderInterface::State state) { /*  */
-}
-
-bool VKRenderInterface::isStateEnabled(VKRenderInterface::State state) {}
-
-void VKRenderInterface::swapBuffer() {
-
-	// VkResult result;
-	// uint32_t imageIndex;
-
-	// VulkanCore *vulkanCore = (VulkanCore *) this->pdata;
-	// result = vkEndCommandBuffer(swapChain->commandBuffers[currentFrame]);
-	// if(result  != VK_SUCCESS)
-	// 	throw RuntimeException("failed");
-
-	// /*  */
-	// result = vkAcquireNextImageKHR(device->getHandle(), swapChain->swapchain, UINT64_MAX,
-	// 							   renderFinishedSemaphore, VK_NULL_HANDLE, &imageIndex);
-	// if(result == VK_ERROR_OUT_OF_DATE_KHR){
-	// 	/*  Recreate.   */
-	// }
-	// if(result != VK_SUCCESS)
-	// 	throw RuntimeException(fmt::format("Failed to acquire next image - %d", result));
-
-	// VkSubmitInfo submitInfo = {};
-	// submitInfo.sType                = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-	// submitInfo.commandBufferCount   = 1;
-	// submitInfo.pCommandBuffers      = &swapChain->commandBuffers[imageIndex];
-
-	// result = vkQueueSubmit(queue, 1, &submitInfo, nullptr);
-	// if(result != VK_SUCCESS)
-	// 	throw RuntimeException("Failed to submit to queue.");
-
-	// VkPresentInfoKHR presentInfo = {};
-	// presentInfo.sType              = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
-	// presentInfo.swapchainCount     = 1;
-	// presentInfo.pSwapchains        = &swapChain->swapchain;
-	// presentInfo.pImageIndices      = &imageIndex;
-
-	// result = vkQueuePresentKHR(queue, &presentInfo);
-	// if(result != VK_SUCCESS)
-	// 	throw RuntimeException(fmt::format("Failed to present - %d", result));
-
-	// vkQueueWaitIdle(queue);
-
-	// /*  Compute current frame.  */
-	// currentFrame = (currentFrame + 1) % swapChain->swapChainImages.size();
-
-	// /*  Reset command buffer.    */
-	// result = vkResetCommandBuffer(swapChain->commandBuffers[currentFrame],
-	// VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT); if(result != VK_SUCCESS) 	throw RuntimeException("failed");
-
-	// /*  */
-	// VkCommandBufferBeginInfo beginInfo = {};
-	// beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-	// beginInfo.flags = VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
-
-	// /*  */
-	// result = vkBeginCommandBuffer(swapChain->commandBuffers[currentFrame], &beginInfo);
-	// if(result != VK_SUCCESS)
-	// 	throw RuntimeException("Failed to start the ");
-}
-
-void VKRenderInterface::drawInstance(Geometry *geometry, unsigned int num) {
-
-	// VKGeometryObject *glgeo;
-	// assert(geometry && num > 0);
-
-	// /*  */
-	// //	const uint32_t curFrame = currentFrame;
-	// //	glgeo = (VKGeometryObject *)geometry->pdata;
-
-	// // /*  */
-	// // VKBufferObject *vertexBuffer = (VKBufferObject *)glgeo->vertexbuffer->pdata;
-	// // VkBuffer vertexBuffers[] = {vertexBuffer->buffer};
-
-	// /*  */
-	// if (glgeo->desc.numIndices > 0) {
-	// 	assert(glgeo->vertexbuffer && glgeo->indicesbuffer);
-	// 	VkDeviceSize offsets[] = {0};
-
-	// 	// VKBufferObject *indexBuffer = (VKBufferObject *)glgeo->indicesbuffer->pdata;
-	// 	// vkCmdBindVertexBuffers(swapChain->commandBuffers[curFrame], 0, 1, vertexBuffers, offsets);
-	// 	// vkCmdBindIndexBuffer(swapChain->commandBuffers[curFrame], indexBuffer->buffer, offsets[0],
-	// 	// VK_INDEX_TYPE_UINT16);
-
-	// 	// vkCmdDrawIndexed(swapChain->commandBuffers[curFrame],
-	// 	// static_cast<uint32_t>(geometry->getIndicesCount()), 1, 0, 0, 0);
-
-	// } else {
-	// 	assert(glgeo->vertexbuffer);
-
-	// 	VkDeviceSize offsets[] = {0};
-	// 	// vkCmdBindVertexBuffers(swapChain->commandBuffers[curFrame], 0, 1, vertexBuffers, offsets);
-
-	// 	// vkCmdDraw(swapChain->commandBuffers[curFrame], static_cast<uint32_t>(geometry->getVertexCount()),
-	// 	// 1, 0, 0);
-	// }
-}
-
-void VKRenderInterface::drawMultiInstance(Geometry &geometries, const unsigned int *first, const unsigned int *count,
-										  unsigned int num) {}
-void VKRenderInterface::drawMultiIndirect(Geometry &geometries, unsigned int offset, unsigned int indirectCount) {}
-
-void VKRenderInterface::drawIndirect(Geometry *geometry) {}
-
-void VKRenderInterface::setLineWidth(float width) {}
-
-void VKRenderInterface::blit(const FrameBuffer *source, FrameBuffer *dest,
-							 Texture::FilterMode filterMode) { /*  TODO add filter.    */
-
-	// vkCmdBlitImage()
-}
-
-void VKRenderInterface::bindTextures(unsigned int firstUnit, const std::vector<Texture *> &textures) {}
-
-void VKRenderInterface::bindImages(unsigned int firstUnit, const std::vector<Texture *> &textures,
-								   const std::vector<Texture::MapTarget> &mapping,
-								   const std::vector<Texture::Format> &formats) {}
-
-void VKRenderInterface::copyTexture(const Texture *source, Texture *target) {
-	// vkCmdCopyImage()
-}
-
-void VKRenderInterface::dispatchCompute(unsigned int *global, unsigned int *local, unsigned int offset) {
-
-	/*  */
-	// const uint32_t curFrame = currentFrame;
-	//	VkCommandBuffer curBuffer = swapChain->commandBuffers[curFrame];
-
-	/*  */
-	// vkCmdDispatch(curBuffer, local[0], local[1], local[2]);
-}
-
-void VKRenderInterface::memoryBarrier() {}
 
 Sync *VKRenderInterface::createSync(SyncDesc *desc) {}
 void VKRenderInterface::deleteSync(Sync *sync) {}

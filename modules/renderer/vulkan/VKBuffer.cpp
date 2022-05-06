@@ -22,9 +22,9 @@ void VKBuffer::bindBase(unsigned int base) {}
 
 void VKBuffer::subData(const void *data, unsigned int offset, unsigned int size) {}
 
-void *VKBuffer::getData(unsigned int offset, unsigned int size) {}
+void *VKBuffer::getData(unsigned int offset, unsigned int size) { return nullptr; }
 
-bool VKBuffer::isValid() {}
+bool VKBuffer::isValid() { return true; }
 
 long int VKBuffer::getSize() {
 
@@ -51,18 +51,18 @@ void *VKBuffer::mapBuffer(VKBuffer::MapTarget target) {
 	return pbuf;
 }
 
-void *VKBuffer::mapBuffer(MapTarget target, unsigned long int offset, unsigned long int length) {}
+void *VKBuffer::mapBuffer(MapTarget target, unsigned long int offset, unsigned long int length) { return nullptr; }
 
 void VKBuffer::flush(unsigned long int offset, unsigned long int length) {
 
 	VkMappedMemoryRange stagingRange{};
 	stagingRange.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
-	//stagingRange.memory = this->buffer;
+	// stagingRange.memory = this->buffer;
 	//->getMemoryBuffer();
 	stagingRange.offset = 0;
 	stagingRange.size = length;
 
-	//vkFlushMappedMemoryRanges(getRenderer<VKRendererInterface>()->getDevice()->getHandle(), 1, &stagingRange);
+	// vkFlushMappedMemoryRanges(getRenderer<VKRendererInterface>()->getDevice()->getHandle(), 1, &stagingRange);
 }
 
 void VKBuffer::unMapBuffer() {

@@ -547,15 +547,15 @@ unsigned int getTextureType(TextureDesc::Type type) {
 
 unsigned int getTextureSwizzle(TextureDesc::Swizzle swizzle) {
 	switch (swizzle) {
-	case TextureDesc::Swizzle::eZero:
+	case TextureDesc::Swizzle::Zero:
 		return GL_ZERO;
-	case TextureDesc::Swizzle::eOne:
+	case TextureDesc::Swizzle::One:
 		return GL_ONE;
-	case TextureDesc::Swizzle::eRed:
+	case TextureDesc::Swizzle::Red:
 		return GL_RED;
-	case TextureDesc::Swizzle::eGreen:
+	case TextureDesc::Swizzle::Green:
 		return GL_GREEN;
-	case TextureDesc::Swizzle::eBlue:
+	case TextureDesc::Swizzle::Blue:
 		return GL_BLUE;
 	case TextureDesc::Swizzle::eAlpha:
 		return GL_ALPHA;
@@ -627,14 +627,16 @@ unsigned int getBufferHint(BufferDesc::BufferHint hint) {
 unsigned int getPrimitive(GeometryDesc::Primitive primitive) {
 
 	switch (primitive) {
-	case GeometryDesc::Primitive::ePoint:
+	case GeometryDesc::Primitive::Point:
 		return GL_POINTS;
-	case GeometryDesc::Primitive::eLines:
+	case GeometryDesc::Primitive::Lines:
 		return GL_LINES;
-	case GeometryDesc::Primitive::eTriangles:
+	case GeometryDesc::Primitive::Triangles:
 		return GL_TRIANGLES;
-	case GeometryDesc::Primitive::eTriangleStrips:
+	case GeometryDesc::Primitive::TriangleStrips:
 		return GL_TRIANGLE_STRIP;
+	case GeometryDesc::Primitive::TriangleAdjacant:
+		return GL_TRIANGLES_ADJACENCY;
 	default:
 		throw InvalidArgumentException("None matching primitive type - {}.", primitive);
 	}
@@ -729,7 +731,7 @@ unsigned int getClearBitMask(CLEARBITMASK clearbitmask) {
 	GLbitfield mask = 0;
 	mask |= ((unsigned int)clearbitmask & (unsigned int)CLEARBITMASK::Color) != 0 ? GL_COLOR_BUFFER_BIT : 0;
 	mask |= ((unsigned int)clearbitmask & (unsigned int)CLEARBITMASK::Depth) != 0 ? GL_DEPTH_BUFFER_BIT : 0;
-	mask |= ((unsigned int)clearbitmask & (unsigned int)CLEARBITMASK::eStencil) != 0 ? GL_STENCIL_BUFFER_BIT : 0;
+	mask |= ((unsigned int)clearbitmask & (unsigned int)CLEARBITMASK::Stencil) != 0 ? GL_STENCIL_BUFFER_BIT : 0;
 	return mask;
 }
 

@@ -36,7 +36,7 @@ namespace fragcore {
 	enum class CLEARBITMASK : uint32_t { // TODO rename
 		Color = 0x1,					 /*	Clear color.    */
 		Depth = 0x2,					 /*	Clear depth.    */
-		eStencil = 0x4,					 /*	Clear stencil.  */
+		Stencil = 0x4,					 /*	Clear stencil.  */
 	};
 
 	/**
@@ -154,6 +154,10 @@ namespace fragcore {
 
 		virtual void deleteQuery(QueryObject *query) = 0;
 
+		virtual Sync *createSync(SyncDesc *desc) = 0;
+
+		virtual void deleteSync(Sync *sync) = 0;
+
 		/**
 		 *
 		 * @param x
@@ -176,103 +180,13 @@ namespace fragcore {
 		 */
 		virtual FrameBuffer *getDefaultFramebuffer(void *window) = 0;
 
-		// TODO add viewobject for handling as a object
 		virtual ViewPort *getView(unsigned int i) = 0;
 
-		/**
-		 *	Set depth mask.
-		 */
-		virtual void setDepthMask(bool flag) = 0;
+		// virtual void bindTextures(unsigned int firstUnit, const std::vector<Texture *> &textures) = 0;
 
-		/**
-		 *	Enable state.
-		 */
-		virtual void enableState(IRenderer::State state) = 0;
-
-		/**
-		 *	Disable state.
-		 */
-		virtual void disableState(IRenderer::State state) = 0;
-
-		/**
-		 *
-		 * @param state
-		 * @return
-		 */
-		virtual bool isStateEnabled(IRenderer::State state) = 0;
-
-		/**
-		 *
-		 * @param geometry
-		 * @param num
-		 */
-		virtual void drawInstance(Geometry *geometry, unsigned int num) = 0;
-		// virtual void drawInstance(Shader* pipeline, GeometryObject* geometry, unsigned int num);
-
-		/**
-		 *
-		 * @param geometries
-		 * @param num
-		 */
-		virtual void drawMultiInstance(Geometry &geometries, const unsigned int *first, const unsigned int *count,
-									   unsigned int num) = 0;
-
-		virtual void drawMultiIndirect(Geometry &geometries, unsigned int offset, unsigned int indirectCount) = 0;
-
-		/**
-		 *
-		 * @param geometries
-		 * @param num
-		 */
-		virtual void drawIndirect(Geometry *geometry) = 0;
-
-		/**
-		 *
-		 * @param width
-		 */
-		virtual void setLineWidth(float width) = 0;
-
-		/**
-		 *
-		 * @param source
-		 * @param dest
-		 */
-		virtual void
-		blit(const FrameBuffer *source, FrameBuffer *dest,
-			 Texture::FilterMode filterMode) = 0; // TODO add filter mode.    /*  TODO add filter and buffer bit.    */
-		// virtual void blit(const FrameBuffer* source, FrameBuffer* dest, int* source, int* dest, Texture::FilterMode
-		// filterMode, FrameBuffer::BufferAttachment attachment);
-		// TODO add additional version of the blit for sub image specifiction.
-
-		virtual void bindTextures(unsigned int firstUnit, const std::vector<Texture *> &textures) = 0;
-
-		virtual void bindImages(unsigned int firstUnit, const std::vector<Texture *> &textures,
-								const std::vector<Texture::MapTarget> &mapping,
-								const std::vector<Texture::Format> &formats) = 0;
-
-		/**
-		 *
-		 * @param source
-		 * @param target
-		 */
-		// TODO add version with regiion specifiction.
-		virtual void copyTexture(const Texture *source, Texture *target) = 0;
-		// virtual void copyTexture(const Texture* source, Texture* target, int* sourceCoord, int* targetCoord);
-
-		/**
-		 * Dispatch compute program.
-		 * @param global global workgroup.
-		 * @param local local workgroup
-		 * @param offset offset in indirect buffer in number of bytes.
-		 */
-		virtual void dispatchCompute(unsigned int *global, unsigned int *local, unsigned int offset = 0) = 0;
-
-		// TODO add memory barrier.
-		virtual void memoryBarrier() = 0;
-
-		virtual Sync *createSync(SyncDesc *desc) = 0;
-
-		virtual void deleteSync(Sync *sync) = 0;
+		// virtual void bindImages(unsigned int firstUnit, const std::vector<Texture *> &textures,
+		// 						const std::vector<Texture::MapTarget> &mapping,
+		// 						const std::vector<Texture::Format> &formats) = 0;
 
 		// virtual void execute(CommandList *list);
 
@@ -339,9 +253,6 @@ namespace fragcore {
 		virtual void execute(CommandList *list) = 0;
 
 		virtual void *getData() const = 0;
-
-	  private: /*  */
-		void *pdata;
 	};
 } // namespace fragcore
 
