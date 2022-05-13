@@ -62,9 +62,9 @@ void FileIO::open(const char *path, IOMode mode) {
 		throw InvalidArgumentException("Invalid IO mode {}", mode);
 	}
 
-	file = fopen(path, f_io_mode);
+	this->file = fopen(path, f_io_mode);
 	/*	Check if open was successful.	*/
-	if (file == nullptr) {
+	if (this->file == nullptr) {
 		// TODO check the error
 		switch (errno) {
 		case ENOENT:

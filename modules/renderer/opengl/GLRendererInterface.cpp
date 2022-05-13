@@ -1569,7 +1569,7 @@ void GLRendererInterface::dispatchCompute(unsigned int *global, unsigned int *lo
 
 void GLRendererInterface::memoryBarrier() {}
 
-void callback_debug_gl(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar *message,
+void default_callback_debug_gl(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar *message,
 					   GLvoid *userParam) {
 
 	const char *sourceString;
@@ -1691,7 +1691,7 @@ void GLRendererInterface::setDebug(bool enable) {
 
 		/*	Set Debug message callback.	*/
 		if (callback) {
-			callback(callback_debug_gl, nullptr);
+			callback(default_callback_debug_gl, nullptr);
 		}
 
 		/*	*/

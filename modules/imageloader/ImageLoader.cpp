@@ -4,6 +4,11 @@
 
 using namespace fragcore;
 
+ImageLoader::ImageLoader(const ImageLoader &other) {}
+ImageLoader::ImageLoader(ImageLoader &&other) {}
+ImageLoader &ImageLoader::operator=(const ImageLoader &other) { return *this; }
+ImageLoader &ImageLoader::operator=(ImageLoader &&other) { return *this; }
+
 Image ImageLoader::loadImage(Ref<IO> &io) {
 
 	/*	Free image.	*/

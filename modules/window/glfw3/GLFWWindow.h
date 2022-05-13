@@ -18,8 +18,8 @@
  */
 #ifndef _FRAG_CORE_GLFW_WINDOW_H_
 #define _FRAG_CORE_GLFW_WINDOW_H_ 1
-#include <GLFW/glfw3.h>
 #include "../Window.h"
+#include <GLFW/glfw3.h>
 #include <string>
 
 namespace fragcore {
@@ -61,13 +61,13 @@ namespace fragcore {
 
 		virtual void getSize(int *width, int *height) const override;
 
-		virtual void resizable(bool resizable) noexcept;
+		virtual void resizable(bool resizable) noexcept override;
 
-		virtual void setFullScreen(bool fullscreen);
+		virtual void setFullScreen(bool fullscreen) override;
 
-		virtual bool isFullScreen() const;
+		virtual bool isFullScreen() const override;
 
-		virtual void setBordered(bool borded);
+		virtual void setBordered(bool borded) override;
 
 		virtual float getGamma() const override;
 

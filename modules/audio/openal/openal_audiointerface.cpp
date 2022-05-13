@@ -94,6 +94,7 @@ AudioClip *OpenALAudioInterface::createAudioClip(AudioClipDesc *desc) {
 		desc->decoder->deincreemnt();
 
 	} else {
+		throw NotSupportedException();
 	}
 
 	return new OpenALAudioClip(*desc);

@@ -265,7 +265,7 @@ long int CANNetSocket::writeFrame(unsigned int ID, size_t nBytes, uint8_t *data)
 	frame.can_dlc = nBytes;
 	long int nsent;
 
-	this->send(&frame, sizeof(struct can_frame), nbytes);
+	nsent = this->send(&frame, sizeof(struct can_frame), nbytes);
 
 	if (nbytes < sizeof(struct can_frame)) {
 	}

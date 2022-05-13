@@ -34,7 +34,7 @@ namespace fragcore {
 		Random(Random &&other) = default;
 		~Random() = default;
 
-		template <typename U> static U rand() { return (float)rand_internal(); }
+		template <typename U> static U rand() { return static_cast<U>(rand_internal()); }
 
 		template <typename U> static constexpr U normalizeRand() noexcept { return rand<U>() / RAND_MAX; }
 		template <typename U> static constexpr U range(U start, U end) noexcept {
