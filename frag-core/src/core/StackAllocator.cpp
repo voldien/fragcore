@@ -28,7 +28,7 @@ void *StackAllocator::alloc(size_t sizeBytes) {
 
 	this->mSize = sizeBytes;
 	this->mData = realloc(mData, sizeBytes);
-	if (!mData) {
+	if (!this->mData) {
 		throw RuntimeException("Failed to allocate {} kb.", (sizeBytes / 1024));
 	}
 	return mData;
@@ -37,7 +37,7 @@ void *StackAllocator::alloc(size_t sizeBytes) {
 size_t StackAllocator::getSize() const { return this->mSize; }
 
 void *StackAllocator::allocateAligned(size_t sizeBytes, int alignment) {
-	sizeBytes += (sizeBytes % alignment);
+	sizeBytes += (alignment - (sizeBytes % alignment));
 	return this->alloc(sizeBytes);
 }
 

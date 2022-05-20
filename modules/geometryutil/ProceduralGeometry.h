@@ -25,20 +25,21 @@ namespace fragcore {
 	class FVDECLSPEC ProceduralGeometry {
 	  public:
 		typedef struct _vertex_t {
+		  public:
 			float vertex[3];
 			float uv[2];
 			float normal[3];
 			float tangent[3];
 		} Vertex;
 
-		void generatePlan(float scale, std::vector<Vertex> &vertices, std::vector<unsigned int> &indices);
+		static void generatePlan(float scale, std::vector<Vertex> &vertices, std::vector<unsigned int> &indices);
 
-		void generateGrid2D();
+		static void generateGrid2D();
 
-		void generateBoundingBox();
-		void generateSphere();
+		static void generateBoundingBox();
+		static void generateSphere();
 
-		void generateCube(float scale, std::vector<Vertex> &vertices, std::vector<unsigned int> &indices);
+		static void generateCube(float scale, std::vector<Vertex> &vertices, std::vector<unsigned int> &indices);
 	};
 
 } // namespace fragcore

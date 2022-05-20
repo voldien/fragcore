@@ -33,7 +33,7 @@ void DoubleBufferedAllocator::alloc(unsigned int sizeBytes) {
 }
 
 void DoubleBufferedAllocator::allocateAligned(unsigned int sizeBytes, int alignment) {
-	sizeBytes += (sizeBytes % alignment);
+	sizeBytes += (alignment - (sizeBytes % alignment));
 	this->alloc(sizeBytes);
 }
 

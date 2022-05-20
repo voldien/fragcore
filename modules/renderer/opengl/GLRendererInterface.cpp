@@ -311,7 +311,7 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 	frameBufferObject->desc.attach[0] = new FrameBufferTexture();
 	// frameBufferObject->desc.attach[0]->iRenderer = this;
 	GLenum drawbuffers[] = {GL_FRONT, GL_BACK};
-	glNamedFramebufferDrawBuffers(0, 2, drawbuffers);
+	//glNamedFramebufferDrawBuffers(0, 2, drawbuffers);
 
 	// TODO determine how to utualize the PBO.
 	/*  Create PBO for image transfer. */

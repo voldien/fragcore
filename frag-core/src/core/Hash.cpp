@@ -7,7 +7,7 @@ using namespace fragcore;
 
 Hash::Hash(Hash::ALGORITHM algorithm) {
 
-	initHash(algorithm);
+	this->initHash(algorithm);
 	/*      */
 	this->algorithm = algorithm;
 	this->nbytes = 0;

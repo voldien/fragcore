@@ -16,29 +16,37 @@ SystemInfo::KernelSystem SystemInfo::getSystemKernel() noexcept {
 SystemInfo::OperatingSystem SystemInfo::getOperatingSystem() noexcept {
 
 	// iware::system::OS_info().full_name
-	if (info.major == 0)
+	if (info.major == 0) {
 		info = iware::system::OS_info();
+	}
 
 	/*  */
-	if (strcmp(info.name.c_str(), "Linux") == 0)
+	if (strcmp(info.name.c_str(), "Linux") == 0) {
 		return SystemInfo::OperatingSystem::Linux;
-	if (strcmp(info.name.c_str(), "Windows") == 0)
+	}
+	if (strcmp(info.name.c_str(), "Windows") == 0) {
 		return SystemInfo::OperatingSystem::Window;
-	if (strcmp(info.name.c_str(), "Android") == 0)
+	}
+	if (strcmp(info.name.c_str(), "Android") == 0) {
 		return SystemInfo::OperatingSystem::Android;
-	if (strcmp(info.name.c_str(), "unix") == 0)
+	}
+	if (strcmp(info.name.c_str(), "unix") == 0) {
 		return SystemInfo::OperatingSystem::Unix;
-	if (strcmp(info.name.c_str(), "iOS") == 0)
+	}
+	if (strcmp(info.name.c_str(), "iOS") == 0) {
 		return SystemInfo::OperatingSystem::IOS;
-	if (strcmp(info.name.c_str(), "Mac OS X") == 0)
+	}
+	if (strcmp(info.name.c_str(), "Mac OS X") == 0) {
 		return SystemInfo::OperatingSystem::Mac;
+	}
 
 	return SystemInfo::OperatingSystem::Unknown;
 }
 
 const std::string &SystemInfo::getOperatingSystemName() noexcept {
-	if (info.major == 0)
+	if (info.major == 0) {
 		info = iware::system::OS_info();
+	}
 	return info.full_name;
 }
 
