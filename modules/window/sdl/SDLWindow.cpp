@@ -36,7 +36,7 @@ std::string SDLWindow::getTitle() const { return SDL_GetWindowTitle(window); }
 void SDLWindow::setIcon(void *) {}
 //		virtual void setIcon(Image& image) = 0;
 
-void *SDLWindow::getIcon() const {}
+void *SDLWindow::getIcon() const { return nullptr; }
 // virtual Image getIcon() const = 0;
 //		virtual Image* setIcon(Image* image) = 0;
 

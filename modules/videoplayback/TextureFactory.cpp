@@ -8,10 +8,11 @@ using namespace fragcore;
 
 Texture *TextureFactory::createChecker(IRenderer *renderer, int width, int height) {
 	void *pixels;
-	int pixelSize;
+
 	assert(renderer && width > 0 && height > 0);
 
 	createChecker(width, height, (char **)&pixels);
+	int pixelSize = width * height * 3;
 
 	Texture *texture = TextureUtil::createTexture(renderer, width, height, pixels, pixelSize, TextureFormat::R8,
 												  GraphicFormat::R8G8B8_SRGB);

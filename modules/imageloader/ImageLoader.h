@@ -32,8 +32,10 @@ namespace fragcore {
 	class FVDECLSPEC ImageLoader : public Object {
 	  public:
 		ImageLoader() = default;
-		ImageLoader(const ImageLoader &other) = default;
-		ImageLoader(ImageLoader &&other) = default;
+		ImageLoader(const ImageLoader &other);
+		ImageLoader(ImageLoader &&other);
+		ImageLoader & operator=(const ImageLoader &other);
+		ImageLoader &operator=(ImageLoader &&other);
 		virtual ~ImageLoader() = default;
 
 		// TODO add support to load image in specific format.

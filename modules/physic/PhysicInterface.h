@@ -38,8 +38,8 @@ namespace fragcore {
 		PhysicInterface();
 		virtual ~PhysicInterface() = default;
 
-		virtual void OnInitialization();
-		virtual void OnDestruction();
+		virtual void OnInitialization() override;
+		virtual void OnDestruction() override;
 
 		/**
 		 * Start simulate.

@@ -84,7 +84,7 @@ Ref<NetSocket> UDPNetSocket::accept(INetAddress &r_ip) {
 	UDPNetSocket *_newsocket = new UDPNetSocket(aaccept_socket);
 	return Ref<NetSocket>(_newsocket);
 }
-UDPNetSocket::NetStatus UDPNetSocket::accept(NetSocket &socket) {}
+UDPNetSocket::NetStatus UDPNetSocket::accept(NetSocket &socket) { return UDPNetSocket::NetStatus::Status_Disconnected; }
 int UDPNetSocket::read() { return 0; }
 int UDPNetSocket::write() { return 0; }
 bool UDPNetSocket::isBlocking() { return 0; }

@@ -80,24 +80,22 @@ bool ZipFileSystem::isFile(const char *path) { return false; }
 
 std::vector<std::string> ZipFileSystem::listFiles(const char *path) const {
 
-	int err;
-	struct zip *zip;
-	ZipFileSystem *zipfile;
-	char buf[4096];
+	struct zip *zip = static_cast<struct zip *>(this->pzip);
 
 	std::vector<std::string> files;
 
 	/*	Attempt to open the file by file path.	*/
-	zip_int64_t index = zip_name_locate((struct zip *)this->pzip, path, 0);
-	if (index < 0)
+	zip_int64_t index = zip_name_locate(zip, path, 0);
+	if (index < 0) {
 		throw InvalidArgumentException("{}", path);
+	}
 
-	zip_int64_t num_entries = zip_get_num_entries((struct zip *)this->pzip, 0);
+	zip_int64_t num_entries = zip_get_num_entries(zip, 0);
 
-	// files.resize(num_entries);
+	files.resize(num_entries);
 
 	for (zip_uint64_t i = 0; i < (zip_uint64_t)num_entries; i++) {
-		const char *name = zip_get_name((struct zip *)this->pzip, i, 0);
+		const char *name = zip_get_name(zip, i, 0);
 		if (name == nullptr) {
 		}
 		if (strcmp(path, name) == 0) {
@@ -112,7 +110,6 @@ std::vector<std::string> ZipFileSystem::listDirectories(const char *path) const 
 	int err;
 	struct zip *zip;
 	ZipFileSystem *zipfile;
-	char buf[4096];
 
 	/*	Attempt to open the file by file path.	*/
 	zip = zip_open(path, 0, &err);
@@ -140,23 +137,57 @@ void ZipFileSystem::closeFile(IO *io) {}
 
 void ZipFileSystem::remove(const char *path) {
 	int err;
-	char buf[4096];
 
 	// Find the file.
-	int index = 0;
+	zip_int64_t index = zip_name_locate((struct zip *)this->pzip, path, 0);
+	if (index < 0) {
+		char buf[4096];
+		zip_error_to_str(buf, sizeof(buf), index, errno);
+		throw InvalidArgumentException("Could not find file {}, error: {}", path, buf);
+	}
 
 	err = zip_delete((zip_t *)this->pzip, index);
 	if (err != ZIP_ER_OK) {
+		char buf[4096];
 		zip_error_to_str(buf, sizeof(buf), err, errno);
 		throw InvalidArgumentException("Could not delete file {}, error: {}", path, buf);
 	}
 }
 
-void ZipFileSystem::rename(const char *oldPath, const char *newPath) {}
+void ZipFileSystem::rename(const char *oldPath, const char *newPath) {
 
-void ZipFileSystem::createFile(const char *path) { zip_int64_t error = zip_add((zip_t *)this->pzip, path, nullptr); }
+	zip_int64_t index = zip_name_locate((struct zip *)this->pzip, oldPath, 0);
+	if (index < 0) {
+		char buf[4096];
+		zip_error_to_str(buf, sizeof(buf), index, errno);
+		throw InvalidArgumentException("Could not find file {}, error: {}", oldPath, buf);
+	}
 
-void ZipFileSystem::createDirectory(const char *path) { zip_int64_t error = zip_dir_add((zip_t *)this->pzip, path, 0); }
+	zip_int64_t error = zip_rename(nullptr, index, newPath);
+	if (error != ZIP_ER_OK) {
+		char buf[4096];
+		zip_error_to_str(buf, sizeof(buf), error, errno);
+		throw InvalidArgumentException("Could not rename file {}, error: {}", oldPath, buf);
+	}
+}
+
+void ZipFileSystem::createFile(const char *path) {
+	zip_int64_t error = zip_add((zip_t *)this->pzip, path, nullptr);
+	if (error != ZIP_ER_OK) {
+		char buf[4096];
+		zip_error_to_str(buf, sizeof(buf), error, errno);
+		throw InvalidArgumentException("Could not create file {}, error: {}", path, buf);
+	}
+}
+
+void ZipFileSystem::createDirectory(const char *path) {
+	zip_int64_t error = zip_dir_add((zip_t *)this->pzip, path, 0);
+	if (error != ZIP_ER_OK) {
+		char buf[4096];
+		zip_error_to_str(buf, sizeof(buf), error, errno);
+		throw InvalidArgumentException("Could not create Directory {}, error: {}", path, buf);
+	}
+}
 
 bool ZipFileSystem::isReadable(const char *path) const {
 	// err = zip_file_get_external_attributes((zip_t*)zip, index, 0, &osSys, &attr);
@@ -169,14 +200,14 @@ bool ZipFileSystem::isWriteable(const char *path) const {
 }
 
 bool ZipFileSystem::exists(const char *path) const {
-	struct zip_file *zfile;
 	struct zip_stat stat;
 	int err;
 
 	/*	*/
 	err = zip_stat((struct zip *)this->pzip, path, 0, &stat);
-	if (err != ZIP_ER_OK)
+	if (err != ZIP_ER_OK) {
 		return false;
+	}
 	return true;
 }
 
@@ -305,8 +336,6 @@ ZipFileSystem *ZipFileSystem::createZipFileObject(Ref<IO> &ioRef, Ref<IScheduler
 }
 
 ZipFileSystem *ZipFileSystem::createZipFileObject(void *source, int size, Ref<IScheduler> ref) {
-	ZipFileSystem *zipfile;
-	struct zip *zip;
 	zip_error_t error;
 
 	zip_error_init(&error);
@@ -326,9 +355,5 @@ ZipFileSystem::~ZipFileSystem() {
 
 	struct zip *zip = static_cast<struct zip *>(this->pzip);
 	/*	*/
-	int rc = zip_close(zip);
+	zip_close(zip);
 }
-
-// FileAccess ZipFile::getFileAccess(const char *path) {
-//	return FileAccess();
-//}

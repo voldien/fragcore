@@ -93,7 +93,7 @@ void RPCPhysicInterface::deleteCollision(Collision *collision) {
 }
 
 Constraints *RPCPhysicInterface::createConstraints(const ConstraintsDesc *desc) {
-	RPCConstraints *constrain;
+	RPCConstraints *constrain = nullptr;
 
 	return constrain;
 }

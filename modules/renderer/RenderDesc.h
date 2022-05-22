@@ -215,7 +215,7 @@ namespace fragcore {
 			};
 			const void *pixelarray; /*  */
 		};
-		unsigned long pixelSize; /*  Image size in bytes.    */
+		size_t pixelSize; /*  Image size in bytes.    */
 		SamplerDesc sampler;	 /*  Texture sampling.   */
 
 		/*  Debug attributes.   */
@@ -261,7 +261,7 @@ namespace fragcore {
 
 		struct {
 			const void *pdata;	 /*	*/
-			int binarySize;		 /*	*/
+			size_t binarySize;		 /*	*/
 			unsigned int format; /*	*/
 		} program;
 
@@ -274,7 +274,7 @@ namespace fragcore {
 			};
 			union {
 				unsigned int numvert; /*	Number of vertex shader string sources.	*/
-				unsigned int size;
+				size_t size;
 			};
 			unsigned int binaryFormat;
 			ShaderCodeType type;
@@ -287,7 +287,7 @@ namespace fragcore {
 			};
 			union {
 				unsigned int numfrag; /*	Number of vertex shader string sources.	*/
-				unsigned int size;
+				size_t size;
 			};
 			unsigned int binaryFormat;
 			ShaderCodeType type;
@@ -300,7 +300,7 @@ namespace fragcore {
 			};
 			union {
 				unsigned int numgeo; /*	Number of vertex shader string sources.	*/
-				unsigned int size;
+				size_t size;
 			};
 			unsigned int binaryFormat;
 			ShaderCodeType type;
@@ -313,7 +313,7 @@ namespace fragcore {
 			};
 			union {
 				unsigned int numtesco; /*	Number of vertex shader string sources.	*/
-				unsigned int size;
+				size_t size;
 			};
 			unsigned int binaryFormat;
 			ShaderCodeType type;
@@ -327,7 +327,7 @@ namespace fragcore {
 			};
 			union {
 				unsigned int numtesev; /*	Number of vertex shader string sources.	*/
-				unsigned int size;
+				size_t size;
 			};
 			unsigned int binaryFormat;
 			ShaderCodeType type;
@@ -341,7 +341,7 @@ namespace fragcore {
 			};
 			union {
 				unsigned int numcompute; /*	Number of vertex shader string sources.	*/
-				unsigned int size;
+				size_t size;
 			};
 			unsigned int binaryFormat;
 			ShaderCodeType type;
@@ -473,7 +473,7 @@ namespace fragcore {
 		unsigned int numVertexAttributes; /*	Number of vertex attributes */
 		struct {
 			unsigned int index;	   /*	Index of vertex attributes.	*/
-			unsigned int size;	   /*	Size in numbers of components (1 - 4).	*/
+			size_t size;	   /*	Size in numbers of components (1 - 4).	*/
 			unsigned int datatype; /*	Data type ( AttributeType ) */
 			unsigned int offset;   /*	Offset in bytes.	*/
 		} vertexattribute[16];

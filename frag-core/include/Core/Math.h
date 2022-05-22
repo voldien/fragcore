@@ -219,7 +219,7 @@ namespace fragcore {
 		 */
 		template <typename T> T random() {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
-			return {drand48(), drand48()};
+			return {static_cast<T>(drand48()), static_cast<T>(drand48())};
 		}
 
 		template <typename T> std::vector<T> &random(std::vector<T> &samples) {
@@ -236,8 +236,8 @@ namespace fragcore {
 			int sqrt_samples = (int)(std::sqrt(samples.size()));
 			for (int i = 0; i < sqrt_samples; i++) {
 				for (int j = 0; j < sqrt_samples; j++) {
-					T x = ((T)i + Random::rand<T>()) / (T)sqrt_samples;
-					T y = ((T)j + Random::rand<T>()) / (T)sqrt_samples;
+					T x = (static_cast<T>(i) + Random::rand<T>()) / static_cast<T>(sqrt_samples);
+					T y = (static_cast<T>(j) + Random::rand<T>()) / static_cast<T>(sqrt_samples);
 
 					samples[i * sqrt_samples + j] = x;
 					samples[i * sqrt_samples + j] = y;
@@ -250,12 +250,12 @@ namespace fragcore {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
 			int num_samples = samples.size();
 			for (int i = 0; i < num_samples; i++) {
-				samples[i].setX(((double)i + drand48()) / (double)num_samples);
-				samples[i].setY(((double)i + drand48()) / (double)num_samples);
+				samples[i].setX((static_cast<double>(i) + drand48()) / static_cast<double>(num_samples));
+				samples[i].setY((static_cast<double>(i) + drand48()) / static_cast<double>(num_samples));
 			}
 
 			for (int i = num_samples - 2; i >= 0; i--) {
-				int target = int(drand48() * (double)i);
+				int target = static_cast<int>((drand48() * static_cast<double>(i)));
 				float temp = samples[i + 1].x();
 				samples[i + 1].setX(samples[target].x());
 				samples[target].setX(temp);
@@ -282,6 +282,7 @@ namespace fragcore {
 		}
 
 		// void multijitter(Vector2 *samples, int num_samples) { int sqrt_samples = (int)sqrt(num_samples); }
+	  protected:
 	};
 } // namespace fragcore
 
