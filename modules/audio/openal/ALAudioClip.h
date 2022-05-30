@@ -33,30 +33,30 @@ namespace fragcore {
 		OpenALAudioClip(AudioClipDesc &desc);
 		virtual ~OpenALAudioClip();
 
-		virtual unsigned long int getSampleRate() const;
-		virtual unsigned long int getFrequency() const;
-		virtual AudioFormat getAudioFormat() const;
-		virtual unsigned int getNumberChannels() const;
-		virtual unsigned long getSize() const;
-		virtual float length() const;
+		virtual unsigned long int getSampleRate() const override;
+		virtual unsigned long int getFrequency() const override;
+		virtual AudioFormat getAudioFormat() const override;
+		virtual unsigned int getNumberChannels() const override;
+		virtual unsigned long getSize() const override;
+		virtual float length() const override;
 
-		virtual AudioDataMode clipType() const;
+		virtual AudioDataMode clipType() const override;
 
-		virtual void getData(void *pData, unsigned int nsamples, unsigned int offset);
-		virtual void setData(const void *pData, unsigned int nsamples, unsigned int offset);
+		virtual void getData(void *pData, unsigned int nsamples, unsigned int offset) override;
+		virtual void setData(const void *pData, unsigned int nsamples, unsigned int offset) override;
 
-		//TODO add queue data.
+		// TODO add queue data.
 
 		intptr_t getNativePtr() const override;
 
-		public:
-		  unsigned int getCurrentBuffer() { return source; }
+	  public: /*	OpenAL Specific methods.	*/
+		unsigned int getCurrentBuffer() { return this->source; }
 
-		protected:
-		  AudioClipDesc &desc;
-		  unsigned int source;
-		  AudioDataMode mode;
-		  Ref<AudioDecoder> decoder;
+	  protected:
+		AudioClipDesc &desc;
+		unsigned int source;
+		AudioDataMode mode;
+		Ref<AudioDecoder> decoder;
 	};
 } // namespace fragcore
 

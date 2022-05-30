@@ -1,74 +1,75 @@
+#include "Core/Math.h"
 #include "Core/dataStructure/DoubleBufferedAllocator.h"
 #include <utility>
 using namespace fragcore;
 
-DoubleBufferedAllocator::DoubleBufferedAllocator() {
+StackBufferedAllocator::StackBufferedAllocator(size_t nrStack) {
 	this->m_curStack = 0;
 	this->m_stack[0] = StackAllocator();
 	this->m_stack[1] = StackAllocator();
 }
 
-DoubleBufferedAllocator::DoubleBufferedAllocator(const DoubleBufferedAllocator &doublebuffer) { *this = doublebuffer; }
+StackBufferedAllocator::StackBufferedAllocator(const StackBufferedAllocator &doublebuffer) { *this = doublebuffer; }
 
-DoubleBufferedAllocator::DoubleBufferedAllocator(DoubleBufferedAllocator &&other) {
+StackBufferedAllocator::StackBufferedAllocator(StackBufferedAllocator &&other) {
 	this->m_stack[0] = std::move(other.m_stack[0]);
 	this->m_stack[1] = std::move(other.m_stack[1]);
 	this->m_curStack = std::exchange(other.m_curStack, 0);
 }
 
-DoubleBufferedAllocator::DoubleBufferedAllocator(unsigned int sizeBytes) {
+StackBufferedAllocator::StackBufferedAllocator(unsigned int sizeBytes) {
 	this->m_curStack = 0;
 	this->m_stack[0].alloc(sizeBytes);
 	this->m_stack[1].alloc(sizeBytes);
 }
 
-DoubleBufferedAllocator::~DoubleBufferedAllocator() {
+StackBufferedAllocator::~StackBufferedAllocator() {
 	this->getStack(0)->clear();
 	this->getStack(1)->clear();
 }
 
-void DoubleBufferedAllocator::alloc(unsigned int sizeBytes) {
+void StackBufferedAllocator::alloc(unsigned int sizeBytes) {
 	this->m_stack[0].alloc(sizeBytes);
 	this->m_stack[1].alloc(sizeBytes);
 }
 
-void DoubleBufferedAllocator::allocateAligned(unsigned int sizeBytes, int alignment) {
-	sizeBytes += (alignment - (sizeBytes % alignment));
-	this->alloc(sizeBytes);
+void StackBufferedAllocator::allocateAligned(unsigned int sizeBytes, int alignment) {
+	size_t allocateSize = Math::align<size_t>(sizeBytes, alignment);
+	this->alloc(allocateSize);
 }
 
-void DoubleBufferedAllocator::clear() { this->m_stack[this->m_curStack].clear(); }
+void StackBufferedAllocator::clear() { this->m_stack[this->m_curStack].clear(); }
 
-unsigned int DoubleBufferedAllocator::getMarker() const { return this->m_stack[this->m_curStack].getMarker(); }
+unsigned int StackBufferedAllocator::getMarker() const { return this->m_stack[this->m_curStack].getMarker(); }
 
-void *DoubleBufferedAllocator::fetch(unsigned int sizeBytes) {
+void *StackBufferedAllocator::fetch(unsigned int sizeBytes) {
 	return this->m_stack[this->m_curStack].fetch(sizeBytes);
 }
 
-void DoubleBufferedAllocator::freeToMarker(unsigned int marker) {
+void StackBufferedAllocator::freeToMarker(unsigned int marker) {
 	return this->m_stack[this->m_curStack].freeToMarker(marker);
 }
 
-void DoubleBufferedAllocator::swap() { this->m_curStack = ~this->m_curStack & 0x1; }
+void StackBufferedAllocator::swap() { this->m_curStack = ~this->m_curStack & 0x1; }
 
-StackAllocator *DoubleBufferedAllocator::getCurrentStack() { return &this->m_stack[this->m_curStack]; }
+StackAllocator *StackBufferedAllocator::getCurrentStack() { return &this->m_stack[this->m_curStack]; }
 
-const StackAllocator *DoubleBufferedAllocator::getStack(int index) const {
+const StackAllocator *StackBufferedAllocator::getStack(int index) const {
 	return static_cast<const StackAllocator *>(&this->m_stack[index]);
 }
 
-StackAllocator *DoubleBufferedAllocator::getStack(int index) {
+StackAllocator *StackBufferedAllocator::getStack(int index) {
 	return static_cast<StackAllocator *>(&this->m_stack[index]);
 }
 
-DoubleBufferedAllocator &DoubleBufferedAllocator::operator=(const DoubleBufferedAllocator &alloc) {
+StackBufferedAllocator &StackBufferedAllocator::operator=(const StackBufferedAllocator &alloc) {
 	*this->getStack(0) = *alloc.getStack(0);
 	*this->getStack(1) = *alloc.getStack(1);
 	this->m_curStack = alloc.m_curStack;
 	return *this;
 }
 
-DoubleBufferedAllocator &DoubleBufferedAllocator::operator=(DoubleBufferedAllocator &&alloc) {
+StackBufferedAllocator &StackBufferedAllocator::operator=(StackBufferedAllocator &&alloc) {
 	this->m_stack[0] = std::move(alloc.m_stack[0]);
 	this->m_stack[1] = std::move(alloc.m_stack[1]);
 	this->m_curStack = alloc.m_curStack;

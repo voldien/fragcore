@@ -217,12 +217,12 @@ namespace fragcore {
 		 * @tparam T
 		 * @return T
 		 */
-		template <typename T> T random() {
+		template <typename T> static T random() {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
 			return {static_cast<T>(drand48()), static_cast<T>(drand48())};
 		}
 
-		template <typename T> std::vector<T> &random(std::vector<T> &samples) {
+		template <typename T> static std::vector<T> &random(std::vector<T> &samples) {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
 			for (int i = 0; i < samples.size(); i++) {
 				samples[i] = Random::rand<T>();
@@ -230,7 +230,7 @@ namespace fragcore {
 			return samples;
 		}
 
-		template <typename T> std::vector<T> &jitter(std::vector<T> &samples) {
+		template <typename T> static std::vector<T> &jitter(std::vector<T> &samples) {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
 
 			int sqrt_samples = (int)(std::sqrt(samples.size()));
@@ -246,7 +246,7 @@ namespace fragcore {
 			return samples;
 		}
 
-		template <typename T> std::vector<T> &nrooks(std::vector<T> &samples) {
+		template <typename T> static std::vector<T> &nrooks(std::vector<T> &samples) {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
 			int num_samples = samples.size();
 			for (int i = 0; i < num_samples; i++) {
@@ -263,7 +263,7 @@ namespace fragcore {
 			}
 			return samples;
 		}
-		template <typename T> T phi(int j) {
+		template <typename T> static T phi(int j) {
 			T x = 0.0;
 			T f = 0.5;
 			while (j) {
@@ -276,12 +276,18 @@ namespace fragcore {
 			return (x);
 		}
 
-		template <typename T> std::vector<T> &hammersley(std::vector<T> &samples) {
+		template <typename T> static std::vector<T> &hammersley(std::vector<T> &samples) {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
 			return {};
 		}
 
 		// void multijitter(Vector2 *samples, int num_samples) { int sqrt_samples = (int)sqrt(num_samples); }
+
+		template <typename T> static T align(T size, T alignment) {
+			static_assert(std::is_integral<T>::value, "Must be an integral type.");
+			return size + (alignment - (size % alignment));
+		}
+
 	  protected:
 	};
 } // namespace fragcore

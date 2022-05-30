@@ -22,6 +22,7 @@
 #include "../AudioTypes.h"
 #include "../decoder/AudioDecoder.h"
 #include <AL/al.h>
+#include <AL/alc.h>
 #include <AL/alext.h>
 #include <AL/alut.h>
 #include <AL/efx-presets.h>
@@ -40,6 +41,15 @@ namespace fragcore {
 	do {                                                                                                               \
 		x;                                                                                                             \
 		ALenum _err = alGetError();                                                                                    \
+		if (_err != AL_NO_ERROR) {                                                                                     \
+			throw cxxexcept::RuntimeException("{} {} {} - {}", __FILE__, __LINE__, _err, openAlErrorToString(_err));   \
+		}                                                                                                              \
+	} while (0)
+
+#define FAOPALC_VALIDATE(x, device)																					  \
+	do {                                                                                                               \
+		x;                                                                                                             \
+		ALenum _err = alcGetError(device);                                                                                   \
 		if (_err != AL_NO_ERROR) {                                                                                     \
 			throw cxxexcept::RuntimeException("{} {} {} - {}", __FILE__, __LINE__, _err, openAlErrorToString(_err));   \
 		}                                                                                                              \

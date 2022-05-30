@@ -9,13 +9,13 @@
 
 using namespace fragcore;
 
-class AudioPlayback {
+class AudioPlaybackExample {
   public:
-	AudioPlayback(int argc, const char **argv) {
-		//	IConfig config;
+	AudioPlaybackExample(int argc, const char **argv) {
 
-		if (argc < 2)
+		if (argc < 2) {
 			throw InvalidArgumentException("Required path to an audio file");
+		}
 
 		/*	*/
 		Ref<AudioInterface> iaudio = Ref<AudioInterface>(new OpenALAudioInterface(nullptr));
@@ -23,6 +23,7 @@ class AudioPlayback {
 		Ref<IScheduler> sch = Ref<IScheduler>(nullptr);
 		FileSystem *fileSystem = FileSystem::createFileSystem(sch);
 
+		/*	*/
 		std::vector<AudioPhysicalDevice> devices = iaudio->getDevices();
 		std::vector<AudioPhysicalDevice>::iterator it = devices.begin();
 
@@ -46,7 +47,7 @@ class AudioPlayback {
 		printf("bits ! %d\n", decoder->getSampleBitResolution());
 		clip_desc.decoder = decoder;
 		clip_desc.samples = decoder->getSampleBitResolution();
-		clip_desc.sampleRate = decoder->getSampleRate(); // * decoder->getNrChannels();
+		clip_desc.sampleRate = decoder->getSampleRate();
 		clip_desc.format = AudioFormat::eStero;
 		clip_desc.datamode = AudioDataMode::LoadedInMemory;
 
@@ -62,19 +63,19 @@ class AudioPlayback {
 		while (audioSource->isPlaying()) {
 			printf("pos sec: %f\n", audioSource->getPos());
 			usleep(500);
-			audioSource->setVolume(powf(sin(audioSource->getPos()), 2));
+			// audioSource->setVolume(std::abs(sin(audioSource->getPos())));
 		}
 
 		sleep(10);
 		delete *iaudio;
 	}
-	~AudioPlayback() {}
+	~AudioPlaybackExample() {}
 };
 
 int main(int argc, const char **argv) {
 
 	try {
-		AudioPlayback(argc, argv);
+		AudioPlaybackExample(argc, argv);
 	} catch (const std::exception &ex) {
 		std::cerr << cxxexcept::getStackMessage(ex) << std::endl;
 		return EXIT_FAILURE;

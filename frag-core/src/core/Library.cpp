@@ -10,7 +10,11 @@ Library::Library() : mlib(nullptr) {}
 Library::Library(const char *clibrary) {
 	this->mlib = nullptr;
 	this->open(clibrary);
-	this->name = clibrary;
+	if (clibrary) {
+		this->name = clibrary;
+	} else {
+		this->name = "Internal";
+	}
 }
 
 Library::Library(const std::string &clibrary) : Library(clibrary.c_str()) {}

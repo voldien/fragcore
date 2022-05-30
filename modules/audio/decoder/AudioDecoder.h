@@ -30,7 +30,7 @@
 namespace fragcore {
 
 	/**
-	 * @brief
+	 * @brief Base object for audio decoder.
 	 *
 	 */
 	class FVDECLSPEC AudioDecoder : public SmartReference {

@@ -13,11 +13,11 @@ void OpenALAudioSource::setClip(AudioClip *clip) {
 	OpenALAudioClip *openal_clip = static_cast<OpenALAudioClip *>(clip);
 
 	// Verify the clip
-	if (!alIsBuffer(openal_clip->getCurrentBuffer()))
+	if (!alIsBuffer(openal_clip->getCurrentBuffer())) {
 		throw InvalidArgumentException("{}", alGetError());
+	}
 
 	/*	*/
-	unsigned int al_buffer = openal_clip->getCurrentBuffer();
 	// FAOPAL_VALIDATE(alSourceQueueBuffers(this->source, 1, &al_buffer));
 	FAOPAL_VALIDATE(alSourcei(this->source, AL_BUFFER, openal_clip->getCurrentBuffer()));
 
@@ -64,6 +64,7 @@ float OpenALAudioSource::getDistance() {
 void OpenALAudioSource::mute(bool mute) {
 	// TODO add support for previous volume.
 	if (mute) {
+		/*	Restore volume.	*/
 		FAOPAL_VALIDATE(alSourcei(this->source, AL_GAIN, 0.0f));
 	} else {
 		FAOPAL_VALIDATE(alSourcei(this->source, AL_GAIN, 1.0f));

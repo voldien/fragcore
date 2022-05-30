@@ -56,15 +56,16 @@ OpenALAudioInterface::OpenALAudioInterface(IConfig *config) {
 OpenALAudioInterface::~OpenALAudioInterface() {
 
 	// TODO check for error.
-	/*  Unbind and release context. */
-	alcMakeContextCurrent(nullptr);
+	FAOPALC_VALIDATE(alcSuspendContext(this->context), this->device);
 
-	/*	*/
-	alcDestroyContext(this->context);
+	/*  Unbind and release context. */
+	FAOPALC_VALIDATE(alcMakeContextCurrent(nullptr), this->device);
+
+	FAOPALC_VALIDATE(alcDestroyContext(this->context), this->device);
 
 	// TODO check for error.
 	/*  Release device. */
-	alcCloseDevice(this->device);
+	FAOPALC_VALIDATE(alcCloseDevice(this->device), this->device);
 }
 
 void OpenALAudioInterface::OnInitialization() {
@@ -83,23 +84,7 @@ AudioClip *OpenALAudioInterface::createAudioClip(AudioClipDesc *desc) {
 
 	std::vector<ALuint> buffers(1);
 
-	FAOPAL_VALIDATE(alGenBuffers((ALuint)1, &buffers[0]));
-
-	/*	TODO based on the loading type.	*/
-	if (desc->datamode == AudioDataMode::LoadedInMemory) {
-		long int size;
-		/*	Load all data from the stream.	*/
-		void *data = desc->decoder->getData(&size);
-		/*	*/
-		ALenum format = to_al_format(desc->format, desc->samples);
-		FAOPAL_VALIDATE(alBufferData(buffers[0], format, data, size, desc->sampleRate));
-
-		free(data);
-		desc->decoder->deincreemnt();
-
-	} else {
-		throw NotSupportedException();
-	}
+	// FAOPAL_VALIDATE(alGenBuffers((ALuint)1, &buffers[0]));
 
 	return new OpenALAudioClip(*desc);
 }
@@ -175,10 +160,11 @@ std::vector<AudioPhysicalDevice> OpenALAudioInterface::getDevices() const {
 	const ALCchar *devices = nullptr;
 	const ALCchar *mices = nullptr;
 	if (alcIsExtensionPresent(nullptr, "ALC_enumeration_EXT") == AL_TRUE) {
-		if (alcIsExtensionPresent(nullptr, "ALC_enumerate_all_EXT") == AL_FALSE)
+		if (alcIsExtensionPresent(nullptr, "ALC_enumerate_all_EXT") == AL_FALSE) {
 			devices = (char *)alcGetString(nullptr, ALC_DEVICE_SPECIFIER);
-		else
+		} else {
 			devices = (char *)alcGetString(nullptr, ALC_ALL_DEVICES_SPECIFIER);
+		}
 
 		mices = (char *)alcGetString(nullptr, ALC_CAPTURE_DEVICE_SPECIFIER);
 	}

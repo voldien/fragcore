@@ -87,8 +87,8 @@ TEST_P(GuassianDistributionTest, Values) {
 }
 
 INSTANTIATE_TEST_SUITE_P(Math, GuassianDistributionTest,
-						 ::testing::Values(std::make_tuple(0.5, 0.5, std::vector<float>{1, 2, 3, 4, 5, 5,5}),
-										   std::make_tuple(0.5, 0.5, std::vector<float>{5, 5, 5, 5, 5, 5,5})));
+						 ::testing::Values(std::make_tuple(0.5, 0.5, std::vector<float>{1, 2, 3, 4, 5, 5, 5}),
+										   std::make_tuple(0.5, 0.5, std::vector<float>{5, 5, 5, 5, 5, 5, 5})));
 TEST(Math, Distrubtion_GammaCorrection) {
 	/*	Gamma space */
 	const int sample_space = 1024;
@@ -115,3 +115,17 @@ TEST(Math, Distrubtion) {
 
 	Math::guassian(guassian, num_guass, theta, 0.1f);
 }
+
+// TODO add alignment.
+class AlignmentTest : public ::testing::TestWithParam<std::tuple<size_t, size_t, size_t>> {};
+
+TEST_P(AlignmentTest, Values) {
+	auto [x, align, expected] = GetParam();
+	auto clampedValue = Math::align<size_t>(x, align);
+
+	EXPECT_FLOAT_EQ(clampedValue, expected);
+}
+
+INSTANTIATE_TEST_SUITE_P(Math, AlignmentTest,
+						 ::testing::Values(std::make_tuple(23, 64, 64), std::make_tuple(244, 128, 256),
+										   std::make_tuple(300, 64, 320)));

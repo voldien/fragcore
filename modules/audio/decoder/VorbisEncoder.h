@@ -16,33 +16,40 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef _FRAG_CORE_AUDIOOBJECT_H_
-#define _FRAG_CORE_AUDIOOBJECT_H_ 1
-#include "Prerequisites.h"
-#include <Core/Ref.h>
-#include <Core/SmartReference.h>
+#ifndef _FRAG_CORE_VORBIS_AUDIO_ENCODER_H_
+#define _FRAG_CORE_VORBIS_AUDIO_ENCODER_H_ 1
+#include "AudioEncoder.h"
 
 namespace fragcore {
-	class AudioInterface; // TODO relocate.
-	// TODO add based on a dynamic interface object class. Similar to the rendering and possibliy physic.
 	/**
 	 *
 	 */
-	class AudioObject : public SmartReference {
+	class FVDECLSPEC VorbisAudioEncoder : public AudioEncoder {
 	  public:
-		AudioObject() = default;
+		VorbisAudioEncoder(Ref<IO> &io);
+		virtual ~VorbisAudioEncoder();
 
-		FV_ALWAYS_INLINE AudioInterface *getAudioInterface() const { return this->audioInterface; }
+		// virtual void seek(long int microseconds);
 
-		FV_ALWAYS_INLINE void *getObject() { return this->pdata; }
+		// virtual void *getData(long int *size);
 
-		FV_ALWAYS_INLINE void *getObject() const { return this->pdata; }
+		// virtual void *getPage(int i);
 
-		virtual intptr_t getNativePtr() const = 0;
+		// virtual AudioFormat getFormat() const;
+		// virtual unsigned int getSampleRate() const;
 
-	  protected: /*  */
-		void *pdata;
-		AudioInterface *audioInterface; // TOOD change to ref.
+		// virtual unsigned int getNrChannels() const;
+		// virtual unsigned int getSampleBitResolution() const;
+
+		// virtual double getTotalTime() const;
+
+	  protected:
+		OggVorbis_File *ov;
+		// AudioFormat format;
+		double length;
+		long int channels;
+		long int sampleFreq;
+		long int bitRate;
 	};
 } // namespace fragcore
 

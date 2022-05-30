@@ -16,33 +16,25 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef _FRAG_CORE_AUDIOOBJECT_H_
-#define _FRAG_CORE_AUDIOOBJECT_H_ 1
-#include "Prerequisites.h"
-#include <Core/Ref.h>
-#include <Core/SmartReference.h>
+#ifndef _FRAG_CORE_AUDIO_OPENAL_PHYSICAL_DEVICE_H_
+#define _FRAG_CORE_AUDIO_OPENAL_PHYSICAL_DEVICE_H_ 1
+#include "../AudioSettings.h"
 
 namespace fragcore {
-	class AudioInterface; // TODO relocate.
-	// TODO add based on a dynamic interface object class. Similar to the rendering and possibliy physic.
 	/**
 	 *
 	 */
-	class AudioObject : public SmartReference {
+	class FVDECLSPEC ALAudioPhysicalDevice : public AudioSettings {
 	  public:
-		AudioObject() = default;
+		ALAudioPhysicalDevice() = default;
+		ALAudioPhysicalDevice(const AudioPhysicalDevice &other) { this->setName(other.getName()); }
+		ALAudioPhysicalDevice(AudioPhysicalDevice &&other) {}
+		virtual ~ALAudioPhysicalDevice() = default;
 
-		FV_ALWAYS_INLINE AudioInterface *getAudioInterface() const { return this->audioInterface; }
-
-		FV_ALWAYS_INLINE void *getObject() { return this->pdata; }
-
-		FV_ALWAYS_INLINE void *getObject() const { return this->pdata; }
-
-		virtual intptr_t getNativePtr() const = 0;
-
-	  protected: /*  */
-		void *pdata;
-		AudioInterface *audioInterface; // TOOD change to ref.
+		// TODO perhaps use the audio setting as part of the audio device.
+		// virtual AudioSettings* getAudioSettings() = 0;
+		// virtual void getCapabilities() = 0;
+	  private:
 	};
 } // namespace fragcore
 

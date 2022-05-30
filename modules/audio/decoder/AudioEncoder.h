@@ -30,13 +30,50 @@
 namespace fragcore {
 
 	/**
-	 * @brief
+	 * @brief Base object for audio encoder.
 	 *
 	 */
 	class FVDECLSPEC AudioEncoder : public SmartReference {
 	  public:
 		AudioEncoder(Ref<IO> &io) { this->io = io; }
 		virtual ~AudioEncoder() {}
+
+
+		/**
+		 * @brief Get the Format object
+		 *
+		 * @return AudioFormat
+		 */
+		virtual AudioFormat getFormat() const = 0;
+
+		/**
+		 * @brief Get the Sample Rate object
+		 *
+		 * @return unsigned int
+		 */
+		virtual unsigned int getSampleRate() const = 0;
+
+		/**
+		 * @brief Get the Nr Channels object
+		 *
+		 * @return unsigned int
+		 */
+		virtual unsigned int getNrChannels() const = 0;
+		// virtual unsigned long getBitRate() const noexcept = 0;
+		/**
+		 * @brief Get the Sample Bit Resolution object
+		 *
+		 * @return unsigned int
+		 */
+		virtual unsigned int getSampleBitResolution() const = 0;
+
+		// TODO add method for checking if stream or not.
+		/**
+		 * @brief Get the Total Time object
+		 *
+		 * @return double
+		 */
+		virtual double getTotalTime() const = 0;
 
 	  protected:
 		Ref<IO> io;

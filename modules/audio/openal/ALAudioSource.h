@@ -32,35 +32,35 @@ namespace fragcore {
 		OpenALAudioSource(AudioSourceDesc &desc, unsigned int source);
 		virtual ~OpenALAudioSource();
 
-		virtual void setClip(AudioClip *clip);
+		virtual void setClip(AudioClip *clip) override;
 		// virtual AudioClip* getClip() const;
 
-		virtual void play();
+		virtual void play() override;
 
-		virtual void stop();
+		virtual void stop() override;
 
-		virtual void pause();
+		virtual void pause() override;
 
-		virtual void setVolume(float volume);
+		virtual void setVolume(float volume) override;
 
-		virtual float getVolume();
+		virtual float getVolume() override;
 
-		virtual void setDistance(float distance);
+		virtual void setDistance(float distance) override;
 
-		virtual float getDistance();
+		virtual float getDistance() override;
 
-		virtual void mute(bool mute);
+		virtual void mute(bool mute) override;
 
-		virtual void loop(bool loop);
-		virtual bool isLooping();
+		virtual void loop(bool loop) override;
+		virtual bool isLooping() override;
 
-		virtual bool isPlaying();
+		virtual bool isPlaying() override;
 
 		//		virtual void setTime(float time);
 		//		virtual void getTime() const;
 
-		virtual float getPos() const;
-		virtual void setPos(float position);
+		virtual float getPos() const override;
+		virtual void setPos(float position) override;
 
 		virtual intptr_t getNativePtr() const override;
 

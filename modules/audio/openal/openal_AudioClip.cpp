@@ -3,9 +3,29 @@
 
 using namespace fragcore;
 
-OpenALAudioClip::~OpenALAudioClip() {}
+OpenALAudioClip::~OpenALAudioClip() { alDeleteBuffers(1, &this->source); }
 
-OpenALAudioClip::OpenALAudioClip(AudioClipDesc &desc) : desc(desc) { alGenBuffers((ALuint)1, &this->source); }
+OpenALAudioClip::OpenALAudioClip(AudioClipDesc &desc) : desc(desc) {
+	FAOPAL_VALIDATE(alGenBuffers(1, &this->source));
+
+	/*	TODO based on the loading type.	*/
+	if (desc.datamode == AudioDataMode::LoadedInMemory) {
+		long int size;
+		/*	Load all data from the stream.	*/
+		void *data = desc.decoder->getData(&size);
+
+		size_t totalSampleRate = desc.sampleRate * desc.decoder->getNrChannels();
+		/*	*/
+		ALenum format = to_al_format(desc.format, desc.samples);
+		FAOPAL_VALIDATE(alBufferData(this->source, format, data, size, totalSampleRate));
+
+		free(data);
+		desc.decoder->deincreemnt();
+
+	} else {
+		throw NotSupportedException();
+	}
+}
 
 intptr_t OpenALAudioClip::getNativePtr() const { return this->source; }
 

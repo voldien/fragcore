@@ -25,14 +25,15 @@ namespace fragcore {
 
 	/**
 	 *	DoubleBufferedAllocator is two allocate buffer.
+	 *	//TODO rename to stack buffered, to allow select number of stack.
 	 */
-	class FVDECLSPEC DoubleBufferedAllocator {
+	class FVDECLSPEC StackBufferedAllocator {
 	  public:
-		DoubleBufferedAllocator();
-		DoubleBufferedAllocator(const DoubleBufferedAllocator &doublebuffer);
-		DoubleBufferedAllocator(DoubleBufferedAllocator &&other);
-		explicit DoubleBufferedAllocator(unsigned int sizeBytes);
-		~DoubleBufferedAllocator();
+		StackBufferedAllocator(size_t nrStack = 0);
+		StackBufferedAllocator(const StackBufferedAllocator &doublebuffer);
+		StackBufferedAllocator(StackBufferedAllocator &&other);
+		explicit StackBufferedAllocator(unsigned int sizeBytes);
+		~StackBufferedAllocator();
 
 		/**
 		 *	Allocate n number of bytes.
@@ -93,8 +94,8 @@ namespace fragcore {
 		/**
 		 *	@return
 		 */
-		DoubleBufferedAllocator &operator=(const DoubleBufferedAllocator &alloc);
-		DoubleBufferedAllocator &operator=(DoubleBufferedAllocator &&alloc);
+		StackBufferedAllocator &operator=(const StackBufferedAllocator &alloc);
+		StackBufferedAllocator &operator=(StackBufferedAllocator &&alloc);
 
 	  private: /*	Attributes.	*/
 		unsigned int m_curStack;

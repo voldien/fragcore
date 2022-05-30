@@ -1,3 +1,4 @@
+#include "Core/Math.h"
 #include "Core/dataStructure/StackAllactor.h"
 #include <cstring>
 #include <malloc.h>
@@ -37,8 +38,8 @@ void *StackAllocator::alloc(size_t sizeBytes) {
 size_t StackAllocator::getSize() const { return this->mSize; }
 
 void *StackAllocator::allocateAligned(size_t sizeBytes, int alignment) {
-	sizeBytes += (alignment - (sizeBytes % alignment));
-	return this->alloc(sizeBytes);
+	size_t allocateSize = Math::align<size_t>(sizeBytes, alignment);
+	return this->alloc(allocateSize);
 }
 
 void StackAllocator::clear() { this->mMarker = 0; }
