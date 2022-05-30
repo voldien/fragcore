@@ -31,7 +31,7 @@ int main(int argc, const char **argv) {
 			net.sendto((const uint8_t *)data, sizeof(data), nr, recvAddr);
 		} while (true);
 	} catch (const std::exception &ex) {
-		std::cerr << ex.what() << std::endl;
+		std::cerr << cxxexcept::getStackMessage(ex) << std::endl;
 		return EXIT_FAILURE;
 	}
 	std::cout << "Bye Bye" << std::endl;

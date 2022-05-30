@@ -3,7 +3,7 @@
 using namespace fragcore;
 
 void VKShader::bind() {
-	VKShaderObject *shadobj = (VKShaderObject *)this->pdata;
+
 	// VulkanCore* vulkanCore = shadobj->vulkanCore;
 
 	//	shadobj->vulkanCore->current_pipeline = shadobj->graphicsPipeline;
@@ -13,35 +13,22 @@ void VKShader::bind() {
 	// shadobj->graphicsPipeline);
 }
 
-int VKShader::getLocation(const char *cparamname) { VKShaderObject *shadobj = (VKShaderObject *)this->pdata; }
+int VKShader::getLocation(const char *cparamname) {}
 
-void VKShader::setInt(int location, int value) { VKShaderObject *shadobj = (VKShaderObject *)this->pdata; }
+void VKShader::setInt(int location, int value) {}
 
-void VKShader::setFloat(int location, float value) { VKShaderObject *shadobj = (VKShaderObject *)this->pdata; }
+void VKShader::setFloat(int location, float value) {}
 
-void VKShader::setFloatv(int location, int n, const float *values) {
-	VKShaderObject *shadobj = (VKShaderObject *)this->pdata;
-}
+void VKShader::setFloatv(int location, int n, const float *values) {}
 
-void VKShader::setVec2(int location, const float v1, const float v2) {
-	VKShaderObject *shadobj = (VKShaderObject *)this->pdata;
-}
-void VKShader::setVec2v(int location, int n, const float *values) {
-	VKShaderObject *shadobj = (VKShaderObject *)this->pdata;
-}
+void VKShader::setVec2(int location, const float v1, const float v2) {}
+void VKShader::setVec2v(int location, int n, const float *values) {}
 
-void VKShader::setMatrix4f(int location, const float *pvalue) {
-	VKShaderObject *shadobj = (VKShaderObject *)this->pdata;
-}
+void VKShader::setMatrix4f(int location, const float *pvalue) {}
 
-void VKShader::setMatrix4fv(int location, int n, const float *pvalue) {
-	VKShaderObject *shadobj = (VKShaderObject *)this->pdata;
-}
+void VKShader::setMatrix4fv(int location, int n, const float *pvalue) {}
 
-void VKShader::setName(const std::string &name) {
-	VKShaderObject *shadobj = (VKShaderObject *)this->pdata;
-	Object::setName(name);
-}
+void VKShader::setName(const std::string &name) { Object::setName(name); }
 
 void VKShader::getLocalGroupSize(int *sizes) {}
 

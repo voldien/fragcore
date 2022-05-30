@@ -25,6 +25,7 @@
 #include <FragDef.h>
 
 namespace fragcore {
+
 	typedef struct audio_source_desc_t {
 		Vector3 position;
 	} AudioSourceDesc;

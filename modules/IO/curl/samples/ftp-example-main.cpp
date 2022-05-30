@@ -27,7 +27,7 @@ int main(int argc, const char **argv) {
 			std::cout << files[x] << std::endl;
 		}
 	} catch (const std::exception &ex) {
-		std::cerr << ex.what() << std::endl;
+		std::cerr << cxxexcept::getStackMessage(ex) << std::endl;
 		return EXIT_FAILURE;
 	}
 

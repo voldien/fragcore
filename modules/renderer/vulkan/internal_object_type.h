@@ -149,33 +149,33 @@ namespace fragcore {
 	// 	Capability capability;
 	// } VulkanCore;
 
-	typedef struct vulkan_viewport_t {
-		unsigned int viewport;
-	} VKViewPort;
+	// typedef struct vulkan_viewport_t {
+	// 	unsigned int viewport;
+	// } VKViewPort;
 
 
-	/**
-	 *
-	 */
-	typedef struct vulkan_shader_object_t {
-		std::shared_ptr<VKDevice> device;
-		// VulkanCore *vulkanCore;
-		VkPipeline graphicsPipeline;
-		VkPipelineLayout pipelineLayout;
-		unsigned int ver;
-		unsigned int fra;
-		unsigned int geo;
-		unsigned int tesse;
-		unsigned int tessc;
-	} VKShaderObject;
+	// /**
+	//  *
+	//  */
+	// typedef struct vulkan_shader_object_t {
+	// 	std::shared_ptr<fvkcore::VKDevice> device;
+	// 	// VulkanCore *vulkanCore;
+	// 	VkPipeline graphicsPipeline;
+	// 	VkPipelineLayout pipelineLayout;
+	// 	unsigned int ver;
+	// 	unsigned int fra;
+	// 	unsigned int geo;
+	// 	unsigned int tesse;
+	// 	unsigned int tessc;
+	// } VKShaderObject;
 
-	typedef struct vulkan_pipeline_object_t {
-		std::shared_ptr<VKDevice> device;
-		// VulkanCore *vulkanCore;
-		VkPipeline graphicsPipeline;
-		VkPipelineLayout pipelineLayout;
-		VkDescriptorSet descriptorSet;
-	} VKPipelineObject;
+	// typedef struct vulkan_pipeline_object_t {
+	// 	std::shared_ptr<fvkcore::VKDevice> device;
+	// 	// VulkanCore *vulkanCore;
+	// 	VkPipeline graphicsPipeline;
+	// 	VkPipelineLayout pipelineLayout;
+	// 	VkDescriptorSet descriptorSet;
+	// } VKPipelineObject;
 
 	extern FVDECLSPEC unsigned int getTextureFormat(fragcore::TextureDesc::Format format);
 

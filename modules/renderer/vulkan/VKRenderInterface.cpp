@@ -22,7 +22,9 @@
 #include <fmt/core.h>
 #include <iostream>
 #include <vector>
+
 using namespace fragcore;
+using namespace fvkcore;
 
 #define RENDER_VULKAN_MAJOR 0
 #define RENDER_VULKAN_MINOR 1
@@ -175,7 +177,7 @@ Shader *VKRenderInterface::createShader(ShaderDesc *desc) {
 
 	/*  Create shader interface object. */
 	VKShader *shader = new VKShader();
-	VKShaderObject *shaobj = new VKShaderObject();
+	// VKShaderObject *shaobj = new VKShaderObject();
 	//	shader->pdata = shaobj;
 	// shaobj->vulkanCore = vulkanCore;
 
@@ -325,9 +327,9 @@ Shader *VKRenderInterface::createShader(ShaderDesc *desc) {
 	pipelineLayoutInfo.pushConstantRangeCount = 0;	  // Optional
 	pipelineLayoutInfo.pPushConstantRanges = nullptr; // Optional
 
-	result = vkCreatePipelineLayout(device->getHandle(), &pipelineLayoutInfo, nullptr, &shaobj->pipelineLayout);
-	if (result != VK_SUCCESS)
-		throw RuntimeException(fmt::format("failed to create pipeline layout - %d!", result));
+	// result = vkCreatePipelineLayout(device->getHandle(), &pipelineLayoutInfo, nullptr, &shaobj->pipelineLayout);
+	// if (result != VK_SUCCESS)
+	// 	throw RuntimeException(fmt::format("failed to create pipeline layout - %d!", result));
 
 	VkAttachmentDescription colorAttachment = {};
 	// colorAttachment.format = swapChain->swapChainImageFormat;
@@ -471,15 +473,15 @@ Shader *VKRenderInterface::createShader(ShaderDesc *desc) {
 	pipelineInfo.pDepthStencilState = nullptr; // Optional
 	pipelineInfo.pColorBlendState = &colorBlending;
 	pipelineInfo.pDynamicState = &dynamicState; // Optional
-	pipelineInfo.layout = shaobj->pipelineLayout;
+	//pipelineInfo.layout = shaobj->pipelineLayout;
 	pipelineInfo.renderPass = renderPass;
 	pipelineInfo.subpass = 0;
 	pipelineInfo.basePipelineHandle = VK_NULL_HANDLE; // Optional
 	pipelineInfo.basePipelineIndex = -1;			  // Optional
 
 	/*  Create graphic pipeline.    */
-	result = vkCreateGraphicsPipelines(device->getHandle(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr,
-									   &shaobj->graphicsPipeline);
+	// result = vkCreateGraphicsPipelines(device->getHandle(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr,
+	// 								   &shaobj->graphicsPipeline);
 	if (result != VK_SUCCESS)
 		throw RuntimeException(fmt::format("vkCreateGraphicsPipelines failed - %d", result));
 

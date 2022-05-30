@@ -15,16 +15,18 @@ static void validateAudioSourceDesc(AudioSourceDesc *desc) {
 }
 
 static void validateClipDesc(AudioClipDesc *desc) {
-	if (desc == nullptr)
+	if (desc == nullptr) {
 		throw InvalidPointerException("AudioClipDesc invalid pointer");
-	// if (desc->decoder.ptr() == nullptr) {
-	// 	throw InvalidArgumentException("Requires a valid decoder");
-	// }
+	}
 
-	if (desc->format < eMono || desc->format > eStero)
+	if (desc->format < eMono || desc->format > eStero) {
 		throw InvalidArgumentException("");
-	if (desc->datamode < AudioDataMode::LoadedInMemory || desc->datamode > AudioDataMode::DecompressOnLoad)
+	}
+
+	if (desc->datamode < AudioDataMode::LoadedInMemory || desc->datamode > AudioDataMode::DecompressOnLoad) {
 		throw InvalidArgumentException("");
+	}
+
 	if (desc->source != nullptr && desc->size <= 0) {
 		throw InvalidArgumentException("");
 	}
@@ -40,6 +42,7 @@ OpenALAudioInterface::OpenALAudioInterface(IConfig *config) {
 	// TODO add support
 	// const char* device = config->get<const char*>("device");
 
+	/*	*/
 	const ALchar *defaultDevice = alcGetString(nullptr, ALC_DEFAULT_DEVICE_SPECIFIER);
 	current_device.setName(defaultDevice);
 
@@ -56,6 +59,7 @@ OpenALAudioInterface::~OpenALAudioInterface() {
 	/*  Unbind and release context. */
 	alcMakeContextCurrent(nullptr);
 
+	/*	*/
 	alcDestroyContext(this->context);
 
 	// TODO check for error.

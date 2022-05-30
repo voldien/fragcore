@@ -89,6 +89,8 @@ namespace fragcore {
 		void setName(const std::string &name) override;
 
 		intptr_t getNativePtr() const override;
+
+	  private:
 	};
 } // namespace fragcore
 

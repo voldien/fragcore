@@ -31,7 +31,7 @@ int main(int argc, const char **argv) {
 			sleep(1);
 		} while (true);
 	} catch (const std::exception &ex) {
-		std::cerr << ex.what() << std::endl;
+		std::cerr << cxxexcept::getStackMessage(ex) << std::endl;
 		return EXIT_FAILURE;
 	}
 

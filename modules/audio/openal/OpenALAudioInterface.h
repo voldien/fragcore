@@ -29,9 +29,6 @@ namespace fragcore {
 	 *
 	 */
 	class FVDECLSPEC OpenALAudioInterface : public AudioInterface {
-	  protected:
-		// virtual void initAllocate(InitAllocateTableInfo *table);
-
 	  public:
 		OpenALAudioInterface(IConfig *config = nullptr);
 		virtual ~OpenALAudioInterface();

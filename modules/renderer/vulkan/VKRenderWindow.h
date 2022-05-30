@@ -143,8 +143,8 @@ namespace fragcore {
 		const std::vector<VkImage> &getSwapChainImages() const noexcept;
 		const std::vector<VkImageView> &getSwapChainImageViews() const noexcept;
 
-		const std::shared_ptr<VKDevice> &getVKDevice() const noexcept;
-		const std::shared_ptr<PhysicalDevice> getPhysicalDevice() const noexcept;
+		const std::shared_ptr<fvkcore::VKDevice> &getVKDevice() const noexcept;
+		const std::shared_ptr<fvkcore::PhysicalDevice> getPhysicalDevice() const noexcept;
 
 		VkPhysicalDevice physicalDevice() const;
 		void setPhysicalDevice(VkPhysicalDevice device);

@@ -63,6 +63,7 @@ namespace fragcore {
 
 		VkPipeline getPipeline() const noexcept { return this->graphicsPipeline; }
 		VkPipelineLayout getPipelineLayout() const noexcept { return this->pipelineLayout; }
+		VkDescriptorSetLayout getDescriptorSetLayout() const noexcept { return this->descriptorSetLayout; }
 
 	  private:
 		VkPipeline graphicsPipeline = VK_NULL_HANDLE;

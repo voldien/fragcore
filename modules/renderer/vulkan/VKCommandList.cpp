@@ -3,6 +3,7 @@
 #include "VKBuffer.h"
 #include "VKFrameBuffer.h"
 #include "VKRenderInterface.h"
+#include "VKRenderPipeline.h"
 #include "VKTexture.h"
 #include "internal_object_type.h"
 
@@ -57,17 +58,18 @@ void VKCommandList::end() { vkEndCommandBuffer(cmdBuffer); }
 void VKCommandList::copyTexture(const Texture *src, Texture *dst) {}
 
 void VKCommandList::bindPipeline(RenderPipeline *pipeline) {
-	VKPipelineObject *vkpipeline = (VKPipelineObject *)pipeline->getObject();
-	vkCmdBindPipeline(cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipeline->graphicsPipeline);
-	vkCmdBindDescriptorSets(cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipeline->pipelineLayout, 0, 1,
-							&vkpipeline->descriptorSet, 0, nullptr);
+
+	VKRenderPipeline *vkpipeline = static_cast<VKRenderPipeline *>(pipeline);
+	vkCmdBindPipeline(cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipeline->getPipeline());
+	// vkCmdBindDescriptorSets(cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipeline->getPipelineLayout(), 0, 1,
+	// 						&vkpipeline->descriptorSet, 0, nullptr);
 }
 
 void VKCommandList::bindComputePipeline(RenderPipeline *pipeline) {
-	VKPipelineObject *vkpipeline = (VKPipelineObject *)pipeline->getObject();
-	vkCmdBindPipeline(cmdBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, vkpipeline->graphicsPipeline);
-	vkCmdBindDescriptorSets(cmdBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, vkpipeline->pipelineLayout, 0, 1,
-							&vkpipeline->descriptorSet, 0, nullptr);
+	VKRenderPipeline *vkpipeline = static_cast<VKRenderPipeline *>(pipeline);
+	vkCmdBindPipeline(cmdBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, vkpipeline->getPipeline());
+	// vkCmdBindDescriptorSets(cmdBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, vkpipeline->getPipelineLayout(), 0, 1,
+	// 						&vkpipeline->descriptorSet, 0, nullptr);
 }
 
 void VKCommandList::beginCurrentRenderPass() {

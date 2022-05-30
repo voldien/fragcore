@@ -10,6 +10,7 @@
 #include <fmt/core.h>
 #include <vulkan/vulkan.h>
 using namespace fragcore;
+using namespace fvkcore;
 
 VKRenderWindow::VKRenderWindow(Ref<VKRenderInterface> &renderer) : renderer(renderer) {
 
@@ -602,8 +603,10 @@ const std::vector<VkImageView> &VKRenderWindow::getSwapChainImageViews() const n
 	return this->swapChain.swapChainImageViews;
 }
 
-const std::shared_ptr<VKDevice> &VKRenderWindow::getVKDevice() const noexcept { return this->renderer->device; }
-const std::shared_ptr<PhysicalDevice> VKRenderWindow::getPhysicalDevice() const noexcept {
+const std::shared_ptr<fvkcore::VKDevice> &VKRenderWindow::getVKDevice() const noexcept {
+	return this->renderer->device;
+}
+const std::shared_ptr<fvkcore::PhysicalDevice> VKRenderWindow::getPhysicalDevice() const noexcept {
 	// return this->renderer->device->getPhysicalDevice();
 }
 
