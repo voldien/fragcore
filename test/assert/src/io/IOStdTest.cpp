@@ -11,7 +11,7 @@ TEST(StandardIOTest, Get_Standard_File_No_Throw_Exception) {
 }
 
 TEST(StandardIOTest, Stdout_Readable_No_Exception) { ASSERT_FALSE(SystemInfo::getStdOut()->readable()); }
-TEST(StandardIOTest, Stderr_Readable_No_Exception) { ASSERT_TRUE(SystemInfo::getStdErr()->readable()); }
+TEST(StandardIOTest, Stderr_Readable_No_Exception) { ASSERT_FALSE(SystemInfo::getStdErr()->readable()); }
 TEST(StandardIOTest, Stdin_Readable_No_Exception) { ASSERT_TRUE(SystemInfo::getStdIn()->readable()); }
 
 TEST(StandardIOTest, Send_Stout_No_throw) {

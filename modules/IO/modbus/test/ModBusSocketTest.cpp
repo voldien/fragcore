@@ -26,8 +26,11 @@ class ModBusServerClientTest : public testing::Test {
 		modbusNetSocket->bind(tcpAddress);
 		modbusNetSocket->listen(2);
 	}
-	void TearDown() override { delete modbusNetSocket; }
-	const int port = 43323;
+	void TearDown() override {
+		this->modbusNetSocket->close();
+		delete modbusNetSocket;
+	}
+	const int port = 41321;
 	const char *ipAddress = "localhost";
 	ModbusNetSocket *modbusNetSocket;
 };

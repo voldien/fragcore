@@ -32,8 +32,8 @@ TEST_P(HashMD5Test, ComputeHashCorrect) {
 
 // ed076287532e86365e841e92bfc50d8c
 INSTANTIATE_TEST_SUITE_P(ComputeHash, HashMD5Test,
-							 ::testing::Values(std::make_tuple("Hello World!", Hash::ALGORITHM::MD5,
-															   std::vector<unsigned char>{
-																   65, 64, 30, 37, 36, 32, 38, 37, 35, 33, 32,
-																   65, 38, 36, 33, 36, 35, 65, 38, 34, 31, 65,
-																   39, 32, 62, 66, 63, 35, 30, 64, 38, 63})));
+						 ::testing::Values(std::make_tuple("Hello World!", Hash::ALGORITHM::MD5,
+														   std::vector<unsigned char>{
+															   65, 64, 30, 37, 36, 32, 38, 37, 35, 33, 32,
+															   65, 38, 36, 33, 36, 35, 65, 38, 34, 31, 65,
+															   39, 32, 62, 66, 63, 35, 30, 64, 38, 63})));

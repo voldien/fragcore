@@ -5,6 +5,7 @@ using namespace fragcore;
 
 TEST(Ref, Added_First_Object_Increment2_1) {
 	Ref<SmartReference> ref = Ref<SmartReference>(new SmartReference());
+
 	ASSERT_EQ(ref->getIndexCount(), 1);
 }
 

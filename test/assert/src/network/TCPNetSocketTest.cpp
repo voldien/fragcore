@@ -27,7 +27,10 @@ class TCPSocketServerClientTest : public testing::Test {
 		tcpNetServerSocket->bind(tcpAddress);
 		tcpNetServerSocket->listen(2);
 	}
-	void TearDown() override { delete tcpNetServerSocket; }
+	void TearDown() override {
+		tcpNetServerSocket->close();
+		delete tcpNetServerSocket;
+	}
 	const int port = 43323;
 	TCPNetSocket *tcpNetServerSocket;
 	IPAddress IP4Address;

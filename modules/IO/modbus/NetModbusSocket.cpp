@@ -52,10 +52,11 @@ ModbusNetSocket::TransportProtocol ModbusNetSocket::getTransportProtocol() const
 }
 
 int ModbusNetSocket::close() {
-	if (this->ctx) {
+	if (this->ctx != nullptr) {
 		modbus_close((modbus_t *)this->ctx);
 		modbus_free((modbus_t *)this->ctx);
 	}
+	/*	Reset variables.	*/
 	this->socket = 0;
 	this->ctx = nullptr;
 	netStatus = NetStatus::Status_Disconnected;

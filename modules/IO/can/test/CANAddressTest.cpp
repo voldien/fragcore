@@ -7,7 +7,7 @@ class CANAddressTest : public testing::Test {
   protected:
 };
 
-TEST_F(CANAddressTest, Create_Default_Throw_Exception) { ASSERT_ANY_THROW(CANAddress address(0)); }
+TEST_F(CANAddressTest, Create_Default_No_Throw_Exception) { ASSERT_NO_THROW(CANAddress address(0)); }
 
 TEST_F(CANAddressTest, Create_Default_Correct_ID_No_Throw_Exception) {
 	const int IDAddress = 120;

@@ -38,7 +38,7 @@ TEST_F(ASyncIOTest, Read_IO_Async_ThrowException) {
 
 	ASyncHandle handle = 0;
 	handle = async.asyncOpen(ioRef);
-	ASSERT_THROW(async.asyncReadFile(handle, nullptr, 0, nullptr), InvalidPointerException);
+	ASSERT_THROW(async.asyncReadFile(handle, nullptr, 0, nullptr), InvalidArgumentException);
 	async.asyncClose(handle);
 }
 

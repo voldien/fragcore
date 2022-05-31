@@ -22,11 +22,14 @@ FileIO::FileIO(FILE *file) {
 	/*	Extract stat of the file.	*/
 	struct stat stat;
 	int rc = fstat(fileno(this->file), &stat);
+	/*	Check file mode.	*/
 	if (rc == 0) {
-		if (stat.st_mode & S_IWUSR)
+		if (stat.st_mode & S_IWUSR) {
 			this->mode = (IOMode)(this->mode | (int)IOMode::WRITE);
-		if (stat.st_mode & S_IRUSR)
+		}
+		if (stat.st_mode & S_IRUSR) {
 			this->mode = (IOMode)((int)IOMode::READ | this->mode);
+		}
 	}
 }
 
@@ -112,6 +115,7 @@ long FileIO::read(long int nbytes, void *pbuffer) {
 
 long FileIO::write(long int nbytes, const void *pbuffer) {
 	long int nreadBytes;
+
 	nreadBytes = fwrite(pbuffer, 1, nbytes, this->file);
 	if (nreadBytes != nbytes) {
 		throw RuntimeException("Failed to write to file, {}.", strerror(errno));
@@ -119,8 +123,9 @@ long FileIO::write(long int nbytes, const void *pbuffer) {
 
 	int err = ferror(this->file);
 
-	if (err != 0)
+	if (err != 0) {
 		throw RuntimeException("Failed to write to file, {}.", strerror(err));
+	}
 	return nreadBytes;
 }
 

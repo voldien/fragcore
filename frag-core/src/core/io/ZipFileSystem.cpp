@@ -1,4 +1,5 @@
 #include "Core/IO/ZipFileSystem.h"
+#include "Core/IO/BufferIO.h"
 #include "Core/IO/ZipFileIO.h"
 
 #include <cassert>
@@ -226,7 +227,7 @@ ZipFileSystem *ZipFileSystem::createZipFileObject(const char *cfilename, Ref<ISc
 		if (err == ZIP_ER_NOENT) {
 			throw InvalidArgumentException("can't open zip archive {} - {}", cfilename, buf);
 		} else {
-			throw RuntimeException("{}", buf);
+			throw RuntimeException("Failed to open Zip {} - {}", cfilename, buf);
 		}
 	}
 
@@ -336,13 +337,9 @@ ZipFileSystem *ZipFileSystem::createZipFileObject(Ref<IO> &ioRef, Ref<IScheduler
 }
 
 ZipFileSystem *ZipFileSystem::createZipFileObject(void *source, int size, Ref<IScheduler> ref) {
-	zip_error_t error;
 
-	zip_error_init(&error);
-
-	// zip_source* zipSource = zip_source_buffer_create(source, size, ZIP_RDONLY, error);
-
-	return nullptr;
+	Ref<IO> io = Ref<IO>(new BufferIO(source, size));
+	return ZipFileSystem::createZipFileObject(io, ref);
 }
 
 void *ZipFileSystem::getZipObject() const { return this->pzip; }

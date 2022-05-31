@@ -98,8 +98,9 @@ int TCPNetSocket::bind(const INetAddress &p_addr) {
 
 	/*	*/
 	const TCPUDPAddress *tcpAddress = dynamic_cast<const TCPUDPAddress *>(&p_addr);
-	if (tcpAddress == nullptr)
+	if (tcpAddress == nullptr) {
 		throw RuntimeException("Not a valid NetAddress Object");
+	}
 
 	/*	*/
 	int domain = getDomain(*tcpAddress);
@@ -111,13 +112,13 @@ int TCPNetSocket::bind(const INetAddress &p_addr) {
 		throw RuntimeException("TCP socket - Failed to create socket {} - {}", domain, strerror(errno));
 	}
 
-	setTimeout(0);
+	this->setTimeout(0);
 
 	/*	Bind process to socket.	*/
 	if (::bind(socket, (struct sockaddr *)&addrU, addrlen) < 0) {
 		this->netStatus = NetStatus::Status_Error;
-		RuntimeException ex("Failed to bind TCP socket, {}", strerror(errno));
-		throw ex;
+		throw RuntimeException("Failed to bind TCP socket - {}:{}, {}", tcpAddress->getIPAddress().getIP(),
+							   tcpAddress->getPort(), strerror(errno));
 	} else {
 		this->netStatus = NetStatus::Status_Done;
 	}
