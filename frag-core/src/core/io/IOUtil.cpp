@@ -1,4 +1,5 @@
 #include "Core/IO/IOUtil.h"
+#include "Core/IO/FileIO.h"
 
 #include <fmt/core.h>
 
@@ -75,16 +76,12 @@ long int IOUtil::loadString(Ref<IO> &in, Ref<IO> &out) {
 	return nbytes;
 }
 
-// long int IOUtil::format(Ref<IO> &io, const char *vformat, ...) noexcept(noexcept(vformat != nullptr)) {
-// 	va_list argptr;
-// 	va_start(argptr, format);
-// 	char buf[1024]; // Page;
-// 	if (vformat == nullptr)
-// 		throw InvalidPointerException("vformat invalid");
+// TODO realocate and improve
+IO *IOUtil::createFIFO(const std::string &path) {
+	// unlink(path.c_str());
+	int ret = mkfifo(path.c_str(), S_IWUSR | S_IRUSR | S_IRGRP | S_IROTH | O_RDWR);
 
-// 	// TODO add support for determine if fully or partial written.
-// 	long int i = vsnprintf(buf, sizeof(buf), vformat, argptr);
-// 	long nrBytes = io->write(i, (const void *)buf);
-// 	va_end(argptr);
-// 	return nrBytes;
-// }
+	// FileIO *io = new FileIO(path.c_str(), (IO::IOMode)( IO::IOMode::WRITE)); //IO::IOMode::APPEND |
+
+	return nullptr;
+}

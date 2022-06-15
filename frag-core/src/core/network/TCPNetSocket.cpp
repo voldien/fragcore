@@ -171,14 +171,15 @@ int TCPNetSocket::connect(const INetAddress &p_addr) {
 	int option = 1;
 	int rc = setsockopt(this->socket, IPPROTO_TCP, TCP_NODELAY, (const void *)&option, sizeof(int));
 	if (rc == -1) {
-		throw RuntimeException();
+		throw RuntimeException("Failed to set Socket Option");
 	}
 
 	addrlen = setupIPAddress((struct sockaddr *)&addrU, *tcpAddress, tcpAddress->getPort());
 
 	rc = ::connect(socket, (struct sockaddr *)&addrU, addrlen);
 	if (rc != 0) {
-		throw RuntimeException("Failed to connect TCP socket, {}", strerror(errno));
+		throw RuntimeException("Failed to connect TCP {}:{}, {}", tcpAddress->getIPAddress().getIP(),
+							   tcpAddress->getPort(), strerror(errno));
 	} else {
 		this->netStatus = NetStatus::Status_Done;
 	}
@@ -189,6 +190,7 @@ int TCPNetSocket::connect(const INetAddress &p_addr) {
 int TCPNetSocket::poll(int p_type, int timeout) const { /*	select or poll.	*/
 	return 0;
 }
+
 int TCPNetSocket::recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddress &r_ip, bool p_peek) {
 	int flag = 0;
 	socklen_t addrlen; /*	*/
@@ -229,7 +231,7 @@ int TCPNetSocket::sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const 
 
 long int TCPNetSocket::send(const void *pbuffer, int p_len, int &sent) {
 	int flag = 0;
-	long int res = ::send(this->socket, pbuffer, p_len, flag);
+	ssize_t res = ::send(this->socket, pbuffer, p_len, flag);
 	return res;
 }
 

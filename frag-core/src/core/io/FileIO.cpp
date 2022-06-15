@@ -22,6 +22,7 @@ FileIO::FileIO(FILE *file) {
 	/*	Extract stat of the file.	*/
 	struct stat stat;
 	int rc = fstat(fileno(this->file), &stat);
+
 	/*	Check file mode.	*/
 	if (rc == 0) {
 		if (stat.st_mode & S_IWUSR) {
@@ -40,26 +41,27 @@ FileIO::FileIO(FileIO &&other) {
 
 void FileIO::open(const char *path, IOMode mode) {
 
-	if (path == nullptr)
+	if (path == nullptr) {
 		throw InvalidPointerException("path must not be null.");
+	}
 
 	const char *f_io_mode = nullptr;
 	bool append = (mode & IO::IOMode::APPEND);
 	switch (mode & ACCESS) {
 	case READ:
-		f_io_mode = "rb";
+		f_io_mode = "r";
 		break;
 	case WRITE:
 		if (append)
-			f_io_mode = "wb+";
+			f_io_mode = "w+";
 		else
-			f_io_mode = "wb";
+			f_io_mode = "w";
 		break;
 	case ACCESS:
 		if (append)
-			f_io_mode = "ab+";
+			f_io_mode = "a+";
 		else
-			f_io_mode = "ab";
+			f_io_mode = "a";
 		break;
 	default:
 		throw InvalidArgumentException("Invalid IO mode {}", mode);

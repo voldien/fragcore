@@ -55,6 +55,9 @@ namespace fragcore {
 			return (operations & OP_ALL) == operations;
 		};
 
+	  public: /*	object specific methods.	*/
+		int getFileDescriptor() { return 0; }
+
 	  protected:
 		FILE *file;
 		IOMode mode;

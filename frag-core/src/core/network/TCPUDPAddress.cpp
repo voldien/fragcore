@@ -5,6 +5,7 @@ using namespace fragcore;
 
 TCPUDPAddress::TCPUDPAddress(const IPAddress &ipaddr, unsigned int port)
 	: INetAddress(INetAddress::NetworkProtocol::NetWorkProtocol_TCP_UDP) {
+		
 	this->ipAddress = ipaddr;
 	this->port = port;
 }

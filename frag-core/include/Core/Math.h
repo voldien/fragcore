@@ -111,7 +111,14 @@ namespace fragcore {
 		/**
 		 *
 		 */
-		template <typename T> static T wrapAngle(T angle) {}
+		template <typename T> static T wrapAngle(T angle) {
+			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
+			while (angle > static_cast<T>(Math::PI_2))
+				angle -= static_cast<T>(Math::PI_2);
+			while (angle < 0.0f)
+				angle += static_cast<T>(Math::PI_2);
+			return angle;
+		}
 
 		/**
 		 *

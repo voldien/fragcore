@@ -115,6 +115,9 @@ namespace fragcore {
 
 			return buffer;
 		}
+
+
+		static IO* createFIFO(const std::string& path);
 	};
 } // namespace fragcore
 
