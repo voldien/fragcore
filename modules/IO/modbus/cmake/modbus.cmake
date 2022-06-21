@@ -31,7 +31,7 @@ IF(NOT libmodbus_source)
     SOURCE_DIR ${MODBUS_DIR}
     DOWNLOAD_COMMAND cd ${MODBUS_DIR} && git clean -dfX &&  ${MODBUS_DIR}/autogen.sh
     CONFIGURE_COMMAND ${MODBUS_DIR}/configure --srcdir=${MODBUS_DIR} --prefix=${MODBUS_BIN} --enable-static=yes --disable-shared
-    BUILD_COMMAND make
+    BUILD_COMMAND make -j ${CMAKE_BUILD_PARALLEL_LEVEL}
     INSTALL_COMMAND make install
     BUILD_BYPRODUCTS ${MODBUS_STATIC_LIB}
   )

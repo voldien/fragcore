@@ -3,7 +3,7 @@
 	url = https://github.com/voldien/task-scheduler
 [submodule "extern/infoware"]
 	path = extern/infoware
-	url = https://github.com/ThePhD/infoware.git
+	url = https://github.com/voldien/infoware.git
 [submodule "extern/fvkcore"]
 	path = extern/fvkcore
 	url = https://github.com/voldien/fvkcore.git

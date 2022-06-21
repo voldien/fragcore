@@ -29,7 +29,7 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC StackBufferedAllocator {
 	  public:
-		StackBufferedAllocator(size_t nrStack = 0);
+		//StackBufferedAllocator(size_t nrStack = 0);
 		StackBufferedAllocator(const StackBufferedAllocator &doublebuffer);
 		StackBufferedAllocator(StackBufferedAllocator &&other);
 		explicit StackBufferedAllocator(unsigned int sizeBytes);

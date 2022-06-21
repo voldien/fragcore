@@ -32,7 +32,7 @@ IF(NOT libserialport_source)
 		SOURCE_DIR ${SERIALPORT_DIR}
 		DOWNLOAD_COMMAND cd ${SERIALPORT_DIR} && git clean -dfX && ${SERIALPORT_DIR}/autogen.sh
 		CONFIGURE_COMMAND ${SERIALPORT_DIR}/configure --srcdir=${SERIALPORT_DIR} --prefix=${SERIALPORT_BIN} --enable-static=yes --disable-shared  CFLAGS=-fPIC CXXFLAGS=-fPIC
-		BUILD_COMMAND make
+		BUILD_COMMAND make -j ${CMAKE_BUILD_PARALLEL_LEVEL}
 		BUILD_BYPRODUCTS ${SERIALPORT_LIB}
 	)
 
