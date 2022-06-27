@@ -65,8 +65,9 @@ void BZFileIO::open(const char *path, IO::IOMode mode) {
 	}
 
 	/*  */
-	if (this->bzFile == nullptr)
+	if (this->bzFile == nullptr) {
 		throw RuntimeException("Failed to open {}", BZ2_bzerror(this->bzFile, &bzerror));
+	}
 }
 
 BZFileIO::BZFileIO(const char *path, IO::IOMode mode) : FileIO(path, mode) { this->open(path, mode); }
