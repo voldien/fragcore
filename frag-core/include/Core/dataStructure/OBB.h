@@ -84,7 +84,9 @@ namespace fragcore {
 		 *
 		 * @param size
 		 */
-		inline void setCenter(const Vector3 &size) {}
+		inline void setCenter(const Vector3 &size) {
+			
+		}
 
 		/**
 		 *

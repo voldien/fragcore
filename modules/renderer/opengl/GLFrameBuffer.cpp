@@ -42,6 +42,7 @@ int GLFrameBuffer::width() const {
 		glGetNamedFramebufferParameteriv(this->framebuffer, GL_FRAMEBUFFER_DEFAULT_WIDTH, &width);
 	} else {
 		getCurrentFrameBufferRead();
+		glGetNamedFramebufferParameteriv(0, GL_FRAMEBUFFER_DEFAULT_WIDTH, &width);
 	}
 
 	return width;
@@ -53,6 +54,8 @@ int GLFrameBuffer::height() const {
 	if (glGetNamedFramebufferParameteriv) {
 		glGetNamedFramebufferParameteriv(this->framebuffer, GL_FRAMEBUFFER_DEFAULT_HEIGHT, &height);
 	} else {
+		getCurrentFrameBufferRead();
+		glGetNamedFramebufferParameteriv(0, GL_FRAMEBUFFER_DEFAULT_HEIGHT, &height);
 	}
 
 	return height;
@@ -64,6 +67,8 @@ int GLFrameBuffer::layers() {
 	if (glGetNamedFramebufferParameteriv) {
 		glGetNamedFramebufferParameteriv(this->framebuffer, GL_FRAMEBUFFER_DEFAULT_LAYERS, &layers);
 	} else {
+		getCurrentFrameBufferRead();
+		glGetNamedFramebufferParameteriv(0, GL_FRAMEBUFFER_DEFAULT_LAYERS, &layers);
 	}
 
 	return layers;

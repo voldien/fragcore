@@ -9,7 +9,7 @@
 using namespace fragcore;
 
 static Log::VERBOSITY g_verbosity = Log::Quite;
-static IO *verboseIO = nullptr;
+// static IO *verboseIO = nullptr;
 std::list<Ref<IO>> g_ios;
 typedef struct log_io_buf_t {
 	Log::VERBOSITY verbosity;

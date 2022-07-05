@@ -19,6 +19,7 @@
 #ifndef _FRAG_CORE_LOG_H_
 #define _FRAG_CORE_LOG_H_ 1
 #include "IO/IO.h"
+#include "Object.h"
 #include "Ref.h"
 
 namespace fragcore {
@@ -26,9 +27,9 @@ namespace fragcore {
 	 * @brief
 	 *
 	 */
-	class FVDECLSPEC Log {
+	// TODO object container.
+	class FVDECLSPEC Log : public Object {
 	  public:
-
 		/**
 		 *	Verbosity level of the program.
 		 */
@@ -45,11 +46,11 @@ namespace fragcore {
 		 *
 		 */
 		enum LogMappingFlag {
-			fQuite = (1 << Quite),
-			fError = (1 << Error),
-			fVerbose = (1 << Verbose),
-			fWarning = (1 << Warning),
-			fDebug = (1 << Debug),
+			fQuite = (1 << VERBOSITY::Quite),
+			fError = (1 << VERBOSITY::Error),
+			fVerbose = (1 << VERBOSITY::Verbose),
+			fWarning = (1 << VERBOSITY::Warning),
+			fDebug = (1 << VERBOSITY::Debug),
 		};
 
 		/**

@@ -15,7 +15,9 @@ void GLFWWindow::close() {
 
 void GLFWWindow::setPosition(int x, int y) noexcept { glfwSetWindowPos(this->window, x, y); }
 
-void GLFWWindow::setSize(int width, int height) noexcept {}
+void GLFWWindow::setSize(int width, int height) noexcept {
+
+}
 
 void GLFWWindow::getPosition(int *x, int *y) const { glfwGetWindowPos(this->window, x, y); }
 
