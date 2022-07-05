@@ -41,6 +41,13 @@ namespace fragcore {
 			Unknown = (1 << 31)		/*  */
 		};
 
+		enum class CPUArch {
+			x86,   /**/
+			AMD64, /**/
+			Arm32, /**/
+			Arm64  /**/
+		};
+
 		enum class SIMD : unsigned int {
 			NONE = (0 << 0),	/*	No HPM SIMD exention flag.	*/
 			MMX = (1 << 1),		/*	MMX. (Yet not supported)	*/
@@ -57,15 +64,16 @@ namespace fragcore {
 		};
 
 		enum class KernelSystem {
-			UnKnownKernel,
-			WindowsNT,
-			LinuxGNU,
-			Darwin,
+			UnKnownKernel, /*		*/
+			WindowsNT,	   /*		*/
+			LinuxGNU,	   /*		*/
+			Darwin,		   /*		*/
 		};
 
 		enum class Endianness {
-			LittleEndian,
-			BigEndian,
+			UnKnown,
+			LittleEndian, /*	*/
+			BigEndian,	  /*	*/
 		};
 
 		static KernelSystem getSystemKernel() noexcept;
@@ -73,12 +81,42 @@ namespace fragcore {
 		static const std::string &getOperatingSystemName() noexcept;
 		static const char *getOperatingSystemName(OperatingSystem os);
 
-		//TODO add support for NUMA.
+	  public: /*	System CPU Information.	*/
+		// TODO add support for NUMA.
 		static std::string getCPUName() noexcept;
+		static CPUArch getCPUArchitecture2() noexcept;
 		static const char *getCPUArchitecture() noexcept;
 		static unsigned long getCPUFrequency() noexcept;
 		static bool isSupportedInstruction(SIMD instruction) noexcept;
 		static SIMD getSupportedSIMD();
+
+		// TODO add package and physical cores.
+		typedef struct cpu_package_t {
+			uint32_t physical_cores;
+			uint32_t logical_cores;
+		} CPUPackage;
+
+		/**
+		 * @brief
+		 *
+		 * @return std::vector<CPUPackage>
+		 */
+		static std::vector<CPUPackage> getCPUPackages();
+
+		/**
+		 * @brief
+		 *
+		 * @return unsigned int
+		 */
+		static unsigned int getCPUCoreCount();
+
+		/**
+		 * @brief
+		 *
+		 * @return unsigned int
+		 */
+		// TODO add level.
+		static unsigned int getCPUCacheLine(size_t level = 2);
 
 		/**
 		 * @brief Get the Endianness object
@@ -87,6 +125,16 @@ namespace fragcore {
 		 */
 		static Endianness getEndianness() noexcept;
 
+	  public: /*	GPU Information	*/
+
+		typedef struct gpu_information_t{
+			std::string name;
+			size_t memorySize;
+		}GPUInformation;
+
+		static std::vector<GPUInformation> getGPUDevices() noexcept;
+
+	  public: /*	System Memory Information.	*/
 		/**
 		 * @brief
 		 *
@@ -101,37 +149,35 @@ namespace fragcore {
 		 */
 		static unsigned int getPageSize();
 
-		/**
-		 * @brief
-		 *
-		 * @return unsigned int
-		 */
-		static unsigned int getCPUCoreCount();
-
-		/**
-		 * @brief
-		 *
-		 * @return unsigned int
-		 */
-		static unsigned int getCPUCacheLine();
-
+	  public: /*	User Space Information.	*/
 		/**
 		 * @brief Get the Appliation Name object
 		 *
 		 * @return const char*
 		 */
-		static const char *getAppliationName();
+		static std::string getAppliationName();
 
+		/**
+		 * @brief Get the name of the current user.
+		 *
+		 * @return const char*
+		 */
 		static const char *getUserName();
-
-		static bool supportsVibration();
 
 		/**
 		 * @brief Get the Current Directory object
 		 *
 		 * @return const char*
 		 */
-		static const char *getCurrentDirectory();
+		static std::string getCurrentDirectory();
+
+		/**
+		 * @brief
+		 *
+		 * @return true
+		 * @return false
+		 */
+		static bool supportsVibration();
 
 		// TODO relocate
 		static Ref<IO> &getStdOut() noexcept;

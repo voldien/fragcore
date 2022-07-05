@@ -8,10 +8,12 @@
 #include <cerrno>
 #include <cstdio>
 #include <cstring>
+#include <filesystem>
 #include <fmt/core.h>
 #include <fstream>
 #include <malloc.h>
-// namespace fs = std::filesystem;
+namespace fs = std::filesystem;
+
 using namespace fragcore;
 
 IO *FileSystem::openFile(const char *path, IO::IOMode mode) {
@@ -110,7 +112,7 @@ void FileSystem::createFile(const char *path) {
 }
 
 void FileSystem::createDirectory(const char *path) {
-	// fs::create_directory(path);
+	fs::create_directory(path);
 	// mkdir(path);
 }
 

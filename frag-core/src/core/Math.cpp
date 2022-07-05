@@ -41,14 +41,16 @@ static struct osn_context *ctx = nullptr;
 float Math::PerlinNoise(const Vector2 &point) noexcept { return Math::PerlinNoise(point.x(), point.y()); }
 
 float Math::PerlinNoise(float x, float y) noexcept {
-	if (unlikely(ctx == nullptr))
+	if (unlikely(ctx == nullptr)) {
 		open_simplex_noise(0, &ctx);
+	}
 	return open_simplex_noise2(ctx, x, y);
 }
 
 float Math::PerlinNoise(float x, float y, float z) noexcept {
-	if (unlikely(ctx == nullptr))
+	if (unlikely(ctx == nullptr)) {
 		open_simplex_noise(0, &ctx);
+	}
 
 	return open_simplex_noise3(ctx, x, y, z);
 }

@@ -1,5 +1,6 @@
 #include "Core/SystemInfo.h"
 #include "Core/IO/FileIO.h"
+#include <filesystem>
 #include <infoware.hpp>
 
 using namespace fragcore;
@@ -19,7 +20,6 @@ SystemInfo::OperatingSystem SystemInfo::getOperatingSystem() noexcept {
 	if (info.major == 0) {
 		info = iware::system::OS_info();
 	}
-
 	/*  */
 	if (strcmp(info.name.c_str(), "Linux") == 0) {
 		return SystemInfo::OperatingSystem::Linux;
@@ -95,54 +95,80 @@ const char *SystemInfo::getCPUArchitecture() noexcept {
 unsigned long SystemInfo::getCPUFrequency() noexcept { return iware::cpu::frequency(); }
 
 bool SystemInfo::isSupportedInstruction(SIMD instruction) noexcept {
+	iware::cpu::instruction_set_t _instruction = iware::cpu::instruction_set_t::mmx;
+	switch (instruction) {
+	case SystemInfo::SIMD::MMX:
+		_instruction = iware::cpu::instruction_set_t::mmx;
+		break;
 
-	if (instruction == SystemInfo::SIMD::MMX) {
-		iware::cpu::instruction_set_t _instruction = iware::cpu::instruction_set_t::mmx;
-		return iware::cpu::instruction_set_supported(_instruction);
+	default:
+		break;
 	}
-
-	return false;
+	return iware::cpu::instruction_set_supported(_instruction);
 }
 
 SystemInfo::SIMD SystemInfo::getSupportedSIMD() {
 	unsigned int supportedSIMD = 0;
 
-	/**/
-	// iware::cpu::instruction_set_supported()
 	iware::cpu::instruction_set_supported(iware::cpu::instruction_set_t::adx);
 
-	// for (int i = 1; i < 11; i++) {
-	// 	if (hpm_support_cpu_feat(1 << i))
-	// 		supportedSIMD |= (1 << i);
-	// }
 	return (SystemInfo::SIMD)supportedSIMD;
 }
 
-SystemInfo::Endianness getEndianness() {
+SystemInfo::Endianness SystemInfo::getEndianness() noexcept {
 	switch (iware::cpu::endianness()) {
 	case iware::cpu::endianness_t::big:
 		return SystemInfo::Endianness::BigEndian;
 	case iware::cpu::endianness_t::little:
 		return SystemInfo::Endianness::LittleEndian;
-	default:
-		assert(0);
-		throw RuntimeException();
+	default: // unknown.
+		return SystemInfo::Endianness::UnKnown;
 	}
 }
 
-const char *SystemInfo::getAppliationName() {
-	return "";
-	/*fs::current_path().c_str();*/
+std::vector<SystemInfo::GPUInformation> SystemInfo::getGPUDevices() noexcept {
+	std::vector<iware::gpu::device_properties_t> devices = iware::gpu::device_properties();
+	std::vector<GPUInformation> gpuDevices(devices.size());
+
+	for (size_t i = 0; i < devices.size(); i++) {
+		gpuDevices[i].name = devices[i].name;
+		gpuDevices[i].memorySize = devices[i].memory_size;
+	}
+	return gpuDevices;
+}
+
+std::string SystemInfo::getAppliationName() {
+#if defined(PLATFORM_POSIX) || defined(__linux__) // check defines for your setup
+
+	std::string sp;
+	std::ifstream("/proc/self/comm") >> sp;
+	return sp;
+
+#elif defined(_WIN32)
+
+	char buf[MAX_PATH];
+	GetModuleFileNameA(nullptr, buf, MAX_PATH);
+	return buf;
+
+#else
+	return std::string();
+#endif
 }
 
 const char *SystemInfo::getUserName() { return ""; }
 
 unsigned int SystemInfo::getPageSize() { return 1024; }
 
+std::vector<SystemInfo::CPUPackage> SystemInfo::getCPUPackages() {
+	std::vector<SystemInfo::CPUPackage> packages(iware::cpu::quantities().packages);
+
+	return packages;
+}
+
 unsigned int SystemInfo::getCPUCoreCount() { return iware::cpu::quantities().logical; }
 
-unsigned int SystemInfo::getCPUCacheLine() {
-	const auto cache = iware::cpu::cache(2);
+unsigned int SystemInfo::getCPUCacheLine(size_t level) {
+	const auto cache = iware::cpu::cache(level);
 	return cache.line_size;
 }
 
@@ -153,16 +179,19 @@ unsigned long int SystemInfo::systemMemorySize() {
 	return memory.physical_total;
 }
 
-const char *SystemInfo::getCurrentDirectory() {
-	return "";
-	/*fs::current_path().c_str();*/
-}
+std::string SystemInfo::getCurrentDirectory() { return std::filesystem::current_path(); }
 
 // TODO relocate to system or something, since it they are always exist more of the time.
-static Ref<IO> stdoutRef = Ref<IO>(new FileIO(stdout));
-static Ref<IO> stdinRef = Ref<IO>(new FileIO(stdin));
-static Ref<IO> stderrRef = Ref<IO>(new FileIO(stderr));
 
-Ref<IO> &SystemInfo::getStdOut() noexcept { return stdoutRef; }
-Ref<IO> &SystemInfo::getStdIn() noexcept { return stdoutRef; }
-Ref<IO> &SystemInfo::getStdErr() noexcept { return stdoutRef; }
+Ref<IO> &SystemInfo::getStdOut() noexcept {
+	static Ref<IO> stdoutRef = Ref<IO>(new FileIO(stdout));
+	return stdoutRef;
+}
+Ref<IO> &SystemInfo::getStdIn() noexcept {
+	static Ref<IO> stdinRef = Ref<IO>(new FileIO(stdin));
+	return stdinRef;
+}
+Ref<IO> &SystemInfo::getStdErr() noexcept {
+	static Ref<IO> stderrRef = Ref<IO>(new FileIO(stderr));
+	return stderrRef;
+}
