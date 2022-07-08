@@ -19,9 +19,25 @@
 #ifndef _FRAG_CORE_I_COMPRESSION_H_
 #define _FRAG_CORE_I_COMPRESSION_H_ 1
 #include "../FragDef.h"
+#include "../IO/IO.h"
+#include "../Ref.h"
 
 namespace fragcore {
-	class FVDECLSPEC ICompression {};
+
+	/**
+	 * @brief 
+	 * 
+	 */
+	class FVDECLSPEC ICompression : public Object {
+	  public:
+		virtual void inflate(Ref<IO> in, Ref<IO> out) = 0;
+		virtual void inflate(const void *in, size_t inSize, void *out, size_t size) = 0;
+
+		virtual void deflate(Ref<IO> in, Ref<IO> out) = 0;
+		virtual void deflate(const void *in, size_t inSize, void *out, size_t size) = 0;
+
+
+	};
 } // namespace fragcore
 
 #endif

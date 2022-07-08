@@ -21,7 +21,9 @@
 #include "ICompression.h"
 
 namespace fragcore {
-	class FVDECLSPEC LZ4Compression : public ICompression {};
+	class FVDECLSPEC LZ4Compression : public ICompression {
+		public:
+	};
 } // namespace fragcore
 
 #endif

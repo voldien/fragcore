@@ -27,6 +27,7 @@ namespace fragcore {
 	 *
 	 */
 	// TODO add template for precisous
+	//template<typename T = Vector3>
 	struct FVDECLSPEC BoundingSphere {
 	  public:
 		BoundingSphere() = default;

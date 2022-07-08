@@ -27,14 +27,17 @@ namespace fragcore {
 	 * @brief
 	 *
 	 */
-	struct FVDECLSPEC Line : public Shape {
+	template <typename T = float> struct FVDECLSPEC Line : public Shape {
 	  public:
+		// using LineVec = Eigen::Vector2f
+
 		Line() = default;
 		Line(const Vector2 &normal) noexcept {
 			this->normal = normal;
 			this->d = 0;
 		}
 		Line(const Vector2 &point, const Vector2 &normal) noexcept { this->setNormalAndPoint(normal, point); }
+
 		Line(const Line &other) noexcept {
 			this->normal = other.normal;
 			this->d = other.d;
@@ -73,7 +76,7 @@ namespace fragcore {
 		 * @param point
 		 * @return
 		 */
-		inline float distance(const Vector2 &point) const noexcept { return normal.dot(point) + d; }
+		inline float distance(const Vector2 &point) const noexcept { return this->normal.dot(point) + d; }
 
 		/**
 		 * Get distance.
@@ -131,7 +134,7 @@ namespace fragcore {
 
 	  public: /*	Static methods.	*/
 		/**
-		 * Create plane from points.
+		 * Create plane from line segment.
 		 * @param v1
 		 * @param v2
 		 * @return
@@ -139,7 +142,7 @@ namespace fragcore {
 		static Line fromPoints(const Vector2 &v1, const Vector2 &v2) noexcept {
 			Line tmp;
 			Vector2 e1 = (v2 - v1);
-			/**/
+			/*	Corss product.	*/
 			Vector2 e2{e1[1], -e1[0]};
 
 			tmp.d = -tmp.normal.dot(v1);

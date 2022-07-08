@@ -24,7 +24,9 @@
 namespace fragcore {
 
 	/**
-	 *
+	 * @brief 
+	 * 
+	 * @tparam T 
 	 */
 	template <class T> class FVDECLSPEC DisjointSet {
 

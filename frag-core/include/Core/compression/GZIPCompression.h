@@ -16,3 +16,14 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+#ifndef _FRAG_CORE_GZIP_COMPRESSION_H_
+#define _FRAG_CORE_GZIP_COMPRESSION_H_ 1
+#include "ICompression.h"
+
+namespace fragcore {
+	class FVDECLSPEC GZIPCompression : public ICompression {
+		public:
+	};
+} // namespace fragcore
+
+#endif

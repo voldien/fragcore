@@ -22,7 +22,8 @@
 
 namespace fragcore {
 	/**
-	 *
+	 * @brief 
+	 * 
 	 */
 	class FVDECLSPEC Triangle {
 	  public:

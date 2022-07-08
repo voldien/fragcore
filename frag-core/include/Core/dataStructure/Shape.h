@@ -25,13 +25,14 @@ namespace fragcore {
 	/**
 	 *
 	 */
+	///template<typename Dim>
 	class FVDECLSPEC Shape {
 	  public:
 		/**
 		 *
 		 *	@Return
 		 */
-		//bool intersect(const Vector3 &orig, const Vector3 dir, RaycastHit &hit) const;
+		//bool intersect(const Dim &orig, const Dim dir, RaycastHit &hit) const;
 
 		/**
 		 *

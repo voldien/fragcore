@@ -17,7 +17,7 @@ StackBufferedAllocator::StackBufferedAllocator(StackBufferedAllocator &&other) {
 	this->m_curStack = std::exchange(other.m_curStack, 0);
 }
 
-StackBufferedAllocator::StackBufferedAllocator(unsigned int sizeBytes) {
+StackBufferedAllocator::StackBufferedAllocator(size_t sizeBytes) {
 	this->m_curStack = 0;
 	this->m_stack[0].alloc(sizeBytes);
 	this->m_stack[1].alloc(sizeBytes);
@@ -28,23 +28,21 @@ StackBufferedAllocator::~StackBufferedAllocator() {
 	this->getStack(1)->clear();
 }
 
-void StackBufferedAllocator::alloc(unsigned int sizeBytes) {
+void StackBufferedAllocator::alloc(size_t sizeBytes) {
 	this->m_stack[0].alloc(sizeBytes);
 	this->m_stack[1].alloc(sizeBytes);
 }
 
-void StackBufferedAllocator::allocateAligned(unsigned int sizeBytes, int alignment) {
+void StackBufferedAllocator::allocateAligned(size_t sizeBytes, int alignment) {
 	size_t allocateSize = Math::align<size_t>(sizeBytes, alignment);
 	this->alloc(allocateSize);
 }
 
 void StackBufferedAllocator::clear() { this->m_stack[this->m_curStack].clear(); }
 
-unsigned int StackBufferedAllocator::getMarker() const { return this->m_stack[this->m_curStack].getMarker(); }
+size_t StackBufferedAllocator::getMarker() const { return this->m_stack[this->m_curStack].getMarker(); }
 
-void *StackBufferedAllocator::fetch(unsigned int sizeBytes) {
-	return this->m_stack[this->m_curStack].fetch(sizeBytes);
-}
+void *StackBufferedAllocator::fetch(size_t sizeBytes) { return this->m_stack[this->m_curStack].fetch(sizeBytes); }
 
 void StackBufferedAllocator::freeToMarker(unsigned int marker) {
 	return this->m_stack[this->m_curStack].freeToMarker(marker);

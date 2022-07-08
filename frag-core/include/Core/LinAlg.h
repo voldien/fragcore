@@ -1,3 +1,4 @@
+
 /*
  *	FragCore - Core Framework Functionalities for Game Engines
  *	Copyright (C) 2018  Valdemar Lindberg

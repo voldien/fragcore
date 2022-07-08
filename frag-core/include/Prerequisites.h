@@ -24,6 +24,8 @@ namespace fragcore {
 	/*  Core.   */
 	class Object;
 
+	/*	Compression.	*/
+
 	/*	*/
 	class IScheduler;
 

@@ -23,10 +23,13 @@
 #include <iostream>
 
 namespace fragcore {
+
 	/**
-	 *
+	 * @brief 
+	 * 
+	 * @tparam T 
 	 */
-	struct FVDECLSPEC Plane {
+	template <typename T = float> struct FVDECLSPEC Plane {
 	  public:
 		Plane() = default;
 		Plane(const Vector3 &normal) noexcept {

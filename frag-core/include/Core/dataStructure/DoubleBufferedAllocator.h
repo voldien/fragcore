@@ -24,28 +24,28 @@
 namespace fragcore {
 
 	/**
-	 *	DoubleBufferedAllocator is two allocate buffer.
-	 *	//TODO rename to stack buffered, to allow select number of stack.
+	 * @brief Stack of buffer allocator.
+	 *
 	 */
 	class FVDECLSPEC StackBufferedAllocator {
 	  public:
-		//StackBufferedAllocator(size_t nrStack = 0);
+		// StackBufferedAllocator(size_t nrStack = 0);
 		StackBufferedAllocator(const StackBufferedAllocator &doublebuffer);
 		StackBufferedAllocator(StackBufferedAllocator &&other);
-		explicit StackBufferedAllocator(unsigned int sizeBytes);
+		explicit StackBufferedAllocator(size_t sizeBytes);
 		~StackBufferedAllocator();
 
 		/**
 		 *	Allocate n number of bytes.
 		 */
-		void alloc(unsigned int sizeBytes);
+		void alloc(size_t sizeBytes);
 
 		/**
 		 *	Allocate n number of bytes aligned.
 		 *
 		 *	@return first memory address.
 		 */
-		void allocateAligned(unsigned int sizeBytes, int alignment);
+		void allocateAligned(size_t sizeBytes, int alignment);
 
 		/**
 		 *	Set marker to zero.
@@ -56,12 +56,12 @@ namespace fragcore {
 		 *	Return marker offset.
 		 *	@return
 		 */
-		unsigned int getMarker() const;
+		size_t getMarker() const;
 
 		/**
 		 *	Fetch block of memory.
 		 */
-		void *fetch(unsigned int sizeBytes);
+		void *fetch(size_t sizeBytes);
 
 		/**
 		 *	Release everything to marker.
@@ -71,6 +71,7 @@ namespace fragcore {
 		/**
 		 *	Swap buffers.
 		 */
+		// TODO perhaps change to next.
 		void swap();
 
 		/**
@@ -100,6 +101,7 @@ namespace fragcore {
 	  private: /*	Attributes.	*/
 		unsigned int m_curStack;
 		StackAllocator m_stack[2];
+		std::vector<StackAllocator> stacks;
 	};
 
 } // namespace fragcore

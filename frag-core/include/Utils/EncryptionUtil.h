@@ -16,3 +16,9 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+#ifndef _FRAG_CORE_ENCRYPTION_UTIL_H_
+#define _FRAG_CORE_ENCRYPTION_UTIL_H_ 1
+
+namespace fragcore {}
+
+#endif

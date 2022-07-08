@@ -19,11 +19,8 @@
 #ifndef FRAG_CORE_GRAPH_H_
 #define FRAG_CORE_GRAPH_H_ 1
 
-namespace fragcore{
-	template<class T>
-	class Graph{
-
-	};
-}
+namespace fragcore {
+	template <class T> class Graph {};
+} // namespace fragcore
 
 #endif
