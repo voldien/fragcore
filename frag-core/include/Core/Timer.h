@@ -19,7 +19,6 @@
 #ifndef _FRAG_CORE_TIMER_H_
 #define _FRAG_CORE_TIMER_H_ 1
 #include "Object.h"
-#include <SDL2/SDL_timer.h>
 #include <chrono>
 
 namespace fragcore {
