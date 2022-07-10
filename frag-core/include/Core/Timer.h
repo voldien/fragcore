@@ -20,49 +20,54 @@
 #define _FRAG_CORE_TIMER_H_ 1
 #include "Object.h"
 #include <SDL2/SDL_timer.h>
+#include <chrono>
 
 namespace fragcore {
-
+	using namespace std::chrono;
 	/**
 	 * @brief
 	 *
 	 */
 	class Time : public Object {
 	  public:
-		Time() {
-			this->_private_level_startup = SDL_GetPerformanceCounter();
+		Time() {}
 
-			this->timeResolution = SDL_GetPerformanceFrequency();
+		void start() {
+			this->start_timestamp = steady_clock::now();
+			this->ticks = steady_clock::now();
 		}
 
-		void start() { this->ticks = SDL_GetPerformanceCounter(); }
 		template <typename T> T getElapsed() const noexcept {
-			return static_cast<T>(SDL_GetPerformanceCounter() - this->_private_level_startup) /
-				   static_cast<T>(this->timeResolution);
+			duration<T> time_span = duration_cast<duration<T>>(steady_clock::now() - start_timestamp);
+
+			return time_span.count();
 		}
+
 		template <typename T> T deltaTime() const noexcept {
-			return static_cast<T>(delta_data) / static_cast<T>(this->timeResolution);
+			duration<T> time_span = duration_cast<duration<T>>(steady_clock::now() - ticks);
+
+			return static_cast<T>(delta_data.count());
 		}
+
 		void update() {
-			delta_data = SDL_GetPerformanceCounter() - ticks;
-			ticks = SDL_GetPerformanceCounter();
+
+			this->delta_data = duration_cast<duration<double>>(steady_clock::now() - this->ticks);
+			this->ticks = steady_clock::now();
 		}
+
+		size_t getTimeResolution() { return 0; }
 
 	  private: /*  */
-		long int ticks;
+		steady_clock::time_point start_timestamp;
+
+		steady_clock::time_point ticks;
 		float scale;
 		float fixed;
 
 		/*	TODO clean up later by relocating it to the time class.*/
-		float gc_fdelta;
-		float delta_data;
+		duration<double> delta_data;
 		// unsigned int nDeltaTime = sizeof(delta_data) / sizeof(delta_data[0]);
 		unsigned int idelta;
-
-		/*  */
-
-		unsigned long timeResolution;
-		unsigned long _private_level_startup;
 	};
 } // namespace fragcore
 
