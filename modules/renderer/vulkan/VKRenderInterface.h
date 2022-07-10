@@ -110,10 +110,14 @@ namespace fragcore {
 
 		virtual void getStatus(MemoryInfo *memoryInfo) override;
 
+	  public: /*	Command buffer methods.	*/
 		virtual CommandList *createCommandBuffer() override;
+
+		// TODO add array support .
 		virtual void submittCommand(Ref<CommandList> &list) override;
 		virtual void execute(CommandList *list) override;
 
+	  public:
 		virtual void *getData() const override;
 
 	  public: /*	*/

@@ -36,6 +36,8 @@ namespace fragcore {
 		CopyTexture,
 		Blit,
 		UpdateBuffer,
+		BindVertexBuffers,
+		BindIndiceBuffer,
 		Draw,
 		DrawIndice,
 		DrawIndirect,
@@ -160,26 +162,52 @@ namespace fragcore {
 		// TODO add size, filtermode
 	};
 
-	class FVDECLSPEC GLDrawCommand : public GLCommandBase {
+	class FVDECLSPEC GLBindVertexBuffersCommand : public GLCommandBase {
 	  public:
-		GLDrawCommand(const Ref<Buffer> &buffer, uint32_t nrVertices, uint32_t nrInstances)
-			: GLCommandBase(GLCommandBufferCmd::Draw) {}
+		GLBindVertexBuffersCommand(const Ref<Buffer> &buffer, uint32_t nrVertices, uint32_t nrInstances)
+			: GLCommandBase(GLCommandBufferCmd::BindVertexBuffers), buffer(buffer), nrVertices(nrVertices),
+			  nrInstances(nrInstances) {}
+
+		Ref<Buffer> buffer;
+		uint32_t nrVertices;
+		uint32_t nrInstances;
+	};
+
+	class FVDECLSPEC GLBindIndiceBufferCommand : public GLCommandBase {
+	  public:
+		GLBindIndiceBufferCommand(const Ref<Buffer> &buffer, uint32_t nrVertices, uint32_t nrInstances)
+			: GLCommandBase(GLCommandBufferCmd::BindIndiceBuffer) {}
 
 		Buffer *src;
 		uint32_t nrVertices;
 		uint32_t nrInstances;
 	};
 
+	class FVDECLSPEC GLDrawCommand : public GLCommandBase {
+	  public:
+		GLDrawCommand(uint32_t vertexCount, uint32_t instanceCount, uint32_t firstVertex, uint32_t firstInstance)
+			: GLCommandBase(GLCommandBufferCmd::Draw), vertexCount(vertexCount), instanceCount(instanceCount),
+			  firstVertex(firstVertex), firstInstance(firstInstance) {}
+
+		uint32_t vertexCount;
+		uint32_t instanceCount;
+		uint32_t firstVertex;
+		uint32_t firstInstance;
+	};
+
 	class FVDECLSPEC GLDrawIndicesCommand : public GLCommandBase {
 	  public:
 		// TODO add the rest of require param
-		GLDrawIndicesCommand(const Ref<Buffer> &buffer, const Ref<Buffer> &indices, uint32_t nrVertices,
-							 uint32_t nrInstances)
-			: GLCommandBase(GLCommandBufferCmd::DrawIndirect) {}
+		GLDrawIndicesCommand(uint32_t indexCount, uint32_t instanceCount, uint32_t firstIndex, int32_t vertexOffset,
+							 uint32_t firstInstance)
+			: GLCommandBase(GLCommandBufferCmd::DrawIndirect), indexCount(indexCount), instanceCount(instanceCount),
+			  firstIndex(firstIndex), vertexOffset(vertexOffset), firstInstance(firstInstance) {}
 
-		Buffer *src;
-		uint32_t nrVertices;
-		uint32_t nrInstances;
+		uint32_t indexCount;
+		uint32_t instanceCount;
+		uint32_t firstIndex;
+		int32_t vertexOffset;
+		uint32_t firstInstance;
 	};
 
 	class FVDECLSPEC GLDrawIndirectCommand : public GLCommandBase {
@@ -212,10 +240,8 @@ namespace fragcore {
 	class FVDECLSPEC GLDepthBoundsCommand : public GLCommandBase {
 	  public:
 		// TODO add the rest of require param
-		GLDepthBoundsCommand(float min, float max) : GLCommandBase(GLCommandBufferCmd::DepthBounds) {
-			this->min = min;
-			this->max = max;
-		}
+		GLDepthBoundsCommand(float min, float max)
+			: GLCommandBase(GLCommandBufferCmd::DepthBounds), min(min), max(max) {}
 
 		float min, max;
 	};
@@ -223,9 +249,8 @@ namespace fragcore {
 	class FVDECLSPEC GLGraphicPipelineCommand : public GLCommandBase {
 	  public:
 		// TODO add the rest of require param
-		GLGraphicPipelineCommand(RenderPipeline *pipeline) : GLCommandBase(GLCommandBufferCmd::BindGraphicPipeline) {
-			this->pipeline = pipeline;
-		}
+		GLGraphicPipelineCommand(RenderPipeline *pipeline)
+			: GLCommandBase(GLCommandBufferCmd::BindGraphicPipeline), pipeline(pipeline) {}
 
 		RenderPipeline *pipeline;
 	};
@@ -233,7 +258,8 @@ namespace fragcore {
 	class FVDECLSPEC GLComputePipelineCommand : public GLCommandBase {
 	  public:
 		// TODO add the rest of require param
-		GLComputePipelineCommand(RenderPipeline *pipeline) : GLCommandBase(GLCommandBufferCmd::BindComputePipeline) {
+		GLComputePipelineCommand(RenderPipeline *pipeline)
+			: GLCommandBase(GLCommandBufferCmd::BindComputePipeline), pipeline(pipeline) {
 			this->pipeline = pipeline;
 		}
 

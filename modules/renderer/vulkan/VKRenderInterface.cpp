@@ -49,12 +49,12 @@ VKRenderInterface::VKRenderInterface(IConfig *config) {
 	};
 
 	VulkanCore *vulkancore = nullptr;
-	IConfig setupConfig;
+	// IConfig setupConfig;
 	/*	Default config parameters.	*/
 	if (config == nullptr) {
-		setupConfig.set("debug", true);
-		setupConfig.set("debug-tracer", true);
-		setupConfig.set("gamma-correction", true);
+		// setupConfig.set("debug", true);
+		// setupConfig.set("debug-tracer", true);
+		// setupConfig.set("gamma-correction", true);
 	} else {
 		// setupConfig = *config
 	}
@@ -78,6 +78,8 @@ VKRenderInterface::VKRenderInterface(IConfig *config) {
 
 	this->languageSupport = SPIRV;
 	this->getCapability(&this->capability);
+
+	this->queue = getDevice()->getDefaultGraphicQueue();
 }
 
 VKRenderInterface::~VKRenderInterface() {
@@ -169,6 +171,7 @@ void VKRenderInterface::deleteSampler(Sampler *sampler) {}
 RenderPipeline *VKRenderInterface::createRenderPipeline(const RenderPipelineDesc *desc) {
 
 	//    desc.
+	return nullptr;
 }
 
 void VKRenderInterface::deleteRenderPipeline(RenderPipeline *obj) {}
@@ -473,7 +476,7 @@ Shader *VKRenderInterface::createShader(ShaderDesc *desc) {
 	pipelineInfo.pDepthStencilState = nullptr; // Optional
 	pipelineInfo.pColorBlendState = &colorBlending;
 	pipelineInfo.pDynamicState = &dynamicState; // Optional
-	//pipelineInfo.layout = shaobj->pipelineLayout;
+	// pipelineInfo.layout = shaobj->pipelineLayout;
 	pipelineInfo.renderPass = renderPass;
 	pipelineInfo.subpass = 0;
 	pipelineInfo.basePipelineHandle = VK_NULL_HANDLE; // Optional
@@ -957,16 +960,14 @@ CommandList *VKRenderInterface::createCommandBuffer() {
 
 void VKRenderInterface::submittCommand(Ref<CommandList> &list) {
 
-	VKCommandList *l = (VKCommandList *)*list;
+	VKCommandList *commandBuffer = static_cast<VKCommandList *>(*list);
 
 	VkSubmitInfo submitInfo = {};
 	submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 	submitInfo.commandBufferCount = 1;
-	submitInfo.pCommandBuffers = &l->cmdBuffer;
+	submitInfo.pCommandBuffers = &commandBuffer->cmdBuffer;
 
-	VkResult result = vkQueueSubmit(queue, 1, &submitInfo, nullptr);
-	if (result != VK_SUCCESS)
-		throw RuntimeException("Failed to submit to queue.");
+	VKS_VALIDATE(vkQueueSubmit(this->queue, 1, &submitInfo, VK_NULL_HANDLE));
 }
 
 void VKRenderInterface::execute(CommandList *list) {}

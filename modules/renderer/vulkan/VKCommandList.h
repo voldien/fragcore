@@ -50,14 +50,25 @@ namespace fragcore {
 
 		virtual void setDepthBounds(float min, float max) override;
 
+		virtual void bindVertexBuffers(uint32_t firstBinding, uint32_t bindingCount,
+									   const std::vector<Ref<Buffer>> &buffer,
+									   const std::vector<size_t> pOffsets) override;
+		virtual void bindBindIndexBuffers(Ref<Buffer> &buffer, size_t offset, size_t indexType) override;
+
+		virtual void draw(uint32_t vertexCount, uint32_t instanceCount, uint32_t firstVertex,
+						  uint32_t firstInstance) override;
+		virtual void drawIndexed(uint32_t indexCount, uint32_t instanceCount, uint32_t firstIndex, int32_t vertexOffset,
+								 uint32_t firstInstance) override;
+		virtual void drawIndirect(Ref<Buffer> &buffer, size_t offset, uint32_t drawCount, uint32_t stride) override;
+		virtual void drawIndexedIndirect(Ref<Buffer> &buffer, size_t offset, uint32_t drawCount,
+										 uint32_t stride) override;
+
 		virtual void dispatch(uint groupCountX, uint groupCountY, uint groupCountZ) override;
 		virtual void dispatchIndirect(Buffer *buffer, u_int64_t offset) override;
 
 		virtual void pushDebugGroup(const char *name) override;
 		virtual void popDebugGroup() override;
 		virtual void insertDebugMarker(const char *name) override;
-
-		virtual void draw(Ref<Buffer> &buffer, uint32_t vertexCount, uint32_t instanceCount) override;
 
 	  public:
 		VkCommandBuffer getCommandBuffer() noexcept { return this->cmdBuffer; }

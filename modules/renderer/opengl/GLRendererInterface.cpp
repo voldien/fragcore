@@ -2035,7 +2035,8 @@ CommandList *GLRendererInterface::createCommandBuffer() { return new GLCommandLi
 void GLRendererInterface::submittCommand(Ref<CommandList> &list) { this->execute(list.ptr()); }
 
 void GLRendererInterface::execute(CommandList *list) {
-	GLCommandList *glist = (GLCommandList *)list;
+
+	GLCommandList *glist = static_cast<GLCommandList *>(list);
 
 	for (size_t i = 0; i < glist->commands.size(); i++) {
 		const GLCommandBase *base = glist->commands[i];
@@ -2093,7 +2094,6 @@ void GLRendererInterface::execute(CommandList *list) {
 			}
 
 		} break;
-
 		case GLCommandBufferCmd::ViewPort: {
 			// TODO add support for the index.
 			const GLViewPortCommand *viewport = base->as<GLViewPortCommand>();

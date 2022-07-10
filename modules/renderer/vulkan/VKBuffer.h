@@ -46,7 +46,7 @@ namespace fragcore {
 		virtual bool isValid() override;
 
 		virtual long int getSize() override;
-
+		
 		virtual void *mapBuffer(MapTarget target) override;
 
 		virtual void *mapBuffer(MapTarget target, unsigned long int offset, unsigned long int length) override;
@@ -69,6 +69,7 @@ namespace fragcore {
 		unsigned int target;
 		unsigned int base;
 		VkBuffer buffer;
+		VkDeviceSize size;
 		VkDeviceMemory vertexBufferMemory;
 	};
 } // namespace fragcore

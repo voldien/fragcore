@@ -3,9 +3,20 @@
 #include "Core/dataStructure/StackAllactor.h"
 #include "ShaderUtil.h"
 #include <spirv_cross/spirv_glsl.hpp>
+#include <spirv_cross/spirv_hlsl.hpp>
+#include <spirv_cross/spirv_msl.hpp>
 
 #include <fmt/core.h>
 using namespace fragcore;
+
+std::vector<char> ShaderCompiler::convert(const std::vector<char> &sourceCode, ShaderLanguage source,
+										  ShaderLanguage target) {
+	spirv_cross::Compiler *compiler;
+	// spirv_cross::CompilerHLSL(reinterpret_cast<const uint32_t *>(sourceCode.data()), sourceCode.size() /
+	// sizeof(uint32_t))
+
+	return {};
+}
 
 std::vector<char> ShaderCompiler::convertSPIRV(const std::vector<char> &source, ShaderLanguage shaderLanguage) {
 	// Read SPIR-V from disk or similar.

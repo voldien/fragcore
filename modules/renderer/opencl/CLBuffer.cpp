@@ -30,7 +30,7 @@ void CLBuffer::subData(const void *data, unsigned int offset, unsigned int size)
 	char *pmap;
 
 	this->bind();
-	pmap = (char *)this->mapBuffer(CLBuffer::eWrite);
+	pmap = (char *)this->mapBuffer(CLBuffer::Write);
 	checkError();
 	if (pmap) {
 		memcpy(pmap + offset, data, size);
@@ -72,28 +72,28 @@ long int CLBuffer::getSize() {
 static GLenum getAccessEnum(CLBuffer::MapTarget target) {
 	GLenum access = 0;
 
-	if (target & CLBuffer::MapTarget::eRead)
+	if (target & CLBuffer::MapTarget::Read)
 		access |= GL_MAP_READ_BIT;
-	if (target & CLBuffer::MapTarget::eWrite)
+	if (target & CLBuffer::MapTarget::Write)
 		access |= GL_MAP_WRITE_BIT;
-	if (target & CLBuffer::MapTarget::eReadWrite)
+	if (target & CLBuffer::MapTarget::ReadWrite)
 		access |= GL_MAP_WRITE_BIT | GL_MAP_READ_BIT;
-	if (target & CLBuffer::MapTarget::eNoSync)
+	if (target & CLBuffer::MapTarget::NoSync)
 		access |= GL_MAP_UNSYNCHRONIZED_BIT;
-	if (target & CLBuffer::MapTarget::ePERSISTENT)
+	if (target & CLBuffer::MapTarget::PERSISTENT)
 		access |= GL_MAP_PERSISTENT_BIT;
-	if (target & CLBuffer::MapTarget::eFlushExplicit)
+	if (target & CLBuffer::MapTarget::FlushExplicit)
 		access |= GL_MAP_FLUSH_EXPLICIT_BIT;
 	return access;
 }
 
 static GLenum getAccessOlder(CLBuffer::MapTarget target) {
 	GLenum access = 0;
-	if (target & CLBuffer::MapTarget::eRead)
+	if (target & CLBuffer::MapTarget::Read)
 		access |= GL_READ_ONLY_ARB;
-	if (target & CLBuffer::MapTarget::eWrite)
+	if (target & CLBuffer::MapTarget::Write)
 		access |= GL_WRITE_ONLY_ARB;
-	if (target & CLBuffer::MapTarget::eReadWrite)
+	if (target & CLBuffer::MapTarget::ReadWrite)
 		access |= GL_READ_WRITE_ARB;
 	return access;
 }

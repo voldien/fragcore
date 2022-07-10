@@ -36,6 +36,8 @@ VKCommandList::VKCommandList(Ref<VKRenderInterface> &renderer) : renderer(render
 	VkResult result = vkAllocateCommandBuffers(renderer->getDevice()->getHandle(), &cbAI, &cmdbuffers[0]);
 	VKS_VALIDATE(result);
 	cmdBuffer = cmdbuffers[0];
+
+
 }
 VKCommandList::VKCommandList(const VKCommandList &other) : renderer(other.renderer) {}
 
@@ -120,9 +122,35 @@ void VKCommandList::clearDepth(float depth) {
 	// vkCmdClearAttachments
 }
 
-void VKCommandList::clearColorTarget(uint index, const Color &color) {}
+void VKCommandList::clearColorTarget(uint index, const Color &color) {
+	/*	*/
+	// vkCmdClearColorImage(cmdbuffers, )
+}
 
 void VKCommandList::setDepthBounds(float min, float max) { vkCmdSetDepthBounds(cmdBuffer, min, max); }
+
+void VKCommandList::bindVertexBuffers(uint32_t firstBinding, uint32_t bindingCount,
+									  const std::vector<Ref<Buffer>> &buffer, const std::vector<size_t> pOffsets) {
+	std::vector<VkBuffer> vkbuffers(buffer.size());
+	for (size_t i = 0; i < buffer.size(); i++) {
+		const VKBuffer *vkBuffer = static_cast<const VKBuffer *>(buffer[i].ptr());
+		vkbuffers[i] = vkBuffer->getBuffer();
+	}
+	vkCmdBindVertexBuffers(cmdBuffer, firstBinding, vkbuffers.size(), vkbuffers.data(), pOffsets.data());
+}
+void VKCommandList::bindBindIndexBuffers(Ref<Buffer> &buffer, size_t offset, size_t indexType) {
+
+	VKBuffer *vkBuffer = static_cast<VKBuffer *>(buffer.ptr());
+	vkCmdBindIndexBuffer(cmdBuffer, vkBuffer->getBuffer(), offset, static_cast<VkIndexType>(indexType));
+}
+
+void VKCommandList::draw(uint32_t vertexCount, uint32_t instanceCount, uint32_t firstVertex, uint32_t firstInstance) {
+	vkCmdDraw(cmdBuffer, vertexCount, instanceCount, firstVertex, firstInstance);
+}
+void VKCommandList::drawIndexed(uint32_t indexCount, uint32_t instanceCount, uint32_t firstIndex, int32_t vertexOffset,
+								uint32_t firstInstance) {}
+void VKCommandList::drawIndirect(Ref<Buffer> &buffer, size_t offset, uint32_t drawCount, uint32_t stride) {}
+void VKCommandList::drawIndexedIndirect(Ref<Buffer> &buffer, size_t offset, uint32_t drawCount, uint32_t stride) {}
 
 void VKCommandList::dispatch(uint groupCountX, uint groupCountY, uint groupCountZ) {
 
@@ -176,5 +204,3 @@ void VKCommandList::insertDebugMarker(const char *name) {
 
 	pvkCmdDebugMarkerInsertEXT(cmdBuffer, &markerinfo);
 }
-
-void VKCommandList::draw(Ref<Buffer> &buffer, uint32_t vertexCount, uint32_t instanceCount) {}

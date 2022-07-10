@@ -23,6 +23,7 @@
 #include "ShaderLanguage.h"
 #include <ImageFormat.h>
 #include <stddef.h>
+#include <stdint.h>
 
 namespace fragcore {
 
@@ -43,7 +44,7 @@ namespace fragcore {
 		/**
 		 *
 		 */
-		enum class FilterMode {
+		enum class FilterMode : uint32_t {
 			NoFilterMode, /*  */
 			Linear,		  /*  */
 			Nearset,	  /*  */
@@ -52,7 +53,7 @@ namespace fragcore {
 		/**
 		 *
 		 */
-		enum class AddressMode {
+		enum class AddressMode : uint32_t {
 			NoAddressMode,
 			Repeat,		  /*  */
 			RepeatMirror, /*  */
@@ -60,7 +61,7 @@ namespace fragcore {
 			ClampBorder,  /*  */
 		};
 
-		enum class CompareFunc {
+		enum class CompareFunc : uint32_t {
 			eNoCompare, /*  */
 			lessEqual,
 			greaterEqual,
@@ -95,7 +96,7 @@ namespace fragcore {
 	 *	Texture descriptor.
 	 */
 	typedef struct texture_desc_t {
-		enum class Target {
+		enum class Target : uint32_t {
 			Texture1D = 0x1,	   /*	1D texture.	*/
 			Texture2D = 0x2,	   /*	2D texture.	*/
 			Texture3D = 0x4,	   /*	3D texture.	*/
@@ -107,7 +108,7 @@ namespace fragcore {
 		/**
 		 *	Texture format.
 		 */
-		enum Format { // GraphicsFormat
+		enum Format : uint32_t { // GraphicsFormat
 			eNoFormat,
 			eRGB = 0x1,	 /*	RGB components.	*/
 			eRGBA = 0x2, /*	RGBA components.	*/
@@ -126,7 +127,7 @@ namespace fragcore {
 		/**
 		 *	Texture pixel type data.
 		 */
-		enum Type {
+		enum Type : uint32_t {
 			eNoType,
 			eUnsignedByte = 0x1, /*	Each color component encoded in a single byte.	*/
 			eSignedByte = 0x2,	 /*	Each color component encoded in a single signed byte.	*/
@@ -143,7 +144,7 @@ namespace fragcore {
 		/**
 		 *	Texture compression types.
 		 */
-		enum Compression {
+		enum Compression : uint32_t {
 			eNoCompression = 0x0, /*	Non-compressed texture.	*/
 			eCompression = 0x1,	  /*	Compressed texture using default compression.   */
 			eRGTC = 0x2,		  /*  */
@@ -215,8 +216,8 @@ namespace fragcore {
 			};
 			const void *pixelarray; /*  */
 		};
-		size_t pixelSize; /*  Image size in bytes.    */
-		SamplerDesc sampler;	 /*  Texture sampling.   */
+		size_t pixelSize;	 /*  Image size in bytes.    */
+		SamplerDesc sampler; /*  Texture sampling.   */
 
 		/*  Debug attributes.   */
 		MarkerDebug *marker;
@@ -261,7 +262,7 @@ namespace fragcore {
 
 		struct {
 			const void *pdata;	 /*	*/
-			size_t binarySize;		 /*	*/
+			size_t binarySize;	 /*	*/
 			unsigned int format; /*	*/
 		} program;
 
@@ -361,7 +362,8 @@ namespace fragcore {
 		/**
 		 *
 		 */
-		enum BufferType {
+		// TOOD change to class
+		enum BufferType : uint32_t {
 			eArray,				/*	*/
 			eElementArray,		/*	*/
 			eUniform,			/*	*/
@@ -378,7 +380,7 @@ namespace fragcore {
 		 *	Hint the usage of the
 		 *	buffer object.
 		 */
-		enum BufferHint {
+		enum BufferHint : uint32_t {
 			eRead = 0x1,	/*  Reading from the buffer.    */
 			eWrite = 0x2,	/*  Writing to the buffer.  */
 			eStatic = 0x4,	/*  Written once.   */
@@ -403,6 +405,7 @@ namespace fragcore {
 	 */
 	typedef struct framebuffer_desc_t {
 		unsigned int nrAttachments;
+		// TOOD convert to pointer.
 		Texture *attach[16];   /*	Texture attachment.	*/
 		Texture *depth;		   /*	Depth attachment.	*/
 		Texture *stencil;	   /*	Stencil attachment.	*/
@@ -443,11 +446,11 @@ namespace fragcore {
 	 *	Geometry description.
 	 */
 	typedef struct geometry_desc_t {
-		enum class Primitive {
-			Point = 0x1,			 /**/
-			Lines = 0x2,			 /**/
-			Triangles = 0x3,		 /**/
-			TriangleStrips = 0x4,	 /**/
+		enum class Primitive : uint32_t {
+			Point = 0x1,			/**/
+			Lines = 0x2,			/**/
+			Triangles = 0x3,		/**/
+			TriangleStrips = 0x4,	/**/
 			TriangleAdjacant = 0x5, /**/
 		};
 
@@ -473,7 +476,7 @@ namespace fragcore {
 		unsigned int numVertexAttributes; /*	Number of vertex attributes */
 		struct {
 			unsigned int index;	   /*	Index of vertex attributes.	*/
-			size_t size;	   /*	Size in numbers of components (1 - 4).	*/
+			size_t size;		   /*	Size in numbers of components (1 - 4).	*/
 			unsigned int datatype; /*	Data type ( AttributeType ) */
 			unsigned int offset;   /*	Offset in bytes.	*/
 		} vertexattribute[16];

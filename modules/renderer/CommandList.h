@@ -44,6 +44,7 @@ namespace fragcore {
 		// virtual void updateBuffer(Ref<Buffer> &buffer, void *p, int size) = 0;
 		virtual void bindFramebuffer(Ref<FrameBuffer> &framebuffer) = 0;
 
+		/*	*/
 		virtual void setViewport(int x, int y, unsigned int width, unsigned int height) = 0;
 		virtual void setScissor(int x, int y, unsigned int width, unsigned int height) = 0;
 		virtual void clearDepth(float depth) = 0;
@@ -51,18 +52,34 @@ namespace fragcore {
 
 		// virtual void
 		// blit(const FrameBuffer *source, FrameBuffer *dest,
-		// 	 Texture::FilterMode filterMode) = 0; 
-		//virtual void memoryBarrier() = 0;
+		// 	 Texture::FilterMode filterMode) = 0;
+		// virtual void memoryBarrier() = 0;
 		virtual void setDepthBounds(float min, float max) = 0;
 
 		// virtual void executeCommand(CommandList &list);
 
 		// virtual void setGraphicResourcesSlot() = 0;
 
-		virtual void draw(Ref<Buffer> &buffer, uint32_t vertexCount, uint32_t instanceCount) = 0;
-		// virtual void drawIndexed(Ref<Buffer>& buffer, offset,uint32_t drawCount,uint32_t stride) = 0;
-		// virtual void drawIndirect() = 0;
-		// virtual void drawIndexedIndirect(Ref<Buffer>& buffer) = 0;
+		/*	*/
+		virtual void bindVertexBuffers(uint32_t firstBinding, uint32_t bindingCount,
+									   const std::vector<Ref<Buffer>> &buffer, const std::vector<size_t> pOffsets) = 0;
+		virtual void bindBindIndexBuffers(Ref<Buffer> &buffer, size_t offset, size_t indexType) = 0;
+
+		/**
+		 * @brief
+		 *
+		 * @param vertexCount
+		 * @param instanceCount
+		 * @param firstVertex
+		 * @param firstInstance
+		 */
+		virtual void draw(uint32_t vertexCount, uint32_t instanceCount, uint32_t firstVertex,
+						  uint32_t firstInstance) = 0;
+		virtual void drawIndexed(uint32_t indexCount, uint32_t instanceCount, uint32_t firstIndex, int32_t vertexOffset,
+								 uint32_t firstInstance) = 0;
+		virtual void drawIndirect(Ref<Buffer> &buffer, size_t offset, uint32_t drawCount, uint32_t stride) = 0;
+		virtual void drawIndexedIndirect(Ref<Buffer> &buffer, size_t offset, uint32_t drawCount, uint32_t stride) = 0;
+
 		// virtual void drawMultiInstance(Geometry &geometries, const unsigned int *first, const unsigned int *count,
 		// 							   unsigned int num) = 0;
 
@@ -74,12 +91,19 @@ namespace fragcore {
 		//		virtual void
 
 		/**
+		 * @brief
 		 *
+		 * @param groupCountX
+		 * @param groupCountY
+		 * @param groupCountZ
 		 */
 		virtual void dispatch(uint groupCountX, uint groupCountY, uint groupCountZ) = 0;
 
 		/**
+		 * @brief
 		 *
+		 * @param buffer
+		 * @param offset
 		 */
 		virtual void dispatchIndirect(Buffer *buffer, u_int64_t offset) = 0;
 

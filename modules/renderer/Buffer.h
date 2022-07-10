@@ -32,14 +32,14 @@ namespace fragcore {
 		friend class IRenderer;
 
 	  public:
-		enum MapTarget {
-			eRead = 0x1,		   /*  */
-			eWrite = 0x2,		   /*  */
-			eReadWrite = 0x4,	   /*  */
-			eNoSync = 0x8,		   /*  Disable implicit synchronization.*/
-			ePERSISTENT = 0x10,	   /*  */
-			eCOHERENT = 0x20,	   /*  */
-			eFlushExplicit = 0x40, /*  */
+		enum MapTarget : uint32_t {
+			Read = 0x1,			  /*  */
+			Write = 0x2,		  /*  */
+			ReadWrite = 0x4,	  /*  */
+			NoSync = 0x8,		  /*  Disable implicit synchronization.*/
+			PERSISTENT = 0x10,	  /*  */
+			COHERENT = 0x20,	  /*  */
+			FlushExplicit = 0x40, /*  */
 		};
 
 		virtual ~Buffer() = default;
@@ -58,12 +58,36 @@ namespace fragcore {
 
 		virtual long int getSize() = 0;
 
+		/**
+		 * @brief
+		 *
+		 * @param target
+		 * @return void*
+		 */
 		virtual void *mapBuffer(MapTarget target) = 0;
 
+		/**
+		 * @brief
+		 *
+		 * @param target
+		 * @param offset
+		 * @param length
+		 * @return void*
+		 */
 		virtual void *mapBuffer(MapTarget target, unsigned long int offset, unsigned long int length) = 0;
 
+		/**
+		 * @brief
+		 *
+		 * @param offset
+		 * @param length
+		 */
 		virtual void flush(unsigned long int offset, unsigned long int length) = 0;
 
+		/**
+		 * @brief
+		 *
+		 */
 		virtual void unMapBuffer() = 0;
 	};
 } // namespace fragcore
