@@ -59,6 +59,13 @@ namespace fragcore {
 		bool isValid() const;
 
 		/**
+		 * @brief Get the Path object
+		 *
+		 * @return std::string
+		 */
+		std::string getPath() const { return this->path; }
+
+		/**
 		 *	Get function pointer.
 		 *
 		 *	@return function pointer if successfully.
@@ -71,7 +78,7 @@ namespace fragcore {
 
 	  private: /*	Attributes.	*/
 		void *mlib;
-		std::string name;
+		std::string path;
 	};
 } // namespace fragcore
 

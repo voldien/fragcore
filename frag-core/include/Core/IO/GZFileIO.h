@@ -26,7 +26,8 @@
 
 namespace fragcore {
 	/**
-	 *
+	 * @brief 
+	 * 
 	 */
 	class FVDECLSPEC GZFileIO : public FileIO { // TODO determine how to handle with the FileIO dep.
 	  public:

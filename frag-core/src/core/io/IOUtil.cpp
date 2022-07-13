@@ -12,8 +12,9 @@ long int IOUtil::loadFileMem(Ref<IO> &io, char **data) {
 	size_t current_pos = io->getPos();
 
 	/*  Check if file is readable.  */
-	if (!io->isReadable())
+	if (!io->isReadable()) {
 		throw InvalidArgumentException("Failed to read from IO: {}", io->getName());
+	}
 	// TODO encapsualte data to reuse
 	// Page aligned;
 	char buf[1024 * 4];
@@ -29,10 +30,12 @@ long int IOUtil::loadFileMem(Ref<IO> &io, char **data) {
 }
 
 long int IOUtil::loadFile(Ref<IO> &in, Ref<IO> &out) {
-	if (!in->isReadable())
+	if (!in->isReadable()) {
 		throw InvalidArgumentException("Failed to read from IO: {}", in->getName());
-	if (!out->isWriteable())
+	}
+	if (!out->isWriteable()) {
 		throw InvalidArgumentException("Failed to write to IO: {}", out->getName());
+	}
 
 	char buf[1024 * 4];
 	long nbytes;
@@ -74,14 +77,4 @@ long int IOUtil::loadString(Ref<IO> &in, Ref<IO> &out) {
 	out->write(sizeof(term), &term);
 
 	return nbytes;
-}
-
-// TODO realocate and improve
-IO *IOUtil::createFIFO(const std::string &path) {
-	// unlink(path.c_str());
-	int ret = mkfifo(path.c_str(), S_IWUSR | S_IRUSR | S_IRGRP | S_IROTH | O_RDWR);
-
-	// FileIO *io = new FileIO(path.c_str(), (IO::IOMode)( IO::IOMode::WRITE)); //IO::IOMode::APPEND |
-
-	return nullptr;
 }

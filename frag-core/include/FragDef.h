@@ -285,14 +285,23 @@ namespace fragcore {
 /**
  *	Alignment of data and vectors.
  */
-#if defined(FV_GNUC) || defined(FV_CLANG)
-#define FV_ALIGN(alignment) __attribute__ ((aligned(alignment)))
-#define FV_VECTORALIGN(alignment) __attribute__ ((__vector_size__ (alignment), __may_alias__))
-#define FV_VECTORALIGNI(alignment) __attribute__ ((__vector_size__ (alignment)))
-#elif defined(FV_VC)
-#define FV_ALIGN(alignment) __attribute__ ((aligned(alignment)))
+#if defined(FV_GNUC) || defined(FV_CLANG)	// GNU & clang compiler
+	#define FV_ALIGN(alignment) __attribute__ ((aligned(alignment)))
 	#define FV_VECTORALIGN(alignment) __attribute__ ((__vector_size__ (alignment), __may_alias__))
 	#define FV_VECTORALIGNI(alignment) __attribute__ ((__vector_size__ (alignment)))
+
+	#define FV_ALIGNED16  FV_ALIGN(16)
+	#define FV_ALIGNED64   FV_ALIGN(64)
+	#define FV_ALIGNED128  FV_ALIGN(128)
+
+#elif defined(FV_VC)	// Visual Compiler
+	#define FV_ALIGN(alignment) __declspec(align(alignment))
+	#define FV_VECTORALIGN(alignment) __declspec(align(alignment))
+	#define FV_VECTORALIGNI(alignment) __declspec(align(alignment))
+
+	#define FV_ALIGNED16  FV_ALIGN(16)
+	#define FV_ALIGNED64   FV_ALIGN(64)
+	#define FV_ALIGNED128  FV_ALIGN(128)
 #else
 	#pragma message("Warning: You'd need to add FV_ALIGN, FV_VECTORALIGN, FV_VECTORALIGNI for this compiler.")
 #endif
@@ -319,7 +328,7 @@ namespace fragcore {
 #endif
 
 /*	Optimized branch predictions.	*/
-#if defined(FV_GCC) || defined(FV_CLANG)
+#if defined(FV_GCC) || defined(FV_CLANG)	// GCC or Clang compiler
 	#define likely(x)      __builtin_expect(!!(x), 1)
 	#define unlikely(x)    __builtin_expect(!!(x), 0)
 #else
@@ -335,8 +344,6 @@ namespace fragcore {
 #else
 	#define FV_PACKED( __Declaration__ ) __Declaration__
 #endif
-
-
 
 /**
  *	String macros.
@@ -354,21 +361,7 @@ namespace fragcore {
 extern "C" {
 #endif
 
-/**
- * @brief
- *
- */
-typedef float fvvec1f FV_VECTORALIGN(4);
-typedef float fvvec2f FV_VECTORALIGN(8);
-typedef float fvvec4f FV_VECTORALIGN(16);
 
-/**
- * @brief
- *
- */
-typedef double fvvec1d FV_VECTORALIGN(8);
-typedef double fvvec2d FV_VECTORALIGN(16);
-typedef double fvvec4d FV_VECTORALIGN(32);
 
 #ifdef __cplusplus /*	C++ Environment	*/
 }

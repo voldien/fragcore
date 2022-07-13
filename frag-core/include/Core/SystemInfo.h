@@ -41,7 +41,8 @@ namespace fragcore {
 			Unknown = (1 << 31)		/*  */
 		};
 
-		enum class CPUArch {
+		enum class CPUArchicture {
+			UnKnown,
 			x86,   /**/
 			AMD64, /**/
 			Arm32, /**/
@@ -84,7 +85,7 @@ namespace fragcore {
 	  public: /*	System CPU Information.	*/
 		// TODO add support for NUMA.
 		static std::string getCPUName() noexcept;
-		static CPUArch getCPUArchitecture2() noexcept;
+		static CPUArchicture getCPUArchitecture2() noexcept;
 		static const char *getCPUArchitecture() noexcept;
 		static unsigned long getCPUFrequency() noexcept;
 		static bool isSupportedInstruction(SIMD instruction) noexcept;
@@ -115,7 +116,6 @@ namespace fragcore {
 		 *
 		 * @return unsigned int
 		 */
-		// TODO add level.
 		static unsigned int getCPUCacheLine(size_t level = 2);
 
 		/**
@@ -126,11 +126,10 @@ namespace fragcore {
 		static Endianness getEndianness() noexcept;
 
 	  public: /*	GPU Information	*/
-
-		typedef struct gpu_information_t{
+		typedef struct gpu_information_t {
 			std::string name;
 			size_t memorySize;
-		}GPUInformation;
+		} GPUInformation;
 
 		static std::vector<GPUInformation> getGPUDevices() noexcept;
 

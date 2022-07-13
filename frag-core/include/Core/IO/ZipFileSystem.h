@@ -59,8 +59,8 @@ namespace fragcore {
 
 		bool isASyncSupported() const override;
 
-		virtual bool isDirectory(const char *path) override;
-		virtual bool isFile(const char *path) override;
+		virtual bool isDirectory(const char *path) const override;
+		virtual bool isFile(const char *path) const override;
 		// FileAccess getFileAccess(const char *path) override;
 
 		/**

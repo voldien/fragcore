@@ -19,8 +19,8 @@
 #ifndef _FRAG_CORE_MATH_H_
 #define _FRAG_CORE_MATH_H_ 1
 #include "../FragDef.h"
+#include "math/Random.h"
 #include "Math3D.h"
-#include "Random.h"
 #include <cfloat>
 #include <cmath>
 #include <vector>

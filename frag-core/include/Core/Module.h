@@ -34,31 +34,38 @@ namespace fragcore {
 		virtual ~Module() = default;
 		virtual void OnInitialization() = 0;
 		virtual void OnDestruction() = 0;
-		/**/
-	  public:
-		// TODO determine where it shal lbe located
-		static Module *loadModule(const std::string &moduleName, const std::string &moduleEntryPoint = "") {
-			auto moduleFile = getModuleName(moduleName);
-			Library lib(moduleFile.c_str());
+
+	  public: /*	*/
+		static Module *loadModule(const std::string &path, const std::string &moduleEntryPoint = "") {
+			Library lib(path.c_str());
 			return Module::loadModule(lib, moduleEntryPoint);
 		}
 
-		static Module *loadModule(Library &library, const std::string &moduleEntryPoint = "") {
+		static Module *loadModule(Library &library, const std::string &moduleEntryPoint) {
 			Module *module;
-			if (moduleEntryPoint.empty()) {
-				//				moduleEntryPoint = getModuleName(moduleEntryPoint);
+			/*	*/
+			std::string moduleEntry = moduleEntryPoint;
+
+			if (moduleEntry.empty()) {
+				moduleEntry = getDefaultModuleName(library.getPath());
 			}
 
 			CreateModule createModuleFunc = nullptr;
 			if (!library.isValid()) {
+				throw RuntimeException("Invalid library {}", library.getPath());
 			}
 
-			createModuleFunc = library.getfunc<CreateModule>("FragCoreModuleEntry");
+			createModuleFunc = library.getfunc<CreateModule>(moduleEntry.c_str());
+			if (createModuleFunc == nullptr) {
+				throw RuntimeException("Module Entrypoint {} not found for module", moduleEntry, library.getPath());
+			}
 			module = createModuleFunc(nullptr);
+
+			module->OnInitialization();
 
 			return module;
 		}
-		static std::string getModuleName(const std::string &name);
+		static std::string getDefaultModuleName(const std::string &name);
 	};
 } // namespace fragcore
 

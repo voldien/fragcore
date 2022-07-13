@@ -3,4 +3,4 @@
 using namespace fragcore;
 
 Module::Module() {}
-std::string Module::getModuleName(const std::string &name) { return name; }
+std::string Module::getDefaultModuleName(const std::string &name) { return name; }

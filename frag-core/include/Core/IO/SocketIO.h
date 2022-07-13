@@ -25,7 +25,7 @@
 namespace fragcore {
 
 	/**
-	 * @brief
+	 * @brief Encapsulate a socket as an IO object.
 	 *
 	 */
 	class FVDECLSPEC SocketIO : public IO {

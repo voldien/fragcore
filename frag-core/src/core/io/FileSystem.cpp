@@ -37,7 +37,7 @@ const char *FileSystem::getBaseName(const char *path) {
 
 void FileSystem::remove(const char *path) {
 #if __cplusplus >= 201703L
-//	fs::remove(path);
+	fs::remove(path);
 #else
 	throw NotImplementedException();
 // if (::remove(path) != 0)
@@ -47,7 +47,7 @@ void FileSystem::remove(const char *path) {
 
 void FileSystem::rename(const char *oldPath, const char *newPath) {
 #if __cplusplus >= 201703L
-	// return fs::rename(oldPath, newPath);
+	return fs::rename(oldPath, newPath);
 #else
 	throw NotImplementedException();
 // if (::rename(oldPath, newPath) != 0)
@@ -57,7 +57,7 @@ void FileSystem::rename(const char *oldPath, const char *newPath) {
 
 bool FileSystem::exists(const char *path) const {
 #if __cplusplus >= 201703L
-	// return fs::exists(path);
+	return fs::exists(path);
 #else
 	FILE *f = fopen(path, "r+");
 	if (f) {
@@ -70,32 +70,46 @@ bool FileSystem::exists(const char *path) const {
 }
 
 bool FileSystem::isReadable(const char *path) const {
-	FILE *f = fopen(path, "r+");
-	if (f) {
-		fclose(f);
-		return true;
+#if __cplusplus >= 201703L
+	if (exists(path)) {
+		fs::perms permissionStatus = fs::status(path).permissions();
+		return (static_cast<unsigned int>(permissionStatus) & static_cast<unsigned int>(fs::perms::owner_read)) != 0;
 	}
+	throw RuntimeException();
+#else
+	throw NotImplementedException();
+#endif
 	return false;
 }
 
 bool FileSystem::isWriteable(const char *path) const {
-	FILE *f = fopen(path, "w+");
-	if (f) {
-		fclose(f);
-		return true;
+#if __cplusplus >= 201703L
+	if (exists(path)) {
+		fs::perms permissionStatus = fs::status(path).permissions();
+		return (static_cast<unsigned int>(permissionStatus) & static_cast<unsigned int>(fs::perms::owner_write)) != 0;
 	}
+	throw RuntimeException();
+#else
+	throw NotImplementedException();
+#endif
 	return false;
 }
 
 std::string FileSystem::getAbsolutePath(const char *path) {
-	// return fs::absolute(path);
-	// char resolved_path[PATH_MAX];
-	// realpath(path, resolved_path);
-	// return resolved_path;
-	return "";
+#if __cplusplus >= 201703L
+	return fs::absolute(path);
+#else
+	throw NotImplementedException();
+#endif
 }
 
-std::string FileSystem::getRelativePath(const char *path) { return ""; }
+std::string FileSystem::getRelativePath(const char *path) {
+#if __cplusplus >= 201703L
+	return fs::relative(path);
+#else
+	throw NotImplementedException();
+#endif
+}
 
 const char *FileSystem::getFileExtension(const char *path) {
 	const char *dot = strrchr(path, '.');
@@ -106,45 +120,101 @@ const char *FileSystem::getFileExtension(const char *path) {
 
 void FileSystem::createFile(const char *path) {
 	FILE *f = fopen(path, "ab+");
-	if (f == nullptr)
+	if (f == nullptr) {
 		throw RuntimeException("Failed to open file {}, {}", path, strerror(errno));
+	}
 	fclose(f);
 }
 
 void FileSystem::createDirectory(const char *path) {
+#if __cplusplus >= 201703L
 	fs::create_directory(path);
-	// mkdir(path);
+#else
+	throw NotImplementedException();
+#endif
 }
 
 bool FileSystem::isASyncSupported() const { return *this->getScheduler() != nullptr; }
 
-bool FileSystem::isDirectory(const char *path) { return false; }
-bool FileSystem::isFile(const char *path) {
-	// TODO improve!
-	std::ifstream ifs(path);
-	return ifs.good();
+bool FileSystem::isDirectory(const char *path) const {
+#if __cplusplus >= 201703L
+	return fs::is_directory(path);
+#else
+	throw NotImplementedException();
+#endif
+}
+bool FileSystem::isFile(const char *path) const {
+#if __cplusplus >= 201703L
+	return fs::is_regular_file(path);
+#else
+	throw NotImplementedException();
+#endif
 }
 
-std::vector<std::string> FileSystem::listFiles(const char *directory) const { return std::vector<std::string>(); }
+std::vector<std::string> FileSystem::listFiles(const char *directory) const {
+#if __cplusplus >= 201703L
+	if (isDirectory(directory)) {
+		std::vector<std::string> files;
+		for (const auto &entry : fs::directory_iterator(directory)) {
+			if (entry.is_regular_file()) {
+				files.push_back(entry.path());
+			}
+		}
+		return files;
+	}
+	throw RuntimeException();
+#else
+	throw NotImplementedException();
+#endif
+}
 
 std::vector<std::string> FileSystem::listDirectories(const char *directory) const {
-	// for(auto& p: fs::directory_iterator("sandbox"))
-	// 	std::cout << p.path() << '\n';
-	// return std::vector<std::string>();
-	return {};
+#if __cplusplus >= 201703L
+	if (isDirectory(directory)) {
+		std::vector<std::string> files;
+		for (const auto &entry : fs::directory_iterator(directory)) {
+			if (entry.is_directory()) {
+				files.push_back(entry.path());
+			}
+		}
+		return files;
+	}
+	throw RuntimeException();
+#else
+	throw NotImplementedException();
+#endif
 }
 
 std::vector<std::string> FileSystem::list(const char *directory) const {
-	// for(auto& p: fs::directory_iterator("sandbox"))
-	// 	std::cout << p.path() << '\n';
-	// return std::vector<std::string>();
-	return {};
+#if __cplusplus >= 201703L
+	if (isDirectory(directory)) {
+		std::vector<std::string> files;
+		for (const auto &entry : fs::directory_iterator(directory)) {
+			files.push_back(entry.path());
+		}
+		return files;
+	}
+	throw RuntimeException();
+#else
+	throw NotImplementedException();
+#endif
+}
+
+// TODO realocate and improve
+IO *FileSystem::createFIFO(const std::string &path) {
+	// unlink(path.c_str());
+	int ret = mkfifo(path.c_str(), S_IWUSR | S_IRUSR | S_IRGRP | S_IROTH | O_RDWR);
+
+	// FileIO *io = new FileIO(path.c_str(), (IO::IOMode)( IO::IOMode::WRITE)); //IO::IOMode::APPEND |
+
+	return nullptr;
 }
 
 static FileSystem *fileSystem = nullptr;
 FileSystem *FileSystem::getFileSystem() {
-	if (fileSystem == nullptr)
+	if (fileSystem == nullptr) {
 		throw RuntimeException("FileSystem must created before utilizing it.");
+	}
 	return fileSystem;
 }
 

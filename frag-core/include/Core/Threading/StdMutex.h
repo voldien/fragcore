@@ -34,7 +34,6 @@ namespace fragcore {
 		virtual void unlock() override;
 		virtual void wait(long int nanoTimeout = -1) override;
 
-
 	  private:
 		std::mutex m;
 	};

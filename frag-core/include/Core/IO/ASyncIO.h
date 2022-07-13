@@ -21,7 +21,7 @@
 #include "../Ref.h"
 #include "../RefPtr.h"
 #include "../TaskScheduler/IScheduler.h"
-#include "../TaskScheduler/ISemaphore.h"
+#include "../Threading/ISemaphore.h"
 #include "IO.h"
 #include <condition_variable>
 #include <map>

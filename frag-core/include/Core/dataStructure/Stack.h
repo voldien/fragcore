@@ -40,7 +40,6 @@ namespace fragcore {
 		Stack(size_t size) : Stack() { this->reserve(size); }
 
 		Stack(const Stack &stack) : Stack() {
-
 			reserve(stack.getReserved());
 			memcpy(this->data, stack.data, stack.getSize() * sizeof(T));
 		}
@@ -57,15 +56,20 @@ namespace fragcore {
 		 * @param allocator
 		 * @return
 		 */
-		Stack &operator=(const Stack &allocator) { return *this; }
+		Stack &operator=(const Stack &allocator) {
+			reserve(allocator.getReserved());
+			mempcpy(this->data, allocator.data, sizeof(T) * allocator.getReserved());
+			this->nrElements = allocator.nrElements;
+			this->mreserved = allocator.mreserved;
+			return *this;
+		}
 
-		Stack &operator=(Stack &&alloctor) { return *this; }
-
-		// void push(const T &p) {
-		// 	// TODO add validate
-		// 	this->data[this->nrElements] = p;
-		// 	this->nrElements++;
-		// }
+		Stack &operator=(Stack &&alloctor) {
+			this->data = std::exchange(allocator.data, nullptr);
+			this->nrElements = std::exchange(alloctor.nrElements, 0);
+			this->mreserved = std::exchange(alloctor.mreserved, 0);
+			return *this;
+		}
 
 		T &push(const T &p) {
 			this->data[this->nrElements] = p;
@@ -75,14 +79,14 @@ namespace fragcore {
 
 		T &peek() const { return data[this->nrElements - 1]; }
 
-		// void pop() {
-		// 	// TODO add validate
-		// 	this->nrElements--;
-		// }
 		T &pop() {
 			// TODO add validate
-			this->nrElements--;
-			return this->data[this->nrElements + 1];
+			if (this->nrElements > 0) {
+				this->nrElements--;
+				return this->data[this->nrElements + 1];
+			} else {
+				throw RuntimeException();
+			}
 		}
 
 		T &operator[](int index) { return this->data[index]; }
@@ -91,8 +95,9 @@ namespace fragcore {
 
 		void reserve(int nrOfElement) {
 			this->data = static_cast<T *>(realloc(this->data, nrOfElement * sizeof(T)));
-			if (this->data == nullptr)
-				throw RuntimeException("Out of memory");
+			if (this->data == nullptr) {
+				throw RuntimeException("Out of memory"); // TODO replace with the system exception.
+			}
 			this->mreserved = nrOfElement;
 		}
 
@@ -112,7 +117,7 @@ namespace fragcore {
 	  private:			   /*	Attributes.	*/
 		size_t nrElements; /*	Number of elements in the stack.	*/
 		size_t mreserved;  /*	Number of reserved elements in the stack.	*/
-		T *data;
+		T *data;		   /*	*/
 	};
 
 } // namespace fragcore

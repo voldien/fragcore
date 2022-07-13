@@ -1,5 +1,5 @@
-#include "Core/Math.h"
-#include "Utils/GeometryUtil.h"
+#include <Core/Math.h>
+#include "GeometryUtil.h"
 
 using namespace fragcore;
 

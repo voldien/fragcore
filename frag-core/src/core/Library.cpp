@@ -11,15 +11,15 @@ Library::Library(const char *clibrary) {
 	this->mlib = nullptr;
 	this->open(clibrary);
 	if (clibrary) {
-		this->name = clibrary;
+		this->path = clibrary;
 	} else {
-		this->name = "Internal";
+		this->path = "";
 	}
 }
 
 Library::Library(const std::string &clibrary) : Library(clibrary.c_str()) {}
 
-Library::Library(const Library &library) : Library(library.name.c_str()) {}
+Library::Library(const Library &library) : Library(library.path.c_str()) {}
 
 Library::Library(Library &&other) { std::exchange(this->mlib, other.mlib); }
 

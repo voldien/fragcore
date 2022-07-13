@@ -18,7 +18,7 @@
  */
 #ifndef _FRAG_CORE_RANDOM_H_
 #define _FRAG_CORE_RANDOM_H_ 1
-#include "../FragDef.h"
+#include "../../FragDef.h"
 #include <climits>
 
 namespace fragcore {

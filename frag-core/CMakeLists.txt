@@ -109,6 +109,7 @@ FILE(GLOB SOURCE_FILES  ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/src/event/notify/*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/src/utils/*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/src/core/*.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/src/core/math/*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/src/core/io/*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/src/core/network/*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/src/core/Scheduler/*.cpp

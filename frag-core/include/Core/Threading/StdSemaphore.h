@@ -18,7 +18,7 @@
  */
 #ifndef _FRAG_CORE_STD_SEMPAHORE_H_
 #define _FRAG_CORE_STD_SEMPAHORE_H_ 1
-#include "../TaskScheduler/ISemaphore.h"
+#include "ISemaphore.h"
 
 #include <taskSch.h>
 

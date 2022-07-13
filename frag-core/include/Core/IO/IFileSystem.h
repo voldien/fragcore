@@ -31,8 +31,9 @@ namespace fragcore {
 	  public:
 		virtual IO *openFile(const char *path, IO::IOMode mode) = 0; /*  Open based on the filename extension.*/
 		virtual ASyncHandle openASyncFile(const char *path, IO::IOMode mode) {
-			if (!isASyncSupported())
-				throw RuntimeException();
+			if (!isASyncSupported()) {
+				throw RuntimeException("No Task Scheduler associated with the AsyncIO");
+			}
 
 			/*	*/
 			Ref<IO> io = Ref<IO>(this->openFile(path, mode));
@@ -105,7 +106,7 @@ namespace fragcore {
 		 * @return true
 		 * @return false
 		 */
-		virtual bool isDirectory(const char *path) = 0;
+		virtual bool isDirectory(const char *path) const = 0;
 
 		/**
 		 * @brief
@@ -114,7 +115,7 @@ namespace fragcore {
 		 * @return true
 		 * @return false
 		 */
-		virtual bool isFile(const char *path) = 0;
+		virtual bool isFile(const char *path) const = 0;
 
 		// virtual FileAccess getFileAccess(const std::string& path) = 0;
 		// virtual DirectoryAccess getDirectoryAccess(const std::string& path) = 0;
