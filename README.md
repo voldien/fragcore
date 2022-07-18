@@ -18,7 +18,7 @@ The architecture of this library consist of a core library and modules. The core
 * **Network** - Support creating network sockets,
 * **DataStructure** - Common data structure in programming as well game development.
 * **Threading** - Cross platform thread support.
-* **Task** Scheduler - Task scheduler for cross platform for uniform CPU resource utilization.
+* **Task Scheduler** - Task scheduler for cross platform for uniform CPU resource utilization.
 * **Math** - Vector (3D) math, and common math functions used in computer games.
 * **ASync** - Support IO Async read/write
 

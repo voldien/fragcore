@@ -19,7 +19,7 @@ IPAddress::IPAddress(const std::string &ip, IPAddressType type)
 }
 
 IPAddress::IPAddress(const std::string &hostname)
-	: INetAddress(NetworkProtocol::NetWorkProtocol_IP), type(IPAddressType::IPAddress_Type_NONE), valid(false){
+	: INetAddress(NetworkProtocol::NetWorkProtocol_IP), type(IPAddressType::IPAddress_Type_NONE), valid(false) {
 	struct hostent *hosten = nullptr; /*	*/
 									  /*	Get IP from hostname.	*/
 	hosten = gethostbyname(hostname.c_str());
@@ -46,6 +46,11 @@ IPAddress::IPAddress(const std::string &hostname)
 	}
 }
 
+NetInterface IPAddress::getInterface() {
+	NetInterface interface;
+	return interface;
+}
+
 const uint8_t *IPAddress::getAddress(IPAddressType addressType) const noexcept {
 	switch (addressType) {
 	default:
@@ -67,6 +72,7 @@ unsigned int IPAddress::getDomain(IPAddressType addressType) noexcept {
 		return 0;
 	}
 }
+
 IPAddress::IPAddressType IPAddress::convertDomain2AddressType(int domain) {
 	switch (domain) {
 	case AF_INET:

@@ -22,7 +22,6 @@
 //#define FRAGCORE_USE_HPMCPP
 #define FRAGCORE_USE_EIGEN
 
-
 #ifdef FRAGCORE_USE_HPMCPP
 #include <Ext/HCPlane.hpp>
 #include <HCQuaternion.hpp>

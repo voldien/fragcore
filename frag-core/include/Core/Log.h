@@ -28,12 +28,12 @@ namespace fragcore {
 	 *
 	 */
 	// TODO object container.
+	// TOOD remove from being static - using spdlog.
 	class FVDECLSPEC Log : public Object {
 	  public:
 		/**
 		 *	Verbosity level of the program.
 		 */
-		// TODO add map flagging.
 		enum VERBOSITY {
 			Quite = 0,	 /*  */
 			Error = 1,	 /*  */

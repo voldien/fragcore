@@ -17,22 +17,26 @@ namespace fs = std::filesystem;
 using namespace fragcore;
 
 IO *FileSystem::openFile(const char *path, IO::IOMode mode) {
-	const char *extension = FileSystem::getFileExtension(path);
+	std::string extension = FileSystem::getFileExtension(path);
 
 	// Parse if possible IO type exists.
-	if (strcmp(extension, "gz") == 0)
+	if (strcmp(extension.c_str(), "gz") == 0) {
 		return new GZFileIO(path, mode);
+	}
+
 	// Open default as IO file.
 	return new FileIO(path, mode);
 }
 
-void FileSystem::closeFile(IO *io) {
-	io->close();
-	// TODO determine what shall be done more.
-	// TODO determine how it can be released in a proper manner.
-}
-const char *FileSystem::getBaseName(const char *path) {
-	return basename(path); // TODO relocate to the OS IO table lookup.
+void FileSystem::closeFile(IO *io) { io->close(); }
+
+std::string FileSystem::getBaseName(const char *path) {
+#if __cplusplus >= 201703L
+	fs::path fsPath(path);
+	return fsPath.filename();
+#else
+	throw NotImplementedException();
+#endif
 }
 
 void FileSystem::remove(const char *path) {
@@ -111,11 +115,16 @@ std::string FileSystem::getRelativePath(const char *path) {
 #endif
 }
 
-const char *FileSystem::getFileExtension(const char *path) {
-	const char *dot = strrchr(path, '.');
-	if (!dot || dot == path)
-		return "";
-	return dot + 1;
+std::string FileSystem::getFileExtension(const char *path) {
+#if __cplusplus >= 201703L
+	fs::path fspath(path);
+	if (fspath.has_extension()) {
+		return fspath.extension().string();
+	}
+	return "";
+#else
+	throw NotImplementedException();
+#endif
 }
 
 void FileSystem::createFile(const char *path) {
@@ -200,14 +209,26 @@ std::vector<std::string> FileSystem::list(const char *directory) const {
 #endif
 }
 
+bool FileSystem::isFIFO(const char *path) {
+#if __cplusplus >= 201703L
+	fs::path fspath(path);
+	return fs::is_fifo(fspath);
+#else
+	throw NotImplementedException();
+#endif
+	return false;
+}
+
 // TODO realocate and improve
-IO *FileSystem::createFIFO(const std::string &path) {
+void FileSystem::createFIFO(const std::string &path) {
 	// unlink(path.c_str());
-	int ret = mkfifo(path.c_str(), S_IWUSR | S_IRUSR | S_IRGRP | S_IROTH | O_RDWR);
+	if (!isFIFO(path.c_str())) {
 
-	// FileIO *io = new FileIO(path.c_str(), (IO::IOMode)( IO::IOMode::WRITE)); //IO::IOMode::APPEND |
-
-	return nullptr;
+		int ret = mkfifo(path.c_str(), S_IWUSR | S_IRUSR | S_IRGRP | S_IROTH | O_RDWR);
+		if (ret != 0) {
+			throw SystemException(errno, std::system_category(), "Failed to create FIFO: {}", path);
+		}
+	}
 }
 
 static FileSystem *fileSystem = nullptr;

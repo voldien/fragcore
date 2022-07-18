@@ -22,8 +22,10 @@
 #include <cstdio>
 
 namespace fragcore {
+
 	/**
-	 *
+	 * @brief 
+	 * 
 	 */
 	class FVDECLSPEC FileIO : public IO {
 	  public:

@@ -27,6 +27,7 @@
 namespace fragcore {
 
 	/**
+	 * @brief
 	 *
 	 */
 	class FVDECLSPEC Hash : public Object {
@@ -45,7 +46,6 @@ namespace fragcore {
 
 		~Hash();
 
-		/*  Add additional data to be used for computing.   .*/
 		/**
 		 * @brief
 		 *
@@ -60,7 +60,6 @@ namespace fragcore {
 		 * @param io
 		 */
 		void update(Ref<IO> &io);
-		/*     */
 
 		/**
 		 * @brief Construct the final hash value.
@@ -87,7 +86,7 @@ namespace fragcore {
 		 *
 		 * @return unsigned long int
 		 */
-		unsigned long int getByteRead() const;
+		size_t getByteRead() const;
 
 		ALGORITHM getAlgorithm() const noexcept;
 
@@ -99,7 +98,7 @@ namespace fragcore {
 	  private:
 		void *context;
 		ALGORITHM algorithm; /**/
-		long int nbytes;
+		size_t nbytes;
 
 		Hash(const Hash &other) = delete;
 		Hash() = delete;

@@ -28,7 +28,6 @@ namespace fragcore {
 	class FVDECLSPEC INetAddress : public UIDObject {
 	  public:
 		enum class NetworkProtocol : unsigned int {
-
 			NetWorkProtocol_NONE = 0,
 			NetWorkProtocol_IP = 1,
 			NetWorkProtocol_TCP_UDP = 2,
@@ -42,6 +41,8 @@ namespace fragcore {
 		virtual NetworkProtocol getNetworkProtocol() const noexcept = 0;
 
 		virtual bool isValid() const noexcept = 0;
+
+		//virtual NetInterface getInterface();
 
 	  private:
 		NetworkProtocol networkProtocol;

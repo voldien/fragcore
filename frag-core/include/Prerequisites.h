@@ -46,6 +46,7 @@ namespace fragcore {
 	class Base64;
 	class Base32;
 	class Base16;
+	
 	/*  Network.    */
 	class IPInterface;
 	class NetSocket;

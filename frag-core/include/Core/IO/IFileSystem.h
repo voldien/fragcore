@@ -146,6 +146,13 @@ namespace fragcore {
 		 */
 		virtual std::vector<std::string> list(const char *directory) const = 0; /*  Display everything in directory. */
 	  public:
+		virtual std::string getBaseName(const char *path) { return path; }
+
+		virtual std::string getAbsolutePath(const char *path) { return path; }
+
+		virtual std::string getRelativePath(const char *path) { return path; }
+
+		virtual std::string getFileExtension(const char *path) { return path; }
 	};
 } // namespace fragcore
 

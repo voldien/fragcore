@@ -52,18 +52,20 @@ namespace fragcore {
 		enum class SIMD : unsigned int {
 			NONE = (0 << 0),	/*	No HPM SIMD exention flag.	*/
 			MMX = (1 << 1),		/*	MMX. (Yet not supported)	*/
-			SSE = (1 << 2),		/*	SSE (Streaming SIMD Extensions).	*/
-			SSE2 = (1 << 3),	/*	SSE2 (Streaming SIMD Extensions).	*/
-			SSE3 = (1 << 4),	/*	SSE3 (Streaming SIMD Extensions).	*/
-			SSSE3 = (1 << 5),	/*	SSSE3 (Streaming SIMD Extensions).	*/
-			SSE4_1 = (1 << 6),	/*	SSE4.1 (Streaming SIMD Extensions).	*/
-			SSE4_2 = (1 << 7),	/*	SSE4.2 (Streaming SIMD Extensions).	*/
-			AVX = (1 << 8),		/*	AVX Version 1 (Advanced Vector Extension).	*/
-			AVX2 = (1 << 9),	/*	AVX Version 2 (Advanced Vector Extension).	(Not tested)*/
-			AVX512 = (1 << 10), /*	AVX512 (Advanced Vector Extension). (Yet not supported)	*/
-			NEON = (1 << 11),	/*	ARM	FPU (floating-point unit) feature.	*/
+			S3DNOW = (1 << 2),	/*	3DNOW. (Yet not supported)	*/
+			SSE = (1 << 3),		/*	SSE (Streaming SIMD Extensions).	*/
+			SSE2 = (1 << 4),	/*	SSE2 (Streaming SIMD Extensions).	*/
+			SSE3 = (1 << 5),	/*	SSE3 (Streaming SIMD Extensions).	*/
+			SSSE3 = (1 << 6),	/*	SSSE3 (Streaming SIMD Extensions).	*/
+			SSE4_1 = (1 << 7),	/*	SSE4.1 (Streaming SIMD Extensions).	*/
+			SSE4_2 = (1 << 8),	/*	SSE4.2 (Streaming SIMD Extensions).	*/
+			AVX = (1 << 9),		/*	AVX Version 1 (Advanced Vector Extension).	*/
+			AVX2 = (1 << 10),	/*	AVX Version 2 (Advanced Vector Extension).	(Not tested)*/
+			AVX512 = (1 << 11), /*	AVX512 (Advanced Vector Extension). (Yet not supported)	*/
+			NEON = (1 << 12),	/*	ARM	FPU (floating-point unit) feature.	*/
 		};
 
+		/*	The kernel of the Operating system.	*/
 		enum class KernelSystem {
 			UnKnownKernel, /*		*/
 			WindowsNT,	   /*		*/

@@ -27,6 +27,8 @@ class AudioPlaybackExample {
 		std::vector<AudioPhysicalDevice> devices = iaudio->getDevices();
 		std::vector<AudioPhysicalDevice>::iterator it = devices.begin();
 
+		/*	*/
+		std::cout << "Physical Audio Devices" << std::endl;
 		for (; it != devices.end(); it++) {
 			std::cout << fmt::format("{}", (*it).getName()) << std::endl;
 		}
@@ -59,6 +61,7 @@ class AudioPlaybackExample {
 		printf("Playing the sound.\n");
 		audioSource->play();
 
+		/*	Play the audio intill it ends.	*/
 		usleep(10);
 		while (audioSource->isPlaying()) {
 			printf("pos sec: %f\n", audioSource->getPos());

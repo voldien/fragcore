@@ -24,7 +24,7 @@
 
 namespace fragcore {
 	/**
-	 * @brief
+	 * @brief Network interface.
 	 *
 	 */
 	class FVDECLSPEC NetInterface : public Object {

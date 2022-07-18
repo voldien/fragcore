@@ -29,8 +29,7 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC IPInterface : public NetInterface {
 	  public:
-		enum Type {
-
+		enum class Type {
 			TYPE_NONE = 0,
 			TYPE_IPV4 = 1,
 			TYPE_IPV6 = 2,

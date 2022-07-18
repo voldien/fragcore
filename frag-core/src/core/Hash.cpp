@@ -91,7 +91,7 @@ unsigned int Hash::getResultSize() const {
 	}
 }
 
-unsigned long int Hash::getByteRead() const { return this->nbytes; }
+size_t Hash::getByteRead() const { return this->nbytes; }
 
 Hash::ALGORITHM Hash::getAlgorithm() const noexcept { return this->algorithm; }
 

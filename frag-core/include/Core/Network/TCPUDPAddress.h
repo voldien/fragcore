@@ -37,10 +37,12 @@ namespace fragcore {
 		TCPUDPAddress &operator=(TCPUDPAddress &&other) = default;
 
 		bool operator==(const TCPUDPAddress &ipAddress) const {
-			if (this == &ipAddress)
+			if (this == &ipAddress) {
 				return true;
-			if (this->getPort() == ipAddress.getPort() && ipAddress.getIPAddress() == getIPAddress())
+			}
+			if (this->getPort() == ipAddress.getPort() && ipAddress.getIPAddress() == getIPAddress()) {
 				return true;
+			}
 			return false;
 		}
 		bool operator!=(const TCPUDPAddress &ipAddress) const { return !(*this == ipAddress); }

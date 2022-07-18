@@ -19,6 +19,7 @@
 #ifndef _FRAG_CORE_FILE_H_
 #define _FRAG_CORE_FILE_H_ 1
 #include "../../FragDef.h"
+#include "../dataStructure/PoolAllocator.h"
 #include "ASyncIO.h"
 #include "IFileSystem.h"
 #include "IO.h"
@@ -58,26 +59,26 @@ namespace fragcore {
 
 		std::vector<std::string> list(const char *directory) const override;
 
-		// TODO determine how to deal with.
+	  public:
+		virtual std::string getBaseName(const char *path) override;
 
-		static const char *getBaseName(const char *path);
+		virtual std::string getAbsolutePath(const char *path) override;
 
-		static std::string getAbsolutePath(const char *path);
+		virtual std::string getRelativePath(const char *path) override;
 
-		static std::string getRelativePath(const char *path);
-
-		static const char *getFileExtension(const char *path);
+		virtual std::string getFileExtension(const char *path) override;
 
 	  public: /*	Object specific.	*/
-		bool isFIFOFile(const char *path);
+		bool isFIFO(const char *path);
 
 		/**
-		 * @brief 
-		 * 
-		 * @param path 
-		 * @return IO* 
+		 * @brief
+		 *
+		 * @param path
+		 * @return IO*
 		 */
-		IO* createFIFO(const std::string& path);
+		// TODO add permission mode.
+		void createFIFO(const std::string &path);
 
 	  public:
 		static FileSystem *getFileSystem();

@@ -18,8 +18,8 @@
  */
 #ifndef _FRAG_CORE_COLOR_H_
 #define _FRAG_CORE_COLOR_H_ 1
-#include "FragDef.h"
-#include "Math.h"
+#include "../FragDef.h"
+#include "../Math.h"
 
 namespace fragcore {
 
@@ -29,6 +29,7 @@ namespace fragcore {
 	 */
 	class Color : public Vector4 {
 	  public:
+		using Precision = float;
 		Color() = default;
 		Color(float r, float g, float b, float a) noexcept : Vector4(r, g, b, a) {}
 		Color(uint32_t hex) noexcept {				 /*	Convert */
@@ -48,14 +49,10 @@ namespace fragcore {
 		inline float a() const noexcept { return w(); }
 
 		// TODO resolve
-		inline void r(float red) noexcept { /*this->[0] = red; */
-		}
-		inline void g(float green) noexcept { /* this->[1] = green;*/
-		}
-		inline void b(float blue) noexcept { /* this->[2] = blue; */
-		}
-		inline void a(float alpha) noexcept { /* this->[3] = alpha;*/
-		}
+		inline void r(float red) noexcept { *this = {red, g(), b(), a()}; }
+		inline void g(float green) noexcept { *this = {r(), green, b(), a()}; }
+		inline void b(float blue) noexcept { *this = {r(), g(), blue, a()}; }
+		inline void a(float alpha) noexcept { *this = {r(), g(), b(), alpha}; }
 
 	  public:
 		/**

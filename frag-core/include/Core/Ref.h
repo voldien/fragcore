@@ -23,8 +23,6 @@
 #include <utility>
 
 namespace fragcore {
-	/*  TODO fix!   */
-
 	/**
 	 * @brief
 	 *

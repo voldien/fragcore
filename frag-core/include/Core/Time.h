@@ -16,8 +16,8 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef _FRAG_CORE_TIMER_H_
-#define _FRAG_CORE_TIMER_H_ 1
+#ifndef _FRAG_CORE_TIME_H_
+#define _FRAG_CORE_TIME_H_ 1
 #include "Object.h"
 #include <chrono>
 
@@ -50,7 +50,7 @@ namespace fragcore {
 
 		void update() {
 
-			this->delta_data = duration_cast<duration<double>>(steady_clock::now() - this->ticks);
+			this->delta_data = duration_cast<duration<float>>(steady_clock::now() - this->ticks);
 			this->ticks = steady_clock::now();
 		}
 
@@ -58,15 +58,8 @@ namespace fragcore {
 
 	  private: /*  */
 		steady_clock::time_point start_timestamp;
-
 		steady_clock::time_point ticks;
-		float scale;
-		float fixed;
-
-		/*	TODO clean up later by relocating it to the time class.*/
-		duration<double> delta_data;
-		// unsigned int nDeltaTime = sizeof(delta_data) / sizeof(delta_data[0]);
-		unsigned int idelta;
+		duration<float> delta_data;
 	};
 } // namespace fragcore
 

@@ -8,10 +8,15 @@ static iware::system::OS_info_t info;
 
 SystemInfo::KernelSystem SystemInfo::getSystemKernel() noexcept {
 	switch (iware::system::kernel_info().variant) {
+	case iware::system::kernel_t::darwin:
+		return SystemInfo::KernelSystem::Darwin;
+	case iware::system::kernel_t::linux:
+		return SystemInfo::KernelSystem::LinuxGNU;
+	case iware::system::kernel_t::windows_nt:
+		return SystemInfo::KernelSystem::WindowsNT;
 	default:
 		return SystemInfo::KernelSystem::UnKnownKernel;
 	}
-	// iware::system::OS_
 }
 
 SystemInfo::OperatingSystem SystemInfo::getOperatingSystem() noexcept {
@@ -20,6 +25,7 @@ SystemInfo::OperatingSystem SystemInfo::getOperatingSystem() noexcept {
 	if (info.major == 0) {
 		info = iware::system::OS_info();
 	}
+
 	/*  */
 	if (strcmp(info.name.c_str(), "Linux") == 0) {
 		return SystemInfo::OperatingSystem::Linux;
@@ -51,6 +57,9 @@ const std::string &SystemInfo::getOperatingSystemName() noexcept {
 }
 
 const char *SystemInfo::getOperatingSystemName(SystemInfo::OperatingSystem os) {
+
+	// TODO add magic enum.
+	// return magic
 
 	/*  */
 	switch (os) {
@@ -96,13 +105,43 @@ unsigned long SystemInfo::getCPUFrequency() noexcept { return iware::cpu::freque
 
 bool SystemInfo::isSupportedInstruction(SIMD instruction) noexcept {
 	iware::cpu::instruction_set_t _instruction = iware::cpu::instruction_set_t::mmx;
+
 	switch (instruction) {
 	case SystemInfo::SIMD::MMX:
 		_instruction = iware::cpu::instruction_set_t::mmx;
 		break;
-
-	default:
+	case SystemInfo::SIMD::S3DNOW:
+		_instruction = iware::cpu::instruction_set_t::s3d_now;
 		break;
+	case SystemInfo::SIMD::SSE:
+		_instruction = iware::cpu::instruction_set_t::sse;
+		break;
+	case SystemInfo::SIMD::SSE2:
+		_instruction = iware::cpu::instruction_set_t::sse2;
+		break;
+	case SystemInfo::SIMD::SSE3:
+		_instruction = iware::cpu::instruction_set_t::sse3;
+		break;
+	case SystemInfo::SIMD::SSE4_1:
+		_instruction = iware::cpu::instruction_set_t::sse41;
+		break;
+
+	case SystemInfo::SIMD::SSE4_2:
+		_instruction = iware::cpu::instruction_set_t::sse42;
+		break;
+
+	case SystemInfo::SIMD::AVX:
+		_instruction = iware::cpu::instruction_set_t::avx;
+		break;
+	case SystemInfo::SIMD::AVX2:
+		_instruction = iware::cpu::instruction_set_t::avx2;
+		break;
+	case SystemInfo::SIMD::AVX512:
+		_instruction = iware::cpu::instruction_set_t::avx_512;
+		break;
+	case SystemInfo::SIMD::NEON:
+	default:
+		return false;
 	}
 	return iware::cpu::instruction_set_supported(_instruction);
 }
@@ -127,6 +166,7 @@ SystemInfo::Endianness SystemInfo::getEndianness() noexcept {
 }
 
 std::vector<SystemInfo::GPUInformation> SystemInfo::getGPUDevices() noexcept {
+
 	std::vector<iware::gpu::device_properties_t> devices = iware::gpu::device_properties();
 	std::vector<GPUInformation> gpuDevices(devices.size());
 
@@ -157,7 +197,14 @@ std::string SystemInfo::getAppliationName() {
 
 const char *SystemInfo::getUserName() { return ""; }
 
-unsigned int SystemInfo::getPageSize() { return 1024; }
+unsigned int SystemInfo::getPageSize() {
+#if defined(PLATFORM_POSIX) || defined(__linux__) // check defines for your setup
+	long int pagesize = sysconf(_SC_PAGE_SIZE);
+	return pagesize;
+#else
+	return 1024;
+#endif
+}
 
 std::vector<SystemInfo::CPUPackage> SystemInfo::getCPUPackages() {
 	std::vector<SystemInfo::CPUPackage> packages(iware::cpu::quantities().packages);

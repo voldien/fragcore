@@ -19,6 +19,7 @@
 #ifndef _FRAG_CORE_IP_ADDRESS_H_
 #define _FRAG_CORE_IP_ADDRESS_H_ 1
 #include "INetAddress.h"
+#include "IPInterface.h"
 #include <string>
 
 namespace fragcore {
@@ -47,10 +48,12 @@ namespace fragcore {
 		IPAddress(const std::string &hostname);
 
 		bool operator==(const IPAddress &ipAddress) const {
-			if (this == &ipAddress)
+			if (this == &ipAddress) {
 				return true;
-			if (this->getIPType() == ipAddress.getIPType() && ipAddress.getIP() == this->getIP())
+			}
+			if (this->getIPType() == ipAddress.getIPType() && ipAddress.getIP() == this->getIP()) {
 				return true;
+			}
 			return false;
 		}
 		bool operator!=(const IPAddress &ipAddress) const { return !(*this == ipAddress); }
@@ -65,12 +68,15 @@ namespace fragcore {
 		virtual bool isValid() const noexcept override;
 		IPAddressType getIPType() const noexcept { return this->type; }
 
+
+		virtual NetInterface getInterface();
+
 	  protected:
 		static unsigned int getDomain(IPAddressType IPaddressType) noexcept;
 		static IPAddressType convertDomain2AddressType(int domain);
 
 	  private:
-		std::string ip;
+		std::string ip; /*	Hostname.	*/
 		IPAddressType type;
 		bool valid;
 		union {
