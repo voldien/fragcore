@@ -1,4 +1,4 @@
-CMAKE_MINIMUM_REQUIRED( VERSION 3.9)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.9)
 
 #-----------------------------------------------------------------------------
 # Set policy
@@ -47,6 +47,7 @@ OPTION(BUILD_WITH_EXTERNAL_PROJECT "Enable external project build." ON)
 OPTION(BUILD_WITH_INSTALL "Will installs the target associated with the project." ON )
 OPTION(BUILD_WITH_UBSAN "Enable Undefined Behavior Sanitizer." OFF)
 OPTION(BUILD_WITH_ASAN "Enable AddressSanitizer." OFF )
+
 OPTION(BUILD_OPT_BUILD_PACKAGES "Set to ON to generate CPack configuration files and packaging targets" OFF)
 OPTION(BUILD_WITH_DEBUG_BOUNDSCHECK "Array/Pointer BoundsChecking, buffer overflow protection. Used in debug only." OFF)
 option(BUILD_INSTALL_RESOURCES "Installs the Resources directory" ON)

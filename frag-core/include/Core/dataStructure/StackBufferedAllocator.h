@@ -19,6 +19,7 @@
 #ifndef _FRAG_CORE_DOUBLE_BUFFERED_ALLACATOR_H_
 #define _FRAG_CORE_DOUBLE_BUFFERED_ALLACATOR_H_ 1
 #include "../SmartReference.h"
+#include "Queue.h"
 #include "StackAllactor.h"
 
 namespace fragcore {
@@ -102,6 +103,7 @@ namespace fragcore {
 		unsigned int m_curStack;
 		StackAllocator m_stack[2];
 		std::vector<StackAllocator> stacks;
+		Queue<StackAllocator> stackQ;
 	};
 
 } // namespace fragcore

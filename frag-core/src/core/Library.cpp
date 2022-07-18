@@ -1,5 +1,6 @@
 #include "Core/Library.h"
 
+#include <filesystem>
 #include <fmt/core.h>
 #include <unistd.h>
 #include <utility>
@@ -12,6 +13,8 @@ Library::Library(const char *clibrary) {
 	this->open(clibrary);
 	if (clibrary) {
 		this->path = clibrary;
+		/*	*/
+
 	} else {
 		this->path = "";
 	}
@@ -36,17 +39,24 @@ bool Library::open(const char *clibrary) {
 		throw RuntimeException("Failed open library : {}", dlerror());
 	}
 
-	return this->mlib != nullptr;
 #else
-	return false;
+
 #endif
+
+	// TODO extract filename without extension.
+	std::filesystem::path pathObj(path);
+	if (pathObj.has_stem()) {
+		this->setName(pathObj.stem().string());
+	}
+	return this->mlib != nullptr;
 }
 
 void Library::close() {
 #ifdef FV_UNIX
 	int rc = dlclose(this->mlib);
-	if (rc < 0)
+	if (rc < 0) {
 		throw SystemException(errno, std::system_category(), "Failed to close library: {}", dlerror());
+	}
 #endif
 	this->mlib = nullptr;
 }

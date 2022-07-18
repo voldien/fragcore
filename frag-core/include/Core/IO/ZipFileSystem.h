@@ -25,8 +25,9 @@
 #include <vector>
 
 namespace fragcore {
+
 	/**
-	 *	Zip file container.
+	 * Zip file container.
 	 */
 	class FVDECLSPEC ZipFileSystem : public IFileSystem {
 		friend class ZipFileIO;

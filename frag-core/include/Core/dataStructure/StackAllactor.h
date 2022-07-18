@@ -23,7 +23,6 @@
 #include <cstdint>
 
 namespace fragcore {
-
 	/**
 	 * @brief Single stack buffer.
 	 *

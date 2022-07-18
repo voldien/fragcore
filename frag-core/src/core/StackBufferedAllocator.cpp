@@ -1,5 +1,5 @@
 #include "Core/Math.h"
-#include "Core/dataStructure/DoubleBufferedAllocator.h"
+#include "Core/dataStructure/StackBufferedAllocator.h"
 #include <utility>
 using namespace fragcore;
 

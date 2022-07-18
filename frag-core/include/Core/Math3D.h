@@ -18,8 +18,12 @@
  */
 #ifndef _FRAG_CORE_MATH_3D_H_
 #define _FRAG_CORE_MATH_3D_H_ 1
-//#define FRAGCORE_USE_HPMCPP_VECTORS
-#ifdef FRAGCORE_USE_HPMCPP_VECTORS
+
+//#define FRAGCORE_USE_HPMCPP
+#define FRAGCORE_USE_EIGEN
+
+
+#ifdef FRAGCORE_USE_HPMCPP
 #include <Ext/HCPlane.hpp>
 #include <HCQuaternion.hpp>
 #include <HCVector2.hpp>
@@ -39,7 +43,7 @@ namespace fragcore {
 	using OBB = LIBHPM::OBB;
 	using Ray = LIBHPM::Ray;
 } // namespace fragcore
-#else
+#elif defined(FRAGCORE_USE_EIGEN)
 #include <Eigen/Dense>
 namespace fragcore {
 	using Vector3 = Eigen::Vector3f;

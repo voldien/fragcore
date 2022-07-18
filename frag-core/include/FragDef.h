@@ -50,7 +50,8 @@ namespace fragcore {
  *    Compiler
  */
 #ifdef _MSC_VER 	/*	Visual Studio C++ Compiler.	*/
-#define FV_VC
+	#define FV_VC
+	
 	#define FV_COMPILER 1
 	#if _MSC_VER >= 1900
 		#define FV_V13 _MSC_VER

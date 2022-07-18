@@ -28,6 +28,7 @@ namespace fragcore {
 	 * @tparam T
 	 * @tparam U
 	 */
+	// TODO add atomic support
 	template <class T, int U = 0> class Queue : public std::allocator<T> {
 	  public:
 		Queue() : Queue(16) {}
