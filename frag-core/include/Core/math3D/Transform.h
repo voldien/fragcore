@@ -25,82 +25,70 @@ namespace fragcore {
 	 * @brief Construct a new fv align object
 	 *
 	 */
-	class FVDECLSPEC Transform {
+	class FV_ALIGN(16) FVDECLSPEC Transform {
 	  public:
 		Transform() = default;
-		Transform(const Vector3 &position, const Quaternion &rotation, const Vector3 &scale): position(position), quaternion(rotation), scale(scale) {
-		}
-		Transform(const Transform &other) {}
+		Transform(const Vector3 &position, const Quaternion &rotation, const Vector3 &scale)
+			: position(position), quaternion(rotation), scale(scale) {}
 
-		Transform &operator=(Transform &othjer) { return *this; }
-
-		void rotate(const Vector3 &eular) {}
-
-		void setPosition(const Vector3 &pos) {}
-
-		inline Vector3 getPosition() { return this->position; }
-
-		inline const Vector3 &getPosition() const { return this->position; }
-
-		void setScale(const Vector3 &scale) {}
-
-		inline Vector3 getScale() const { return this->scale; }
-
-
-		void setRotation(const Quaternion &quat) {}
-
-
-		const Quaternion &getRotation() const {}
-
-
-		Matrix4x4 getMatrix() const {}
-
-
-		Matrix4x4 getViewMatrix() const {}
-
-
-		Matrix3x3 &getBasis() {}
-
-		const Matrix3x3 &getBasis() const {}
-
-		Transform &operator*=(const Transform &t) { return *this; }
-
-		Transform operator*(const Transform &t) const { return *this; }
-
-		//	Vector3 operator()(const Vector3 &v) const { return this->getBasis() * v; }
-
-		Vector3 operator*(const Vector3 &v) const { return this->getBasis() * v; }
-
-		Quaternion operator*(const Quaternion &q) const { return this->getRotation() * q; }
-
-		float getMinimumScale() const {}
-
-		float getMaximumScale() const {}
-
-		void setMinimumScale(float min) {}
-
-		void setMaximumScale(float max) {
-			this->maxScale = max;
-
-			float x = Math::clamp(this->getScale().x(), this->getMinimumScale(), this->getMaximumScale());
-			float y = Math::clamp(this->getScale().y(), this->getMinimumScale(), this->getMaximumScale());
-			float z = Math::clamp(this->getScale().z(), this->getMinimumScale(), this->getMaximumScale());
-
-			Vector3 clampedScale = Vector3(x, y, z);
-			this->setScale(clampedScale);
+		explicit Transform(const Matrix3x3 &b, const Vector3 &c = Vector3::Zero()) {}
+		Transform(const Transform &other) {
+			this->position = other.position;
+			this->quaternion = other.quaternion;
+			this->scale = other.scale;
 		}
 
-		// Transform &operator=(const Transform &other);
+		Transform &operator=(Transform &other) {
+			this->position = other.position;
+			this->quaternion = other.quaternion;
+			this->scale = other.scale;
+			return *this;
+		}
 
-	  protected: /*  Internal methods.   */
-		void updateModelMatrix();
+		FV_ALWAYS_INLINE void rotate(const Vector3 &eular) { this->quaternion = Quaternion(); }
+
+		FV_ALWAYS_INLINE void setPosition(const Vector3 &position) { this->position = position; }
+
+		FV_ALWAYS_INLINE Vector3 getPosition() { return this->position; }
+
+		FV_ALWAYS_INLINE const Vector3 &getPosition() const { return this->position; }
+
+		FV_ALWAYS_INLINE void setScale(const Vector3 &scale) { this->scale = scale; }
+
+		FV_ALWAYS_INLINE Vector3 getScale() const { return this->scale; }
+
+		FV_ALWAYS_INLINE void setRotation(const Quaternion &quat) { this->quaternion = quat; }
+
+		FV_ALWAYS_INLINE Transform inverse() const {
+			Transform transform;
+			Matrix3x3 inv = this->getBasis().transpose();
+			return transform;
+		}
+
+		FV_ALWAYS_INLINE const Quaternion &getRotation() const { return this->quaternion; }
+
+		FV_ALWAYS_INLINE const Matrix3x3 getBasis() const { return this->quaternion.matrix(); }
+
+		FV_ALWAYS_INLINE Transform &operator*=(const Transform &t) {
+			Matrix3x3 basis = this->getBasis() * t.getBasis();
+			return *this;
+		}
+
+		FV_ALWAYS_INLINE Transform operator*(const Transform &t) const {
+			Matrix3x3 basis = this->getBasis() * t.getBasis();
+
+			return *this;
+		}
+
+		FV_ALWAYS_INLINE Vector3 operator*(const Vector3 &v) const { return this->getBasis() * v; }
+
+		FV_ALWAYS_INLINE Quaternion operator*(const Quaternion &q) const { return this->getRotation() * q; }
 
 	  private:				   /*	Attributes.	*/
 		Vector3 position;	   /*	Position in world space.	*/
-		Vector3 scale;		   /*	Scale.	*/
 		Quaternion quaternion; /*	Rotation in world space.	*/
-		float maxScale;
-		float minScale;
+		Vector3 scale;		   /*	Scale.	*/
+		Matrix3x3 basis;
 	};
 
 } // namespace fragcore

@@ -34,8 +34,9 @@ namespace fragcore {
 		Queue() : Queue(16) {}
 
 		Queue(unsigned int nrOfElements) {
-			if (nrOfElements <= 0)
+			if (nrOfElements <= 0) {
 				throw InvalidArgumentException("");
+			}
 			this->mdata = nullptr;
 			this->reserved = 0;
 			this->nrElements = 0;
@@ -52,8 +53,9 @@ namespace fragcore {
 		T &back() const { return getData()[tail]; }
 
 		T &dequeue() {
-			if (isEmpty())
+			if (isEmpty()) {
 				throw InvalidArgumentException("");
+			}
 			T *obj = &this->getData()[head];
 			head = (head + 1) % getReserved();
 			this->nrElements--;
@@ -62,8 +64,9 @@ namespace fragcore {
 
 		// TODO resolve circluar queue for enqueue and dequeue.
 		T &enqueue(const T &item) {
-			if (this->getSize() >= this->getReserved() - 1)
+			if (this->getSize() >= this->getReserved() - 1) {
 				this->resize(this->getReserved() * 2);
+			}
 			T *obj = &this->getData()[tail];
 
 			*obj = item;
@@ -94,14 +97,14 @@ namespace fragcore {
 		/**
 		 *	Resize queue.
 		 */
-		void resize(unsigned int size) {
+		void resize(size_t size) {
 			if (this->mdata == nullptr) {
 				this->mdata = new T[size]();
 			} else {
-				this->mdata = (T *)realloc(this->mdata, this->getTypeSize() * size);
+				this->mdata = new T[size]();
 
 				/*	Relocate.	*/
-				for (unsigned int i = 0; i < getSize(); i++)
+				for (size_t i = 0; i < getSize(); i++)
 					this->mdata[i] = this->mdata[(this->head + i) % getReserved()];
 				this->head = 0;
 				this->tail = this->getSize() - 1;
@@ -109,9 +112,9 @@ namespace fragcore {
 			this->reserved = size;
 		}
 
-		unsigned int getSize() const noexcept { return nrElements; }
+		size_t getSize() const noexcept { return nrElements; }
 
-		unsigned int getReserved() const noexcept { return this->reserved; }
+		size_t getReserved() const noexcept { return this->reserved; }
 
 		/*  */
 		class QueueIterator : public Iterator<T> {
@@ -154,12 +157,12 @@ namespace fragcore {
 			return *this;
 		}
 
-	  private:					 /*  */
-		unsigned int reserved;	 /*	*/
-		unsigned int nrElements; /*	*/
-		unsigned int tail;		 /*	*/
-		unsigned int head;		 /*	*/
-		T *mdata;				 /*	*/
+	  private:			   /*  */
+		size_t reserved;   /*	*/
+		size_t nrElements; /*	*/
+		size_t tail;	   /*	*/
+		size_t head;	   /*	*/
+		T *mdata;		   /*	*/
 	};
 } // namespace fragcore
 
