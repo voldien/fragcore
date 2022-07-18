@@ -1,17 +1,20 @@
-# FragCore - Work in Progress
+# FragCore
+
 [![Linux Build](https://github.com/voldien/fragcore/actions/workflows/linux-build.yml/badge.svg)](https://github.com/voldien/fragcore/actions/workflows/linux-build.yml)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Language grade: C/C++](https://img.shields.io/lgtm/grade/cpp/g/voldien/fragcore.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/voldien/fragcore/context:cpp)
 [![GitHub release](https://img.shields.io/github/release/voldien/fragcore.svg)](https://github.com/voldien/fragcore/releases)
 
-A Core library framework library for Game Engine and other similar software that can benefit from modularity.
+A Core library framework library developed for both, but not exclusivly for Game Engines.
 
-Architecture is still in work progress.
+## Architecture
+The architecture of this library consist of a core library and modules. The core contains all the basic low level system logic. This core component are used for all the modules. These modules are dedicated library that extend the feature set of the fragcore.
 
 ## Features
 
-* **IO** - Abstract interface for IO, such as File,Memory,TCP/UDP,FTP and much more
+* **Core** - Contains all the basic functionalities and logic for modular design.
 * **Modular** - Modular support of loading library in runtime and compilation time.
+* **IO** - Abstract interface for IO, such as File,Memory,TCP/UDP,FTP and much more
 * **Network** - Support creating network sockets,
 * **DataStructure** - Common data structure in programming as well game development.
 * **Threading** - Cross platform thread support.
@@ -21,7 +24,8 @@ Architecture is still in work progress.
 
 ## Motivation
 
-This library contains all the low-level functionalities associated with a game engine. It was derived from the projects fragview, physic-engine and fragengine, extracted their common low-level functionality.
+The intention is to create a library that contains all the low-level functionalities associated with a game engine. That way it can be integrated with many other projects, all from basic to very advanced software.
+It was derived from the projects fragview, physic-engine and fragengine, extracted their common low-level functionality.
 
 ## Installation
 
@@ -37,7 +41,6 @@ The software can be easily installed by invoking the following command.
 mkdir build && cd build
 cmake ..
 cmake --build .
-make install
 ```
 
 ## Integration with CMake
@@ -48,6 +51,7 @@ The idea is to be able to integrate this library with another project easily. Wi
 ADD_SUBDIRECTORY(fragcore EXCLUDE_FROM_ALL)
 ```
 
+Assgin the library target to the your target, and all the depedencies of fragcore will be configured and built.
 ```cmake
 TARGET_LINK_LIBRARIES(myTarget PUBLIC fragcore)
 ```
@@ -93,12 +97,18 @@ ctest
 
 ## Modules
 
-The project is design that modules can be use to reduce both dependices and code depdending on what the library is integrate with. Currently, this can be done with CMake.
+The project is design that modules can be use to reduce both dependices and code depdending on what the library is integrate with. Currently, this can be done with CMake. The modules can be located in the [modules](modules) directory.
 
+- **Audio** - Currently it supports OpenAL and FMOD
+- **Font**
+- **Geometry Util**
+- **Image Loader**
+- **IO**
+- **Physic**
+- **Renderer**
+- **VideoPlayback**
+- **Window**
 
-### Audio
-
-Currently it supports OpenAL and FMOD.s
 
 #### AudioDecoder
 

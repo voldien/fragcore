@@ -18,32 +18,32 @@ IF( BUILTIN_EIGEN)
 ENDIF()
 
 IF(BUILTIN_OPEN_SIMPLEX_NOISE )
-	SET(OPEN_SIMPLEX_NOISE_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/../extern/open-simplex-noise-in-c)
+	SET(OPEN_SIMPLEX_NOISE_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/extern/open-simplex-noise-in-c)
 
-	FILE(GLOB OPEN_SIMPLEX_NOISE_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/../extern/open-simplex-noise-in-c/*.c )
+	FILE(GLOB OPEN_SIMPLEX_NOISE_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/extern/open-simplex-noise-in-c/*.c )
 ENDIF()
 
 IF(BUILTIN_PCG_C_BASIC)
-	SET(PCG_C_BASIC_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/../extern/pcg-c-basic)
+	SET(PCG_C_BASIC_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/extern/pcg-c-basic)
 
-	FILE(GLOB PCG_C_BASIC_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/../extern/pcg-c-basic/*.h
-	${CMAKE_CURRENT_SOURCE_DIR}/../extern/pcg-c-basic/*.c )
+	FILE(GLOB PCG_C_BASIC_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/extern/pcg-c-basic/*.h
+	${CMAKE_CURRENT_SOURCE_DIR}/extern/pcg-c-basic/*.c )
 
 ENDIF()
 
 IF(BUILTIN_KISS_FFT)
 	#https://github.com/mborgerding/kissfft.git
-	SET(KISS_FFT_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/../extern/kissfft )
+	SET(KISS_FFT_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/extern/kissfft )
 
-	FILE(GLOB KISS_FFT_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/../extern/kissfft/*.h
-	${CMAKE_CURRENT_SOURCE_DIR}/../extern/kissfft/*.c)
+	FILE(GLOB KISS_FFT_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/extern/kissfft/*.h
+	${CMAKE_CURRENT_SOURCE_DIR}/extern/kissfft/*.c)
 ENDIF()
 
 IF(BUILTIN_MISC)
-	SET(MISC_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/../extern/misc)
-	FILE(GLOB MISC_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/../extern/misc/*.h
-	${CMAKE_CURRENT_SOURCE_DIR}/../extern/misc/*.c
-	${CMAKE_CURRENT_SOURCE_DIR}/../extern/misc/*.cpp)
+	SET(MISC_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/extern/misc)
+	FILE(GLOB MISC_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/extern/misc/*.h
+	${CMAKE_CURRENT_SOURCE_DIR}/extern/misc/*.c
+	${CMAKE_CURRENT_SOURCE_DIR}/extern/misc/*.cpp)
 ENDIF()
 
 # Find all required libaries for the program.
@@ -141,7 +141,7 @@ ADD_LIBRARY(fragcore ${SOURCE_FILES} ${HEADER_FILES}
  							${OPEN_SIMPLEX_NOISE_SOURCE} ${PCG_C_BASIC_SOURCE}
 							${KISS_FFT_SOURCE}
 							${MISC_SOURCE})
-ADD_DEPENDENCIES(fragcore taskSch infoware cxxexcept cxx-config )
+ADD_DEPENDENCIES(fragcore taskSch infoware cxxexcept cxx-config)
 
 #
 TARGET_COMPILE_DEFINITIONS(fragcore PRIVATE FRAG_CORE_INTERNAL_IMP=1)

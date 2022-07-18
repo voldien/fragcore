@@ -18,7 +18,7 @@
  */
 #ifndef _FRAG_CORE_AUDIOOBJECT_H_
 #define _FRAG_CORE_AUDIOOBJECT_H_ 1
-#include "Prerequisites.h"
+#include "AudioPrerequisites.h"
 #include <Core/Ref.h>
 #include <Core/SmartReference.h>
 
