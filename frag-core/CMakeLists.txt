@@ -16,39 +16,23 @@ LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" )
 
 #INCLUDE(infoware)
 #INCLUDE(exceptcxx)
-
-
-IF( BUILTIN_EIGEN)
-	SET(EIGEN_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/extern/eigen/Eigen)
-ENDIF()
+#Eigen
 
 IF(BUILTIN_OPEN_SIMPLEX_NOISE )
 	SET(OPEN_SIMPLEX_NOISE_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/extern/open-simplex-noise-in-c)
-
 	FILE(GLOB OPEN_SIMPLEX_NOISE_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/extern/open-simplex-noise-in-c/*.c )
 ENDIF()
 
 IF(BUILTIN_PCG_C_BASIC)
 	SET(PCG_C_BASIC_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/extern/pcg-c-basic)
-
 	FILE(GLOB PCG_C_BASIC_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/extern/pcg-c-basic/*.h
 	${CMAKE_CURRENT_SOURCE_DIR}/extern/pcg-c-basic/*.c )
-
 ENDIF()
 
 IF(BUILTIN_KISS_FFT)
-	#https://github.com/mborgerding/kissfft.git
 	SET(KISS_FFT_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/extern/kissfft )
-
 	FILE(GLOB KISS_FFT_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/extern/kissfft/*.h
 	${CMAKE_CURRENT_SOURCE_DIR}/extern/kissfft/*.c)
-ENDIF()
-
-IF(BUILTIN_MISC)
-	SET(MISC_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/extern/misc)
-	FILE(GLOB MISC_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/extern/misc/*.h
-	${CMAKE_CURRENT_SOURCE_DIR}/extern/misc/*.c
-	${CMAKE_CURRENT_SOURCE_DIR}/extern/misc/*.cpp)
 ENDIF()
 
 # Find all required libaries for the program.
@@ -162,7 +146,7 @@ TARGET_LINK_LIBRARIES(fragcore PUBLIC Eigen3::Eigen taskSch cxxexcept fmt cxx-co
 #
 TARGET_INCLUDE_DIRECTORIES(fragcore PRIVATE ${ZIP_INCLUDE_DIRS} ${JSONC_INCLUDE_DIRS} ${LIBXML2_INCLUDE_DIR}
 													 ${OPEN_SIMPLEX_NOISE_INCLUDE_DIRS} ${PCG_C_BASIC_INCLUDE_DIRS} 
-													 ${KISS_FFT_INCLUDE_DIRS} ${MISC_INCLUDE_DIRS}
+													 ${KISS_FFT_INCLUDE_DIRS}
 													 ${ZLIB_INCLUDE_DIRS} ${ZSTD_INCLUDE_DIRS}
 													 ${Backtrace_HEADER}
 													 ${CMAKE_CURRENT_SOURCE_DIR}/../extern/infoware/include/infoware

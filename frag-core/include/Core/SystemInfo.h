@@ -50,19 +50,19 @@ namespace fragcore {
 		};
 
 		enum class SIMD : unsigned int {
-			NONE = (0 << 0),	/*	No HPM SIMD exention flag.	*/
-			MMX = (1 << 1),		/*	MMX. (Yet not supported)	*/
-			S3DNOW = (1 << 2),	/*	3DNOW. (Yet not supported)	*/
-			SSE = (1 << 3),		/*	SSE (Streaming SIMD Extensions).	*/
-			SSE2 = (1 << 4),	/*	SSE2 (Streaming SIMD Extensions).	*/
-			SSE3 = (1 << 5),	/*	SSE3 (Streaming SIMD Extensions).	*/
-			SSSE3 = (1 << 6),	/*	SSSE3 (Streaming SIMD Extensions).	*/
-			SSE4_1 = (1 << 7),	/*	SSE4.1 (Streaming SIMD Extensions).	*/
-			SSE4_2 = (1 << 8),	/*	SSE4.2 (Streaming SIMD Extensions).	*/
-			AVX = (1 << 9),		/*	AVX Version 1 (Advanced Vector Extension).	*/
-			AVX2 = (1 << 10),	/*	AVX Version 2 (Advanced Vector Extension).	(Not tested)*/
-			AVX512 = (1 << 11), /*	AVX512 (Advanced Vector Extension). (Yet not supported)	*/
-			NEON = (1 << 12),	/*	ARM	FPU (floating-point unit) feature.	*/
+			NONE,	/*	No HPM SIMD exention flag.	*/
+			MMX,	/*	MMX. (Yet not supported)	*/
+			S3DNOW, /*	3DNOW. (Yet not supported)	*/
+			SSE,	/*	SSE (Streaming SIMD Extensions).	*/
+			SSE2,	/*	SSE2 (Streaming SIMD Extensions).	*/
+			SSE3,	/*	SSE3 (Streaming SIMD Extensions).	*/
+			SSSE3,	/*	SSSE3 (Streaming SIMD Extensions).	*/
+			SSE4_1, /*	SSE4.1 (Streaming SIMD Extensions).	*/
+			SSE4_2, /*	SSE4.2 (Streaming SIMD Extensions).	*/
+			AVX,	/*	AVX Version 1 (Advanced Vector Extension).	*/
+			AVX2,	/*	AVX Version 2 (Advanced Vector Extension).	(Not tested)*/
+			AVX512, /*	AVX512 (Advanced Vector Extension). (Yet not supported)	*/
+			NEON,	/*	ARM	FPU (floating-point unit) feature.	*/
 		};
 
 		/*	The kernel of the Operating system.	*/
@@ -91,7 +91,7 @@ namespace fragcore {
 		static const char *getCPUArchitecture() noexcept;
 		static unsigned long getCPUFrequency() noexcept;
 		static bool isSupportedInstruction(SIMD instruction) noexcept;
-		static SIMD getSupportedSIMD();
+		static std::vector<SIMD> getSupportedSIMD();
 
 		// TODO add package and physical cores.
 		typedef struct cpu_package_t {

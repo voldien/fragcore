@@ -346,7 +346,7 @@ void *ZipFileSystem::getZipObject() const { return this->pzip; }
 
 ZipFileSystem::ZipFileSystem(Ref<IScheduler> ref) { this->setScheduleReference(ref); }
 
-ZipFileSystem::ZipFileSystem(const ZipFileSystem &other) { this->pzip = nullptr; }
+ZipFileSystem::ZipFileSystem(const ZipFileSystem &other) { this->pzip = other.pzip; }
 
 ZipFileSystem::~ZipFileSystem() {
 

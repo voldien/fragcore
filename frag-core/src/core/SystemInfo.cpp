@@ -122,6 +122,9 @@ bool SystemInfo::isSupportedInstruction(SIMD instruction) noexcept {
 	case SystemInfo::SIMD::SSE3:
 		_instruction = iware::cpu::instruction_set_t::sse3;
 		break;
+	case SystemInfo::SIMD::SSSE3:
+		_instruction = iware::cpu::instruction_set_t::ssse3;
+		break;
 	case SystemInfo::SIMD::SSE4_1:
 		_instruction = iware::cpu::instruction_set_t::sse41;
 		break;
@@ -146,12 +149,52 @@ bool SystemInfo::isSupportedInstruction(SIMD instruction) noexcept {
 	return iware::cpu::instruction_set_supported(_instruction);
 }
 
-SystemInfo::SIMD SystemInfo::getSupportedSIMD() {
-	unsigned int supportedSIMD = 0;
+std::vector<SystemInfo::SIMD> SystemInfo::getSupportedSIMD() {
+	std::vector<SystemInfo::SIMD> supportedSIMDS;
 
-	iware::cpu::instruction_set_supported(iware::cpu::instruction_set_t::adx);
+	std::vector<iware::cpu::instruction_set_t> supported = iware::cpu::supported_instruction_sets();
 
-	return (SystemInfo::SIMD)supportedSIMD;
+	for (size_t i = 0; i < supported.size(); i++) {
+		switch (supported[i]) {
+		case iware::cpu::instruction_set_t::s3d_now:
+			supportedSIMDS.push_back(SystemInfo::SIMD::S3DNOW);
+			break;
+		case iware::cpu::instruction_set_t::mmx:
+			supportedSIMDS.push_back(SystemInfo::SIMD::MMX);
+			break;
+		case iware::cpu::instruction_set_t::sse:
+			supportedSIMDS.push_back(SystemInfo::SIMD::SSE);
+			break;
+		case iware::cpu::instruction_set_t::sse2:
+			supportedSIMDS.push_back(SystemInfo::SIMD::SSE2);
+			break;
+		case iware::cpu::instruction_set_t::sse3:
+			supportedSIMDS.push_back(SystemInfo::SIMD::SSE3);
+			break;
+		case iware::cpu::instruction_set_t::ssse3:
+			supportedSIMDS.push_back(SystemInfo::SIMD::SSSE3);
+			break;
+		case iware::cpu::instruction_set_t::sse41:
+			supportedSIMDS.push_back(SystemInfo::SIMD::SSE4_1);
+			break;
+		case iware::cpu::instruction_set_t::sse42:
+			supportedSIMDS.push_back(SystemInfo::SIMD::SSE4_2);
+			break;
+		case iware::cpu::instruction_set_t::avx:
+			supportedSIMDS.push_back(SystemInfo::SIMD::AVX);
+			break;
+		case iware::cpu::instruction_set_t::avx2:
+			supportedSIMDS.push_back(SystemInfo::SIMD::AVX2);
+			break;
+		case iware::cpu::instruction_set_t::avx_512:
+			supportedSIMDS.push_back(SystemInfo::SIMD::AVX512);
+			break;
+		default:
+			break;
+		}
+	}
+
+	return supportedSIMDS;
 }
 
 SystemInfo::Endianness SystemInfo::getEndianness() noexcept {

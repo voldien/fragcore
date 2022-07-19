@@ -35,6 +35,7 @@ namespace fragcore {
 	  public:
 		virtual ~ZipFileSystem();
 
+	  public:
 		IO *openFile(const char *path, IO::IOMode mode) override;
 		IO *openFile(unsigned int index);
 
