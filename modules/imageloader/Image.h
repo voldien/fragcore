@@ -19,7 +19,7 @@
 #ifndef _FRAG_CORE_IMAGE_H_
 #define _FRAG_CORE_IMAGE_H_ 1
 #include "ImageFormat.h"
-#include <Core/Color.h>
+#include <Core/math3D/Color.h>
 #include <Core/Object.h>
 
 namespace fragcore {

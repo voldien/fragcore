@@ -41,7 +41,7 @@
 #include "Core/IO/GZFileIO.h"
 #include "Core/IO/ZipFileSystem.h"
 /*  */
-#include "Core/dataStructure/DoubleBufferedAllocator.h"
+#include "Core/dataStructure/StackBufferedAllocator.h"
 /*  */
 #include "Core/Library.h"
 #include "Core/Log.h"
@@ -52,9 +52,9 @@
 /*  */
 #include "Core/Network/NetSocket.h"
 
-#include "Core/dataStructure/AABB.h"
-#include "Core/dataStructure/BoundingSphere.h"
-#include "Core/dataStructure/OBB.h"
-#include "Core/dataStructure/Plane.h"
+#include "Core/math3D/AABB.h"
+#include "Core/math3D/BoundingSphere.h"
+#include "Core/math3D/OBB.h"
+#include "Core/math3D/Plane.h"
 
 #endif

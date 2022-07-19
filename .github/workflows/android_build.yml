@@ -2,8 +2,7 @@ name: FragCore
 on:
   push:
   pull_request:
-
-
+  
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Release
@@ -19,7 +18,7 @@ jobs:
         with:
           submodules: "recursive"
 
-      - name: Install Android NDK r21
+      - name: Install Android NDK r23
         run: |
           sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install 'ndk;${{env.ANDROID_NDK_VERSION}}'
 

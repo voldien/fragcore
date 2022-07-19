@@ -10,20 +10,11 @@ void GLRenderPipeline::bind() {
 	// glActiveShaderProgram
 }
 
-int GLRenderPipeline::getLocation(const char *name) {
+int GLRenderPipeline::getLocation(const char *name) { return glGetUniformLocation(this->program, name); }
 
-	return glGetUniformLocation(this->program, name);
-}
+void GLRenderPipeline::setInt(int location, int value) { glProgramUniform1i(this->program, location, value); }
 
-void GLRenderPipeline::setInt(int location, int value) {
-
-	glProgramUniform1i(this->program, location, value);
-}
-
-void GLRenderPipeline::setFloat(int location, float value) {
-
-	glProgramUniform1f(this->program, location, value);
-}
+void GLRenderPipeline::setFloat(int location, float value) { glProgramUniform1f(this->program, location, value); }
 
 void GLRenderPipeline::setFloatv(int location, int n, const float *values) {
 
@@ -52,24 +43,29 @@ void GLRenderPipeline::setMatrix4fv(int location, int n, const float *pvalue) {
 static GLenum getShaderFlag(GLRenderPipeline::ShaderType type) {
 	GLenum flag = 0;
 
-	if (type & GLRenderPipeline::VERTEX_SHADER)
+	if (type & GLRenderPipeline::VERTEX_SHADER) {
 		flag |= GL_VERTEX_SHADER_BIT;
-	if (type & GLRenderPipeline::FRAGMENT_SHADER)
+	}
+	if (type & GLRenderPipeline::FRAGMENT_SHADER) {
 		flag |= GL_FRAGMENT_SHADER_BIT;
-	if (type & GLRenderPipeline::GEOMETRY_SHADER)
+	}
+	if (type & GLRenderPipeline::GEOMETRY_SHADER) {
 		flag |= GL_GEOMETRY_SHADER_BIT;
-	if (type & GLRenderPipeline::TESSELLATION_CONTROL_SHADER)
+	}
+	if (type & GLRenderPipeline::TESSELLATION_CONTROL_SHADER) {
 		flag |= GL_TESS_CONTROL_SHADER_BIT;
-	if (type & GLRenderPipeline::TESSELLATION_EVOLUTION_SHADER)
+	}
+	if (type & GLRenderPipeline::TESSELLATION_EVOLUTION_SHADER) {
 		flag |= GL_TESS_EVALUATION_SHADER_BIT;
-	if (type & GLRenderPipeline::COMPUTE_SHADER)
+	}
+	if (type & GLRenderPipeline::COMPUTE_SHADER) {
 		flag |= GL_COMPUTE_SHADER_BIT;
+	}
 
 	return flag;
 }
 
 Shader *GLRenderPipeline::getShader(ShaderType type) {
-
 
 	// switch (type) {
 	// case VERTEX_SHADER:

@@ -51,7 +51,7 @@ int UDPNetSocket::listen(unsigned int maxListen) {
 }
 
 int UDPNetSocket::connect(const INetAddress &p_addr) {
-	socklen_t addrlen;			 /*	*/
+	socklen_t addrlen = 0;			 /*	*/
 	const struct sockaddr *addr; /*	*/
 	union {
 		struct sockaddr_in addr4;  /*	*/

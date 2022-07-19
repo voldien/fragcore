@@ -26,9 +26,6 @@ IO *FTPFileSystem::openFile(const char *path, IO::IOMode mode) {
 }
 
 void FTPFileSystem::closeFile(IO *io) { throw NotImplementedException(); }
-const char *FTPFileSystem::getBaseName(const char *path) {
-	return basename(path); // TODO relocate to the OS IO table lookup.
-}
 
 void FTPFileSystem::remove(const char *path) { throw NotImplementedException(); }
 
@@ -40,16 +37,19 @@ bool FTPFileSystem::isReadable(const char *path) const { throw NotImplementedExc
 
 bool FTPFileSystem::isWriteable(const char *path) const { throw NotImplementedException(); }
 
-std::string FTPFileSystem::getAbsolutePath(const char *path) { throw NotImplementedException(); }
-
-std::string FTPFileSystem::getRelativePath(const char *path) { throw NotImplementedException(); }
-
-const char *FTPFileSystem::getFileExtension(const char *path) {
-	const char *dot = strrchr(path, '.');
-	if (!dot || dot == path)
-		return "";
-	return dot + 1;
-}
+// const char *FTPFileSystem::getBaseName(const char *path) {
+//	return basename(path); // TODO relocate to the OS IO table lookup.
+//}
+// std::string FTPFileSystem::getAbsolutePath(const char *path) { throw NotImplementedException(); }
+//
+// std::string FTPFileSystem::getRelativePath(const char *path) { throw NotImplementedException(); }
+//
+// const char *FTPFileSystem::getFileExtension(const char *path) {
+//	const char *dot = strrchr(path, '.');
+//	if (!dot || dot == path)
+//		return "";
+//	return dot + 1;
+//}
 
 void FTPFileSystem::createFile(const char *path) { throw NotImplementedException(); }
 
@@ -57,8 +57,8 @@ void FTPFileSystem::createDirectory(const char *path) { throw NotImplementedExce
 
 bool FTPFileSystem::isASyncSupported() const { return *this->getScheduler() != nullptr; }
 
-bool FTPFileSystem::isDirectory(const char *path) { throw NotImplementedException(); }
-bool FTPFileSystem::isFile(const char *path) { throw NotImplementedException(); }
+bool FTPFileSystem::isDirectory(const char *path) const { throw NotImplementedException(); }
+bool FTPFileSystem::isFile(const char *path) const { throw NotImplementedException(); }
 
 void write_file_dir_callback(void *data, size_t size, size_t nmemb, void *ptr) {
 

@@ -1,4 +1,4 @@
-#include"GLQuery.h"
+#include "GLQuery.h"
 #include <GL/glew.h>
 
 using namespace fragcore;
@@ -27,10 +27,7 @@ void GLQueryObject::begin(Target target, unsigned int index) {
 	glBeginQueryIndexed(getTarget(target), index, this->query[index]);
 }
 
-void GLQueryObject::end(Target target, unsigned int index) {
-
-	glEndQueryIndexed(getTarget(target), index);
-}
+void GLQueryObject::end(Target target, unsigned int index) { glEndQueryIndexed(getTarget(target), index); }
 
 long int GLQueryObject::getResult(int index) {
 
@@ -51,7 +48,6 @@ static GLenum getConditionTarget(QueryObject::Condition condition) {
 }
 
 void GLQueryObject::beginConditionalRenderer(Condition target) {
-
 
 	GLenum condition = getConditionTarget(target);
 	glBeginConditionalRender(query[0], condition);

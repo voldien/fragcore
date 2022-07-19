@@ -18,7 +18,7 @@
  */
 #ifndef _FRAG_CORE_AUDIO_FACTORY_H_
 #define _FRAG_CORE_AUDIO_FACTORY_H_ 1
-#include "../Prerequisites.h"
+#include "../AudioPrerequisites.h"
 #include "AudioDecoderFactory.h"
 #include <FragCore.h>
 

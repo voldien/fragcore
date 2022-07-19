@@ -19,8 +19,8 @@
 #ifndef _FRAG_CORE_MATH_H_
 #define _FRAG_CORE_MATH_H_ 1
 #include "../FragDef.h"
-#include "math/Random.h"
 #include "Math3D.h"
+#include "math/Random.h"
 #include <cfloat>
 #include <cmath>
 #include <vector>
@@ -90,6 +90,18 @@ namespace fragcore {
 		}
 
 		/**
+		 *
+		 */
+		template <typename T> static T wrapAngle(T angle) {
+			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
+			while (angle > static_cast<T>(Math::PI_2))
+				angle -= static_cast<T>(Math::PI_2);
+			while (angle < 0.0f)
+				angle += static_cast<T>(Math::PI_2);
+			return angle;
+		}
+
+		/**
 		 * @brief Linear interpolation.
 		 *
 		 * @tparam T
@@ -111,18 +123,6 @@ namespace fragcore {
 		/**
 		 *
 		 */
-		template <typename T> static T wrapAngle(T angle) {
-			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
-			while (angle > static_cast<T>(Math::PI_2))
-				angle -= static_cast<T>(Math::PI_2);
-			while (angle < 0.0f)
-				angle += static_cast<T>(Math::PI_2);
-			return angle;
-		}
-
-		/**
-		 *
-		 */
 		// TODO add macro for inline.
 		inline static constexpr double E = 2.718281828459045235;
 		inline static constexpr double PI = 3.141592653589793238462643383279502884;
@@ -133,7 +133,7 @@ namespace fragcore {
 		inline static constexpr double Rad2Deg = 180 / Math::PI;
 		inline static constexpr double NegativeInfinity = 0;
 
-		template <typename T> static constexpr T NextPowerOfTwo(T v) {
+		template <typename T> static inline constexpr T NextPowerOfTwo(T v) {
 			static_assert(std::is_integral<T>::value, "Must be a integer type.");
 			T res = 1;
 			while (res < v)
@@ -144,13 +144,13 @@ namespace fragcore {
 		/**
 		 *
 		 */
-		template <typename T> static constexpr T ClosestPowerOfTwo(T v) {
+		template <typename T> static inline constexpr T ClosestPowerOfTwo(T v) {
 			T n = NextPowerOfTwo(v);
 			T p = 0;
 			return 0;
 		}
 
-		template <typename T> static constexpr bool IsPowerOfTwo(T v) {
+		template <typename T> static inline constexpr bool IsPowerOfTwo(T v) {
 			static_assert(std::is_integral<T>::value, "Must be a integer type.");
 			return !(v == 0) && !((v - 1) & v);
 		}
@@ -159,7 +159,7 @@ namespace fragcore {
 		 *	Generate 1D guassian.
 		 */
 		template <typename T>
-		static void guassian(std::vector<T> &guassian, unsigned int height, T theta, T standard_deviation) {
+		static inline void guassian(std::vector<T> &guassian, unsigned int height, T theta, T standard_deviation) {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
 			Math::guassian<T>(static_cast<T &>(*guassian.data()), height, theta, standard_deviation);
 		}
@@ -182,8 +182,8 @@ namespace fragcore {
 		 *	Generate 2D guassian.
 		 */
 		template <typename T>
-		static void guassian(const std::vector<T> &guassian, unsigned int width, unsigned int height, T theta,
-							 T standard_deviation) noexcept {
+		static inline void guassian(const std::vector<T> &guassian, unsigned int width, unsigned int height, T theta,
+									T standard_deviation) noexcept {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
 			/*	TODO validate size.	*/
 
@@ -199,7 +199,7 @@ namespace fragcore {
 			}
 		}
 
-		template <typename T, typename U> static T gammaCorrection(T x, U gamma) noexcept {
+		template <typename T, typename U> static constexpr inline T gammaCorrection(T x, U gamma) noexcept {
 
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
 			// TODO add support for using vector components.
@@ -224,7 +224,7 @@ namespace fragcore {
 		 * @tparam T
 		 * @return T
 		 */
-		template <typename T> static T random() {
+		template <typename T> static inline T random() {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
 			return {static_cast<T>(drand48()), static_cast<T>(drand48())};
 		}
@@ -290,7 +290,7 @@ namespace fragcore {
 
 		// void multijitter(Vector2 *samples, int num_samples) { int sqrt_samples = (int)sqrt(num_samples); }
 
-		template <typename T> static T align(T size, T alignment) {
+		template <typename T> static inline constexpr T align(T size, T alignment) {
 			static_assert(std::is_integral<T>::value, "Must be an integral type.");
 			return size + (alignment - (size % alignment));
 		}

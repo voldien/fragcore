@@ -48,8 +48,8 @@ namespace fragcore {
 		virtual bool exists(const char *path) const override;
 
 		virtual bool isASyncSupported() const override;
-		virtual bool isDirectory(const char *path) override;
-		virtual bool isFile(const char *path) override;
+		virtual bool isDirectory(const char *path) const override;
+		virtual bool isFile(const char *path) const override;
 
 		// FileAccess getFileAccess(const char *path) override;
 
@@ -60,13 +60,10 @@ namespace fragcore {
 		std::vector<std::string> list(const char *directory) const override;
 
 		// TODO determine how to deal with.
-		static const char *getBaseName(const char *path);
-
-		static std::string getAbsolutePath(const char *path);
-
-		static std::string getRelativePath(const char *path);
-
-		static const char *getFileExtension(const char *path);
+		//virtual const char *getBaseName(const char *path);
+		//virtual std::string getAbsolutePath(const char *path);
+		//virtual std::string getRelativePath(const char *path);
+		//virtual const char *getFileExtension(const char *path);
 
 	  public:
 		/**
