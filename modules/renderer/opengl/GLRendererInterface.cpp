@@ -680,7 +680,7 @@ static void checkShaderError(int shader) {
 }
 
 RenderPipeline *GLRendererInterface::createRenderPipeline(const RenderPipelineDesc *desc) {
-	unsigned int pipeline;
+	unsigned int pipeline = 0;
 
 	GLRenderPipeline *programPipeline = new GLRenderPipeline();
 

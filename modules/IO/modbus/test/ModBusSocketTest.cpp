@@ -50,4 +50,6 @@ TEST_F(ModBusServerClientTest, Bind_IO_To_NetSocket_No_Throw_Exception) {
 
 	Ref<NetSocket> netSocket = Ref<NetSocket>(this->modbusNetSocket);
 	// ASSERT_NO_THROW(SocketIO io(netSocket));
+
+	netSocket->close();
 }

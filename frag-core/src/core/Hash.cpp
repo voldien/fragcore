@@ -66,8 +66,6 @@ void Hash::final(std::vector<unsigned char> &hash) {
 	default:
 		throw NotSupportedException("Not supported");
 	}
-
-	/**/
 }
 
 void Hash::reset() noexcept {

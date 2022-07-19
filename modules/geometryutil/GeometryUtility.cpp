@@ -1,5 +1,5 @@
-#include <Core/Math.h>
 #include "GeometryUtil.h"
+#include <Core/Math.h>
 
 using namespace fragcore;
 
@@ -13,8 +13,9 @@ std::vector<Triangle> GeometryUtility::createPolygon(const std::vector<Vector3> 
 }
 
 bool GeometryUtility::isConvex(std::vector<Vector3> &polygon) {
-	if (polygon.size() < 3)
+	if (polygon.size() < 3) {
 		return false;
+	}
 
 	Vector3 p;
 	Vector3 v;
@@ -31,9 +32,11 @@ bool GeometryUtility::isConvex(std::vector<Vector3> &polygon) {
 		if (i == 0) // in first loop direction is unknown, so save it in res
 			res = u.x() * v.y() - u.y() * v.x() + v.x() * p.y() - v.y() * p.x();
 		else {
+			/*	*/
 			int newres = u.x() * v.y() - u.y() * v.x() + v.x() * p.y() - v.y() * p.x();
-			if ((newres > 0 && res < 0) || (newres < 0 && res > 0))
+			if ((newres > 0 && res < 0) || (newres < 0 && res > 0)) {
 				return false;
+			}
 		}
 	}
 	return true;

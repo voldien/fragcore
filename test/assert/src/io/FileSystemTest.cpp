@@ -46,9 +46,11 @@ TEST(FileSystem, FileSystem_Get_Directory_list_file_No_Throw) {
 
 TEST(FileSystem, FileSystem_Compute_Absolute_Path_Correct) {
 	FileSystem *fileSystem = FileSystem::createFileSystem();
-	std::string fullPath = fileSystem->getAbsolutePath("");
 
-	// TODO add evoluation.
+	std::string fullPath;
+	ASSERT_NO_THROW(fullPath = fileSystem->getAbsolutePath("."));
+	ASSERT_TRUE(!fullPath.empty());
+	
 }
 
 TEST(FileSystem, FileSystem_Compute_Relative_Path_Correct) {}

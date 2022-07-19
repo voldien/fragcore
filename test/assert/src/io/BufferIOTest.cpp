@@ -23,12 +23,12 @@ class BufferIOTest : public testing::Test {
 		zipFile = "zipfile.zip";
 	}
 
-	std::vector<char *> files;
-	char *FileWrite;
-	std::vector<char *> gzFiles;
-	char *gzFileWrite;
-	std::vector<char *> zipInFiles;
-	char *zipFile;
+	std::vector<std::string> files;
+	std::string FileWrite;
+	std::vector<std::string> gzFiles;
+	std::string gzFileWrite;
+	std::vector<std::string> zipInFiles;
+	std::string zipFile;
 };
 
 /*	TODO relocate to its own source file.	*/

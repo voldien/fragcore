@@ -63,7 +63,8 @@ TEST_F(IOTest, IO_File_Open_Read_No_Exception) {
 TEST_F(IOTest, IO_File_Write_In_ReadOnly_Throw_Exception) {
 	char buf[512];
 	IO *io = FileSystem::getFileSystem()->openFile(__FILE__, IO::READ);
-	ASSERT_THROW(io->write(0, buf), RuntimeException);
+
+	ASSERT_THROW(io->write(sizeof(buf), buf), RuntimeException);
 
 	FileSystem::getFileSystem()->closeFile(io);
 }
@@ -82,6 +83,7 @@ TEST_F(IOTest, IOFile) {
 	std::vector<char *>::const_iterator it = files.cbegin();
 	for (; it != files.cend(); it++) {
 		FileIO *fileIo = nullptr;
+		
 		ASSERT_NO_THROW(fileIo = new FileIO((*it), IO::IOMode::READ));
 		ASSERT_TRUE(fileIo->isReadable());
 		ASSERT_FALSE(fileIo->isWriteable());
