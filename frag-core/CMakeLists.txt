@@ -90,22 +90,21 @@ IF(LZO_FOUND)
 
 ENDIF()
 
+
 FIND_PACKAGE(Eigen3 3.3 NO_MODULE QUIET)
 IF(EIGEN3_FOUND)
-	MESSAGE(STATUS "Using eigen3 version .")
+	MESSAGE(STATUS "Using eigen3 version.")
 ENDIF()
 
 # Define all file lists.
 FILE(GLOB SOURCE_FILES  ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/src/event/*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/src/event/notify/*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/src/utils/*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/src/core/*.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/src/core/threading/*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/src/core/math/*.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/src/core/datastructure/*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/src/core/io/*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/src/core/network/*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/src/core/Scheduler/*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/src/window/*.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/src/core/scheduler/*.cpp
 		)
 
 #
@@ -117,7 +116,6 @@ FILE(GLOB DEVELOPMENT_HEADER_FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h
 									${CMAKE_CURRENT_SOURCE_DIR}/include/Core/*.h
 									${CMAKE_CURRENT_SOURCE_DIR}/include/Core/event/*.h
 									${CMAKE_CURRENT_SOURCE_DIR}/include/Core/IO/*.h
-									${CMAKE_CURRENT_SOURCE_DIR}/include/Window/*.h
 									${CMAKE_CURRENT_SOURCE_DIR}/include/Utils/*.h)
 
 SET(FRAG_CORE_INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/include)
@@ -140,8 +138,8 @@ TARGET_COMPILE_DEFINITIONS(fragcore PRIVATE FRAG_CORE_INTERNAL_IMP=1)
 TARGET_COMPILE_FEATURES(fragcore PUBLIC cxx_std_17 cxx_constexpr)
 
 #
-TARGET_LINK_LIBRARIES(fragcore PUBLIC Eigen3::Eigen taskSch cxxexcept fmt cxx-config PRIVATE dl ${ZLIB_LIBRARIES} ${LIBXML2_LIBRARIES} ${FREETYPE_LIBRARIES}
-													${ZIP_LIBRARIES} m dl ${JSONC_LIBRARIES} yaml ${OPENSSL_CRYPTO_LIBRARY} infoware )
+TARGET_LINK_LIBRARIES(fragcore PUBLIC Eigen3::Eigen taskSch cxxexcept fmt cxx-config magic_enum PRIVATE stdc++ atomic dl ${ZLIB_LIBRARIES} ${LIBXML2_LIBRARIES} ${FREETYPE_LIBRARIES}
+													${ZIP_LIBRARIES} m ${JSONC_LIBRARIES} yaml ${OPENSSL_CRYPTO_LIBRARY} infoware )
 
 #
 TARGET_INCLUDE_DIRECTORIES(fragcore PRIVATE ${ZIP_INCLUDE_DIRS} ${JSONC_INCLUDE_DIRS} ${LIBXML2_INCLUDE_DIR}

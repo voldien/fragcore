@@ -50,6 +50,7 @@ void Hash::update(Ref<IO> &io) {
 	while ((len = io->read(sizeof(buffer), buffer)) >= 0) {
 		this->update(buffer, len);
 	}
+
 	/*	retain the original state.	*/
 	io->seek(prev_pos, IO::Seek::SET);
 }
@@ -61,16 +62,25 @@ void Hash::final(std::vector<unsigned char> &hash) {
 		MD5_Final(hash.data(), static_cast<MD5_CTX *>(this->context));
 		break;
 	case Hash::ALGORITHM::SHA128:
+		hash.resize(SHA_DIGEST_LENGTH);
+		SHA1_Final(hash.data(), static_cast<SHA_CTX *>(this->context));
+		break;
 	case Hash::ALGORITHM::SHA256:
+		hash.resize(SHA256_DIGEST_LENGTH);
+		SHA256_Final(hash.data(), static_cast<SHA256_CTX *>(this->context));
+		break;
 	case Hash::ALGORITHM::SHA512:
+		hash.resize(SHA512_DIGEST_LENGTH);
+		SHA512_Final(hash.data(), static_cast<SHA512_CTX *>(this->context));
+		break;
 	default:
-		throw NotSupportedException("Not supported");
+		throw NotImplementedException();
 	}
 }
 
 void Hash::reset() noexcept {
 	this->nbytes = 0;
-	initHash(getAlgorithm());
+	this->initHash(this->getAlgorithm());
 }
 
 unsigned int Hash::getResultSize() const {
@@ -79,6 +89,8 @@ unsigned int Hash::getResultSize() const {
 		return MD5_DIGEST_LENGTH;
 	case Hash::ALGORITHM::SHA128:
 		return SHA_DIGEST_LENGTH;
+	case Hash::ALGORITHM::SHA224:
+		return SHA224_DIGEST_LENGTH;
 	case Hash::ALGORITHM::SHA256:
 		return SHA256_DIGEST_LENGTH;
 	case Hash::ALGORITHM::SHA512:
@@ -96,26 +108,29 @@ Hash::ALGORITHM Hash::getAlgorithm() const noexcept { return this->algorithm; }
 void Hash::initHash(ALGORITHM algorithm) {
 
 	/*	*/
+	int status = 0;
 	switch (algorithm) {
 	case Hash::ALGORITHM::MD5:
 		this->context = malloc(sizeof(MD5_CTX));
-		MD5_Init(static_cast<MD5_CTX *>(this->context));
+		status = MD5_Init(static_cast<MD5_CTX *>(this->context));
 		break;
 	case Hash::ALGORITHM::SHA128:
 		this->context = malloc(sizeof(SHA_CTX));
-		SHA1_Init(static_cast<SHA_CTX *>(this->context));
+		status = SHA1_Init(static_cast<SHA_CTX *>(this->context));
 		break;
 	case Hash::ALGORITHM::SHA224:
 		throw NotSupportedException();
 	case Hash::ALGORITHM::SHA256:
 		this->context = malloc(sizeof(SHA256_CTX));
-		SHA256_Init(static_cast<SHA256_CTX *>(this->context));
+		status = SHA256_Init(static_cast<SHA256_CTX *>(this->context));
 		break;
 	case Hash::ALGORITHM::SHA512:
 		this->context = malloc(sizeof(SHA512_CTX));
-		SHA512_Init(static_cast<SHA512_CTX *>(this->context));
+		status = SHA512_Init(static_cast<SHA512_CTX *>(this->context));
 		throw NotSupportedException();
 	default:
 		throw InvalidArgumentException("Invalid hash algorithm - {}", static_cast<int>(this->algorithm));
+	}
+	if (status == 0) {
 	}
 }

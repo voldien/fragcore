@@ -24,8 +24,8 @@
 namespace fragcore {
 
 	/**
-	 * @brief 
-	 * 
+	 * @brief
+	 *
 	 */
 	class FVDECLSPEC FileIO : public IO {
 	  public:
@@ -69,7 +69,7 @@ namespace fragcore {
 	  public:
 		FileIO(const char *path, IOMode mode);
 		FileIO(const std::string &path, IOMode mode);
-		virtual ~FileIO() = default;
+		virtual ~FileIO();
 
 		FileIO(FILE *file); // TODO perhaps add IOMOde for overriding.
 		FileIO(FileIO &&other);

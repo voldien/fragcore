@@ -645,6 +645,7 @@ Geometry *VKRenderInterface::createGeometry(GeometryDesc *desc) {
 
 	// //	geometryObject->pdata = glgeoobj;
 	// return geometryObject;
+	return nullptr;
 }
 
 void VKRenderInterface::deleteGeometry(Geometry *obj) {
@@ -677,7 +678,7 @@ FrameBuffer *VKRenderInterface::createFrameBuffer(FrameBufferDesc *desc) { retur
 
 void VKRenderInterface::deleteFrameBuffer(FrameBuffer *obj) {}
 
-QueryObject *VKRenderInterface::createQuery(QueryDesc *desc) {}
+QueryObject *VKRenderInterface::createQuery(QueryDesc *desc) {	return nullptr;}
 void VKRenderInterface::deleteQuery(QueryObject *query) {}
 
 RendererWindow *VKRenderInterface::createWindow(int x, int y, int width, int height) {

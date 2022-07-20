@@ -1,6 +1,6 @@
 #include "Core/IO/IOUtil.h"
 #include "Core/IO/FileIO.h"
-
+#include "Core/SystemInfo.h"
 #include <fmt/core.h>
 
 using namespace fragcore;
@@ -16,6 +16,7 @@ long int IOUtil::loadFileMem(Ref<IO> &io, char **data) {
 		throw InvalidArgumentException("Failed to read from IO: {}", io->getName());
 	}
 	// TODO encapsualte data to reuse
+
 	// Page aligned;
 	char buf[1024 * 4];
 	long nbytes;
@@ -25,11 +26,14 @@ long int IOUtil::loadFileMem(Ref<IO> &io, char **data) {
 		dataSize += nbytes;
 	}
 
+	io->seek(current_pos, IO::Seek::SET);
+
 	*data = d;
 	return dataSize;
 }
 
 long int IOUtil::loadFile(Ref<IO> &in, Ref<IO> &out) {
+	
 	if (!in->isReadable()) {
 		throw InvalidArgumentException("Failed to read from IO: {}", in->getName());
 	}

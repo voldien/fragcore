@@ -948,6 +948,8 @@ Shader *GLRendererInterface::createShader(ShaderDesc *desc) {
 	// 	shader->setRenderInterface(this);
 
 	// 	return shader;
+
+	return nullptr;
 }
 
 void GLRendererInterface::deleteShader(Shader *shader) {

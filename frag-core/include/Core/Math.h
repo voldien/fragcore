@@ -191,8 +191,8 @@ namespace fragcore {
 		}
 
 		template <typename T>
-		static void guassian(const T &guassian, unsigned int width, unsigned int height, T theta,
-							 T standard_deviation) noexcept {
+		static inline void guassian(const T &guassian, unsigned int width, unsigned int height, T theta,
+									T standard_deviation) noexcept {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
 			for (unsigned int i = 0; i < height; i++) {
 				// guassian(guassian[i * width],)
@@ -208,7 +208,7 @@ namespace fragcore {
 			return static_cast<T>(std::pow(x, exponent));
 		}
 
-		template <typename T> static T gameSpaceToLinear(T gamma, T exp) noexcept {}
+		template <typename T> static T gameSpaceToLinear(T gamma, T exp) noexcept { return std::pow(gamma, exp); }
 
 		/**
 		 *	Generate perlin noise value
@@ -231,7 +231,7 @@ namespace fragcore {
 
 		template <typename T> static std::vector<T> &random(std::vector<T> &samples) {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
-			for (int i = 0; i < samples.size(); i++) {
+			for (size_t i = 0; i < samples.size(); i++) {
 				samples[i] = Random::rand<T>();
 			}
 			return samples;
@@ -240,9 +240,9 @@ namespace fragcore {
 		template <typename T> static std::vector<T> &jitter(std::vector<T> &samples) {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
 
-			int sqrt_samples = (int)(std::sqrt(samples.size()));
-			for (int i = 0; i < sqrt_samples; i++) {
-				for (int j = 0; j < sqrt_samples; j++) {
+			size_t sqrt_samples = (size_t)(std::sqrt(samples.size()));
+			for (size_t i = 0; i < sqrt_samples; i++) {
+				for (size_t j = 0; j < sqrt_samples; j++) {
 					T x = (static_cast<T>(i) + Random::rand<T>()) / static_cast<T>(sqrt_samples);
 					T y = (static_cast<T>(j) + Random::rand<T>()) / static_cast<T>(sqrt_samples);
 
@@ -255,13 +255,13 @@ namespace fragcore {
 
 		template <typename T> static std::vector<T> &nrooks(std::vector<T> &samples) {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
-			int num_samples = samples.size();
-			for (int i = 0; i < num_samples; i++) {
+			size_t num_samples = samples.size();
+			for (size_t i = 0; i < num_samples; i++) {
 				samples[i].setX((static_cast<double>(i) + drand48()) / static_cast<double>(num_samples));
 				samples[i].setY((static_cast<double>(i) + drand48()) / static_cast<double>(num_samples));
 			}
 
-			for (int i = num_samples - 2; i >= 0; i--) {
+			for (size_t i = num_samples - 2; i >= 0; i--) {
 				int target = static_cast<int>((drand48() * static_cast<double>(i)));
 				float temp = samples[i + 1].x();
 				samples[i + 1].setX(samples[target].x());

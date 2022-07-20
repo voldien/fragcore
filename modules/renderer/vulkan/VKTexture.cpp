@@ -19,7 +19,7 @@ void VKTexture::setMipLevel(unsigned int level) {}
 
 void VKTexture::setFilterMode(FilterMode mode) {}
 
-VKTexture::FilterMode VKTexture::getFilterMode() {}
+VKTexture::FilterMode VKTexture::getFilterMode() { return Texture::FilterMode::eNearest; }
 
 void VKTexture::setWrapMode(VKTexture::WrapMode mode) {}
 

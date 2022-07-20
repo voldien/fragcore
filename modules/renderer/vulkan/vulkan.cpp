@@ -47,7 +47,9 @@ unsigned int getTextureTarget(TextureDesc::Target target) {
 	throw InvalidArgumentException("Invalid Texture target");
 }
 
-unsigned int getTextureType(TextureDesc::Type type) {}
+unsigned int getTextureType(TextureDesc::Type type) {
+	return 0;
+}
 
 unsigned int getBufferType(BufferDesc::BufferType type) {
 	switch (type) {

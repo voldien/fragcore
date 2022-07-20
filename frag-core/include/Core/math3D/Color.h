@@ -48,7 +48,6 @@ namespace fragcore {
 		inline float b() const noexcept { return z(); }
 		inline float a() const noexcept { return w(); }
 
-		// TODO resolve
 		inline void r(float red) noexcept { *this = {red, g(), b(), a()}; }
 		inline void g(float green) noexcept { *this = {r(), green, b(), a()}; }
 		inline void b(float blue) noexcept { *this = {r(), g(), blue, a()}; }

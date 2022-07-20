@@ -22,7 +22,9 @@ IPAddress::IPAddress(const std::string &hostname)
 	: INetAddress(NetworkProtocol::NetWorkProtocol_IP), type(IPAddressType::IPAddress_Type_NONE), valid(false) {
 	struct hostent *hosten = nullptr; /*	*/
 									  /*	Get IP from hostname.	*/
+	/*	*/
 	hosten = gethostbyname(hostname.c_str());
+	/*	*/
 	if (hosten != nullptr) {
 		struct in_addr **addr_list;
 		int i;

@@ -39,6 +39,10 @@ FileIO::FileIO(FileIO &&other) {
 	this->mode = other.mode;
 }
 
+FileIO::~FileIO(){
+	this->close();
+}
+
 void FileIO::open(const char *path, IOMode mode) {
 
 	if (path == nullptr) {

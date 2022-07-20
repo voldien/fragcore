@@ -251,7 +251,8 @@ namespace fragcore {
 	** File control method. For custom operations on an mem-file.
 	*/
 	static int memFileControl(sqlite3_file *pFile, int op, void *pArg) {
-		IOFile *p = (IOFile *)pFile;
+		IOFile *p = reinterpret_cast<IOFile *>(pFile);
+
 		int rc = SQLITE_NOTFOUND;
 		if (op == SQLITE_FCNTL_VFSNAME) {
 			//	*(char **) pArg = sqlite3_mprintf("mem(%p,%lld)", p->aData, p->sz);

@@ -2,6 +2,7 @@
 #include "Core/IO/FileIO.h"
 #include <filesystem>
 #include <infoware.hpp>
+#include <magic_enum.hpp>
 
 using namespace fragcore;
 static iware::system::OS_info_t info;
@@ -21,7 +22,6 @@ SystemInfo::KernelSystem SystemInfo::getSystemKernel() noexcept {
 
 SystemInfo::OperatingSystem SystemInfo::getOperatingSystem() noexcept {
 
-	// iware::system::OS_info().full_name
 	if (info.major == 0) {
 		info = iware::system::OS_info();
 	}
@@ -49,38 +49,15 @@ SystemInfo::OperatingSystem SystemInfo::getOperatingSystem() noexcept {
 	return SystemInfo::OperatingSystem::Unknown;
 }
 
-const std::string &SystemInfo::getOperatingSystemName() noexcept {
+ std::string SystemInfo::getOperatingSystemName() noexcept {
 	if (info.major == 0) {
 		info = iware::system::OS_info();
 	}
 	return info.full_name;
 }
 
-const char *SystemInfo::getOperatingSystemName(SystemInfo::OperatingSystem os) {
-
-	// TODO add magic enum.
-	// return magic
-
-	/*  */
-	switch (os) {
-	case SystemInfo::OperatingSystem::Linux:
-		return "Linux";
-	case SystemInfo::OperatingSystem::Window:
-		return "Window";
-	case SystemInfo::OperatingSystem::Unix:
-		return "Unix";
-	case SystemInfo::OperatingSystem::Android:
-		return "Android";
-	case SystemInfo::OperatingSystem::Mac:
-		return "Mac";
-	case SystemInfo::OperatingSystem::IOS:
-		return "IOS";
-	case SystemInfo::OperatingSystem::FreeBSD:
-		return "FreeBSD";
-	case SystemInfo::OperatingSystem::Unknown:
-	default:
-		return "Unkown Operating System";
-	}
+std::string SystemInfo::getOperatingSystemName(SystemInfo::OperatingSystem os) {
+	return std::string(magic_enum::enum_name(os));
 }
 
 std::string SystemInfo::getCPUName() noexcept { return iware::cpu::model_name(); }

@@ -31,8 +31,8 @@ namespace fragcore {
 	  public:
 		AABB() = default;
 		AABB(const Vector3 &size, const Vector3 &center) {
-			setCenter(center);
-			setSize(size);
+			this->setCenter(center);
+			this->setSize(size);
 		}
 		AABB(const AABB &bounds) { *this = bounds; }
 

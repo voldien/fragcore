@@ -264,7 +264,7 @@ int TCPNetSocket::write() { return 0; }
 bool TCPNetSocket::isBlocking() { /*	*/
 	int flags = fcntl(this->socket, F_GETFL, 0);
 	if (flags == -1) {
-		//	return false;
+		throw SystemException(errno, std::system_category(), "Failed to get flag");
 	}
 	return (flags & ~O_NONBLOCK) == 0;
 }
@@ -272,8 +272,9 @@ bool TCPNetSocket::isBlocking() { /*	*/
 void TCPNetSocket::setBlocking(bool blocking) { /*	*/
 	int flags = fcntl(this->socket, F_GETFL, 0);
 	if (flags == -1) {
-		//	return false;
+		throw SystemException(errno, std::system_category(), "Failed to get flag");
 	}
+
 	flags = (flags & ~O_NONBLOCK);
 	int rc = fcntl(this->socket, F_SETFL, flags);
 	if (rc < 0) {

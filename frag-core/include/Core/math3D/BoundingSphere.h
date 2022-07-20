@@ -27,7 +27,7 @@ namespace fragcore {
 	 *
 	 */
 	// TODO add template for precisous
-	//template<typename T = Vector3>
+	// template<typename T = Vector3>
 	struct FVDECLSPEC BoundingSphere {
 	  public:
 		BoundingSphere() = default;
@@ -118,12 +118,13 @@ namespace fragcore {
 		}
 
 		friend bool operator==(const BoundingSphere &o1, const BoundingSphere &o2) noexcept {
-			if (&o1 == &o2)
+			if (&o1 == &o2) {
 				return true;
-			else if (o1.center == o2.center && o1.radius == o2.radius)
+			} else if (o1.center == o2.center && o1.radius == o2.radius) {
 				return true;
-			else
+			} else {
 				return false;
+			}
 		}
 
 		friend bool operator!=(const BoundingSphere &o1, const BoundingSphere &o2) noexcept { return !(o1 == o2); }

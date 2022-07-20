@@ -34,6 +34,6 @@ TEST_F(IPAddressTest, Create_Local_Adddress_FDQN_No_Exception) {
 	ASSERT_NO_THROW(IPAddress localHost("localhost", IPAddress::IPAddressType::IPAddress_Type_IPV4));
 }
 
-TEST_F(IPAddressTest, Create_Local_Adddress_FDQN_InCorrect_Throw_Exception) {
+TEST_F(IPAddressTest, Create_InCorrect_FDQN_Local_Adddress_Throw_Exception) {
 	ASSERT_ANY_THROW(IPAddress localHost("incorrect_fqdn"));
 }

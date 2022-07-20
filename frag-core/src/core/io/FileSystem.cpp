@@ -213,6 +213,7 @@ bool FileSystem::isFIFO(const char *path) {
 #if __cplusplus >= 201703L
 	fs::path fspath(path);
 	return fs::is_fifo(fspath);
+
 #else
 	throw NotImplementedException();
 #endif

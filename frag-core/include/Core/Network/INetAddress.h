@@ -42,7 +42,7 @@ namespace fragcore {
 
 		virtual bool isValid() const noexcept = 0;
 
-		//virtual NetInterface getInterface();
+		// virtual NetInterface& getInterface() const;
 
 	  private:
 		NetworkProtocol networkProtocol;

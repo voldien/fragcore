@@ -11,18 +11,21 @@ using namespace fragcore;
 ASyncHandle ASyncIO::asyncOpen(Ref<IO> &io) {
 
 	/*	Check if scheduler is initialized.	*/
-	if (scheduler == nullptr)
+	if (scheduler == nullptr) {
 		throw RuntimeException("Async not initialized with a scheduler object");
+	}
 	/*  Check parameters.   */
-	if (io == nullptr)
+	if (io == nullptr) {
 		throw InvalidArgumentException("Invalid IO reference.");
+	}
 
 	/*	Required IO operation to be supported.	*/
 	const IO::IOOperation requiredIOReadSupported = static_cast<IO::IOOperation>(IO::OP_READ | IO::OP_WRITE);
 
 	/*	Check if IO operations are supported.	*/
-	if (!io->isOperationSupported(requiredIOReadSupported))
+	if (!io->isOperationSupported(requiredIOReadSupported)) {
 		throw InvalidArgumentException("IO: {} requires read/write operation support", io->getName());
+	}
 
 	/*	Generate new handle*/
 	ASyncHandle handle = this->generateHandle();
@@ -46,11 +49,13 @@ void ASyncIO::asyncReadFile(ASyncHandle handle, char *buffer, unsigned int size,
 	AsyncObject *ao = getObject(handle);
 
 	/*	Verify that is has read access.	*/
-	if (!ao->ref->isReadable())
+	if (!ao->ref->isReadable()) {
 		throw RuntimeException("IO object is not readable {}", ao->ref->getUID());
+	}
 
-	if (buffer == nullptr || size == 0)
+	if (buffer == nullptr || size == 0) {
 		throw InvalidArgumentException("");
+	}
 
 	// TODO replace with an abstract version
 	/*  Assign variables.   */
