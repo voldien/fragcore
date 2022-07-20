@@ -5,23 +5,23 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.9)
 
 # see "cmake --help-policy CMP0003"
 # So library linking is more sane
-cmake_policy(SET CMP0003 NEW)
+CMAKE_POLICY(SET CMP0003 NEW)
 
 # So syntax problems are errors
-cmake_policy(SET CMP0010 NEW)
+CMAKE_POLICY(SET CMP0010 NEW)
 
 # Input directories must have CMakeLists.txt
-cmake_policy(SET CMP0014 NEW)
+CMAKE_POLICY(SET CMP0014 NEW)
 
 # Silence draco warning on macOS, new policy works fine.
-if(POLICY CMP0068)
-  cmake_policy(SET CMP0068 NEW)
-endif()
+IF(POLICY CMP0068)
+	CMAKE_POLICY(SET CMP0068 NEW)
+ENDIF()
 
 # find_package() uses <PackageName>_ROOT variables.
-if(POLICY CMP0074)
-  cmake_policy(SET CMP0074 NEW)
-endif()
+IF(POLICY CMP0074)
+	CMAKE_POLICY(SET CMP0074 NEW)
+ENDIF()
 
 PROJECT(FragCore)
 
@@ -33,6 +33,7 @@ ENDIF()
 # Use GNUInstallDirs for Unix predefined directories
 INCLUDE(GNUInstallDirs)
 
+
 SET(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin CACHE INTERNAL "" FORCE)
 SET(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib CACHE INTERNAL "" FORCE)
 
@@ -41,20 +42,22 @@ SET(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib CACHE INTERNAL "" FORCE)
 #####################################
 
 OPTION(BUILD_SHARED_LIBS "Build package with shared libraries." ON)
-OPTION(BUILD_WITH_COVERAGE "Enable profiling and coverage report analysis." OFF)
-OPTION(BUILD_WITH_PROFILER "Enable profiling." OFF)
+
+#
 OPTION(BUILD_WITH_EXTERNAL_PROJECT "Enable external project build." ON)
 OPTION(BUILD_WITH_INSTALL "Will installs the target associated with the project." ON )
-OPTION(BUILD_WITH_UBSAN "Enable Undefined Behavior Sanitizer." OFF)
-OPTION(BUILD_WITH_ASAN "Enable AddressSanitizer." OFF )
 
+#
 OPTION(BUILD_OPT_BUILD_PACKAGES "Set to ON to generate CPack configuration files and packaging targets" OFF)
-OPTION(BUILD_WITH_DEBUG_BOUNDSCHECK "Array/Pointer BoundsChecking, buffer overflow protection. Used in debug only." OFF)
-option(BUILD_INSTALL_RESOURCES "Installs the Resources directory" ON)
 
 # Debug
+OPTION(BUILD_WITH_COVERAGE "Enable profiling and coverage report analysis." OFF)
+OPTION(BUILD_WITH_PROFILER "Enable profiling." OFF)
+OPTION(BUILD_WITH_UBSAN "Enable Undefined Behavior Sanitizer." OFF)
+OPTION(BUILD_WITH_ASAN "Enable AddressSanitizer." OFF )
 OPTION(WITH_CXX_GUARDEDALLOC "Enable GuardedAlloc for C++ memory allocation tracking (only enable for development)" OFF)
 MARK_AS_ADVANCED(WITH_CXX_GUARDEDALLOC)
+
 #
 OPTION(BUILD_WITH_TEST "Enable Testing." OFF)
 OPTION(BUILD_WITH_DOCS "Build documentation." OFF)
@@ -62,17 +65,20 @@ OPTION(BUILD_WITH_SAMPLES "Build sample codes" OFF)
 
 # Build external interface plugin.
 OPTION(BUILD_MODULES "Build module plugins" OFF)
-OPTION(BUILD_WITH_EXTERNAL_PLUGINS "" ON)
+
+# Specific Modules.
 OPTION(BUILD_EXTERNAL_RENDERER "Building external renderer libraries" ON)
 OPTION(BUILD_EXTERNAL_AUDIO "Building external audio libraries" ON)
 OPTION(BUILD_EXTERNAL_PHYSIC "Building external physic libraries" ON)
 
+# Override the option if root directory. This implies this is the development project.
 IF(FRAGCORE_PROJECT_ROOT)
 	SET(BUILD_MODULES ON)
 	SET(BUILD_WITH_TEST ON)
 	SET(BUILD_WITH_SAMPLES ON)
 ENDIF()
 
+# Shared or Static library.
 IF(NOT BUILD_SHARED_LIBS)
 	SET(CMAKE_EXE_LINKER_FLAGS "-static")
 	MESSAGE(STATUS "Static libraries enabled.")
@@ -81,6 +87,7 @@ ELSE()
 	MESSAGE(STATUS "Shared libraries enabled.")
 ENDIF(NOT BUILD_SHARED_LIBS)
 
+# SIMD support
 OPTION(WITH_CPU_SSE              "Enable SIMD instruction if they're detected on the host machine" ON)
 MARK_AS_ADVANCED(WITH_CPU_SSE)
 
@@ -182,9 +189,6 @@ SET(CMAKE_CXX_EXTENSIONS OFF)
 # Inlucde external resources.
 #################################
 ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/extern)
-IF(NOT TARGET cxxexcept)
-	INCLUDE(exceptcxx)
-ENDIF()
 INCLUDE(magicEnum)
 
 
@@ -282,6 +286,7 @@ ELSE()
 	SET(COMPILER_SSE2_FLAG)
 ENDIF()
 
+#
 IF(UNIX AND NOT APPLE)
 	IF(NOT WITH_CXX11_ABI)
 		STRING(APPEND PLATFORM_CFLAGS " -D_GLIBCXX_USE_CXX11_ABI=0")
@@ -309,14 +314,6 @@ SET( FRAGCORE_INCLUDE_INSTALL_DIR "fragcore-core" CACHE STRING
 SET( FRAGCORE_BIN_INSTALL_DIR "bin" CACHE STRING
 		"Path the tool executables are installed to." )
 
-# Find all required libaries for the program.
-FIND_PACKAGE(ZLIB QUIET)
-FIND_PACKAGE(Backtrace QUIET)
-FIND_PACKAGE(PkgConfig QUIET)
-FIND_PACKAGE(OpenSSL QUIET)
-FIND_PACKAGE(JeMalloc QUIET)
-FIND_PACKAGE(LLVM QUIET)
-FIND_PACKAGE(LZO QUIET)
 
 IF( UNIX )
 	SET( FRAGCORE_LIB_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR})
@@ -335,6 +332,8 @@ ELSE()
 	SET(CMAKE_INSTALL_FULL_LIBDIR ${CMAKE_INSTALL_PREFIX}/${FRAGCORE_LIB_INSTALL_DIR})
 	SET(CMAKE_INSTALL_FULL_BINDIR ${CMAKE_INSTALL_PREFIX}/${FRAGCORE_BIN_INSTALL_DIR})
 ENDIF()
+
+FIND_PACKAGE(PkgConfig QUIET)
 
 #########################################
 # Main core library.
@@ -407,8 +406,6 @@ IF(BUILD_MODULES)
 	# Video playback.
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/videoplayback)
 
-
-
 ENDIF(BUILD_MODULES)
 
 ##########################################
@@ -440,43 +437,6 @@ IF( UNIX )
 	SET( FRAG_LIB_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR})
 	SET( FRAG_INCLUDE_INSTALL_DIR ${CMAKE_INSTALL_INCLUDEDIR})
 	SET( FRAG_BIN_INSTALL_DIR ${CMAKE_INSTALL_BINDIR})
-
-	#
-	FIND_PACKAGE(UnixCommands REQUIRED)
-
-	#TODO relocate
-	FIND_PROGRAM(GLSLLANGVALIDATOR glslangValidator)
-	FIND_PROGRAM(SPIRVDIS spirv-dis)
-	FIND_PROGRAM(SPIRVAS spirv-as)
-	FIND_PROGRAM(SPIRVREMAP spirv-remap)
-
-	IF(GLSLLANGVALIDATOR)
-		MESSAGE(STATUS "glslangValidator found: ${GLSLLANGVALIDATOR}")
-		#TODO add for all shaders.
-		ADD_CUSTOM_TARGET(samples-spirv
-				COMMENT "Creating spirv shader from the display shader.")
-		#ADD_DEPENDENCIES(fragview samples-spirv)
-		FOREACH(glslFile ${SAMPLE_GLSL_FILES})
-			MESSAGE(STATUS ${glslFile} )
-			ADD_CUSTOM_COMMAND(TARGET samples-spirv PRE_BUILD
-					COMMAND glslangValidator --entry-point main --auto-map-bindings --auto-map-locations --uniform-base 0
-					-u:time:10 -G450 ${glslFile} -o ${CMAKE_CURRENT_SOURCE_DIR}/samples/spirv/)
-		ENDFOREACH()
-
-		# Create default shader
-		ADD_CUSTOM_TARGET(display-spirv
-				COMMENT "Creating spirv shader from the display shader.")
-		#ADD_DEPENDENCIES(fragview display-spirv)
-		FOREACH(glslFile ${SAMPLE_SHADER_GLSL_FILES})
-			ADD_CUSTOM_COMMAND(TARGET display-spirv PRE_BUILD
-					COMMAND glslangValidator --entry-point main --auto-map-bindings --auto-map-locations --uniform-base 0 -G -d
-					-u:time:10 ${glslFile} -o ${CMAKE_CURRENT_SOURCE_DIR}/)
-		ENDFOREACH()
-
-	ELSE()
-		MESSAGE(WARNING "Could not find the glslangValidator program for creating spirv shaders.")
-	ENDIF()
-
 
 ELSEIF(WIN32)
 

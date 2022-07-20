@@ -49,7 +49,7 @@ SystemInfo::OperatingSystem SystemInfo::getOperatingSystem() noexcept {
 	return SystemInfo::OperatingSystem::Unknown;
 }
 
- std::string SystemInfo::getOperatingSystemName() noexcept {
+std::string SystemInfo::getOperatingSystemName() noexcept {
 	if (info.major == 0) {
 		info = iware::system::OS_info();
 	}
@@ -109,7 +109,6 @@ bool SystemInfo::isSupportedInstruction(SIMD instruction) noexcept {
 	case SystemInfo::SIMD::SSE4_2:
 		_instruction = iware::cpu::instruction_set_t::sse42;
 		break;
-
 	case SystemInfo::SIMD::AVX:
 		_instruction = iware::cpu::instruction_set_t::avx;
 		break;

@@ -9,7 +9,7 @@ IF(PKG_CONFIG_FOUND)
 	PKG_CHECK_MODULES(AVUTIL QUIET libavutil)
 	PKG_CHECK_MODULES(SWSCALE QUIET libswscale)
 ELSE()
-	MESSAGE(ERROR "")
+	MESSAGE(ERROR "Could not pkg-config")
 	# TODO add logic for handling if pkg-config not available.
 
 	LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" )
