@@ -28,9 +28,6 @@ IF(CMAKE_TESTING_ENABLED)
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/test)
 ENDIF()
 
-
-ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/samples)
-
 #####################
 #
 #####################

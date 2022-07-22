@@ -1,12 +1,6 @@
 [submodule "extern/task-scheduler"]
 	path = extern/task-scheduler
 	url = https://github.com/voldien/task-scheduler
-[submodule "extern/infoware"]
-	path = extern/infoware
-	url = https://github.com/voldien/infoware.git
-[submodule "extern/fvkcore"]
-	path = extern/fvkcore
-	url = https://github.com/voldien/fvkcore.git
 [submodule "extern/cxx-config"]
 	path = extern/cxx-config
 	url = https://github.com/voldien/cxx-config.git

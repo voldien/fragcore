@@ -14,7 +14,7 @@ SET(THIRDPARTY_SOURCE "" PARENT_SCOPE)
 
 LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" )
 
-#INCLUDE(infoware)
+INCLUDE(infoware)
 IF(NOT TARGET cxxexcept)
 	INCLUDE(exceptcxx)
 ENDIF()
@@ -149,7 +149,7 @@ TARGET_INCLUDE_DIRECTORIES(fragcore PRIVATE ${ZIP_INCLUDE_DIRS} ${JSONC_INCLUDE_
 													 ${KISS_FFT_INCLUDE_DIRS}
 													 ${ZLIB_INCLUDE_DIRS} ${ZSTD_INCLUDE_DIRS}
 													 ${Backtrace_HEADER}
-													 ${CMAKE_CURRENT_SOURCE_DIR}/../extern/infoware/include/infoware
+													 ${infoware_SOURCE_DIR}/include/infoware
 										PUBLIC
 											$<BUILD_INTERFACE:${FRAG_CORE_INCLUDE}>
 											$<INSTALL_INTERFACE:${FRAG_CORE_INCLUDE}>
