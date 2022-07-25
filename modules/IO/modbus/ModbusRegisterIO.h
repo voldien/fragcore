@@ -28,7 +28,8 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC ModbusRegisterIO : public IO {
 	  public:
-		ModbusRegisterIO(ModbusNetSocket &socket, unsigned int address, unsigned int size);
+		// TODO add as reference.
+		ModbusRegisterIO(ModbusNetSocket &socket, size_t address_start, size_t size);
 		virtual ~ModbusRegisterIO();
 
 		virtual void open(const char *path, IOMode mode) override;
@@ -56,15 +57,15 @@ namespace fragcore {
 		virtual bool flush() override;
 
 		virtual bool isOperationSupported(IOOperation operations) const noexcept override {
-			const IOOperation supportedIO = static_cast<IOOperation>(OP_READ | OP_WRITE | OP_PEEK | OP_FILEACCESS |
-																	 OP_FILEACCESS | OP_FLUSH | OP_EOF);
+			const IOOperation supportedIO = static_cast<IOOperation>(OP_READ | OP_WRITE | OP_SEEK | OP_FLUSH);
 			return (operations & supportedIO) == operations;
 		}
 
 	  private:
 		ModbusNetSocket &socket;
-		unsigned int address;
-		unsigned int size;
+		size_t address_start;
+		size_t size;
+		size_t seek_offset = 0;
 	};
 } // namespace fragcore
 
