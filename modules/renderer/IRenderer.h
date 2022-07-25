@@ -20,7 +20,6 @@
 #define _FRAG_CORE_IRENDERER_H_ 1
 #include "Buffer.h"
 #include "FrameBuffer.h"
-#include "Geometry.h"
 #include "ICompute.h"
 #include "Query.h"
 #include "RenderDesc.h"
@@ -131,14 +130,6 @@ namespace fragcore {
 
 		virtual void deleteBuffer(Buffer *object) = 0;
 
-		/**
-		 *	Create geometry.
-		 *
-		 *	@return
-		 */
-		virtual Geometry *createGeometry(GeometryDesc *desc) = 0;
-
-		virtual void deleteGeometry(Geometry *obj) = 0;
 
 		/**
 		 *

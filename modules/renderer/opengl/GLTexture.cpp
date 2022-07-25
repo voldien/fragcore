@@ -146,12 +146,15 @@ GLTexture::WrapMode GLTexture::getWrapMode() {
 		glGetTexParameteriv(this->target, GL_TEXTURE_WRAP_R, &wrapR);
 	}
 
-	if (wrapR == GL_REPEAT && wrapS == GL_REPEAT && wrapT == GL_REPEAT)
+	if (wrapR == GL_REPEAT && wrapS == GL_REPEAT && wrapT == GL_REPEAT) {
 		return Sampler::WrapMode::eRepeat;
-	if (wrapR == GL_MIRRORED_REPEAT && wrapS == GL_MIRRORED_REPEAT && wrapT == GL_MIRRORED_REPEAT)
+	}
+	if (wrapR == GL_MIRRORED_REPEAT && wrapS == GL_MIRRORED_REPEAT && wrapT == GL_MIRRORED_REPEAT) {
 		return Sampler::WrapMode::eMirror;
-	if (wrapR == wrapS == wrapT == GL_CLAMP_TO_EDGE)
+	}
+	if (wrapR == GL_CLAMP_TO_EDGE && wrapS == GL_CLAMP_TO_EDGE && wrapT == GL_CLAMP_TO_EDGE) {
 		return Sampler::WrapMode::eClamp;
+	}
 	return Sampler::WrapMode::eClamp;
 }
 
@@ -205,33 +208,23 @@ void GLTexture::setCompareFunc(CompareFunc compareFunc) {
 
 void GLTexture::setMipMapBaseLevel(unsigned int level) {}
 
-unsigned int GLTexture::getMipMapBaseLevel() const {
-	return 0;
-}
+unsigned int GLTexture::getMipMapBaseLevel() const { return 0; }
 
 void GLTexture::setMipMapBias(float bias) {}
 
-float GLTexture::getMipMapBias(float bias) const {
-		return 0;
-}
+float GLTexture::getMipMapBias(float bias) const { return 0; }
 
 void GLTexture::setBorderColor(float color) {}
 
-float GLTexture::getBorderColor() const {
-		return 0;
-}
+float GLTexture::getBorderColor() const { return 0; }
 
-unsigned int GLTexture::setMaxLod(unsigned int level) {
-		return 0;
-}
+unsigned int GLTexture::setMaxLod(unsigned int level) { return 0; }
 
-unsigned int GLTexture::getMaxLod() const {
-		return 0;
-}
+unsigned int GLTexture::getMaxLod() const { return 0; }
 
-unsigned int GLTexture::setMinLod(unsigned int level) {	return 0;}
+unsigned int GLTexture::setMinLod(unsigned int level) { return 0; }
 
-unsigned int GLTexture::getMinLod() const {	return 0;}
+unsigned int GLTexture::getMinLod() const { return 0; }
 
 GLTexture::Format GLTexture::getFormat() const {
 

@@ -587,79 +587,6 @@ void VKRenderInterface::deleteBuffer(Buffer *object) {
 	// delete object;
 }
 
-Geometry *VKRenderInterface::createGeometry(GeometryDesc *desc) {
-	// Geometry *geometryObject;
-	// VKGeometryObject *glgeoobj = nullptr;
-	// unsigned int x;
-
-	// /*	*/
-	// geometryObject = new Geometry();
-	// glgeoobj = new VKGeometryObject();
-
-	// /*	Requires array buffer.  */
-	// if (desc->numVerticecs > 0) {
-	// 	BufferDesc abuffer;
-	// 	abuffer.size = desc->numVerticecs * desc->vertexStride;
-	// 	abuffer.type = BufferDesc::eArray;
-	// 	abuffer.data = desc->buffer;
-	// 	abuffer.hint = (BufferDesc::BufferHint)(BufferDesc::eWrite | BufferDesc::eStatic);
-	// 	glgeoobj->vertexbuffer = createBuffer(&abuffer);
-	// 	glgeoobj->vertexbuffer->bind();
-	// }
-
-	// /*	Requires element buffer.    */
-	// if (desc->numIndices > 0) {
-	// 	BufferDesc abuffer;
-	// 	abuffer.size = desc->numIndices * desc->indicesStride;
-	// 	abuffer.type = BufferDesc::eElementArray;
-	// 	abuffer.data = desc->indices;
-	// 	abuffer.hint = (BufferDesc::BufferHint)(BufferDesc::eWrite | BufferDesc::eStatic);
-	// 	glgeoobj->indicesbuffer = createBuffer(&abuffer);
-	// 	glgeoobj->indicesbuffer->bind();
-
-	// 	/*  Determine indices data size type.   */
-	// 	switch (desc->indicesStride) {
-	// 	case 2:
-	// 	case 1:
-	// 		glgeoobj->indicesType = VK_INDEX_TYPE_UINT16;
-	// 		break;
-	// 	case 4:
-	// 		glgeoobj->indicesType = VK_INDEX_TYPE_UINT32;
-	// 		break;
-	// 	}
-	// }
-
-	// /*	*/
-	// //	for(x = 0; x < desc->numVertexAttributes; x++){
-	// //		glEnableVertexAttribArray(desc->vertexattribute[x].index);
-	// //		glVertexAttribPointer(desc->vertexattribute[x].index,
-	// //		                      desc->vertexattribute[x].size,
-	// // getAttributeDataType((GeometryDesc::AttributeType)desc->vertexattribute[x].datatype),
-	// //		                      GL_FALSE,
-	// //		                      desc->vertexStride,
-	// //		                      (const void*)desc->vertexattribute[x].offset);
-	// //	}
-
-	// // glgeoobj->mode = getPrimitive((GeometryDesc::Primitive)desc->primitive);
-	// glgeoobj->desc = *desc;
-
-	// //	geometryObject->pdata = glgeoobj;
-	// return geometryObject;
-	return nullptr;
-}
-
-void VKRenderInterface::deleteGeometry(Geometry *obj) {
-
-	// VKGeometryObject *glgeoobj = (VKGeometryObject *)obj->pdata;
-
-	// deleteBuffer(glgeoobj->vertexbuffer);
-	// deleteBuffer(glgeoobj->indicesbuffer);
-
-	/*  Release objects.    */
-	//	delete obj->pdata;
-	delete obj;
-}
-
 ViewPort *VKRenderInterface::getView(unsigned int i) {
 
 	/*  Validate the index. */
@@ -678,7 +605,7 @@ FrameBuffer *VKRenderInterface::createFrameBuffer(FrameBufferDesc *desc) { retur
 
 void VKRenderInterface::deleteFrameBuffer(FrameBuffer *obj) {}
 
-QueryObject *VKRenderInterface::createQuery(QueryDesc *desc) {	return nullptr;}
+QueryObject *VKRenderInterface::createQuery(QueryDesc *desc) { return nullptr; }
 void VKRenderInterface::deleteQuery(QueryObject *query) {}
 
 RendererWindow *VKRenderInterface::createWindow(int x, int y, int width, int height) {
@@ -898,11 +825,11 @@ void VKRenderInterface::getCapability(Capability *capability) {
 	capability->lineWidthRange[0] = properties.limits.lineWidthRange[0];
 	capability->lineWidthRange[1] = properties.limits.lineWidthRange[1];
 	capability->lineWidthGranularity = properties.limits.lineWidthGranularity;
-	properties.limits.strictLines;
-	properties.limits.maxCullDistances;
-	properties.limits.maxTexelOffset;
-	properties.limits.maxUniformBufferRange;
-	properties.limits.maxImageDimension2D;
+	// properties.limits.strictLines;
+	// properties.limits.maxCullDistances;
+	// properties.limits.maxTexelOffset;
+	// properties.limits.maxUniformBufferRange;
+	// properties.limits.maxImageDimension2D;
 
 	/*  Compute shader.*/
 	capability->sMaxWorKGroupSize[0] = properties.limits.maxComputeWorkGroupCount[0];

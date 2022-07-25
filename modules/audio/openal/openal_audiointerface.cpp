@@ -56,16 +56,16 @@ OpenALAudioInterface::OpenALAudioInterface(IConfig *config) {
 OpenALAudioInterface::~OpenALAudioInterface() {
 
 	// TODO check for error.
-	FAOPALC_VALIDATE(alcSuspendContext(this->context), this->device);
+	alcSuspendContext(this->context);
 
 	/*  Unbind and release context. */
-	FAOPALC_VALIDATE(alcMakeContextCurrent(nullptr), this->device);
+	alcMakeContextCurrent(nullptr);
 
-	FAOPALC_VALIDATE(alcDestroyContext(this->context), this->device);
+	/*	*/
+	alcDestroyContext(this->context);
 
-	// TODO check for error.
 	/*  Release device. */
-	FAOPALC_VALIDATE(alcCloseDevice(this->device), this->device);
+	alcCloseDevice(this->device);
 }
 
 void OpenALAudioInterface::OnInitialization() {

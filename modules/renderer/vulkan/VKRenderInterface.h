@@ -68,10 +68,6 @@ namespace fragcore {
 
 		virtual void deleteBuffer(Buffer *object) override;
 
-		virtual Geometry *createGeometry(GeometryDesc *desc) override;
-
-		virtual void deleteGeometry(Geometry *obj) override;
-
 		virtual FrameBuffer *createFrameBuffer(
 			FrameBufferDesc *desc) override; // TODO determine what to do with the reference objects. Same for
 											 // all other object using reference object to GPU resources.

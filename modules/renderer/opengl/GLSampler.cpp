@@ -38,12 +38,15 @@ GLSampler::WrapMode GLSampler::getWrapMode() {
 	glGetSamplerParameteriv(this->sampler, GL_TEXTURE_WRAP_S, &wrapS);
 	glGetSamplerParameteriv(this->sampler, GL_TEXTURE_WRAP_T, &wrapT);
 	glGetSamplerParameteriv(this->sampler, GL_TEXTURE_WRAP_R, &wrapR);
-	if (wrapR == wrapS == wrapT == GL_REPEAT)
+	if (wrapR == GL_REPEAT && wrapS == GL_REPEAT && wrapT == GL_REPEAT) {
 		return GLSampler::WrapMode::eRepeat;
-	if (wrapR == wrapS == wrapT == GL_MIRRORED_REPEAT)
+	}
+	if (wrapR == GL_MIRRORED_REPEAT && wrapS == GL_MIRRORED_REPEAT && wrapT == GL_MIRRORED_REPEAT) {
 		return GLSampler::WrapMode::eMirror;
-	if (wrapR == wrapS == wrapT == GL_CLAMP_TO_EDGE)
+	}
+	if (wrapR == GL_CLAMP_TO_EDGE && wrapS == GL_CLAMP_TO_EDGE && wrapT == GL_CLAMP_TO_EDGE) {
 		return GLSampler::WrapMode::eClamp;
+	}
 
 	return GLSampler::WrapMode::eClamp;
 }

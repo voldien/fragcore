@@ -462,11 +462,11 @@ namespace fragcore {
 		};
 
 		/*	*/
-		unsigned int primitive;		/*	Primitive type.	*/
-		unsigned int numVerticecs;	/*	Number of vertices.	*/
-		unsigned int numIndices;	/*	Number of indices.	*/
-		unsigned int indicesStride; /*	Size per indices in bytes.	*/
-		unsigned int vertexStride;	/*	Size per vertex in bytes.	*/
+		unsigned int primitive; /*	Primitive type.	*/
+		size_t numVerticecs;	/*	Number of vertices.	*/
+		size_t numIndices;		/*	Number of indices.	*/
+		size_t indicesStride;	/*	Size per indices in bytes.	*/
+		size_t vertexStride;	/*	Size per vertex in bytes.	*/
 
 		/*  */
 		void *indices; /*	Indices host pointer data.	*/

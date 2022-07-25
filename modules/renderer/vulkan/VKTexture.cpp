@@ -23,35 +23,35 @@ VKTexture::FilterMode VKTexture::getFilterMode() { return Texture::FilterMode::e
 
 void VKTexture::setWrapMode(VKTexture::WrapMode mode) {}
 
-VKTexture::WrapMode VKTexture::getWrapMode() {}
+VKTexture::WrapMode VKTexture::getWrapMode() { return VKTexture::WrapMode::eClamp; }
 
 void VKTexture::setAnisotropic(float anisotropic) {}
 
-float VKTexture::getAnisotropic() const {}
+float VKTexture::getAnisotropic() const { return 0; }
 
-VKTexture::CompareFunc VKTexture::getCompare() const {}
+VKTexture::CompareFunc VKTexture::getCompare() const { return VKTexture::CompareFunc::always; }
 
 void VKTexture::setCompareFunc(CompareFunc compareFunc) {}
 
 void VKTexture::setMipMapBaseLevel(unsigned int level) {}
 
-unsigned int VKTexture::getMipMapBaseLevel() const {}
+unsigned int VKTexture::getMipMapBaseLevel() const { return 0; }
 
 void VKTexture::setMipMapBias(float bias) {}
 
-float VKTexture::getMipMapBias(float bias) const {}
+float VKTexture::getMipMapBias(float bias) const { return 0; }
 
 void VKTexture::setBorderColor(float color) {}
 
-float VKTexture::getBorderColor() const {}
+float VKTexture::getBorderColor() const { return 0; }
 
-unsigned int VKTexture::setMaxLod(unsigned int level) {}
+unsigned int VKTexture::setMaxLod(unsigned int level) { return 0; }
 
-unsigned int VKTexture::getMaxLod() const {}
+unsigned int VKTexture::getMaxLod() const { return 0; }
 
-unsigned int VKTexture::setMinLod(unsigned int level) {}
+unsigned int VKTexture::setMinLod(unsigned int level) { return 0; }
 
-unsigned int VKTexture::getMinLod() const { ; }
+unsigned int VKTexture::getMinLod() const { return 0; }
 
 VKTexture::Format VKTexture::getFormat() const { return eR8G8B8; }
 
@@ -86,7 +86,7 @@ void VKTexture::unMapTexture() {
 
 void VKTexture::setPixels(Texture::Format format, unsigned int level, const void *pixels, unsigned long size) {}
 
-void *VKTexture::getPixels(TextureFormat format, unsigned int level, unsigned long *nBytes) {}
+void *VKTexture::getPixels(TextureFormat format, unsigned int level, unsigned long *nBytes) { return nullptr; }
 
 void VKTexture::clear() {}
 

@@ -11,9 +11,9 @@ FileIO::FileIO() {
 	this->file = nullptr;
 }
 
-FileIO::FileIO(const char *path, IOMode mode) { this->open(path, mode); }
+FileIO::FileIO(const char *path, IOMode mode) { FileIO::open(path, mode); }
 
-FileIO::FileIO(const std::string &path, IOMode mode) { this->open(path.c_str(), mode); }
+FileIO::FileIO(const std::string &path, IOMode mode) { FileIO::open(path.c_str(), mode); }
 
 FileIO::FileIO(FILE *file) {
 	this->file = file;
@@ -39,9 +39,7 @@ FileIO::FileIO(FileIO &&other) {
 	this->mode = other.mode;
 }
 
-FileIO::~FileIO(){
-	this->close();
-}
+FileIO::~FileIO() { this->close(); }
 
 void FileIO::open(const char *path, IOMode mode) {
 
@@ -94,20 +92,22 @@ void FileIO::open(const char *path, IOMode mode) {
 }
 
 void FileIO::close() {
-	int rc = fclose(this->file);
+	if (this->file != nullptr) {
+		int rc = fclose(this->file);
 
-	/*	Reset the value.	*/
-	this->file = nullptr;
-	this->mode = (IOMode)0;
+		/*	Reset the value.	*/
+		this->file = nullptr;
+		this->mode = (IOMode)0;
 
-	/*	Check the result.	*/
-	switch (rc) {
-	case EIO:
-	case EBADF:
-	case EINTR:
-		break;
-	default:
-		break;
+		/*	Check the result.	*/
+		switch (rc) {
+		case EIO:
+		case EBADF:
+		case EINTR:
+			break;
+		default:
+			break;
+		}
 	}
 }
 
@@ -115,6 +115,7 @@ long FileIO::read(long int nbytes, void *pbuffer) {
 	long int nreadBytes;
 	nreadBytes = fread(pbuffer, 1, nbytes, this->file);
 	if (nreadBytes < 0) {
+		throw RuntimeException("Failed to read to file, {}.", strerror(errno));
 	}
 	return nreadBytes;
 }

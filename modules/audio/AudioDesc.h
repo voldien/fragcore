@@ -35,7 +35,7 @@ namespace fragcore {
 		/*  */
 		void *source;		  /*  */
 		size_t size;		  /*  */
-		int sampleRate;		  /*  */
+		size_t sampleRate;		  /*  */
 		AudioFormat format;	  /*  */
 		unsigned int samples; /*  */
 

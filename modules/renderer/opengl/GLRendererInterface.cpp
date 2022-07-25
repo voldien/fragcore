@@ -311,7 +311,7 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 	frameBufferObject->desc.attach[0] = new FrameBufferTexture();
 	// frameBufferObject->desc.attach[0]->iRenderer = this;
 	GLenum drawbuffers[] = {GL_FRONT, GL_BACK};
-	//glNamedFramebufferDrawBuffers(0, 2, drawbuffers);
+	// glNamedFramebufferDrawBuffers(0, 2, drawbuffers);
 
 	// TODO determine how to utualize the PBO.
 	/*  Create PBO for image transfer. */
@@ -1058,100 +1058,100 @@ void GLRendererInterface::deleteBuffer(Buffer *object) {
 	// delete object;
 }
 
-Geometry *GLRendererInterface::createGeometry(GeometryDesc *desc) {
-
-	/*  Validate the argument.  */
-	// if (desc->primitive & ~(GeometryDesc::Primitive::ePoint | GeometryDesc::Primitive::eLines |
-	// 						GeometryDesc::Primitive::eTriangles | GeometryDesc::Primitive::eTriangleStrips))
-	// 	throw std::invalid_argument("Invalid primitive");
-	// GL_TRIANGLES_ADJACENCY
-	// GL_PATCHES
-
-	Geometry *geometryObject;
-
-	GLGeometryObject *glgeoobj = nullptr;
-	unsigned int vao;
-	unsigned int x;
-
-	/*	*/
-	geometryObject = new Geometry();
-	glgeoobj = new GLGeometryObject();
-
-	/*  */
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
-
-	/*	Requires array buffer.  */
-	if (desc->numVerticecs > 0) {
-		BufferDesc abuffer = {};
-		abuffer.size = desc->numVerticecs * desc->vertexStride;
-		abuffer.type = BufferDesc::eArray;
-		abuffer.data = desc->buffer;
-		abuffer.hint = (BufferDesc::BufferHint)(BufferDesc::eWrite | BufferDesc::eStatic);
-		glgeoobj->vertexbuffer = createBuffer(&abuffer);
-		//		if(glVertexArrayVertexBuffer){
-		//            //ARB_separate_attrib_format
-		//		    GLBufferObject* vertexBuffer = (GLBufferObject*)glgeoobj->vertexbuffer;
-		//		    glVertexArrayVertexBuffer(0, vertexBuffer->buffer, 0, )
-		//		}else{
-		glgeoobj->vertexbuffer->bind();
-		//}
-	}
-
-	/*	Requires element buffer.    */
-	if (desc->numIndices > 0) {
-		BufferDesc abuffer = {};
-		abuffer.size = desc->numIndices * desc->indicesStride;
-		abuffer.type = BufferDesc::eElementArray;
-		abuffer.data = desc->indices;
-		abuffer.hint = (BufferDesc::BufferHint)(BufferDesc::eWrite | BufferDesc::eStatic);
-		glgeoobj->indicesbuffer = createBuffer(&abuffer);
-		glgeoobj->indicesbuffer->bind();
-
-		/*  Determine indices data size type.   */
-		switch (desc->indicesStride) {
-		case 1:
-			glgeoobj->indicesType = GL_UNSIGNED_BYTE;
-			break;
-		case 2:
-			glgeoobj->indicesType = GL_UNSIGNED_SHORT;
-			break;
-		case 4:
-			glgeoobj->indicesType = GL_UNSIGNED_INT;
-			break;
-		}
-		// VertexArrayElementBuffer
-	}
-
-	/*	*/
-	for (x = 0; x < desc->numVertexAttributes; x++) {
-		if (glEnableVertexArrayAttrib) {
-			glEnableVertexArrayAttrib(vao, desc->vertexattribute[x].index);
-			glVertexAttribPointer(desc->vertexattribute[x].index, desc->vertexattribute[x].size,
-								  getAttributeDataType((GeometryDesc::AttributeType)desc->vertexattribute[x].datatype),
-								  GL_FALSE, desc->vertexStride, (const void *)desc->vertexattribute[x].offset);
-		} else {
-			glEnableVertexAttribArray(desc->vertexattribute[x].index);
-			glVertexAttribPointer(desc->vertexattribute[x].index, desc->vertexattribute[x].size,
-								  getAttributeDataType((GeometryDesc::AttributeType)desc->vertexattribute[x].datatype),
-								  GL_FALSE, desc->vertexStride, (const void *)desc->vertexattribute[x].offset);
-		}
-	}
-
-	glBindVertexArray(0);
-
-	// Add debug marker information.
-	// addMarkerLabel(this, GL_VERTEX_ARRAY, vao, &desc->marker);
-
-	glgeoobj->mode = getPrimitive((GeometryDesc::Primitive)desc->primitive);
-	glgeoobj->vao = vao;
-	glgeoobj->desc = *desc;
-
-	// geometryObject->pdata = glgeoobj;
-	return geometryObject;
-}
-
-void GLRendererInterface::deleteGeometry(Geometry *obj) {}
+//Geometry *GLRendererInterface::createGeometry(GeometryDesc *desc) {
+//
+//	/*  Validate the argument.  */
+//	// if (desc->primitive & ~(GeometryDesc::Primitive::ePoint | GeometryDesc::Primitive::eLines |
+//	// 						GeometryDesc::Primitive::eTriangles | GeometryDesc::Primitive::eTriangleStrips))
+//	// 	throw std::invalid_argument("Invalid primitive");
+//	// GL_TRIANGLES_ADJACENCY
+//	// GL_PATCHES
+//
+//	Geometry *geometryObject;
+//
+//	GLGeometryObject *glgeoobj = nullptr;
+//	unsigned int vao;
+//	unsigned int x;
+//
+//	/*	*/
+//	geometryObject = new Geometry();
+//	glgeoobj = new GLGeometryObject();
+//
+//	/*  */
+//	glGenVertexArrays(1, &vao);
+//	glBindVertexArray(vao);
+//
+//	/*	Requires array buffer.  */
+//	if (desc->numVerticecs > 0) {
+//		BufferDesc abuffer = {};
+//		abuffer.size = desc->numVerticecs * desc->vertexStride;
+//		abuffer.type = BufferDesc::eArray;
+//		abuffer.data = desc->buffer;
+//		abuffer.hint = (BufferDesc::BufferHint)(BufferDesc::eWrite | BufferDesc::eStatic);
+//		glgeoobj->vertexbuffer = createBuffer(&abuffer);
+//		//		if(glVertexArrayVertexBuffer){
+//		//            //ARB_separate_attrib_format
+//		//		    GLBufferObject* vertexBuffer = (GLBufferObject*)glgeoobj->vertexbuffer;
+//		//		    glVertexArrayVertexBuffer(0, vertexBuffer->buffer, 0, )
+//		//		}else{
+//		glgeoobj->vertexbuffer->bind();
+//		//}
+//	}
+//
+//	/*	Requires element buffer.    */
+//	if (desc->numIndices > 0) {
+//		BufferDesc abuffer = {};
+//		abuffer.size = desc->numIndices * desc->indicesStride;
+//		abuffer.type = BufferDesc::eElementArray;
+//		abuffer.data = desc->indices;
+//		abuffer.hint = (BufferDesc::BufferHint)(BufferDesc::eWrite | BufferDesc::eStatic);
+//		glgeoobj->indicesbuffer = createBuffer(&abuffer);
+//		glgeoobj->indicesbuffer->bind();
+//
+//		/*  Determine indices data size type.   */
+//		switch (desc->indicesStride) {
+//		case 1:
+//			glgeoobj->indicesType = GL_UNSIGNED_BYTE;
+//			break;
+//		case 2:
+//			glgeoobj->indicesType = GL_UNSIGNED_SHORT;
+//			break;
+//		case 4:
+//			glgeoobj->indicesType = GL_UNSIGNED_INT;
+//			break;
+//		}
+//		// VertexArrayElementBuffer
+//	}
+//
+//	/*	*/
+//	for (x = 0; x < desc->numVertexAttributes; x++) {
+//		if (glEnableVertexArrayAttrib) {
+//			glEnableVertexArrayAttrib(vao, desc->vertexattribute[x].index);
+//			glVertexAttribPointer(desc->vertexattribute[x].index, desc->vertexattribute[x].size,
+//								  getAttributeDataType((GeometryDesc::AttributeType)desc->vertexattribute[x].datatype),
+//								  GL_FALSE, desc->vertexStride, (const void *)desc->vertexattribute[x].offset);
+//		} else {
+//			glEnableVertexAttribArray(desc->vertexattribute[x].index);
+//			glVertexAttribPointer(desc->vertexattribute[x].index, desc->vertexattribute[x].size,
+//								  getAttributeDataType((GeometryDesc::AttributeType)desc->vertexattribute[x].datatype),
+//								  GL_FALSE, desc->vertexStride, (const void *)desc->vertexattribute[x].offset);
+//		}
+//	}
+//
+//	glBindVertexArray(0);
+//
+//	// Add debug marker information.
+//	// addMarkerLabel(this, GL_VERTEX_ARRAY, vao, &desc->marker);
+//
+//	glgeoobj->mode = getPrimitive((GeometryDesc::Primitive)desc->primitive);
+//	glgeoobj->vao = vao;
+//	glgeoobj->desc = *desc;
+//
+//	// geometryObject->pdata = glgeoobj;
+//	return geometryObject;
+//}
+//
+//void GLRendererInterface::deleteGeometry(Geometry *obj) {}
 
 FrameBuffer *GLRendererInterface::createFrameBuffer(FrameBufferDesc *desc) {
 
@@ -1377,62 +1377,6 @@ void GLRendererInterface::disableState(GLRendererInterface::State state) { glDis
 
 bool GLRendererInterface::isStateEnabled(GLRendererInterface::State state) { return glIsEnabled(getState(state)); }
 
-void GLRendererInterface::drawInstance(Geometry *geometry, unsigned int num) {
-
-	GLGeometryObject *glgeo = nullptr; // static_cast<GLGeometryObject *>(geometry);
-	assert(geometry && num > 0);
-
-	/*	Reset error flags to prevent previous call to throw error.	*/
-	fragcore::resetErrorFlag();
-	/*  */
-	glBindVertexArray(glgeo->vao);
-
-	if (glgeo->desc.numIndices > 0) {
-		glDrawElementsInstancedARB(glgeo->mode, glgeo->desc.numIndices, glgeo->indicesType, nullptr, num);
-	} else {
-		glDrawArraysInstancedARB(glgeo->mode, 0, glgeo->desc.numVerticecs, num);
-	}
-
-	GLenum errorStatus = glGetError();
-	if (errorStatus != GL_NO_ERROR) {
-		throw RuntimeException("Error when dispatching compute - {}, {}", errorStatus, gluErrorString(errorStatus));
-	}
-
-	glBindVertexArray(0);
-}
-
-void GLRendererInterface::drawMultiInstance(Geometry &geometries, const unsigned int *first, const unsigned int *count,
-											unsigned int num) {
-	throw NotImplementedException();
-}
-
-void GLRendererInterface::drawMultiIndirect(Geometry &geometries, unsigned int offset, unsigned int indirectCount) {
-	throw NotImplementedException();
-}
-
-void GLRendererInterface::drawIndirect(Geometry *geometry) {
-	GLGeometryObject *glgeo;
-
-	assert(geometry);
-
-	// glgeo = (GLGeometryObject *) geometry->pdata;
-
-	/*  */
-	glBindVertexArray(glgeo->vao);
-	resetErrorFlag();
-	if (glgeo->desc.numIndices > 0) {
-		glDrawElementsIndirect(glgeo->mode, glgeo->indicesType, nullptr);
-	} else {
-		glDrawArraysIndirect(glgeo->mode, nullptr);
-	}
-
-	GLenum errorStatus = glGetError();
-	if (errorStatus != GL_NO_ERROR)
-		throw RuntimeException("Error when dispatching compute - {}, {}", errorStatus, gluErrorString(errorStatus));
-
-	glBindVertexArray(0);
-}
-
 void GLRendererInterface::setLineWidth(float width) { glLineWidth(width); }
 
 void GLRendererInterface::blit(const FrameBuffer *source, FrameBuffer *dest, Texture::FilterMode filterMode) {
@@ -1571,8 +1515,8 @@ void GLRendererInterface::dispatchCompute(unsigned int *global, unsigned int *lo
 
 void GLRendererInterface::memoryBarrier() {}
 
-void default_callback_debug_gl(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar *message,
-					   GLvoid *userParam) {
+void default_callback_debug_gl(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length,
+							   const GLchar *message, GLvoid *userParam) {
 
 	const char *sourceString;
 	const char *typeString;

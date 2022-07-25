@@ -29,7 +29,6 @@ namespace fragcore {
 	class FrameBuffer;
 	class Shader;
 	class Buffer;
-	class Geometry;
 	class IRenderer;
 	class ViewPort;
 	class QueryObject;

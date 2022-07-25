@@ -79,14 +79,6 @@ namespace fragcore {
 
 		virtual void deleteBuffer(Buffer *object);
 
-		/**
-		 *	Create geometry.
-		 *
-		 *	@return
-		 */
-		virtual Geometry *createGeometry(GeometryDesc *desc);
-
-		virtual void deleteGeometry(Geometry *obj);
 
 		/**
 		 *
@@ -168,31 +160,6 @@ namespace fragcore {
 		 * @return
 		 */
 		virtual bool isStateEnabled(IRenderer::State state);
-
-		/**
-		 *
-		 * @param geometry
-		 * @param num
-		 */
-		virtual void drawInstance(Geometry *geometry, unsigned int num);
-		// virtual void drawInstance(Shader* pipeline, GeometryObject* geometry, unsigned int num);
-
-		/**
-		 *
-		 * @param geometries
-		 * @param num
-		 */
-		virtual void drawMultiInstance(Geometry &geometries, const unsigned int *first, const unsigned int *count,
-									   unsigned int num);
-
-		virtual void drawMultiIndirect(Geometry &geometries, unsigned int offset, unsigned int indirectCount);
-
-		/**
-		 *
-		 * @param geometries
-		 * @param num
-		 */
-		virtual void drawIndirect(Geometry *geometry);
 
 		/**
 		 *

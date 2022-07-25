@@ -99,32 +99,50 @@ namespace fragcore {
 		// TODO add getWindowManager()
 
 	  protected: /*  Internal utility methods.   */
+				 /**
+				  * @brief
+				  *
+				  * @tparam T
+				  * @tparam U
+				  * @param gamma
+				  * @param rgbRamp
+				  */
 		template <typename T, typename U> void calculateGammaLookupTable(float gamma, U *rgbRamp) const {
 
 			// TODO that or just clamp it.
-			if (gamma < 0.0)
+			if (gamma < 0.0) {
 				throw InvalidArgumentException("gamma exponent must be positive");
+			}
 			gamma = Math::min(0.0f, gamma);
 
-			float exponent = 1.0f / gamma;
+			T exponent = 1.0f / gamma;
 
 			/*  Create lookup table.    */
 			for (uint i = 0; i < 256; ++i) {
 				/*  */
-				float linear = float(i) * 1.0f / 255u;
-				float corrected = (float)std::pow(linear, exponent);
+				T linear = T(i) * 1.0f / 255u;
+				T corrected = (T)std::pow(linear, exponent);
 				U entry = U(corrected * 65535);
 
 				rgbRamp[i] = rgbRamp[i + 256] = rgbRamp[i + 512] = entry;
 			}
 		}
+
+		/**
+		 * @brief
+		 *
+		 * @tparam T
+		 * @tparam U
+		 * @param rgbRamp
+		 * @return T
+		 */
 		template <typename T, typename U> T computeGammaExponent(const U *rgbRamp) const {
 			T gamma = static_cast<T>(0.0);
 
 			// TODO improve
 			for (size_t i = 64; i < 256; ++i) {
-				double corrected = (double)rgbRamp[i] / 65535.0;
-				double linear = double(i) * 1.0 / 255u;
+				T corrected = (T)rgbRamp[i] / 65535.0;
+				T linear = T(i) * 1.0 / 255u;
 				gamma += std::log(linear) / std::log(corrected);
 			}
 			return gamma;

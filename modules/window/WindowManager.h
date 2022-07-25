@@ -28,7 +28,6 @@ namespace fragcore {
 	 * @brief
 	 *
 	 */
-	// TOOD remove singleton
 	class FVDECLSPEC WindowManager : public SmartReference {
 	  public:
 		/**
@@ -70,6 +69,7 @@ namespace fragcore {
 		virtual Display *primaryDisplay() const noexcept = 0;
 
 		virtual const std::vector<Display *> &getDisplays() const = 0;
+		
 		/*	TODO get the event.	*/
 
 	  protected:

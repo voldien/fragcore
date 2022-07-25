@@ -13,7 +13,9 @@ void VKShader::bind() {
 	// shadobj->graphicsPipeline);
 }
 
-int VKShader::getLocation(const char *cparamname) {}
+int VKShader::getLocation(const char *cparamname) {
+	return 0;
+}
 
 void VKShader::setInt(int location, int value) {}
 

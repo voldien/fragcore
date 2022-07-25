@@ -23,6 +23,8 @@ VKSampler::WrapMode VKSampler::getWrapMode() {
 	int wrapS;
 	int wrapT;
 	int wrapR;
+
+	return VKSampler::WrapMode::eClamp;
 }
 
 void VKSampler::setAnisotropic(float anisotropy) {}
