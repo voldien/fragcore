@@ -456,6 +456,8 @@ unsigned int getInternalTextureFormat(TextureDesc::Format format, bool sRGB, Tex
 					return GL_COMPRESSED_SRGB;
 				case TextureDesc::Compression::eETC2:
 					return GL_COMPRESSED_SRGB8_ETC2;
+				default:
+					break;
 				}
 			case TextureDesc::eRGBA:
 				switch (compression) {

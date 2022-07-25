@@ -1,6 +1,5 @@
 #include "AudioFactory.h"
 #include <Core/Library.h>
-#include <Core/Log.h>
 
 using namespace fragcore;
 
@@ -32,7 +31,6 @@ AudioInterface *AudioFactory::createAudioInterface(const char *cpathlib, IConfig
 		/*	Assign resource object in order to work.	*/
 		// interface->setResource(resources);
 	} else {
-		Log::error("Failed loading: %s, library for creating audio interface.\n", cpathlib);
 	}
 
 	return interface;

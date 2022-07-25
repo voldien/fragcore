@@ -15,6 +15,9 @@ SET(THIRDPARTY_SOURCE "" PARENT_SCOPE)
 LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" )
 
 INCLUDE(infoware)
+IF(NOT TARGET spdlog)
+	INCLUDE(spdlog)
+ENDIF()
 IF(NOT TARGET cxxexcept)
 	INCLUDE(exceptcxx)
 ENDIF()
@@ -140,7 +143,7 @@ TARGET_COMPILE_DEFINITIONS(fragcore PRIVATE FRAG_CORE_INTERNAL_IMP=1)
 TARGET_COMPILE_FEATURES(fragcore PUBLIC cxx_std_17 cxx_constexpr)
 
 #
-TARGET_LINK_LIBRARIES(fragcore PUBLIC Eigen3::Eigen taskSch cxxexcept fmt cxx-config magic_enum PRIVATE stdc++ atomic dl ${ZLIB_LIBRARIES} ${LIBXML2_LIBRARIES} ${FREETYPE_LIBRARIES}
+TARGET_LINK_LIBRARIES(fragcore PUBLIC Eigen3::Eigen taskSch cxxexcept spdlog_header_only fmt cxx-config magic_enum PRIVATE stdc++ atomic dl ${ZLIB_LIBRARIES} ${LIBXML2_LIBRARIES} ${FREETYPE_LIBRARIES}
 													${ZIP_LIBRARIES} m ${JSONC_LIBRARIES} yaml ${OPENSSL_CRYPTO_LIBRARY} infoware )
 
 #

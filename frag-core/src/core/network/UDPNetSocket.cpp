@@ -4,13 +4,14 @@
 #include <arpa/inet.h>
 #include <cassert>
 #include <cerrno>
-#include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include <ctime>
 #include <net/if.h>
 #include <netdb.h>
 #include <netinet/in.h>
+#include <netinet/ip.h>
+#include <netinet/tcp.h>
 #include <sys/ioctl.h>
 #include <sys/socket.h>
 #include <sys/types.h>
@@ -51,7 +52,7 @@ int UDPNetSocket::listen(unsigned int maxListen) {
 }
 
 int UDPNetSocket::connect(const INetAddress &p_addr) {
-	socklen_t addrlen = 0;			 /*	*/
+	socklen_t addrlen = 0;		 /*	*/
 	const struct sockaddr *addr; /*	*/
 	union {
 		struct sockaddr_in addr4;  /*	*/
@@ -59,7 +60,31 @@ int UDPNetSocket::connect(const INetAddress &p_addr) {
 	} addrU;
 	struct hostent *hosten = nullptr; /*	*/
 	int domain;
+	int flags = SOCK_STREAM;
 	struct timeval tv;
+
+	//if (!isValidNetworkAddress(p_addr)) {
+	//	throw RuntimeException("Invalid Net Address");
+	//}
+
+	/*	*/
+	const TCPUDPAddress *tcpAddress = dynamic_cast<const TCPUDPAddress *>(&p_addr);
+	if (tcpAddress == nullptr)
+		throw RuntimeException("Not a valid NetAddress Object");
+	domain = 0; // this->getDomain(*tcpAddress);
+
+	this->socket = ::socket(domain, flags, 0);
+	if (this->socket < 0) {
+		throw RuntimeException("UDP socket - Failed to create socket {} - {}", domain, strerror(errno));
+	}
+
+	int option = 1;
+	int rc = setsockopt(this->socket, IPPROTO_TCP, TCP_NODELAY, (const void *)&option, sizeof(int));
+	if (rc == -1) {
+		throw RuntimeException("Failed to set Socket Option");
+	}
+
+	// addrlen = setupIPAddress((struct sockaddr *)&addrU, *tcpAddress, tcpAddress->getPort());
 
 	if (::connect(socket, addr, addrlen) < 0) {
 		throw RuntimeException("Failed to connect UDP socket");

@@ -22,7 +22,7 @@ Texture *TextureFactory::createChecker(IRenderer *renderer, int width, int heigh
 }
 
 Texture *TextureFactory::createPerlinNoise(IRenderer *renderer, int width, int height) {
-	char *pixels;
+	char *pixels = nullptr;
 	size_t pixelSize = static_cast<size_t>(width) * static_cast<size_t>(height) * 1;
 
 	assert(renderer && width > 0 && height > 0);

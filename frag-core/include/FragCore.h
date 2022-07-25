@@ -44,7 +44,7 @@
 #include "Core/dataStructure/StackBufferedAllocator.h"
 /*  */
 #include "Core/Library.h"
-#include "Core/Log.h"
+
 /*  */
 #include "Core/TaskScheduler/IScheduler.h"
 #include "Core/TaskScheduler/TaskScheduler.h"

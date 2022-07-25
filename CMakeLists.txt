@@ -1,4 +1,5 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.9)
+PROJECT(FragCore)
 
 #-----------------------------------------------------------------------------
 # Set policy
@@ -22,8 +23,6 @@ ENDIF()
 IF(POLICY CMP0074)
 	CMAKE_POLICY(SET CMP0074 NEW)
 ENDIF()
-
-PROJECT(FragCore)
 
 # Check if project is a standalone and not part of another project.
 IF( CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR )

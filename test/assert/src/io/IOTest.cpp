@@ -33,12 +33,12 @@ class IOTest : public testing::Test {
 
 	static void writecallback(ASyncIO *aSync, ASyncHandle handle) {}
 
-	std::vector<char *> files;
-	char *FileWrite;
-	std::vector<char *> gzFiles;
-	char *gzFileWrite;
-	std::vector<char *> zipInFiles;
-	char *zipFile;
+	std::vector<std::string> files;
+	std::string FileWrite;
+	std::vector<std::string> gzFiles;
+	std::string gzFileWrite;
+	std::vector<std::string> zipInFiles;
+	std::string zipFile;
 };
 
 TEST_F(IOTest, IO_File_Invalid_Path_Throw_Exception) {
@@ -80,7 +80,7 @@ TEST_F(IOTest, IOFile) {
 	ASSERT_FALSE(write.isReadable());
 	ASSERT_TRUE(write.isWriteable());
 
-	std::vector<char *>::const_iterator it = files.cbegin();
+	std::vector<std::string>::const_iterator it = files.cbegin();
 	for (; it != files.cend(); it++) {
 		FileIO *fileIo = nullptr;
 		

@@ -1,4 +1,3 @@
-#include "Core/Log.h"
 #include "debugDrawer.h"
 #include "internal_object_type.h"
 
@@ -28,7 +27,7 @@ void DebugDrawer::drawContactPoint(const btVector3 &PointOnB, const btVector3 &n
 	/*	Accumulate line to buffer.	*/
 }
 
-void DebugDrawer::reportErrorWarning(const char *warningString) { Log::log(Log::Warning, warningString); }
+void DebugDrawer::reportErrorWarning(const char *warningString) {  }
 
 void DebugDrawer::draw3dText(const btVector3 &location, const char *textString) {}
 

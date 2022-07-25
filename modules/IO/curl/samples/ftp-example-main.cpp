@@ -1,5 +1,5 @@
 
-#include "Core/Log.h"
+
 #include "FTPFileSystem.h"
 
 using namespace fragcore;
@@ -30,7 +30,7 @@ int main(int argc, const char **argv) {
 		for (size_t x = 0; x < files.size(); x++) {
 			std::cout << files[x] << std::endl;
 		}
-		
+
 	} catch (const std::exception &ex) {
 		std::cerr << cxxexcept::getStackMessage(ex) << std::endl;
 		return EXIT_FAILURE;

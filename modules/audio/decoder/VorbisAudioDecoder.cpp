@@ -69,6 +69,9 @@ VorbisAudioDecoder::VorbisAudioDecoder(Ref<IO> &io) : AudioDecoder(io) {
 
 	io->seek(0, IO::SET);
 	int ret = ov_open_callbacks((void *)t, ov, nullptr, 0, callbacks);
+	if (ret < 0) {
+		throw RuntimeException("Failed to create custom callback: {}", ret);
+	}
 
 	if (ov_seekable(ov)) {
 		// TODO remove

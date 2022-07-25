@@ -19,6 +19,7 @@
 #ifndef _FRAG_CORE_TCP_NETSOCKET_H_
 #define _FRAG_CORE_TCP_NETSOCKET_H_ 1
 #include "NetSocket.h"
+#include "UDPSocket.h"
 #include <sys/socket.h>
 
 namespace fragcore {

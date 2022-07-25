@@ -1,6 +1,5 @@
 
 #include "SerialIO.h"
-#include <Core/Log.h>
 
 using namespace fragcore;
 
@@ -21,7 +20,7 @@ int main(int argc, const char **argv) {
 
 		io.write(sizeof(dataPayload), dataPayload);
 		while (io.read(sizeof(dataPayload), dataPayload) > 0) {
-			Log::log("%x", dataPayload[0]);
+			printf("%x", dataPayload[0]);
 			sleep(1);
 			io.write(sizeof(dataPayload), dataPayload);
 		}

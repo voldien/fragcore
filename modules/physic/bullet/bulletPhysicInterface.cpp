@@ -157,9 +157,10 @@ void BulletPhysicInterface::deleteCollision(Collision *collision) {
 
 Constraints *BulletPhysicInterface::createConstraints(const ConstraintsDesc *desc) {
 
-	Constraints *constrains;
-	btTypedConstraint *constr;
-	btRigidBody *b1, *b2;
+	Constraints *constrains = nullptr;
+	btTypedConstraint *constr = nullptr;
+	btRigidBody *b1 = nullptr;
+	btRigidBody *b2 = nullptr;
 
 	//	if(desc->body1)
 	//		b1 = (btRigidBody*)desc->body1->getMappedObject();

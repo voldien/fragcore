@@ -100,7 +100,7 @@ Constraints *RPCPhysicInterface::createConstraints(const ConstraintsDesc *desc) 
 void RPCPhysicInterface::deleteConstraints(Constraints *constraints) {}
 
 RigidBody *RPCPhysicInterface::createRigibody(const RigidBodyDesc *desc) {
-	RigidBody *rigbody;
+	RigidBody *rigbody = nullptr;
 	this->dispatcher->send(RPCProtocolCommand::eCreateRigidbody, 0, nullptr);
 	return rigbody;
 }

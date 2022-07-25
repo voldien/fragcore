@@ -102,10 +102,9 @@ namespace fragcore {
 
 		virtual bool isOperationSupported(IOOperation operationFlags) const noexcept = 0;
 
-		template <typename T> T &as() { return static_cast<T>(*this); }
-
 	  protected: /*  Internal methods.   */
 				 // TOOD determine how it should be used?
+				 // TODO change
 		virtual void open(const char *path, IOMode mode) = 0;
 		virtual void open(std::string &path, IOMode mode) { this->open(path.c_str(), mode); }
 	};

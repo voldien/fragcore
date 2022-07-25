@@ -5,8 +5,8 @@
 #include <sqlite3.h>
 //#include <sqlite3ext.h>
 // SQLITE_EXTENSION_INIT1
-#include <assert.h>
-#include <string.h>
+#include <cassert>
+#include <cstring>
 
 namespace fragcore {
 	const char *fragcore_sqlite_vfs_name = "iovfs";

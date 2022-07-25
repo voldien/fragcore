@@ -1,7 +1,6 @@
 #include "PhysicFactory.h"
 #include "Core/Library.h"
 
-#include <Core/Log.h>
 using namespace fragcore;
 
 /**
@@ -11,8 +10,8 @@ using namespace fragcore;
 typedef PhysicInterface *(*pcreateInternalPhysicInterface)(IConfig *overrideOption);
 
 /*	TODO update with the new naming.	*/
-const char *bulletlibpath = "libfragcore-pbu.so";  /*	Default bullet library.	*/
-const char *physxlibpath = "libfragcore-pbu.so";   /*	Nvidia's physic library. ( Not supported ) */
+const char *bulletlibpath = "libfragcore-pbu.so"; /*	Default bullet library.	*/
+const char *physxlibpath = "libfragcore-pbu.so";  /*	Nvidia's physic library. ( Not supported ) */
 
 PhysicInterface *PhysicFactory::createPhysic(PhysicAPI api, IConfig *overrideOption) {
 	return PhysicFactory::createPhysic(PhysicFactory::getInterfaceLibraryPath(api), overrideOption);
@@ -38,10 +37,10 @@ PhysicInterface *PhysicFactory::createPhysic(const char *libpath, IConfig *confi
 			interface = pfunc(config);
 		} else {
 			/*	Error	*/
-			Log::log("Couldn't find symbol %s in %s.\n", funcsymbol, libpath);
+		//	Log::log("Couldn't find symbol %s in %s.\n", funcsymbol, libpath);
 		}
 	} else {
-		Log::error("Failed loading %s library for creating physic dynamicInterface.\n", libpath);
+		//Log::error("Failed loading %s library for creating physic dynamicInterface.\n", libpath);
 	}
 
 	//	if(connection != nullptr){
@@ -52,8 +51,8 @@ PhysicInterface *PhysicFactory::createPhysic(const char *libpath, IConfig *confi
 	//		apirequest.offset = sizeof(apirequest);
 	//		apirequest.type = -1;
 	//		apirequest.pathlen = strlen(libpath);
-	//		//connection->sendPacket(RPCProtocolCommand::ePhysicAPIRequest, &apirequest, sizeof(PacketPhysicAPIRequest));
-	//		connection->send(libpath, apirequest.pathlen);
+	//		//connection->sendPacket(RPCProtocolCommand::ePhysicAPIRequest, &apirequest,
+	//sizeof(PacketPhysicAPIRequest)); 		connection->send(libpath, apirequest.pathlen);
 	//
 	//	}else
 

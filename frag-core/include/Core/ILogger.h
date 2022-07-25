@@ -16,47 +16,40 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef _FRAG_CORE_BZ_FILEIO_H_
-#define _FRAG_CORE_BZ_FILEIO_H_ 1
-#include "FileIO.h"
-#include "IO.h"
-#include <bzlib.h>
+#ifndef _FRAG_CORE_LOGGER_H_
+#define _FRAG_CORE_LOGGER_H_ 1
+#include "IO/IO.h"
+#include "Object.h"
+#include "Ref.h"
 
 namespace fragcore {
 	/**
 	 * @brief
 	 *
 	 */
-	class FVDECLSPEC BZFileIO : public FileIO {
+
+	class FVDECLSPEC ILogger : public Object {
 	  public:
-		virtual long read(long int nbytes, void *pbuffer) override;
+		/**
+		 *	Verbosity level of the program.
+		 */
+		enum class Verbosity {
+			Quite = 0,	 /*  */
+			Error = 1,	 /*  */
+			Verbose = 2, /*  */
+			Warning = 3, /*  */
+			Debug = 16,	 /*  */
+		};
 
-		virtual long write(long int nbytes, const void *pbuffer) override;
+		/**
+		 *
+		 * @param verbosity
+		 * @param format
+		 * @param ...
+		 */
+		virtual size_t log(Verbosity verbosity, const char *format, ...) = 0;
 
-		virtual long length() override;
-
-		virtual bool eof() const override;
-
-		virtual void seek(long int nbytes, Seek seek) override;
-
-		virtual unsigned long getPos() override;
-
-		virtual bool isWriteable() const override;
-
-		virtual bool isReadable() const override;
-
-		virtual bool flush() override;
-
-		virtual void close() override;
-
-
-		virtual void open(const char *path, IOMode mode) override;
-
-	  protected:
-		BZFILE *bzFile;
-
-	  public:
-		BZFileIO(const char *path, IOMode mode);
+		ILogger() = default;
 	};
 } // namespace fragcore
 

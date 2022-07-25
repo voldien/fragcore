@@ -1,13 +1,11 @@
 
 #include "CANAddress.h"
-#include "Core/Log.h"
 #include "NetCANSocket.h"
 
 using namespace fragcore;
 
 int main(int argc, const char **argv) {
 
-	Log::setVerbosity(Log::VERBOSITY::Debug);
 	try {
 		CANNetSocket net;
 		CANAddress local(0);

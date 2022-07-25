@@ -2,21 +2,21 @@
 #include "NetModbusSocket.h"
 #include "Core/Network/TCPUDPAddress.h"
 #include <arpa/inet.h>
-#include <assert.h>
-#include <errno.h>
+#include <cassert>
+#include <cerrno>
 #include <modbus/modbus-rtu.h>
 #include <modbus/modbus-tcp.h>
 #include <modbus/modbus.h>
 #include <net/if.h>
 #include <netdb.h>
 #include <netinet/in.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 #include <sys/ioctl.h>
 #include <sys/socket.h>
 #include <sys/types.h>
-#include <time.h>
+#include <ctime>
 #include <unistd.h>
 
 using namespace fragcore;
