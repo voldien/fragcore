@@ -124,6 +124,7 @@ namespace fragcore {
 	  public:
 		GLViewPortCommand(int index, int x, int y, int width, int height)
 			: GLCommandBase(GLCommandBufferCmd::ViewPort), index(index), x(x), y(y), width(width), height(height) {}
+			
 		unsigned int index;
 		unsigned int x, y;
 		unsigned int width, height;
@@ -133,9 +134,10 @@ namespace fragcore {
 	  public:
 		GLScissorPortCommand(int index, int x, int y, int width, int height)
 			: GLCommandBase(GLCommandBufferCmd::Scissor), index(index), x(x), y(y), width(width), height(height) {}
+
 		unsigned int index;
-		unsigned int width, height;
 		unsigned int x, y;
+		unsigned int width, height;
 	};
 
 	class FVDECLSPEC GLBindFrameBufferCommand : public GLCommandBase {

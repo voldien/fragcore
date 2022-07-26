@@ -6,7 +6,7 @@
 using namespace fragcore;
 
 // TODO add for checking by the target
-static int getCurrentTexture() {
+static int getCurrentTexture2D() {
 	GLint whichID;
 	glGetIntegerv(GL_TEXTURE_BINDING_2D, &whichID);
 
@@ -64,7 +64,7 @@ void GLTexture::setMipLevel(unsigned int level) {
 	if (glTextureParameteri) {
 		glTextureParameteri(this->texture, GL_TEXTURE_LOD_BIAS, level);
 	} else {
-		unsigned int c = getCurrentTexture();
+		unsigned int c = getCurrentTexture2D();
 		this->bind(0);
 	}
 }
@@ -79,11 +79,13 @@ void GLTexture::setFilterMode(FilterMode mode) {
 		glTextureParameteri(this->texture, GL_TEXTURE_MIN_FILTER, filter);
 
 	} else {
-		unsigned int c = getCurrentTexture();
+		unsigned int c = getCurrentTexture2D();
 		this->bind(0);
 
 		glTexParameteri(this->target, GL_TEXTURE_MAG_FILTER, filter);
 		glTexParameteri(this->target, GL_TEXTURE_MIN_FILTER, filter);
+
+		glBindTexture(GL_TEXTURE_2D, c);
 	}
 }
 
@@ -97,7 +99,7 @@ GLTexture::FilterMode GLTexture::getFilterMode() {
 		glGetTextureParameteriv(this->texture, GL_TEXTURE_MAG_FILTER, &magFilter);
 		glGetTextureParameteriv(this->texture, GL_TEXTURE_MIN_FILTER, &minFilter);
 	} else {
-		unsigned int c = getCurrentTexture();
+		unsigned int c = getCurrentTexture2D();
 		this->bind(0);
 
 		glGetTexParameteriv(this->target, GL_TEXTURE_MAG_FILTER, &magFilter);
@@ -115,7 +117,7 @@ void GLTexture::setWrapMode(GLTexture::WrapMode mode) {
 		glTextureParameteri(this->texture, GL_TEXTURE_WRAP_T, wrapMode);
 		glTextureParameteri(this->texture, GL_TEXTURE_WRAP_R, wrapMode);
 	} else {
-		unsigned int c = getCurrentTexture();
+		unsigned int c = getCurrentTexture2D();
 		this->bind(0);
 
 		glTexParameteri(this->target, GL_TEXTURE_WRAP_S, wrapMode);
@@ -138,7 +140,7 @@ GLTexture::WrapMode GLTexture::getWrapMode() {
 		glGetTextureParameteriv(this->texture, GL_TEXTURE_WRAP_R, &wrapR);
 
 	} else {
-		unsigned int c = getCurrentTexture();
+		unsigned int c = getCurrentTexture2D();
 		this->bind(0);
 
 		glGetTexParameteriv(this->target, GL_TEXTURE_WRAP_S, &wrapS);
@@ -163,7 +165,7 @@ void GLTexture::setAnisotropic(float anisotropic) {
 	if (glTextureParameterf) {
 		glTexParameterf(this->texture, GL_TEXTURE_MAX_ANISOTROPY_EXT, anisotropic);
 	} else {
-		GLint prevTex = getCurrentTexture();
+		GLint prevTex = getCurrentTexture2D();
 		glBindTexture(this->target, this->texture);
 		glTexParameterf(this->target, GL_TEXTURE_MAX_ANISOTROPY_EXT, anisotropic);
 		glBindTexture(this->target, prevTex);
@@ -176,7 +178,7 @@ float GLTexture::getAnisotropic() const {
 	if (glGetTextureParameterfv) {
 		glGetTextureParameterfv(this->texture, GL_TEXTURE_MAX_ANISOTROPY_EXT, &anisotropic);
 	} else {
-		GLint prevTex = getCurrentTexture();
+		GLint prevTex = getCurrentTexture2D();
 		glBindTexture(this->target, this->texture);
 		glGetTexParameterfv(this->target, GL_TEXTURE_MAX_ANISOTROPY_EXT, &anisotropic);
 		glBindTexture(this->target, prevTex);
@@ -199,7 +201,7 @@ void GLTexture::setCompareFunc(CompareFunc compareFunc) {
 	if (glTextureParameterf) {
 		glTexParameterf(this->texture, GL_TEXTURE_COMPARE_FUNC, glCompareFunc);
 	} else {
-		GLint prevTex = getCurrentTexture();
+		GLint prevTex = getCurrentTexture2D();
 		glBindTexture(this->target, this->texture);
 		glTexParameterf(this->target, GL_TEXTURE_MAX_ANISOTROPY_EXT, glCompareFunc);
 		glBindTexture(this->target, prevTex);
@@ -342,7 +344,7 @@ void *GLTexture::getPixels(TextureFormat format, unsigned int level, unsigned lo
 	// TODO add compute size of the buffer.
 
 	// GL_TEXTURE_COMPRESSED_IMAGE_SIZE
-	GLenum _type;
+	GLenum _type = 0;
 	GLenum _format = getTextureFormat(format, &type);
 
 	const unsigned int bufferSize = (width * height * depth * pixelSize) / (level + 1);
@@ -352,7 +354,7 @@ void *GLTexture::getPixels(TextureFormat format, unsigned int level, unsigned lo
 		glGetTextureImage(this->texture, level, _format, _type, bufferSize, pbuffer);
 	} else {
 		/* TODO resolve texture type.   */
-		GLint prevTex = getCurrentTexture();
+		GLint prevTex = getCurrentTexture2D();
 		glBindTexture(this->target, this->texture);
 		glGetTexImage(this->target, level, _format, _type, pbuffer);
 		glBindTexture(this->target, prevTex);

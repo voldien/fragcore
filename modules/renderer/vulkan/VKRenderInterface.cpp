@@ -93,7 +93,7 @@ void VKRenderInterface::OnDestruction() {}
 
 Texture *VKRenderInterface::createTexture(TextureDesc *desc) {
 
-	VkPhysicalDevice physicalDevice;
+	VkPhysicalDevice physicalDevice = nullptr;
 
 	unsigned int texWidth, texHeight, internal, type, format;
 	unsigned long pixelSize;

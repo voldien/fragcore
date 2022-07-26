@@ -72,7 +72,7 @@ namespace fragcore {
 		template <class Function, class... Args> void addTask(Function &&f, Args &&... args) {
 
 			TaskFunc task(f, args...);
-//			this->addTask(&task);
+			//			this->addTask(&task);
 		}
 
 		/**
@@ -106,8 +106,13 @@ namespace fragcore {
 		 *
 		 */
 		virtual void wait() = 0;
-		// TODO add support.
-		virtual void wait(Task *task) {}
+
+		/**
+		 * @brief
+		 *
+		 * @param task
+		 */
+		virtual void wait(Task *task) = 0;
 
 		/**
 		 * @brief

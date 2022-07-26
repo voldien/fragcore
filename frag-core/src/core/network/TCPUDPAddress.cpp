@@ -3,11 +3,12 @@
 
 using namespace fragcore;
 
-TCPUDPAddress::TCPUDPAddress(const IPAddress &ipaddr, unsigned int port)
-	: INetAddress(INetAddress::NetworkProtocol::NetWorkProtocol_TCP_UDP) {
-		
+TCPUDPAddress::TCPUDPAddress(const IPAddress &ipaddr, unsigned int port) : INetAddress() {
+
 	this->ipAddress = ipaddr;
 	this->port = port;
 }
 
-bool TCPUDPAddress::isValid() const noexcept { return this->getIPAddress().isValid() && this->port > 0 && this->port < 65536; }
+bool TCPUDPAddress::isValid() const noexcept {
+	return this->getIPAddress().isValid() && this->port > 0 && this->port < 65536;
+}

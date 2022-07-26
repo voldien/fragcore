@@ -36,7 +36,7 @@ namespace fragcore {
 			NetworkProtocol_Unknown = 1000,
 			NetWorkProtocol_ANY = 0xFFFFFFFF,
 		};
-		INetAddress(NetworkProtocol type) : networkProtocol(type) {}
+		INetAddress() = default;
 
 		virtual NetworkProtocol getNetworkProtocol() const noexcept = 0;
 
@@ -45,7 +45,6 @@ namespace fragcore {
 		// virtual NetInterface& getInterface() const;
 
 	  private:
-		NetworkProtocol networkProtocol;
 	};
 } // namespace fragcore
 

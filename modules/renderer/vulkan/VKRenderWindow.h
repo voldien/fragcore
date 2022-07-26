@@ -71,7 +71,7 @@ namespace fragcore {
 
 		void *getIcon() const override;
 
-		virtual Display *getCurrentDisplay() const;
+		virtual Display *getCurrentDisplay() const override;
 
 		void setFullScreen(bool fullscreen) override;
 		virtual void setFullScreen(Display &display) override;

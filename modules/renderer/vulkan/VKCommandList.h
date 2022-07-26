@@ -45,7 +45,7 @@ namespace fragcore {
 
 		virtual void setViewport(int x, int y, unsigned int width, unsigned int height) override;
 		virtual void setScissor(int x, int y, unsigned int width, unsigned int height) override;
-		virtual void clearDepth(float depth);
+		virtual void clearDepth(float depth) override;
 		virtual void clearColorTarget(uint index, const Color &color) override;
 
 		virtual void setDepthBounds(float min, float max) override;

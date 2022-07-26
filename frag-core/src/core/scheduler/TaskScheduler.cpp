@@ -60,8 +60,9 @@ void TaskScheduler::addTask(Task *task) {
 	packageTask.puser = nullptr;
 
 	int status = schSubmitTask((schTaskSch *)this->sch, &packageTask, nullptr);
-	if (status != SCH_OK)
+	if (status != SCH_OK) {
 		throw RuntimeException("{}", schErrorMsg(status));
+	}
 }
 
 void TaskScheduler::setUserData(const void *data) { return schSetSchUserData((schTaskSch *)this->sch, data); }
@@ -69,18 +70,22 @@ const void *TaskScheduler::getUserData() { return schGetPoolUserData((schTaskSch
 void TaskScheduler::run() {
 	schTaskSch *taskSch = static_cast<schTaskSch *>(this->sch);
 	int status = schRunTaskSch(taskSch);
-	if (status != SCH_OK)
+	if (status != SCH_OK) {
 		throw RuntimeException(schErrorMsg(status));
+	}
 }
 
 void TaskScheduler::terminate() {
 	schTaskSch *taskSch = static_cast<schTaskSch *>(this->sch);
 	int status = schTerminateTaskSch(taskSch);
 
-	if (status != SCH_OK)
+	if (status != SCH_OK) {
 		throw RuntimeException(schErrorMsg(status));
+	}
 }
 
 void TaskScheduler::wait() { schWaitTask((schTaskSch *)this->sch); }
+void TaskScheduler::wait(Task *task) {}
+
 void TaskScheduler::lock() {}
 void TaskScheduler::unLock() {}

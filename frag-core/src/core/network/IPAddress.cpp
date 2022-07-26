@@ -3,10 +3,9 @@
 #include <netdb.h>
 using namespace fragcore;
 
-IPAddress::IPAddress() : INetAddress(NetworkProtocol::NetWorkProtocol_IP), valid(false) {}
+IPAddress::IPAddress() : INetAddress(), valid(false) {}
 
-IPAddress::IPAddress(const std::string &ip, IPAddressType type)
-	: INetAddress(NetworkProtocol::NetWorkProtocol_IP), ip(ip), type(type), valid(false) {
+IPAddress::IPAddress(const std::string &ip, IPAddressType type) : INetAddress(), ip(ip), type(type), valid(false) {
 	struct hostent *hosten = nullptr; /*	*/
 	/*	Get IP from hostname.	*/
 	//	hosten = gethostbyname(ip.c_str());
@@ -19,7 +18,7 @@ IPAddress::IPAddress(const std::string &ip, IPAddressType type)
 }
 
 IPAddress::IPAddress(const std::string &hostname)
-	: INetAddress(NetworkProtocol::NetWorkProtocol_IP), type(IPAddressType::IPAddress_Type_NONE), valid(false) {
+	: INetAddress(), type(IPAddressType::IPAddress_Type_NONE), valid(false) {
 	struct hostent *hosten = nullptr; /*	*/
 									  /*	Get IP from hostname.	*/
 	/*	*/

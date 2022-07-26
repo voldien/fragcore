@@ -110,12 +110,12 @@ std::vector<std::string> ZipFileSystem::listFiles(const char *path) const {
 std::vector<std::string> ZipFileSystem::listDirectories(const char *path) const {
 	int err;
 	struct zip *zip;
-	ZipFileSystem *zipfile;
+	ZipFileSystem *zipfile = nullptr;
 
 	/*	Attempt to open the file by file path.	*/
 	zip = zip_open(path, 0, &err);
 
-	return std::vector<std::string>();
+	return {};
 }
 
 std::vector<std::string> ZipFileSystem::list(const char *path) const {

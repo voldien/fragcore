@@ -21,10 +21,11 @@ FrameBufferTexture::FrameBufferTexture() {
 
 void *FrameBufferTexture::mapTexture(Format format, unsigned int level) {
 	GLenum _format = getTextureGLFormat(format);
-	GLenum _type = GL_UNSIGNED_BYTE; // TODO determine the type based on the fmt::format.
+	GLenum _type = GL_UNSIGNED_BYTE; // TODO determine the type based on the format.
 
-	if (level != 0)
+	if (level != 0) {
 		throw InvalidArgumentException("Level 0 is only available.");
+	}
 
 	/*  Bind pixel pack to create memory mapping from GPU to CPU memory.	*/
 	glReadBuffer(GL_BACK_LEFT);

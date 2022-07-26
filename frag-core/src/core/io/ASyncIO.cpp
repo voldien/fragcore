@@ -53,14 +53,15 @@ void ASyncIO::asyncReadFile(ASyncHandle handle, char *buffer, unsigned int size,
 		throw RuntimeException("IO object is not readable {}", ao->ref->getUID());
 	}
 
+	/*	*/
 	if (buffer == nullptr || size == 0) {
 		throw InvalidArgumentException("");
 	}
 
-	// TODO replace with an abstract version
 	/*  Assign variables.   */
 	ao->sem = new stdSemaphore();
 
+	/*	*/
 	ao->buffer = buffer;
 	ao->size = size;
 	ao->callback = complete;
@@ -172,7 +173,7 @@ void ASyncIO::asyncClose(ASyncHandle handle) {
 void ASyncIO::async_open(Task *task) {
 
 	// ASyncHandle handle = (ASyncHandle)task->userData;
-	AsyncObject *ao = static_cast<AsyncObject *>(task->userData);
+	// AsyncObject *ao = static_cast<AsyncObject *>(task->userData);
 
 	// const char *path = (const char *)ao->begin;
 	// ASync *async = (ASync *) package->puser;
@@ -257,7 +258,7 @@ void ASyncIO::async_write(Task *task) {
 
 void ASyncIO::async_write_io(Task *task) {
 	AsyncObject *ao = static_cast<AsyncObject *>(task->userData);
-	const size_t block_size = 512;
+
 	task->Execute();
 
 	ao->sem->lock();
@@ -273,8 +274,9 @@ ASyncIO::AsyncObject *ASyncIO::getObject(ASyncHandle handle) {
 	/*	Check if handle exits.	*/
 	std::map<ASyncHandle, AsyncObject>::iterator it = this->asyncs.find(handle);
 
-	if (it != this->asyncs.end())
+	if (it != this->asyncs.end()) {
 		return &this->asyncs[handle];
+	}
 
 	throw RuntimeException("Invalid Async object {}", handle);
 
@@ -285,8 +287,9 @@ const ASyncIO::AsyncObject *ASyncIO::getObject(ASyncHandle handle) const {
 
 	/*	Check if the object exits.	*/
 	std::map<ASyncHandle, AsyncObject>::const_iterator it = this->asyncs.find(handle);
-	if (it != this->asyncs.cend())
+	if (it != this->asyncs.cend()) {
 		return &it->second;
+	}
 
 	throw RuntimeException("Invalid Async object {}", handle);
 
