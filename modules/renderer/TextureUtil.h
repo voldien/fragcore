@@ -25,8 +25,10 @@
 #include <ImageLoader.h>
 
 namespace fragcore {
+
 	/**
-	 *
+	 * @brief 
+	 * 
 	 */
 	class FVDECLSPEC TextureUtil : public ImageLoader {
 	  public:

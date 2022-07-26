@@ -36,6 +36,7 @@ static const char *get_parity_symbol(SerialIO::Parity parity) {
 		return "Unknown";
 	}
 }
+
 static const char *get_xonxoff_symbol(SerialIO::XonXoff XonXoff) {
 	switch (XonXoff) {
 	case SerialIO::XonXoff::XonXoffDisable:
@@ -60,11 +61,13 @@ void SerialIO::close() {
 		}
 	}
 }
+
 long int SerialIO::read(long int nbytes, void *pbuffer) {
 	struct sp_port *serialPort = static_cast<struct sp_port *>(this->port);
 	sp_return res_in_read_bytes = sp_nonblocking_read(serialPort, pbuffer, nbytes);
 	return res_in_read_bytes;
 }
+
 long int SerialIO::write(long int nbytes, const void *pbuffer) {
 	struct sp_port *serialPort = static_cast<struct sp_port *>(this->port);
 	sp_return res_in_written_bytes = sp_nonblocking_write(serialPort, pbuffer, nbytes);

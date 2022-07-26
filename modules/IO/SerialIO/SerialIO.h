@@ -141,13 +141,13 @@ namespace fragcore {
 		int getPayloadBits() const;
 
 	  public:
-	  	/**
-	  	 * @brief
-	  	 *
-	  	 * @param baudRate
-	  	 * @return true
-	  	 * @return false
-	  	 */
+		/**
+		 * @brief
+		 *
+		 * @param baudRate
+		 * @return true
+		 * @return false
+		 */
 		static bool supportedBaudRate(unsigned int baudRate);
 
 		/**

@@ -123,7 +123,6 @@ namespace fragcore {
 		/**
 		 *
 		 */
-		// TODO add macro for inline.
 		inline static constexpr double E = 2.718281828459045235;
 		inline static constexpr double PI = 3.141592653589793238462643383279502884;
 		inline static constexpr double PI_half = Math::PI / 2.0;
@@ -136,8 +135,9 @@ namespace fragcore {
 		template <typename T> static inline constexpr T NextPowerOfTwo(T v) {
 			static_assert(std::is_integral<T>::value, "Must be a integer type.");
 			T res = 1;
-			while (res < v)
+			while (res < v) {
 				res <<= 1;
+			}
 			return res;
 		}
 
@@ -289,7 +289,7 @@ namespace fragcore {
 		}
 
 		// void multijitter(Vector2 *samples, int num_samples) { int sqrt_samples = (int)sqrt(num_samples); }
-
+	
 		template <typename T> static inline constexpr T align(T size, T alignment) {
 			static_assert(std::is_integral<T>::value, "Must be an integral type.");
 			return size + (alignment - (size % alignment));

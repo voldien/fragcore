@@ -4,19 +4,19 @@
 #include <arpa/inet.h>
 #include <cassert>
 #include <cerrno>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <ctime>
 #include <modbus/modbus-rtu.h>
 #include <modbus/modbus-tcp.h>
 #include <modbus/modbus.h>
 #include <net/if.h>
 #include <netdb.h>
 #include <netinet/in.h>
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
 #include <sys/ioctl.h>
 #include <sys/socket.h>
 #include <sys/types.h>
-#include <ctime>
 #include <unistd.h>
 
 using namespace fragcore;
@@ -30,15 +30,19 @@ ModbusNetSocket::ModbusNetSocket(int socket) : TCPNetSocket(socket), ctx(nullptr
 			throw RuntimeException("{}", modbus_strerror(errno));
 		}
 	}
+	/*	*/
 	int rc = modbus_set_socket(static_cast<modbus_t *>(this->ctx), this->getSocket());
 	if (rc == -1) {
 		throw RuntimeException("Failed to set Socket: {}", modbus_strerror(errno));
 	}
 
+	/*	*/
 	rc = modbus_set_debug(static_cast<modbus_t *>(this->ctx), 0);
 	if (rc == -1) {
 		throw RuntimeException("{}", modbus_strerror(errno));
 	}
+
+	/*	*/
 	if (modbus_set_error_recovery(static_cast<modbus_t *>(this->ctx),
 								  static_cast<modbus_error_recovery_mode>(MODBUS_ERROR_RECOVERY_PROTOCOL)) == -1) {
 		/*	*/
@@ -65,6 +69,7 @@ int ModbusNetSocket::close() {
 
 int ModbusNetSocket::bind(const INetAddress &p_addr) {
 
+	/*	*/
 	const TCPUDPAddress &tcpAddress = static_cast<const TCPUDPAddress &>(p_addr);
 	if (this->ctx == nullptr) {
 		this->ctx = modbus_new_tcp(nullptr, tcpAddress.getPort());
@@ -81,10 +86,13 @@ int ModbusNetSocket::bind(const INetAddress &p_addr) {
 		throw RuntimeException("{}", modbus_strerror(errno));
 	}
 
+	/*	*/
 	rc = modbus_set_debug(static_cast<modbus_t *>(this->ctx), 0);
 	if (rc == -1) {
 		throw RuntimeException("{}", modbus_strerror(errno));
 	}
+
+	/*	*/
 	if (modbus_set_error_recovery(static_cast<modbus_t *>(this->ctx),
 								  static_cast<modbus_error_recovery_mode>(MODBUS_ERROR_RECOVERY_PROTOCOL)) == -1) {
 		/*	*/
@@ -99,6 +107,7 @@ int ModbusNetSocket::connect(const INetAddress &addr) {
 	uint32_t old_response_to_sec;
 	uint32_t old_response_to_usec;
 
+	/*	*/
 	if (this->ctx == nullptr) {
 		this->ctx = modbus_new_tcp(nullptr, 0);
 		if (this->ctx == nullptr)
@@ -108,10 +117,12 @@ int ModbusNetSocket::connect(const INetAddress &addr) {
 	/*	Connect over the transport layer.	*/
 	TCPNetSocket::connect(addr);
 
+	/*	*/
 	int rc = modbus_set_socket(static_cast<modbus_t *>(this->ctx), this->socket);
 	if (rc == -1) {
 		throw RuntimeException("Failed to set Socket: {}", modbus_strerror(errno));
 	}
+
 	/*	*/
 	rc = modbus_get_response_timeout(static_cast<modbus_t *>(this->ctx), &old_response_to_sec, &old_response_to_usec);
 	if (rc == -1) {
@@ -132,29 +143,31 @@ int ModbusNetSocket::connect(const INetAddress &addr) {
 
 int ModbusNetSocket::poll(int p_type, int timeout) const { return 0; }
 int ModbusNetSocket::recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddress &r_ip, bool p_peek) {
-	int flag = 0;
-	int res; //= recvfrom(this->socket, p_buffer, p_len, flag, connection->intaddr, &r_read);
+
+	int res = 0; //= recvfrom(this->socket, p_buffer, p_len, flag, connection->intaddr, &r_read);
 	return res;
 }
+
 int ModbusNetSocket::recv(void *pbuffer, int p_len, int &sent, bool peek) {
-	int flag = 0;
+
 	int res = modbus_read_registers((modbus_t *)this->ctx, 0, p_len, (uint16_t *)pbuffer);
-	if (res != p_len) {
+	if (res == -1) {
 		throw RuntimeException(" Failed to read Register {}", modbus_strerror(errno));
 	}
 	return res;
 }
+
 int ModbusNetSocket::send(const uint8_t *p_buffer, int p_len, int &r_sent) {
-	int flag = 0;
+
 	int res = modbus_write_registers((modbus_t *)this->ctx, 0, p_len, (const uint16_t *)p_buffer);
-	if (res != p_len) {
+	if (res == -1) {
 		throw RuntimeException(" Failed to write Register {}", modbus_strerror(errno));
 	}
 	return res;
 }
 
 int ModbusNetSocket::sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const INetAddress &p_ip) {
-	int res; //=  sendto(this->socket, p_buffer, p_len, flag, connection->extaddr, connection->sclen);
+	int res = 0; //=  sendto(this->socket, p_buffer, p_len, flag, connection->extaddr, connection->sclen);
 	return res;
 }
 
@@ -188,11 +201,17 @@ void ModbusNetSocket::setBlocking(bool blocking) { /*	*/
 int ModbusNetSocket::writeRegister(unsigned int address, unsigned int nWords, void *pdata) {
 	auto rc = modbus_write_registers((modbus_t *)this->getModbusContext(), static_cast<int>(address), nWords,
 									 (uint16_t *)pdata);
+	if (rc == -1) {
+		throw RuntimeException(" Failed to write Register {}", modbus_strerror(errno));
+	}
 	return rc;
 }
 int ModbusNetSocket::readRegister(unsigned int address, unsigned int nWords, void *pdata) {
 	auto rc = modbus_read_registers((modbus_t *)this->getModbusContext(), static_cast<int>(address), nWords,
 									(uint16_t *)pdata);
+	if (rc == -1) {
+		throw RuntimeException(" Failed to read Register {}", modbus_strerror(errno));
+	}
 	return rc;
 }
 

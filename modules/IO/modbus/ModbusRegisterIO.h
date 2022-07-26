@@ -28,7 +28,7 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC ModbusRegisterIO : public IO {
 	  public:
-		// TODO add as reference.
+		// TODO add shared pointer.
 		ModbusRegisterIO(ModbusNetSocket &socket, size_t address_start, size_t size);
 		virtual ~ModbusRegisterIO();
 
@@ -57,7 +57,7 @@ namespace fragcore {
 		virtual bool flush() override;
 
 		virtual bool isOperationSupported(IOOperation operations) const noexcept override {
-			const IOOperation supportedIO = static_cast<IOOperation>(OP_READ | OP_WRITE | OP_SEEK | OP_FLUSH);
+			const IOOperation supportedIO = static_cast<IOOperation>(OP_READ | OP_WRITE | OP_SEEK | OP_FLUSH | OP_LENGTH);
 			return (operations & supportedIO) == operations;
 		}
 

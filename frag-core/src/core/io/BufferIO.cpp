@@ -10,13 +10,15 @@ void BufferIO::close() { /*	TOOD reset values.	*/
 long BufferIO::read(long int nbytes, void *pbuffer) {
 	long int nBytesLeft = this->nbytes - this->marker;
 	long int nReadBytes;
-	if (nBytesLeft == 0)
+	if (nBytesLeft == 0) {
 		return 0;
+	}
 
-	if (nBytesLeft < nbytes)
+	if (nBytesLeft < nbytes) {
 		nReadBytes = nBytesLeft;
-	else
+	} else {
 		nReadBytes = nbytes;
+	}
 	memcpy(pbuffer, &this->buffer[this->marker], nReadBytes);
 
 	this->marker += nReadBytes;

@@ -63,4 +63,11 @@ bool ModbusRegisterIO::isWriteable() const { return true; }
 
 bool ModbusRegisterIO::isReadable() const { return true; }
 
-bool ModbusRegisterIO::flush() { return true; }
+bool ModbusRegisterIO::flush() {
+
+	int rc = modbus_flush(reinterpret_cast<modbus_t *>(this->socket.getModbusContext()));
+	if (rc == -1) {
+		return false;
+	}
+	return true;
+}

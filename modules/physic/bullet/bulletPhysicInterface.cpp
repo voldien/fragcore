@@ -82,7 +82,7 @@ Vector3 BulletPhysicInterface::getGravity() const {
 
 void BulletPhysicInterface::addRigidBody(RigidBody *body) {
 
-	btRigidBody *rigid;
+	btRigidBody *rigid = nullptr;
 
 	/*	*/
 	// rigid = (btRigidBody*)getPointerByIndex(body);
@@ -92,7 +92,7 @@ void BulletPhysicInterface::addRigidBody(RigidBody *body) {
 }
 void BulletPhysicInterface::removeRigidBody(RigidBody *body) {
 
-	btRigidBody *rigid;
+	btRigidBody *rigid= nullptr;
 
 	/*	*/
 	// rigid = (btRigidBody*)getPointerByIndex(body);
@@ -115,7 +115,7 @@ void BulletPhysicInterface::removeConstraints(Constraints *constraints) {
 }
 
 Collision *BulletPhysicInterface::createCollision(const CollisionDesc *desc) {
-	btCollisionShape *shape;
+	btCollisionShape *shape= nullptr;
 
 	switch (desc->Primitive) {
 	case CollisionDesc::ePlane: {
