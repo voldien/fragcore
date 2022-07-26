@@ -4,9 +4,9 @@
 #include "ALAudioSource.h"
 #include "Core/Math.h"
 #include "Core/SystemInfo.h"
-#include "Core/TaskScheduler/TaskScheduler.h"
 #include "OpenALAudioInterface.h"
 #include "internal_object_type.h"
+#include <TaskScheduler.h>
 using namespace fragcore;
 
 static void validateAudioSourceDesc(AudioSourceDesc *desc) {

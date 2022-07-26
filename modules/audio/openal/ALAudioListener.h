@@ -38,14 +38,14 @@ namespace fragcore {
 		 *
 		 * @param volume
 		 */
-		virtual void setVolume(float volume);
+		virtual void setVolume(float volume) override;
 
 		/**
 		 * @brief Get the Volume object
 		 *
 		 * @return float
 		 */
-		virtual float getVolume() const;
+		virtual float getVolume() const override;
 
 		// TODO rename to mute
 		/**
@@ -53,18 +53,18 @@ namespace fragcore {
 		 *
 		 * @param pause
 		 */
-		virtual void pause(bool pause);
+		virtual void pause(bool pause) override;
 
 		// virtual void getOutPutData();
 
-		virtual void setPosition(const Vector3 &position);
-		virtual const Vector3 getPosition() const;
+		virtual void setPosition(const Vector3 &position) override;
+		virtual const Vector3 getPosition() const override;
 
-		virtual void setVelocity(const Vector3 &velocity);
-		virtual const Vector3 getVelocity() const;
+		virtual void setVelocity(const Vector3 &velocity) override;
+		virtual const Vector3 getVelocity() const override;
 
-		virtual void setOrientation(const Quaternion &orientation);
-		virtual const Quaternion getOrientation() const;
+		virtual void setOrientation(const Quaternion &orientation) override;
+		virtual const Quaternion getOrientation() const override;
 
 		virtual intptr_t getNativePtr() const override;
 	};

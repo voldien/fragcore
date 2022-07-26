@@ -7,7 +7,7 @@ using namespace fragcore;
 
 class FileSystemTest : public testing::Test {
   public:
-	void SetUp() override { this->sche = Ref<IScheduler>(new TaskScheduler()); }
+	void SetUp() override {}
 
 	Ref<IScheduler> sche{nullptr};
 };
@@ -50,7 +50,6 @@ TEST(FileSystem, FileSystem_Compute_Absolute_Path_Correct) {
 	std::string fullPath;
 	ASSERT_NO_THROW(fullPath = fileSystem->getAbsolutePath("."));
 	ASSERT_TRUE(!fullPath.empty());
-	
 }
 
 TEST(FileSystem, FileSystem_Compute_Relative_Path_Correct) {}

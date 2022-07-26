@@ -16,11 +16,11 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef _FRAG_CORE_TASK_SCHEDULER_H_
-#define _FRAG_CORE_TASK_SCHEDULER_H_ 1
-#include "../Ref.h"
-#include "../RefPtr.h"
-#include "IScheduler.h"
+#ifndef _FRAG_SCHTASK_TASK_SCHEDULER_H_
+#define _FRAG_SCHTASK_TASK_SCHEDULER_H_ 1
+#include <Core/Ref.h>
+#include <Core/RefPtr.h>
+#include <Core/TaskScheduler/IScheduler.h>
 #include <map>
 
 // TODO relocate to its own module.

@@ -47,7 +47,6 @@
 
 /*  */
 #include "Core/TaskScheduler/IScheduler.h"
-#include "Core/TaskScheduler/TaskScheduler.h"
 
 /*  */
 #include "Core/Network/NetSocket.h"

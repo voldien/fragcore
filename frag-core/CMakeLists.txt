@@ -110,7 +110,6 @@ FILE(GLOB SOURCE_FILES  ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/src/core/datastructure/*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/src/core/io/*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/src/core/network/*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/src/core/scheduler/*.cpp
 		)
 
 #
