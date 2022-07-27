@@ -38,6 +38,7 @@ namespace fragcore {
 			MD5,	/*  */
 			SHA128, /*  */
 			SHA224, /*  */
+			SHA384, /*	*/
 			SHA256, /*  */
 			SHA512, /*  */
 		};

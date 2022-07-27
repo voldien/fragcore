@@ -23,18 +23,18 @@ IO *ZipFileSystem::openFile(const char *path, IO::IOMode mode) {
 	zip_uint8_t osSys = 0;
 	err = zip_file_get_external_attributes((zip_t *)zip, index, 0, &osSys, &attr);
 	if (err != 0) {
-		char buf[1024];
+		char errorStr[1024];
 		zip_error_get(zip, &err, &sys_err);
-		zip_error_to_str(buf, sizeof(buf), err, errno);
-		throw InvalidArgumentException("can't open `{}':\n\t{}", path, buf);
+		zip_error_to_str(errorStr, sizeof(errorStr), err, errno);
+		throw InvalidArgumentException("can't open `{}':\n\t{}", path, errorStr);
 	}
 
 	/*	*/
 	err = zip_stat_index(zip, index, 0, &stat);
 	if (err != 0) {
-		char buf[1024];
-		zip_error_to_str(buf, sizeof(buf), err, errno);
-		throw InvalidArgumentException("can't open `{}':\n\t{}", path, buf);
+		char errorStr[1024];
+		zip_error_to_str(errorStr, sizeof(errorStr), err, errno);
+		throw InvalidArgumentException("can't open `{}':\n\t{}", path, errorStr);
 	}
 
 	// TODO check if encryption and compression.
@@ -42,10 +42,10 @@ IO *ZipFileSystem::openFile(const char *path, IO::IOMode mode) {
 	/*	Open file inside zip.	*/
 	zfile = zip_fopen_index(zip, index, 0);
 	if (!zfile) {
-		char buf[1024];
+		char errorStr[1024];
 		zip_error_get(zip, &err, &sys_err);
-		zip_error_to_str(buf, sizeof(buf), err, errno);
-		throw InvalidArgumentException("can't open `{}':\n\t{}", path, buf);
+		zip_error_to_str(errorStr, sizeof(errorStr), err, errno);
+		throw InvalidArgumentException("can't open `{}':\n\t{}", path, errorStr);
 	}
 
 	return new ZipFileIO(zfile, index, Ref<ZipFileSystem>(this));
@@ -54,21 +54,21 @@ IO *ZipFileSystem::openFile(const char *path, IO::IOMode mode) {
 IO *ZipFileSystem::openFile(unsigned int index) {
 	struct zip_file *zfile;
 	struct zip_stat stat;
-	char buf[1024];
+	char errorStr[1024];
 	int err;
 
 	/*	*/
 	err = zip_stat_index((struct zip *)this->pzip, index, 0, &stat);
 	if (err != 0) {
-		zip_error_to_str(buf, sizeof(buf), err, errno);
-		throw InvalidArgumentException("can't open `{}':\n\t{}", index, buf);
+		zip_error_to_str(errorStr, sizeof(errorStr), err, errno);
+		throw InvalidArgumentException("can't open `{}':\n\t{}", index, errorStr);
 	}
 
 	zfile = zip_fopen_index((struct zip *)this->pzip, index, 0);
 	if (!zfile) {
 		err = zip_get_error((struct zip *)this->pzip)->zip_err;
-		zip_error_to_str(buf, sizeof(buf), err, errno);
-		throw InvalidArgumentException("can't open index `{}':\n\t{}", index, buf);
+		zip_error_to_str(errorStr, sizeof(errorStr), err, errno);
+		throw InvalidArgumentException("can't open index `{}':\n\t{}", index, errorStr);
 	}
 
 	return new ZipFileIO(zfile, index, Ref<ZipFileSystem>(this));
@@ -99,6 +99,7 @@ std::vector<std::string> ZipFileSystem::listFiles(const char *path) const {
 		const char *name = zip_get_name(zip, i, 0);
 		if (name == nullptr) {
 		}
+
 		if (strcmp(path, name) == 0) {
 			files[i] = name;
 		}
@@ -108,22 +109,60 @@ std::vector<std::string> ZipFileSystem::listFiles(const char *path) const {
 }
 
 std::vector<std::string> ZipFileSystem::listDirectories(const char *path) const {
-	int err;
-	struct zip *zip;
-	ZipFileSystem *zipfile = nullptr;
+	struct zip *zip = static_cast<struct zip *>(this->pzip);
+
+	std::vector<std::string> files;
 
 	/*	Attempt to open the file by file path.	*/
-	zip = zip_open(path, 0, &err);
+	zip_int64_t index = zip_name_locate(zip, path, 0);
+	if (index < 0) {
+		throw InvalidArgumentException("{}", path);
+	}
 
-	return {};
+	zip_int64_t num_entries = zip_get_num_entries(zip, 0);
+
+	files.resize(num_entries);
+
+	for (zip_uint64_t i = 0; i < (zip_uint64_t)num_entries; i++) {
+		const char *name = zip_get_name(zip, i, 0);
+
+		if (name == nullptr) {
+		}
+
+		if (strcmp(path, name) == 0) {
+			files[i] = name;
+		}
+	}
+
+	return files;
 }
 
 std::vector<std::string> ZipFileSystem::list(const char *path) const {
-	std::vector<std::string> files = listFiles(path);
-	std::vector<std::string> directories = listDirectories(path);
-	/*  merge.  */
-	// files.insert(files.end)
-	return {};
+	struct zip *zip = static_cast<struct zip *>(this->pzip);
+
+	std::vector<std::string> files;
+
+	/*	Attempt to open the file by file path.	*/
+	zip_int64_t index = zip_name_locate(zip, path, 0);
+	if (index < 0) {
+		throw InvalidArgumentException("{}", path);
+	}
+
+	zip_int64_t num_entries = zip_get_num_entries(zip, 0);
+
+	files.resize(num_entries);
+
+	for (zip_uint64_t i = 0; i < (zip_uint64_t)num_entries; i++) {
+		const char *name = zip_get_name(zip, i, 0);
+		if (name == nullptr) {
+		}
+
+		if (strcmp(path, name) == 0) {
+			files[i] = name;
+		}
+	}
+
+	return files;
 }
 
 void ZipFileSystem::release() {
@@ -142,16 +181,16 @@ void ZipFileSystem::remove(const char *path) {
 	// Find the file.
 	zip_int64_t index = zip_name_locate((struct zip *)this->pzip, path, 0);
 	if (index < 0) {
-		char buf[4096];
-		zip_error_to_str(buf, sizeof(buf), index, errno);
-		throw InvalidArgumentException("Could not find file {}, error: {}", path, buf);
+		char errorStr[4096];
+		zip_error_to_str(errorStr, sizeof(errorStr), index, errno);
+		throw InvalidArgumentException("Could not find file {}, error: {}", path, errorStr);
 	}
 
 	err = zip_delete((zip_t *)this->pzip, index);
 	if (err != ZIP_ER_OK) {
-		char buf[4096];
-		zip_error_to_str(buf, sizeof(buf), err, errno);
-		throw InvalidArgumentException("Could not delete file {}, error: {}", path, buf);
+		char errorStr[4096];
+		zip_error_to_str(errorStr, sizeof(errorStr), err, errno);
+		throw InvalidArgumentException("Could not delete file {}, error: {}", path, errorStr);
 	}
 }
 
@@ -159,34 +198,35 @@ void ZipFileSystem::rename(const char *oldPath, const char *newPath) {
 
 	zip_int64_t index = zip_name_locate((struct zip *)this->pzip, oldPath, 0);
 	if (index < 0) {
-		char buf[4096];
-		zip_error_to_str(buf, sizeof(buf), index, errno);
-		throw InvalidArgumentException("Could not find file {}, error: {}", oldPath, buf);
+		char errorStr[4096];
+		zip_error_to_str(errorStr, sizeof(errorStr), index, errno);
+		throw InvalidArgumentException("Could not find file {}, error: {}", oldPath, errorStr);
 	}
 
 	zip_int64_t error = zip_rename(nullptr, index, newPath);
 	if (error != ZIP_ER_OK) {
-		char buf[4096];
-		zip_error_to_str(buf, sizeof(buf), error, errno);
-		throw InvalidArgumentException("Could not rename file {}, error: {}", oldPath, buf);
+		char errorStr[4096];
+		zip_error_to_str(errorStr, sizeof(errorStr), error, errno);
+		throw InvalidArgumentException("Could not rename file {}, error: {}", oldPath, errorStr);
 	}
 }
 
 void ZipFileSystem::createFile(const char *path) {
+	// zip_file_add
 	zip_int64_t error = zip_add((zip_t *)this->pzip, path, nullptr);
 	if (error != ZIP_ER_OK) {
-		char buf[4096];
-		zip_error_to_str(buf, sizeof(buf), error, errno);
-		throw InvalidArgumentException("Could not create file {}, error: {}", path, buf);
+		char errorStr[4096];
+		zip_error_to_str(errorStr, sizeof(errorStr), error, errno);
+		throw InvalidArgumentException("Could not create file {}, error: {}", path, errorStr);
 	}
 }
 
 void ZipFileSystem::createDirectory(const char *path) {
 	zip_int64_t error = zip_dir_add((zip_t *)this->pzip, path, 0);
 	if (error != ZIP_ER_OK) {
-		char buf[4096];
-		zip_error_to_str(buf, sizeof(buf), error, errno);
-		throw InvalidArgumentException("Could not create Directory {}, error: {}", path, buf);
+		char errorStr[4096];
+		zip_error_to_str(errorStr, sizeof(errorStr), error, errno);
+		throw InvalidArgumentException("Could not create Directory {}, error: {}", path, errorStr);
 	}
 }
 
@@ -221,13 +261,15 @@ ZipFileSystem *ZipFileSystem::createZipFileObject(const char *cfilename, Ref<ISc
 	/*	Attempt to open the file by file path.	*/
 	zip = zip_open(cfilename, 0, &err);
 	if (zip == nullptr) {
-		char buf[4096];
+
+		char errorStr[4096];
 		/*	Display error and return.	*/
-		zip_error_to_str(buf, sizeof(buf), err, errno);
+		zip_error_to_str(errorStr, sizeof(errorStr), err, errno);
+
 		if (err == ZIP_ER_NOENT) {
-			throw InvalidArgumentException("can't open zip archive {} - {}", cfilename, buf);
+			throw InvalidArgumentException("Can not open/create zip file {} - {}", cfilename, errorStr);
 		} else {
-			throw RuntimeException("Failed to open Zip {} - {}", cfilename, buf);
+			throw RuntimeException("Failed to open Zip {} - {}", cfilename, errorStr);
 		}
 	}
 
@@ -310,7 +352,7 @@ ZipFileSystem *ZipFileSystem::createZipFileObject(Ref<IO> &ioRef, Ref<IScheduler
 
 	zip = zip_open_from_source(zipSource, ZIP_RDONLY, &error);
 	if (zip == nullptr) {
-		char buf[4096];
+		char errorStr[4096];
 
 		/*  Release.    */
 		zip_source_free(zipSource);
@@ -318,10 +360,10 @@ ZipFileSystem *ZipFileSystem::createZipFileObject(Ref<IO> &ioRef, Ref<IScheduler
 
 		/*	Display error and return.	*/
 		int err = zip_error_code_zip(&error);
-		zip_error_to_str(buf, sizeof(buf), err, errno);
+		zip_error_to_str(errorStr, sizeof(errorStr), err, errno);
 		zip_error_fini(&error);
 		if (err == ZIP_ER_NOENT)
-			throw InvalidArgumentException("can't open zip archive - {}", buf);
+			throw InvalidArgumentException("can't open zip archive - {}", errorStr);
 		else
 			throw RuntimeException("Can't open zip file: {}", zip_error_strerror(&error));
 	}

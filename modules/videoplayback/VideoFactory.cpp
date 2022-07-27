@@ -322,9 +322,9 @@ VideoTexture *VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IR
 					}
 
 					av_get_channel_layout_nb_channels(header.frame->channel_layout);
-					header.frame->format != AV_SAMPLE_FMT_S16P;
+					header.frame->format = AV_SAMPLE_FMT_S16P;
 					header.frame->channel_layout;
-					AudioClip *clip;
+					AudioClip *clip = nullptr;
 					clip->setData(header.frame->extended_data[0], header.frame->linesize[0], 0);
 				}
 			}
@@ -339,7 +339,8 @@ VideoTexture *VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IR
 	AudioClipDesc clip_desc = {};
 	clip_desc.decoder = video_audio_decoder;
 	clip_desc.samples = header.pVideoCtx->sample_fmt;
-	clip_desc.sampleRate = header.pVideoCtx->channels * header.pVideoCtx->sample_rate;
+	clip_desc.sampleRate =
+		static_cast<size_t>(header.pVideoCtx->channels) * static_cast<size_t>(header.pVideoCtx->sample_rate);
 	clip_desc.format = (AudioFormat)header.pVideoCtx->channels;
 	*audio = audioInterface->createAudioClip(&clip_desc);
 
@@ -453,7 +454,7 @@ void libAVComputeVideoTask(Task *task) {
 
 				while (result >= 0) {
 					result = avcodec_receive_frame(header.pAudioCtx, header.frame);
-					if (result == AVERROR(EAGAIN) || result == AVERROR_EOF){
+					if (result == AVERROR(EAGAIN) || result == AVERROR_EOF) {
 						break;
 					}
 					if (result < 0) {
@@ -463,7 +464,7 @@ void libAVComputeVideoTask(Task *task) {
 					}
 
 					av_get_channel_layout_nb_channels(header.frame->channel_layout);
-					header.frame->format != AV_SAMPLE_FMT_S16P;
+					header.frame->format = AV_SAMPLE_FMT_S16P;
 					header.frame->channel_layout;
 					AudioClip *clip = nullptr;
 					clip->setData(header.frame->extended_data[0], header.frame->linesize[0], 0);

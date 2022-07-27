@@ -1,4 +1,4 @@
-name: FragCore
+name: FragCore Window
 on:
   push:
   pull_request:

@@ -43,15 +43,18 @@ INSTANTIATE_TEST_SUITE_P(Math, MinTest,
 										   std::make_tuple(5, 3, 3)));
 
 TEST(Math, PowerOf2_Found) {
-	for (unsigned int i = 0; i < 63; i++)
+	for (unsigned int i = 0; i < 31; i++) {
 		ASSERT_TRUE(Math::IsPowerOfTwo<unsigned long int>(1 << i));
+	}
 }
 
 TEST(Math, PowerOf2_Next_Found) {
 
 	for (unsigned int i = 0; i < 31; i++) {
 		auto p2 = Math::NextPowerOfTwo<unsigned long int>(1 << i);
+
 		ASSERT_TRUE(Math::IsPowerOfTwo(p2));
+
 		ASSERT_TRUE(p2 == static_cast<unsigned long int>(1 << (i + 1)));
 	}
 }
@@ -80,8 +83,7 @@ TEST_P(GuassianDistributionTest, Values) {
 	ASSERT_EQ(expected.size(), guass.size());
 
 	float sum = Math::sum(guass);
-	EXPECT_NEAR(sum, 1.0f,  0.05f);
-
+	EXPECT_NEAR(sum, 1.0f, 0.05f);
 }
 
 INSTANTIATE_TEST_SUITE_P(Math, GuassianDistributionTest,

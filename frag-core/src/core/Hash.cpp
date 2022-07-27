@@ -1,15 +1,16 @@
 #include "Core/Hash.h"
 
 #include <fmt/core.h>
+#include <magic_enum.hpp>
 #include <openssl/md5.h>
 #include <openssl/sha.h>
+
 using namespace fragcore;
 
 Hash::Hash(Hash::ALGORITHM algorithm) {
 
 	this->initHash(algorithm);
 	/*      */
-	this->algorithm = algorithm;
 	this->nbytes = 0;
 }
 
@@ -21,22 +22,28 @@ Hash::Hash(Hash &&other) {
 Hash::~Hash() { free(this->context); }
 
 void Hash::update(const void *pdata, size_t nbytes) {
-	switch (this->algorithm) {
+	size_t status = 0;
+	switch (this->getAlgorithm()) {
 	case Hash::ALGORITHM::MD5:
-		nbytes += MD5_Update(static_cast<MD5_CTX *>(this->context), pdata, nbytes);
+		status = MD5_Update(static_cast<MD5_CTX *>(this->context), pdata, nbytes);
 		break;
 	case Hash::ALGORITHM::SHA128:
-		nbytes += SHA1_Update(static_cast<SHA_CTX *>(this->context), pdata, nbytes);
+		status = SHA1_Update(static_cast<SHA_CTX *>(this->context), pdata, nbytes);
+		break;
+	case Hash::ALGORITHM::SHA224:
+		status = SHA224_Update(static_cast<SHA256_CTX *>(this->context), pdata, nbytes);
 		break;
 	case Hash::ALGORITHM::SHA256:
-		nbytes += SHA256_Update(static_cast<SHA256_CTX *>(this->context), pdata, nbytes);
+		status = SHA256_Update(static_cast<SHA256_CTX *>(this->context), pdata, nbytes);
 		break;
 	case Hash::ALGORITHM::SHA512:
-		nbytes += SHA512_Update(static_cast<SHA512_CTX *>(this->context), pdata, nbytes);
+		status = SHA512_Update(static_cast<SHA512_CTX *>(this->context), pdata, nbytes);
 		break;
 	default:
 		assert(0);
-		throw NotSupportedException("Not supported");
+	}
+	if (status != 1) {
+		throw RuntimeException("Error");
 	}
 	this->nbytes += nbytes;
 }
@@ -56,25 +63,29 @@ void Hash::update(Ref<IO> &io) {
 }
 
 void Hash::final(std::vector<unsigned char> &hash) {
+	int status = 0;
 	switch (this->algorithm) {
 	case Hash::ALGORITHM::MD5:
 		hash.resize(MD5_DIGEST_LENGTH);
-		MD5_Final(hash.data(), static_cast<MD5_CTX *>(this->context));
+		status = MD5_Final(hash.data(), static_cast<MD5_CTX *>(this->context));
 		break;
 	case Hash::ALGORITHM::SHA128:
 		hash.resize(SHA_DIGEST_LENGTH);
-		SHA1_Final(hash.data(), static_cast<SHA_CTX *>(this->context));
+		status = SHA1_Final(hash.data(), static_cast<SHA_CTX *>(this->context));
 		break;
 	case Hash::ALGORITHM::SHA256:
 		hash.resize(SHA256_DIGEST_LENGTH);
-		SHA256_Final(hash.data(), static_cast<SHA256_CTX *>(this->context));
+		status = SHA256_Final(hash.data(), static_cast<SHA256_CTX *>(this->context));
 		break;
 	case Hash::ALGORITHM::SHA512:
 		hash.resize(SHA512_DIGEST_LENGTH);
-		SHA512_Final(hash.data(), static_cast<SHA512_CTX *>(this->context));
+		status = SHA512_Final(hash.data(), static_cast<SHA512_CTX *>(this->context));
 		break;
 	default:
 		throw NotImplementedException();
+	}
+	if (status != 1) {
+		throw RuntimeException("Failed to compute final Hash");
 	}
 }
 
@@ -119,7 +130,9 @@ void Hash::initHash(ALGORITHM algorithm) {
 		status = SHA1_Init(static_cast<SHA_CTX *>(this->context));
 		break;
 	case Hash::ALGORITHM::SHA224:
-		throw NotSupportedException();
+		this->context = malloc(sizeof(SHA256_CTX));
+		status = SHA224_Init(static_cast<SHA256_CTX *>(this->context));
+		break;
 	case Hash::ALGORITHM::SHA256:
 		this->context = malloc(sizeof(SHA256_CTX));
 		status = SHA256_Init(static_cast<SHA256_CTX *>(this->context));
@@ -127,10 +140,11 @@ void Hash::initHash(ALGORITHM algorithm) {
 	case Hash::ALGORITHM::SHA512:
 		this->context = malloc(sizeof(SHA512_CTX));
 		status = SHA512_Init(static_cast<SHA512_CTX *>(this->context));
-		throw NotSupportedException();
 	default:
-		throw InvalidArgumentException("Invalid hash algorithm - {}", static_cast<int>(this->algorithm));
+		throw InvalidArgumentException("Invalid hash algorithm - {}", static_cast<int>(algorithm));
 	}
-	if (status == 0) {
+	if (status != 1) {
+		throw InvalidArgumentException("Failed to initlize Hash Algorithm {}", magic_enum::enum_name(algorithm));
 	}
+	this->algorithm = algorithm;
 }

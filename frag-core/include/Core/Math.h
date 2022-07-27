@@ -68,8 +68,9 @@ namespace fragcore {
 			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
 						  "Type Must Support addition operation.");
 			T sum = 0;
-			for (unsigned int i = 0; i < list.size(); i++)
+			for (size_t i = 0; i < list.size(); i++){
 				sum += list[i];
+			}
 			return sum;
 		}
 

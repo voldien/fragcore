@@ -17,10 +17,11 @@ class HashBaseUnitTest : public ::testing::TestWithParam<std::tuple<std::string,
 using HashMD5Test = HashBaseUnitTest<std::string>;
 
 TEST_P(HashMD5Test, ComputeHashCorrect) {
-	auto [x, hash_algo, expected] = GetParam();
+	auto [str, hash_algo, expected] = GetParam();
 	Hash hash(hash_algo);
 
-	EXPECT_NO_THROW(hash.update(x.data(), x.size()));
+	EXPECT_NO_THROW(hash.update(str.data(), str.size()));
+	ASSERT_EQ(hash.getByteRead(), str.size());
 
 	const size_t mdSize = 16;
 	ASSERT_EQ(hash.getResultSize(), mdSize);
@@ -29,7 +30,8 @@ TEST_P(HashMD5Test, ComputeHashCorrect) {
 	std::vector<unsigned char> md5(hash.getResultSize());
 	EXPECT_NO_THROW(hash.final(md5));
 
-	ASSERT_STREQ((const char *)md5.data(), expected.c_str());
+	/*	*/
+	ASSERT_TRUE(memcmp(md5.data(), expected.data(), hash.getResultSize()) == 0);
 }
 
 INSTANTIATE_TEST_SUITE_P(ComputeHash, HashMD5Test,

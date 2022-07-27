@@ -354,12 +354,12 @@ GLRendererInterface::~GLRendererInterface() {
 
 Texture *GLRendererInterface::createTexture(TextureDesc *desc) {
 
-	if (desc->width < 0 && desc->height < 0 && desc->depth < 0)
+	if (desc->width < 0 && desc->height < 0 && desc->depth < 0) {
 		throw InvalidArgumentException("Invalid texture dimensions.");
-	if (desc->numlevel < 0 && desc->usemipmaps)
-		throw InvalidArgumentException("Mips number count must be greater than or equal to 0.");
-	if (desc->compression & ~this->compression)
+	}
+	if (desc->compression & ~this->compression) {
 		throw InvalidArgumentException("Invalid compression format - {}.", desc->compression);
+	}
 	if (desc->srgb) {
 		if (!this->capability.sSRGB)
 			throw InvalidArgumentException("sRGB is not supported.");
@@ -1058,7 +1058,7 @@ void GLRendererInterface::deleteBuffer(Buffer *object) {
 	// delete object;
 }
 
-//Geometry *GLRendererInterface::createGeometry(GeometryDesc *desc) {
+// Geometry *GLRendererInterface::createGeometry(GeometryDesc *desc) {
 //
 //	/*  Validate the argument.  */
 //	// if (desc->primitive & ~(GeometryDesc::Primitive::ePoint | GeometryDesc::Primitive::eLines |
@@ -1151,7 +1151,7 @@ void GLRendererInterface::deleteBuffer(Buffer *object) {
 //	return geometryObject;
 //}
 //
-//void GLRendererInterface::deleteGeometry(Geometry *obj) {}
+// void GLRendererInterface::deleteGeometry(Geometry *obj) {}
 
 FrameBuffer *GLRendererInterface::createFrameBuffer(FrameBufferDesc *desc) {
 

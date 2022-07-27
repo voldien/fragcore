@@ -633,7 +633,9 @@ FrameBuffer *VKRenderInterface::getDefaultFramebuffer(void *window) {
 	return defaultFrambuffer;
 }
 
-Sync *VKRenderInterface::createSync(SyncDesc *desc) {}
+Sync *VKRenderInterface::createSync(SyncDesc *desc) {
+	return nullptr;
+}
 void VKRenderInterface::deleteSync(Sync *sync) {}
 
 static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,

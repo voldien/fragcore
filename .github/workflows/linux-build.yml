@@ -1,4 +1,4 @@
-name: FragCore
+name: FragCore Linux
 on:
   push:
   pull_request:

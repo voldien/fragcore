@@ -70,7 +70,8 @@ TEST_F(IOTest, IO_File_Write_In_ReadOnly_Throw_Exception) {
 }
 
 TEST_F(IOTest, IOFile) {
-	char buf[512];
+	const size_t blockSize = 512;
+	char buf[blockSize];
 	long size;
 
 	ASSERT_THROW(FileIO("", IO::READ), InvalidArgumentException);
@@ -83,17 +84,18 @@ TEST_F(IOTest, IOFile) {
 	std::vector<std::string>::const_iterator it = files.cbegin();
 	for (; it != files.cend(); it++) {
 		FileIO *fileIo = nullptr;
-		
+
 		ASSERT_NO_THROW(fileIo = new FileIO((*it), IO::IOMode::READ));
+		/*	*/
 		ASSERT_TRUE(fileIo->isReadable());
 		ASSERT_FALSE(fileIo->isWriteable());
 
 		/*  */
-		while ((size = fileIo->read(512, buf)) > 0) {
+		while ((size = fileIo->read(blockSize, buf)) > 0) {
 			EXPECT_EQ(SystemInfo::getStdOut()->write(size, buf), size);
 			EXPECT_EQ(write.write(size, buf), size);
 		}
-		delete fileIo;
+		ASSERT_NO_THROW(delete fileIo);
 	}
 
 	write.flush();

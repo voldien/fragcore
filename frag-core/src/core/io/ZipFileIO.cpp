@@ -41,16 +41,18 @@ void ZipFileIO::close() {
 
 long ZipFileIO::read(long int nbytes, void *pbuffer) {
 	nbytes = zip_fread(this->file, pbuffer, nbytes);
+
 	if (nbytes == -1) {
 		char buf[1024];
 		zip_error_to_str(buf, sizeof(buf), nbytes, errno);
-		throw RuntimeException("Failed to close zip file {}", buf);
+		throw RuntimeException("Failed to read zip file {}", buf);
 	}
 	return nbytes;
 }
 
 long ZipFileIO::write(long int nbytes, const void *pbuffer) {
 	throw NotImplementedException();
+
 	return nbytes;
 }
 
@@ -61,12 +63,12 @@ bool ZipFileIO::eof() const { return false; }
 long ZipFileIO::length() {
 
 	struct zip_stat state;
-	// TODO add error check.
+
 	int err = zip_stat_index((zip_t *)this->zipfile->pzip, this->index, 0, &state);
 	if (err != ZIP_ER_OK) {
 		char buf[1024];
 		zip_error_to_str(buf, sizeof(buf), err, errno);
-		throw RuntimeException("Failed to close zip file {}", buf);
+		throw RuntimeException("Failed to get zip file size {}", buf);
 	}
 
 	return state.size;
@@ -88,20 +90,18 @@ void ZipFileIO::seek(long int nbytes, Seek seek) {
 		throw InvalidArgumentException("Invalid seek enumerator.");
 	}
 
-	//	zip_int8_t err = zip_fseek(this->file, nbytes, whence);
-	//	if (err != 0) {
-	//		char buf[1024];
-	//		int sys_err;
-	////		zip_error_get(zip, &err, &sys_err);
-	////		zip_error_to_str(buf, sizeof(buf), err, errno);
-	////		throw InvalidArgumentException("can't open `{}':\n\t{}", path, buf));
-	//	}
-	//	//zip_fseek
+	zip_int8_t err = zip_fseek(this->file, nbytes, whence);
+	if (err != 0) {
+		char buf[1024];
+		int sys_err;
+		//		zip_error_get(zip, &err, &sys_err);
+		//		zip_error_to_str(buf, sizeof(buf), err, errno);
+		//		throw InvalidArgumentException("can't open `{}':\n\t{}", path, buf));
+	}
+	// zip_fseek
 }
 
-unsigned long ZipFileIO::getPos() {
-	return 0; // zip_ftell(this->file);
-}
+unsigned long ZipFileIO::getPos() { return zip_ftell(this->file); }
 
 bool ZipFileIO::isWriteable() const {
 	zip_uint32_t attr;
