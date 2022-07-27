@@ -3,7 +3,7 @@ FILE(GLOB SHADER_COMPILER_HEADER_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.h)
 
 
 LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" )
-IF(NOT TARGET spirv-cross-glsl AND NOT spirv-cross-core AND NOT spirv-cross-util)
+IF(NOT TARGET spirv-cross-glsl AND NOT TARGET spirv-cross-core AND NOT TARGET spirv-cross-util)
 	INCLUDE(spirvcross)
 ENDIF()
 
