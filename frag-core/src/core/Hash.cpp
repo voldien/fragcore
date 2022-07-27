@@ -54,7 +54,7 @@ void Hash::update(Ref<IO> &io) {
 	long int len;
 
 	/*	*/
-	while ((len = io->read(sizeof(buffer), buffer)) >= 0) {
+	while ((len = io->read(sizeof(buffer), buffer)) > 0) {
 		this->update(buffer, len);
 	}
 
@@ -104,10 +104,11 @@ unsigned int Hash::getResultSize() const {
 		return SHA224_DIGEST_LENGTH;
 	case Hash::ALGORITHM::SHA256:
 		return SHA256_DIGEST_LENGTH;
+	case Hash::ALGORITHM::SHA384:
+		return SHA384_DIGEST_LENGTH;
 	case Hash::ALGORITHM::SHA512:
 		return SHA512_DIGEST_LENGTH;
 	default:
-		assert(0);
 		return 0;
 	}
 }

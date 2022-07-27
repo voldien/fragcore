@@ -19,7 +19,9 @@
 #ifndef _FRAG_CORE_ICONFIG_H_
 #define _FRAG_CORE_ICONFIG_H_ 1
 #include <CXXConfig.h>
+
 namespace fragcore {
 	using IConfig = cxxconfig::IConfig;
 }
+
 #endif

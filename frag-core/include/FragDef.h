@@ -18,6 +18,7 @@
  */
 #ifndef _FRAG_CORE_FRAG_DEF_H_
 #define _FRAG_CORE_FRAG_DEF_H_ 1
+
 #include <cstdio>
 #include <cstdint>
 #include <cstring>
