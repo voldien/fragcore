@@ -145,6 +145,7 @@ namespace fragcore {
 		 * @return std::vector<std::string>
 		 */
 		virtual std::vector<std::string> list(const char *directory) const = 0; /*  Display everything in directory. */
+		
 	  public:
 		virtual std::string getBaseName(const char *path) { return path; }
 

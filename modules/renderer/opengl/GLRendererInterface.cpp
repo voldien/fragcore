@@ -71,12 +71,13 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 
 	// Check all required config variables.
 	for (int i = 0; i < numReqConfigKeys; i++) {
-		if (!setupConfig.isSet(reqConfigKey[i]))
+		if (!setupConfig.isSet(reqConfigKey[i])) {
 			throw RuntimeException("None valid configuration node - missing attribute {}", reqConfigKey[i]);
+		}
 	}
 
 	if (SDL_InitSubSystem(SDL_INIT_VIDEO) != 0) {
-		throw RuntimeException("SDL_InitSubSystem failed, {}.\n", SDL_GetError());
+		throw RuntimeException("SDL_InitSubSystem failed, {}", SDL_GetError());
 	}
 
 	/*  */
@@ -107,10 +108,11 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 
 	/*  Context profile type.   */
 	int contextProfileMask;
-	if (useCoreProfile)
+	if (useCoreProfile) {
 		contextProfileMask = SDL_GL_CONTEXT_PROFILE_CORE;
-	else
+	} else {
 		contextProfileMask = SDL_GL_CONTEXT_PROFILE_COMPATIBILITY;
+	}
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, contextProfileMask);
 
 	/*  Enable Debug mode if enabled.   */

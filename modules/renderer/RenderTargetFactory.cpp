@@ -11,8 +11,9 @@ FrameBuffer *RenderTargetFactory::createShadow(IRenderer *render, int width, int
 	Texture *shadowtex = nullptr;
 
 	assert(render);
-	if (render == nullptr)
+	if (render == nullptr) {
 		throw InvalidArgumentException("renderer interface must not be null!");
+	}
 
 	/*	*/
 	depthdesc.target = TextureDesc::Target::Texture2D;
@@ -53,8 +54,9 @@ FrameBuffer *RenderTargetFactory::createDeffered(IRenderer *render, int width, i
 	FrameBufferDesc desc;
 	FrameBuffer *frame = nullptr;
 
-	if (render == nullptr)
+	if (render == nullptr) {
 		throw InvalidArgumentException("renderer interface must not be null!");
+	}
 
 	memset(&texdesc, 0, sizeof(texdesc));
 	memset(&desc, 0, sizeof(desc));
@@ -125,7 +127,7 @@ FrameBuffer *RenderTargetFactory::createColor(IRenderer *render, int width, int 
 	FrameBufferDesc desc;
 
 	assert(render);
-	if (render == nullptr){
+	if (render == nullptr) {
 		throw InvalidArgumentException("renderer interface must not be null!");
 	}
 
@@ -173,8 +175,9 @@ FrameBuffer *RenderTargetFactory::createHDR(IRenderer *renderer, int width, int 
 	FrameBufferDesc desc;
 
 	assert(renderer);
-	if (renderer == nullptr)
+	if (renderer == nullptr) {
 		throw InvalidArgumentException("renderer interface must not be null!");
+	}
 
 	/*	Zero out descriptor.	*/
 	memset(&texdesc, 0, sizeof(texdesc));

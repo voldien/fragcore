@@ -8,9 +8,7 @@ ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/cxx-config EXCLUDE_FROM_ALL)
 # 	# https://github.com/source-foundry/Hack
 
 # 	# https://github.com/baldurk/renderdoc.git
-# 	# https://github.com/ispc/ispc.git
 # 	# https://github.com/mborgerding/kissfft.git
-# 	# https://github.com/NVIDIAGameWorks/PhysX.git
 
 # 	# https://github.com/turbulenz/NvTriStrip.git
 # 	# https://github.com/microsoft/ShaderConductor.git

@@ -18,9 +18,9 @@
  */
 #ifndef _FRAG_CORE_SHADERUTIL_H_
 #define _FRAG_CORE_SHADERUTIL_H_ 1
+#include "../IRenderer.h"
 #include <Core/IO/IO.h>
 #include <Core/Ref.h>
-#include "../IRenderer.h"
 #include <vector>
 
 namespace fragcore {
@@ -28,8 +28,7 @@ namespace fragcore {
 	/**
 	 *
 	 */
-	class FVDECLSPEC
-		ShaderUtil { // TODO determine if to make a instance support for better memory improvements during compilation.
+	class FVDECLSPEC ShaderUtil {
 	  public:
 		typedef struct uniform_location_t {
 			const char *texname; /*  */
@@ -59,8 +58,6 @@ namespace fragcore {
 									   Ref<IRenderer> &renderer, Shader **pshader);
 
 	  public:
-		static void privateShaderPopulate();
-
 		/*	Single shader object.	*/
 		static void loadShader(Ref<IO> &io, ShaderType shadetype, Ref<IRenderer> &renderer, ShaderLanguage language,
 							   ShaderCodeType codetype, Shader **shader);
@@ -100,12 +97,16 @@ namespace fragcore {
 		static void loadComputeShaderSource(ShaderObject *shaderDesc, IRenderer *renderer,
 											RenderPipeline **programPipeline);
 
+	  public:
 		static ShaderCodeType getCodeType(
 			const char *filePath); /*  Determine if shader is binary or source file based on the file basename.    */
+
 		static ShaderLanguage
 		getFileLanguage(const char *filePath); /*  Determine what shader language based on the file basename.  */
+
 		static ShaderType getShaderType(const char *filePath); /*  */
 
+	  public:
 		static std::vector<UniformLocation> getShaderUniformAttributes(const Ref<Shader> &shader);
 
 		// TODO resolve and act as a helper function.

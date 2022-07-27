@@ -67,12 +67,28 @@ namespace fragcore {
 		  public:
 			std::vector<CompilerOption> option;
 		};
-		// std::map<long int, ShaderResult> CompilePermutation(Ref<IRenderer> &renderer, CompilerSources *references,
-		// 													const CompilerOptionSet &optionset);
+		static std::map<long int, ShaderResult>
+		CompilePermutation(Ref<IRenderer> &renderer, CompilerSources *references, const CompilerOptionSet &optionset);
 
-		static std::vector<char> convert(const std::vector<char> &sourceCode, ShaderLanguage source, ShaderLanguage target);
+	  public:
+		/**
+		 * @brief
+		 *
+		 * @param sourceCode
+		 * @param source
+		 * @param target
+		 * @return std::vector<char>
+		 */
+		static std::vector<char> convert(const std::vector<char> &sourceCode, ShaderLanguage source,
+										 ShaderLanguage target);
 
-
+		/**
+		 * @brief
+		 *
+		 * @param source
+		 * @param shaderLanguage
+		 * @return std::vector<char>
+		 */
 		static std::vector<char> convertSPIRV(const std::vector<char> &source, ShaderLanguage shaderLanguage);
 
 		/**/

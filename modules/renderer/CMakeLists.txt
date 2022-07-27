@@ -31,4 +31,4 @@ ENDIF()
 #####################
 #
 #####################
-ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/ShaderCompiler EXCLUDE_FROM_ALL)
+ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/shadercompiler)

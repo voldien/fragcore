@@ -11,7 +11,7 @@ using namespace fragcore;
 
 std::vector<char> ShaderCompiler::convert(const std::vector<char> &sourceCode, ShaderLanguage source,
 										  ShaderLanguage target) {
-	spirv_cross::Compiler *compiler;
+	spirv_cross::Compiler *compiler = nullptr;
 	// spirv_cross::CompilerHLSL(reinterpret_cast<const uint32_t *>(sourceCode.data()), sourceCode.size() /
 	// sizeof(uint32_t))
 

@@ -20,14 +20,18 @@ void GLViewPort::getViewPort(int *x, int *y, int *width, int *height) {
 	GLint dim[4];
 	glGetIntegeri_v(GL_VIEWPORT, this->viewport, dim);
 
-	if (x)
+	if (x) {
 		*x = dim[0];
-	if (y)
+	}
+	if (y) {
 		*y = dim[1];
-	if (width)
+	}
+	if (width) {
 		*width = dim[2];
-	if (height)
+	}
+	if (height) {
 		*height = dim[3];
+	}
 }
 
 void GLViewPort::getScissorView(int *x, int *y, int *width, int *height) {
@@ -35,24 +39,30 @@ void GLViewPort::getScissorView(int *x, int *y, int *width, int *height) {
 	GLint dim[4];
 	glGetIntegeri_v(GL_SCISSOR_BOX, this->viewport, dim);
 
-	if (x)
+	if (x) {
 		*x = dim[0];
-	if (y)
+	}
+	if (y) {
 		*y = dim[1];
-	if (width)
+	}
+	if (width) {
 		*width = dim[2];
-	if (height)
+	}
+	if (height) {
 		*height = dim[3];
+	}
 }
 
 void GLViewPort::getDepthRange(double *near, double *far) {
 
 	double range[2];
 	glGetDoublei_v(GL_DEPTH_RANGE, this->viewport, range);
-	if (near)
+	if (near) {
 		*near = range[0];
-	if (far)
+	}
+	if (far) {
 		*far = range[1];
+	}
 }
 
 void GLViewPort::enable(IRenderer::State state) { glEnablei(getState(state), this->viewport); }

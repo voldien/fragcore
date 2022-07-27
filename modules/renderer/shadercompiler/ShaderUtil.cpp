@@ -1,8 +1,9 @@
 #include "ShaderUtil.h"
+#include "../RenderPipeline.h"
 #include "Core/IO/FileSystem.h"
 #include "Core/IO/IOUtil.h"
-#include "../RenderPipeline.h"
 #include <../RenderDesc.h>
+#include <Core/IO/IFileSystem.h>
 
 #include <cassert>
 #include <fmt/format.h>
@@ -305,8 +306,8 @@ void ShaderUtil::loadProgramPipeline(const ShaderObject *vshader, const ShaderOb
 static void validateShaderArguments(ShaderType type, ShaderLanguage language, ShaderCodeType codetype) {
 	// Validate the arguments.
 	if (type < ShaderType::Vertex || type > ShaderType::Compute)
-		throw InvalidArgumentException(
-			"Invalid shader type - {}", type); // TODO add enumerator to string for shader type.
+		throw InvalidArgumentException("Invalid shader type - {}",
+									   type); // TODO add enumerator to string for shader type.
 	if (language & ~(GLSL | SPIRV | HLSL | CLC))
 		throw InvalidArgumentException("None supported shader language by the application - {}",
 									   language); // TODO add enumerator to string for shader language.
@@ -331,8 +332,9 @@ void ShaderUtil::loadShader(Ref<IO> &io, ShaderType type, Ref<IRenderer> &render
 void ShaderUtil::loadShader(const char *source, const int size, ShaderType type, Ref<IRenderer> &renderer,
 							ShaderLanguage language, ShaderCodeType codetype, Shader **pshader) {
 	validateShaderArguments(type, language, codetype);
-	if (pshader == nullptr)
+	if (pshader == nullptr) {
 		throw InvalidArgumentException("");
+	}
 
 	ShaderDesc desc = {};
 	Shader *shader = nullptr;
@@ -550,7 +552,7 @@ void ShaderUtil::loadComputeProgram(const char *pData, long int nBytes, ShaderLa
 
 void ShaderUtil::loadComputeShaderSource(ShaderObject *shaderDesc, IRenderer *renderer,
 										 RenderPipeline **programPipeline) {
-	Shader *shader;
+	Shader *shader = nullptr;
 	RenderPipelineDesc progDes = {};
 
 	/*  */
@@ -563,43 +565,51 @@ void ShaderUtil::loadComputeShaderSource(ShaderObject *shaderDesc, IRenderer *re
 }
 
 ShaderCodeType ShaderUtil::getCodeType(const char *filePath) {
-	const char *basename = FileSystem::getBaseName(filePath);
+	// const char *basename = FileSystem::getBaseName(filePath);
 
 	return ShaderCodeType::SourceCode;
 }
 
 ShaderLanguage ShaderUtil::getFileLanguage(const char *filePath) {
-	const char *buf;
 
 	/*	Extract file extension.	*/
-	const char *basename = FileSystem::getBaseName(filePath);
-	buf = FileSystem::getFileExtension(basename);
+	std::string extension = FileSystem::getFileSystem()->getFileExtension(filePath);
 
 	/*  Iterate through each file.*/
-	if (strcmp(buf, "vert") == 0)
+	if (extension == "vert") {
 		return GLSL;
-	if (strcmp(buf, "frag") == 0)
+	}
+	if (extension == "frag") {
 		return GLSL;
-	if (strcmp(buf, "geom") == 0)
+	}
+	if (extension == "geom") {
 		return GLSL;
-	if (strcmp(buf, "tesc") == 0)
+	}
+	if (extension == "tesc") {
 		return GLSL;
-	if (strcmp(buf, "tese") == 0)
+	}
+	if (extension == "tese") {
 		return GLSL;
-	if (strcmp(buf, "comp") == 0)
+	}
+	if (extension == "comp") {
 		return GLSL;
-	if (strcmp(buf, "glsl") == 0)
+	}
+	if (extension == "glsl") {
 		return GLSL;
-	if (strcmp(buf, "sprv") == 0)
+	}
+	if (extension == "sprv") {
 		return SPIRV;
-	if (strcmp(buf, "cl") == 0)
+	}
+	if (extension == "cl") {
 		return CLC;
+	}
 
 	return unKnownLanguage;
 }
 
 ShaderType ShaderUtil::getShaderType(const char *filePath) {
-	const char *basename = FileSystem::getBaseName(filePath);
+
+	// const char *basename = FileSystem::getBaseName(filePath);
 
 	return ShaderType::Frag;
 }
