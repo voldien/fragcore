@@ -67,7 +67,7 @@ namespace fragcore {
 
 		};
 
-		enum class BufferAttachment : int {
+		enum class BufferAttachment {
 			NoAttachment,
 			Depth,
 			Stencil,

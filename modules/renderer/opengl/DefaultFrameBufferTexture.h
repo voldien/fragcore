@@ -22,6 +22,7 @@
 
 namespace fragcore {
 
+	//TOOD rename
 	class FrameBufferTexture : public GLTexture {
 	  public:
 		FrameBufferTexture();

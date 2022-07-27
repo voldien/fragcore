@@ -38,6 +38,7 @@ GLSampler::WrapMode GLSampler::getWrapMode() {
 	glGetSamplerParameteriv(this->sampler, GL_TEXTURE_WRAP_S, &wrapS);
 	glGetSamplerParameteriv(this->sampler, GL_TEXTURE_WRAP_T, &wrapT);
 	glGetSamplerParameteriv(this->sampler, GL_TEXTURE_WRAP_R, &wrapR);
+	/*	*/
 	if (wrapR == GL_REPEAT && wrapS == GL_REPEAT && wrapT == GL_REPEAT) {
 		return GLSampler::WrapMode::eRepeat;
 	}

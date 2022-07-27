@@ -21,7 +21,9 @@
 #include "../Query.h"
 
 namespace fragcore {
+
 	/**
+	 * @brief
 	 *
 	 */
 	class FVDECLSPEC GLQueryObject : public QueryObject {

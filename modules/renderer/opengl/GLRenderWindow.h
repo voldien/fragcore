@@ -102,10 +102,10 @@ namespace fragcore {
 		virtual bool assertConfigAttributes(const IConfig *iConfig) override;
 		virtual void useWindow(void *pdata) override;
 
-	  protected:
+	  protected: /*	*/
 		virtual void createSwapChain();
 
-	  private:
+	  private: /*	*/
 		// TODO add proxy window.
 		SDL_Window *window;
 		Ref<GLRendererInterface> renderer;
