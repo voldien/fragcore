@@ -166,6 +166,7 @@ ENDIF()
 CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/fragcore.pc.in" "${CMAKE_CURRENT_BINARY_DIR}/fragcore.pc" @ONLY)
 # Generate revision for up to date header with version and etc.
 CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/include/fragcore_revision.h.in" "${CMAKE_CURRENT_BINARY_DIR}/include/fragcore_revision.h" @ONLY)
+CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/include/fragcore_revision.h.in" "${CMAKE_CURRENT_SOURCE_DIR}/include/fragcore_revision.h" @ONLY)
 
 # Install
 IF(BUILD_WITH_INSTALL)

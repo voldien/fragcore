@@ -133,30 +133,32 @@ IF(GIT_FOUND)
 	MESSAGE(STATUS "git found: ${GIT_EXECUTABLE} -- ${GIT_VERSION_STRING}")
 ENDIF()
 IF(NOT FRAG_IGNORE_GIT_HASH)
-  # Get the current working branch
-  EXECUTE_PROCESS(
+	# Get the current working branch
+	EXECUTE_PROCESS(
 	COMMAND git rev-parse --abbrev-ref HEAD
 	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-	OUTPUT_VARIABLE FRAGCORE_GIT_BRANCH
+	OUTPUT_VARIABLE GIT_BRANCH
 	OUTPUT_STRIP_TRAILING_WHITESPACE
 	ERROR_QUIET
-  )
+	)
 
-  # Get the latest abbreviated commit hash of the working branch
-  EXECUTE_PROCESS(
+	# Get the latest abbreviated commit hash of the working branch
+	EXECUTE_PROCESS(
 	COMMAND git rev-parse --short=8 HEAD
 	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-	OUTPUT_VARIABLE FRAGCORE_GIT_COMMIT_HASH
+	OUTPUT_VARIABLE GIT_COMMIT_HASH
 	OUTPUT_STRIP_TRAILING_WHITESPACE
 	ERROR_QUIET
-  )
-  EXECUTE_PROCESS(
-    COMMAND git describe --exact-match --tags 2> /dev/null || git rev-parse --short HEAD
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    OUTPUT_VARIABLE FRAGCORE_GIT_TAG
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-    ERROR_QUIET
-    )
+	)
+
+	#Extract IF there is a tag associated with current commit
+	EXECUTE_PROCESS(
+	COMMAND git describe --exact-match --tags 2> /dev/null || git rev-parse --short HEAD
+	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+	OUTPUT_VARIABLE GIT_TAG
+	OUTPUT_STRIP_TRAILING_WHITESPACE
+	ERROR_QUIET
+	)
 ENDIF()
 
 LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake-modules" )
