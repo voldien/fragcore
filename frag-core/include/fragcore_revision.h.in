@@ -1,0 +1,22 @@
+#ifndef _FRAGCORE_REVISION_H_
+#define _FRAGCORE_REVISION_H_ 1
+
+/*  Git hash and string.*/
+#define FRAGCORE_GITCOMMIT 0x@GIT_COMMIT_HASH@
+#define FRAGCORE_STR_GITCOMMIT "0x@GIT_COMMIT_HASH@"
+
+/*  Branch and tag string.  */
+#define FRAGCORE_GITBRANCH "@GIT_BRANCH@"
+#define FRAGCORE_STR_GITTAG "@GIT_TAG@"
+
+/*  Software version.   */
+#define FRAGCORE_VER_MAJOR @FRAGCORE_VERSION_MAJOR@
+#define FRAGCORE_VER_MINOR @FRAGCORE_VERSION_MINOR@
+#define FRAGCORE_VER_STR "@FRAGCORE_SOFTWARE_VERSION@"
+
+/*  Complete version string.    */
+#define FRAGCORE_VERSION_STR "@FRAGCORE_FULL_VERSION@"
+
+#define FRAGCORE_BUILD_TYPE "@CMAKE_BUILD_TYPE@"
+
+#endif
