@@ -115,8 +115,9 @@ SerialIO::BaudRate SerialIO::getBaudRate() const {
 
 	int baudRate;
 	res = sp_get_config_baudrate(config, &baudRate);
-	if (res != SP_OK)
+	if (res != SP_OK) {
 		throw RuntimeException("Failed to get baudrate {} - {}", "path", sp_last_error_message());
+	}
 
 	return static_cast<SerialIO::BaudRate>(baudRate);
 }
@@ -148,8 +149,9 @@ SerialIO::StopBits SerialIO::getStopBits() const {
 	}
 
 	res = sp_get_config_stopbits(config, &stopBit);
-	if (res != SP_OK)
+	if (res != SP_OK) {
 		throw RuntimeException("Failed to get StopBits {} - {}", "path", sp_last_error_message());
+	}
 
 	return static_cast<SerialIO::StopBits>(stopBit);
 }
@@ -181,9 +183,10 @@ void SerialIO::setFlowControl(FlowControl flowControl) {
 		throw RuntimeException("Failed to get config: {} ({})", sp_last_error_message(), res);
 	}
 	res = sp_set_config_flowcontrol(config, sp_flowcontrol);
-	if (res != SP_OK)
+	if (res != SP_OK) {
 		throw RuntimeException("Failed to set flow control {} - {}", get_flow_control_symbol(flowControl),
 							   sp_last_error_message());
+	}
 
 	res = sp_set_config(serialPort, this->config);
 	if (res != SP_OK) {
@@ -249,8 +252,9 @@ SerialIO::Parity SerialIO::getParity() const {
 
 	sp_parity parity;
 	res = sp_get_config_parity(config, &parity);
-	if (res != SP_OK)
+	if (res != SP_OK) {
 		throw RuntimeException("Failed to get parity {} ({})", sp_last_error_message(), res);
+	}
 
 	return static_cast<SerialIO::Parity>(parity);
 }
@@ -282,8 +286,9 @@ void SerialIO::setXonXoff(XonXoff XonXoff) {
 	}
 
 	res = sp_set_config_xon_xoff(config, sp_xonoxoff);
-	if (res != SP_OK)
+	if (res != SP_OK) {
 		throw RuntimeException("Failed to set xonoff {} - {}", "path", sp_last_error_message());
+	}
 
 	res = sp_set_config(serialPort, this->config);
 	if (res != SP_OK) {
@@ -298,10 +303,12 @@ SerialIO::XonXoff SerialIO::getXonXoff() {
 	if (res != SP_OK) {
 		throw RuntimeException("Failed to get config: {} ({})", sp_last_error_message(), res);
 	}
+
 	sp_xonxoff xonxoff;
 	res = sp_get_config_xon_xoff(config, &xonxoff);
-	if (res != SP_OK)
+	if (res != SP_OK) {
 		throw RuntimeException("Failed to get config xon xoff: {}", sp_last_error_message());
+	}
 
 	return static_cast<SerialIO::XonXoff>(xonxoff);
 }
@@ -315,8 +322,9 @@ void SerialIO::setPayloadBits(unsigned int nrBits) {
 	}
 
 	res = sp_set_config_bits(config, nrBits);
-	if (res != SP_OK)
+	if (res != SP_OK) {
 		throw RuntimeException("Failed to set payload: {}", sp_last_error_message());
+	}
 
 	res = sp_set_config(serialPort, this->config);
 	if (res != SP_OK) {
@@ -332,8 +340,9 @@ int SerialIO::getPayloadBits() const {
 	}
 	int nrBits;
 	res = sp_get_config_bits(config, &nrBits);
-	if (res != SP_OK)
+	if (res != SP_OK) {
 		throw RuntimeException("Failed to get config payload bits: {}", sp_last_error_message());
+	}
 
 	return nrBits;
 }

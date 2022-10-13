@@ -110,8 +110,9 @@ int ModbusNetSocket::connect(const INetAddress &addr) {
 	/*	*/
 	if (this->ctx == nullptr) {
 		this->ctx = modbus_new_tcp(nullptr, 0);
-		if (this->ctx == nullptr)
+		if (this->ctx == nullptr) {
 			throw RuntimeException("Failed to create ModbusTCP Context: {}", modbus_strerror(errno));
+		}
 	}
 
 	/*	Connect over the transport layer.	*/

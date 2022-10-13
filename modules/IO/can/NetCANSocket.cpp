@@ -32,8 +32,9 @@ CANNetSocket::TransportProtocol CANNetSocket::getTransportProtocol() const noexc
 
 int CANNetSocket::close() {
 	int status = ::close(this->socket);
-	if (status != 0)
+	if (status != 0) {
 		throw RuntimeException("Failed to close socket: {}", strerror(errno));
+	}
 	this->socket = 0; /*	*/
 	this->netStatus = NetStatus::Status_Disconnected;
 	return 0;
@@ -196,8 +197,9 @@ int CANNetSocket::sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const 
 		memcpy(&frame.data[0], &p_buffer[i], frame.can_dlc);
 
 		int res = ::sendto(this->socket, &frame, sizeof(frame), flag, (sockaddr *)&addr, sizeof(addr));
-		if (res != sizeof(frame))
+		if (res != sizeof(frame)) {
 			throw RuntimeException("Invalid Frame");
+		}
 	}
 	r_sent = p_len;
 	return p_len;
