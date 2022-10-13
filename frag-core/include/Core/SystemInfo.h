@@ -50,7 +50,7 @@ namespace fragcore {
 		};
 
 		enum class SIMD : unsigned int {
-			NONE,	/*	No HPM SIMD exention flag.	*/
+			NONE,	/*	No SIMD exention flag.	*/
 			MMX,	/*	MMX. (Yet not supported)	*/
 			S3DNOW, /*	3DNOW. (Yet not supported)	*/
 			SSE,	/*	SSE (Streaming SIMD Extensions).	*/

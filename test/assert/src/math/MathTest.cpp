@@ -70,7 +70,8 @@ TEST_P(SumTest, Values) {
 
 INSTANTIATE_TEST_SUITE_P(Math, SumTest,
 						 ::testing::Values(std::make_tuple(std::vector<float>{1, 2, 3, 4, 5}, 15),
-										   std::make_tuple(std::vector<float>{5, 5, 5, 5, 5}, 25)));
+										   std::make_tuple(std::vector<float>{5, 5, 5, 5, 5}, 25),
+										   std::make_tuple(std::vector<float>{-5, 5, -5, 5, 5}, 5)));
 
 class GuassianDistributionTest : public ::testing::TestWithParam<std::tuple<float, float, std::vector<float>>> {};
 
