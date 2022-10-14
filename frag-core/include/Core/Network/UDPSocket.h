@@ -19,6 +19,7 @@
 #ifndef _FRAG_CORE_UDP_NETSOCKET_H_
 #define _FRAG_CORE_UDP_NETSOCKET_H_ 1
 #include "NetSocket.h"
+#include <sys/socket.h>
 
 namespace fragcore {
 	/**
@@ -64,10 +65,12 @@ namespace fragcore {
 
 		void setTimeout(long int nanoSeconds);
 		static int getDomain(const INetAddress &address);
-		// static size_t setupIPAddress(sockaddr *addr, const INetAddress &p_addr, uint16_t p_port);
+		static size_t setupIPAddress(sockaddr *addr, const INetAddress &p_addr, uint16_t p_port);
 
 	  private:
 		int socket;
+		void *UDPaddr = nullptr;
+		size_t addrSize;
 		NetStatus netStatus;
 	};
 } // namespace fragcore
