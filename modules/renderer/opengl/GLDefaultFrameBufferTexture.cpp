@@ -20,7 +20,7 @@ FrameBufferTexture::FrameBufferTexture() {
 }
 
 void *FrameBufferTexture::mapTexture(Format format, unsigned int level) {
-	GLenum _format = getTextureGLFormat(format);
+	GLenum _format = GLHelper::getTextureGLFormat(format);
 	GLenum _type = GL_UNSIGNED_BYTE; // TODO determine the type based on the format.
 
 	if (level != 0) {
@@ -73,7 +73,7 @@ void FrameBufferTexture::setPixels(Format format, unsigned int level, const void
 void *FrameBufferTexture::getPixels(Format format, unsigned int level, unsigned long *nBytes) {
 	// TODO add support.
 	// if PBO supported, otherwise, the slow versino.
-	GLenum glformat = getTextureGLFormat(format);
+	GLenum glformat = GLHelper::getTextureGLFormat(format);
 	glReadPixels(0, 0, this->width(), this->height(), glformat, GL_UNSIGNED_BYTE, nullptr);
 	return nullptr; // Texture::getPixels(mipmap, nBytes);
 }

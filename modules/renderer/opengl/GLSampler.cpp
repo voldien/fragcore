@@ -7,8 +7,8 @@ GLSampler::~GLSampler() {}
 
 void GLSampler::setFilterMode(FilterMode mode) {
 
-	glSamplerParameteri(this->sampler, GL_TEXTURE_MAG_FILTER, getTextureFilterMode(mode));
-	glSamplerParameteri(this->sampler, GL_TEXTURE_MIN_FILTER, getTextureFilterMode(mode));
+	glSamplerParameteri(this->sampler, GL_TEXTURE_MAG_FILTER, GLHelper::getTextureFilterMode(mode));
+	glSamplerParameteri(this->sampler, GL_TEXTURE_MIN_FILTER, GLHelper::getTextureFilterMode(mode));
 }
 
 GLSampler::FilterMode GLSampler::getFilterMode() {
@@ -22,7 +22,7 @@ GLSampler::FilterMode GLSampler::getFilterMode() {
 }
 
 void GLSampler::setWrapMode(GLSampler::WrapMode mode) {
-	unsigned int wrapMode = getTextureWrapMode(mode);
+	unsigned int wrapMode = GLHelper::getTextureWrapMode(mode);
 
 	/*  */
 	glSamplerParameteri(this->sampler, GL_TEXTURE_WRAP_S, wrapMode);
@@ -68,7 +68,7 @@ GLSampler::CompareFunc GLSampler::getCompare() const { return GLSampler::Compare
 
 void GLSampler::setCompareFunc(CompareFunc compareFunc) {
 
-	GLenum glCompareFunc = getTextureCompareMode(compareFunc);
+	GLenum glCompareFunc = GLHelper::getTextureCompareMode(compareFunc);
 	// TODO resolve.
 	// glGetSamplerParameterfv(this->sampler, GL_TEXTURE_COMPARE_FUNC, glCompareFunc);
 }

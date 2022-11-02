@@ -150,7 +150,7 @@ void GLBuffer::setName(const std::string &name) {
 	/*  Update the marker.  */
 	MarkerDebug marker = {};
 	marker.markerName = name.c_str();
-	addMarkerLabel(GL_BUFFER, this->buffer, &marker);
+	GLHelper::addMarkerLabel(GL_BUFFER, this->buffer, &marker);
 }
 
 intptr_t GLBuffer::getNativePtr() const { return this->buffer; }

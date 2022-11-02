@@ -38,8 +38,8 @@ void GLTexture::bindImage(unsigned int index, int level, MapTarget target, Forma
 
 	if (glBindImageTexture) {
 
-		GLenum access = getAccess(target);
-		GLenum gformat = getImageInternalFormat(format);
+		GLenum access = GLHelper::getAccess(target);
+		GLenum gformat = GLHelper::getImageInternalFormat(format);
 
 		glBindImageTexture(index, this->texture, level, GL_FALSE, 0, access, gformat);
 	} else
@@ -72,7 +72,7 @@ void GLTexture::setMipLevel(unsigned int level) {
 void GLTexture::setFilterMode(FilterMode mode) {
 
 	// TODO improve.
-	GLuint filter = getTextureFilterMode(mode);
+	GLuint filter = GLHelper::getTextureFilterMode(mode);
 	if (glTextureParameteri) {
 
 		glTextureParameteri(this->texture, GL_TEXTURE_MAG_FILTER, filter);
@@ -110,7 +110,7 @@ GLTexture::FilterMode GLTexture::getFilterMode() {
 
 void GLTexture::setWrapMode(GLTexture::WrapMode mode) {
 
-	unsigned int wrapMode = getTextureWrapMode(mode);
+	unsigned int wrapMode = GLHelper::getTextureWrapMode(mode);
 
 	if (glTextureParameteri) {
 		glTextureParameteri(this->texture, GL_TEXTURE_WRAP_S, wrapMode);
@@ -197,7 +197,7 @@ GLTexture::CompareFunc GLTexture::getCompare() const {
 
 void GLTexture::setCompareFunc(CompareFunc compareFunc) {
 
-	GLenum glCompareFunc = getTextureCompareMode(compareFunc);
+	GLenum glCompareFunc = GLHelper::getTextureCompareMode(compareFunc);
 	if (glTextureParameterf) {
 		glTexParameterf(this->texture, GL_TEXTURE_COMPARE_FUNC, glCompareFunc);
 	} else {
@@ -256,7 +256,7 @@ void GLTexture::resize(int width, int height, GLTexture::Format format, bool has
 	// this->bind(0);
 
 	// GL_TEXTURE_IMMUTABLE_FORMAT'
-	glTexImage2D(this->target, 0, getImageInternalFormat(format), width, height, 0, GL_RED, GL_UNSIGNED_BYTE, nullptr);
+	glTexImage2D(this->target, 0, GLHelper::getImageInternalFormat(format), width, height, 0, GL_RED, GL_UNSIGNED_BYTE, nullptr);
 	// glTextureStorage2D(this->texture, 1, getImageInternalFormat(GLTexture::Format::eR8G8B8A8), width,
 	//               height); // TODO add only if mipmaps is used with nullptr pixel object.
 
@@ -274,7 +274,7 @@ void *GLTexture::mapTexture(Format format, unsigned int level) {
 	// TODO add compute size of the buffer.
 	const unsigned int bufferSize = (width * height * depth * pixelSize) / (level + 1);
 	// GL_TEXTURE_COMPRESSED_IMAGE_SIZE
-	GLenum _format = getTextureGLFormat(format);
+	GLenum _format = GLHelper::getTextureGLFormat(format);
 	GLenum _type = GL_UNSIGNED_BYTE;
 
 	glGenBuffersARB(1, &this->pbo);
@@ -311,7 +311,7 @@ void GLTexture::unMapTexture() {
 void GLTexture::setPixels(Format format, unsigned int level, const void *pixels, unsigned long size) {
 
 	// TODO improve.
-	GLenum gformat = getTextureGLFormat(format);
+	GLenum gformat = GLHelper::getTextureGLFormat(format);
 	GLenum type = GL_UNSIGNED_BYTE;
 
 	// GL_PIXEL_UNPACK_BUFFER
@@ -345,7 +345,7 @@ void *GLTexture::getPixels(TextureFormat format, unsigned int level, unsigned lo
 
 	// GL_TEXTURE_COMPRESSED_IMAGE_SIZE
 	GLenum _type = 0;
-	GLenum _format = getTextureFormat(format, &type);
+	GLenum _format = GLHelper::getTextureFormat(format, &type);
 
 	const unsigned int bufferSize = (width * height * depth * pixelSize) / (level + 1);
 	void *pbuffer = malloc(bufferSize);

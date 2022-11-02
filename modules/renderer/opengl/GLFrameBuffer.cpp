@@ -86,9 +86,9 @@ int GLFrameBuffer::nrSamples() {
 
 void GLFrameBuffer::blend(BlendEqu equ, BlendFunc sfactor, BlendFunc dfactor, BufferAttachment bufferAttachment) {
 	int index = (int)bufferAttachment - (int)BufferAttachment::Color0;
-	GLenum glEqu = getBlendEqu(equ);
-	GLenum glsFactor = getBlendFunc(sfactor);
-	GLenum gldFactor = getBlendFunc(dfactor);
+	GLenum glEqu = GLHelper::getBlendEqu(equ);
+	GLenum glsFactor = GLHelper::getBlendFunc(sfactor);
+	GLenum gldFactor = GLHelper::getBlendFunc(dfactor);
 	if (index < 0)
 		throw InvalidArgumentException(::fmt::format("Must be a color attachment, %d.", index));
 
@@ -100,7 +100,7 @@ void GLFrameBuffer::blend(BlendEqu equ, BlendFunc sfactor, BlendFunc dfactor, Bu
 void GLFrameBuffer::blendSeperate(BlendEqu equ, BlendFunc srcRGB, BlendFunc dstRGB, BlendFunc srcAlpha,
 								  BlendFunc dstAlpha, BufferAttachment bufferAttachment) {
 	int index = (int)bufferAttachment - (int)BufferAttachment::Color0;
-	GLenum glEqu = getBlendEqu(equ);
+	GLenum glEqu = GLHelper::getBlendEqu(equ);
 	//	GLenum glsFactor = getBlendFunc(sfactor);
 	//	GLenum gldFactor = getBlendFunc(dfactor);
 	if (index < 0)
@@ -111,7 +111,7 @@ void GLFrameBuffer::blendSeperate(BlendEqu equ, BlendFunc srcRGB, BlendFunc dstR
 }
 
 void GLFrameBuffer::clear(unsigned int clear) {
-	GLbitfield mask = getClearBitMask((CLEARBITMASK)clear);
+	GLbitfield mask = GLHelper::getClearBitMask((CLEARBITMASK)clear);
 	glClear(mask);
 }
 

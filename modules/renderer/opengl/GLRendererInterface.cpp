@@ -375,10 +375,10 @@ Texture *GLRendererInterface::createTexture(TextureDesc *desc) {
 	GLuint type;
 
 	/*	Extract OpenGL target from desc.	*/
-	format = getTextureFormat(desc->pixelFormat, &type);
-	internalformat = getGraphicFormat(desc->graphicFormat);
+	format = GLHelper::getTextureFormat(desc->pixelFormat, &type);
+	internalformat = GLHelper::getGraphicFormat(desc->graphicFormat);
 	//
-	target = getTextureTarget((TextureDesc::Target)desc->target, desc->nrSamples);
+	target = GLHelper::getTextureTarget((TextureDesc::Target)desc->target, desc->nrSamples);
 
 	// TODO add release logic for when failing.
 	resetErrorFlag();
@@ -400,18 +400,18 @@ Texture *GLRendererInterface::createTexture(TextureDesc *desc) {
 		checkError();
 
 		/*	wrap and filter	*/
-		glTexParameteri(target, GL_TEXTURE_WRAP_S, getWrapMode(desc->sampler.AddressU));
+		glTexParameteri(target, GL_TEXTURE_WRAP_S, GLHelper::getWrapMode(desc->sampler.AddressU));
 		checkError();
-		glTexParameteri(target, GL_TEXTURE_WRAP_T, getWrapMode(desc->sampler.AddressV));
+		glTexParameteri(target, GL_TEXTURE_WRAP_T, GLHelper::getWrapMode(desc->sampler.AddressV));
 		checkError();
-		glTexParameteri(target, GL_TEXTURE_WRAP_R, getWrapMode(desc->sampler.AddressW));
+		glTexParameteri(target, GL_TEXTURE_WRAP_R, GLHelper::getWrapMode(desc->sampler.AddressW));
 		checkError();
 
 		glTexParameteri(target, GL_TEXTURE_MIN_FILTER,
-						getFilterMode(desc->sampler.minFilter, desc->sampler.mipmapFilter));
+						GLHelper::getFilterMode(desc->sampler.minFilter, desc->sampler.mipmapFilter));
 		checkError();
 		glTexParameteri(target, GL_TEXTURE_MAG_FILTER,
-						getFilterMode(desc->sampler.magFilter, SamplerDesc::FilterMode::NoFilterMode));
+						GLHelper::getFilterMode(desc->sampler.magFilter, SamplerDesc::FilterMode::NoFilterMode));
 		checkError();
 
 		const GLint compareMode = desc->sampler.compareMode == (int)SamplerDesc::CompareFunc::eNoCompare
@@ -421,7 +421,7 @@ Texture *GLRendererInterface::createTexture(TextureDesc *desc) {
 		checkError();
 
 		if (desc->sampler.compareMode) {
-			glTexParameteri(target, GL_TEXTURE_COMPARE_FUNC, getCompareMode(desc->sampler.compareFunc));
+			glTexParameteri(target, GL_TEXTURE_COMPARE_FUNC, GLHelper::getCompareMode(desc->sampler.compareFunc));
 			checkError();
 		}
 
@@ -446,16 +446,16 @@ Texture *GLRendererInterface::createTexture(TextureDesc *desc) {
 		checkError();
 
 		if (desc->Swizzler != TextureDesc::Swizzle::NoSwizzle) {
-			glTexParameteri(target, GL_TEXTURE_SWIZZLE_R, getTextureSwizzle(desc->Swizzler));
+			glTexParameteri(target, GL_TEXTURE_SWIZZLE_R, GLHelper::getTextureSwizzle(desc->Swizzler));
 		}
 		if (desc->Swizzleg != TextureDesc::Swizzle::NoSwizzle) {
-			glTexParameteri(target, GL_TEXTURE_SWIZZLE_G, getTextureSwizzle(desc->Swizzleg));
+			glTexParameteri(target, GL_TEXTURE_SWIZZLE_G, GLHelper::getTextureSwizzle(desc->Swizzleg));
 		}
 		if (desc->Swizzleb != TextureDesc::Swizzle::NoSwizzle) {
-			glTexParameteri(target, GL_TEXTURE_SWIZZLE_B, getTextureSwizzle(desc->Swizzleb));
+			glTexParameteri(target, GL_TEXTURE_SWIZZLE_B, GLHelper::getTextureSwizzle(desc->Swizzleb));
 		}
 		if (desc->Swizzlea != TextureDesc::Swizzle::NoSwizzle) {
-			glTexParameteri(target, GL_TEXTURE_SWIZZLE_A, getTextureSwizzle(desc->Swizzlea));
+			glTexParameteri(target, GL_TEXTURE_SWIZZLE_A, GLHelper::getTextureSwizzle(desc->Swizzlea));
 		}
 
 		// if (errorStatus != GL_NO_ERROR)
@@ -604,9 +604,9 @@ Sampler *GLRendererInterface::createSampler(SamplerDesc *desc) {
 	/*  */
 	glGenSamplers(1, &sampler);
 
-	const GLint wrapS = getWrapMode(desc->AddressU);
-	const GLint wrapT = getWrapMode(desc->AddressV);
-	const GLint wrapR = getWrapMode(desc->AddressW);
+	const GLint wrapS = GLHelper::getWrapMode(desc->AddressU);
+	const GLint wrapT = GLHelper::getWrapMode(desc->AddressV);
+	const GLint wrapR = GLHelper::getWrapMode(desc->AddressW);
 
 	glSamplerParameteri(sampler, GL_TEXTURE_WRAP_S, wrapS);
 	checkError();
@@ -615,17 +615,17 @@ Sampler *GLRendererInterface::createSampler(SamplerDesc *desc) {
 	glSamplerParameteri(sampler, GL_TEXTURE_WRAP_R, wrapR);
 	checkError();
 
-	glSamplerParameteri(sampler, GL_TEXTURE_MIN_FILTER, getFilterMode(desc->minFilter, desc->mipmapFilter));
+	glSamplerParameteri(sampler, GL_TEXTURE_MIN_FILTER, GLHelper::getFilterMode(desc->minFilter, desc->mipmapFilter));
 	checkError();
 	glSamplerParameteri(sampler, GL_TEXTURE_MAG_FILTER,
-						getFilterMode(desc->magFilter, SamplerDesc::FilterMode::NoFilterMode));
+						GLHelper::getFilterMode(desc->magFilter, SamplerDesc::FilterMode::NoFilterMode));
 	checkError();
 
 	const GLint compareMode =
 		desc->compareMode == (int)SamplerDesc::CompareFunc::eNoCompare ? GL_NONE : GL_COMPARE_REF_TO_TEXTURE;
 	glSamplerParameteri(sampler, GL_TEXTURE_COMPARE_MODE, compareMode);
 	if (desc->compareMode)
-		glSamplerParameteri(sampler, GL_TEXTURE_COMPARE_FUNC, getCompareMode(desc->compareFunc));
+		glSamplerParameteri(sampler, GL_TEXTURE_COMPARE_FUNC, GLHelper::getCompareMode(desc->compareFunc));
 
 	/*  */
 	if (desc->anisotropy > 0)
@@ -980,8 +980,8 @@ Buffer *GLRendererInterface::createBuffer(BufferDesc *desc) {
 
 	GLuint buf = 0;
 	/*	Translate into OpenGL arguments.	*/
-	GLenum target = getBufferType((BufferDesc::BufferType)desc->type);
-	GLenum usage = getBufferHint((BufferDesc::BufferHint)desc->hint);
+	GLenum target = GLHelper::getBufferType((BufferDesc::BufferType)desc->type);
+	GLenum usage = GLHelper::getBufferHint((BufferDesc::BufferHint)desc->hint);
 
 	// TODO add for checking if target is supported.
 
@@ -1237,7 +1237,7 @@ FrameBuffer *GLRendererInterface::createFrameBuffer(FrameBufferDesc *desc) {
 
 	// Add debug marker information.
 	if (desc->marker) {
-		addMarkerLabel(GL_FRAMEBUFFER, glfraobj->framebuffer, desc->marker);
+		GLHelper::addMarkerLabel(GL_FRAMEBUFFER, glfraobj->framebuffer, desc->marker);
 	}
 
 	/*  */
@@ -1373,11 +1373,11 @@ ViewPort *GLRendererInterface::getView(unsigned int i) {
 
 void GLRendererInterface::setDepthMask(bool flag) { glDepthMask(flag ? GL_TRUE : GL_FALSE); }
 
-void GLRendererInterface::enableState(GLRendererInterface::State state) { glEnable(getState(state)); }
+void GLRendererInterface::enableState(GLRendererInterface::State state) { glEnable(GLHelper::getState(state)); }
 
-void GLRendererInterface::disableState(GLRendererInterface::State state) { glDisable(getState(state)); }
+void GLRendererInterface::disableState(GLRendererInterface::State state) { glDisable(GLHelper::getState(state)); }
 
-bool GLRendererInterface::isStateEnabled(GLRendererInterface::State state) { return glIsEnabled(getState(state)); }
+bool GLRendererInterface::isStateEnabled(GLRendererInterface::State state) { return glIsEnabled(GLHelper::getState(state)); }
 
 void GLRendererInterface::setLineWidth(float width) { glLineWidth(width); }
 
@@ -1385,7 +1385,7 @@ void GLRendererInterface::blit(const FrameBuffer *source, FrameBuffer *dest, Tex
 	GLFrameBuffer *read = (GLFrameBuffer *)source;
 	GLFrameBuffer *write = (GLFrameBuffer *)dest;
 
-	GLenum filter = getTextureFilterModeNoMip(filterMode);
+	GLenum filter = GLHelper::getTextureFilterModeNoMip(filterMode);
 	GLenum attachment = GL_COLOR_BUFFER_BIT;
 
 	// if (glBlitNamedFramebuffer) {

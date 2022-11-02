@@ -8,7 +8,7 @@ using namespace fragcore;
 
 /*  Assign marker for debugging.    */
 // GL_MAX_LABEL_LENGTH
-void addMarkerLabel(unsigned int identifier, unsigned int object, const MarkerDebug *debug) {
+void GLHelper::addMarkerLabel(unsigned int identifier, unsigned int object, const MarkerDebug *debug) {
 	if (identifier != 0) {
 		// glObjectPtrLabel
 		int maxLabelLength;
@@ -21,7 +21,7 @@ void addMarkerLabel(unsigned int identifier, unsigned int object, const MarkerDe
 	}
 }
 
-unsigned int getWrapMode(SamplerDesc::AddressMode mode) {
+unsigned int GLHelper::getWrapMode(SamplerDesc::AddressMode mode) {
 	switch (mode) {
 	case SamplerDesc::AddressMode::Repeat:
 		return GL_REPEAT;
@@ -37,7 +37,7 @@ unsigned int getWrapMode(SamplerDesc::AddressMode mode) {
 	}
 }
 
-unsigned int getFilterMode(SamplerDesc::FilterMode mode, SamplerDesc::FilterMode mips) {
+unsigned int GLHelper::getFilterMode(SamplerDesc::FilterMode mode, SamplerDesc::FilterMode mips) {
 	if (mips == SamplerDesc::FilterMode::NoFilterMode) {
 		switch (mode) {
 		case SamplerDesc::FilterMode::Linear:
@@ -76,7 +76,7 @@ unsigned int getFilterMode(SamplerDesc::FilterMode mode, SamplerDesc::FilterMode
 	throw InvalidArgumentException("Invalid filter mode.");
 }
 
-unsigned int getCompareMode(SamplerDesc::CompareFunc mode) {
+unsigned int GLHelper::getCompareMode(SamplerDesc::CompareFunc mode) {
 	switch (mode) {
 	case SamplerDesc::CompareFunc::lessEqual:
 		return GL_LEQUAL;
@@ -99,7 +99,7 @@ unsigned int getCompareMode(SamplerDesc::CompareFunc mode) {
 	}
 }
 
-unsigned int getGraphicFormat(GraphicFormat graphicFormat) {
+unsigned int GLHelper::getGraphicFormat(GraphicFormat graphicFormat) {
 	switch (graphicFormat) {
 	case GraphicFormat::R8_SRGB:
 		return GL_SLUMINANCE8;
@@ -323,7 +323,7 @@ unsigned int getGraphicFormat(GraphicFormat graphicFormat) {
 	throw InvalidArgumentException("Invalid texture format.");
 }
 
-unsigned int getTextureFormat(TextureFormat textureFormat, unsigned int *pixelType) {
+unsigned int GLHelper::getTextureFormat(TextureFormat textureFormat, unsigned int *pixelType) {
 	switch (textureFormat) {
 	case TextureFormat::Alpha8:
 		*pixelType = GL_UNSIGNED_BYTE;
@@ -386,7 +386,7 @@ unsigned int getTextureFormat(TextureFormat textureFormat, unsigned int *pixelTy
 	throw InvalidArgumentException("Invalid texture format.");
 }
 
-unsigned int getTextureFormat(TextureDesc::Format format) {
+unsigned int GLHelper::getTextureFormat(TextureDesc::Format format) {
 	switch (format) {
 	case TextureDesc::Format::eSingleColor:
 		return GL_RED;
@@ -405,7 +405,7 @@ unsigned int getTextureFormat(TextureDesc::Format format) {
 	}
 }
 
-unsigned int getInternalTextureFormat(TextureDesc::Format format, bool sRGB, TextureDesc::Compression compression,
+unsigned int GLHelper::getInternalTextureFormat(TextureDesc::Format format, bool sRGB, TextureDesc::Compression compression,
 									  TextureDesc::Type type) {
 
 	// No
@@ -503,7 +503,7 @@ unsigned int getInternalTextureFormat(TextureDesc::Format format, bool sRGB, Tex
 	throw InvalidArgumentException("Invalid texture format {}.", format);
 }
 
-unsigned int getTextureTarget(TextureDesc::Target target, int nrSamples) {
+unsigned int GLHelper::getTextureTarget(TextureDesc::Target target, int nrSamples) {
 	switch (target) {
 	case TextureDesc::Target::Texture1D:
 		return GL_TEXTURE_1D;
@@ -530,7 +530,7 @@ unsigned int getTextureTarget(TextureDesc::Target target, int nrSamples) {
 	}
 }
 
-unsigned int getTextureType(TextureDesc::Type type) {
+unsigned int GLHelper::getTextureType(TextureDesc::Type type) {
 	switch (type) {
 	case TextureDesc::eUnsignedByte:
 		return GL_UNSIGNED_BYTE;
@@ -547,7 +547,7 @@ unsigned int getTextureType(TextureDesc::Type type) {
 	}
 }
 
-unsigned int getTextureSwizzle(TextureDesc::Swizzle swizzle) {
+unsigned int GLHelper::getTextureSwizzle(TextureDesc::Swizzle swizzle) {
 	switch (swizzle) {
 	case TextureDesc::Swizzle::Zero:
 		return GL_ZERO;
@@ -566,7 +566,7 @@ unsigned int getTextureSwizzle(TextureDesc::Swizzle swizzle) {
 	}
 }
 
-unsigned int getBufferType(BufferDesc::BufferType type) {
+unsigned int GLHelper::getBufferType(BufferDesc::BufferType type) {
 	switch (type) {
 	case BufferDesc::eArray:
 		return GL_ARRAY_BUFFER_ARB;
@@ -593,7 +593,7 @@ unsigned int getBufferType(BufferDesc::BufferType type) {
 	}
 }
 
-unsigned int getBufferHint(BufferDesc::BufferHint hint) {
+unsigned int GLHelper::getBufferHint(BufferDesc::BufferHint hint) {
 
 	const unsigned int subhint = (hint & ~(BufferDesc::eWrite | BufferDesc::eRead));
 
@@ -626,7 +626,7 @@ unsigned int getBufferHint(BufferDesc::BufferHint hint) {
 	throw InvalidArgumentException("None matching buffer hint - {}", hint);
 }
 
-unsigned int getPrimitive(GeometryDesc::Primitive primitive) {
+unsigned int GLHelper::getPrimitive(GeometryDesc::Primitive primitive) {
 
 	switch (primitive) {
 	case GeometryDesc::Primitive::Point:
@@ -644,7 +644,7 @@ unsigned int getPrimitive(GeometryDesc::Primitive primitive) {
 	}
 }
 
-unsigned int getAttributeDataType(GeometryDesc::AttributeType type) {
+unsigned int GLHelper::getAttributeDataType(GeometryDesc::AttributeType type) {
 	switch (type) {
 	case GeometryDesc::AttributeType::eInt:
 		return GL_INT;
@@ -659,7 +659,7 @@ unsigned int getAttributeDataType(GeometryDesc::AttributeType type) {
 	}
 }
 
-unsigned int getState(IRenderer::State state) {
+unsigned int GLHelper::getState(IRenderer::State state) {
 	switch (state) {
 	case IRenderer::State::DepthTest:
 		return GL_DEPTH_TEST;
@@ -689,7 +689,7 @@ unsigned int getState(IRenderer::State state) {
 		throw InvalidArgumentException("Invalid state - {}.", (int)state);
 	}
 }
-unsigned int getTextureFilterModeNoMip(Texture::FilterMode format) {
+unsigned int GLHelper::getTextureFilterModeNoMip(Texture::FilterMode format) {
 	switch (format) {
 	case Texture::FilterMode::eNearest:
 		return GL_NEAREST;
@@ -700,7 +700,7 @@ unsigned int getTextureFilterModeNoMip(Texture::FilterMode format) {
 	}
 }
 
-unsigned int getBlendEqu(FrameBuffer::BlendEqu equ) {
+unsigned int GLHelper::getBlendEqu(FrameBuffer::BlendEqu equ) {
 	switch (equ) {
 	case FrameBuffer::BlendEqu::Addition:
 		return GL_FUNC_ADD;
@@ -710,7 +710,7 @@ unsigned int getBlendEqu(FrameBuffer::BlendEqu equ) {
 		throw InvalidArgumentException("");
 	}
 }
-unsigned int getBlendFunc(FrameBuffer::BlendFunc func) {
+unsigned int GLHelper::getBlendFunc(FrameBuffer::BlendFunc func) {
 	switch (func) {
 	case FrameBuffer::BlendFunc::Zero:
 		return GL_ZERO;
@@ -729,7 +729,7 @@ unsigned int getBlendFunc(FrameBuffer::BlendFunc func) {
 	}
 }
 
-unsigned int getClearBitMask(CLEARBITMASK clearbitmask) {
+unsigned int GLHelper::getClearBitMask(CLEARBITMASK clearbitmask) {
 	GLbitfield mask = 0;
 	mask |= ((unsigned int)clearbitmask & (unsigned int)CLEARBITMASK::Color) != 0 ? GL_COLOR_BUFFER_BIT : 0;
 	mask |= ((unsigned int)clearbitmask & (unsigned int)CLEARBITMASK::Depth) != 0 ? GL_DEPTH_BUFFER_BIT : 0;
@@ -738,7 +738,7 @@ unsigned int getClearBitMask(CLEARBITMASK clearbitmask) {
 }
 
 /*  Texture.    */
-unsigned int getTextureWrapMode(Texture::WrapMode mode) {
+unsigned int GLHelper::getTextureWrapMode(Texture::WrapMode mode) {
 	switch (mode) {
 	case Texture::WrapMode::eClamp:
 		return GL_CLAMP_TO_EDGE;
@@ -751,7 +751,7 @@ unsigned int getTextureWrapMode(Texture::WrapMode mode) {
 	}
 }
 
-unsigned int getTextureFilterMode(Texture::FilterMode mode) {
+unsigned int GLHelper::getTextureFilterMode(Texture::FilterMode mode) {
 	switch (mode) {
 	case Texture::FilterMode::eNearest:
 
@@ -765,7 +765,7 @@ unsigned int getTextureFilterMode(Texture::FilterMode mode) {
 	}
 }
 
-unsigned int getTextureCompareMode(Texture::CompareFunc compareFunc) {
+unsigned int GLHelper::getTextureCompareMode(Texture::CompareFunc compareFunc) {
 	switch (compareFunc) {
 	case Texture::CompareFunc::lessEqual:
 		return GL_LEQUAL;
@@ -787,7 +787,7 @@ unsigned int getTextureCompareMode(Texture::CompareFunc compareFunc) {
 		throw InvalidArgumentException("Invalid address mode.");
 	}
 }
-unsigned int getImageInternalFormat(Texture::Format format) {
+unsigned int GLHelper::getImageInternalFormat(Texture::Format format) {
 	GLenum gformat;
 	switch (format) {
 	case Texture::Format::eR8G8B8:
@@ -810,7 +810,7 @@ unsigned int getImageInternalFormat(Texture::Format format) {
 	return gformat;
 }
 
-unsigned int getAccess(Texture::MapTarget target) {
+unsigned int GLHelper::getAccess(Texture::MapTarget target) {
 	GLenum access;
 	switch (target) {
 	case Texture::MapTarget::eWrite:
@@ -828,7 +828,7 @@ unsigned int getAccess(Texture::MapTarget target) {
 	return access;
 }
 
-unsigned int getTextureGLFormat(Texture::Format format) {
+unsigned int GLHelper::getTextureGLFormat(Texture::Format format) {
 	switch (format) {
 	case Texture::Format::eR8G8B8A8:
 		return GL_RGBA;
@@ -843,7 +843,7 @@ unsigned int getTextureGLFormat(Texture::Format format) {
 	}
 }
 
-Texture::Format getTextureFormatUserSpace(unsigned int format) {
+Texture::Format GLHelper::getTextureFormatUserSpace(unsigned int format) {
 	switch (format) {
 	case GL_RGBA8:
 		return Texture::eR8G8B8;

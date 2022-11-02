@@ -65,8 +65,8 @@ void GLViewPort::getDepthRange(double *near, double *far) {
 	}
 }
 
-void GLViewPort::enable(IRenderer::State state) { glEnablei(getState(state), this->viewport); }
-void GLViewPort::disable(IRenderer::State state) { glDisablei(getState(state), this->viewport); }
-bool GLViewPort::isStateEnabled(IRenderer::State state) { return glIsEnabledi(getState(state), this->viewport); }
+void GLViewPort::enable(IRenderer::State state) { glEnablei(GLHelper::getState(state), this->viewport); }
+void GLViewPort::disable(IRenderer::State state) { glDisablei(GLHelper::getState(state), this->viewport); }
+bool GLViewPort::isStateEnabled(IRenderer::State state) { return glIsEnabledi(GLHelper::getState(state), this->viewport); }
 
 intptr_t GLViewPort::getNativePtr() const { return 0; }

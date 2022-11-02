@@ -10,6 +10,9 @@ void VKFrameBuffer::unBind() {
 	// vkCmdEndRenderPass(commandBuffers[i]);
 }
 
+int VKFrameBuffer::attachmentCount() {}
+std::vector<Texture *> VKFrameBuffer::getColorTargets() {}
+
 void VKFrameBuffer::write() {}
 
 void VKFrameBuffer::read() const {}
@@ -55,7 +58,8 @@ void VKFrameBuffer::clear(unsigned int clear) {
 	//   PrintVkResult("vkEndCommandBuffer", Result);
 }
 
-void VKFrameBuffer::clearColor(BufferAttachment colorAttachment, const float *color) { /*  Assign only.*/ }
+void VKFrameBuffer::clearColor(BufferAttachment colorAttachment, const float *color) { /*  Assign only.*/
+}
 
 void VKFrameBuffer::clearDepthStencil(float depth, int stencil) {}
 
