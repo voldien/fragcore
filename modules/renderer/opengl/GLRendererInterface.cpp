@@ -310,7 +310,9 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 	frameBufferObject->numtextures = 1;
 	// this->defaultFrameBuffer->pdata = frameBufferObject;
 	// this->defaultFrameBuffer->iRenderer = this;
-	frameBufferObject->desc.attach[0] = new FrameBufferTexture();
+	Texture *framebuffers[] = {new FrameBufferTexture()};
+	frameBufferObject->desc.attach = (Texture **)&framebuffers;
+	//frameBufferObject->desc.nrAttachments = 1;
 	// frameBufferObject->desc.attach[0]->iRenderer = this;
 	GLenum drawbuffers[] = {GL_FRONT, GL_BACK};
 	// glNamedFramebufferDrawBuffers(0, 2, drawbuffers);
@@ -1377,7 +1379,9 @@ void GLRendererInterface::enableState(GLRendererInterface::State state) { glEnab
 
 void GLRendererInterface::disableState(GLRendererInterface::State state) { glDisable(GLHelper::getState(state)); }
 
-bool GLRendererInterface::isStateEnabled(GLRendererInterface::State state) { return glIsEnabled(GLHelper::getState(state)); }
+bool GLRendererInterface::isStateEnabled(GLRendererInterface::State state) {
+	return glIsEnabled(GLHelper::getState(state));
+}
 
 void GLRendererInterface::setLineWidth(float width) { glLineWidth(width); }
 
