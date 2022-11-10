@@ -405,7 +405,6 @@ namespace fragcore {
 	 */
 	typedef struct framebuffer_desc_t {
 		unsigned int nrAttachments;
-		// TOOD convert to pointer.
 		Texture **attach; /*	Texture attachment.	*/
 
 		Texture *depth;		   /*	Depth attachment.	*/

@@ -31,8 +31,6 @@ void ZipFileIO::close() {
 		throw RuntimeException("Failed to close zip file {}", buf);
 	}
 
-	// zip_file_add
-
 	if (this->zipfile->deincreemnt()) {
 		this->zipfile->release();
 		delete this->zipfile.ptr();
