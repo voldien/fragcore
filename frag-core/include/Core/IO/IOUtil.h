@@ -66,6 +66,8 @@ namespace fragcore {
 		 */
 		static long int loadString(Ref<IO> &in, Ref<IO> &out);
 
+		static long int saveFileMem(Ref<IO> &io, char *data, size_t size);
+
 		/**
 		 * @brief
 		 *

@@ -19,8 +19,8 @@
 #ifndef _FRAG_CORE_IMAGE_H_
 #define _FRAG_CORE_IMAGE_H_ 1
 #include "ImageFormat.h"
-#include <Core/math3D/Color.h>
 #include <Core/Object.h>
+#include <Core/math3D/Color.h>
 
 namespace fragcore {
 
@@ -58,8 +58,10 @@ namespace fragcore {
 
 	  protected:
 		void allocateMemory(unsigned int width, unsigned int height, unsigned depth, TextureFormat format);
-		size_t getTextureSize(unsigned int width, unsigned int height, unsigned depth, TextureFormat format);
-		size_t getFormatPixelSize(TextureFormat format);
+
+	  public:
+		static size_t getTextureSize(unsigned int width, unsigned int height, unsigned depth, TextureFormat format);
+		static size_t getFormatPixelSize(TextureFormat format);
 
 	  private:
 		unsigned int w;

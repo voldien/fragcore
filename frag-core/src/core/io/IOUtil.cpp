@@ -33,7 +33,7 @@ long int IOUtil::loadFileMem(Ref<IO> &io, char **data) {
 }
 
 long int IOUtil::loadFile(Ref<IO> &in, Ref<IO> &out) {
-	
+
 	if (!in->isReadable()) {
 		throw InvalidArgumentException("Failed to read from IO: {}", in->getName());
 	}
@@ -81,4 +81,29 @@ long int IOUtil::loadString(Ref<IO> &in, Ref<IO> &out) {
 	out->write(sizeof(term), &term);
 
 	return nbytes;
+}
+
+long int IOUtil::saveFileMem(Ref<IO> &io, char *data, size_t size) {
+
+	if (!io->isWriteable()) {
+		throw InvalidArgumentException("Failed to write to IO: {}", io->getName());
+	}
+
+	io->write(size, data);
+
+	char buf[1024 * 4];
+	long nbytes;
+	long dataSize = 0;
+	//while ((nbytes = in->write(sizeof(buf), buf)) > 0) {
+	//	int outbytes = out->write(nbytes, buf);
+	//	if (outbytes > 0) {
+	//		/*	*/
+	//		dataSize += nbytes;
+	//	} else {
+	//		throw RuntimeException("Error while reading IO: {}", out->getName());
+	//	}
+	//}
+
+	return dataSize;
+
 }

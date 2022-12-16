@@ -48,7 +48,11 @@ namespace fragcore {
 
 		void loadImageData(const std::string &path, unsigned int *width, unsigned int *height);
 
-		void saveImage(const std::string &path, Image &image);
+		void saveImage(const std::string &path, Image &image){
+			Ref<IO> io = Ref<IO>(new FileIO(path.c_str(), FileIO::WRITE));
+			saveImage(io, image);
+			io->close();
+		}
 		void saveImage(Ref<IO> &IO, Image &image);
 	};
 } // namespace fragcore
