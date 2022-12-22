@@ -1,5 +1,7 @@
 #include "GeometryUtil.h"
 #include <Core/Math.h>
+#include <generator/SubdivideMesh.hpp>
+
 
 using namespace fragcore;
 

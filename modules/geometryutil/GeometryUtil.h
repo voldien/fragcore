@@ -39,6 +39,8 @@ namespace fragcore {
 
 		static std::vector<Triangle> createPolygon(const std::vector<Vector3> &points);
 
+		static std::vector<Triangle> GenerateSmoothNormals(const std::vector<Triangle> &points, float angle);
+
 		static bool isConvex(std::vector<Vector3> &points);
 		static bool isConcave(std::vector<Vector3> &points);
 

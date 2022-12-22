@@ -63,7 +63,7 @@ namespace fragcore {
 
 		virtual bool isDirectory(const char *path) const override;
 		virtual bool isFile(const char *path) const override;
-		
+
 		// FileAccess getFileAccess(const char *path) override;
 
 		/**
@@ -71,6 +71,9 @@ namespace fragcore {
 		 */
 		virtual void release();
 
+	  public:
+		// TODO add auth to allow to read encrypted files.
+		//	  void authenicate();
 	  private:		/*	*/
 		void *pzip; /**/
 

@@ -16,18 +16,19 @@ Image ImageLoader::loadImage(Ref<IO> &io) {
 	FIMEMORY *stream;		   /**/
 	FIBITMAP *firsbitmap;	   /**/
 	void *pixelData;		   /**/
-	size_t bitsPerPixel;
+	size_t bitsPerPixel;	   /*	*/
 	TextureFormat imageFormat = TextureFormat::Alpha8;
-	size_t pixelSize = 0;
-	size_t width, height, depth;
+	size_t pixelSize = 0;		 /*	*/
+	size_t width, height, depth; /*	*/
 
-	char *imageData;
+	char *imageData = nullptr;
+
 	size_t imageSize = IOUtil::loadFileMem(io, &imageData);
 
 	/*	1 byte for the size in order, Because it crash otherwise if set to 0.	*/
 	stream = FreeImage_OpenMemory((BYTE *)imageData, imageSize);
 	if (stream == nullptr) {
-		throw RuntimeException("Failed to open freeimage memory stream. \n");
+		throw RuntimeException("Failed to open freeimage memory stream");
 	}
 
 	/*	Seek to beginning of the memory stream.	*/
@@ -40,7 +41,7 @@ Image ImageLoader::loadImage(Ref<IO> &io) {
 	/*	*/
 	if (firsbitmap == nullptr) {
 		FreeImage_CloseMemory(stream);
-		throw RuntimeException("Failed to create free-image from memory.\n");
+		throw RuntimeException("Failed to create free-image from memory");
 	}
 
 	/*	Reset to beginning of stream.	*/
@@ -79,7 +80,7 @@ Image ImageLoader::loadImage(Ref<IO> &io) {
 		// 	imageFormat = TextureFormat::RGFloat;
 		// 	break;
 		default:
-			throw NotSupportedException("Non Supported");
+			throw NotSupportedException("None Supported Color Type");
 		}
 		break;
 	case FIC_RGBALPHA:
@@ -94,7 +95,7 @@ Image ImageLoader::loadImage(Ref<IO> &io) {
 			imageFormat = TextureFormat::RGBAFloat;
 			break;
 		default:
-			throw NotSupportedException("Non Supported");
+			throw NotSupportedException("None Supported Color Type");
 		}
 		break;
 	case FIC_MINISWHITE:
@@ -111,7 +112,7 @@ Image ImageLoader::loadImage(Ref<IO> &io) {
 		break;
 	case FIC_CMYK:
 	default:
-		throw NotSupportedException("Non Supported");
+		throw NotSupportedException("None Supported Color Type");
 	}
 
 	/*  */
@@ -132,9 +133,7 @@ void ImageLoader::saveImage(Ref<IO> &IO, Image &Image) {
 	FIBITMAP *image = nullptr;
 	FIBITMAP *finalImage = nullptr;
 	FREE_IMAGE_FORMAT image_format = FIF_UNKNOWN;
-	std::string filepath = "save.png";
-
-	// assert(renderer && texture);
+	std::string filepath; // = "save.png";
 
 	const size_t size = Image.getSize();
 
@@ -180,20 +179,16 @@ void ImageLoader::saveImage(Ref<IO> &IO, Image &Image) {
 	// FreeImage_SaveToHandle()
 
 	FIMEMORY *mem = FreeImage_OpenMemory(nullptr, FreeImage_GetMemorySize(image));
-	FreeImage_SaveToMemory(image_format, image, mem);
+	if (FreeImage_SaveToMemory(image_format, image, mem)) {
 
-	BYTE *save_pixel_data;
-	DWORD save_size;
-	if (FreeImage_AcquireMemory(mem, &save_pixel_data, &save_size)) {
-		IOUtil::saveFileMem(IO, (char *)save_pixel_data, save_size);
+		BYTE *save_pixel_data;
+		DWORD save_size;
+		if (FreeImage_AcquireMemory(mem, &save_pixel_data, &save_size)) {
+			IOUtil::saveFileMem(IO, (char *)save_pixel_data, save_size);
+		}
 	}
-	// size_t imageSize = IOUtil::loadFileMem(io, &imageData);
 
-	// if (!FreeImage_Save(image_format, image, filepath.c_str(), 0)) {
-	//	throw RuntimeException("Failed save image: {}", filepath);
-	//}
-	//
-	// /*  */
+	/*  */
 	FreeImage_CloseMemory(fimemory);
 
 	FreeImage_Unload(image);

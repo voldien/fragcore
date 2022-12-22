@@ -32,14 +32,17 @@ namespace fragcore {
 			float tangent[3];
 		} Vertex;
 
-		static void generatePlan(float scale, std::vector<Vertex> &vertices, std::vector<unsigned int> &indices);
+		static void generatePlan(float scale, std::vector<Vertex> &vertices, std::vector<unsigned int> &indices,
+								 int segmentsX = 1, int segmentsY = 1);
 
 		static void generateGrid2D();
 
 		static void generateBoundingBox();
-		static void generateSphere();
+		static void generateSphere(float radius, std::vector<Vertex> &vertices, std::vector<unsigned int> &indices);
 
 		static void generateCube(float scale, std::vector<Vertex> &vertices, std::vector<unsigned int> &indices);
+
+		static void generateTorus(float scale, std::vector<Vertex> &vertices, std::vector<unsigned int> &indices);
 	};
 
 } // namespace fragcore

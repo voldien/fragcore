@@ -8,8 +8,8 @@ using namespace fragcore;
 
 ZipFileIO::ZipFileIO(zip_file_t *file, zip_int64_t index, Ref<ZipFileSystem> ref) {
 	this->file = file;
-	this->zipfile = ref;
 	this->index = index;
+	this->zipfile = ref;
 	this->zipfile->increment();
 }
 
@@ -38,14 +38,13 @@ void ZipFileIO::close() {
 }
 
 long ZipFileIO::read(long int nbytes, void *pbuffer) {
-	nbytes = zip_fread(this->file, pbuffer, nbytes);
+	zip_int64_t nread = zip_fread(this->file, pbuffer, nbytes);
 
-	if (nbytes == -1) {
-		char buf[1024];
-		zip_error_to_str(buf, sizeof(buf), nbytes, errno);
-		throw RuntimeException("Failed to read zip file {}", buf);
+	if (nread == -1) {
+		throw RuntimeException("Failed to read zip file {} - number of bytes: {}", zip_file_strerror(this->file),
+							   nbytes);
 	}
-	return nbytes;
+	return nread;
 }
 
 long ZipFileIO::write(long int nbytes, const void *pbuffer) {
@@ -88,33 +87,47 @@ void ZipFileIO::seek(long int nbytes, Seek seek) {
 		throw InvalidArgumentException("Invalid seek enumerator.");
 	}
 
-	zip_int8_t err = zip_fseek(this->file, nbytes, whence);
-	if (err != 0) {
-		char buf[1024];
-		int sys_err;
-		//		zip_error_get(zip, &err, &sys_err);
-		//		zip_error_to_str(buf, sizeof(buf), err, errno);
-		//		throw InvalidArgumentException("can't open `{}':\n\t{}", path, buf));
-	}
-	// zip_fseek
+	// zip_int8_t err = zip_fseek(this->file, nbytes, whence);
+	// if (err == -1) {
+	//	//	char buf[1024];
+	//	//	int sys_err;
+	//	//	throw InvalidArgumentException("Can not seek {}", zip_file_strerror(this->file));
+	//}
 }
 
-unsigned long ZipFileIO::getPos() { return zip_ftell(this->file); }
+unsigned long ZipFileIO::getPos() {
+
+	// zip_int64_t tell = zip_ftell(this->file);
+	// if (tell == -1) {
+	//	//		throw InvalidArgumentException("Can not tell: {} - Path {}", zip_file_strerror(this->file),
+	//	//									   zip_get_name((zip_t *)this->zipfile->getZipObject(), this->index, 0));
+	//}
+	return 0;
+}
 
 bool ZipFileIO::isWriteable() const {
 	zip_uint32_t attr;
-	int err =
-		zip_file_get_external_attributes((zip_t *)this->zipfile->getZipObject(), 0, ZIP_OPSYS_UNIX, nullptr, &attr);
+	int err = zip_file_get_external_attributes((zip_t *)this->zipfile->getZipObject(), this->index, ZIP_OPSYS_UNIX,
+											   nullptr, &attr);
+
 	if (err != ZIP_ER_OK) {
 		char buf[1024];
 		zip_error_to_str(buf, sizeof(buf), err, errno);
 		throw RuntimeException("Failed to close zip file {}", buf);
 	}
-	return true;
+	return (attr & ZIP_RDONLY);
 }
 
 bool ZipFileIO::isReadable() const {
-	// ZIP_RDONLY
+	zip_uint32_t attr;
+	int err = zip_file_get_external_attributes((zip_t *)this->zipfile->getZipObject(), this->index, ZIP_OPSYS_UNIX,
+											   nullptr, &attr);
+
+	if (err != ZIP_ER_OK) {
+		char buf[1024];
+		zip_error_to_str(buf, sizeof(buf), err, errno);
+		throw RuntimeException("Failed to close zip file {}", buf);
+	}
 	return true;
 }
 

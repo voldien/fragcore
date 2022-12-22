@@ -7,7 +7,7 @@ using namespace fragcore;
 
 long int IOUtil::loadFileMem(Ref<IO> &io, char **data) {
 	char *d = nullptr;
-	long dataSize = 0;
+	long int dataSize = 0;
 
 	size_t current_pos = io->getPos();
 
@@ -19,8 +19,9 @@ long int IOUtil::loadFileMem(Ref<IO> &io, char **data) {
 
 	// Page aligned;
 	char buf[1024 * 4];
-	long nbytes;
-	while (!io->eof() && (nbytes = io->read(sizeof(buf), buf)) > 0) {
+	long nbytes = 0;
+
+	while ((nbytes = io->read(sizeof(buf), buf)) > 0) {
 		d = static_cast<char *>(realloc(d, dataSize + nbytes));
 		memcpy(&d[dataSize], buf, nbytes);
 		dataSize += nbytes;
@@ -94,7 +95,7 @@ long int IOUtil::saveFileMem(Ref<IO> &io, char *data, size_t size) {
 	char buf[1024 * 4];
 	long nbytes;
 	long dataSize = 0;
-	//while ((nbytes = in->write(sizeof(buf), buf)) > 0) {
+	// while ((nbytes = in->write(sizeof(buf), buf)) > 0) {
 	//	int outbytes = out->write(nbytes, buf);
 	//	if (outbytes > 0) {
 	//		/*	*/
@@ -105,5 +106,4 @@ long int IOUtil::saveFileMem(Ref<IO> &io, char *data, size_t size) {
 	//}
 
 	return dataSize;
-
 }
