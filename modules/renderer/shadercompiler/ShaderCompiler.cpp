@@ -2,9 +2,11 @@
 #include "Core/IO/BufferIO.h"
 #include "Core/dataStructure/StackAllactor.h"
 #include "ShaderUtil.h"
-#include <spirv_cross/spirv_glsl.hpp>
-#include <spirv_cross/spirv_hlsl.hpp>
-#include <spirv_cross/spirv_msl.hpp>
+#include <spirv_glsl.hpp>
+#include <spirv_hlsl.hpp>
+#include <utility>
+#include <vector>
+//#include <spirv_cross/spirv_msl.hpp>
 
 #include <fmt/core.h>
 using namespace fragcore;
@@ -18,36 +20,39 @@ std::vector<char> ShaderCompiler::convert(const std::vector<char> &sourceCode, S
 	return {};
 }
 
-std::vector<char> ShaderCompiler::convertSPIRV(const std::vector<char> &source, ShaderLanguage shaderLanguage) {
+std::vector<char> ShaderCompiler::convertSPIRV(const std::vector<uint32_t> &source,
+											   const CompilerConvertOption &target) {
 	// Read SPIR-V from disk or similar.
 
-	spirv_cross::CompilerGLSL glsl(reinterpret_cast<const uint32_t *>(source.data()), source.size() / sizeof(uint32_t));
+	std::vector<uint32_t> Tsource = source;
+
+	spirv_cross::CompilerGLSL glsl(source);
 
 	// The SPIR-V is now parsed, and we can perform reflection on it.
 	spirv_cross::ShaderResources resources = glsl.get_shader_resources();
-
+	//
 	// Get all sampled images in the shader.
-	for (auto &resource : resources.sampled_images) {
-		unsigned set = glsl.get_decoration(resource.id, spv::DecorationDescriptorSet);
-		unsigned binding = glsl.get_decoration(resource.id, spv::DecorationBinding);
-		printf("Image %s at set = %u, binding = %u\n", resource.name.c_str(), set, binding);
-
-		// Modify the decoration to prepare it for GLSL.
-		glsl.unset_decoration(resource.id, spv::DecorationDescriptorSet);
-
-		// Some arbitrary remapping if we want.
-		glsl.set_decoration(resource.id, spv::DecorationBinding, set * 16 + binding);
-	}
+	// for (auto &resource : resources.sampled_images) {
+	//	unsigned set = glsl.get_decoration(resource.id, spv::DecorationDescriptorSet);
+	//	unsigned binding = glsl.get_decoration(resource.id, spv::DecorationBinding);
+	//	printf("Image %s at set = %u, binding = %u\n", resource.name.c_str(), set, binding);
+	//
+	//	// Modify the decoration to prepare it for GLSL.
+	//	glsl.unset_decoration(resource.id, spv::DecorationDescriptorSet);
+	//
+	//	// Some arbitrary remapping if we want.
+	//	glsl.set_decoration(resource.id, spv::DecorationBinding, set * 16 + binding);
+	//}
 
 	// Set some options.
-	spirv_cross::CompilerGLSL::Options options;
-	options.version = 330;
+	spirv_cross::CompilerGLSL::Options options; // = glsl.get_common_options();
+	options.version = target.glslVersion;
 	options.es = false;
 	glsl.set_common_options(options);
 
 	// Compile to GLSL, ready to give to GL driver.
+	const std::string converted_source = glsl.compile();
 
-	std::string converted_source = glsl.compile();
 	/*	*/
 	return std::vector<char>(converted_source.begin(), converted_source.end());
 }

@@ -40,9 +40,9 @@ namespace fragcore {
 			return rand<U>() / static_cast<U>(RAND_MAX);
 		}
 		template <typename U> static constexpr U range(U start, U end) noexcept {
-			return start + (Random::rand<U>() % (start - end + static_cast<U>(1)));
+			return start + (Random::rand<U>() % (start - end));
 		}
-		
+
 		template <typename U> static U insideUnitCircle() noexcept { return 0; }
 		template <typename U> static U insideUnitSphere() noexcept { return 0; }
 		template <typename U> static void setSet() noexcept {}

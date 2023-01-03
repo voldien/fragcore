@@ -117,7 +117,6 @@ namespace fragcore {
 
 			return buffer;
 		}
-
 	};
 } // namespace fragcore
 

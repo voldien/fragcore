@@ -59,7 +59,7 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 	IConfig setupConfig;
 	if (config == nullptr) {
 		setupConfig.set("core", true);
-		setupConfig.set("debug", true);
+		setupConfig.set("debug", false);
 		setupConfig.set("alpha", true);
 		setupConfig.set("opengl", -1);
 		setupConfig.set("anti-aliasing-samples", 0);
@@ -118,9 +118,7 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 	/*  Enable Debug mode if enabled.   */
 	int curDefaultFlag;
 	SDL_GL_GetAttribute(SDL_GL_CONTEXT_FLAGS, &curDefaultFlag);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS,
-						curDefaultFlag |
-							(this->debug ? (SDL_GL_CONTEXT_DEBUG_FLAG | SDL_GL_CONTEXT_ROBUST_ACCESS_FLAG) : 0));
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, curDefaultFlag | (this->debug ? (SDL_GL_CONTEXT_DEBUG_FLAG) : 0));
 
 	/*  Set OpenGL version. */
 	if (setupConfig.get<int>("opengl") > 0) {
@@ -167,13 +165,15 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 			this->majorVersion = nthValidGLVersion[0];
 			this->minorVersion = nthValidGLVersion[1];
 			this->openglcontext = SDL_GL_CreateContext(window);
-			if (this->openglcontext != nullptr)
+			if (this->openglcontext != nullptr) {
 				break;
+			}
 		}
 
 		/*	Attempt to create compatible.	*/
 		/*  Using a top down approach   .    */
 		if (!this->openglcontext) {
+			/*	*/
 			for (int i = 0; i < nValidVersions; i++) {
 				const unsigned int *nthValidGLVersion = &validGLVersion[i][0];
 				SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, nthValidGLVersion[0]);
@@ -201,7 +201,8 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 			/*  Final check.    */
 			if (this->openglcontext == nullptr) {
 				SDL_DestroyWindow(window);
-				throw RuntimeException("Failed to create compatibility context: {}.", SDL_GetError());
+				throw RuntimeException("Failed to create compatibility context: {} - OpenGLVersion: {}.{}.",
+									   SDL_GetError(), this->majorVersion, this->minorVersion);
 			}
 		}
 	}
@@ -257,10 +258,11 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 	this->getSupportedTextureCompression(&this->compression);
 
 	// Determine and cache the supported shader languages.
-	if (glewIsExtensionSupported("GL_ARB_gl_spirv"))
+	if (glewIsExtensionSupported("GL_ARB_gl_spirv")) {
 		this->supportedLanguages = (ShaderLanguage)(GLSL | SPIRV);
-	else
+	} else {
 		this->supportedLanguages = GLSL;
+	}
 
 	/*	Set default state.	*/
 	this->enableState(State::DepthTest);
@@ -269,6 +271,7 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 	this->enableState(State::Dither);
 	this->enableState(State::Cullface);
 	this->setDepthMask(true);
+	
 	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_FALSE);
 	glDepthFunc(GL_LESS);
 	glCullFace(GL_FRONT_AND_BACK);
@@ -278,13 +281,13 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 		glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 	}
 	this->clearColor(0.2f, 0.2f, 0.2f, 1.0f);
-	if (this->gamma)
-		enableState(GLRendererInterface::State::SRGB);
-	// this->setVSync(config->get<bool>("v-sync"));
+	if (this->gamma) {
+		this->enableState(GLRendererInterface::State::SRGB);
+	}
+
 	this->setDebug(this->debug);
 	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 
-	// TODO improve
 	// TODO, add support for version without viewports.
 	/*  Create default viewport object. */
 	// this->defaultViewport = new ViewPort();
@@ -301,9 +304,6 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 	// 	this->viewports.push_back(virtualView);
 	// }
 
-	// TODO create default framebuffer.
-	// TODO create default texture.
-	// TODO relocate to the window.
 	this->defaultFrameBuffer = new GLFrameBuffer();
 	GLFrameBuffer *frameBufferObject = new GLFrameBuffer();
 	frameBufferObject->framebuffer = 0;
@@ -312,7 +312,7 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 	// this->defaultFrameBuffer->iRenderer = this;
 	Texture *framebuffers[] = {new FrameBufferTexture()};
 	frameBufferObject->desc.attach = (Texture **)&framebuffers;
-	//frameBufferObject->desc.nrAttachments = 1;
+	// frameBufferObject->desc.nrAttachments = 1;
 	// frameBufferObject->desc.attach[0]->iRenderer = this;
 	GLenum drawbuffers[] = {GL_FRONT, GL_BACK};
 	// glNamedFramebufferDrawBuffers(0, 2, drawbuffers);

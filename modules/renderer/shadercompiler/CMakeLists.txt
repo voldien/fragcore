@@ -8,13 +8,13 @@ IF(NOT TARGET spirv-cross-glsl AND NOT TARGET spirv-cross-core AND NOT TARGET sp
 ENDIF()
 
 IF (BUILD_SHARED_LIBS AND CMAKE_SIZEOF_VOID_P EQUAL 8)
-	SET_PROPERTY(TARGET spirv-cross-glsl spirv-cross-core PROPERTY POSITION_INDEPENDENT_CODE ON)
+	SET_PROPERTY(TARGET spirv-cross-glsl spirv-cross-core spirv-cross-cpp spirv-cross-reflect spirv-cross-util PROPERTY POSITION_INDEPENDENT_CODE ON)
 ENDIF()
 
 # Library target.
 ADD_LIBRARY(fragcore-shader-compiler SHARED ${SHADER_COMPILER_SOURCE_FILES} ${SHADER_COMPILER_HEADER_FILES})
-TARGET_LINK_LIBRARIES(fragcore-shader-compiler PUBLIC fragcore-render-interface spirv-cross-glsl spirv-cross-core) #
-TARGET_COMPILE_DEFINITIONS(fragcore-shader-compiler PRIVATE FRAG_CORE_INTERNAL_IMP=1)
+TARGET_LINK_LIBRARIES(fragcore-shader-compiler PUBLIC fragcore-render-interface spirv-cross-glsl spirv-cross-core spirv-cross-cpp spirv-cross-reflect spirv-cross-util) #
+TARGET_COMPILE_DEFINITIONS(fragcore-shader-compiler PRIVATE FRAG_CORE_INTERNAL_IMP=1 SPIRV_CROSS_EXCEPTIONS_TO_ASSERTIONS=1)
 
 #
 TARGET_INCLUDE_DIRECTORIES(fragcore-shader-compiler PUBLIC

@@ -76,7 +76,7 @@ namespace fragcore {
 		void setFullScreen(bool fullscreen) override;
 		virtual void setFullScreen(Display &display) override;
 
-		bool isFullScreen() const;
+		bool isFullScreen() const override;
 
 		void setBordered(bool bordered) override;
 

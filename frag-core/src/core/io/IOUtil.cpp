@@ -89,12 +89,13 @@ long int IOUtil::saveFileMem(Ref<IO> &io, char *data, size_t size) {
 	if (!io->isWriteable()) {
 		throw InvalidArgumentException("Failed to write to IO: {}", io->getName());
 	}
+	
+	long dataSize;
+	dataSize = io->write(size, data);
 
-	io->write(size, data);
-
-	char buf[1024 * 4];
-	long nbytes;
-	long dataSize = 0;
+	// char buf[1024 * 4];
+	// long nbytes;
+	// long dataSize = 0;
 	// while ((nbytes = in->write(sizeof(buf), buf)) > 0) {
 	//	int outbytes = out->write(nbytes, buf);
 	//	if (outbytes > 0) {
