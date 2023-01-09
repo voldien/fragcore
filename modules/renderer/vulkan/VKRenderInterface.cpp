@@ -694,15 +694,15 @@ void VKRenderInterface::getSupportedTextureCompression(TextureDesc::Compression 
 	// vkGetPhysicalDeviceFeatures(getDevice()-> gpu, &deviceFeatures);
 
 	if (deviceFeatures.textureCompressionBC)
-		compressions |= TextureDesc::Compression::eNoCompression;
+		compressions |= (unsigned int) TextureDesc::Compression::NoCompression;
 	if (deviceFeatures.textureCompressionETC2)
-		compressions |= TextureDesc::Compression::eETC2;
+		compressions |= (unsigned int) TextureDesc::Compression::ETC2;
 	if (deviceFeatures.textureCompressionASTC_LDR)
-		compressions |= TextureDesc::Compression::eASTC_LDR;
+		compressions |= (unsigned int) TextureDesc::Compression::ASTC_LDR;
 
 	// Add support for default compression format.
 	if (compressions != 0)
-		compressions |= TextureDesc::eCompression;
+		compressions |= (unsigned int) TextureDesc::Compression::Compression;
 
 	*pCompressions = (TextureDesc::Compression)compressions;
 }

@@ -24,25 +24,10 @@ std::vector<char> ShaderCompiler::convertSPIRV(const std::vector<uint32_t> &sour
 											   const CompilerConvertOption &target) {
 	// Read SPIR-V from disk or similar.
 
-	std::vector<uint32_t> Tsource = source;
-
 	spirv_cross::CompilerGLSL glsl(source);
 
-	// The SPIR-V is now parsed, and we can perform reflection on it.
-	spirv_cross::ShaderResources resources = glsl.get_shader_resources();
-	//
-	// Get all sampled images in the shader.
-	// for (auto &resource : resources.sampled_images) {
-	//	unsigned set = glsl.get_decoration(resource.id, spv::DecorationDescriptorSet);
-	//	unsigned binding = glsl.get_decoration(resource.id, spv::DecorationBinding);
-	//	printf("Image %s at set = %u, binding = %u\n", resource.name.c_str(), set, binding);
-	//
-	//	// Modify the decoration to prepare it for GLSL.
-	//	glsl.unset_decoration(resource.id, spv::DecorationDescriptorSet);
-	//
-	//	// Some arbitrary remapping if we want.
-	//	glsl.set_decoration(resource.id, spv::DecorationBinding, set * 16 + binding);
-	//}
+
+
 
 	// Set some options.
 	spirv_cross::CompilerGLSL::Options options; // = glsl.get_common_options();
@@ -53,8 +38,8 @@ std::vector<char> ShaderCompiler::convertSPIRV(const std::vector<uint32_t> &sour
 	// Compile to GLSL, ready to give to GL driver.
 	const std::string converted_source = glsl.compile();
 
-	/*	*/
-	return std::vector<char>(converted_source.begin(), converted_source.end());
+	/*	Includes the null terminator.	*/
+	return std::vector<char>(converted_source.begin(), converted_source.end() + 1);
 }
 
 // std::map<long int, ShaderCompiler::ShaderResult>

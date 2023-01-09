@@ -7,25 +7,25 @@ using namespace fragcore;
 // TODO move to the helper file.
 unsigned int getTextureFormat(TextureDesc::Format format) {
 	switch (format) {
-	case TextureDesc::eRGB:
+	case TextureDesc::Format::RGB:
 		return VK_FORMAT_R8G8B8_UNORM;
-	case TextureDesc::eRGBA:
+	case TextureDesc::Format::RGBA:
 		return VK_FORMAT_R8G8B8A8_UNORM;
-	case TextureDesc::eBGR:
+	case TextureDesc::Format::BGR:
 		return VK_FORMAT_B8G8R8_UNORM;
-	case TextureDesc::eBGRA:
+	case TextureDesc::Format::BGRA:
 		return VK_FORMAT_B8G8R8A8_UNORM;
-	case TextureDesc::eSRGB:
+	case TextureDesc::Format::SRGB:
 		return VK_FORMAT_B8G8R8_SRGB;
-	case TextureDesc::eSRGBA:
+	case TextureDesc::Format::SRGBA:
 		return VK_FORMAT_B8G8R8A8_UNORM;
-	case TextureDesc::eSingleColor:
+	case TextureDesc::Format::SingleColor:
 		return VK_FORMAT_R8_UNORM;
-	case TextureDesc::eDepth:
+	case TextureDesc::Format::Depth:
 		return VK_FORMAT_R8_UNORM;
-	case TextureDesc::eStencil:
+	case TextureDesc::Format::Stencil:
 		return VK_FORMAT_R8_UNORM;
-	case TextureDesc::eDepthStencil:
+	case TextureDesc::Format::DepthStencil:
 		return VK_FORMAT_R8G8_UNORM;
 	default:
 		throw InvalidArgumentException("Invalid texture format");

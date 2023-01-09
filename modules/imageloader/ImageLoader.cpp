@@ -1,6 +1,7 @@
 #include "ImageLoader.h"
 #include <Core/IO/IOUtil.h>
 #include <FreeImage.h>
+#include <magic_enum.hpp>
 
 using namespace fragcore;
 
@@ -41,7 +42,7 @@ Image ImageLoader::loadImage(Ref<IO> &io) {
 	/*	*/
 	if (firsbitmap == nullptr) {
 		FreeImage_CloseMemory(stream);
-		throw RuntimeException("Failed to create free-image from memory");
+		throw RuntimeException("Failed load image memory");
 	}
 
 	/*	Reset to beginning of stream.	*/
@@ -73,14 +74,17 @@ Image ImageLoader::loadImage(Ref<IO> &io) {
 		case FREE_IMAGE_TYPE::FIT_BITMAP:
 			imageFormat = TextureFormat::BGR24;
 			break;
-		// case FREE_IMAGE_TYPE::FIT_RGB16:
-		// 	imageFormat = TextureFormat::RGB24;
-		// 	break;
-		// case FREE_IMAGE_TYPE::FIT_RGBAF:
-		// 	imageFormat = TextureFormat::RGFloat;
-		// 	break;
+		case FREE_IMAGE_TYPE::FIT_RGB16:
+			imageFormat = TextureFormat::RGB24;
+			break;
+		case FREE_IMAGE_TYPE::FIT_RGBF:
+			imageFormat = TextureFormat::RGBFloat;
+			break;
+		case FREE_IMAGE_TYPE::FIT_RGBAF:
+			imageFormat = TextureFormat::RGBAFloat;
+			break;
 		default:
-			throw NotSupportedException("None Supported Color Type");
+			throw NotSupportedException("None Supported Color Type {} ", imageType);
 		}
 		break;
 	case FIC_RGBALPHA:
@@ -112,7 +116,7 @@ Image ImageLoader::loadImage(Ref<IO> &io) {
 		break;
 	case FIC_CMYK:
 	default:
-		throw NotSupportedException("None Supported Color Type");
+		throw NotSupportedException("None Supported Color Type {}", std::string(magic_enum::enum_name(colortype)));
 	}
 
 	/*  */

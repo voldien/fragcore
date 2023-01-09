@@ -1,4 +1,5 @@
 #include "Image.h"
+#include <magic_enum.hpp>
 
 using namespace fragcore;
 
@@ -15,15 +16,15 @@ Image::~Image() {
 
 void *Image::getPixelData() const noexcept { return this->pixelData; }
 void Image::setPixelData(void *srcPixelData, size_t size) {
-	// TODO validate if size permits.
-	if (size > getSize()) {
-		throw InvalidArgumentException("{} {}", size, bufferSize);
+
+	if (size > this->getSize()) {
+		throw InvalidArgumentException("Source data size is greater than destination data: {} > {}", size, bufferSize);
 	}
 	mempcpy(this->pixelData, srcPixelData, size);
 }
 
 void Image::allocateMemory(unsigned int width, unsigned int height, unsigned depth, TextureFormat format) {
-	this->bufferSize = getTextureSize(width, height, depth, format);
+	this->bufferSize = this->getTextureSize(width, height, depth, format);
 	this->pixelData = malloc(this->bufferSize);
 	if (this->pixelData == nullptr) {
 		throw RuntimeException("Failed to allocate {}", bufferSize);
@@ -49,28 +50,30 @@ size_t Image::getFormatPixelSize(TextureFormat format) {
 	case TextureFormat::RGB565:
 		return 5 + 6 + 5;
 	case TextureFormat::R16:
-		return 2 * 8;
+		return 1 * 16;
 	case TextureFormat::DXT1:
 		break;
 	case TextureFormat::DXT5:
 		break;
 	case TextureFormat::RHalf:
-		return 2 * 8;
+		return 1 * 16;
 	case TextureFormat::RGHalf:
-		return 4 * 8;
+		return 2 * 16;
 	case TextureFormat::RGBAHalf:
-		return 8 * 8;
+		return 4 * 16;
 	case TextureFormat::RFloat:
-		return 4 * 8;
+		return 1 * 32;
 	case TextureFormat::RGFloat:
-		return 4 * 8;
+		return 2 * 32;
+	case TextureFormat::RGBFloat:
+		return 3 * 32;
 	case TextureFormat::RGBAFloat:
-		return 16 * 8;
+		return 4 * 32;
 	case TextureFormat::YUY2:
 	default:
 		break;
 	}
-	throw NotSupportedException("Invalid texture format {}", format);
+	throw NotSupportedException("Invalid texture format: {}", std::string(magic_enum::enum_name(format)));
 }
 
 size_t Image::getTextureSize(unsigned int width, unsigned int height, unsigned depth, TextureFormat format) {

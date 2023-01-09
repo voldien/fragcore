@@ -236,9 +236,9 @@ GLTexture::Format GLTexture::getFormat() const {
 	// GL_TEXTURE_COMPRESSED_IMAGE_SIZE
 	/*  Get the internal fmt::format.    */
 	switch (this->desc.internalformat) {
-	case TextureDesc::eRGB:
+	case TextureDesc::Format::RGB:
 		return eR8G8B8;
-	case TextureDesc::eRGBA:
+	case TextureDesc::Format::RGBA:
 		return eR8G8B8A8;
 	default:
 		throw InvalidArgumentException("");

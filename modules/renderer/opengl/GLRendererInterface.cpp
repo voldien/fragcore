@@ -271,7 +271,7 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 	this->enableState(State::Dither);
 	this->enableState(State::Cullface);
 	this->setDepthMask(true);
-	
+
 	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_FALSE);
 	glDepthFunc(GL_LESS);
 	glCullFace(GL_FRONT_AND_BACK);
@@ -361,7 +361,7 @@ Texture *GLRendererInterface::createTexture(TextureDesc *desc) {
 	if (desc->width < 0 && desc->height < 0 && desc->depth < 0) {
 		throw InvalidArgumentException("Invalid texture dimensions.");
 	}
-	if (desc->compression & ~this->compression) {
+	if (desc->compression & ~((unsigned int)this->compression)) {
 		throw InvalidArgumentException("Invalid compression format - {}.", desc->compression);
 	}
 	if (desc->srgb) {
@@ -1632,14 +1632,14 @@ void GLRendererInterface::setDebug(bool enable) {
 	typedef void (*glDebugMessageCallback)(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length,
 										   const GLchar *message, GLvoid *userParam);
 	typedef void (*PROC)(glDebugMessageCallback, void *);
+	PROC callback;
+
+	/*	Load function pointer by their symbol name.	*/
+	callback = (PROC)SDL_GL_GetProcAddress("glDebugMessageCallback");
 
 	if (enable) {
-		PROC callback;
 		PROC callbackARB;
 		PROC callbackAMD;
-
-		/*	Load function pointer by their symbol name.	*/
-		callback = (PROC)SDL_GL_GetProcAddress("glDebugMessageCallback");
 
 		/*	Set Debug message callback.	*/
 		if (callback) {
@@ -1649,6 +1649,13 @@ void GLRendererInterface::setDebug(bool enable) {
 		/*	*/
 		glEnable(GL_DEBUG_OUTPUT);
 		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+	} else {
+
+		if (callback) {
+			callback(default_callback_debug_gl, nullptr);
+		}
+		glDisable(GL_DEBUG_OUTPUT);
+		glDisable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 	}
 }
 
@@ -1717,26 +1724,27 @@ void GLRendererInterface::getSupportedTextureCompression(TextureDesc::Compressio
 
 	// TODO add and improve.
 	if (glewIsExtensionSupported("GL_ARB_texture_compression_bptc"))
-		compressions |= TextureDesc::Compression::eBPTC;
+		compressions |= (unsigned int)TextureDesc::Compression::BPTC;
 	if (glewIsExtensionSupported("GL_ANGLE_texture_compression_dxt1"))
-		compressions |= TextureDesc::Compression::eDXT1;
+		compressions |= (unsigned int)TextureDesc::Compression::DXT1;
 	if (glewIsExtensionSupported("GL_EXT_texture_compression_rgtc") ||
 		glewIsExtensionSupported("GL_ARB_texture_compression_rgtc"))
-		compressions |= TextureDesc::Compression::eRGTC;
+		compressions |= (unsigned int)TextureDesc::Compression::RGTC;
 	if (glewIsExtensionSupported("GL_ANGLE_texture_compression_dxt5"))
-		compressions |= TextureDesc::Compression::eDXT5;
+		compressions |= (unsigned int)TextureDesc::Compression::DXT5;
 	if (glewIsExtensionSupported("GL_ATI_texture_compression_3dc"))
-		compressions |= TextureDesc::Compression::e3DC;
+		compressions |= (unsigned int)TextureDesc::Compression::_3DC;
 	if (glewIsExtensionSupported("GL_EXT_texture_compression_s3tc"))
-		compressions |= TextureDesc::Compression::eS3TC;
+		compressions |= (unsigned int)TextureDesc::Compression::S3TC;
 	if (glewIsExtensionSupported("GL_ANGLE_texture_compression_dxt3"))
-		compressions |= TextureDesc::Compression::eDXT3;
+		compressions |= (unsigned int)TextureDesc::Compression::DXT3;
 	if (glewIsExtensionSupported("GL_KHR_texture_compression_astc_ldr"))
-		compressions |= TextureDesc::Compression::eASTC_LDR;
+		compressions |= (unsigned int)TextureDesc::Compression::ASTC_LDR;
 
 	// Add support for default compression fmt::format.
-	if (compressions != 0)
-		compressions |= TextureDesc::eCompression;
+	if (compressions != 0) {
+		compressions |= (unsigned int)TextureDesc::Compression::Compression;
+	}
 
 	*pCompressions = (TextureDesc::Compression)compressions;
 }

@@ -20,9 +20,9 @@ FrameBuffer *RenderTargetFactory::createShadow(IRenderer *render, int width, int
 	depthdesc.width = width;
 	depthdesc.height = height;
 	depthdesc.usemipmaps = 0;
-	depthdesc.internalformat = TextureDesc::eDepth;
-	depthdesc.format = TextureDesc::eDepth;
-	depthdesc.type = TextureDesc::eFloat;
+	depthdesc.internalformat = TextureDesc::Format::Depth;
+	depthdesc.format = TextureDesc::Format::Depth;
+	depthdesc.type = TextureDesc::Type::Float;
 	depthdesc.sampler.AddressU = SamplerDesc::AddressMode::Clamp;
 	depthdesc.sampler.AddressV = SamplerDesc::AddressMode::Clamp;
 	depthdesc.sampler.AddressW = SamplerDesc::AddressMode::Clamp;
@@ -65,9 +65,9 @@ FrameBuffer *RenderTargetFactory::createDeffered(IRenderer *render, int width, i
 	texdesc.target = TextureDesc::Target::Texture2D;
 	texdesc.width = width;
 	texdesc.height = height;
-	texdesc.format = TextureDesc::eDepthStencil;
-	texdesc.internalformat = TextureDesc::eDepthStencil;
-	texdesc.type = TextureDesc::eUnsigned24_8;
+	texdesc.format = TextureDesc::Format::DepthStencil;
+	texdesc.internalformat = TextureDesc::Format::DepthStencil;
+	texdesc.type = TextureDesc::Type::Unsigned24_8;
 	texdesc.sampler.AddressU = SamplerDesc::AddressMode::Clamp;
 	texdesc.sampler.AddressV = SamplerDesc::AddressMode::Clamp;
 	texdesc.sampler.AddressW = SamplerDesc::AddressMode::Clamp;
@@ -78,34 +78,34 @@ FrameBuffer *RenderTargetFactory::createDeffered(IRenderer *render, int width, i
 	depthstencil = render->createTexture(&texdesc);
 
 	/*	Diffuse color texture attachment.	*/
-	texdesc.format = TextureDesc::eRGB;
-	texdesc.internalformat = TextureDesc::eRGB;
-	texdesc.type = TextureDesc::eUnsignedByte;
+	texdesc.format = TextureDesc::Format::RGB;
+	texdesc.internalformat = TextureDesc::Format::RGB;
+	texdesc.type = TextureDesc::Type::UnsignedByte;
 	color1 = render->createTexture(&texdesc);
 	color1->setWrapMode(Texture::eClamp);
 
 	/*	*/
-	texdesc.format = TextureDesc::eRGB;
-	texdesc.internalformat = TextureDesc::eRGB;
-	texdesc.type = TextureDesc::eUnsignedByte;
+	texdesc.format = TextureDesc::Format::RGB;
+	texdesc.internalformat = TextureDesc::Format::RGB;
+	texdesc.type = TextureDesc::Type::UnsignedByte;
 	color2 = render->createTexture(&texdesc);
 
 	/*	*/
-	texdesc.format = TextureDesc::eRGB;
-	texdesc.internalformat = TextureDesc::eRGB;
-	texdesc.type = TextureDesc::eUnsignedByte;
+	texdesc.format = TextureDesc::Format::RGB;
+	texdesc.internalformat = TextureDesc::Format::RGB;
+	texdesc.type = TextureDesc::Type::UnsignedByte;
 	color3 = render->createTexture(&texdesc);
 
 	/*	*/
-	texdesc.format = TextureDesc::eRGB;
-	texdesc.internalformat = TextureDesc::eRGB;
-	texdesc.type = TextureDesc::eUnsignedByte;
+	texdesc.format = TextureDesc::Format::RGB;
+	texdesc.internalformat = TextureDesc::Format::RGB;
+	texdesc.type = TextureDesc::Type::UnsignedByte;
 	color4 = render->createTexture(&texdesc);
 
 	/*	*/
-	texdesc.format = TextureDesc::eRGB;
-	texdesc.internalformat = TextureDesc::eRGB;
-	texdesc.type = TextureDesc::eUnsignedByte;
+	texdesc.format = TextureDesc::Format::RGB;
+	texdesc.internalformat = TextureDesc::Format::RGB;
+	texdesc.type = TextureDesc::Type::UnsignedByte;
 	color5 = render->createTexture(&texdesc);
 
 	/*	*/
@@ -139,11 +139,11 @@ FrameBuffer *RenderTargetFactory::createColor(IRenderer *render, int width, int 
 	texdesc.target = TextureDesc::Target::Texture2D;
 	texdesc.width = width;
 	texdesc.height = height;
-	texdesc.format = TextureDesc::eRGBA;
-	texdesc.internalformat = TextureDesc::eRGBA;
+	texdesc.format = TextureDesc::Format::RGBA;
+	texdesc.internalformat = TextureDesc::Format::RGBA;
 	texdesc.pixelFormat = TextureFormat::BGR24;
 	texdesc.graphicFormat = GraphicFormat::R8G8B8_SRGB;
-	texdesc.type = TextureDesc::eUnsignedByte;
+	texdesc.type = TextureDesc::Type::UnsignedByte;
 	texdesc.srgb = 1;
 	texdesc.usemipmaps = 0;
 	texdesc.compression = 0;
@@ -187,9 +187,9 @@ FrameBuffer *RenderTargetFactory::createHDR(IRenderer *renderer, int width, int 
 	texdesc.target = TextureDesc::Target::Texture2D;
 	texdesc.width = width;
 	texdesc.height = height;
-	texdesc.format = TextureDesc::eRGB;
-	texdesc.internalformat = TextureDesc::eRGB;
-	texdesc.type = TextureDesc::eFloat;
+	texdesc.format = TextureDesc::Format::RGB;
+	texdesc.internalformat = TextureDesc::Format::RGB;
+	texdesc.type = TextureDesc::Type::Float;
 	texdesc.sampler.AddressU = SamplerDesc::AddressMode::Clamp;
 	texdesc.sampler.AddressV = SamplerDesc::AddressMode::Clamp;
 	texdesc.sampler.AddressW = SamplerDesc::AddressMode::Clamp;

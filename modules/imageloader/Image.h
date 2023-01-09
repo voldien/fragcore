@@ -61,6 +61,12 @@ namespace fragcore {
 
 	  public:
 		static size_t getTextureSize(unsigned int width, unsigned int height, unsigned depth, TextureFormat format);
+		/**
+		 * @brief Get the Format Pixel Size in bits
+		 * 
+		 * @param format 
+		 * @return size_t 
+		 */
 		static size_t getFormatPixelSize(TextureFormat format);
 
 	  private:

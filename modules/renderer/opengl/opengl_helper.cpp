@@ -388,82 +388,82 @@ unsigned int GLHelper::getTextureFormat(TextureFormat textureFormat, unsigned in
 
 unsigned int GLHelper::getTextureFormat(TextureDesc::Format format) {
 	switch (format) {
-	case TextureDesc::Format::eSingleColor:
+	case TextureDesc::Format::SingleColor:
 		return GL_RED;
-	case TextureDesc::Format::eRGB:
+	case TextureDesc::Format::RGB:
 		return GL_RGB;
-	case TextureDesc::Format::eRGBA:
+	case TextureDesc::Format::RGBA:
 		return GL_RGBA;
-	case TextureDesc::Format::eBGR:
+	case TextureDesc::Format::BGR:
 		return GL_BGR;
-	case TextureDesc::Format::eBGRA:
+	case TextureDesc::Format::BGRA:
 		return GL_BGRA;
-	case TextureDesc::Format::eRG:
+	case TextureDesc::Format::RG:
 		return GL_RG;
 	default:
 		throw InvalidArgumentException("Invalid texture format.");
 	}
 }
 
-unsigned int GLHelper::getInternalTextureFormat(TextureDesc::Format format, bool sRGB, TextureDesc::Compression compression,
-									  TextureDesc::Type type) {
+unsigned int GLHelper::getInternalTextureFormat(TextureDesc::Format format, bool sRGB,
+												TextureDesc::Compression compression, TextureDesc::Type type) {
 
 	// No
-	if (!sRGB && compression == TextureDesc::Compression::eNoCompression) {
+	if (!sRGB && compression == TextureDesc::Compression::NoCompression) {
 		switch (format) {
-		case TextureDesc::eRGB:
-			if (type == TextureDesc::eUnsignedByte) {
+		case TextureDesc::Format::RGB:
+			if (type == TextureDesc::Type::UnsignedByte) {
 				return GL_RGB8;
 			}
-			if (type == TextureDesc::eFloat) {
+			if (type == TextureDesc::Type::Float) {
 				return GL_RGB32F;
 			}
 			break;
-		case TextureDesc::eRGBA:
-			if (type == TextureDesc::eUnsignedByte) {
+		case TextureDesc::Format::RGBA:
+			if (type == TextureDesc::Type::UnsignedByte) {
 				return GL_RGBA8;
 			}
-			if (type == TextureDesc::eFloat) {
+			if (type == TextureDesc::Type::Float) {
 				return GL_RGBA32F;
 			}
 			break;
-		case TextureDesc::eBGR:
+		case TextureDesc::Format::BGR:
 			return GL_BGR;
-		case TextureDesc::eBGRA:
+		case TextureDesc::Format::BGRA:
 			return GL_BGRA;
-		case TextureDesc::eSRGB:
+		case TextureDesc::Format::SRGB:
 			return GL_SRGB;
-		case TextureDesc::eSRGBA:
+		case TextureDesc::Format::SRGBA:
 			return GL_SRGB_ALPHA;
-		case TextureDesc::eSingleColor:
+		case TextureDesc::Format::SingleColor:
 			return GL_R8;
-		case TextureDesc::eDepth:
+		case TextureDesc::Format::Depth:
 			return GL_DEPTH;
-		case TextureDesc::eStencil:
+		case TextureDesc::Format::Stencil:
 			return GL_STENCIL;
-		case TextureDesc::eDepthStencil:
+		case TextureDesc::Format::DepthStencil:
 			return GL_DEPTH_STENCIL;
 		default:
 			break;
 		}
 	} else {
 		/*  Gamma correction and */
-		if (sRGB && compression != TextureDesc::Compression::eNoCompression) {
+		if (sRGB && compression != TextureDesc::Compression::NoCompression) {
 			switch (format) {
-			case TextureDesc::eRGB:
+			case TextureDesc::Format::RGB:
 				switch (compression) {
-				case TextureDesc::Compression::eCompression:
+				case TextureDesc::Compression::Compression:
 					return GL_COMPRESSED_SRGB;
-				case TextureDesc::Compression::eETC2:
+				case TextureDesc::Compression::ETC2:
 					return GL_COMPRESSED_SRGB8_ETC2;
 				default:
 					break;
 				}
-			case TextureDesc::eRGBA:
+			case TextureDesc::Format::RGBA:
 				switch (compression) {
-				case TextureDesc::Compression::eCompression:
+				case TextureDesc::Compression::Compression:
 					return GL_COMPRESSED_SRGB_ALPHA;
-				case TextureDesc::Compression::eETC2:
+				case TextureDesc::Compression::ETC2:
 					return GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC;
 				}
 			default:
@@ -472,13 +472,13 @@ unsigned int GLHelper::getInternalTextureFormat(TextureDesc::Format format, bool
 		}
 
 		/*  Only compression.   */
-		if (compression) {
+		if ((unsigned int)compression) {
 			switch (format) {
-			case TextureDesc::eRGB:
+			case TextureDesc::Format::RGB:
 				switch (compression) {
-				case TextureDesc::Compression::eCompression:
+				case TextureDesc::Compression::Compression:
 					return GL_COMPRESSED_RGB;
-				case TextureDesc::Compression::eRGTC:
+				case TextureDesc::Compression::RGTC:
 					return GL_COMPRESSED_RED_RGTC1;
 				}
 			default:
@@ -489,11 +489,11 @@ unsigned int GLHelper::getInternalTextureFormat(TextureDesc::Format format, bool
 		/*  Only gamma correction.  */
 		if (sRGB) {
 			switch (format) {
-			case TextureDesc::eRGB:
+			case TextureDesc::Format::RGB:
 				return GL_SRGB8;
-			case TextureDesc::eRGBA:
+			case TextureDesc::Format::RGBA:
 				return GL_SRGB8_ALPHA8;
-			case TextureDesc::eSingleColor:
+			case TextureDesc::Format::SingleColor:
 				return GL_SLUMINANCE8;
 			default:
 				break;
@@ -532,15 +532,15 @@ unsigned int GLHelper::getTextureTarget(TextureDesc::Target target, int nrSample
 
 unsigned int GLHelper::getTextureType(TextureDesc::Type type) {
 	switch (type) {
-	case TextureDesc::eUnsignedByte:
+	case TextureDesc::Type::UnsignedByte:
 		return GL_UNSIGNED_BYTE;
-	case TextureDesc::eFloat:
+	case TextureDesc::Type::Float:
 		return GL_FLOAT;
-	case TextureDesc::eHalfFloat:
+	case TextureDesc::Type::HalfFloat:
 		return GL_HALF_FLOAT_ARB;
-	case TextureDesc::eSignedByte:
+	case TextureDesc::Type::SignedByte:
 		return GL_BYTE;
-	case TextureDesc::eUnsigned24_8:
+	case TextureDesc::Type::Unsigned24_8:
 		return GL_UNSIGNED_INT_24_8;
 	default:
 		throw InvalidArgumentException("Invalid texture type {}.", type);

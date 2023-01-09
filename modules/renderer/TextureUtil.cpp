@@ -26,7 +26,7 @@ void TextureUtil::loadTexture(Ref<IO> &io, IRenderer *renderer, Texture **textur
 	desc.depth = image.layers();
 	desc.pixel = image.getPixelData();
 	desc.pixelSize = image.getSize();
-	desc.compression = TextureDesc::eNoCompression;
+	desc.compression = (unsigned int)TextureDesc::Compression::NoCompression;
 
 	/*  Texture.    */
 	desc.target = TextureDesc::Target::Texture2D;
@@ -97,7 +97,7 @@ Texture *TextureUtil::createTexture(IRenderer *renderer, unsigned int width, uns
 	desc.depth = 1;
 	desc.pixel = pixels;
 	desc.pixelSize = size;
-	desc.compression = TextureDesc::eNoCompression;
+	desc.compression = (unsigned int)TextureDesc::Compression::NoCompression;
 	desc.nrSamples = 0;
 
 	/*  Texture.    */
