@@ -8,7 +8,7 @@ INCLUDE(etc2comp)
 
 # Library target.
 ADD_LIBRARY(fragcore-imageloader SHARED ${IMAGE_LOADER_SOURCE_FILES} ${IMAGE_LOADER_HEADER_FILES})
-TARGET_LINK_LIBRARIES(fragcore-imageloader PUBLIC fragcore freeimage)
+TARGET_LINK_LIBRARIES(fragcore-imageloader PUBLIC fragcore fragcore-image freeimage)
 TARGET_COMPILE_DEFINITIONS(fragcore-imageloader PRIVATE FRAG_CORE_INTERNAL_IMP=1)
 
 #
@@ -18,7 +18,7 @@ TARGET_INCLUDE_DIRECTORIES(fragcore-imageloader
 											$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 											$<INSTALL_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
 
-ADD_DEPENDENCIES(fragcore-imageloader fragcore )
+ADD_DEPENDENCIES(fragcore-imageloader fragcore fragcore-image)
 
 IF (BUILD_SHARED_LIBS AND CMAKE_SIZEOF_VOID_P EQUAL 8)
 	SET_PROPERTY(TARGET fragcore-imageloader PROPERTY POSITION_INDEPENDENT_CODE ON)

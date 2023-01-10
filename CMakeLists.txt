@@ -393,6 +393,9 @@ IF(BUILD_MODULES)
 	#Database
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/db/sqlite)
 
+	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/image)
+	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/imageloader)
+
 	# File watcher.
 	#ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/filenotify)
 

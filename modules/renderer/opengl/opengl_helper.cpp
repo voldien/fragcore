@@ -2,8 +2,8 @@
 #include "GLHelper.h"
 #include "internal_object_type.h"
 #include <GL/glew.h>
-
 #include <fmt/core.h>
+#include <magic_enum.hpp>
 using namespace fragcore;
 
 /*  Assign marker for debugging.    */
@@ -33,7 +33,7 @@ unsigned int GLHelper::getWrapMode(SamplerDesc::AddressMode mode) {
 		return GL_CLAMP_TO_BORDER;
 	case SamplerDesc::AddressMode::NoAddressMode:
 	default:
-		throw InvalidArgumentException("Invalid address mode.");
+		throw InvalidArgumentException("Invalid address mode - {}", magic_enum::enum_name(mode));
 	}
 }
 
@@ -73,7 +73,7 @@ unsigned int GLHelper::getFilterMode(SamplerDesc::FilterMode mode, SamplerDesc::
 			break;
 		}
 	}
-	throw InvalidArgumentException("Invalid filter mode.");
+	throw InvalidArgumentException("Invalid filter mode : {}", magic_enum::enum_name(mode));
 }
 
 unsigned int GLHelper::getCompareMode(SamplerDesc::CompareFunc mode) {
@@ -95,7 +95,7 @@ unsigned int GLHelper::getCompareMode(SamplerDesc::CompareFunc mode) {
 	case SamplerDesc::CompareFunc::never:
 		return GL_NEVER;
 	default:
-		throw InvalidArgumentException("Invalid address mode.");
+		throw InvalidArgumentException("Invalid address mode : {}", magic_enum::enum_name(mode));
 	}
 }
 
@@ -111,216 +111,137 @@ unsigned int GLHelper::getGraphicFormat(GraphicFormat graphicFormat) {
 		return GL_SRGB8_ALPHA8;
 	case GraphicFormat::R8_UNorm:
 		return GL_RED_INTEGER;
-	case GraphicFormat::R8G8_UNorm: // A two-component, 16-bit unsigned normalized fmt::format that has an 8-bit R
-									// component stored with sRGB nonlinear encoding in byte 0, and an 8-bit G component
-									// stored with sRGB nonlinear encoding in byte 1.
-	case GraphicFormat::R8G8B8_UNorm:	// A three-component, 24-bit unsigned normalized fvformatf that has an 8-bit R
-										// component in byte 0, an 8-bit G component in byte 1, and an 8-bit B component
-										// in byte 2.
-	case GraphicFormat::R8G8B8A8_UNorm: //	A four-component, 32-bit unsigned normalized fvformatf that has an 8-bit R
-										// component in byte
-										// 0, an 8-bit G component in byte 1, an 8-bit B component in byte 2, and an
-										// 8-bit A component in byte 3.
-	case GraphicFormat::R8_SNorm:		//	A one-component, 8-bit signed normalized fvformatf that has a single 8-bit R
-										// component.
-	case GraphicFormat::R8G8_SNorm:		//	A two-component: 16-bit signed normalized fvformatf that has an 8-bit R
-										// component stored with
-										// sRGB nonlinear encoding in byte 0: and an 8-bit G component stored with sRGB
-										// nonlinear encoding in byte 1.
-	case GraphicFormat::R8G8B8_SNorm:	//	A three-component: 24-bit signed normalized fvformatf that has an 8-bit R
-										// component in byte
-										// 0: an 8-bit G component in byte 1: and an 8-bit B component in byte 2.
-	case GraphicFormat::R8G8B8A8_SNorm: //	A four-component: 32-bit signed normalized fvformatf that has an 8-bit R
-										// component in byte
-										// 0: an 8-bit G component in byte 1: an 8-bit B component in byte 2: and an
-										// 8-bit A component in byte 3.
-	case GraphicFormat::R8_UInt:		//	A one-component: 8-bit unsigned integer fvformatf that has a single 8-bit R
-										// component.
-	case GraphicFormat::R8G8_UInt:	 //	A two-component: 16-bit unsigned integer fvformatf that has an 8-bit R component
-									 // in byte 0: and
-									 // an 8-bit G component in byte 1.
-	case GraphicFormat::R8G8B8_UInt: //	A three-component: 24-bit unsigned integer fvformatf that has an 8-bit R
-									 // component in byte
-									 // 0: an 8-bit G component in byte 1: and an 8-bit B component in byte 2.
-	case GraphicFormat::R8G8B8A8_UInt: //	A four-component: 32-bit unsigned integer fvformatf that has an 8-bit R
-									   // component in byte 0:
-									   // an 8-bit G component in byte 1: an 8-bit B component in byte 2: and an 8-bit A
-									   // component in byte 3.
-	case GraphicFormat::R8_SInt: //	A one-component: 8-bit signed integer fvformatf that has a single 8-bit R component.
-	case GraphicFormat::R8G8_SInt:	 //	A two-component: 16-bit signed integer fvformatf that has an 8-bit R component
-									 // in byte 0: and an
-									 // 8-bit G component in byte 1.
-	case GraphicFormat::R8G8B8_SInt: //	A three-component: 24-bit signed integer fvformatf that has an 8-bit R component
-									 // in byte 0:
-									 // an 8-bit G component in byte 1: and an 8-bit B component in byte 2.
-	case GraphicFormat::R8G8B8A8_SInt: //	A four-component: 32-bit signed integer fvformatf that has an 8-bit R
-									   // component in byte 0:
-									   // an 8-bit G component in byte 1: an 8-bit B component in byte 2: and an 8-bit A
-									   // component in byte 3.
-	case GraphicFormat::R16_UNorm: //	A one-component: 16-bit unsigned normalized fvformatf that has a single 16-bit R
-								   // component.
-	case GraphicFormat::R16G16_UNorm: //	A two-component: 32-bit unsigned normalized fvformatf that has a 16-bit R
-									  // component in bytes
-									  // 0..1: and a 16-bit G component in bytes 2..3.
-	case GraphicFormat::
-		R16G16B16_UNorm: //	A three-component: 48-bit unsigned normalized fvformatf that has a 16-bit R component in
-						 // bytes 0..1: a 16-bit G component in bytes 2..3: and a 16-bit B component in bytes 4..5.
-	case GraphicFormat::R16G16B16A16_UNorm: //	A four-component: 64-bit unsigned normalized fvformatf that has a 16-bit
-											// R component in
-											// bytes 0..1: a 16-bit G component in bytes 2..3: a 16-bit B component in
-											// bytes 4..5: and a 16-bit A component in bytes 6..7.
-	case GraphicFormat::R16_SNorm:	  //	A one-component: 16-bit signed normalized fvformatf that has a single 16-bit R
-									  // component.
-	case GraphicFormat::R16G16_SNorm: //	A two-component: 32-bit signed normalized fvformatf that has a 16-bit R
-									  // component in bytes
-									  // 0..1: and a 16-bit G component in bytes 2..3.
-	case GraphicFormat::
-		R16G16B16_SNorm: //	A three-component: 48-bit signed normalized fvformatf that has a 16-bit R component in
-						 // bytes 0..1: a 16-bit G component in bytes 2..3: and a 16-bit B component in bytes 4..5.
-	case GraphicFormat::R16G16B16A16_SNorm: //	A four-component: 64-bit signed normalized fvformatf that has a 16-bit R
-											// component in
-											// bytes 0..1: a 16-bit G component in bytes 2..3: a 16-bit B component in
-											// bytes 4..5: and a 16-bit A component in bytes 6..7.
-	case GraphicFormat::R16_UInt:	 //	A one-component: 16-bit unsigned integer fvformatf that has a single 16-bit R
-									 // component.
-	case GraphicFormat::R16G16_UInt: //	A two-component: 32-bit unsigned integer fvformatf that has a 16-bit R component
-									 // in bytes
-									 // 0..1: and a 16-bit G component in bytes 2..3.
-	case GraphicFormat::
-		R16G16B16_UInt: //	A three-component: 48-bit unsigned integer fvformatf that has a 16-bit R component in bytes
-						// 0..1: a 16-bit G component in bytes 2..3: and a 16-bit B component in bytes 4..5.
-	case GraphicFormat::R16G16B16A16_UInt: //	A four-component: 64-bit unsigned integer fvformatf that has a 16-bit R
-										   // component in
-										   // bytes 0..1: a 16-bit G component in bytes 2..3: a 16-bit B component in
-										   // bytes 4..5: and a 16-bit A component in bytes 6..7.
-	case GraphicFormat::R16_SInt:	 //	A one-component: 16-bit signed integer fvformatf that has a single 16-bit R
-									 // component.
-	case GraphicFormat::R16G16_SInt: //	A two-component: 32-bit signed integer fvformatf that has a 16-bit R component
-									 // in bytes
-									 // 0..1: and a 16-bit G component in bytes 2..3.
-	case GraphicFormat::
-		R16G16B16_SInt: //	A three-component: 48-bit signed integer fvformatf that has a 16-bit R component in bytes
-						// 0..1: a 16-bit G component in bytes 2..3: and a 16-bit B component in bytes 4..5.
-	case GraphicFormat::R16G16B16A16_SInt: //	A four-component: 64-bit signed integer fvformatf that has a 16-bit R
-										   // component in bytes
-										   // 0..1: a 16-bit G component in bytes 2..3: a 16-bit B component in
-										   // bytes 4..5: and a 16-bit A component in bytes 6..7.
-	case GraphicFormat::R32_UInt:	 //	A one-component: 32-bit unsigned integer fvformatf that has a single 32-bit R
-									 // component.
-	case GraphicFormat::R32G32_UInt: //	A two-component: 64-bit unsigned integer fvformatf that has a 32-bit R component
-									 // in bytes
-									 // 0..3: and a 32-bit G component in bytes 4..7.
-	case GraphicFormat::
-		R32G32B32_UInt: //	A three-component: 96-bit unsigned integer fvformatf that has a 32-bit R component in bytes
-						// 0..3: a 32-bit G component in bytes 4..7: and a 32-bit B component in bytes 8..11.
-	case GraphicFormat::R32G32B32A32_UInt: //	A four-component: 128-bit unsigned integer fvformatf that has a 32-bit R
-										   // component in
-										   // bytes 0..3: a 32-bit G component in bytes 4..7: a 32-bit B component in
-										   // bytes 8..11: and a 32-bit A component in bytes 12..15.
-	case GraphicFormat::R32_SInt:	 //	A one-component: 32-bit signed integer fvformatf that has a single 32-bit R
-									 // component.
-	case GraphicFormat::R32G32_SInt: //	A two-component: 64-bit signed integer fvformatf that has a 32-bit R component
-									 // in bytes
-									 // 0..3: and a 32-bit G component in bytes 4..7.
-	case GraphicFormat::
-		R32G32B32_SInt: //	A three-component: 96-bit signed integer fvformatf that has a 32-bit R component in bytes
-						// 0..3: a 32-bit G component in bytes 4..7: and a 32-bit B component in bytes 8..11.
-	case GraphicFormat::R32G32B32A32_SInt: //	A four-component: 128-bit signed integer fvformatf that has a 32-bit R
-										   // component in
-										   // bytes 0..3: a 32-bit G component in bytes 4..7: a 32-bit B component in
-										   // bytes 8..11: and a 32-bit A component in bytes 12..15.
-	case GraphicFormat::R16_SFloat: //	A one-component: 16-bit signed floating-point fvformatf that has a single 16-bit
-									// R component.
-	case GraphicFormat::R16G16_SFloat: //	A two-component: 32-bit signed floating-point fvformatf that has a 16-bit R
-									   // component in
-									   // bytes 0..1: and a 16-bit G component in bytes 2..3.
-	case GraphicFormat::
-		R16G16B16_SFloat: //	A three-component: 48-bit signed floating-point fvformatf that has a 16-bit R component
-						  // in bytes 0..1: a 16-bit G component in bytes 2..3: and a 16-bit B component in bytes 4..5.
-	case GraphicFormat::R16G16B16A16_SFloat: //	A four-component: 64-bit signed floating-point fvformatf that has a
-											 // 16-bit R
-											 // component in bytes 0..1: a 16-bit G component in bytes 2..3: a 16-bit B
-											 // component in bytes 4..5: and a 16-bit A component in bytes 6..7.
-	case GraphicFormat::R32_SFloat: //	A one-component: 32-bit signed floating-point fvformatf that has a single 32-bit
-									// R component.
-	case GraphicFormat::R32G32_SFloat:	  //	A two-component: 64-bit signed floating-point fvformatf that has a 32-bit R
-										  // component in
-										  // bytes 0..3: and a 32-bit G component in bytes 4..7.
-	case GraphicFormat::R32G32B32_SFloat: //	A three-component: 96-bit signed floating-point fvformatf that has a
-										  // 32-bit R component
-										  // in bytes 0..3: a 32-bit G component in bytes 4..7: and a 32-bit B component
-										  // in bytes 8..11.
-	case GraphicFormat::R32G32B32A32_SFloat: //	A four-component: 128-bit signed floating-point fvformatf that has a
-											 // 32-bit R
-											 // component in bytes 0..3: a 32-bit G component in bytes 4..7: a 32-bit B
-											 // component in bytes 8..11: and a 32-bit A component in bytes 12..15.
-	case GraphicFormat::
-		B8G8R8_SRGB: //	A three-component: 24-bit unsigned normalized fvformatf that has an 8-bit R component stored
-					 // with sRGB nonlinear encoding in byte 0: an 8-bit G component stored with sRGB nonlinear
-					 // encoding in byte 1: and an 8-bit B component stored with sRGB nonlinear encoding in byte 2.
-	case GraphicFormat::B8G8R8A8_SRGB:	//	A four-component: 32-bit unsigned normalized fvformatf that has an 8-bit B
-										// component stored
-										// with sRGB nonlinear encoding in byte 0: an 8-bit G component stored with sRGB
-										// nonlinear encoding in byte 1: an 8-bit R component stored with sRGB nonlinear
-										// encoding in byte 2: and an 8-bit A component in byte 3.
-	case GraphicFormat::B8G8R8_UNorm:	//	A three-component: 24-bit unsigned normalized fvformatf that has an 8-bit B
-										// component in
-										// byte 0: an 8-bit G component in byte 1: and an 8-bit R component in byte 2.
-	case GraphicFormat::B8G8R8A8_UNorm: //	A four-component: 32-bit unsigned normalized fvformatf that has an 8-bit B
-										// component in byte
-										// 0: an 8-bit G component in byte 1: an 8-bit R component in byte 2: and an
-										// 8-bit A component in byte 3.
-	case GraphicFormat::B8G8R8_SNorm:	//	A three-component: 24-bit signed normalized fvformatf that has an 8-bit B
-										// component in byte
-										// 0: an 8-bit G component in byte 1: and an 8-bit R component in byte 2.
-	case GraphicFormat::B8G8R8A8_SNorm: //	A four-component: 32-bit signed normalized fvformatf that has an 8-bit B
-										// component in byte
-										// 0: an 8-bit G component in byte 1: an 8-bit R component in byte 2: and an
-										// 8-bit A component in byte 3.
-	case GraphicFormat::B8G8R8_UInt:	//	A three-component: 24-bit unsigned integer fvformatf that has an 8-bit B
-										// component in byte
-										// 0: an 8-bit G component in byte 1: and an 8-bit R component in byte 2
-	case GraphicFormat::B8G8R8A8_UInt:	//	A four-component: 32-bit unsigned integer fvformatf that has an 8-bit B
-										// component in byte 0:
-		// an 8-bit G component in byte 1: an 8-bit R component in byte 2: and an 8-bit A
-		// component in byte 3.
-	case GraphicFormat::B8G8R8_SInt: //	A three-component: 24-bit signed integer fvformatf that has an 8-bit B component
-									 // in byte 0:
-									 // an 8-bit G component in byte 1: and an 8-bit R component in byte 2.
-	case GraphicFormat::B8G8R8A8_SInt: //	A four-component: 32-bit signed integer fvformatf that has an 8-bit B
-									   // component in byte 0:
-									   // an 8-bit G component in byte 1: an 8-bit R component in byte 2: and an 8-bit A
-									   // component in byte 3.
-	case GraphicFormat::R4G4B4A4_UNormPack16: //	A four-component: 16-bit packed unsigned normalized fvformatf that
-											  // has a 4-bit R
-											  // component in bits 12..15: a 4-bit G component in bits 8..11: a 4-bit B
-											  // component in bits 4..7: and a 4-bit A component in bits 0..3.
-	case GraphicFormat::B4G4R4A4_UNormPack16: //	A four-component: 16-bit packed unsigned normalized fvformatf that
-											  // has a 4-bit B
-											  // component in bits 12..15: a 4-bit G component in bits 8..11: a 4-bit R
-											  // component in bits 4..7: and a 4-bit A component in bits 0..3.
-	case GraphicFormat::R5G6B5_UNormPack16:	  //	A three-component: 16-bit packed unsigned normalized fvformatf that has
-											  // a 5-bit R
-		// component in bits 11..15: a 6-bit G component in bits 5..10: and a 5-bit
-		// B component in bits 0..4.
-	case GraphicFormat::B5G6R5_UNormPack16: //	A three-component: 16-bit packed unsigned normalized fvformatf that has
-											// a 5-bit B
-											// component in bits 11..15: a 6-bit G component in bits 5..10: and a 5-bit
-											// R component in bits 0..4.
-	case GraphicFormat::R5G5B5A1_UNormPack16: //	A four-component: 16-bit packed unsigned normalized fvformatf that
-											  // has a 5-bit R
-											  // component in bits 11..15: a 5-bit G component in bits 6..10: a 5-bit B
-											  // component in bits 1..5: and a 1-bit A component in bit 0.
-	case GraphicFormat::B5G5R5A1_UNormPack16: //	A four-component: 16-bit packed unsigned normalized fvformatf that
-											  // has a 5-bit B
-											  // component in bits 11..15: a 5-bit G component in bits 6..10: a 5-bit R
-											  // component in bits 1..5: and a 1-bit A component in bit 0.
-	case GraphicFormat::A1R5G5B5_UNormPack16: //	A four-component, 16-bit packed unsigned normalized fvformatf that
-											  // has a 1-bi
+	case GraphicFormat::R8G8_UNorm:
+
+	case GraphicFormat::R8G8B8_UNorm:
+
+	case GraphicFormat::R8G8B8A8_UNorm:
+
+	case GraphicFormat::R8_SNorm:
+
+	case GraphicFormat::R8G8_SNorm:
+
+	case GraphicFormat::R8G8B8_SNorm:
+
+	case GraphicFormat::R8G8B8A8_SNorm:
+
+	case GraphicFormat::R8_UInt:
+
+	case GraphicFormat::R8G8_UInt:
+
+	case GraphicFormat::R8G8B8_UInt:
+
+	case GraphicFormat::R8G8B8A8_UInt:
+
+	case GraphicFormat::R8_SInt:
+	case GraphicFormat::R8G8_SInt:
+
+	case GraphicFormat::R8G8B8_SInt:
+
+	case GraphicFormat::R8G8B8A8_SInt:
+
+	case GraphicFormat::R16_UNorm:
+
+	case GraphicFormat::R16G16_UNorm:
+
+	case GraphicFormat::R16G16B16_UNorm:
+
+	case GraphicFormat::R16G16B16A16_UNorm:
+
+	case GraphicFormat::R16_SNorm:
+
+	case GraphicFormat::R16G16_SNorm:
+
+	case GraphicFormat::R16G16B16_SNorm:
+
+	case GraphicFormat::R16G16B16A16_SNorm:
+
+	case GraphicFormat::R16_UInt:
+
+	case GraphicFormat::R16G16_UInt:
+
+	case GraphicFormat::R16G16B16_UInt:
+
+	case GraphicFormat::R16G16B16A16_UInt:
+
+	case GraphicFormat::R16_SInt:
+
+	case GraphicFormat::R16G16_SInt:
+
+	case GraphicFormat::R16G16B16_SInt:
+
+	case GraphicFormat::R16G16B16A16_SInt:
+
+	case GraphicFormat::R32_UInt:
+
+	case GraphicFormat::R32G32_UInt:
+
+	case GraphicFormat::R32G32B32_UInt:
+
+	case GraphicFormat::R32G32B32A32_UInt:
+
+	case GraphicFormat::R32_SInt:
+
+	case GraphicFormat::R32G32_SInt:
+
+	case GraphicFormat::R32G32B32_SInt:
+
+	case GraphicFormat::R32G32B32A32_SInt:
+
+	case GraphicFormat::R16_SFloat:
+
+	case GraphicFormat::R16G16_SFloat:
+
+	case GraphicFormat::R16G16B16_SFloat:
+
+	case GraphicFormat::R16G16B16A16_SFloat:
+
+	case GraphicFormat::R32_SFloat:
+
+	case GraphicFormat::R32G32_SFloat:
+
+	case GraphicFormat::R32G32B32_SFloat:
+
+	case GraphicFormat::R32G32B32A32_SFloat:
+
+	case GraphicFormat::B8G8R8_SRGB:
+
+	case GraphicFormat::B8G8R8A8_SRGB:
+
+	case GraphicFormat::B8G8R8_UNorm:
+
+	case GraphicFormat::B8G8R8A8_UNorm:
+
+	case GraphicFormat::B8G8R8_SNorm:
+
+	case GraphicFormat::B8G8R8A8_SNorm:
+
+	case GraphicFormat::B8G8R8_UInt:
+
+	case GraphicFormat::B8G8R8A8_UInt:
+
+	case GraphicFormat::B8G8R8_SInt:
+
+	case GraphicFormat::B8G8R8A8_SInt:
+
+	case GraphicFormat::R4G4B4A4_UNormPack16:
+
+	case GraphicFormat::B4G4R4A4_UNormPack16:
+
+	case GraphicFormat::R5G6B5_UNormPack16:
+
+	case GraphicFormat::B5G6R5_UNormPack16:
+
+	case GraphicFormat::R5G5B5A1_UNormPack16:
+
+	case GraphicFormat::B5G5R5A1_UNormPack16:
+
+	case GraphicFormat::A1R5G5B5_UNormPack16:
+
 	default:
 		break;
 	}
-	throw InvalidArgumentException("Invalid texture format.");
+	throw InvalidArgumentException("Invalid texture format : {}", magic_enum::enum_name(graphicFormat));
 }
 
 unsigned int GLHelper::getTextureFormat(TextureFormat textureFormat, unsigned int *pixelType) {
@@ -383,7 +304,7 @@ unsigned int GLHelper::getTextureFormat(TextureFormat textureFormat, unsigned in
 	default:
 		break;
 	}
-	throw InvalidArgumentException("Invalid texture format.");
+	throw InvalidArgumentException("Invalid texture format : {}", magic_enum::enum_name(textureFormat));
 }
 
 unsigned int GLHelper::getTextureFormat(TextureDesc::Format format) {
@@ -401,7 +322,7 @@ unsigned int GLHelper::getTextureFormat(TextureDesc::Format format) {
 	case TextureDesc::Format::RG:
 		return GL_RG;
 	default:
-		throw InvalidArgumentException("Invalid texture format.");
+		throw InvalidArgumentException("Invalid texture format : {}", magic_enum::enum_name(format));
 	}
 }
 
@@ -500,7 +421,7 @@ unsigned int GLHelper::getInternalTextureFormat(TextureDesc::Format format, bool
 			}
 		}
 	}
-	throw InvalidArgumentException("Invalid texture format {}.", format);
+	throw InvalidArgumentException("Invalid texture format {}.", magic_enum::enum_name(format));
 }
 
 unsigned int GLHelper::getTextureTarget(TextureDesc::Target target, int nrSamples) {
@@ -526,7 +447,7 @@ unsigned int GLHelper::getTextureTarget(TextureDesc::Target target, int nrSample
 	case TextureDesc::Target::CubeMapArray:
 		return GL_TEXTURE_CUBE_MAP_ARRAY;
 	default:
-		throw InvalidArgumentException("Invalid texture target {}.", target);
+		throw InvalidArgumentException("Invalid texture target {}.", magic_enum::enum_name(target));
 	}
 }
 
@@ -543,7 +464,7 @@ unsigned int GLHelper::getTextureType(TextureDesc::Type type) {
 	case TextureDesc::Type::Unsigned24_8:
 		return GL_UNSIGNED_INT_24_8;
 	default:
-		throw InvalidArgumentException("Invalid texture type {}.", type);
+		throw InvalidArgumentException("Invalid texture type {}.", magic_enum::enum_name(type));
 	}
 }
 
@@ -589,7 +510,7 @@ unsigned int GLHelper::getBufferType(BufferDesc::BufferType type) {
 	case BufferDesc::eIndirectDispatch:
 		return GL_DISPATCH_INDIRECT_BUFFER;
 	default:
-		throw InvalidArgumentException("Invalid buffer type {}.", type);
+		throw InvalidArgumentException("Invalid buffer type {}.", magic_enum::enum_name(type));
 	}
 }
 
@@ -623,7 +544,7 @@ unsigned int GLHelper::getBufferHint(BufferDesc::BufferHint hint) {
 		}
 	}
 	assert(0);
-	throw InvalidArgumentException("None matching buffer hint - {}", hint);
+	throw InvalidArgumentException("None matching buffer hint : {}", magic_enum::enum_name(hint));
 }
 
 unsigned int GLHelper::getPrimitive(GeometryDesc::Primitive primitive) {
@@ -640,7 +561,7 @@ unsigned int GLHelper::getPrimitive(GeometryDesc::Primitive primitive) {
 	case GeometryDesc::Primitive::TriangleAdjacant:
 		return GL_TRIANGLES_ADJACENCY;
 	default:
-		throw InvalidArgumentException("None matching primitive type - {}.", primitive);
+		throw InvalidArgumentException("None matching primitive type : {}.", magic_enum::enum_name(primitive));
 	}
 }
 
@@ -655,7 +576,7 @@ unsigned int GLHelper::getAttributeDataType(GeometryDesc::AttributeType type) {
 	case GeometryDesc::AttributeType::eHalf:
 		return GL_HALF_FLOAT;
 	default:
-		throw InvalidArgumentException("Invalid attribute type- {}.", type);
+		throw InvalidArgumentException("Invalid attribute type- {}.", magic_enum::enum_name(type));
 	}
 }
 
@@ -686,7 +607,7 @@ unsigned int GLHelper::getState(IRenderer::State state) {
 	case IRenderer::State::SampleAlphaCoverage:
 		return GL_SAMPLE_ALPHA_TO_COVERAGE;
 	default:
-		throw InvalidArgumentException("Invalid state - {}.", (int)state);
+		throw InvalidArgumentException("Invalid state - {}.", magic_enum::enum_name(state));
 	}
 }
 unsigned int GLHelper::getTextureFilterModeNoMip(Texture::FilterMode format) {
