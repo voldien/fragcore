@@ -4,21 +4,14 @@
 #include "Core/Math.h"
 #include "Texture.h"
 #include <Core/IO/FileSystem.h>
-#include <FreeImage.h>
-#include <ImageLoader.h>
 #include <fmt/core.h>
 using namespace fragcore;
 
-void TextureUtil::loadTexture(Ref<IO> &io, IRenderer *renderer, Texture **texture) {
+void TextureUtil::loadTexture(Image &image, IRenderer *renderer, Texture **texture) {
 	TextureDesc desc = {};
 	TextureDesc::Format format;
 	TextureDesc::Format internalformat;
 	TextureDesc::Type type;
-
-	/*	Load texture.   */
-
-	ImageLoader loader;
-	Image image = loader.loadImage(io);
 
 	/*  Texture attributes. */
 	desc.width = image.width();
@@ -51,30 +44,15 @@ void TextureUtil::loadTexture(Ref<IO> &io, IRenderer *renderer, Texture **textur
 	desc.marker = nullptr;
 
 	*texture = renderer->createTexture(&desc);
-	/*  TODO rename.    */
-	(*texture)->setName(io->getName());
 }
 
-void TextureUtil::loadTexture(const std::string &filepath, IRenderer *renderer, Texture **texture) {
-
-	Ref<IO> ref = Ref<IO>(FileSystem::getFileSystem()->openFile(filepath.c_str(), IO::IOMode::READ));
-	loadTexture(ref, renderer, texture);
-}
-
-void TextureUtil::saveTexture(const std::string &filepath, IRenderer *renderer, Texture *texture) {
-	Ref<IO> ref = Ref<IO>(FileSystem::getFileSystem()->openFile(filepath.c_str(), IO::IOMode::READ));
-	saveTexture(ref, renderer, texture);
-}
-
-void TextureUtil::saveTexture(Ref<IO> &io, IRenderer *renderer, Texture *texture) { /*	Image Loader.	*/
-	ImageLoader imageLoader;
-	/*	TODO verify.	*/
-	void *pixels = texture->mapTexture(texture->getFormat(), 0);
-	Image image(texture->width(), texture->height(), TextureFormat::Alpha8);
-	image.setPixelData(pixels, -1);
-	/*	*/
-	imageLoader.saveImage(io, image);
-	free(pixels);
+void TextureUtil::saveTexture(Image &image, IRenderer *renderer, Texture *texture) { /*	Image Loader.	*/
+																					 ///*	TODO verify.	*/
+	// void *pixels = texture->mapTexture(texture->getFormat(), 0);
+	// Image image(texture->width(), texture->height(), TextureFormat::Alpha8);
+	// image.setPixelData(pixels, -1);
+	///*	*/
+	// free(pixels);
 }
 
 Texture *TextureUtil::createTexture(IRenderer *renderer, unsigned int width, unsigned int height, const Ref<IO> &io,

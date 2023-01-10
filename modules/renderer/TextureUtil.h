@@ -21,23 +21,21 @@
 #include "IRenderer.h"
 #include "Texture.h"
 #include <Core/Ref.h>
+#include <Image.h>
 #include <ImageFormat.h>
-#include <ImageLoader.h>
 
 namespace fragcore {
 
 	/**
-	 * @brief 
-	 * 
+	 * @brief
+	 *
 	 */
-	class FVDECLSPEC TextureUtil : public ImageLoader {
+	class FVDECLSPEC TextureUtil {
 	  public:
-		static void loadTexture(Ref<IO> &io, IRenderer *renderer, Texture **texture);
-		static void loadTexture(const std::string &path, IRenderer *renderer, Texture **texture);
+		static void loadTexture(Image &image, IRenderer *renderer, Texture **texture);
 
 		/*	*/
-		static void saveTexture(const std::string &filepath, IRenderer *renderer, Texture *texture);
-		static void saveTexture(Ref<IO> &io, IRenderer *renderer, Texture *texture);
+		static void saveTexture(Image &image, IRenderer *renderer, Texture *texture);
 
 		/*	*/
 		static Texture *createTexture(IRenderer *renderer, unsigned int width, unsigned int height, const Ref<IO> &io,
