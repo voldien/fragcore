@@ -62,10 +62,11 @@ void SDLWindow::resizable(bool resizable) noexcept { SDL_SetWindowResizable(this
 
 void SDLWindow::setFullScreen(bool fullscreen) {
 
-	if (fullscreen)
+	if (fullscreen) {
 		SDL_SetWindowFullscreen(this->window, SDL_WINDOW_FULLSCREEN_DESKTOP);
-	else
+	} else {
 		SDL_SetWindowFullscreen(this->window, 0);
+	}
 }
 void SDLWindow::setFullScreen(fragcore::Display &display) {}
 

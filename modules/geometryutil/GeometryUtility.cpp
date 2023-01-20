@@ -2,7 +2,6 @@
 #include <Core/Math.h>
 #include <generator/SubdivideMesh.hpp>
 
-
 using namespace fragcore;
 
 std::vector<Triangle> GeometryUtility::createPolygon(const std::vector<Vector3> &points) {

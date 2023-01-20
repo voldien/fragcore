@@ -1,5 +1,4 @@
 #include "ProceduralGeometry.h"
-
 #include <generator/BoxMesh.hpp>
 #include <generator/CircleShape.hpp>
 #include <generator/HelixPath.hpp>

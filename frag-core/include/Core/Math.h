@@ -68,7 +68,7 @@ namespace fragcore {
 			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
 						  "Type Must Support addition operation.");
 			T sum = 0;
-			for (size_t i = 0; i < list.size(); i++){
+			for (size_t i = 0; i < list.size(); i++) {
 				sum += list[i];
 			}
 			return sum;
@@ -119,6 +119,11 @@ namespace fragcore {
 		template <typename T> inline constexpr static T lerpClamped(T a, T b, T t) noexcept {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
 			return (a + (b - a) * Math::clamp<T>(t, static_cast<T>(0.0), static_cast<T>(1.0)));
+		}
+
+		template <typename T> inline constexpr static T mod(T a, T mod) noexcept {
+			static_assert(std::is_integral<T>::value, "Must be a integer type.");
+			return (a % mod + mod) % mod;
 		}
 
 		/**
@@ -290,7 +295,7 @@ namespace fragcore {
 		}
 
 		// void multijitter(Vector2 *samples, int num_samples) { int sqrt_samples = (int)sqrt(num_samples); }
-	
+
 		template <typename T> static inline constexpr T align(T size, T alignment) {
 			static_assert(std::is_integral<T>::value, "Must be an integral type.");
 			return size + (alignment - (size % alignment));
