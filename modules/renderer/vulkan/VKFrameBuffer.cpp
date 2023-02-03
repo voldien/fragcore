@@ -10,8 +10,12 @@ void VKFrameBuffer::unBind() {
 	// vkCmdEndRenderPass(commandBuffers[i]);
 }
 
-int VKFrameBuffer::attachmentCount() {}
-std::vector<Texture *> VKFrameBuffer::getColorTargets() {}
+int VKFrameBuffer::attachmentCount() {
+	return 0;
+}
+std::vector<Texture *> VKFrameBuffer::getColorTargets() {
+	return {};
+}
 
 void VKFrameBuffer::write() {}
 

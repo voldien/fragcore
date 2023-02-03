@@ -2,7 +2,7 @@
 
 using namespace fragcore;
 
-void BufferIO::open(const char *path, IOMode mode) {}
+void BufferIO::open([[maybe_unused]] const char *path, [[maybe_unused]] IOMode mode) {}
 
 void BufferIO::close() { /*	TOOD reset values.	*/
 }

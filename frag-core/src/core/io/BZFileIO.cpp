@@ -47,7 +47,7 @@ void BZFileIO::close() {
 	FileIO::close();
 }
 
-void BZFileIO::open(const char *path, IO::IOMode mode) {
+void BZFileIO::open([[maybe_unused]] const char *path, IO::IOMode mode) {
 
 	/*  */
 	int bzerror;

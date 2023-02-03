@@ -12,6 +12,8 @@ void ICompute::OnDestruction() {}
 
 const char *ICompute::getVersion() const { return ""; }
 
-CommandList *ICompute::createCommandBuffer() {}
+CommandList *ICompute::createCommandBuffer() {
+    return nullptr;
+}
 void ICompute::submittCommand(Ref<CommandList> &list) {}
 void ICompute::execute(CommandList *list) {}

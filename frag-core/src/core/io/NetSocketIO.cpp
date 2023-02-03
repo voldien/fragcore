@@ -7,7 +7,7 @@ SocketIO::SocketIO(Ref<NetSocket> &socket) : netSocket(socket) {}
 
 SocketIO::SocketIO(SocketIO &&other) { this->netSocket = std::exchange(other.netSocket, nullptr); }
 
-void SocketIO::open(const char *path, IOMode mode) {}
+void SocketIO::open([[maybe_unused]] const char *path,[[maybe_unused]] IOMode mode) {}
 
 void SocketIO::close() {}
 

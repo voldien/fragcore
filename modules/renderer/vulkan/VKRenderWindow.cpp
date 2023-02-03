@@ -608,6 +608,7 @@ const std::shared_ptr<fvkcore::VKDevice> &VKRenderWindow::getVKDevice() const no
 }
 const std::shared_ptr<fvkcore::PhysicalDevice> VKRenderWindow::getPhysicalDevice() const noexcept {
 	// return this->renderer->device->getPhysicalDevice();
+	return {};
 }
 
 VkPhysicalDevice VKRenderWindow::physicalDevice() const {

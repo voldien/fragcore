@@ -141,11 +141,14 @@ void Hash::initHash(ALGORITHM algorithm) {
 	case Hash::ALGORITHM::SHA512:
 		this->context = malloc(sizeof(SHA512_CTX));
 		status = SHA512_Init(static_cast<SHA512_CTX *>(this->context));
+		break;
 	default:
 		throw InvalidArgumentException("Invalid hash algorithm - {}", static_cast<int>(algorithm));
 	}
+	/*	*/
+
 	if (status != 1) {
-		throw InvalidArgumentException("Failed to initlize Hash Algorithm {}", magic_enum::enum_name(algorithm));
+		throw RuntimeException("Failed to initlize Hash Algorithm {}", magic_enum::enum_name(algorithm));
 	}
 	this->algorithm = algorithm;
 }
