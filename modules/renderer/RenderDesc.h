@@ -238,7 +238,6 @@ namespace fragcore {
 		MarkerDebug marker;
 	} RenderPipelineDesc;
 
-	// TOOD rename all enum without the e infront.
 	enum class ShaderType {
 		Unknown,
 		Vertex,	 /*  */

@@ -353,13 +353,13 @@ VideoTexture *VideoFactory::loadVideoTexture(Ref<IO> &ref, AudioClip **audio, IR
 	// av_read_image_line2()
 	desc.pixel = header.frameoutput->data[0];
 	desc.pixelSize = 0;
-	desc.compression = TextureDesc::eNoCompression;
+	desc.compression = (int)TextureDesc::Compression::NoCompression;
 
 	/*  Texture.    */
 	desc.target = TextureDesc::Target::Texture2D;
 	desc.pixelFormat = TextureFormat::BGRA32;
 	desc.graphicFormat = GraphicFormat::R8G8B8A8_SRGB;
-	desc.type = TextureDesc::eUnsignedByte;
+	desc.type = TextureDesc::Type::UnsignedByte;
 	desc.numlevel = 4;
 	desc.usemipmaps = 1;
 	desc.srgb = 0;

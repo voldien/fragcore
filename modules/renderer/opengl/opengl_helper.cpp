@@ -378,7 +378,7 @@ unsigned int GLHelper::getInternalTextureFormat(TextureDesc::Format format, bool
 				case TextureDesc::Compression::ETC2:
 					return GL_COMPRESSED_SRGB8_ETC2;
 				default:
-					break;
+					return 0;
 				}
 			case TextureDesc::Format::RGBA:
 				switch (compression) {
@@ -386,6 +386,8 @@ unsigned int GLHelper::getInternalTextureFormat(TextureDesc::Format format, bool
 					return GL_COMPRESSED_SRGB_ALPHA;
 				case TextureDesc::Compression::ETC2:
 					return GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC;
+				default:
+					return 0;
 				}
 			default:
 				break;
@@ -401,6 +403,8 @@ unsigned int GLHelper::getInternalTextureFormat(TextureDesc::Format format, bool
 					return GL_COMPRESSED_RGB;
 				case TextureDesc::Compression::RGTC:
 					return GL_COMPRESSED_RED_RGTC1;
+				default:
+					return 0;
 				}
 			default:
 				break;
