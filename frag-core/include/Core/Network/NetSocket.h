@@ -114,6 +114,9 @@ namespace fragcore {
 
 		virtual NetStatus getStatus() const noexcept = 0;
 
+		virtual void setTimeout(long int microsec) = 0;
+		virtual long int getTimeout() = 0;
+
 		// TODO get interaces assocated
 
 	  protected:

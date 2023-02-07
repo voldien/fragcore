@@ -57,13 +57,15 @@ namespace fragcore {
 
 		virtual NetStatus getStatus() const noexcept override;
 
+		virtual void setTimeout(long int microsec) override;
+		virtual long int getTimeout() override;
+
 	  protected:
 		UDPNetSocket(int socket);
 
 		bool isNetworkLayerSupported(INetAddress::NetworkProtocol protocol);
 		bool isValidNetworkAddress(const INetAddress &address);
 
-		void setTimeout(long int nanoSeconds);
 		static int getDomain(const INetAddress &address);
 		static size_t setupIPAddress(sockaddr *addr, const INetAddress &p_addr, uint16_t p_port);
 

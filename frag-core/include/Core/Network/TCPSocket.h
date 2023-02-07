@@ -58,10 +58,12 @@ namespace fragcore {
 
 		virtual NetStatus getStatus() const noexcept override;
 
+		virtual void setTimeout(long int microsec) override;
+		virtual long int getTimeout() override;
+
 		/*	TODO get info about connection IP and etc.	*/
 
 	  public:
-		void setTimeout(long int microsec);
 		int getSocket();
 		int getPort();
 

@@ -305,6 +305,17 @@ void TCPNetSocket::setTimeout(long int microsec) {
 	}
 }
 
+long int TCPNetSocket::getTimeout() {
+	struct timeval tv;
+	socklen_t len;
+	int rc = getsockopt(this->socket, SOL_SOCKET, SO_RCVTIMEO, &tv, &len);
+	if (rc != 0) {
+		throw SystemException(errno, std::system_category(), "Failed to set recv timeout");
+	}
+
+	return tv.tv_sec * 1E6L + tv.tv_usec;
+}
+
 int TCPNetSocket::getSocket() { return this->socket; }
 
 int TCPNetSocket::getPort() {

@@ -176,6 +176,35 @@ bool UDPNetSocket::isBlocking() { return 0; }
 void UDPNetSocket::setBlocking(bool blocking) {}
 UDPNetSocket::NetStatus UDPNetSocket::getStatus() const noexcept { return this->netStatus; }
 
+void UDPNetSocket::setTimeout(long int microsec) {
+	struct timeval tv;
+
+	/*	Set timeout for client.	*/
+	tv.tv_sec = microsec / 1000000;
+	tv.tv_usec = microsec % 1000000;
+
+	int rc = setsockopt(this->socket, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv));
+	if (rc != 0) {
+		throw SystemException(errno, std::system_category(), "Failed to set recv timeout");
+	}
+	rc = setsockopt(this->socket, SOL_SOCKET, SO_SNDTIMEO, &tv, sizeof(tv));
+
+	if (rc != 0) {
+		throw SystemException(errno, std::system_category(), "Failed to set send timeout");
+	}
+}
+
+long int UDPNetSocket::getTimeout() {
+	struct timeval tv;
+	socklen_t len;
+	int rc = getsockopt(this->socket, SOL_SOCKET, SO_RCVTIMEO, &tv, &len);
+	if (rc != 0) {
+		throw SystemException(errno, std::system_category(), "Failed to set recv timeout");
+	}
+
+	return tv.tv_sec * 1E6L + tv.tv_usec;
+}
+
 size_t UDPNetSocket::setupIPAddress(struct sockaddr *addr, const INetAddress &p_addr, uint16_t p_port) {
 
 	size_t addrlen;

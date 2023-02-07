@@ -59,6 +59,9 @@ namespace fragcore {
 
 		virtual NetStatus getStatus() const noexcept override;
 
+		virtual void setTimeout(long int nanoSeconds) override;
+		virtual long int getTimeout() override;
+
 	  public: /*	CAN Socket Specific NetSocket Methods.	*/
 		/**
 		 * @brief
