@@ -6,7 +6,7 @@ namespace fragcore {
 	void checkError() {
 		GLenum error = glGetError();
 		if (error != GL_NO_ERROR) {
-			throw RuntimeException("glGetError indicated an error: {}", glewGetErrorString(error));
+			throw RuntimeException("glGetError indicated an error: {}", (const char *)glewGetErrorString(error));
 		}
 	}
 

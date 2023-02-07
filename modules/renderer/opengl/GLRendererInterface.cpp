@@ -241,7 +241,7 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 	if (status != GLEW_OK) {
 		SDL_GL_DeleteContext(this->openglcontext);
 		SDL_DestroyWindow(window);
-		throw RuntimeException("Could not Initialize GLEW - {}.", glewGetErrorString(status));
+		throw RuntimeException("Could not Initialize GLEW - {}.", (const char *)glewGetErrorString(status));
 	}
 
 	/*  TODO add function for checking if context is supported. */
@@ -249,7 +249,7 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 		const char *extension = minRequiredExtensions[i];
 		if (!glewIsExtensionSupported(extension)) {
 			throw RuntimeException("Non supported GPU - {} using OpenGL version: {}\nGLSL: {}", extension, getVersion(),
-								   glGetString(GL_SHADING_LANGUAGE_VERSION));
+								   (const char *)glGetString(GL_SHADING_LANGUAGE_VERSION));
 		}
 	}
 
@@ -550,7 +550,8 @@ Texture *GLRendererInterface::createTexture(TextureDesc *desc) {
 	GLenum errorStatus = glGetError();
 	if (errorStatus != GL_NO_ERROR) {
 		glDeleteTextures(1, &texture);
-		throw RuntimeException("Error when allocating the texture - {}, {}", errorStatus, gluErrorString(errorStatus));
+		throw RuntimeException("Error when allocating the texture - {}, {}", errorStatus,
+							   (const char *)gluErrorString(errorStatus));
 	}
 
 	// Unbound texture.
@@ -1008,7 +1009,7 @@ Buffer *GLRendererInterface::createBuffer(BufferDesc *desc) {
 		if (error != GL_NO_ERROR) {
 			glDeleteBuffers(1, &buf);
 			checkError();
-			throw RuntimeException("Failed to create buffer - {}", glewGetErrorString(error));
+			throw RuntimeException("Failed to create buffer - {}", (const char *)glewGetErrorString(error));
 		}
 
 		glBindBufferARB(target, 0);
@@ -1027,7 +1028,7 @@ Buffer *GLRendererInterface::createBuffer(BufferDesc *desc) {
 		error = glGetError();
 		if (error != GL_NO_ERROR) {
 			glDeleteBuffers(1, &buf);
-			throw RuntimeException("Failed to create buffer - {}", glewGetErrorString(error));
+			throw RuntimeException("Failed to create buffer - {}", (const char *)glewGetErrorString(error));
 		}
 
 		glBindBuffer(target, 0);
@@ -1511,7 +1512,7 @@ void GLRendererInterface::dispatchCompute(unsigned int *global, unsigned int *lo
 
 	GLenum errorStatus = glGetError();
 	if (errorStatus != GL_NO_ERROR) {
-		throw RuntimeException("Error when dispatching compute - {}, {}", errorStatus, gluErrorString(errorStatus));
+		throw RuntimeException("Error when dispatching compute - {}, {}", errorStatus, (const char*)gluErrorString(errorStatus));
 	}
 
 	// TODO relocate

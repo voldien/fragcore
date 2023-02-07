@@ -307,13 +307,13 @@ static void validateShaderArguments(ShaderType type, ShaderLanguage language, Sh
 	// Validate the arguments.
 	if (type < ShaderType::Vertex || type > ShaderType::Compute)
 		throw InvalidArgumentException("Invalid shader type - {}",
-									   type); // TODO add enumerator to string for shader type.
+									   (unsigned int)type); // TODO add enumerator to string for shader type.
 	if (language & ~(GLSL | SPIRV | HLSL | CLC))
 		throw InvalidArgumentException("None supported shader language by the application - {}",
-									   language); // TODO add enumerator to string for shader language.
+									  (unsigned int)language); // TODO add enumerator to string for shader language.
 	if (codetype <= ShaderCodeType::NoShaderType || codetype > ShaderCodeType::Binary)
 		throw InvalidArgumentException("None supported shader code format - {}",
-									   codetype); // TODO add enumerator to string for shader language.
+									  (unsigned int) codetype); // TODO add enumerator to string for shader language.
 }
 
 void ShaderUtil::loadShader(Ref<IO> &io, ShaderType type, Ref<IRenderer> &renderer, ShaderLanguage language,
