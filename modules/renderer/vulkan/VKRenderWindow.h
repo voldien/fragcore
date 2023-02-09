@@ -38,9 +38,9 @@ namespace fragcore {
 
 		void close() override;
 
-		virtual void show();
+		virtual void show() override;
 
-		virtual void hide();
+		virtual void hide() override;
 
 		void focus() override;
 
@@ -50,11 +50,11 @@ namespace fragcore {
 
 		void minimize() override;
 
-		virtual void swapBuffer();
+		virtual void swapBuffer() override;
 
-		virtual void setPosition(int x, int y);
+		virtual void setPosition(int x, int y) override;
 
-		virtual void setSize(int width, int height);
+		virtual void setSize(int width, int height) override;
 
 		virtual void vsync(bool state) override;
 

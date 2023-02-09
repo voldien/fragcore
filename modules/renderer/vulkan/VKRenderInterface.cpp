@@ -319,8 +319,9 @@ Shader *VKRenderInterface::createShader(ShaderDesc *desc) {
 
 	VkDescriptorSetLayout setLayout;
 	result = vkCreateDescriptorSetLayout(device->getHandle(), &layoutInfo, nullptr, &setLayout);
-	if (result != VK_SUCCESS)
-		throw RuntimeException(fmt::format("Failed to create descriptor set layout - %d", result));
+	if (result != VK_SUCCESS) {
+		throw RuntimeException("Failed to create descriptor set layout - {}", static_cast<int>(result));
+	}
 
 	/*  */
 	VkPipelineLayoutCreateInfo pipelineLayoutInfo = {};
@@ -362,8 +363,9 @@ Shader *VKRenderInterface::createShader(ShaderDesc *desc) {
 	renderPassInfo.subpassCount = 1;
 	renderPassInfo.pSubpasses = &subpass;
 
-	if (vkCreateRenderPass(device->getHandle(), &renderPassInfo, nullptr, &renderPass) != VK_SUCCESS)
-		throw RuntimeException(fmt::format("failed to create render pass - %d", result));
+	if (vkCreateRenderPass(device->getHandle(), &renderPassInfo, nullptr, &renderPass) != VK_SUCCESS) {
+		throw RuntimeException("failed to create render pass - {}", static_cast<int>(result));
+	}
 
 	/*  */
 	VkVertexInputBindingDescription bindingDescription = {};
@@ -485,8 +487,9 @@ Shader *VKRenderInterface::createShader(ShaderDesc *desc) {
 	/*  Create graphic pipeline.    */
 	// result = vkCreateGraphicsPipelines(device->getHandle(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr,
 	// 								   &shaobj->graphicsPipeline);
-	if (result != VK_SUCCESS)
-		throw RuntimeException(fmt::format("vkCreateGraphicsPipelines failed - %d", result));
+	if (result != VK_SUCCESS) {
+		throw RuntimeException("vkCreateGraphicsPipelines failed - {}", static_cast<int>(result));
+	}
 
 	/*  Release shader moudles once used.  */
 	if (vertShaderModule)
@@ -590,9 +593,10 @@ void VKRenderInterface::deleteBuffer(Buffer *object) {
 ViewPort *VKRenderInterface::getView(unsigned int i) {
 
 	/*  Validate the index. */
-	if (i >= capability.sMaxViewPorts)
+	if (i >= capability.sMaxViewPorts) {
 		throw InvalidArgumentException(
-			fmt::format("Does not support viewport index %d, max index %d.", i, capability.sMaxViewPorts));
+			fmt::format("Does not support viewport index {}, max index {}.", i, capability.sMaxViewPorts));
+	}
 
 	//	// If the view does not exits. Create it.
 	//	if(i == 0)
@@ -633,9 +637,7 @@ FrameBuffer *VKRenderInterface::getDefaultFramebuffer(void *window) {
 	return defaultFrambuffer;
 }
 
-Sync *VKRenderInterface::createSync(SyncDesc *desc) {
-	return nullptr;
-}
+Sync *VKRenderInterface::createSync(SyncDesc *desc) { return nullptr; }
 void VKRenderInterface::deleteSync(Sync *sync) {}
 
 static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
@@ -694,15 +696,15 @@ void VKRenderInterface::getSupportedTextureCompression(TextureDesc::Compression 
 	// vkGetPhysicalDeviceFeatures(getDevice()-> gpu, &deviceFeatures);
 
 	if (deviceFeatures.textureCompressionBC)
-		compressions |= (unsigned int) TextureDesc::Compression::NoCompression;
+		compressions |= (unsigned int)TextureDesc::Compression::NoCompression;
 	if (deviceFeatures.textureCompressionETC2)
-		compressions |= (unsigned int) TextureDesc::Compression::ETC2;
+		compressions |= (unsigned int)TextureDesc::Compression::ETC2;
 	if (deviceFeatures.textureCompressionASTC_LDR)
-		compressions |= (unsigned int) TextureDesc::Compression::ASTC_LDR;
+		compressions |= (unsigned int)TextureDesc::Compression::ASTC_LDR;
 
 	// Add support for default compression format.
 	if (compressions != 0)
-		compressions |= (unsigned int) TextureDesc::Compression::Compression;
+		compressions |= (unsigned int)TextureDesc::Compression::Compression;
 
 	*pCompressions = (TextureDesc::Compression)compressions;
 }

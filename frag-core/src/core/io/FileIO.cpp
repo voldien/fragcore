@@ -1,6 +1,6 @@
 #include "Core/IO/FileIO.h"
-
 #include <fmt/core.h>
+#include <magic_enum.hpp>
 #include <sys/stat.h>
 #include <utility>
 
@@ -66,7 +66,7 @@ void FileIO::open(const char *path, IOMode mode) {
 			f_io_mode = "a";
 		break;
 	default:
-		throw InvalidArgumentException("Invalid IO mode {}", mode);
+		throw InvalidArgumentException("Invalid IO mode: {}", magic_enum::enum_name(mode));
 	}
 
 	this->file = fopen(path, f_io_mode);
@@ -168,7 +168,7 @@ void FileIO::seek(long int nbytes, Seek seek) {
 		whence = SEEK_END;
 		break;
 	default:
-		throw InvalidArgumentException("Invalid seek enumerator.");
+		throw InvalidArgumentException("Invalid seek enumerator");
 	}
 
 	int rc = fseek(this->file, nbytes, whence);
