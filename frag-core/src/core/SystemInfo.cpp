@@ -196,7 +196,7 @@ std::vector<SystemInfo::GPUInformation> SystemInfo::getGPUDevices() noexcept {
 	return gpuDevices;
 }
 
-std::string SystemInfo::getAppliationName() {
+std::string SystemInfo::getApplicationName() {
 #if defined(PLATFORM_POSIX) || defined(__linux__) // check defines for your setup
 
 	std::string sp;

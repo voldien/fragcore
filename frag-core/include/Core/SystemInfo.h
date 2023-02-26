@@ -156,7 +156,7 @@ namespace fragcore {
 		 *
 		 * @return const char*
 		 */
-		static std::string getAppliationName();
+		static std::string getApplicationName();
 
 		/**
 		 * @brief Get the name of the current user.
