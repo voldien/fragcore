@@ -7,26 +7,39 @@ void BufferIO::open([[maybe_unused]] const char *path, [[maybe_unused]] IOMode m
 void BufferIO::close() { /*	TOOD reset values.	*/
 }
 
-long BufferIO::read(long int nbytes, void *pbuffer) {
-	long int nBytesLeft = this->nbytes - this->marker;
-	long int nReadBytes;
-	if (nBytesLeft == 0) {
+long BufferIO::read(long int requestedBytes, void *pbuffer) {
+	long int nBytesLeft = (this->nbytes - this->marker);
+	long int nReadBytes = 0;
+
+	/*	End of file.	*/
+	if (nBytesLeft <= 0) {
 		return 0;
 	}
 
-	if (nBytesLeft < nbytes) {
+	if (nBytesLeft < requestedBytes) {
+		/*	Clamp to the remaing part left.	*/
 		nReadBytes = nBytesLeft;
 	} else {
-		nReadBytes = nbytes;
+		/*	Fill the whole request.	*/
+		nReadBytes = requestedBytes;
 	}
+
+	/*	Validate the state.	*/
+	assert(this->marker >= 0);
+	assert(this->marker < this->nbytes);
+	assert(this->marker + nReadBytes <= this->nbytes);
+
+	/*	*/
 	memcpy(pbuffer, &this->buffer[this->marker], nReadBytes);
 
+	/*	*/
 	this->marker += nReadBytes;
+	
 	return nReadBytes;
 }
 
 long BufferIO::write(long int nbytes, const void *pbuffer) {
-	if (isWriteable()) {
+	if (this->isWriteable()) {
 		unsigned long nWriteBytes = 0;
 		memcpy(&this->buffer[this->marker], pbuffer, nWriteBytes);
 		nWriteBytes = nbytes;
@@ -71,7 +84,7 @@ bool BufferIO::flush() { return true; }
 BufferIO::BufferIO(const void *pBuffer, unsigned long size) {
 	this->marker = 0;
 	this->nbytes = size;
-	this->buffer = (char *)pBuffer;
+	this->buffer = (uint8_t *)pBuffer;
 	this->ioMode = IOMode::READ;
 	this->expandable = false;
 }
@@ -79,7 +92,7 @@ BufferIO::BufferIO(const void *pBuffer, unsigned long size) {
 BufferIO::BufferIO(void *pBuffer, unsigned long size) {
 	this->marker = 0;
 	this->nbytes = size;
-	this->buffer = (char *)pBuffer;
+	this->buffer = (uint8_t *)pBuffer;
 	this->ioMode = static_cast<IOMode>(IOMode::READ | IOMode::WRITE);
 	this->expandable = false;
 }
@@ -87,12 +100,13 @@ BufferIO::BufferIO(void *pBuffer, unsigned long size) {
 BufferIO::BufferIO(unsigned long size, bool expandable) {
 	this->marker = 0;
 	this->nbytes = size;
-	this->buffer = static_cast<char *>(malloc(size));
+	this->buffer = static_cast<uint8_t *>(malloc(size));
 	this->ioMode = static_cast<IOMode>(IOMode::READ | IOMode::WRITE);
 	this->expandable = expandable;
 }
 
 BufferIO::~BufferIO() {
-	if (this->expandable)
+	if (this->expandable) {
 		free(this->buffer);
+	}
 }

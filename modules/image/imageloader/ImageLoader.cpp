@@ -24,12 +24,13 @@ Image ImageLoader::loadImage(Ref<IO> &io) {
 
 	char *imageData = nullptr;
 
+	/*	Load image data.	*/
 	size_t imageSize = IOUtil::loadFileMem(io, &imageData);
 
-	/*	1 byte for the size in order, Because it crash otherwise if set to 0.	*/
+	/*	Create memory object.*/
 	stream = FreeImage_OpenMemory((BYTE *)imageData, imageSize);
 	if (stream == nullptr) {
-		throw RuntimeException("Failed to open freeimage memory stream");
+		throw RuntimeException("Failed to open freeimage memory stream {0}", imageSize);
 	}
 
 	/*	Seek to beginning of the memory stream.	*/
@@ -42,7 +43,7 @@ Image ImageLoader::loadImage(Ref<IO> &io) {
 	/*	*/
 	if (firsbitmap == nullptr) {
 		FreeImage_CloseMemory(stream);
-		throw RuntimeException("Failed load image memory");
+		throw RuntimeException("Failed load image memory: {0} : size {1}", magic_enum::enum_name(imgtype), imageSize);
 	}
 
 	/*	Reset to beginning of stream.	*/
@@ -84,7 +85,7 @@ Image ImageLoader::loadImage(Ref<IO> &io) {
 			imageFormat = TextureFormat::RGBAFloat;
 			break;
 		default:
-			throw NotSupportedException("None Supported Color Type {} ", imageType);
+			throw NotSupportedException("None Supported Color Type {} ", magic_enum::enum_name(imageType));
 		}
 		break;
 	case FIC_RGBALPHA:
@@ -126,6 +127,7 @@ Image ImageLoader::loadImage(Ref<IO> &io) {
 	/*	Release free image resources.	*/
 	FreeImage_Unload(firsbitmap);
 	FreeImage_CloseMemory(stream);
+
 	free(imageData);
 
 	return image;

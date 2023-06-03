@@ -6,8 +6,8 @@
 using namespace fragcore;
 
 long int IOUtil::loadFileMem(Ref<IO> &io, char **data) {
-	char *d = nullptr;
-	long int dataSize = 0;
+	uint8_t *populatedMemory = nullptr;
+	long int numberByteRead = 0;
 
 	size_t current_pos = io->getPos();
 
@@ -15,22 +15,21 @@ long int IOUtil::loadFileMem(Ref<IO> &io, char **data) {
 	if (!io->isReadable()) {
 		throw InvalidArgumentException("Failed to read from IO: {}", io->getName());
 	}
-	// TODO encapsualte data to reuse
 
 	// Page aligned;
-	char buf[1024 * 4];
+	uint8_t buf[1024 * 4];
 	long nbytes = 0;
 
 	while ((nbytes = io->read(sizeof(buf), buf)) > 0) {
-		d = static_cast<char *>(realloc(d, dataSize + nbytes));
-		memcpy(&d[dataSize], buf, nbytes);
-		dataSize += nbytes;
+		populatedMemory = static_cast<uint8_t *>(realloc(populatedMemory, numberByteRead + nbytes));
+		memcpy(&populatedMemory[numberByteRead], buf, nbytes);
+		numberByteRead += nbytes;
 	}
 
 	io->seek(current_pos, IO::Seek::SET);
 
-	*data = d;
-	return dataSize;
+	*data = (char *)populatedMemory;
+	return numberByteRead;
 }
 
 long int IOUtil::loadFile(Ref<IO> &in, Ref<IO> &out) {
@@ -89,7 +88,7 @@ long int IOUtil::saveFileMem(Ref<IO> &io, char *data, size_t size) {
 	if (!io->isWriteable()) {
 		throw InvalidArgumentException("Failed to write to IO: {}", io->getName());
 	}
-	
+
 	long dataSize;
 	dataSize = io->write(size, data);
 
