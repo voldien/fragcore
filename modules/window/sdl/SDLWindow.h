@@ -29,70 +29,69 @@ namespace fragcore {
 	class FVDECLSPEC SDLWindow : public Window {
 	  public:
 		SDLWindow();
-		virtual ~SDLWindow();
+		~SDLWindow() override;
 
-		virtual void show() override;
+		void show() override;
 
-		virtual void hide() override;
+		void hide() override;
 
-		virtual void close() override;
+		void close() override;
 
-		virtual void focus() override;
+		void focus() override;
 
-		virtual void restore() override;
+		void restore() override;
 
-		virtual void maximize() override;
+		void maximize() override;
 
-		virtual void minimize() override;
+		void minimize() override;
 
-		virtual void setTitle(const std::string &title) override;
+		void setTitle(const std::string &title) override;
 
-		virtual std::string getTitle() const override;
+		std::string getTitle() const override;
 
-				// TODO change the type to image.
-		virtual void setIcon(void *) override;
+		// TODO change the type to image.
+		void setIcon(void *) override;
 		//		virtual void setIcon(Image& image) = 0;
 
-		virtual void *getIcon() const override;
+		void *getIcon() const override;
 		// virtual Image getIcon() const = 0;
 		//		virtual Image* setIcon(Image* image) = 0;
-
 
 		// virtual int x() const noexcept override;
 		// virtual int y() const noexcept override;
 
-		virtual int width() const override;
-		virtual int height() const override;
+		int width() const override;
+		int height() const override;
 
-		virtual void getPosition(int *x, int *y) const override;
+		void getPosition(int *x, int *y) const override;
 
-		virtual void setPosition(int x, int y) noexcept override;
+		void setPosition(int x, int y) noexcept override;
 
-		virtual void setSize(int width, int height) noexcept override;
+		void setSize(int width, int height) noexcept override;
 
-		virtual void getSize(int *width, int *height) const override;
+		void getSize(int *width, int *height) const override;
 
-		virtual void resizable(bool resizable) noexcept override;
+		void resizable(bool resizable) noexcept override;
 
-		virtual void setFullScreen(bool fullscreen) override;
-		virtual void setFullScreen(fragcore::Display &display) override;
+		void setFullScreen(bool fullscreen) override;
+		void setFullScreen(fragcore::Display &display) override;
 
-		virtual bool isFullScreen() const override;
+		bool isFullScreen() const override;
 
-		virtual void setBordered(bool borded) override;
+		void setBordered(bool borded) override;
 
-		virtual float getGamma() const override;
+		float getGamma() const override;
 
-		virtual void setGamma(float gamma) override;
+		void setGamma(float gamma) override;
 
-		virtual void setMinimumSize(int width, int height) override;
-		virtual void getMinimumSize(int *width, int *height) override;
-		virtual void setMaximumSize(int width, int height) override;
-		virtual void getMaximumSize(int *width, int *height) override;
+		void setMinimumSize(int width, int height) override;
+		void getMinimumSize(int *width, int *height) override;
+		void setMaximumSize(int width, int height) override;
+		void getMaximumSize(int *width, int *height) override;
 
-		virtual fragcore::Display *getCurrentDisplay() const override;
+		fragcore::Display *getCurrentDisplay() const override;
 
-		virtual intptr_t getNativePtr() const override; /*  Get native window reference object. */
+		intptr_t getNativePtr() const override; /*  Get native window reference object. */
 
 	  protected:
 		SDL_Window *window;

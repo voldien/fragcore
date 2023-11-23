@@ -30,7 +30,7 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC Window : public SmartReference {
 	  public:
-		virtual ~Window() = default;
+		~Window() override = default;
 
 	  public:
 		virtual void show() = 0;
@@ -59,9 +59,9 @@ namespace fragcore {
 		// virtual Image getIcon() const = 0;
 		//		virtual Image* setIcon(Image* image) = 0;
 
-		virtual void getPosition(int *x, int *y) const = 0;
+		virtual void getPosition(int *xPosition, int *yPosition) const = 0;
 
-		virtual void setPosition(int x, int y) = 0;
+		virtual void setPosition(int xPosition, int yPosition) = 0;
 
 		virtual void setSize(int width, int height) = 0;
 

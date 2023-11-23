@@ -31,31 +31,31 @@ namespace fragcore {
 	class FVDECLSPEC SerialIO : public IO {
 	  public:
 		SerialIO(const std::string &path, IOMode mode);
-		virtual ~SerialIO();
+		~SerialIO() override;
 
-		virtual void close() override;
+		void close() override;
 
-		virtual long int read(long int nbytes, void *pbuffer) override;
+		long int read(long int nbytes, void *pbuffer) override;
 
-		virtual long int write(long int nbytes, const void *pbuffer) override;
+		long int write(long int nbytes, const void *pbuffer) override;
 
-		virtual long int peek(long int nBytes, void *pbuffer) override;
+		long int peek(long int nBytes, void *pbuffer) override;
 
-		virtual bool eof() const override;
+		bool eof() const override;
 
-		virtual long int length() override;
+		long int length() override;
 
-		virtual void seek(long int nbytes, Seek seek) override;
+		void seek(long int nbytes, Seek seek) override;
 
-		virtual unsigned long getPos() override;
+		unsigned long getPos() override;
 
-		virtual bool isWriteable() const override;
+		bool isWriteable() const override;
 
-		virtual bool isReadable() const override;
+		bool isReadable() const override;
 
-		virtual bool flush() override;
+		bool flush() override;
 
-		virtual bool isOperationSupported(IOOperation operations) const noexcept override {
+		bool isOperationSupported(IOOperation operations) const noexcept override {
 			const IOOperation supportedIO = static_cast<IOOperation>(OP_READ | OP_WRITE | OP_FLUSH);
 			return (operations & supportedIO) != operations;
 		};
@@ -158,7 +158,7 @@ namespace fragcore {
 		static std::optional<std::vector<std::string>> getSerialPorts();
 
 	  private:
-		virtual void open([[maybe_unused]] const char *path, [[maybe_unused]] IOMode mode) override {}
+		void open([[maybe_unused]] const char *path, [[maybe_unused]] IOMode mode) override {}
 
 		struct sp_port *port;
 		struct sp_port_config *config;

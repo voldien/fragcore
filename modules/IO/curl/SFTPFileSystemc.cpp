@@ -1,16 +1,17 @@
-#include"SFTPFileSystem.h"
+#include "SFTPFileSystem.h"
 
 using namespace fragcore;
 
-SFTPFileSystem *SFTPFileSystem::createFileSystem(const char *ip, int port, const Ref<IScheduler> &sch) {
+SFTPFileSystem *SFTPFileSystem::createFileSystem(const char *ipAddress, int port, const Ref<IScheduler> &sch) {
 
-	SFTPFileSystem *filesystem = new SFTPFileSystem(ip, port, nullptr, nullptr, sch);
+	SFTPFileSystem *filesystem = new SFTPFileSystem(ipAddress, port, nullptr, nullptr, sch);
 	return filesystem;
 }
 
 void SFTPFileSystem::setCredentials(const std::string &username, const std::string &password) {
-	if (handle == nullptr)
+	if (handle == nullptr) {
 		throw RuntimeException("SFTP FileSystem Not Setup Properly");
+	}
 
 	std::string cred = fmt::format("{}:{}", username, password);
 	curl_easy_setopt(handle, CURLOPT_USERPWD, cred.c_str());
@@ -18,14 +19,14 @@ void SFTPFileSystem::setCredentials(const std::string &username, const std::stri
 	memset(cred.data(), 0, cred.length());
 }
 
-SFTPFileSystem::SFTPFileSystem(const char *ip, int port, const char *username, const char *password,
+SFTPFileSystem::SFTPFileSystem(const char *ipAddress, int port, const char *username, const char *password,
 							   const Ref<IScheduler> &ref)
-	: SFTPFileSystem(ip, port, username, password) {
+	: SFTPFileSystem(ipAddress, port, username, password) {
 
 	this->setScheduleReference(ref);
 }
 
-SFTPFileSystem::SFTPFileSystem(const char *ip, int port, const char *username, const char *password) {
+SFTPFileSystem::SFTPFileSystem(const char *ipAddress, int port, const char *username, const char *password) {
 	CURLcode rc = curl_global_init(CURL_GLOBAL_ALL);
 	if (rc) {
 		throw RuntimeException("Failed: {}", curl_easy_strerror(rc));
@@ -38,7 +39,7 @@ SFTPFileSystem::SFTPFileSystem(const char *ip, int port, const char *username, c
 		// return CURLE_OUT_OF_MEMORY;
 	}
 
-	curl_easy_setopt(handle, CURLOPT_URL, fmt::format("sftp://{}@{}/", username, ip).c_str());
+	curl_easy_setopt(handle, CURLOPT_URL, fmt::format("sftp://{}@{}/", username, ipAddress).c_str());
 
 #ifndef DISABLE_SSH_AGENT
 	/* We activate ssh agent. For this to work you need

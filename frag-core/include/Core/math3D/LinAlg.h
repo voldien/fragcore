@@ -48,8 +48,7 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC LinAlg {
 	  public:
-	  
-		template <typename T> std::vector<T> PCA(std::vector<T> &p) {
+		template <typename T> static std::vector<T> PCA(std::vector<T> &p) {
 			float nInverse = (1.0f / p.size());
 			T m = nInverse * Math::sum<T>(p);
 			Matrix3x3 C = nInverse;

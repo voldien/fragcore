@@ -40,6 +40,7 @@ Image ImageLoader::loadImage(Ref<IO> &io) {
 	imgtype = FreeImage_GetFileTypeFromMemory(stream, imageSize);
 	FreeImage_SeekMemory(stream, 0, SEEK_SET);
 	firsbitmap = FreeImage_LoadFromMemory(imgtype, stream, 0);
+
 	/*	*/
 	if (firsbitmap == nullptr) {
 		FreeImage_CloseMemory(stream);
@@ -56,11 +57,13 @@ Image ImageLoader::loadImage(Ref<IO> &io) {
 	/*	Get attributes from the image.	*/
 	pixelData = FreeImage_GetBits(firsbitmap);
 
+	/*	*/
 	width = FreeImage_GetWidth(firsbitmap);
 	height = FreeImage_GetHeight(firsbitmap);
 	depth = 1;
 	bitsPerPixel = FreeImage_GetBPP(firsbitmap);
 
+	/*	*/
 	pixelSize = (width * height * depth * bitsPerPixel) / 8;
 
 	// TODO fix, seems to be a bug with freeiamge.
@@ -100,7 +103,7 @@ Image ImageLoader::loadImage(Ref<IO> &io) {
 			imageFormat = TextureFormat::RGBAFloat;
 			break;
 		default:
-			throw NotSupportedException("None Supported Color Type");
+			throw NotSupportedException("None Supported Color Type {} ", magic_enum::enum_name(imageType));
 		}
 		break;
 	case FIC_MINISWHITE:
@@ -111,13 +114,15 @@ Image ImageLoader::loadImage(Ref<IO> &io) {
 			imageFormat = TextureFormat::Alpha8;
 			break;
 		case FREE_IMAGE_TYPE::FIT_FLOAT:
-		default:
+			imageFormat = TextureFormat::RFloat;
 			break;
+		default:
+			throw NotSupportedException("None Supported Color Type {} ", magic_enum::enum_name(imageType));
 		}
 		break;
 	case FIC_CMYK:
 	default:
-		throw NotSupportedException("None Supported Color Type {}", std::string(magic_enum::enum_name(colortype)));
+		throw NotSupportedException("None Supported Color Type {} ", magic_enum::enum_name(imageType));
 	}
 
 	/*  */
@@ -133,22 +138,24 @@ Image ImageLoader::loadImage(Ref<IO> &io) {
 	return image;
 }
 
-void ImageLoader::saveImage(Ref<IO> &IO, Image &Image) {
+void ImageLoader::saveImage(Ref<IO> &IO, const Image &Image, const FileFormat fileformat) {
+
 	void *pixels = nullptr;
 	FIMEMORY *fimemory = nullptr;
 	FIBITMAP *image = nullptr;
 	FIBITMAP *finalImage = nullptr;
 	FREE_IMAGE_FORMAT image_format = FIF_UNKNOWN;
-	std::string filepath; // = "save.png";
+	std::string filepath;
+	int flag = 0;
 
 	const size_t size = Image.getSize();
 
-	// /*  Validate argument.  */
+	/*  Validate argument.  */
 	if (size <= 0) {
 		throw RuntimeException("Invalid texture, yield invalid size.");
 	}
 
-	// /*  Read current pixels from mandelbrot set.    */
+	/*  Read current pixels from mandelbrot set.    */
 	pixels = Image.getPixelData();
 	if (pixels == nullptr) {
 		throw RuntimeException("Texture pixel mapping failed.");
@@ -156,16 +163,30 @@ void ImageLoader::saveImage(Ref<IO> &IO, Image &Image) {
 
 	FreeImage_Initialise(FALSE);
 
-	// /*  Get file fmt::format.    */
-	image_format = FIF_PNG; // FreeImage_GetFIFFromFilename(filepath.c_str());
+	/*  Get file format.    */
+	switch (fileformat) {
+	case FileFormat::Png:
+		image_format = FIF_PNG;
+		break;
+	case FileFormat::Jpeg:
+		image_format = FIF_JPEG;
+		break;
+	case FileFormat::Exr:
+		image_format = FIF_EXR;
+		break;
+	default:
+		image_format = FIF_UNKNOWN;
+		break;
+	}
+
 	if (image_format == FIF_UNKNOWN) {
 		throw InvalidArgumentException("filepath file format is not supported : {}", filepath);
 	}
 
-	// // TODO resolve color swizzle issue.
+	// TODO resolve color swizzle issue.
 	Image.getFormat();
 
-	// /*  Allocate image buffer.  */
+	/*  Allocate image buffer.  */
 	image = FreeImage_ConvertFromRawBits((BYTE *)pixels, Image.width(), Image.height(),
 										 (Image::getFormatPixelSize(Image.getFormat()) * Image.width()) / 8,
 										 Image::getFormatPixelSize(Image.getFormat()), 0x000000FF, 0x0000FF00,
@@ -175,17 +196,15 @@ void ImageLoader::saveImage(Ref<IO> &IO, Image &Image) {
 		throw RuntimeException("FreeImage_ConvertFromRawBits failed: {}", filepath);
 	}
 
-	// /*  */
+	/*  */
 	finalImage = FreeImage_ConvertTo32Bits(image);
 	if (finalImage == nullptr) {
 		throw RuntimeException("Failed convert image: {}", filepath);
 	}
 
-	// /*  Save to file.   */
-	// FreeImage_SaveToHandle()
-
+	/*  Save to file.   */
 	FIMEMORY *mem = FreeImage_OpenMemory(nullptr, FreeImage_GetMemorySize(image));
-	if (FreeImage_SaveToMemory(image_format, image, mem)) {
+	if (FreeImage_SaveToMemory(image_format, image, mem, JPEG_QUALITYSUPERB)) {
 
 		BYTE *save_pixel_data;
 		DWORD save_size;

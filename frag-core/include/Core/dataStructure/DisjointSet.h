@@ -24,9 +24,9 @@
 namespace fragcore {
 
 	/**
-	 * @brief 
-	 * 
-	 * @tparam T 
+	 * @brief
+	 *
+	 * @tparam T
 	 */
 	template <class T> class FVDECLSPEC DisjointSet {
 
@@ -39,7 +39,7 @@ namespace fragcore {
 		/**
 		 *
 		 */
-		int getNumberSets() const {
+		int getNumberSets() const noexcept {
 			int i = 0;
 			for (i = 0; i < getSize(); i++) {
 				if (this->set[i] == -1)
@@ -51,7 +51,7 @@ namespace fragcore {
 		/**
 		 *
 		 */
-		int height(int x) const {
+		int height(int x) const noexcept {
 			int i = x;
 			while (i > 0) {
 				i = this->set[i].parent;
@@ -62,13 +62,14 @@ namespace fragcore {
 		/**
 		 *
 		 */
-		int maxHeight() const {
+		int maxHeight() const noexcept {
 			int max = 0;
 			int m;
 			for (int i = 0; i < this->getSize(); i++) {
 				m = this->height(i);
-				if (m > max)
+				if (m > max) {
 					max = m;
+				}
 			}
 			return max;
 		}
@@ -104,17 +105,16 @@ namespace fragcore {
 		 *
 		 */
 		int findCompression(int x) {
-			if (this->set[x].parent < 0)
+			if (this->set[x].parent < 0) {
 				return x;
-			else {
-				return this->set[x].parent = this->findCompression(this->set[x].parent);
 			}
+			return this->set[x].parent = this->findCompression(this->set[x].parent);
 		}
 
 		/**
 		 *
 		 */
-		void unions(int root1, int root2) {
+		void unions(int root1, int root2) noexcept {
 			if (root1 != root2) {
 				this->set[root2].parent = root1;
 			}
@@ -156,27 +156,28 @@ namespace fragcore {
 			this->set = realloc(set, size * sizeof(Partition));
 			this->size = size;
 
-			if ((size - tmpSize) > 0)
-				clear(tmpSize);
+			if ((size - tmpSize) > 0) {
+				this->clear(tmpSize);
+			}
 		}
 
 		/**
 		 *
 		 */
-		void clear(int x = 0) {
+		void clear(int x = 0) noexcept {
 			int i;
 			for (i = x; i < this->getSize(); i++) {
 				this->set[i].parent = -1;
 			}
 		}
 
-		inline int getSize() const { return this->size; }
+		inline int getSize() const noexcept { return this->size; }
 
-		inline int getReserved() const { return this->reserved; }
+		inline int getReserved() const noexcept { return this->reserved; }
 
-		inline int getTypeSize() const { return sizeof(Partition); }
+		inline int getTypeSize() const noexcept { return sizeof(Partition); }
 
-		inline void *getData() const { return this->set; }
+		inline void *getData() const noexcept { return this->set; }
 
 		/**
 		 *

@@ -144,7 +144,7 @@ namespace fragcore {
 
 		virtual DisplayFormat getFormat() = 0;
 
-		virtual ~Display() = default;
+		~Display() override = default;
 
 	  public:
 		// virtual void calculateGammaLookupTable(float gamma, ushort *rgbRamp) const; /*  */

@@ -18,7 +18,6 @@
  */
 #ifndef _FRAG_CORE_DOUBLE_BUFFERED_ALLACATOR_H_
 #define _FRAG_CORE_DOUBLE_BUFFERED_ALLACATOR_H_ 1
-#include "../SmartReference.h"
 #include "Queue.h"
 #include "StackAllactor.h"
 
@@ -51,13 +50,13 @@ namespace fragcore {
 		/**
 		 *	Set marker to zero.
 		 */
-		void clear();
+		void clear() noexcept;
 
 		/**
 		 *	Return marker offset.
 		 *	@return
 		 */
-		size_t getMarker() const;
+		size_t getMarker() const noexcept;
 
 		/**
 		 *	Fetch block of memory.

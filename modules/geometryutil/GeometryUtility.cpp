@@ -1,5 +1,9 @@
+#include "Core/Math3D.h"
+#include "Core/math3D/AABB.h"
+#include "Core/math3D/OBB.h"
 #include "GeometryUtil.h"
 #include <Core/Math.h>
+#include <Core/math3D/LinAlg.h>
 #include <generator/SubdivideMesh.hpp>
 
 using namespace fragcore;
@@ -13,7 +17,8 @@ std::vector<Triangle> GeometryUtility::createPolygon(const std::vector<Vector3> 
 	return {};
 }
 
-bool GeometryUtility::isConvex(std::vector<Vector3> &polygon) {
+bool GeometryUtility::isConvex(const std::vector<Vector3> &polygon) {
+	
 	if (polygon.size() < 3) {
 		return false;
 	}
@@ -21,6 +26,7 @@ bool GeometryUtility::isConvex(std::vector<Vector3> &polygon) {
 	Vector3 p;
 	Vector3 v;
 	Vector3 u;
+
 	int res = 0;
 	for (size_t i = 0; i < polygon.size(); i++) {
 		p = polygon[i];
@@ -42,4 +48,48 @@ bool GeometryUtility::isConvex(std::vector<Vector3> &polygon) {
 	}
 	return true;
 }
-bool GeometryUtility::isConcave(std::vector<Vector3> &points) { return !isConvex(points); }
+bool GeometryUtility::isConcave(const std::vector<Vector3> &points) { return !isConvex(points); }
+
+AABB GeometryUtility::computeBoundingBox(const Vector3 *vertices, const size_t nrVertices) {
+	Vector3 min = Vector3(std::numeric_limits<float>::max(), std::numeric_limits<float>::max(),
+						  std::numeric_limits<float>::max());
+	Vector3 max = Vector3(std::numeric_limits<float>::min(), std::numeric_limits<float>::min(),
+						  std::numeric_limits<float>::min());
+
+	for (size_t i = 0; i < nrVertices; i++) {
+		const Vector3 &vertex = vertices[i];
+
+		/*	Max point.	*/
+		if (vertex.x() > max.x()) {
+			max.x() = vertex.x();
+		}
+		if (vertex.y() > max.y()) {
+			max.y() = vertex.y();
+		}
+		if (vertex.z() > max.z()) {
+			max.z() = vertex.z();
+		}
+		/*	Min Point.	*/
+		if (vertex.x() < min.x()) {
+			min.x() = vertex.x();
+		}
+		if (vertex.y() < min.y()) {
+			min.y() = vertex.y();
+		}
+		if (vertex.z() < min.z()) {
+			min.z() = vertex.z();
+		}
+	}
+
+	return AABB::createMinMax(min, max);
+}
+
+BoundingSphere GeometryUtility::computeBoundingSphere(float *vertices, const size_t nrVertices) {
+	return BoundingSphere();
+}
+OBB GeometryUtility::computeBoundingOBB(float *vertices, const size_t nrVertices) {
+	// PCA
+	// LinAlg::PCA();
+
+	return OBB();
+}

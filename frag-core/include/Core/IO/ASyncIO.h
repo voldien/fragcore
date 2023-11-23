@@ -185,8 +185,8 @@ namespace fragcore {
 
 		class FVDECLSPEC AsyncTask : public Task {
 		  public:
-			virtual void Execute() noexcept override {}
-			virtual void Complete() noexcept override {}
+			void Execute() noexcept override {}
+			void Complete() noexcept override {}
 			AsyncTask(AsyncObject &asyncObj) : asyncObject(asyncObj) {}
 			ASyncIO::AsyncObject &asyncObject;
 		};

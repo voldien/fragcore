@@ -23,7 +23,8 @@
 
 namespace fragcore {
 	class Module;
-	typedef Module *(*CreateModule)(Module *module);
+	using CreateModule = Module *(*)(Module *);
+
 	/**
 	 * @brief
 	 *
@@ -31,7 +32,7 @@ namespace fragcore {
 	class FVDECLSPEC Module : public SmartReference {
 	  public:
 		Module();
-		virtual ~Module() = default;
+		~Module() override = default;
 		virtual void OnInitialization() = 0;
 		virtual void OnDestruction() = 0;
 

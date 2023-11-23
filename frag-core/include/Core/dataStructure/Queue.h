@@ -104,8 +104,9 @@ namespace fragcore {
 				this->mdata = new T[size]();
 
 				/*	Relocate.	*/
-				for (size_t i = 0; i < getSize(); i++)
+				for (size_t i = 0; i < getSize(); i++) {
 					this->mdata[i] = this->mdata[(this->head + i) % getReserved()];
+				}
 				this->head = 0;
 				this->tail = this->getSize() - 1;
 			}

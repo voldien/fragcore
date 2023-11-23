@@ -52,11 +52,10 @@ long FTPFileIO::read(long int nbytes, void *pbuffer) {
 		}
 	} while (rc == CURLE_AGAIN);
 
-	if (rc == CURLE_OK)
+	if (rc == CURLE_OK) {
 		return nRecv;
-	else {
-		return -1;
 	}
+	return -1;
 }
 
 long FTPFileIO::write(long int nbytes, const void *pbuffer) {
@@ -70,11 +69,10 @@ long FTPFileIO::write(long int nbytes, const void *pbuffer) {
 		}
 	} while (rc == CURLE_AGAIN);
 
-	if (rc == CURLE_OK)
+	if (rc == CURLE_OK) {
 		return nRecv;
-	else {
-		return -1;
 	}
+	return -1;
 }
 
 long FTPFileIO::length() {
@@ -175,8 +173,9 @@ int debug_callback(CURL *handle, curl_infotype type, char *data, size_t size, vo
 }
 
 FTPFileIO::FTPFileIO(CURL *handle, const char *URL, IOMode mode) {
-	if (handle == nullptr)
+	if (handle == nullptr) {
 		throw InvalidArgumentException("");
+	}
 	this->handle = handle;
 	CURLcode rc;
 	if (this->handle) {
@@ -209,7 +208,7 @@ FTPFileIO::FTPFileIO(CURL *handle, const char *URL, IOMode mode) {
 
 		rc = curl_easy_setopt(this->handle, CURLOPT_CONNECTTIMEOUT, 5L);
 
-		//rc = curl_easy_setopt(this->handle, CURLOPT_CONNECT_ONLY, 1L);
+		// rc = curl_easy_setopt(this->handle, CURLOPT_CONNECT_ONLY, 1L);
 	}
 	rc = curl_easy_perform(this->handle);
 	if (rc != CURLE_OK) {

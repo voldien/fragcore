@@ -16,6 +16,7 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+#include "Core/Math3D.h"
 #ifndef _FRAG_CORE_AXIS_ALIGN_BOUNDIN_BOX_H_
 #define _FRAG_CORE_AXIS_ALIGN_BOUNDIN_BOX_H_ 1
 #include "../../FragDef.h"
@@ -244,6 +245,12 @@ namespace fragcore {
 		 */
 		bool operator!=(const AABB &bound) noexcept {
 			return (this->getCenter() != bound.getCenter()) || (this->getSize() != bound.getSize());
+		}
+
+		static AABB createMinMax(const Vector3 &min, const Vector3 &max) noexcept {
+			const Vector3 center = Vector3::Zero();
+			const Vector3 size = (min - max) / 2.0f;
+			return AABB(min, max);
 		}
 
 	  private:			   /*	Attributes.	*/

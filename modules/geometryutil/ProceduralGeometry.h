@@ -16,33 +16,46 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+#include "Core/Math3D.h"
 #ifndef _FRAG_CORE_PROCEDURAL_GEOMETRY_H_
 #define _FRAG_CORE_PROCEDURAL_GEOMETRY_H_ 1
 #include <FragCore.h>
 
 namespace fragcore {
 
+	/**
+	 * @brief
+	 *
+	 */
 	class FVDECLSPEC ProceduralGeometry {
 	  public:
-		typedef struct _vertex_t {
-		  public:
+		// TODO align package
+		using Vertex = struct _vertex_t {
 			float vertex[3];
 			float uv[2];
 			float normal[3];
 			float tangent[3];
-		} Vertex;
+		};
 
-		static void generatePlan(float scale, std::vector<Vertex> &vertices, std::vector<unsigned int> &indices,
-								 int segmentsX = 1, int segmentsY = 1);
+		static void generatePlan(float scale, std::vector<Vertex> &vertices,
+								 std::vector<unsigned int> &indices, int segmentsX = 1, int segmentsY = 1);
 
 		static void generateGrid2D();
 
-		static void generateBoundingBox();
-		static void generateSphere(float radius, std::vector<Vertex> &vertices, std::vector<unsigned int> &indices);
+		static std::vector<Vector3> createFrustum(const Matrix4x4 &projection);
+		static std::vector<Vector3> createFrustum(const float fov, const float aspect, const float near,
+												  const float far);
 
-		static void generateCube(float scale, std::vector<Vertex> &vertices, std::vector<unsigned int> &indices);
+		static void generateSphere(float radius, std::vector<Vertex> &vertices,
+								   std::vector<unsigned int> &indices);
 
-		static void generateTorus(float scale, std::vector<Vertex> &vertices, std::vector<unsigned int> &indices);
+		static void generateCube(const float scale, std::vector<Vertex> &vertices,
+								 std::vector<unsigned int> &indices);
+		static void generateWireCube(const float scale, std::vector<Vertex> &vertices,
+									 std::vector<unsigned int> &indices);
+
+		static void generateTorus(float scale, std::vector<Vertex> &vertices,
+								  std::vector<unsigned int> &indices);
 	};
 
 } // namespace fragcore

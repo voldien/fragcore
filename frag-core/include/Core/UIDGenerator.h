@@ -44,10 +44,10 @@ namespace fragcore {
 		T getNextUID() noexcept { return this->nextUID++; }
 
 		bool operator==(const UIDGenerator &other) noexcept {
-			if (this == &other)
+			if (this == &other) {
 				return true;
-			else
-				return this->uid == other.uid;
+			}
+			return this->uid == other.uid;
 		}
 		bool operator!=(const UIDGenerator &other) noexcept { return !(*this == other); }
 

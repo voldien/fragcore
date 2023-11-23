@@ -36,9 +36,8 @@ namespace fragcore {
 		Image(const Image &other) {}
 		Image(Image &&other) {}
 
-		virtual ~Image();
+		~Image() override;
 
-		// TODO set const for the width and height
 		virtual unsigned int width() const noexcept { return this->w; }
 
 		virtual unsigned int height() const noexcept { return this->h; }
@@ -47,14 +46,14 @@ namespace fragcore {
 
 		virtual TextureFormat getFormat() const noexcept { return this->format; }
 
-		virtual Color operator[](unsigned int index) { return Color::black(); }
+		virtual Color operator[](unsigned int index) const { return Color::black(); }
 
-		virtual Color getColor(unsigned int x, unsigned int y, unsigned int z) { return Color::black(); }
+		virtual Color getColor(unsigned int x, unsigned int y, unsigned int z) const { return Color::black(); }
 
 		virtual size_t getSize() const noexcept { return this->bufferSize; }
 
 		virtual void *getPixelData() const noexcept;
-		virtual void setPixelData(void *srcPixelData, size_t size);
+		virtual void setPixelData(void *srcPixelData, size_t size); // TODO add offset
 
 	  protected:
 		void allocateMemory(unsigned int width, unsigned int height, unsigned depth, TextureFormat format);
@@ -63,21 +62,23 @@ namespace fragcore {
 		static size_t getTextureSize(unsigned int width, unsigned int height, unsigned depth, TextureFormat format);
 		/**
 		 * @brief Get the Format Pixel Size in bits
-		 * 
-		 * @param format 
-		 * @return size_t 
+		 *
+		 * @param format
+		 * @return size_t
 		 */
 		static size_t getFormatPixelSize(TextureFormat format);
+
+		Image &convertImage(Image &image, TextureFormat textureFormat);
 
 	  private:
 		unsigned int w;
 		unsigned int h;
 		unsigned int depth{1};
 		TextureFormat format;
+		
 		// TODO encpsulate object.
 		void *pixelData = nullptr;
 		size_t bufferSize;
-		// Color color;
 	};
 } // namespace fragcore
 

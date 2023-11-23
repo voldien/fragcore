@@ -82,20 +82,20 @@ namespace fragcore {
 		 *
 		 * @param path
 		 */
-		virtual void addFilePath(const char *path, Object *object);
+		 void addFilePath(const char *path, Object *object) override;
 
 		/**
 		 *
 		 * @param path
 		 */
-		virtual void removeFilePath(const char *path, Object *object);
+		 void removeFilePath(const char *path, Object *object) override;
 
 		/**
 		 *
 		 * @param path
 		 * @return
 		 */
-		virtual Object *getObject(const char *path);
+		 Object *getObject(const char *path) override;
 
 		/**
 		 *

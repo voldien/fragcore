@@ -29,36 +29,35 @@ namespace fragcore {
 	class FVDECLSPEC UDPNetSocket : public NetSocket {
 	  public:
 		UDPNetSocket();
-		virtual ~UDPNetSocket();
+		~UDPNetSocket() override;
 
-		virtual TransportProtocol getTransportProtocol() const noexcept override;
+		TransportProtocol getTransportProtocol() const noexcept override;
 
-		virtual int close() override;
+		int close() override;
 
-		virtual int bind(const INetAddress &p_addr) override;
-		virtual int listen(unsigned int maxListen) override;
-		virtual int connect(const INetAddress &p_addr) override;
+		int bind(const INetAddress &p_addr) override;
+		int listen(unsigned int maxListen) override;
+		int connect(const INetAddress &p_addr) override;
 
-		virtual int poll(int p_type, int timeout) const override;
+		int poll(int p_type, int timeout) const override;
 
-		virtual int recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddress &r_ip,
-							 bool p_peek = false) override;
-		virtual int recv(void *pbuffer, int p_len, int &sent, bool peek = false) override;
-		virtual int send(const uint8_t *p_buffer, int p_len, int &r_sent) override;
-		virtual int sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const INetAddress &p_ip) override;
-		virtual long int send(const void *pbuffer, int p_len, int &sent) override;
-		virtual Ref<NetSocket> accept(INetAddress &r_ip) override;
-		virtual NetStatus accept(NetSocket &socket) override;
+		int recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddress &r_ip, bool p_peek = false) override;
+		int recv(void *pbuffer, int p_len, int &sent, bool peek = false) override;
+		int send(const uint8_t *p_buffer, int p_len, int &r_sent) override;
+		int sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const INetAddress &p_ip) override;
+		long int send(const void *pbuffer, int p_len, int &sent) override;
+		Ref<NetSocket> accept(INetAddress &r_ip) override;
+		NetStatus accept(NetSocket &socket) override;
 
-		virtual int read() override;
-		virtual int write() override;
-		virtual bool isBlocking() override;
-		virtual void setBlocking(bool blocking) override;
+		int read() override;
+		int write() override;
+		bool isBlocking() override;
+		void setBlocking(bool blocking) override;
 
-		virtual NetStatus getStatus() const noexcept override;
+		NetStatus getStatus() const noexcept override;
 
-		virtual void setTimeout(long int microsec) override;
-		virtual long int getTimeout() override;
+		void setTimeout(long int microsec) override;
+		long int getTimeout() override;
 
 	  protected:
 		UDPNetSocket(int socket);

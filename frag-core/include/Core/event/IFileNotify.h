@@ -16,16 +16,18 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
 #ifndef _FRAG_CORE_IFILE_NOTIFY_H_
 #define _FRAG_CORE_IFILE_NOTIFY_H_ 1
 #include "../../FragDef.h"
+#include "Core/Object.h"
 #include "FileChangeEvent.h"
 
 namespace fragcore {
-	// TOOD Determine name if shalla only be INotify
+
+	// TOOD Determine name if shall only be INotify
 	class FVDECLSPEC IFileNotify : public SmartReference {
 	  public:
-	  
 		/**
 		 *
 		 */

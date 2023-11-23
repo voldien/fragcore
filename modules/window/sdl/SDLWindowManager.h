@@ -27,18 +27,18 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC SDLWindowManager : public WindowManager {
 	  public:
-		virtual Display *getDisplay(unsigned int index) override;
-		virtual unsigned int getNumDisplays() const noexcept override;
-		virtual Display *getAssociatedDisplay(Ref<Window> &window) override;
-		virtual Window *createWindow(const std::string &title) override;
-		virtual Display *primaryDisplay() const noexcept override;
+		Display *getDisplay(unsigned int index) override;
+		unsigned int getNumDisplays() const noexcept override;
+		Display *getAssociatedDisplay(Ref<Window> &window) override;
+		Window *createWindow(const std::string &title) override;
+		Display *primaryDisplay() const noexcept override;
 
 		/*	TODO get the event.	*/
 
 		// protected:
 
 		SDLWindowManager();
-		virtual ~SDLWindowManager();
+		~SDLWindowManager() override;
 	};
 } // namespace fragcore
 

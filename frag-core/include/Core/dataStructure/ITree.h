@@ -38,10 +38,10 @@ namespace fragcore {
 		ITree(ITree &&other) {}
 
 		virtual ITree<T> *root() const {
-			if (this->getParent() == nullptr)
+			if (this->getParent() == nullptr) {
 				return (ITree<T> *)this;
-			else
-				return this->getParent()->root();
+			}
+			return this->getParent()->root();
 		}
 
 		virtual bool isEmpty() const { return this->getNumChildren() == 0; }
@@ -64,10 +64,11 @@ namespace fragcore {
 
 				find = this->child;
 				while (find) {
-					if (find->sibling)
+					if (find->sibling) {
 						find = find->sibling;
-					else
+					} else {
 						break;
+					}
 				}
 				find->sibling = pchild;
 				find->sibling->setParent(this);
@@ -82,8 +83,9 @@ namespace fragcore {
 		}
 
 		virtual ITree<T> *getChild(unsigned int index) const {
-			if (index >= this->getNumChildren())
+			if (index >= this->getNumChildren()) {
 				throw InvalidArgumentException("Exceeded {} has {}", index, this->getNumChildren());
+			}
 			ITree<T> *chi = this->child;
 			for (unsigned int x = 0; x <= index; x++) {
 				chi = chi->sibling;
@@ -93,8 +95,9 @@ namespace fragcore {
 
 		virtual bool isChild(ITree<T> *item) const {
 			for (unsigned int i = 0; i < getNumChildren(); i++) {
-				if (item == getChild(i))
+				if (item == getChild(i)) {
 					return true;
+				}
 			}
 			return false;
 		}

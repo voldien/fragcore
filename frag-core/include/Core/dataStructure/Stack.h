@@ -65,7 +65,7 @@ namespace fragcore {
 		}
 
 		Stack &operator=(Stack &&alloctor) {
-			this->data = std::exchange(allocator.data, nullptr);
+			this->data = std::exchange(alloctor.data, nullptr);
 			this->nrElements = std::exchange(alloctor.nrElements, 0);
 			this->mreserved = std::exchange(alloctor.mreserved, 0);
 			return *this;
@@ -84,9 +84,8 @@ namespace fragcore {
 			if (this->nrElements > 0) {
 				this->nrElements--;
 				return this->data[this->nrElements + 1];
-			} else {
-				throw RuntimeException();
 			}
+			throw RuntimeException();
 		}
 
 		T &operator[](int index) { return this->data[index]; }

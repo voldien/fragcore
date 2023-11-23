@@ -35,8 +35,9 @@ void Base64::encode(Ref<IO> &input, Ref<IO> &encoded) { /*	*/
 	}
 
 	if (i) {
-		for (j = i; j < 3; j++)
+		for (j = i; j < 3; j++) {
 			char_array_3[j] = '\0';
+		}
 
 		char_array_4[0] = (char_array_3[0] & 0xfc) >> 2;
 		char_array_4[1] = ((char_array_3[0] & 0x03) << 4) + ((char_array_3[1] & 0xf0) >> 4);
@@ -89,11 +90,13 @@ void Base64::decode(Ref<IO> &encoded, Ref<IO> &output) { /*	*/
 		}
 
 		if (i) {
-			for (j = i; j < 4; j++)
+			for (j = i; j < 4; j++) {
 				char_array_4[j] = 0;
+			}
 
-			for (j = 0; j < 4; j++)
+			for (j = 0; j < 4; j++) {
 				char_array_4[j] = base64_chars.find(char_array_4[j]);
+			}
 
 			char_array_3[0] = (char_array_4[0] << 2) + ((char_array_4[1] & 0x30) >> 4);
 			char_array_3[1] = ((char_array_4[1] & 0xf) << 4) + ((char_array_4[2] & 0x3c) >> 2);

@@ -18,7 +18,7 @@
  */
 #ifndef _FRAG_CORE_SFTP_FILESYSTEM_H_
 #define _FRAG_CORE_SFTP_FILESYSTEM_H_ 1
-#include"FTPFileSystem.h"
+#include "FTPFileSystem.h"
 
 namespace fragcore {
 
@@ -36,7 +36,7 @@ namespace fragcore {
 		 * @param sch
 		 * @return FTPFileSystem*
 		 */
-		static SFTPFileSystem *createFileSystem(const char *ip, int port,
+		static SFTPFileSystem *createFileSystem(const char *ipAddress, int port,
 												const Ref<IScheduler> &sch = Ref<IScheduler>(nullptr));
 
 		/**
@@ -46,7 +46,7 @@ namespace fragcore {
 		 * @param sch
 		 * @return FTPFileSystem*
 		 */
-		static SFTPFileSystem *createFileSystem(const IPAddress &, int port,
+		static SFTPFileSystem *createFileSystem(const IPAddress &ipAddress, int port,
 												const Ref<IScheduler> &sch = Ref<IScheduler>(nullptr));
 
 		SFTPFileSystem(SFTPFileSystem &&other);
@@ -62,12 +62,11 @@ namespace fragcore {
 		void setCredentials(const std::string &username, const std::string &password);
 
 	  protected:
-
 		SFTPFileSystem() = default;
-		SFTPFileSystem(const char *ip, int port, const char *username, const char *password,
+		SFTPFileSystem(const char *ipAddress, int port, const char *username, const char *password,
 					   const Ref<IScheduler> &sch);
-		SFTPFileSystem(const char *ip, int port, const char *username, const char *password);
-		virtual ~SFTPFileSystem();
+		SFTPFileSystem(const char *ipAddress, int port, const char *username, const char *password);
+		~SFTPFileSystem() override;
 
 	  private:
 		CURL *handle;

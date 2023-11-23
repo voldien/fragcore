@@ -44,7 +44,7 @@ namespace fragcore {
 		IPAddress(IPAddress &&other) = default;
 		IPAddress &operator=(IPAddress &&other) = default;
 
-		IPAddress(const std::string &ip, IPAddressType type);
+		IPAddress(const std::string &ipAddress, IPAddressType type);
 		IPAddress(const std::string &hostname);
 
 		bool operator==(const IPAddress &ipAddress) const {
@@ -58,16 +58,13 @@ namespace fragcore {
 		}
 		bool operator!=(const IPAddress &ipAddress) const { return !(*this == ipAddress); }
 
-		virtual NetworkProtocol getNetworkProtocol() const noexcept override {
-			return NetworkProtocol::NetWorkProtocol_IP;
-		}
+		NetworkProtocol getNetworkProtocol() const noexcept override { return NetworkProtocol::NetWorkProtocol_IP; }
 
 		const std::string &getIP() const noexcept { return this->ip; }
 		const uint8_t *getAddress(IPAddressType addressType) const noexcept;
 		const std::string &getHostName() const;
-		virtual bool isValid() const noexcept override;
+		bool isValid() const noexcept override;
 		IPAddressType getIPType() const noexcept { return this->type; }
-
 
 		virtual NetInterface getInterface();
 

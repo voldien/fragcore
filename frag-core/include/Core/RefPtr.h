@@ -31,7 +31,7 @@ namespace fragcore {
 	 */
 	template <class T> class RefPtr {
 	  public:
-		static_assert(std::is_object<T>::value, "");
+		static_assert(std::is_object<T>::value, "Must be a class object.");
 
 		FV_ALWAYS_INLINE T *operator->() { return ref; }
 

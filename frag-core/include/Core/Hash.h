@@ -45,7 +45,7 @@ namespace fragcore {
 		Hash(ALGORITHM algorithm);
 		Hash(Hash &&other);
 
-		~Hash();
+		~Hash() override;
 
 		/**
 		 * @brief

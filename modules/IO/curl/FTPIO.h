@@ -35,7 +35,7 @@ namespace fragcore {
 
 		long write(long int nbytes, const void *pbuffer) override;
 
-		virtual long int peek(long int nBytes, void *pbuffer) override { return 0; }
+		long int peek(long int nBytes, void *pbuffer) override { return 0; }
 
 		long length() override;
 
@@ -55,7 +55,7 @@ namespace fragcore {
 
 		void open(const char *path, IOMode mode) override;
 
-		virtual bool isOperationSupported(IOOperation operations) const noexcept override {
+		bool isOperationSupported(IOOperation operations) const noexcept override {
 			const IOOperation supportedIO = static_cast<IOOperation>(OP_READ | OP_WRITE | OP_LENGTH);
 			return (operations & supportedIO) != operations;
 		};

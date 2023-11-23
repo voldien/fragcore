@@ -35,7 +35,7 @@ namespace fragcore {
 		Library(const Library &other);
 		Library(Library &&other);
 
-		~Library();
+		~Library() override;
 
 		/**
 		 *	Open library.

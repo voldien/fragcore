@@ -30,37 +30,36 @@ namespace fragcore {
 	class FVDECLSPEC CANNetSocket : public NetSocket {
 	  public:
 		CANNetSocket();
-		virtual ~CANNetSocket();
+		~CANNetSocket() override;
 
-		virtual TransportProtocol getTransportProtocol() const noexcept override;
+		TransportProtocol getTransportProtocol() const noexcept override;
 
-		virtual int close() override;
+		int close() override;
 
-		virtual int bind(const INetAddress &p_addr) override;
-		virtual int listen(unsigned int maxListen) override;
+		int bind(const INetAddress &p_addr) override;
+		int listen(unsigned int maxListen) override;
 
-		virtual int connect(const INetAddress &p_addr) override;
-		virtual int poll(int p_type, int timeout) const override;
+		int connect(const INetAddress &p_addr) override;
+		int poll(int p_type, int timeout) const override;
 
-		virtual int recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddress &addr,
-							 bool p_peek = false) override;
-		virtual int recv(void *pbuffer, int p_len, int &sent, bool peek = false) override;
-		virtual int send(const uint8_t *p_buffer, int p_len, int &r_sent) override;
-		virtual int sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const INetAddress &p_ip) override;
-		virtual long int send(const void *pbuffer, int p_len, int &sent) override;
-		virtual Ref<NetSocket> accept(INetAddress &addr) override;
+		int recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddress &addr, bool p_peek = false) override;
+		int recv(void *pbuffer, int p_len, int &sent, bool peek = false) override;
+		int send(const uint8_t *p_buffer, int p_len, int &r_sent) override;
+		int sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const INetAddress &p_ip) override;
+		long int send(const void *pbuffer, int p_len, int &sent) override;
+		Ref<NetSocket> accept(INetAddress &addr) override;
 
-		virtual NetStatus accept(NetSocket &socket) override;
+		NetStatus accept(NetSocket &socket) override;
 
-		virtual int read() override;
-		virtual int write() override;
-		virtual bool isBlocking() override;
-		virtual void setBlocking(bool blocking) override;
+		int read() override;
+		int write() override;
+		bool isBlocking() override;
+		void setBlocking(bool blocking) override;
 
-		virtual NetStatus getStatus() const noexcept override;
+		NetStatus getStatus() const noexcept override;
 
-		virtual void setTimeout(long int nanoSeconds) override;
-		virtual long int getTimeout() override;
+		void setTimeout(long int nanoSeconds) override;
+		long int getTimeout() override;
 
 	  public: /*	CAN Socket Specific NetSocket Methods.	*/
 		/**

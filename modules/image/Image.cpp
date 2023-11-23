@@ -20,11 +20,12 @@ void Image::setPixelData(void *srcPixelData, size_t size) {
 	if (size > this->getSize()) {
 		throw InvalidArgumentException("Source data size is greater than destination data: {} > {}", size, bufferSize);
 	}
+
 	mempcpy(this->pixelData, srcPixelData, size);
 }
 
 void Image::allocateMemory(unsigned int width, unsigned int height, unsigned depth, TextureFormat format) {
-	this->bufferSize = this->getTextureSize(width, height, depth, format);
+	this->bufferSize = Image::getTextureSize(width, height, depth, format);
 	this->pixelData = malloc(this->bufferSize);
 	if (this->pixelData == nullptr) {
 		throw RuntimeException("Failed to allocate {}", bufferSize);
@@ -80,7 +81,7 @@ size_t Image::getTextureSize(unsigned int width, unsigned int height, unsigned d
 
 	size_t imageRes = static_cast<size_t>(width) * static_cast<size_t>(height) * static_cast<size_t>(depth);
 
-	imageRes = (imageRes * getFormatPixelSize(format)) / 8;
+	imageRes = (imageRes * Image::getFormatPixelSize(format)) / 8;
 
 	return imageRes;
 }

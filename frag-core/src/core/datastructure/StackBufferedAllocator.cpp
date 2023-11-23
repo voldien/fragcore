@@ -1,5 +1,5 @@
-#include "Core/Math.h"
 #include "Core/dataStructure/StackBufferedAllocator.h"
+#include "Core/Math.h"
 #include <utility>
 using namespace fragcore;
 
@@ -38,9 +38,9 @@ void StackBufferedAllocator::allocateAligned(size_t sizeBytes, int alignment) {
 	this->alloc(allocateSize);
 }
 
-void StackBufferedAllocator::clear() { this->m_stack[this->m_curStack].clear(); }
+void StackBufferedAllocator::clear() noexcept { this->m_stack[this->m_curStack].clear(); }
 
-size_t StackBufferedAllocator::getMarker() const { return this->m_stack[this->m_curStack].getMarker(); }
+size_t StackBufferedAllocator::getMarker() const noexcept { return this->m_stack[this->m_curStack].getMarker(); }
 
 void *StackBufferedAllocator::fetch(size_t sizeBytes) { return this->m_stack[this->m_curStack].fetch(sizeBytes); }
 

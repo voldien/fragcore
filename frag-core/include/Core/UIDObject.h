@@ -49,14 +49,15 @@ namespace fragcore {
 		virtual uint32_t getUID() const noexcept { return this->uid; }
 
 		virtual bool operator==(const UIDObject &other) noexcept {
-			if (this == &other)
+			if (this == &other) {
 				return true;
-			else
-				return this->uid == other.uid; // TODO verify!
+			}
+			return this->uid == other.uid; // TODO verify!
 		}
 		virtual bool operator!=(const UIDObject &other) noexcept { return !(*this == other); }
 
 		static UIDGenerator<uint32_t> &getGenerator() noexcept { return generator; }
+
 	  private: /*	Attributes.	*/
 		// TODO remove. remove the responsiblity to the generator pool.
 		static UIDGenerator<uint32_t> generator;

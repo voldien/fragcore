@@ -32,34 +32,34 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC Math {
 	  public:
-		template <class T> inline constexpr static T clamp(T a, T min, T max) {
+		template <class T> inline constexpr static T clamp(T value, T min, T max) {
 			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
 						  "Must be a decimal type(float/double/half) or integer.");
-			return Math::max<T>(min, Math::min<T>(max, a));
+			return Math::max<T>(min, Math::min<T>(max, value));
 		}
 
 		/**
 		 *	Get max value of a and b.
 		 */
-		template <typename T> inline constexpr static T max(T a, T b) {
+		template <typename T> inline constexpr static T max(T valueA, T valueB) {
 			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
 						  "Must be a decimal type(float/double/half) or integer.");
-			return (static_cast<T>(a) < static_cast<T>(b)) ? static_cast<T>(b) : static_cast<T>(a);
+			return (static_cast<T>(valueA) < static_cast<T>(valueB)) ? static_cast<T>(valueB) : static_cast<T>(valueA);
 		}
 
 		/**
 		 *	Get min value of a and b.
 		 */
-		template <typename T> inline constexpr static T min(T a, T b) noexcept {
+		template <typename T> inline constexpr static T min(T valueA, T valueB) noexcept {
 			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
 						  "Must be a decimal type(float/double/half) or integer.");
-			return (static_cast<T>(b) < static_cast<T>(a)) ? static_cast<T>(b) : static_cast<T>(a);
+			return (static_cast<T>(valueB) < static_cast<T>(valueA)) ? static_cast<T>(valueB) : static_cast<T>(valueA);
 		}
 
-		template <typename T> inline constexpr static T frac(T a) noexcept {
+		template <typename T> inline constexpr static T frac(const T value) noexcept {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
 			T part;
-			std::modf(a, &part);
+			std::modf(value, &part);
 			return part;
 		}
 
@@ -95,10 +95,12 @@ namespace fragcore {
 		 */
 		template <typename T> static T wrapAngle(T angle) {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
-			while (angle > static_cast<T>(Math::PI_2))
+			while (angle > static_cast<T>(Math::PI_2)) {
 				angle -= static_cast<T>(Math::PI_2);
-			while (angle < 0.0f)
+			}
+			while (angle < 0.0f) {
 				angle += static_cast<T>(Math::PI_2);
+			}
 			return angle;
 		}
 
@@ -272,7 +274,6 @@ namespace fragcore {
 				float temp = samples[i + 1].x();
 				samples[i + 1].setX(samples[target].x());
 				samples[target].setX(temp);
-				continue;
 			}
 			return samples;
 		}

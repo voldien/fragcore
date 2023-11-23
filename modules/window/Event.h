@@ -195,36 +195,6 @@ typedef struct elt_poll_events_t {
 	ExWin window;			   /*	*/
 } ExEvent;
 
-/**
- *	Poll event from process.
- *
- *	\event non null pointer to ExEvent event structure.
- *	if event is NULL, there will be a segmentation violation.
- *
- *	@return 1 if event was polled. 0 if no event was polled.
- */
-extern ELTDECLSPEC int ELTAPIENTRY ExPollEvent(ExEvent *event);
-
-/**
- *	Poll Window Event information
- *
- *	\window which window to poll event information.
- *	Remark: message feed will only be apply to given HWND paramter
- *	if HWND is null all window create on this application will be update
- *	read more at MSDN for more specific information regarding PeekMessage with null HWND.
- *
- *	\event pointer to event struct. all event will be stored in it.
- *
- *	@return
- */
-extern ELTDECLSPEC int ELTAPIENTRY ExPollWindowEvent(ExWin window, ExWindowEvent *event);
-
-/**
- *
- *	@return
- */
-extern ELTDECLSPEC int ELTAPIENTRY ExForwardEvent(unsigned int event, ExHandle data, unsigned int size);
-
 #ifdef __cplusplus /*	C++ Environment	*/
 }
 #endif

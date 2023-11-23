@@ -31,68 +31,67 @@ namespace fragcore {
 		// TODO make it less state machine and allow it to become more modern.
 		virtual ~GLRendererInterface();
 
-		virtual void OnInitialization();
-		virtual void OnDestruction();
+		void OnInitialization() override;
+		void OnDestruction() override;
 
 		/**
 		 *	Create texture.
 		 *
 		 *	@return non null texture object if succesfully. Null otherwise.
 		 */
-		virtual Texture *createTexture(TextureDesc *desc);
+		Texture *createTexture(TextureDesc *desc) override;
 
-		virtual void deleteTexture(Texture *texture);
+		void deleteTexture(Texture *texture) override;
 
-		virtual Sampler *createSampler(SamplerDesc *desc);
+		Sampler *createSampler(SamplerDesc *desc) override;
 
-		virtual void deleteSampler(Sampler *texture);
+		void deleteSampler(Sampler *texture) override;
 
 		/**
 		 *
 		 * @param desc
 		 * @return
 		 */
-		virtual RenderPipeline *createRenderPipeline(const RenderPipelineDesc *desc);
+		RenderPipeline *createRenderPipeline(const RenderPipelineDesc *desc) override;
 
 		/**
 		 *
 		 * @param obj
 		 * @return
 		 */
-		virtual void deleteRenderPipeline(RenderPipeline *obj);
+		void deleteRenderPipeline(RenderPipeline *obj) override;
 
 		/**
 		 *	Create shader.
 		 *
 		 *	@return
 		 */
-		virtual Shader *createShader(ShaderDesc *desc);
+		Shader *createShader(ShaderDesc *desc) override;
 
-		virtual void deleteShader(Shader *shader);
-
-		/**
-		 *
-		 * @param desc
-		 * @return
-		 */
-		virtual Buffer *createBuffer(BufferDesc *desc);
-
-		virtual void deleteBuffer(Buffer *object);
-
+		void deleteShader(Shader *shader) override;
 
 		/**
 		 *
 		 * @param desc
 		 * @return
 		 */
-		virtual FrameBuffer *
-		createFrameBuffer(FrameBufferDesc *desc); // TODO determine what to do with the reference objects. Same for all
+		 Buffer *createBuffer(BufferDesc *desc) override;
+
+		 void deleteBuffer(Buffer *object) override;
+
+		/**
+		 *
+		 * @param desc
+		 * @return
+		 */
+		 FrameBuffer *
+		createFrameBuffer(FrameBufferDesc *desc) override; // TODO determine what to do with the reference objects. Same for all
 												  // other object using reference object to GPU resources.
-		virtual void deleteFrameBuffer(FrameBuffer *obj);
+		 void deleteFrameBuffer(FrameBuffer *obj) override;
 
-		virtual QueryObject *createQuery(QueryDesc *desc);
+		 QueryObject *createQuery(QueryDesc *desc) override;
 
-		virtual void deleteQuery(QueryObject *query);
+		 void deleteQuery(QueryObject *query) override;
 
 		/**
 		 *
@@ -102,13 +101,13 @@ namespace fragcore {
 		 * @param height
 		 * @return
 		 */
-		virtual RendererWindow *createWindow(int x, int y, int width, int height);
+		 RendererWindow *createWindow(int x, int y, int width, int height) override;
 
 		/**
 		 *
 		 * @param window
 		 */
-		virtual void setCurrentWindow(RendererWindow *window);
+		 void setCurrentWindow(RendererWindow *window) override;
 
 		/**
 		 * Create swapchain.
@@ -119,10 +118,10 @@ namespace fragcore {
 		 *
 		 * @return
 		 */
-		virtual FrameBuffer *getDefaultFramebuffer(void *window);
+		 FrameBuffer *getDefaultFramebuffer(void *window) override;
 
 		// TODO add viewobject for handling as a object
-		virtual ViewPort *getView(unsigned int i);
+		 ViewPort *getView(unsigned int i) override;
 		// TODO relocate to the render pipeline queue
 		/**
 		 *
@@ -137,7 +136,7 @@ namespace fragcore {
 		 * @param b
 		 * @param a
 		 */
-		virtual void clearColor(float r, float g, float b, float a); // TODO relocate to the framebuffer.
+		virtual void clearColor(float red, float green, float blue, float alpha); // TODO relocate to the framebuffer.
 
 		/**
 		 *	Set depth mask.
@@ -205,9 +204,9 @@ namespace fragcore {
 		// TODO add memory barrier.
 		virtual void memoryBarrier();
 
-		virtual Sync *createSync(SyncDesc *desc);
+		 Sync *createSync(SyncDesc *desc) override;
 
-		virtual void deleteSync(Sync *sync);
+		 void deleteSync(Sync *sync) override;
 
 		// virtual void execute(CommandList *list);
 
@@ -215,37 +214,37 @@ namespace fragcore {
 		 * Set debug state.
 		 * @param enable
 		 */
-		virtual void setDebug(bool enable);
+		 void setDebug(bool enable) override;
 
 		/**
 		 *	Get shader version.
 		 *	@return non-null terminated string.
 		 */
-		virtual const char *getShaderVersion(ShaderLanguage language) const;
+		 const char *getShaderVersion(ShaderLanguage language) const override;
 
 		/**
 		 * Get all support shader languages.
 		 * @return bitflag of all supported shader languages.
 		 */
-		virtual ShaderLanguage getShaderLanguage() const;
+		 ShaderLanguage getShaderLanguage() const override;
 
 		/**
 		 * Get the name of the rendering API.
 		 * @return non-null terminated string.
 		 */
-		virtual const char *getAPIVersion() const;
+		 const char *getAPIVersion() const override;
 
 		/**
 		 *	Get version of the interface.
 		 *	@return non-null terminated string.
 		 */
-		virtual const char *getVersion() const;
+		 const char *getVersion() const override;
 
 		/**
 		 * Get all supported texture formats.
 		 * @param pCompressions
 		 */
-		virtual void getSupportedTextureCompression(TextureDesc::Compression *pCompressions);
+		 void getSupportedTextureCompression(TextureDesc::Compression *pCompressions) override;
 
 		// virtual void getSupportedTextureFormat(TextureFormat* textureFormat);
 		// virtual void getSupportedGraphicTextureFormat(TextureFormat* textureFormat);
@@ -256,12 +255,12 @@ namespace fragcore {
 		 * Get capability of the rendering API.
 		 * @param capability non-null object.
 		 */
-		virtual void getCapability(Capability *capability);
+		 void getCapability(Capability *capability) override;
 
 		/**
 		 *
 		 */
-		virtual void getFeatures(Features *features);
+		 void getFeatures(Features *features) override;
 
 		/**
 		 * TODO add for reading status such as memory.
@@ -278,6 +277,10 @@ namespace fragcore {
 		GLRendererInterface(IConfig *config);
 
 		virtual void *getData() const;
+
+	  public:
+		const char *getExtensions() const noexcept;
+		bool isExtensionSupported(const char* extension) const noexcept;
 
 	  public: /*	OpenGL Specific methods.	*/
 		void *getOpenGLContext() noexcept;

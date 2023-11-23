@@ -16,6 +16,11 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+#include "Core/Math3D.h"
+#include "Core/math3D/AABB.h"
+#include "Core/math3D/BoundingSphere.h"
+#include "Core/math3D/OBB.h"
+#include "Core/math3D/Plane.h"
 #ifndef _FRAG_CORE_GEOMETRYUTIL_H_
 #define _FRAG_CORE_GEOMETRYUTIL_H_ 1
 #include <Core/math3D/Triangle.h>
@@ -28,9 +33,9 @@ namespace fragcore {
 	// TODO name class to match the file name.
 	class FVDECLSPEC GeometryUtility {
 	  public:
-		// static bool TestPlanesAABB(const Plane &plane, const AABB &bound){
-
-		// }
+		static bool TestPlanesAABB(const Plane<float> &plane, const AABB &bound) { return true; }
+		static bool TestPlanesSphere(const Plane<float> &plane, const AABB &bound) { return true; }
+		static bool TestPlanesOBB(const Plane<float> &plane, const AABB &bound) { return true; }
 
 		// TODO  Transform
 
@@ -39,10 +44,14 @@ namespace fragcore {
 
 		static std::vector<Triangle> createPolygon(const std::vector<Vector3> &points);
 
-		static std::vector<Triangle> GenerateSmoothNormals(const std::vector<Triangle> &points, float angle);
+		static std::vector<Triangle> generateSmoothNormals(const std::vector<Triangle> &points, float angle);
 
-		static bool isConvex(std::vector<Vector3> &points);
-		static bool isConcave(std::vector<Vector3> &points);
+		static AABB computeBoundingBox(const Vector3 *vertices, const size_t nrVertices);
+		static BoundingSphere computeBoundingSphere(float *vertices, const size_t nrVertices);
+		static OBB computeBoundingOBB(float *vertices, const size_t nrVertices);
+
+		static bool isConvex(const std::vector<Vector3> &points);
+		static bool isConcave(const std::vector<Vector3> &points);
 
 	  private:
 		GeometryUtility() = default;

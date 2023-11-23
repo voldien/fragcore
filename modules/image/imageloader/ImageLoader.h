@@ -25,6 +25,7 @@
 #include <Core/Ref.h>
 
 namespace fragcore {
+
 	/**
 	 * @brief
 	 *
@@ -34,9 +35,9 @@ namespace fragcore {
 		ImageLoader() = default;
 		ImageLoader(const ImageLoader &other);
 		ImageLoader(ImageLoader &&other);
-		ImageLoader & operator=(const ImageLoader &other);
+		ImageLoader &operator=(const ImageLoader &other);
 		ImageLoader &operator=(ImageLoader &&other);
-		virtual ~ImageLoader() = default;
+		~ImageLoader() override = default;
 
 		// TODO add support to load image in specific format.
 		Image loadImage(const std::string &path) {
@@ -48,12 +49,15 @@ namespace fragcore {
 
 		void loadImageData(const std::string &path, unsigned int *width, unsigned int *height);
 
-		void saveImage(const std::string &path, Image &image){
+		enum class FileFormat { Default, Png, Jpeg, Exr };
+
+		// TODO add fileformat enum.
+		void saveImage(const std::string &path, const Image &image, const FileFormat fileformat = FileFormat::Default) {
 			Ref<IO> io = Ref<IO>(new FileIO(path.c_str(), FileIO::WRITE));
-			saveImage(io, image);
+			saveImage(io, image, fileformat);
 			io->close();
 		}
-		void saveImage(Ref<IO> &IO, Image &image);
+		void saveImage(Ref<IO> &IO, const Image &image, const FileFormat fileformat);
 	};
 } // namespace fragcore
 

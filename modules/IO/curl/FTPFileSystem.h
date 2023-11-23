@@ -29,29 +29,27 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC FTPFileSystem : public IFileSystem {
 	  public:
-		virtual IO *openFile(const char *path, IO::IOMode mode) override; /*  Open based on the filename extension.*/
+		IO *openFile(const char *path, IO::IOMode mode) override; /*  Open based on the filename extension.*/
 
-		virtual void closeFile(IO *io) override;
+		void closeFile(IO *io) override;
 
-		virtual void remove(const char *path) override;
+		void remove(const char *path) override;
 
-		virtual void rename(const char *oldPath, const char *newPath) override;
+		void rename(const char *oldPath, const char *newPath) override;
 
-		virtual void createFile(const char *path) override;
+		void createFile(const char *path) override;
 
-		virtual void createDirectory(const char *path) override;
+		void createDirectory(const char *path) override;
 
-		virtual bool isReadable(const char *path) const override;
+		bool isReadable(const char *path) const override;
 
-		virtual bool isWriteable(const char *path) const override;
+		bool isWriteable(const char *path) const override;
 
-		virtual bool exists(const char *path) const override;
+		bool exists(const char *path) const override;
 
-		virtual bool isASyncSupported() const override;
-		virtual bool isDirectory(const char *path) const override;
-		virtual bool isFile(const char *path) const override;
-
-
+		bool isASyncSupported() const override;
+		bool isDirectory(const char *path) const override;
+		bool isFile(const char *path) const override;
 
 		std::vector<std::string> listFiles(const char *directory) const override;
 
@@ -61,10 +59,10 @@ namespace fragcore {
 
 		// FileAccess getFileAccess(const char *path) override;
 		// TODO determine how to deal with.
-		//virtual const char *getBaseName(const char *path);
-		//virtual std::string getAbsolutePath(const char *path);
-		//virtual std::string getRelativePath(const char *path);
-		//virtual const char *getFileExtension(const char *path);
+		// virtual const char *getBaseName(const char *path);
+		// virtual std::string getAbsolutePath(const char *path);
+		// virtual std::string getRelativePath(const char *path);
+		// virtual const char *getFileExtension(const char *path);
 
 	  public:
 		/**
@@ -104,7 +102,7 @@ namespace fragcore {
 		FTPFileSystem() = default;
 		FTPFileSystem(const char *ip, int port, const char *username, const char *password, const Ref<IScheduler> &sch);
 		FTPFileSystem(const char *ip, int port, const char *username, const char *password);
-		virtual ~FTPFileSystem();
+		~FTPFileSystem() override;
 
 	  private:
 		CURL *handle;

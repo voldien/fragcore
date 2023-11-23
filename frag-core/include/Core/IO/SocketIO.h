@@ -30,31 +30,31 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC SocketIO : public IO {
 	  public:
-		virtual void open(const char *path, IOMode mode) override;
+		void open(const char *path, IOMode mode) override;
 
-		virtual void close() override;
+		void close() override;
 
-		virtual long int read(long int nbytes, void *pbuffer) override;
+		long int read(long int nbytes, void *pbuffer) override;
 
-		virtual long int write(long int nbytes, const void *pbuffer) override;
+		long int write(long int nbytes, const void *pbuffer) override;
 
-		virtual long int peek(long int nBytes, void *pbuffer) override;
+		long int peek(long int nBytes, void *pbuffer) override;
 
-		virtual bool eof() const override;
+		bool eof() const override;
 
-		virtual long int length() override;
+		long int length() override;
 
-		virtual void seek(long int nbytes, Seek seek) override;
+		void seek(long int nbytes, Seek seek) override;
 
-		virtual unsigned long getPos() override;
+		unsigned long getPos() override;
 
-		virtual bool isWriteable() const override;
+		bool isWriteable() const override;
 
-		virtual bool isReadable() const override;
+		bool isReadable() const override;
 
-		virtual bool flush() override;
+		bool flush() override;
 
-		virtual bool isOperationSupported(IOOperation operations) const noexcept override {
+		bool isOperationSupported(IOOperation operations) const noexcept override {
 			const IOOperation supportedIO = static_cast<IOOperation>(OP_READ | OP_WRITE | OP_PEEK | OP_FILEACCESS |
 																	 OP_FILEACCESS | OP_FLUSH | OP_EOF);
 			return (operations & supportedIO) == operations;

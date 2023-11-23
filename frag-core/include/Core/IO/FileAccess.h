@@ -29,7 +29,7 @@ namespace fragcore {
 	class FVDECLSPEC FileAccess : public SmartReference {
 	  public:
 		FileAccess();
-		~FileAccess();
+		~FileAccess() override;
 
 		virtual bool readable() const;
 		virtual bool writeable() const;

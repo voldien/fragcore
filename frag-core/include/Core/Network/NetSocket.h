@@ -33,7 +33,7 @@ namespace fragcore {
 	class FVDECLSPEC NetSocket : public SmartReference {
 	  public:
 		NetSocket(NetSocket &&other) = delete;
-		virtual ~NetSocket();
+		~NetSocket() override;
 
 		NetSocket &operator=(NetSocket &&other) = delete;
 

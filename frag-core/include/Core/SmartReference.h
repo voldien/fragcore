@@ -32,7 +32,7 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC SmartReference : public Object, public NoCopyable {
 	  public:
-		virtual ~SmartReference() = default;
+		~SmartReference() override = default;
 
 		SmartReference() noexcept;
 

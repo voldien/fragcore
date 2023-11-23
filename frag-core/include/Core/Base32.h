@@ -27,8 +27,8 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC Base32 : public IBase {
 	  public:
-		virtual void encode(Ref<IO> &input, Ref<IO> &encoded) override;
-		virtual void decode(Ref<IO> &encoded, Ref<IO> &input) override;
+		 void encode(Ref<IO> &input, Ref<IO> &encoded) override;
+		 void decode(Ref<IO> &encoded, Ref<IO> &input) override;
 	};
 } // namespace fragcore
 

@@ -1512,7 +1512,8 @@ void GLRendererInterface::dispatchCompute(unsigned int *global, unsigned int *lo
 
 	GLenum errorStatus = glGetError();
 	if (errorStatus != GL_NO_ERROR) {
-		throw RuntimeException("Error when dispatching compute - {}, {}", errorStatus, (const char*)gluErrorString(errorStatus));
+		throw RuntimeException("Error when dispatching compute - {}, {}", errorStatus,
+							   (const char *)gluErrorString(errorStatus));
 	}
 
 	// TODO relocate
@@ -1754,8 +1755,9 @@ void GLRendererInterface::getCapability(Capability *capability) {
 
 	assert(capability);
 
-	if (capability == nullptr)
-		throw std::invalid_argument("capability object may not a null pointer.");
+	if (capability == nullptr) {
+		throw std::invalid_argument("Capability object may not a null pointer.");
+	}
 
 	glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &capability->sMaxVertexAttributes);
 	if (glGetInteger64v) {
@@ -1987,7 +1989,7 @@ void GLRendererInterface::getFeatures(Features *features) {
 
 	memcpy(features, &this->features, sizeof(Features));
 
-	features->raytracing = glewIsExtensionSupported("GL_NV_ray_tracing");
+	features->raytracing = false;
 	features->variableRateShading = glewIsExtensionSupported("GL_NV_shading_rate_image");
 }
 
@@ -2070,6 +2072,12 @@ void GLRendererInterface::execute(CommandList *list) {
 			break;
 		}
 	}
+}
+
+const char *GLRendererInterface::getExtensions() const noexcept { return (const char *)glGetString(GL_EXTENSIONS); }
+
+bool GLRendererInterface::isExtensionSupported(const char *extension) const noexcept {
+	return glewIsExtensionSupported(extension);
 }
 
 void *GLRendererInterface::getOpenGLContext() noexcept { return this->openglcontext; }

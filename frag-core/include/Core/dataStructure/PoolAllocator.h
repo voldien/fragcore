@@ -109,10 +109,11 @@ namespace fragcore {
 			}
 
 			/*  Special case.   */
-			if (this->nrOfElements == 0)
+			if (this->nrOfElements == 0) {
 				alloc = &this->item->data;
-			else
+			} else {
 				alloc = &this->item->next->data; /*changed.*/
+			}
 
 			this->item->next = this->item->next->next; /*	TODO still some bugs in pool allactor.	*/
 			this->nrOfElements++;
@@ -124,8 +125,9 @@ namespace fragcore {
 		 * @param element
 		 */
 		void Return(T *element) {
-			if (!isValidItem(*element))
+			if (!isValidItem(*element)) {
 				throw InvalidArgumentException("invalid pointer returned");
+			}
 
 			PoolAllactorItem *alloc = (PoolAllactorItem *)element;
 			alloc->next = item->next;
@@ -138,14 +140,16 @@ namespace fragcore {
 		 * @param data
 		 * @return  true if valid item.
 		 */
-		bool isValidItem(const T &data) const {
+		bool isValidItem(const T &data) const noexcept {
 			const T *tmp = &data;
 			/*  If pointer is less than the base pointer.*/
-			if ((void *)tmp < (void *)this->item)
+			if ((void *)tmp < (void *)this->item) {
 				return false;
+			}
 			/*  Check if pointer is outside the end point*/
-			if (tmp >= (void *)&this->item[this->reserved()])
+			if (tmp >= (void *)&this->item[this->reserved()]) {
 				return false;
+			}
 			/*	Check if memory is a multiple of the size from the base pointer.	*/
 			return true;
 		}
@@ -153,29 +157,29 @@ namespace fragcore {
 		/**
 		 *
 		 */
-		void clean() {
+		void clean() noexcept {
 			free(this->item);
 			this->mReserved = 0;
 			this->nrOfElements = 0;
 		}
 
-		bool isFull() const { return this->nrOfElements >= (this->reserved() - 1); }
+		bool isFull() const noexcept { return this->nrOfElements >= (this->reserved() - 1); }
 
-		inline int size() const { return this->nrOfElements; }
+		inline int size() const noexcept { return this->nrOfElements; }
 
-		inline int reserved() const { return this->mReserved; }
+		inline int reserved() const noexcept { return this->mReserved; }
 
 		/**
 		 * Get datatype size.
 		 * @param size
 		 */
-		inline void setTypeSize(unsigned int size) { this->typeSize = size; }
+		inline void setTypeSize(unsigned int size) noexcept { this->typeSize = size; }
 
 		/**
 		 *
 		 * @return
 		 */
-		inline unsigned int getTypeSize() const { return this->typeSize; }
+		inline unsigned int getTypeSize() const noexcept { return this->typeSize; }
 
 		/**
 		 *
@@ -197,8 +201,9 @@ namespace fragcore {
 				item[size - 1].next = nullptr;
 			} else {
 				/*  */
-				if (size < this->reserved())
+				if (size < this->reserved()) {
 					throw InvalidArgumentException("Can no be downsized from {} to {}.", this->reserved(), size);
+				}
 
 				/*  Reallocate buffer.  */
 				i = this->reserved();
@@ -223,7 +228,7 @@ namespace fragcore {
 		 *
 		 * @return
 		 */
-		inline T *getLast() { return &this->item[this->mReserved - 1].data; }
+		inline T *getLast() noexcept { return &this->item[this->mReserved - 1].data; }
 
 		/**
 		 *
@@ -243,7 +248,7 @@ namespace fragcore {
 		 *
 		 * @return
 		 */
-		unsigned int getItemSize() const { return sizeof(PoolAllactorItem); }
+		unsigned int getItemSize() const noexcept { return sizeof(PoolAllactorItem); }
 
 	  private:					/*	attributes.	*/
 		PoolAllactorItem *item; /*	Pool data.	*/
