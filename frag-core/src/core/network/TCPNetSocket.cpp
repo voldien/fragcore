@@ -119,9 +119,9 @@ int TCPNetSocket::bind(const INetAddress &p_addr) {
 		this->netStatus = NetStatus::Status_Error;
 		throw RuntimeException("Failed to bind TCP socket - {}:{}, {}", tcpAddress->getIPAddress().getIP(),
 							   tcpAddress->getPort(), strerror(errno));
-	} else {
-		this->netStatus = NetStatus::Status_Done;
 	}
+	this->netStatus = NetStatus::Status_Done;
+
 	return 0;
 }
 
@@ -159,8 +159,9 @@ int TCPNetSocket::connect(const INetAddress &p_addr) {
 
 	/*	*/
 	const TCPUDPAddress *tcpAddress = dynamic_cast<const TCPUDPAddress *>(&p_addr);
-	if (tcpAddress == nullptr)
+	if (tcpAddress == nullptr) {
 		throw RuntimeException("Not a valid NetAddress Object");
+	}
 	int domain = this->getDomain(*tcpAddress);
 
 	this->socket = ::socket(domain, flags, 0);
@@ -180,9 +181,8 @@ int TCPNetSocket::connect(const INetAddress &p_addr) {
 	if (rc != 0) {
 		throw RuntimeException("Failed to connect TCP {}:{}, {}", tcpAddress->getIPAddress().getIP(),
 							   tcpAddress->getPort(), strerror(errno));
-	} else {
-		this->netStatus = NetStatus::Status_Done;
 	}
+	this->netStatus = NetStatus::Status_Done;
 
 	return 0;
 }
@@ -198,19 +198,35 @@ int TCPNetSocket::recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddres
 		struct sockaddr_in addr4;  /*	*/
 		struct sockaddr_in6 addr6; /*	*/
 	} addrU;
+	if (p_peek) {
+		flag |= MSG_PEEK;
+	}
+
 	int res = ::recvfrom(this->socket, p_buffer, p_len, flag, reinterpret_cast<sockaddr *>(&addrU), &addrlen);
+
+	// TODO Add extract ip address.
+	// r_ip = IPAddress(addrU.addr4, IPAddress::IPAddressType::IPAddress_Type_IPV4);
+
+	r_read = res;
+
 	return res;
 }
 int TCPNetSocket::recv(void *pbuffer, int p_len, int &sent, bool peek) {
 	int flag = 0;
+
+	if (peek) {
+		flag |= MSG_PEEK;
+	}
 	int res = ::recv(this->socket, (void *)pbuffer, p_len, flag);
 	sent = res;
 	return res;
 }
 int TCPNetSocket::send(const uint8_t *p_buffer, int p_len, int &r_sent) {
 	int flag = 0;
+
 	int res = ::send(this->socket, p_buffer, p_len, flag);
 	// Check status of the send.
+	r_sent = res;
 	if (res < 0) {
 	}
 	return res;
@@ -226,12 +242,18 @@ int TCPNetSocket::sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const 
 	unsigned int flag = 0;
 
 	int res = ::sendto(this->socket, p_buffer, p_len, flag, reinterpret_cast<sockaddr *>(&addrU), addrlen);
+
+	r_sent = res;
+
 	return res;
 }
 
 long int TCPNetSocket::send(const void *pbuffer, int p_len, int &sent) {
 	int flag = 0;
 	ssize_t res = ::send(this->socket, pbuffer, p_len, flag);
+
+	sent = res;
+
 	return res;
 }
 
@@ -246,16 +268,21 @@ Ref<NetSocket> TCPNetSocket::accept(INetAddress &r_ip) {
 	}
 
 	// TODO assign r_ip
+	IPAddress *ipAddress = reinterpret_cast<IPAddress *>(&r_ip);
+	if (addr.ss_family == AF_INET) {
+		struct sockaddr_in *address = reinterpret_cast<struct sockaddr_in *>(&addr);
+		*ipAddress = IPAddress(&address->sin_addr, IPAddress::IPAddressType::IPAddress_Type_IPV4);
+	}
 
 	TCPNetSocket *_newsocket = new TCPNetSocket(aaccept_socket);
-	return Ref<NetSocket>(_newsocket);
+	return {_newsocket};
 }
 
 TCPNetSocket::NetStatus TCPNetSocket::accept(NetSocket &socket) {
 	TCPUDPAddress addr;
 
 	Ref<NetSocket> netSocket = this->accept(addr);
-	// socket = std::move(*netSocket);
+	//socket = std::move(netSocket);
 	return netSocket->getStatus();
 }
 
@@ -270,15 +297,23 @@ bool TCPNetSocket::isBlocking() { /*	*/
 }
 
 void TCPNetSocket::setBlocking(bool blocking) { /*	*/
+
+	/*	*/
 	int flags = fcntl(this->socket, F_GETFL, 0);
 	if (flags == -1) {
-		throw SystemException(errno, std::system_category(), "Failed to get flag");
+		throw SystemException(errno, std::system_category(), "Failed to get Socket Flag");
 	}
 
-	flags = (flags & ~O_NONBLOCK);
+	if (blocking) {
+		flags = (flags & ~O_NONBLOCK);
+	} else {
+		flags = (flags & O_NONBLOCK);
+	}
+
 	int rc = fcntl(this->socket, F_SETFL, flags);
+
 	if (rc < 0) {
-		throw RuntimeException("Failed to set blocking");
+		throw SystemException(errno, std::system_category(), "Failed to set Blocking State {}", blocking);
 	}
 }
 TCPNetSocket::NetStatus TCPNetSocket::getStatus() const noexcept { return this->netStatus; }
@@ -308,7 +343,9 @@ void TCPNetSocket::setTimeout(long int microsec) {
 long int TCPNetSocket::getTimeout() {
 	struct timeval tv;
 	socklen_t len;
+
 	int rc = getsockopt(this->socket, SOL_SOCKET, SO_RCVTIMEO, &tv, &len);
+
 	if (rc != 0) {
 		throw SystemException(errno, std::system_category(), "Failed to set recv timeout");
 	}
@@ -335,12 +372,15 @@ int TCPNetSocket::getDomain(const INetAddress &address) {
 	case INetAddress::NetworkProtocol::NetWorkProtocol_TCP_UDP:
 	case INetAddress::NetworkProtocol::NetWorkProtocol_IP: {
 		const IPAddress &ipAddress = tcpAddress.getIPAddress();
-		if (ipAddress.getIPType() == IPAddress::IPAddressType::IPAddress_Type_IPV4)
+		if (ipAddress.getIPType() == IPAddress::IPAddressType::IPAddress_Type_IPV4) {
 			return AF_INET;
-		else if (ipAddress.getIPType() == IPAddress::IPAddressType::IPAddress_Type_IPV6)
+		}
+		if (ipAddress.getIPType() == IPAddress::IPAddressType::IPAddress_Type_IPV6) {
 			return AF_INET6;
-		else
-			throw RuntimeException("No valid IP address");
+		}
+
+		throw RuntimeException("No valid IP address");
+
 	} break;
 	case INetAddress::NetworkProtocol::NetWorkProtocol_CAN:
 		return AF_CAN;
