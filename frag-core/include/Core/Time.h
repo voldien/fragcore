@@ -22,7 +22,7 @@
 #include <chrono>
 
 namespace fragcore {
-	
+
 	using namespace std::chrono;
 	/**
 	 * @brief
@@ -32,7 +32,7 @@ namespace fragcore {
 	  public:
 		Time() {}
 
-		void start() {
+		void start() noexcept {
 			this->start_timestamp = steady_clock::now();
 			this->ticks = steady_clock::now();
 		}
@@ -44,18 +44,22 @@ namespace fragcore {
 		}
 
 		template <typename T> T deltaTime() const noexcept {
+			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
 			duration<T> time_span = duration_cast<duration<T>>(steady_clock::now() - ticks);
 
 			return static_cast<T>(delta_data.count());
 		}
 
-		void update() {
+		void update() noexcept {
 
 			this->delta_data = duration_cast<duration<float>>(steady_clock::now() - this->ticks);
 			this->ticks = steady_clock::now();
 		}
 
-		size_t getTimeResolution() { return 0; }
+		size_t getTimeResolution() const noexcept {
+			return static_cast<size_t>(1.0 / static_cast<double>(std::chrono::high_resolution_clock::period::num) /
+									   static_cast<double>(std::chrono::high_resolution_clock::period::den));
+		}
 
 	  private: /*  */
 		steady_clock::time_point start_timestamp;

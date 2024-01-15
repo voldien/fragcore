@@ -17,6 +17,10 @@ IPAddress::IPAddress(const std::string &ip, IPAddressType type) : INetAddress(),
 	this->valid = true;
 }
 
+IPAddress::IPAddress(void *encoded, IPAddressType type) {
+	//TODO: impl
+}
+
 IPAddress::IPAddress(const std::string &hostname)
 	: INetAddress(), type(IPAddressType::IPAddress_Type_NONE), valid(false) {
 	struct hostent *hosten = nullptr; /*	*/
