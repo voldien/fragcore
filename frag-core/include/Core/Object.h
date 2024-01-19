@@ -47,7 +47,7 @@ namespace fragcore {
 
 		virtual const std::string &getName() const noexcept { return this->name; }
 
-		template <typename T> T &as() { return static_cast<T>(*this); }
+		template <typename T> inline T &as() noexcept { return static_cast<T>(*this); }
 
 	  protected: /*	*/
 		Object &operator=(const Object &object) {

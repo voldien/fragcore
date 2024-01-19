@@ -45,7 +45,6 @@ namespace fragcore {
 
 		template <typename T> T deltaTime() const noexcept {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
-			duration<T> time_span = duration_cast<duration<T>>(steady_clock::now() - ticks);
 
 			return static_cast<T>(delta_data.count());
 		}

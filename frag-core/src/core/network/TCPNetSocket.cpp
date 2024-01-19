@@ -211,6 +211,7 @@ int TCPNetSocket::recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddres
 
 	return res;
 }
+
 int TCPNetSocket::recv(void *pbuffer, int p_len, int &sent, bool peek) {
 	int flag = 0;
 
@@ -221,6 +222,7 @@ int TCPNetSocket::recv(void *pbuffer, int p_len, int &sent, bool peek) {
 	sent = res;
 	return res;
 }
+
 int TCPNetSocket::send(const uint8_t *p_buffer, int p_len, int &r_sent) {
 	int flag = 0;
 
@@ -231,6 +233,7 @@ int TCPNetSocket::send(const uint8_t *p_buffer, int p_len, int &r_sent) {
 	}
 	return res;
 }
+
 int TCPNetSocket::sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const INetAddress &p_addr) {
 	socklen_t addrlen; /*	*/
 	union {
@@ -282,7 +285,7 @@ TCPNetSocket::NetStatus TCPNetSocket::accept(NetSocket &socket) {
 	TCPUDPAddress addr;
 
 	Ref<NetSocket> netSocket = this->accept(addr);
-	//socket = std::move(netSocket);
+	// socket = std::move(netSocket);
 	return netSocket->getStatus();
 }
 
@@ -323,17 +326,17 @@ bool TCPNetSocket::isValidNetworkAddress(const INetAddress &address) {
 }
 
 void TCPNetSocket::setTimeout(long int microsec) {
-	struct timeval tv;
+	struct timeval timeout;
 
 	/*	Set timeout for client.	*/
-	tv.tv_sec = microsec / 1000000;
-	tv.tv_usec = microsec % 1000000;
+	timeout.tv_sec = microsec / 1000000;
+	timeout.tv_usec = microsec % 1000000;
 
-	int rc = setsockopt(this->socket, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv));
+	int rc = setsockopt(this->socket, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
 	if (rc != 0) {
 		throw SystemException(errno, std::system_category(), "Failed to set recv timeout");
 	}
-	rc = setsockopt(this->socket, SOL_SOCKET, SO_SNDTIMEO, &tv, sizeof(tv));
+	rc = setsockopt(this->socket, SOL_SOCKET, SO_SNDTIMEO, &timeout, sizeof(timeout));
 
 	if (rc != 0) {
 		throw SystemException(errno, std::system_category(), "Failed to set send timeout");

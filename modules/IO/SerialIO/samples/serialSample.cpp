@@ -15,14 +15,14 @@ int main(int argc, const char **argv) {
 			baudRate = atoi(argv[2]);
 		}
 
-		SerialIO io(argv[1], IO::IOMode::ACCESS);
-		io.setBaudRate(baudRate);
+		SerialIO serialIO(argv[1], IO::IOMode::ACCESS);
+		serialIO.setBaudRate(baudRate);
 
-		io.write(sizeof(dataPayload), dataPayload);
-		while (io.read(sizeof(dataPayload), dataPayload) > 0) {
+		serialIO.write(sizeof(dataPayload), dataPayload);
+		while (serialIO.read(sizeof(dataPayload), dataPayload) > 0) {
 			printf("%x", dataPayload[0]);
 			sleep(1);
-			io.write(sizeof(dataPayload), dataPayload);
+			serialIO.write(sizeof(dataPayload), dataPayload);
 		}
 	} catch (const std::exception &ex) {
 		std::cerr << cxxexcept::getStackMessage(ex) << std::endl;

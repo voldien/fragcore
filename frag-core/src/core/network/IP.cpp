@@ -5,7 +5,7 @@
 
 using namespace fragcore;
 
-IPInterface::IPInterface(const std::string &ip, Type type) {}
+IPInterface::IPInterface(const std::string &ipAddress, Type type) {}
 
 std::vector<IPInterface> IPInterface::getLocalAddresses() { return {}; }
 std::vector<IPInterface> IPInterface::getLocalInterface() {

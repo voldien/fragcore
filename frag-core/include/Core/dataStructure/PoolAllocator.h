@@ -16,6 +16,7 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+#include <utility>
 #ifndef _FRAG_CORE_POOL_ALLACTOR_H_
 #define _FRAG_CORE_POOL_ALLACTOR_H_ 1
 #include "../../FragDef.h"
@@ -59,7 +60,13 @@ namespace fragcore {
 			this->setTypeSize(sizeof(T));
 			*this = pollallactor;
 		}
-		PoolAllocator(PoolAllocator &&other) {}
+
+		PoolAllocator(PoolAllocator &&other) {
+			this->item = std::exchange(other.item, nullptr);
+			this->nrOfElements = other.nrOfElements;
+			this->mReserved = other.mReserved;
+			this->setTypeSize(sizeof(T));
+		}
 
 		PoolAllocator(unsigned int num) : PoolAllocator() { this->resize(num); }
 
@@ -84,15 +91,21 @@ namespace fragcore {
 
 			/*	Reconstruct next list.	*/
 			PoolAllactorItem *item = this->item;
-			for (int x = 0; x < this->reserved() - 1; x++) {
-				item[x].next = &item[x + 1];
+			for (int index = 0; index < this->reserved() - 1; index++) {
+				item[index].next = &item[index + 1];
 			}
 			item[this->reserved() - 1].next = nullptr;
 
 			return *this;
 		}
 
-		PoolAllocator &operator=(PoolAllocator &&alloctor) { return *this; }
+		PoolAllocator &operator=(PoolAllocator &&other) {
+			this->item = std::exchange(other.item, nullptr);
+			this->nrOfElements = other.nrOfElements;
+			this->mReserved = other.mReserved;
+			this->setTypeSize(sizeof(T));
+			return *this;
+		}
 
 		/**
 		 *	Get a pointer to next object in pool allocator.
@@ -186,7 +199,7 @@ namespace fragcore {
 		 */
 		/*	TODO Fix, still some bugs!	*/
 		void resize(int size) {
-			int i;
+			int index;
 			const unsigned int itemSize = getItemSize();
 
 			assert(size >= 0);
@@ -195,8 +208,8 @@ namespace fragcore {
 			if (this->reserved() == 0) {
 				this->item = static_cast<PoolAllactorItem *>(realloc(this->item, itemSize * size));
 
-				for (i = 0; i < size - 1; i++) {
-					item[i].next = &item[i + 1];
+				for (index = 0; index < size - 1; index++) {
+					item[index].next = &item[index + 1];
 				}
 				item[size - 1].next = nullptr;
 			} else {
@@ -206,13 +219,13 @@ namespace fragcore {
 				}
 
 				/*  Reallocate buffer.  */
-				i = this->reserved();
+				index = this->reserved();
 				this->item = static_cast<PoolAllactorItem *>(realloc(this->item, itemSize * size));
 
-				PoolAllactorItem *lastItem = &this->item[i];
+				PoolAllactorItem *lastItem = &this->item[index];
 				PoolAllactorItem *subpool = lastItem;
-				for (; i < size - 1; i++) {
-					lastItem->next = &item[i + 1];
+				for (; index < size - 1; index++) {
+					lastItem->next = &item[index + 1];
 					lastItem = lastItem->next;
 				}
 				lastItem->next = nullptr;

@@ -29,35 +29,36 @@ namespace fragcore {
 	class FVDECLSPEC ModbusRegisterIO : public IO {
 	  public:
 		// TODO add shared pointer.
-		ModbusRegisterIO(ModbusNetSocket &socket, size_t address_start, size_t size);
-		virtual ~ModbusRegisterIO();
+		ModbusRegisterIO(ModbusNetSocket &socket, const size_t address_start, const size_t size);
+		~ModbusRegisterIO() override;
 
-		virtual void open(const char *path, IOMode mode) override;
+		void open(const char *path, IOMode mode) override;
 
-		virtual void close() override;
+		void close() override;
 
-		virtual long int read(long int nbytes, void *pbuffer) override;
+		long int read(long int nbytes, void *pbuffer) override;
 
-		virtual long int write(long int nbytes, const void *pbuffer) override;
+		long int write(long int nbytes, const void *pbuffer) override;
 
-		virtual long int peek(long int nBytes, void *pbuffer) override;
+		long int peek(long int nBytes, void *pbuffer) override;
 
-		virtual bool eof() const override;
+		bool eof() const override;
 
-		virtual long int length() override;
+		long int length() override;
 
-		virtual void seek(long int nbytes, Seek seek) override;
+		void seek(long int nbytes, Seek seek) override;
 
-		virtual unsigned long getPos() override;
+		unsigned long getPos() override;
 
-		virtual bool isWriteable() const override;
+		bool isWriteable() const override;
 
-		virtual bool isReadable() const override;
+		bool isReadable() const override;
 
-		virtual bool flush() override;
+		bool flush() override;
 
-		virtual bool isOperationSupported(IOOperation operations) const noexcept override {
-			const IOOperation supportedIO = static_cast<IOOperation>(OP_READ | OP_WRITE | OP_SEEK | OP_FLUSH | OP_LENGTH);
+		bool isOperationSupported(IOOperation operations) const noexcept override {
+			const IOOperation supportedIO =
+				static_cast<IOOperation>(OP_READ | OP_WRITE | OP_SEEK | OP_FLUSH | OP_LENGTH);
 			return (operations & supportedIO) == operations;
 		}
 

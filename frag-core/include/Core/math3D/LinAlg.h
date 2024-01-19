@@ -51,7 +51,7 @@ namespace fragcore {
 		template <typename T> static std::vector<T> PCA(std::vector<T> &p) {
 			float nInverse = (1.0f / p.size());
 			T m = nInverse * Math::sum<T>(p);
-			Matrix3x3 C = nInverse;
+			//Matrix3x3 C = nInverse;
 		}
 	};
 } // namespace fragcore

@@ -5,7 +5,7 @@
 
 using namespace fragcore;
 
-ModbusRegisterIO::ModbusRegisterIO(ModbusNetSocket &socket, size_t address_start, size_t size)
+ModbusRegisterIO::ModbusRegisterIO(ModbusNetSocket &socket, const size_t address_start, const size_t size)
 	: socket(socket), address_start(address_start), size(size) {}
 ModbusRegisterIO::~ModbusRegisterIO() {}
 
@@ -15,13 +15,13 @@ void ModbusRegisterIO::close() {}
 
 long int ModbusRegisterIO::read(long int nbytes, void *pbuffer) {
 	/*	*/
-	auto rc = modbus_read_registers((modbus_t *)socket.getModbusContext(),
+	auto rcode = modbus_read_registers((modbus_t *)socket.getModbusContext(),
 									static_cast<int>(this->address_start + seek_offset), nbytes, (uint16_t *)pbuffer);
-	if (rc == -1) {
+	if (rcode == -1) {
 		throw RuntimeException("Failed to read register {} - size {} : {}", address_start, nbytes,
 							   modbus_strerror(errno));
 	}
-	return rc;
+	return rcode;
 }
 
 long int ModbusRegisterIO::write(long int nbytes, const void *pbuffer) {
@@ -65,8 +65,8 @@ bool ModbusRegisterIO::isReadable() const { return true; }
 
 bool ModbusRegisterIO::flush() {
 
-	int rc = modbus_flush(reinterpret_cast<modbus_t *>(this->socket.getModbusContext()));
-	if (rc == -1) {
+	int rcode = modbus_flush(reinterpret_cast<modbus_t *>(this->socket.getModbusContext()));
+	if (rcode == -1) {
 		return false;
 	}
 	return true;

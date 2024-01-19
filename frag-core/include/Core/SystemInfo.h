@@ -82,7 +82,7 @@ namespace fragcore {
 		static KernelSystem getSystemKernel() noexcept;
 		static OperatingSystem getOperatingSystem() noexcept;
 		static std::string getOperatingSystemName() noexcept;
-		static std::string getOperatingSystemName(OperatingSystem os);
+		static std::string getOperatingSystemName(OperatingSystem operatingSystem);
 
 	  public: /*	System CPU Information.	*/
 		// TODO add support for NUMA.

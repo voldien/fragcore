@@ -32,28 +32,29 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC Math {
 	  public:
-		template <class T> inline constexpr static T clamp(T value, T min, T max) {
+		template <class T> inline constexpr static T clamp(const T value, const T min, const T max) noexcept {
 			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
 						  "Must be a decimal type(float/double/half) or integer.");
 			return Math::max<T>(min, Math::min<T>(max, value));
 		}
 
+
 		/**
 		 *	Get max value of a and b.
 		 */
-		template <typename T> inline constexpr static T max(T valueA, T valueB) {
+		template <typename T> inline constexpr static T max(const T value0, const T value1) noexcept {
 			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
 						  "Must be a decimal type(float/double/half) or integer.");
-			return (static_cast<T>(valueA) < static_cast<T>(valueB)) ? static_cast<T>(valueB) : static_cast<T>(valueA);
+			return (static_cast<T>(value0) < static_cast<T>(value1)) ? static_cast<T>(value1) : static_cast<T>(value0);
 		}
 
 		/**
 		 *	Get min value of a and b.
 		 */
-		template <typename T> inline constexpr static T min(T valueA, T valueB) noexcept {
+		template <typename T> inline constexpr static T min(const T value0, const T value1) noexcept {
 			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
 						  "Must be a decimal type(float/double/half) or integer.");
-			return (static_cast<T>(valueB) < static_cast<T>(valueA)) ? static_cast<T>(valueB) : static_cast<T>(valueA);
+			return (static_cast<T>(value1) < static_cast<T>(value0)) ? static_cast<T>(value1) : static_cast<T>(value0);
 		}
 
 		template <typename T> inline constexpr static T frac(const T value) noexcept {
@@ -63,12 +64,11 @@ namespace fragcore {
 			return part;
 		}
 
-		template <typename T> constexpr static T sum(const std::vector<T> &list) noexcept {
-			// TODO add check if support adding assign operation.
+		template <typename T> static T sum(const T *list, const size_t nrElements) noexcept {
 			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
 						  "Type Must Support addition operation.");
 			T sum = 0;
-			for (size_t i = 0; i < list.size(); i++) {
+			for (size_t i = 0; i < nrElements; i++) {
 				sum += list[i];
 			}
 			return sum;
@@ -93,7 +93,7 @@ namespace fragcore {
 		/**
 		 *
 		 */
-		template <typename T> static T wrapAngle(T angle) {
+		template <typename T> static T wrapAngle(T angle) noexcept {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
 			while (angle > static_cast<T>(Math::PI_2)) {
 				angle -= static_cast<T>(Math::PI_2);
@@ -114,18 +114,19 @@ namespace fragcore {
 		 * 	and will thus exceed eitehr the start or the end point.
 		 * @return constexpr T
 		 */
-		template <typename T> inline constexpr static T lerp(T a, T b, T t) noexcept {
+		template <typename T> inline constexpr static T lerp(const T value0, const T value1, const T interp) noexcept {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
-			return (a + (b - a) * t);
+			return (value0 + (value1 - value0) * interp);
 		}
-		template <typename T> inline constexpr static T lerpClamped(T a, T b, T t) noexcept {
+		template <typename T>
+		inline constexpr static T lerpClamped(const T value0, const T value1, const T interp) noexcept {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
-			return (a + (b - a) * Math::clamp<T>(t, static_cast<T>(0.0), static_cast<T>(1.0)));
+			return (value0 + (value1 - value0) * Math::clamp<T>(interp, static_cast<T>(0.0), static_cast<T>(1.0)));
 		}
 
-		template <typename T> inline constexpr static T mod(T a, T mod) noexcept {
+		template <typename T> inline constexpr static T mod(const T value, const T mod) noexcept {
 			static_assert(std::is_integral<T>::value, "Must be a integer type.");
-			return (a % mod + mod) % mod;
+			return (value % mod + mod) % mod;
 		}
 
 		/**
@@ -297,7 +298,7 @@ namespace fragcore {
 
 		// void multijitter(Vector2 *samples, int num_samples) { int sqrt_samples = (int)sqrt(num_samples); }
 
-		template <typename T> static inline constexpr T align(T size, T alignment) {
+		template <typename T> static inline constexpr T align(const T size, const T alignment) noexcept {
 			static_assert(std::is_integral<T>::value, "Must be an integral type.");
 			return size + (alignment - (size % alignment));
 		}

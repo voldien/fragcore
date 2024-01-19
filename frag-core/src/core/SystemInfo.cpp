@@ -56,8 +56,8 @@ std::string SystemInfo::getOperatingSystemName() noexcept {
 	return info.full_name;
 }
 
-std::string SystemInfo::getOperatingSystemName(SystemInfo::OperatingSystem os) {
-	return std::string(magic_enum::enum_name(os));
+std::string SystemInfo::getOperatingSystemName(SystemInfo::OperatingSystem operatingSystem) {
+	return std::string(magic_enum::enum_name(operatingSystem));
 }
 
 std::string SystemInfo::getCPUName() noexcept { return iware::cpu::model_name(); }
@@ -199,9 +199,9 @@ std::vector<SystemInfo::GPUInformation> SystemInfo::getGPUDevices() noexcept {
 std::string SystemInfo::getApplicationName() {
 #if defined(PLATFORM_POSIX) || defined(__linux__) // check defines for your setup
 
-	std::string sp;
-	std::ifstream("/proc/self/comm") >> sp;
-	return sp;
+	std::string app_name;
+	std::ifstream("/proc/self/comm") >> app_name;
+	return app_name;
 
 #elif defined(_WIN32)
 

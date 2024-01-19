@@ -22,7 +22,7 @@ Library::Library(const char *clibrary) {
 
 Library::Library(const std::string &clibrary) : Library(clibrary.c_str()) {}
 
-Library::Library(const Library &library) : Library(library.path.c_str()) {}
+Library::Library(const Library &other) : Library(other.path.c_str()) {}
 
 Library::Library(Library &&other) { std::exchange(this->mlib, other.mlib); }
 
@@ -53,8 +53,8 @@ bool Library::open(const char *clibrary) {
 
 void Library::close() {
 #ifdef FV_UNIX
-	int rc = dlclose(this->mlib);
-	if (rc < 0) {
+	int rcode = dlclose(this->mlib);
+	if (rcode < 0) {
 		throw SystemException(errno, std::system_category(), "Failed to close library: {}", dlerror());
 	}
 #endif

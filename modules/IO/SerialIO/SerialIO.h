@@ -120,7 +120,7 @@ namespace fragcore {
 		void setFlowControl(FlowControl flowControl);
 		FlowControl getFlowControl() const;
 
-		void setParity(Parity flowControl);
+		void setParity(Parity parity);
 		Parity getParity() const;
 
 		void setXonXoff(XonXoff XonXoff);

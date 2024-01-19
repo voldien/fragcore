@@ -31,7 +31,8 @@ namespace fragcore {
 		Transform(const Vector3 &position, const Quaternion &rotation, const Vector3 &scale)
 			: position(position), quaternion(rotation), scale(scale) {}
 
-		explicit Transform(const Matrix3x3 &b, const Vector3 &c = Vector3::Zero()) {}
+		explicit Transform(const Matrix3x3 &basis, const Vector3 &c = Vector3::Zero()) {}
+
 		Transform(const Transform &other) {
 			this->position = other.position;
 			this->quaternion = other.quaternion;
@@ -45,19 +46,19 @@ namespace fragcore {
 			return *this;
 		}
 
-		FV_ALWAYS_INLINE void rotate(const Vector3 &eular) { this->quaternion = Quaternion(); }
+		FV_ALWAYS_INLINE void rotate(const Vector3 &eular) noexcept { this->quaternion = Quaternion(); }
 
-		FV_ALWAYS_INLINE void setPosition(const Vector3 &position) { this->position = position; }
+		FV_ALWAYS_INLINE void setPosition(const Vector3 &position) noexcept { this->position = position; }
 
-		FV_ALWAYS_INLINE Vector3 getPosition() { return this->position; }
+		FV_ALWAYS_INLINE Vector3 getPosition() noexcept { return this->position; }
 
-		FV_ALWAYS_INLINE const Vector3 &getPosition() const { return this->position; }
+		FV_ALWAYS_INLINE const Vector3 &getPosition() const noexcept { return this->position; }
 
-		FV_ALWAYS_INLINE void setScale(const Vector3 &scale) { this->scale = scale; }
+		FV_ALWAYS_INLINE void setScale(const Vector3 &scale) noexcept { this->scale = scale; }
 
-		FV_ALWAYS_INLINE Vector3 getScale() const { return this->scale; }
+		FV_ALWAYS_INLINE Vector3 getScale() const noexcept { return this->scale; }
 
-		FV_ALWAYS_INLINE void setRotation(const Quaternion &quat) { this->quaternion = quat; }
+		FV_ALWAYS_INLINE void setRotation(const Quaternion &quat) noexcept { this->quaternion = quat; }
 
 		FV_ALWAYS_INLINE Transform inverse() const {
 			Transform transform;
@@ -65,9 +66,9 @@ namespace fragcore {
 			return transform;
 		}
 
-		FV_ALWAYS_INLINE const Quaternion &getRotation() const { return this->quaternion; }
+		FV_ALWAYS_INLINE const Quaternion &getRotation() const noexcept { return this->quaternion; }
 
-		FV_ALWAYS_INLINE const Matrix3x3 getBasis() const { return this->quaternion.matrix(); }
+		FV_ALWAYS_INLINE const Matrix3x3 getBasis() const noexcept { return this->quaternion.matrix(); }
 
 		FV_ALWAYS_INLINE Transform &operator*=(const Transform &t) {
 			Matrix3x3 basis = this->getBasis() * t.getBasis();

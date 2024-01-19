@@ -19,7 +19,7 @@
 
 using namespace fragcore;
 
-UDPNetSocket::UDPNetSocket() : netStatus(NetStatus::Status_Disconnected), socket(0) { this->UDPaddr = nullptr; }
+UDPNetSocket::UDPNetSocket() : socket(0), netStatus(NetStatus::Status_Disconnected) { this->UDPaddr = nullptr; }
 
 UDPNetSocket::UDPNetSocket(int socket) : UDPNetSocket() {
 	this->socket = socket;
@@ -36,10 +36,12 @@ NetSocket::TransportProtocol UDPNetSocket::getTransportProtocol() const noexcept
 int UDPNetSocket::close() {
 	free(this->UDPaddr);
 	this->UDPaddr = nullptr;
+
 	if (this->socket > 0) {
-		int rc = ::close(this->socket);
-		if (rc != 0)
+		int rcode = ::close(this->socket);
+		if (rcode != 0) {
 			throw RuntimeException("{}", strerror(errno));
+		}
 		this->socket = 0;
 	}
 	this->netStatus = NetStatus::Status_Disconnected;
@@ -85,9 +87,9 @@ int UDPNetSocket::bind(const INetAddress &p_addr) {
 		this->netStatus = NetStatus::Status_Error;
 		throw RuntimeException("Failed to bind UDP socket - {}:{}, {}", udpAddress->getIPAddress().getIP(),
 							   udpAddress->getPort(), strerror(errno));
-	} else {
-		this->netStatus = NetStatus::Status_Done;
 	}
+	this->netStatus = NetStatus::Status_Done;
+
 	return 0;
 }
 
@@ -108,7 +110,7 @@ int UDPNetSocket::connect(const INetAddress &p_addr) {
 	struct hostent *hosten = nullptr; /*	*/
 	int domain;
 	int flags = SOCK_DGRAM;
-	struct timeval tv;
+	struct timeval timeout;
 
 	// if (!isValidNetworkAddress(p_addr)) {
 	//	throw RuntimeException("Invalid Net Address");
@@ -116,9 +118,10 @@ int UDPNetSocket::connect(const INetAddress &p_addr) {
 
 	/*	*/
 	const TCPUDPAddress *udpAddress = dynamic_cast<const TCPUDPAddress *>(&p_addr);
-	if (udpAddress == nullptr)
+	if (udpAddress == nullptr) {
 		throw RuntimeException("Not a valid NetAddress Object");
-	domain = this->getDomain(*udpAddress);
+	}
+	domain = UDPNetSocket::getDomain(*udpAddress);
 
 	this->socket = ::socket(domain, flags, 0);
 	if (this->socket < 0) {
@@ -172,37 +175,37 @@ Ref<NetSocket> UDPNetSocket::accept(INetAddress &r_ip) {
 UDPNetSocket::NetStatus UDPNetSocket::accept(NetSocket &socket) { return UDPNetSocket::NetStatus::Status_Disconnected; }
 int UDPNetSocket::read() { return 0; }
 int UDPNetSocket::write() { return 0; }
-bool UDPNetSocket::isBlocking() { return 0; }
+bool UDPNetSocket::isBlocking() { return false; }
 void UDPNetSocket::setBlocking(bool blocking) {}
 UDPNetSocket::NetStatus UDPNetSocket::getStatus() const noexcept { return this->netStatus; }
 
 void UDPNetSocket::setTimeout(long int microsec) {
-	struct timeval tv;
+	struct timeval timeout;
 
 	/*	Set timeout for client.	*/
-	tv.tv_sec = microsec / 1000000;
-	tv.tv_usec = microsec % 1000000;
+	timeout.tv_sec = microsec / 1000000;
+	timeout.tv_usec = microsec % 1000000;
 
-	int rc = setsockopt(this->socket, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv));
-	if (rc != 0) {
+	int rcode = setsockopt(this->socket, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
+	if (rcode != 0) {
 		throw SystemException(errno, std::system_category(), "Failed to set recv timeout");
 	}
-	rc = setsockopt(this->socket, SOL_SOCKET, SO_SNDTIMEO, &tv, sizeof(tv));
+	rcode = setsockopt(this->socket, SOL_SOCKET, SO_SNDTIMEO, &timeout, sizeof(timeout));
 
-	if (rc != 0) {
+	if (rcode != 0) {
 		throw SystemException(errno, std::system_category(), "Failed to set send timeout");
 	}
 }
 
 long int UDPNetSocket::getTimeout() {
-	struct timeval tv;
+	struct timeval timeout;
 	socklen_t len;
-	int rc = getsockopt(this->socket, SOL_SOCKET, SO_RCVTIMEO, &tv, &len);
-	if (rc != 0) {
+	int rcode = getsockopt(this->socket, SOL_SOCKET, SO_RCVTIMEO, &timeout, &len);
+	if (rcode != 0) {
 		throw SystemException(errno, std::system_category(), "Failed to set recv timeout");
 	}
 
-	return tv.tv_sec * 1E6L + tv.tv_usec;
+	return timeout.tv_sec * 1E6L + timeout.tv_usec;
 }
 
 size_t UDPNetSocket::setupIPAddress(struct sockaddr *addr, const INetAddress &p_addr, uint16_t p_port) {
@@ -254,12 +257,13 @@ int UDPNetSocket::getDomain(const INetAddress &address) {
 	case INetAddress::NetworkProtocol::NetWorkProtocol_TCP_UDP:
 	case INetAddress::NetworkProtocol::NetWorkProtocol_IP: {
 		const IPAddress &ipAddress = tcpAddress.getIPAddress();
-		if (ipAddress.getIPType() == IPAddress::IPAddressType::IPAddress_Type_IPV4)
+		if (ipAddress.getIPType() == IPAddress::IPAddressType::IPAddress_Type_IPV4) {
 			return AF_INET;
-		else if (ipAddress.getIPType() == IPAddress::IPAddressType::IPAddress_Type_IPV6)
+		}
+		if (ipAddress.getIPType() == IPAddress::IPAddressType::IPAddress_Type_IPV6) {
 			return AF_INET6;
-		else
-			throw RuntimeException("No valid IP address");
+		}
+		throw RuntimeException("No valid IP address");
 	} break;
 	case INetAddress::NetworkProtocol::NetWorkProtocol_CAN:
 		return AF_CAN;

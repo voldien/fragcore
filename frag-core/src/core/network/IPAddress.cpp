@@ -3,26 +3,22 @@
 #include <netdb.h>
 using namespace fragcore;
 
-IPAddress::IPAddress() : INetAddress(), valid(false) {}
+IPAddress::IPAddress() : valid(false) {}
 
-IPAddress::IPAddress(const std::string &ip, IPAddressType type) : INetAddress(), ip(ip), type(type), valid(false) {
-	struct hostent *hosten = nullptr; /*	*/
-	/*	Get IP from hostname.	*/
-	//	hosten = gethostbyname(ip.c_str());
+IPAddress::IPAddress(const std::string &ipAddress, IPAddressType type) : ip(ipAddress), type(type), valid(false) {
 
 	int domain = getDomain(type);
-	if (inet_pton(domain, ip.c_str(), &field8[0]) < 0) {
-		throw RuntimeException("Failed to convert {} to IP Address", ip);
+	if (inet_pton(domain, ipAddress.c_str(), &field8[0]) < 0) {
+		throw RuntimeException("Failed to convert {} to IP Address", ipAddress);
 	}
 	this->valid = true;
 }
 
 IPAddress::IPAddress(void *encoded, IPAddressType type) {
-	//TODO: impl
+	// TODO: impl
 }
 
-IPAddress::IPAddress(const std::string &hostname)
-	: INetAddress(), type(IPAddressType::IPAddress_Type_NONE), valid(false) {
+IPAddress::IPAddress(const std::string &hostname) : type(IPAddressType::IPAddress_Type_NONE), valid(false) {
 	struct hostent *hosten = nullptr; /*	*/
 									  /*	Get IP from hostname.	*/
 	/*	*/
@@ -30,19 +26,18 @@ IPAddress::IPAddress(const std::string &hostname)
 	/*	*/
 	if (hosten != nullptr) {
 		struct in_addr **addr_list;
-		int i;
 		addr_list = (struct in_addr **)hosten->h_addr_list;
 
-		for (i = 0; addr_list[i] != nullptr; i++) {
+		for (int i = 0; addr_list[i] != nullptr; i++) {
 			// Return the first one;
 			const char *ipAddress = inet_ntoa(*addr_list[i]);
 			int domain = hosten->h_addrtype;
 			if (inet_pton(domain, ipAddress, &field8[0]) != 1) {
 				throw RuntimeException("Failed to convert '{}' to Address", hosten->h_name);
-			} else {
-				this->type = convertDomain2AddressType(domain);
-				this->valid = true;
 			}
+
+			this->type = convertDomain2AddressType(domain);
+			this->valid = true;
 		}
 
 	} else {

@@ -55,12 +55,12 @@ namespace fragcore {
 		class FVDECLSPEC TaskFunc : public Task {
 		  public:
 			template <class Function, class... Args> explicit TaskFunc(Function &&f, Args &&... args) {}
-			virtual void Execute() noexcept override {}
-			virtual void Complete() noexcept override {}
+			 void Execute() noexcept override {}
+			 void Complete() noexcept override {}
 		};
 
 	  public:
-		virtual ~IScheduler() = default;
+		~IScheduler() override = default;
 
 		/**
 		 * @brief

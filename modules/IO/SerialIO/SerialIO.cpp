@@ -130,8 +130,9 @@ void SerialIO::setStopBits(StopBits stopBits) {
 		throw RuntimeException("Failed to get config: {} ({})", sp_last_error_message(), res);
 	}
 	res = sp_set_config_stopbits(config, static_cast<int>(stopBits));
-	if (res != SP_OK)
+	if (res != SP_OK) {
 		throw RuntimeException("Failed to set StopBits {} - {}", "path", sp_last_error_message());
+	}
 
 	res = sp_set_config(serialPort, this->config);
 	if (res != SP_OK) {
@@ -418,18 +419,18 @@ SerialIO ::~SerialIO() {
 }
 
 std::optional<std::vector<std::string>> SerialIO::getSerialPorts() {
-	int i;
+
 	struct sp_port **ports;
 	std::vector<std::string> list;
 	sp_return error = sp_list_ports(&ports);
+
 	if (error == SP_OK) {
 
-		for (i = 0; ports[i] != nullptr; i++) {
-			list.push_back(sp_get_port_name(ports[i]));
+		for (int i = 0; ports[i] != nullptr; i++) {
+			list.emplace_back(sp_get_port_name(ports[i]));
 		}
 		sp_free_port_list(ports);
 		return {list};
-	} else {
-		return {};
 	}
+	return {};
 }
