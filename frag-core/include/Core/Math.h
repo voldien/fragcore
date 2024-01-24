@@ -63,6 +63,15 @@ namespace fragcore {
 			return part;
 		}
 
+		template <typename T, typename U> static std::vector<T> &add(std::vector<T> &list, const U &value) noexcept {
+			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
+						  "Type Must Support addition operation.");
+			for (size_t i = 0; i < list.size(); i++) {
+				list[i] += value;
+			}
+			return list;
+		}
+
 		template <typename T> static inline T sum(const std::vector<T> &list) noexcept {
 			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
 						  "Type Must Support addition operation.");

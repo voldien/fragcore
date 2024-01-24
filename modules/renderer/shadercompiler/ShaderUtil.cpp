@@ -16,8 +16,9 @@ void ShaderUtil::loadProgramFromMem(const ShaderObject *vshader, const ShaderObj
 									Shader **pshader) {
 
 	//	validateShaderArguments(type, language, codetype);
-	if (pshader == nullptr)
+	if (pshader == nullptr) {
 		throw InvalidArgumentException("");
+	}
 
 	ShaderDesc desc = {};
 	Shader *shader = nullptr;
@@ -94,9 +95,9 @@ void ShaderUtil::loadProgramFromMem(const ShaderObject *vshader, const ShaderObj
 		desc.vertex.size = vshader->size;
 		desc.vertex.type = vshader->type;
 		desc.vertex.numvert = nsources;
-		if (vshader->type == ShaderCodeType::SourceCode)
+		if (vshader->type == ShaderCodeType::SourceCode) {
 			desc.vertex.vertexsource = (const char **)&vsources;
-		else {
+		} else {
 			desc.vertex.vertexBinary = (const char *)vshader->buf;
 			desc.vertex.binaryFormat = 0;
 		}
@@ -128,9 +129,9 @@ void ShaderUtil::loadProgramFromMem(const ShaderObject *vshader, const ShaderObj
 		desc.fragment.size = fshader->size;
 		desc.fragment.type = fshader->type;
 		desc.fragment.numfrag = nsources;
-		if (fshader->type == ShaderCodeType::SourceCode)
+		if (fshader->type == ShaderCodeType::SourceCode) {
 			desc.fragment.fragmentsource = (const char **)&fsources;
-		else {
+		} else {
 			desc.fragment.fragmentBinary = (const char *)fshader->buf;
 			desc.fragment.binaryFormat = 0;
 		}
@@ -162,9 +163,9 @@ void ShaderUtil::loadProgramFromMem(const ShaderObject *vshader, const ShaderObj
 		desc.geometry.size = gshader->size;
 		desc.geometry.type = gshader->type;
 		desc.geometry.numgeo = nsources;
-		if (gshader->type == ShaderCodeType::SourceCode)
+		if (gshader->type == ShaderCodeType::SourceCode) {
 			desc.geometry.geometrysource = (const char **)&gsources;
-		else {
+		} else {
 			desc.geometry.geometryBinary = (const char *)gshader->buf;
 			desc.geometry.binaryFormat = 0;
 		}
@@ -196,9 +197,9 @@ void ShaderUtil::loadProgramFromMem(const ShaderObject *vshader, const ShaderObj
 		desc.Compute.size = compute->size;
 		desc.Compute.type = compute->type;
 		desc.Compute.numcompute = nsources;
-		if (fshader->type == ShaderCodeType::SourceCode)
+		if (fshader->type == ShaderCodeType::SourceCode) {
 			desc.Compute.computeSource = (const char **)&csources;
-		else {
+		} else {
 			desc.Compute.computeBinary = (const char *)compute->buf;
 			desc.Compute.binaryFormat = 0;
 		}
@@ -305,15 +306,18 @@ void ShaderUtil::loadProgramPipeline(const ShaderObject *vshader, const ShaderOb
 
 static void validateShaderArguments(ShaderType type, ShaderLanguage language, ShaderCodeType codetype) {
 	// Validate the arguments.
-	if (type < ShaderType::Vertex || type > ShaderType::Compute)
+	if (type < ShaderType::Vertex || type > ShaderType::Compute) {
 		throw InvalidArgumentException("Invalid shader type - {}",
 									   (unsigned int)type); // TODO add enumerator to string for shader type.
-	if (language & ~(GLSL | SPIRV | HLSL | CLC))
+	}
+	if (language & ~(GLSL | SPIRV | HLSL | CLC)) {
 		throw InvalidArgumentException("None supported shader language by the application - {}",
-									  (unsigned int)language); // TODO add enumerator to string for shader language.
-	if (codetype <= ShaderCodeType::NoShaderType || codetype > ShaderCodeType::Binary)
+									   (unsigned int)language); // TODO add enumerator to string for shader language.
+	}
+	if (codetype <= ShaderCodeType::NoShaderType || codetype > ShaderCodeType::Binary) {
 		throw InvalidArgumentException("None supported shader code format - {}",
-									  (unsigned int) codetype); // TODO add enumerator to string for shader language.
+									   (unsigned int)codetype); // TODO add enumerator to string for shader language.
+	}
 }
 
 void ShaderUtil::loadShader(Ref<IO> &io, ShaderType type, Ref<IRenderer> &renderer, ShaderLanguage language,
@@ -480,8 +484,9 @@ void ShaderUtil::loadProgram(const void *vertex, const int vsize, const void *fr
 							 const void *tesselatione, const int tesize, ShaderCodeType codetype,
 							 ShaderLanguage language, Ref<IRenderer> &renderer, Shader **pshader) {
 	validateShaderArguments(ShaderType::Vertex, language, codetype);
-	if (pshader == nullptr)
+	if (pshader == nullptr) {
 		throw InvalidArgumentException("");
+	}
 
 	ShaderObject v, f, g, tc, te;
 	ShaderObject *pv, *pf, *pg, *ptc, *pte;

@@ -22,8 +22,8 @@ static inline glm::vec3 tangent(const glm::vec3 &normal) noexcept {
 	return tangent;
 }
 
-void ProceduralGeometry::generatePlan(float scale, std::vector<Vertex> &vertices,
-									  std::vector<unsigned int> &indices, int segmentsX, int segmentsY) {
+void ProceduralGeometry::generatePlan(float scale, std::vector<Vertex> &vertices, std::vector<unsigned int> &indices,
+									  int segmentsX, int segmentsY) {
 
 	PlaneMesh mesh({1.0, 1.0}, glm::ivec2(segmentsX, segmentsY));
 
@@ -69,11 +69,11 @@ void ProceduralGeometry::generatePlan(float scale, std::vector<Vertex> &vertices
 	}
 }
 
-std::vector<Vector3> ProceduralGeometry::createFrustum(const Matrix4x4 &projection) {
+void ProceduralGeometry::createFrustum(std::vector<Vertex> &vertices, const Matrix4x4 &projection) {
 
 	BoxMesh BoxMesh({1, 1, 1}, {1, 1, 1});
 
-	std::vector<Vector3> vertices;
+	// std::vector<Vector3> vertices;
 
 	auto mesh_vertices = BoxMesh.vertices();
 
@@ -85,14 +85,14 @@ std::vector<Vector3> ProceduralGeometry::createFrustum(const Matrix4x4 &projecti
 
 		projectedVertex *= (1.0f / projectedVertex.w());
 
-		vertices.emplace_back(projectedVertex.head<3>());
+		ProceduralGeometry::Vertex frustum_vertex;
+		// frustum_vertex.vertex = projectedVertex.head<3>();
+		vertices.emplace_back(frustum_vertex);
 	}
-
-	return vertices;
 }
 
-std::vector<Vector3> ProceduralGeometry::createFrustum(const float fov, const float aspect, const float near,
-													   const float far) {
+void ProceduralGeometry::createFrustum(std::vector<Vertex> &vertices, const float fov, const float aspect,
+									   const float near, const float far) {
 
 	Matrix4x4 projectMatrix;
 	const float theta = fov * 0.5f;
@@ -106,7 +106,7 @@ std::vector<Vector3> ProceduralGeometry::createFrustum(const float fov, const fl
 	projectMatrix(2, 3) = -2 * near * far / range;
 	projectMatrix(3, 3) = 0;
 
-	return ProceduralGeometry::createFrustum(projectMatrix);
+	return ProceduralGeometry::createFrustum(vertices, projectMatrix);
 }
 
 void ProceduralGeometry::generateSphere(float radius, std::vector<Vertex> &vertices,
@@ -223,8 +223,7 @@ void ProceduralGeometry::generateWireCube(const float scale, std::vector<Vertex>
 	}
 }
 
-void ProceduralGeometry::generateTorus(float scale, std::vector<Vertex> &vertices,
-									   std::vector<unsigned int> &indices) {
+void ProceduralGeometry::generateTorus(float scale, std::vector<Vertex> &vertices, std::vector<unsigned int> &indices) {
 	TorusMesh SphereMesh;
 
 	auto mesh_vertices = SphereMesh.vertices();
