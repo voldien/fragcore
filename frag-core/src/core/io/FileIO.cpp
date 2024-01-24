@@ -21,7 +21,7 @@ FileIO::FileIO(FILE *file) {
 
 	/*	Extract stat of the file.	*/
 	struct stat stat;
-	int rc = fstat(fileno(this->file), &stat);
+	const int rc = fstat(fileno(this->file), &stat);
 
 	/*	Check file mode.	*/
 	if (rc == 0) {

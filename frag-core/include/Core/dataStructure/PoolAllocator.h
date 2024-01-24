@@ -40,10 +40,10 @@ namespace fragcore {
 	template <class T> class PoolAllocator {
 	  public:
 		/*	TODO add align and pack .	*/
-		typedef struct poolallactoritem {
+		using PoolAllactorItem = struct poolallactoritem {
 			T data;
 			poolallactoritem *next;
-		} PoolAllactorItem;
+		};
 
 	  public:
 		PoolAllocator() {

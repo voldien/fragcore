@@ -33,17 +33,17 @@ namespace fragcore {
 	  public:
 		static_assert(std::is_object<T>::value, "Must be a class object.");
 
-		FV_ALWAYS_INLINE T *operator->() { return ref; }
+		FV_ALWAYS_INLINE T *operator->() noexcept { return ref; }
 
-		FV_ALWAYS_INLINE T *operator*() { return ref; }
+		FV_ALWAYS_INLINE T *operator*() noexcept { return ref; }
 
-		FV_ALWAYS_INLINE const T *operator->() const { return ref; }
+		FV_ALWAYS_INLINE const T *operator->() const noexcept { return ref; }
 
-		FV_ALWAYS_INLINE const T *ptr() const { return ref; }
+		FV_ALWAYS_INLINE const T *ptr() const noexcept { return ref; }
 
-		FV_ALWAYS_INLINE T *ptr() { return ref; }
+		FV_ALWAYS_INLINE T *ptr() noexcept { return ref; }
 
-		FV_ALWAYS_INLINE const T *operator*() const { return ref; }
+		FV_ALWAYS_INLINE const T *operator*() const noexcept { return ref; }
 
 	  public:
 		FV_ALWAYS_INLINE RefPtr() { this->ref = nullptr; }

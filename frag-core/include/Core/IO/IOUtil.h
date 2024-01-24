@@ -37,7 +37,7 @@ namespace fragcore {
 		 * @param data
 		 * @return long int
 		 */
-		static long int loadFileMem(Ref<IO> &io, char **data);
+		static long int loadFileMem(Ref<IO> &ioRef, char **data);
 
 		/**
 		 * @brief

@@ -19,6 +19,7 @@
 #ifndef _FRAG_CORE_MODBUS_ADDRESS_H_
 #define _FRAG_CORE_MODBUS_ADDRESS_H_ 1
 #include <Core/Network/INetAddress.h>
+
 namespace fragcore {
 	/**
 	 * @brief
@@ -26,7 +27,8 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC ModBusAddress : public INetAddress {
 	  public:
-		ModBusAddress() : INetAddress() {}
+		ModBusAddress() {}
 	};
 } // namespace fragcore
+
 #endif

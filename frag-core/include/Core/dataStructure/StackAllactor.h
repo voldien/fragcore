@@ -22,6 +22,7 @@
 #include <cstdint>
 
 namespace fragcore {
+
 	/**
 	 * @brief Single stack buffer.
 	 *
@@ -31,7 +32,7 @@ namespace fragcore {
 		StackAllocator();
 		StackAllocator(const StackAllocator &stack);
 		StackAllocator(StackAllocator &&other);
-		explicit StackAllocator(size_t stackSizeBytes);
+		explicit StackAllocator(const size_t stackSizeBytes);
 		~StackAllocator();
 
 		/**
@@ -44,33 +45,33 @@ namespace fragcore {
 		 *	Get size of the allocated data block
 		 *	in bytes.
 		 */
-		size_t getSize() const;
+		size_t getSize() const noexcept;
 
 		/**
 		 *	Allocate aligned memory block.
 		 *	@return first memory address.
 		 */
-		void *allocateAligned(size_t sizeBytes, int alignment);
+		void *allocateAligned(size_t sizeBytes, unsigned int alignment);
 
 		/**
 		 *	Set marker to zero.
 		 */
-		void clear();
+		void clear() noexcept;
 
 		/**
 		 *	@return marker offset.
 		 */
-		size_t getMarker() const;
+		size_t getMarker() const noexcept;
 
 		/**
 		 *	@return non null pointer if successfully.
 		 */
-		void *fetch(size_t sizeBytes);
+		void *fetch(const size_t sizeBytes);
 
 		/**
 		 *	Release everything to marker.
 		 */
-		void freeToMarker(size_t marker);
+		void freeToMarker(const size_t marker);
 
 		/**
 		 *	@return

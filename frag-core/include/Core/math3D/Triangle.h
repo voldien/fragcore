@@ -21,15 +21,16 @@
 #include "Plane.h"
 
 namespace fragcore {
+	
 	/**
-	 * @brief 
-	 * 
+	 * @brief
+	 *
 	 */
 	class FVDECLSPEC Triangle {
 	  public:
 		Triangle();
 		Triangle(const Triangle &triangle);
-		Triangle(const Vector3 &p1, const Vector3 &p2, const Vector3 &p3);
+		Triangle(const Vector3 &point1, const Vector3 &point2, const Vector3 &point3);
 
 		Triangle &operator=(const Triangle &triangle) = default;
 
@@ -38,34 +39,34 @@ namespace fragcore {
 		 *
 		 *	@Return
 		 */
-		Vector3 getNormal() const;
+		Vector3 getNormal() const noexcept;
 
 		/**
 		 *
 		 *	@Return
 		 */
-		Vector3 getEdge0() const;
+		Vector3 getEdge0() const noexcept;
 
 		/**
 		 *
 		 *	@Return
 		 */
-		Vector3 getEdge1() const;
+		Vector3 getEdge1() const noexcept;
 
 		/**
 		 *
 		 *	@Return
 		 */
-		Vector3 getEdge3() const;
+		Vector3 getEdge3() const noexcept;
 
 		/**/
-		inline void setPos0(const Vector3 &pos) { p0 = pos; }
+		inline void setPos0(const Vector3 &pos) noexcept { p0 = pos; }
 
 		/**/
-		inline void setPos1(const Vector3 &pos) { p1 = pos; }
+		inline void setPos1(const Vector3 &pos) noexcept { p1 = pos; }
 
 		/**/
-		inline void setPos2(const Vector3 &pos) { p2 = pos; }
+		inline void setPos2(const Vector3 &pos) noexcept { p2 = pos; }
 
 	  private:		/*	Attributes.	*/
 		Vector3 p0; /**/
@@ -91,12 +92,12 @@ namespace fragcore {
 		this->p2 = p2;
 	}
 
-	inline Vector3 Triangle::getEdge0() const { return (p0 - p1); }
+	inline Vector3 Triangle::getEdge0() const noexcept { return (p0 - p1); }
 
-	inline Vector3 Triangle::getEdge1() const { return (p0 - p2); }
+	inline Vector3 Triangle::getEdge1() const noexcept { return (p0 - p2); }
 
-	inline Vector3 Triangle::getEdge3() const { return (p2 - p1); }
+	inline Vector3 Triangle::getEdge3() const noexcept { return (p2 - p1); }
 
-	inline Vector3 Triangle::getNormal() const { return (p0 - p1).cross(p0 - p2) / (p0 - p1).dot(p0 - p2); }
+	inline Vector3 Triangle::getNormal() const noexcept { return (p0 - p1).cross(p0 - p2) / (p0 - p1).dot(p0 - p2); }
 } // namespace fragcore
 #endif

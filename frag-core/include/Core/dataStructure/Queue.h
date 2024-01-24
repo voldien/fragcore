@@ -97,7 +97,7 @@ namespace fragcore {
 		/**
 		 *	Resize queue.
 		 */
-		void resize(size_t size) {
+		void resize(const size_t size) {
 			if (this->mdata == nullptr) {
 				this->mdata = new T[size]();
 			} else {
@@ -143,9 +143,9 @@ namespace fragcore {
 		Iterator<T> end() { return QueueIterator(this); }
 
 	  private:
-		inline int getTypeSize() const { return sizeof(T); }
+		inline int getTypeSize() const noexcept { return sizeof(T); }
 
-		inline T *getData() const { return this->mdata; }
+		inline T *getData() const noexcept { return this->mdata; }
 
 	  public: /*  */
 		Queue &operator=(const Queue &que) {

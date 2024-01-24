@@ -23,6 +23,7 @@
 #include "SmartReference.h"
 
 namespace fragcore {
+	
 	/**
 	 * @brief
 	 *

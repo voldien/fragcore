@@ -37,6 +37,7 @@ namespace fragcore {
 		virtual void OnDestruction() = 0;
 
 	  public: /*	*/
+	  
 		static Module *loadModule(const std::string &path, const std::string &moduleEntryPoint = "") {
 			Library lib(path.c_str());
 			return Module::loadModule(lib, moduleEntryPoint);

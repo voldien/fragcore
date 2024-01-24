@@ -16,6 +16,7 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+#include <utility>
 #ifndef _FRAG_CORE_TREE_H_
 #define _FRAG_CORE_TREE_H_ 1
 #include "../../FragDef.h"
@@ -26,8 +27,7 @@ namespace fragcore {
 	/**
 	 *
 	 */
-	template <class T> // TODO evoluate.
-	class ITree {
+	template <typename T> class ITree {
 	  public:
 		ITree() {
 			this->sibling = nullptr;
@@ -35,24 +35,29 @@ namespace fragcore {
 			this->child = nullptr;
 			this->parent = nullptr;
 		}
-		ITree(ITree &&other) {}
+		ITree(ITree &&other) {
+			this->child = std::exchange(other.child, nullptr);
+			this->parent = std::exchange(other.parent, nullptr);
+			this->sibling = std::exchange(other.sibling, nullptr);
+			this->numChildren = other.numChildren;
+		}
 
-		virtual ITree<T> *root() const {
+		virtual ITree<T> *root() const noexcept {
 			if (this->getParent() == nullptr) {
 				return (ITree<T> *)this;
 			}
 			return this->getParent()->root();
 		}
 
-		virtual bool isEmpty() const { return this->getNumChildren() == 0; }
+		virtual bool isEmpty() const noexcept { return this->getNumChildren() == 0; }
 
-		virtual ITree<T> *getParent() const { return this->parent; }
+		virtual ITree<T> *getParent() const noexcept { return this->parent; }
 
-		virtual void setParent(ITree<T> *parent) { this->parent = parent; }
+		virtual void setParent(ITree<T> *parent) noexcept { this->parent = parent; }
 
-		virtual unsigned int getNumChildren() const { return this->numChildren; }
+		virtual unsigned int getNumChildren() const noexcept { return this->numChildren; }
 
-		virtual void addChild(ITree<T> *pchild) {
+		virtual void addChild(ITree<T> *pchild) noexcept {
 			ITree<T> *find;
 			assert(pchild);
 
@@ -78,6 +83,7 @@ namespace fragcore {
 		virtual void removeChild(unsigned int index) {
 			ITree<T> *sn = getChild(index - 1);
 			ITree<T> *n = sn->sibling;
+
 			sn->setSibling(n->sibling);
 			n->parent = nullptr;
 		}
@@ -93,7 +99,7 @@ namespace fragcore {
 			return chi;
 		}
 
-		virtual bool isChild(ITree<T> *item) const {
+		virtual bool isChild(ITree<T> *item) const noexcept {
 			for (unsigned int i = 0; i < getNumChildren(); i++) {
 				if (item == getChild(i)) {
 					return true;
@@ -102,7 +108,7 @@ namespace fragcore {
 			return false;
 		}
 
-		virtual int getNodeChildIndex(ITree<T> *node) {
+		virtual int getNodeChildIndex(ITree<T> *node) noexcept {
 			ITree<T> *n = this->child;
 			int i = 0;
 			while (n) {
@@ -121,8 +127,8 @@ namespace fragcore {
 
 		// const T *operator->() const { return (T *)this; }
 
-		virtual const T *ptr() const { return (T *)this; }
-		virtual T *ptr() { return (T *)this; }
+		virtual const T *ptr() const noexcept { return (T *)this; }
+		virtual T *ptr() noexcept { return (T *)this; }
 
 		class TIterator : public Iterator<T> {
 		  public:
@@ -190,9 +196,9 @@ namespace fragcore {
 		//		virtual TIterator<T> end();
 
 	  protected: /*  */
-		void setSibling(ITree<T> *sibling) { this->sibling = sibling; }
+		void setSibling(ITree<T> *sibling) noexcept { this->sibling = sibling; }
 
-		void setChild(ITree<T> *child) { this->child = child; }
+		void setChild(ITree<T> *child) noexcept { this->child = child; }
 
 	  private:					  /*  */
 		ITree<T> *parent;		  /*	parent node.	*/

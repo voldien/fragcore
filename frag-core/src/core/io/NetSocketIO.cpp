@@ -1,6 +1,6 @@
 #include "Core/IO/SocketIO.h"
-
 #include <fmt/core.h>
+
 using namespace fragcore;
 
 SocketIO::SocketIO(Ref<NetSocket> &socket) : netSocket(socket) {}

@@ -21,6 +21,7 @@
 #include "../FragDef.h"
 
 namespace fragcore {
+	
 	class FVDECLSPEC CurveUtil {
 	  public:
 		template <typename T, class U>

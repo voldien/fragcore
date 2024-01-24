@@ -3,7 +3,7 @@
 
 using namespace fragcore;
 
-TCPUDPAddress::TCPUDPAddress(const IPAddress &ipaddr, unsigned int port) : INetAddress() {
+TCPUDPAddress::TCPUDPAddress(const IPAddress &ipaddr, unsigned int port) {
 
 	this->ipAddress = ipaddr;
 	this->port = port;

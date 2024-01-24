@@ -33,15 +33,15 @@ namespace fragcore {
 		friend class ZipFileIO;
 
 	  public:
-		virtual ~ZipFileSystem();
+		~ZipFileSystem() override;
 
 	  public:
 		IO *openFile(const char *path, IO::IOMode mode) override;
 		IO *openFile(unsigned int index);
 
-		virtual std::vector<std::string> listFiles(const char *path) const override;
-		virtual std::vector<std::string> listDirectories(const char *path) const override;
-		virtual std::vector<std::string> list(const char *path) const override;
+		std::vector<std::string> listFiles(const char *path) const override;
+		std::vector<std::string> listDirectories(const char *path) const override;
+		std::vector<std::string> list(const char *path) const override;
 
 		void closeFile(IO *io) override;
 
@@ -61,8 +61,8 @@ namespace fragcore {
 
 		bool isASyncSupported() const override;
 
-		virtual bool isDirectory(const char *path) const override;
-		virtual bool isFile(const char *path) const override;
+		bool isDirectory(const char *path) const override;
+		bool isFile(const char *path) const override;
 
 		// FileAccess getFileAccess(const char *path) override;
 

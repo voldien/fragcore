@@ -29,31 +29,31 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC BufferIO : public IO { // TODO rename so that it understood it is a system memory IO object.
 	  public:
-		virtual void open(const char *path, IOMode mode) override;
+		void open(const char *path, IOMode mode) override;
 
-		virtual void close() override;
+		void close() override;
 
-		virtual long read(long int nbytes, void *pbuffer) override;
+		long read(long int nbytes, void *pbuffer) override;
 
-		virtual long write(long int nbytes, const void *pbuffer) override;
+		long write(long int nbytes, const void *pbuffer) override;
 
-		virtual long int peek(long int nBytes, void *pbuffer) override;
+		long int peek(long int nBytes, void *pbuffer) override;
 
-		virtual bool eof() const override;
+		bool eof() const override;
 
-		virtual long length() override;
+		long length() override;
 
-		virtual void seek(long int nbytes, Seek seek) override;
+		void seek(long int nbytes, Seek seek) override;
 
-		virtual unsigned long getPos() override;
+		unsigned long getPos() override;
 
-		virtual bool isWriteable() const override;
+		bool isWriteable() const override;
 
-		virtual bool isReadable() const override;
+		bool isReadable() const override;
 
-		virtual bool flush() override;
+		bool flush() override;
 
-		virtual bool isOperationSupported(IOOperation operations) const noexcept override {
+		bool isOperationSupported(IOOperation operations) const noexcept override {
 			return (operations & OP_ALL) != operations;
 		};
 
@@ -69,7 +69,7 @@ namespace fragcore {
 		BufferIO(const void *pBuffer, unsigned long size);
 		BufferIO(void *pBuffer, unsigned long size);
 		BufferIO(unsigned long size, bool expandable = false);
-		~BufferIO();
+		~BufferIO() override;
 	};
 } // namespace fragcore
 #endif

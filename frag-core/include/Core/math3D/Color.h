@@ -31,16 +31,16 @@ namespace fragcore {
 	  public:
 		using Precision = float;
 		Color() = default;
-		Color(float r, float g, float b, float a) noexcept : Vector4(r, g, b, a) {}
-		Color(uint32_t hex) noexcept {				 /*	Convert */
-			float r = ((hex >> 24) & 0xFF) / 255.0f; // Extract the RR byte
-			float g = ((hex >> 16) & 0xFF) / 255.0f; // Extract the GG byte
-			float b = ((hex >> 8) & 0xFF) / 255.0f;	 // Extract the GG byte
-			float a = ((hex)&0xFF) / 255.0f;		 // Extract the BB byte
-			this->r(r);
-			this->g(g);
-			this->b(b);
-			this->a(a);
+		Color(float red, float green, float blue, float alpha) noexcept : Vector4(red, green, blue, alpha) {}
+		Color(uint32_t hex) noexcept {					 /*	Convert */
+			float red = ((hex >> 24) & 0xFF) / 255.0f;	 // Extract the RR byte
+			float green = ((hex >> 16) & 0xFF) / 255.0f; // Extract the GG byte
+			float blue = ((hex >> 8) & 0xFF) / 255.0f;	 // Extract the GG byte
+			float alpha = ((hex)&0xFF) / 255.0f;		 // Extract the BB byte
+			this->r(red);
+			this->g(green);
+			this->b(blue);
+			this->a(alpha);
 		}
 
 		inline float r() const noexcept { return x(); }
@@ -76,7 +76,7 @@ namespace fragcore {
 		 */
 		template <typename T> static Color CorrelatedColorTemperatureToRGB(T kelvin) noexcept {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
-			T temp = kelvin / static_cast<T>(100.0);
+			const T temp = kelvin / static_cast<T>(100.0);
 
 			T red, green, blue;
 
@@ -111,17 +111,17 @@ namespace fragcore {
 		}
 
 	  public:
-		static Color clear() noexcept { return Color(0.0f, 0.0f, 0.0f, 0.0f); }	 // Clear Color {0,0,0,0}
-		static Color black() noexcept { return Color(0.0f, 0.0f, 0.0f, 1.0f); }	 // Black Color {0,0,0,1}
-		static Color white() noexcept { return Color(1.0f, 1.0f, 1.0f, 1.0f); }	 // White Color {1,1,1,constexpr
-		static Color red() noexcept { return Color(1.0f, 0.0f, 0.0f, 1.0f); }	 // Red Color {1,0,0,1}
-		static Color green() noexcept { return Color(0.0f, 1.0f, 0.0f, 1.0f); }	 // Green Color {0,1,0,1}
-		static Color blue() noexcept { return Color(0.0f, 0.0f, 1.0f, 1.0f); }	 // Blue Color {0,0,0,constexpr
-		static Color grey() noexcept { return Color(0.5f, 0.5f, 0.5f, 1.0f); }	 // Gray Color {0,0,0,1}
-		static Color yellow() noexcept { return Color(1.0f, 1.0f, 0.0f, 1.0f); } // Yellow Color {0,0,0,1}
-		static Color orange() noexcept { return Color(1.0f, 0.5f, 0.0f, 1.0f); } // Orange Color {0,0,0,1}
-		static Color pink() noexcept { return Color(1.0f, 0.5f, 1.0f, 1.0f); }	 // Pink Color {1,0.5,1.0,1.0}
-		static Color purple() noexcept { return Color(0.5f, 0.0f, 1.0f, 1.0f); } // Purple Color { 0.5, 0, 1, 1.0}
+		static Color clear() noexcept { return {0.0f, 0.0f, 0.0f, 0.0f}; }	// Clear Color {0,0,0,0}
+		static Color black() noexcept { return {0.0f, 0.0f, 0.0f, 1.0f}; }	// Black Color {0,0,0,1}
+		static Color white() noexcept { return {1.0f, 1.0f, 1.0f, 1.0f}; }	// White Color {1,1,1,constexpr
+		static Color red() noexcept { return {1.0f, 0.0f, 0.0f, 1.0f}; }	// Red Color {1,0,0,1}
+		static Color green() noexcept { return {0.0f, 1.0f, 0.0f, 1.0f}; }	// Green Color {0,1,0,1}
+		static Color blue() noexcept { return {0.0f, 0.0f, 1.0f, 1.0f}; }	// Blue Color {0,0,0,constexpr
+		static Color grey() noexcept { return {0.5f, 0.5f, 0.5f, 1.0f}; }	// Gray Color {0,0,0,1}
+		static Color yellow() noexcept { return {1.0f, 1.0f, 0.0f, 1.0f}; } // Yellow Color {0,0,0,1}
+		static Color orange() noexcept { return {1.0f, 0.5f, 0.0f, 1.0f}; } // Orange Color {0,0,0,1}
+		static Color pink() noexcept { return {1.0f, 0.5f, 1.0f, 1.0f}; }	// Pink Color {1,0.5,1.0,1.0}
+		static Color purple() noexcept { return {0.5f, 0.0f, 1.0f, 1.0f}; } // Purple Color { 0.5, 0, 1, 1.0}
 	};
 } // namespace fragcore
 

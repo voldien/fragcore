@@ -31,14 +31,14 @@ ModbusNetSocket::ModbusNetSocket(int socket) : TCPNetSocket(socket), ctx(nullptr
 		}
 	}
 	/*	*/
-	int rc = modbus_set_socket(static_cast<modbus_t *>(this->ctx), this->getSocket());
-	if (rc == -1) {
+	int rcode = modbus_set_socket(static_cast<modbus_t *>(this->ctx), this->getSocket());
+	if (rcode == -1) {
 		throw RuntimeException("Failed to set Socket: {}", modbus_strerror(errno));
 	}
 
 	/*	*/
-	rc = modbus_set_debug(static_cast<modbus_t *>(this->ctx), 0);
-	if (rc == -1) {
+	rcode = modbus_set_debug(static_cast<modbus_t *>(this->ctx), 0);
+	if (rcode == -1) {
 		throw RuntimeException("{}", modbus_strerror(errno));
 	}
 
@@ -81,14 +81,14 @@ int ModbusNetSocket::bind(const INetAddress &p_addr) {
 	TCPNetSocket::bind(tcpAddress);
 
 	/*	*/
-	int rc = modbus_set_socket(static_cast<modbus_t *>(this->ctx), this->socket);
-	if (rc == -1) {
+	int rcode = modbus_set_socket(static_cast<modbus_t *>(this->ctx), this->socket);
+	if (rcode == -1) {
 		throw RuntimeException("{}", modbus_strerror(errno));
 	}
 
 	/*	*/
-	rc = modbus_set_debug(static_cast<modbus_t *>(this->ctx), 0);
-	if (rc == -1) {
+	rcode = modbus_set_debug(static_cast<modbus_t *>(this->ctx), 0);
+	if (rcode == -1) {
 		throw RuntimeException("{}", modbus_strerror(errno));
 	}
 
@@ -119,21 +119,22 @@ int ModbusNetSocket::connect(const INetAddress &addr) {
 	TCPNetSocket::connect(addr);
 
 	/*	*/
-	int rc = modbus_set_socket(static_cast<modbus_t *>(this->ctx), this->socket);
-	if (rc == -1) {
+	int rcode = modbus_set_socket(static_cast<modbus_t *>(this->ctx), this->socket);
+	if (rcode == -1) {
 		throw RuntimeException("Failed to set Socket: {}", modbus_strerror(errno));
 	}
 
 	/*	*/
-	rc = modbus_get_response_timeout(static_cast<modbus_t *>(this->ctx), &old_response_to_sec, &old_response_to_usec);
-	if (rc == -1) {
+	rcode =
+		modbus_get_response_timeout(static_cast<modbus_t *>(this->ctx), &old_response_to_sec, &old_response_to_usec);
+	if (rcode == -1) {
 		throw RuntimeException("Failed to set response timeout Mode: {}", modbus_strerror(errno));
 	}
 
 	/*	*/
-	rc = modbus_set_error_recovery(static_cast<modbus_t *>(this->ctx),
-								   static_cast<modbus_error_recovery_mode>(MODBUS_ERROR_RECOVERY_PROTOCOL));
-	if (rc == -1) {
+	rcode = modbus_set_error_recovery(static_cast<modbus_t *>(this->ctx),
+									  static_cast<modbus_error_recovery_mode>(MODBUS_ERROR_RECOVERY_PROTOCOL));
+	if (rcode == -1) {
 		throw RuntimeException("Failed to set Recovery Mode: {}", modbus_strerror(errno));
 	}
 
@@ -200,20 +201,20 @@ void ModbusNetSocket::setBlocking(bool blocking) { /*	*/
 }
 
 int ModbusNetSocket::writeRegister(unsigned int address, unsigned int nWords, void *pdata) {
-	auto rc = modbus_write_registers((modbus_t *)this->getModbusContext(), static_cast<int>(address), nWords,
-									 (uint16_t *)pdata);
-	if (rc == -1) {
+	auto rcode = modbus_write_registers((modbus_t *)this->getModbusContext(), static_cast<int>(address), nWords,
+										(uint16_t *)pdata);
+	if (rcode == -1) {
 		throw RuntimeException(" Failed to write Register {}", modbus_strerror(errno));
 	}
-	return rc;
+	return rcode;
 }
 int ModbusNetSocket::readRegister(unsigned int address, unsigned int nWords, void *pdata) {
-	auto rc = modbus_read_registers((modbus_t *)this->getModbusContext(), static_cast<int>(address), nWords,
-									(uint16_t *)pdata);
-	if (rc == -1) {
+	auto rcode = modbus_read_registers((modbus_t *)this->getModbusContext(), static_cast<int>(address), nWords,
+									   (uint16_t *)pdata);
+	if (rcode == -1) {
 		throw RuntimeException(" Failed to read Register {}", modbus_strerror(errno));
 	}
-	return rc;
+	return rcode;
 }
 
 ModbusNetSocket::NetStatus ModbusNetSocket::getStatus() const noexcept { return this->netStatus; }

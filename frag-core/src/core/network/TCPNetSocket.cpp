@@ -162,7 +162,7 @@ int TCPNetSocket::connect(const INetAddress &p_addr) {
 	if (tcpAddress == nullptr) {
 		throw RuntimeException("Not a valid NetAddress Object");
 	}
-	int domain = this->getDomain(*tcpAddress);
+	int domain = TCPNetSocket::getDomain(*tcpAddress);
 
 	this->socket = ::socket(domain, flags, 0);
 	if (this->socket < 0) {
@@ -170,15 +170,15 @@ int TCPNetSocket::connect(const INetAddress &p_addr) {
 	}
 
 	int option = 1;
-	int rc = setsockopt(this->socket, IPPROTO_TCP, TCP_NODELAY, (const void *)&option, sizeof(int));
-	if (rc == -1) {
+	int rcode = setsockopt(this->socket, IPPROTO_TCP, TCP_NODELAY, (const void *)&option, sizeof(int));
+	if (rcode == -1) {
 		throw RuntimeException("Failed to set Socket Option");
 	}
 
 	addrlen = setupIPAddress((struct sockaddr *)&addrU, *tcpAddress, tcpAddress->getPort());
 
-	rc = ::connect(socket, (struct sockaddr *)&addrU, addrlen);
-	if (rc != 0) {
+	rcode = ::connect(socket, (struct sockaddr *)&addrU, addrlen);
+	if (rcode != 0) {
 		throw RuntimeException("Failed to connect TCP {}:{}, {}", tcpAddress->getIPAddress().getIP(),
 							   tcpAddress->getPort(), strerror(errno));
 	}
@@ -313,9 +313,9 @@ void TCPNetSocket::setBlocking(bool blocking) { /*	*/
 		flags = (flags & O_NONBLOCK);
 	}
 
-	int rc = fcntl(this->socket, F_SETFL, flags);
+	int rcode = fcntl(this->socket, F_SETFL, flags);
 
-	if (rc < 0) {
+	if (rcode < 0) {
 		throw SystemException(errno, std::system_category(), "Failed to set Blocking State {}", blocking);
 	}
 }
@@ -332,28 +332,28 @@ void TCPNetSocket::setTimeout(long int microsec) {
 	timeout.tv_sec = microsec / 1000000;
 	timeout.tv_usec = microsec % 1000000;
 
-	int rc = setsockopt(this->socket, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
-	if (rc != 0) {
+	int rcode = setsockopt(this->socket, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
+	if (rcode != 0) {
 		throw SystemException(errno, std::system_category(), "Failed to set recv timeout");
 	}
-	rc = setsockopt(this->socket, SOL_SOCKET, SO_SNDTIMEO, &timeout, sizeof(timeout));
+	rcode = setsockopt(this->socket, SOL_SOCKET, SO_SNDTIMEO, &timeout, sizeof(timeout));
 
-	if (rc != 0) {
+	if (rcode != 0) {
 		throw SystemException(errno, std::system_category(), "Failed to set send timeout");
 	}
 }
 
 long int TCPNetSocket::getTimeout() {
-	struct timeval tv;
+	struct timeval timeout;
 	socklen_t len;
 
-	int rc = getsockopt(this->socket, SOL_SOCKET, SO_RCVTIMEO, &tv, &len);
+	int rcode = getsockopt(this->socket, SOL_SOCKET, SO_RCVTIMEO, &timeout, &len);
 
-	if (rc != 0) {
+	if (rcode != 0) {
 		throw SystemException(errno, std::system_category(), "Failed to set recv timeout");
 	}
 
-	return tv.tv_sec * 1E6L + tv.tv_usec;
+	return timeout.tv_sec * 1E6L + timeout.tv_usec;
 }
 
 int TCPNetSocket::getSocket() { return this->socket; }

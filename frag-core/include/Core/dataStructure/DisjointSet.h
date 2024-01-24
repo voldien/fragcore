@@ -30,10 +30,10 @@ namespace fragcore {
 	 */
 	template <class T> class FVDECLSPEC DisjointSet {
 
-		typedef struct partition {
+		using Partition = struct partition {
 			int parent; /*	*/
 			T data;		/*	*/
-		} Partition;
+		};
 
 	  public:
 		/**
@@ -51,7 +51,7 @@ namespace fragcore {
 		/**
 		 *
 		 */
-		int height(int x) const noexcept {
+		int height(const int x) const noexcept {
 			int i = x;
 			while (i > 0) {
 				i = this->set[i].parent;
@@ -93,7 +93,7 @@ namespace fragcore {
 		/**
 		 *
 		 */
-		int find(int x) const {
+		int find(const int x) const noexcept {
 			int i;
 			for (i = x; i > -1; i = this->set[i].parent) {
 				continue;
@@ -104,7 +104,7 @@ namespace fragcore {
 		/**
 		 *
 		 */
-		int findCompression(int x) {
+		int findCompression(const int x) {
 			if (this->set[x].parent < 0) {
 				return x;
 			}
@@ -164,7 +164,7 @@ namespace fragcore {
 		/**
 		 *
 		 */
-		void clear(int x = 0) noexcept {
+		void clear(const int x = 0) noexcept {
 			int i;
 			for (i = x; i < this->getSize(); i++) {
 				this->set[i].parent = -1;

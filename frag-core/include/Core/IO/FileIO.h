@@ -29,31 +29,31 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC FileIO : public IO {
 	  public:
-		virtual long read(long int nbytes, void *pbuffer) override;
+		long read(long int nbytes, void *pbuffer) override;
 
-		virtual long write(long int nbytes, const void *pbuffer) override;
+		long write(long int nbytes, const void *pbuffer) override;
 
-		virtual long int peek(long int nBytes, void *pbuffer) override;
+		long int peek(long int nBytes, void *pbuffer) override;
 
-		virtual void close() override;
+		void close() override;
 
-		virtual long length() override;
+		long length() override;
 
-		virtual unsigned long getPos() override;
+		unsigned long getPos() override;
 
-		virtual bool eof() const override;
+		bool eof() const override;
 
-		virtual void seek(long int nbytes, Seek seek) override;
+		void seek(long int nbytes, Seek seek) override;
 
-		virtual bool isWriteable() const override;
+		bool isWriteable() const override;
 
-		virtual bool isReadable() const override;
+		bool isReadable() const override;
 
-		virtual void open(const char *path, IOMode mode) override;
+		void open(const char *path, IOMode mode) override;
 
-		virtual bool flush() override;
+		bool flush() override;
 
-		virtual bool isOperationSupported(IOOperation operations) const noexcept override {
+		bool isOperationSupported(IOOperation operations) const noexcept override {
 			return (operations & OP_ALL) == operations;
 		};
 
@@ -69,7 +69,7 @@ namespace fragcore {
 	  public:
 		FileIO(const char *path, IOMode mode);
 		FileIO(const std::string &path, IOMode mode);
-		virtual ~FileIO();
+		~FileIO() override;
 
 		FileIO(FILE *file); // TODO perhaps add IOMOde for overriding.
 		FileIO(FileIO &&other);

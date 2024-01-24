@@ -28,7 +28,7 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC TCPUDPAddress : public INetAddress {
 	  public:
-		TCPUDPAddress() : INetAddress() {}
+		TCPUDPAddress() {}
 		TCPUDPAddress(const TCPUDPAddress &other) = default;
 		TCPUDPAddress(const IPAddress &ipaddress, unsigned int port);
 		~TCPUDPAddress() = default;
@@ -47,13 +47,13 @@ namespace fragcore {
 		}
 		bool operator!=(const TCPUDPAddress &ipAddress) const { return !(*this == ipAddress); }
 
-		 NetworkProtocol getNetworkProtocol() const noexcept override {
+		NetworkProtocol getNetworkProtocol() const noexcept override {
 			return NetworkProtocol::NetWorkProtocol_TCP_UDP;
 		}
 
 		const IPAddress &getIPAddress() const noexcept { return ipAddress; }
 		unsigned int getPort() const noexcept { return this->port; }
-		 bool isValid() const noexcept override;
+		bool isValid() const noexcept override;
 
 	  private:
 		unsigned int port;

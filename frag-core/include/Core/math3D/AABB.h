@@ -42,13 +42,13 @@ namespace fragcore {
 		 * @param i
 		 * @return
 		 */
-		inline Vector3 operator[](int i) const { return ((Vector3 *)this)[i]; }
+		inline Vector3 operator[](int index) const { return ((Vector3 *)this)[index]; }
 
 		/**
 		 *
 		 * @return
 		 */
-		inline Vector3 &operator[](int i) { return ((Vector3 *)this)[i]; }
+		inline Vector3 &operator[](int index) { return ((Vector3 *)this)[index]; }
 
 		/**
 		 * Check if object is valid.
@@ -75,13 +75,13 @@ namespace fragcore {
 		 * Compute max position.
 		 * @return vector position.
 		 */
-		Vector3 max() const { return this->getCenter() + this->getSize(); }
+		Vector3 max() const noexcept { return this->getCenter() + this->getSize(); }
 
 		/**
 		 * Get half size.
 		 * @return half size vector.
 		 */
-		inline const Vector3 &getSize() const { return this->mhalfsize; }
+		inline const Vector3 &getSize() const noexcept { return this->mhalfsize; }
 
 		/**
 		 * Set half size.
@@ -116,7 +116,7 @@ namespace fragcore {
 		 * @param worldPosition
 		 * @return  true if object contains.
 		 */
-		bool contains(const Vector3 &point, const Vector3 worldPosition = Vector3()) {
+		bool contains(const Vector3 &point, const Vector3 worldPosition = Vector3()) noexcept {
 			return (point.x() > minX() + worldPosition.x() && point.x() < maxX() + worldPosition.x() &&
 					point.y() > minY() + worldPosition.y() && point.y() < maxY() + worldPosition.y() &&
 					point.z() > minZ() + worldPosition.z() && point.z() < maxZ() + worldPosition.z());
@@ -128,7 +128,7 @@ namespace fragcore {
 		 * @param bounds
 		 * @return true if completly contains, false otherwise.
 		 */
-		constexpr bool contains(const AABB &bounds) { return false; }
+		constexpr bool contains(const AABB &bounds) noexcept { return false; }
 
 		/**
 		 *
@@ -234,7 +234,7 @@ namespace fragcore {
 		 * @param bound
 		 * @return true if object are equal, false otherwise.
 		 */
-		bool operator==(const AABB &bound) noexcept {
+		bool operator==(const AABB &bound) const noexcept {
 			return (this->getCenter() == bound.getCenter()) && (this->getSize() == bound.getSize());
 		}
 
@@ -243,7 +243,7 @@ namespace fragcore {
 		 * @param bound
 		 * @return false if object are equal, true otherwise.
 		 */
-		bool operator!=(const AABB &bound) noexcept {
+		bool operator!=(const AABB &bound) const noexcept {
 			return (this->getCenter() != bound.getCenter()) || (this->getSize() != bound.getSize());
 		}
 

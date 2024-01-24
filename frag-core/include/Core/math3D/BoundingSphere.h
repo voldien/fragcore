@@ -66,7 +66,8 @@ namespace fragcore {
 		 * @param sphere
 		 * @return true if object intersects, false otherwise.
 		 */
-		bool intersect(const BoundingSphere &sphere) const { // get box closest point to sphere center by clamping
+		bool
+		intersect(const BoundingSphere &sphere) const noexcept { // get box closest point to sphere center by clamping
 			// we are using multiplications because it's faster than calling Math.pow
 			float distance = std::sqrt(
 				(this->getCenter().x() - sphere.getCenter().x()) * (this->getCenter().x() - sphere.getCenter().x()) +
@@ -80,7 +81,7 @@ namespace fragcore {
 		 * @param sphere sphere inside this sphere.
 		 * @return true if object contains, false otherwise.
 		 */
-		bool contains(const BoundingSphere &sphere) const { return false; }
+		bool contains(const BoundingSphere &sphere) const noexcept { return false; }
 
 		/**
 		 * @brief
@@ -120,11 +121,11 @@ namespace fragcore {
 		friend bool operator==(const BoundingSphere &o1, const BoundingSphere &o2) noexcept {
 			if (&o1 == &o2) {
 				return true;
-			} else if (o1.center == o2.center && o1.radius == o2.radius) {
-				return true;
-			} else {
-				return false;
 			}
+			if (o1.center == o2.center && o1.radius == o2.radius) {
+				return true;
+			}
+			return false;
 		}
 
 		friend bool operator!=(const BoundingSphere &o1, const BoundingSphere &o2) noexcept { return !(o1 == o2); }

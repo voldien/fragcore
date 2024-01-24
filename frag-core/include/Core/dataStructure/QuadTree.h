@@ -21,15 +21,21 @@
 #include <iostream>
 
 namespace fragcore {
-	template <class T> class QuadTree {
-		typedef struct node {
+	
+	/**
+	 * @brief 
+	 * 
+	 * @tparam T 
+	 */
+	template <typename T> class QuadTree {
+		using Node = struct node {
 			struct node *lt;
 			struct node *rt;
 			struct node *lb;
 			struct node *rb;
 			T data;
 
-		} Node;
+		};
 
 	  public:
 		QuadTree() {}

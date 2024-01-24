@@ -34,19 +34,19 @@ namespace fragcore {
 		CANAddress(unsigned int ID);
 
 		bool operator==(const CANAddress &address) const {
-			if (this == &address)
+			if (this == &address) {
 				return true;
-			if (this->getID() == address.getID())
+			}
+			if (this->getID() == address.getID()) {
 				return true;
+			}
 			return false;
 		}
 		bool operator!=(const CANAddress &address) const { return !(*this == address); }
 
-		virtual NetworkProtocol getNetworkProtocol() const noexcept override {
-			return NetworkProtocol::NetWorkProtocol_CAN;
-		}
+		NetworkProtocol getNetworkProtocol() const noexcept override { return NetworkProtocol::NetWorkProtocol_CAN; }
 
-		virtual bool isValid() const noexcept override { return this->valid; }
+		bool isValid() const noexcept override { return this->valid; }
 		CANStandard getStandard() const noexcept { return CANStandard::CANRaw; }
 		unsigned int getID() const noexcept { return this->id; }
 		const std::string getInterface() const;

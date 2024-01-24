@@ -73,7 +73,7 @@ namespace fragcore {
 		 * @brief
 		 *
 		 */
-		void reset() noexcept;
+		void reset();
 
 		/**
 		 * @brief Get the Result Size object
@@ -101,6 +101,7 @@ namespace fragcore {
 		ALGORITHM algorithm; /**/
 		size_t nbytes;
 
+	  public:
 		Hash(const Hash &other) = delete;
 		Hash() = delete;
 	};

@@ -15,8 +15,9 @@ void ModbusRegisterIO::close() {}
 
 long int ModbusRegisterIO::read(long int nbytes, void *pbuffer) {
 	/*	*/
-	auto rcode = modbus_read_registers((modbus_t *)socket.getModbusContext(),
-									static_cast<int>(this->address_start + seek_offset), nbytes, (uint16_t *)pbuffer);
+	auto rcode =
+		modbus_read_registers((modbus_t *)socket.getModbusContext(),
+							  static_cast<int>(this->address_start + seek_offset), nbytes, (uint16_t *)pbuffer);
 	if (rcode == -1) {
 		throw RuntimeException("Failed to read register {} - size {} : {}", address_start, nbytes,
 							   modbus_strerror(errno));
@@ -25,13 +26,14 @@ long int ModbusRegisterIO::read(long int nbytes, void *pbuffer) {
 }
 
 long int ModbusRegisterIO::write(long int nbytes, const void *pbuffer) {
-	auto rc = modbus_write_registers((modbus_t *)socket.getModbusContext(),
-									 static_cast<int>(this->address_start + seek_offset), nbytes, (uint16_t *)pbuffer);
-	if (rc == -1) {
+	auto rcode =
+		modbus_write_registers((modbus_t *)socket.getModbusContext(),
+							   static_cast<int>(this->address_start + seek_offset), nbytes, (uint16_t *)pbuffer);
+	if (rcode == -1) {
 		throw RuntimeException("Failed to write register {} - size {} : {}", address_start, nbytes,
 							   modbus_strerror(errno));
 	}
-	return rc;
+	return rcode;
 }
 
 long int ModbusRegisterIO::peek(long int nBytes, void *pbuffer) { return 0; }

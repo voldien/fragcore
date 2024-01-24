@@ -1,6 +1,5 @@
 #include "Core/IO/IOUtil.h"
-#include "Core/IO/FileIO.h"
-#include "Core/SystemInfo.h"
+#include "FragDef.h"
 #include <fmt/core.h>
 
 using namespace fragcore;
@@ -9,7 +8,7 @@ long int IOUtil::loadFileMem(Ref<IO> &io, char **data) {
 	uint8_t *populatedMemory = nullptr;
 	long int numberByteRead = 0;
 
-	size_t current_pos = io->getPos();
+	const size_t current_pos = io->getPos();
 
 	/*  Check if file is readable.  */
 	if (!io->isReadable()) {
@@ -22,6 +21,11 @@ long int IOUtil::loadFileMem(Ref<IO> &io, char **data) {
 
 	while ((nbytes = io->read(sizeof(buf), buf)) > 0) {
 		populatedMemory = static_cast<uint8_t *>(realloc(populatedMemory, numberByteRead + nbytes));
+
+		if (populatedMemory == nullptr) {
+			throw SystemException();
+		}
+
 		memcpy(&populatedMemory[numberByteRead], buf, nbytes);
 		numberByteRead += nbytes;
 	}
@@ -32,25 +36,25 @@ long int IOUtil::loadFileMem(Ref<IO> &io, char **data) {
 	return numberByteRead;
 }
 
-long int IOUtil::loadFile(Ref<IO> &in, Ref<IO> &out) {
+long int IOUtil::loadFile(Ref<IO> &inRef, Ref<IO> &outRef) {
 
-	if (!in->isReadable()) {
-		throw InvalidArgumentException("Failed to read from IO: {}", in->getName());
+	if (!inRef->isReadable()) {
+		throw InvalidArgumentException("Failed to read from IO: {}", inRef->getName());
 	}
-	if (!out->isWriteable()) {
-		throw InvalidArgumentException("Failed to write to IO: {}", out->getName());
+	if (!outRef->isWriteable()) {
+		throw InvalidArgumentException("Failed to write to IO: {}", outRef->getName());
 	}
 
 	char buf[1024 * 4];
 	long nbytes;
 	long dataSize = 0;
-	while ((nbytes = in->read(sizeof(buf), buf)) > 0) {
-		int outbytes = out->write(nbytes, buf);
+	while ((nbytes = inRef->read(sizeof(buf), buf)) > 0) {
+		int outbytes = outRef->write(nbytes, buf);
 		if (outbytes > 0) {
 			/*	*/
 			dataSize += nbytes;
 		} else {
-			throw RuntimeException("Error while reading IO: {}", out->getName());
+			throw RuntimeException("Error while reading IO: {}", outRef->getName());
 		}
 	}
 
@@ -60,7 +64,7 @@ long int IOUtil::loadFile(Ref<IO> &in, Ref<IO> &out) {
 long int IOUtil::loadStringMem(Ref<IO> &io, char **string) {
 	long int nbytes;
 
-	nbytes = loadFileMem(io, string);
+	nbytes = IOUtil::loadFileMem(io, string);
 	*string = static_cast<char *>(realloc(*string, nbytes + 1));
 	(*string)[nbytes] = '\0';
 
@@ -69,10 +73,12 @@ long int IOUtil::loadStringMem(Ref<IO> &io, char **string) {
 
 long int IOUtil::loadString(Ref<IO> &in, Ref<IO> &out) {
 
-	if (!in->isReadable())
+	if (!in->isReadable()) {
 		throw InvalidArgumentException("Failed to read from IO: {}", in->getName());
-	if (!out->isWriteable())
+	}
+	if (!out->isWriteable()) {
 		throw InvalidArgumentException("Failed to write to IO: {}", out->getName());
+	}
 
 	long int nbytes;
 

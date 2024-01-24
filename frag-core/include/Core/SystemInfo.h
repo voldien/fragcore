@@ -94,10 +94,10 @@ namespace fragcore {
 		static std::vector<SIMD> getSupportedSIMD();
 
 		// TODO add package and physical cores.
-		typedef struct cpu_package_t {
+		using CPUPackage = struct cpu_package_t {
 			uint32_t physical_cores;
 			uint32_t logical_cores;
-		} CPUPackage;
+		};
 
 		/**
 		 * @brief
@@ -128,10 +128,10 @@ namespace fragcore {
 		static Endianness getEndianness() noexcept;
 
 	  public: /*	GPU Information	*/
-		typedef struct gpu_information_t {
+		using GPUInformation = struct gpu_information_t {
 			std::string name;
 			size_t memorySize;
-		} GPUInformation;
+		};
 
 		static std::vector<GPUInformation> getGPUDevices() noexcept;
 
@@ -181,9 +181,9 @@ namespace fragcore {
 		static bool supportsVibration();
 
 		// TODO relocate
-		static Ref<IO> &getStdOut() noexcept;
-		static Ref<IO> &getStdIn() noexcept;
-		static Ref<IO> &getStdErr() noexcept;
+		static Ref<IO> &getStdOut();
+		static Ref<IO> &getStdIn();
+		static Ref<IO> &getStdErr();
 
 	  private:
 	};

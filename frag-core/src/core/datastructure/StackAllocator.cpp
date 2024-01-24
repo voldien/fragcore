@@ -21,7 +21,7 @@ StackAllocator::StackAllocator(StackAllocator &&other) {
 	this->mSize = std::exchange(other.mSize, 0);
 }
 
-StackAllocator::StackAllocator(size_t stackSizeBytes) : StackAllocator() { this->alloc(stackSizeBytes); }
+StackAllocator::StackAllocator(const size_t stackSizeBytes) : StackAllocator() { this->alloc(stackSizeBytes); }
 
 StackAllocator::~StackAllocator() { free(this->mData); }
 
@@ -35,24 +35,25 @@ void *StackAllocator::alloc(size_t sizeBytes) {
 	return mData;
 }
 
-size_t StackAllocator::getSize() const { return this->mSize; }
+size_t StackAllocator::getSize() const noexcept { return this->mSize; }
 
-void *StackAllocator::allocateAligned(size_t sizeBytes, int alignment) {
+void *StackAllocator::allocateAligned(size_t sizeBytes, unsigned int alignment) {
 	size_t allocateSize = Math::align<size_t>(sizeBytes, alignment);
 	return this->alloc(allocateSize);
 }
 
-void StackAllocator::clear() { this->mMarker = 0; }
+void StackAllocator::clear() noexcept { this->mMarker = 0; }
 
-size_t StackAllocator::getMarker() const { return this->mMarker; }
+size_t StackAllocator::getMarker() const noexcept { return this->mMarker; }
 
-void *StackAllocator::fetch(size_t sizeBytes) {
-	uint8_t *p = static_cast<uint8_t *>(this->mData) + getMarker();
+void *StackAllocator::fetch(const size_t sizeBytes) {
+	/*	TODO: validate. request.	*/
+	uint8_t *pdata = static_cast<uint8_t *>(this->mData) + getMarker();
 	this->mMarker += sizeBytes;
-	return p;
+	return pdata;
 }
 
-void StackAllocator::freeToMarker(size_t marker) { this->mMarker = marker; }
+void StackAllocator::freeToMarker(const size_t marker) { this->mMarker = marker; }
 
 StackAllocator &StackAllocator::operator=(const StackAllocator &alloc) {
 	this->alloc(alloc.getSize());

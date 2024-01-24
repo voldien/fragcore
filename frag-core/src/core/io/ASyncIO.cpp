@@ -82,11 +82,13 @@ void ASyncIO::asyncReadFile(ASyncHandle handle, Ref<IO> &writeIO, AsyncComplete 
 	AsyncObject *ao = getObject(handle);
 
 	/*  Check that open file is readable.   */
-	if (!ao->ref->isReadable())
+	if (!ao->ref->isReadable()) {
 		throw RuntimeException("IO object is not writable {}", ao->ref->getUID());
+	}
 	/*  Check if IO object is writeable.    */
-	if (!writeIO->isWriteable())
+	if (!writeIO->isWriteable()) {
 		throw RuntimeException("IO object is not writable {}", writeIO->getUID());
+	}
 
 	ao->callback = complete;
 }
@@ -159,8 +161,9 @@ void ASyncIO::asyncClose(ASyncHandle handle) {
 	this->asyncWait(handle);
 
 	/*  If not used by scheduler anymore, delete all references.    */
-	if (ao->ref->deincreemnt())
+	if (ao->ref->deincreemnt()) {
 		ao->ref->close();
+	}
 
 	/*	Release sync objects.	*/
 	delete ao->sem;
@@ -196,16 +199,18 @@ void ASyncIO::async_read(Task *task) {
 	while (ao->status.nbytes < ao->size) {
 		/*	*/
 		long int nread = io->read(block_size, &ao->buffer[ao->status.nbytes]);
-		if (nread <= 0)
+		if (nread <= 0) {
 			break;
+		}
 
 		ao->status.nbytes += nread;
 		ao->status.offset += nread;
 	}
 
 	/*  Finished.   */
-	if (ao->callback)
+	if (ao->callback) {
 		ao->callback(nullptr, 0);
+	}
 	/*  Finish and posted for the data is available.  */
 	ao->sem->unlock();
 }
@@ -220,16 +225,18 @@ void ASyncIO::async_read_io(Task *task) {
 	ao->status.offset = io->getPos();
 	while (ao->status.nbytes < ao->size) {
 		long int nread = io->read(block_size, &ao->buffer[ao->status.nbytes]);
-		if (nread <= 0)
+		if (nread <= 0) {
 			break;
+		}
 
 		ao->status.nbytes += nread;
 		ao->status.offset += nread;
 	}
 
 	/*  Finished.   */
-	if (ao->callback)
+	if (ao->callback) {
 		ao->callback(nullptr, 0);
+	}
 	/*  Finish and posted for the data is available.  */
 	ao->sem->unlock();
 }
@@ -243,15 +250,17 @@ void ASyncIO::async_write(Task *task) {
 	ao->status.offset = io->getPos();
 	while (ao->status.nbytes < ao->size) {
 		long int nwritten = io->write(block_size, &ao->buffer[ao->status.nbytes]);
-		if (nwritten <= 0)
+		if (nwritten <= 0) {
 			break;
+		}
 		ao->status.nbytes += nwritten;
 		ao->status.offset += nwritten;
 	}
 
 	io->flush();
-	if (ao->callback)
+	if (ao->callback) {
 		ao->callback(nullptr, 0);
+	}
 	/*  Finish and posted for the data is available.  */
 	ao->sem->unlock();
 }
@@ -264,7 +273,6 @@ void ASyncIO::async_write_io(Task *task) {
 	ao->sem->lock();
 
 	ao->sem->unlock();
-	return;
 }
 
 ASyncHandle ASyncIO::generateHandle() { return this->uidGenerator.getNextUID(); }

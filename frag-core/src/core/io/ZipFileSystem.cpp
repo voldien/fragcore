@@ -172,8 +172,9 @@ std::vector<std::string> ZipFileSystem::list(const char *path) const {
 
 void ZipFileSystem::release() {
 	if (this->deincreemnt()) {
-		if (this->pzip)
+		if (this->pzip) {
 			zip_close((zip_t *)this->pzip);
+		}
 	}
 	this->pzip = nullptr;
 }
@@ -273,9 +274,8 @@ ZipFileSystem *ZipFileSystem::createZipFileObject(const char *cfilename, Ref<ISc
 
 		if (err == ZIP_ER_NOENT) {
 			throw InvalidArgumentException("Can not open/create zip file {} - {}", cfilename, errorStr);
-		} else {
-			throw RuntimeException("Failed to open Zip {} - {}", cfilename, errorStr);
 		}
+		throw RuntimeException("Failed to open Zip {} - {}", cfilename, errorStr);
 	}
 
 	/*	Create object and store zip pointer.	*/
@@ -369,9 +369,8 @@ ZipFileSystem *ZipFileSystem::createZipFileObject(Ref<IO> &ioRef, Ref<IScheduler
 		zip_error_fini(&error);
 		if (err == ZIP_ER_NOENT) {
 			throw InvalidArgumentException("Failed to open zip archive - {}", errorStr);
-		} else {
-			throw RuntimeException("Failed to open zip file: {}", zip_error_strerror(&error));
 		}
+		throw RuntimeException("Failed to open zip file: {}", zip_error_strerror(&error));
 	}
 	zip_source_keep(zipSource);
 
@@ -394,7 +393,7 @@ void *ZipFileSystem::getZipObject() const { return this->pzip; }
 
 ZipFileSystem::ZipFileSystem(Ref<IScheduler> ref) { this->setScheduleReference(ref); }
 
-ZipFileSystem::ZipFileSystem(const ZipFileSystem &other) { this->pzip = other.pzip; }
+ZipFileSystem::ZipFileSystem(const ZipFileSystem &other) : IFileSystem(other) { this->pzip = other.pzip; }
 
 ZipFileSystem::~ZipFileSystem() {
 

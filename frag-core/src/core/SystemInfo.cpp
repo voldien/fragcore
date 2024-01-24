@@ -249,15 +249,15 @@ std::string SystemInfo::getCurrentDirectory() { return std::filesystem::current_
 
 // TODO relocate to system or something, since it they are always exist more of the time.
 
-Ref<IO> &SystemInfo::getStdOut() noexcept {
+Ref<IO> &SystemInfo::getStdOut() {
 	static Ref<IO> stdoutRef = Ref<IO>(new FileIO(stdout));
 	return stdoutRef;
 }
-Ref<IO> &SystemInfo::getStdIn() noexcept {
+Ref<IO> &SystemInfo::getStdIn() {
 	static Ref<IO> stdinRef = Ref<IO>(new FileIO(stdin));
 	return stdinRef;
 }
-Ref<IO> &SystemInfo::getStdErr() noexcept {
+Ref<IO> &SystemInfo::getStdErr() {
 	static Ref<IO> stderrRef = Ref<IO>(new FileIO(stderr));
 	return stderrRef;
 }

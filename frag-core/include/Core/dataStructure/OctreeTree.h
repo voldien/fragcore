@@ -22,11 +22,11 @@
 
 namespace fragcore {
 	template <class T> class Octree {
-		typedef struct node {
+		using Node = struct node {
 			Octree *m[8];
 			T element;
 
-		} Node;
+		};
 
 	  public:
 		Octree() {

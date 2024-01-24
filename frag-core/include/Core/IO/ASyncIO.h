@@ -47,17 +47,17 @@ namespace fragcore {
 	  public:
 		ASyncIO(const Ref<IScheduler> &scheduler);
 		ASyncIO(ASyncIO &&other); // Move semantics
-		~ASyncIO();
+		~ASyncIO() override;
 
 		/**
 		 * @brief
 		 *
 		 */
-		typedef struct io_status_t {
+		using IOStatus = struct io_status_t {
 			std::atomic_long nbytes; /*  Number of bytes read.   */
 			std::atomic_long offset; /*  Current position in bytes from start position.  */
 			std::atomic_long status; /*  Status of the termination of the IO operation.  */
-		} IOStatus;
+		};
 
 		// TODO determine if adding support for dynamic sized buffer read and write.
 		// TODO add stragety perhaps for how to schedule it.
@@ -170,7 +170,7 @@ namespace fragcore {
 		 * @brief
 		 *
 		 */
-		typedef struct async_object {
+		using AsyncObject = struct async_object {
 			// TOOD be replace with an encapsulated class version.
 			ISemaphore *sem;
 			Ref<IO> ref;			/*  */
@@ -181,7 +181,7 @@ namespace fragcore {
 			IOStatus status;		/*  */
 			void *userData;			/*  */
 			void *priv;				/*	*/
-		} AsyncObject;
+		};
 
 		class FVDECLSPEC AsyncTask : public Task {
 		  public:

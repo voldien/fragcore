@@ -56,8 +56,9 @@ long GZFileIO::read(long int nbytes, void *pbuffer) {
 
 long GZFileIO::write(long int nbytes, const void *pbuffer) {
 	long int nWrittenBytes = gzfwrite(pbuffer, 1, nbytes, this->gzFi);
-	if (nWrittenBytes == 0)
+	if (nWrittenBytes == 0) {
 		throw RuntimeException("Failed to write to  gz file {}", gzerror(this->gzFi, nullptr));
+	}
 	return nWrittenBytes;
 }
 
@@ -90,8 +91,9 @@ bool GZFileIO::flush() {
 	if (this->mode & WRITE) {
 		int error;
 		error = gzflush(this->gzFi, Z_FINISH);
-		if (error != Z_OK)
+		if (error != Z_OK) {
 			throw RuntimeException(zError(error));
+		}
 		return true;
 	}
 	return false;

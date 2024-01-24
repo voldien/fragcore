@@ -29,28 +29,27 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC BZFileIO : public FileIO {
 	  public:
-		virtual long read(long int nbytes, void *pbuffer) override;
+		long read(long int nbytes, void *pbuffer) override;
 
-		virtual long write(long int nbytes, const void *pbuffer) override;
+		long write(long int nbytes, const void *pbuffer) override;
 
-		virtual long length() override;
+		long length() override;
 
-		virtual bool eof() const override;
+		bool eof() const override;
 
-		virtual void seek(long int nbytes, Seek seek) override;
+		void seek(long int nbytes, Seek seek) override;
 
-		virtual unsigned long getPos() override;
+		unsigned long getPos() override;
 
-		virtual bool isWriteable() const override;
+		bool isWriteable() const override;
 
-		virtual bool isReadable() const override;
+		bool isReadable() const override;
 
-		virtual bool flush() override;
+		bool flush() override;
 
-		virtual void close() override;
+		void close() override;
 
-
-		virtual void open(const char *path, IOMode mode) override;
+		void open(const char *path, IOMode mode) override;
 
 	  protected:
 		BZFILE *bzFile;

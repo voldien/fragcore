@@ -31,7 +31,7 @@ namespace fragcore {
 	  public:
 		virtual ~Task() = default;
 
-		typedef void (*TaskCallBack)(Task *task);
+		using TaskCallBack = void (*)(Task *);
 		TaskCallBack callback;
 		void *userData;
 

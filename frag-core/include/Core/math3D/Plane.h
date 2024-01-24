@@ -25,9 +25,9 @@
 namespace fragcore {
 
 	/**
-	 * @brief 
-	 * 
-	 * @tparam T 
+	 * @brief
+	 *
+	 * @tparam T
 	 */
 	template <typename T = float> struct FVDECLSPEC Plane {
 	  public:
@@ -107,12 +107,13 @@ namespace fragcore {
 		 * @return true if equal.
 		 */
 		friend bool operator==(const Plane &o1, const Plane &o2) noexcept {
-			if (&o1 == &o2)
+			if (&o1 == &o2) {
 				return true;
-			else if (o1.normal == o2.normal && o1.d == o2.d)
+			}
+			if (o1.normal == o2.normal && o1.d == o2.d) {
 				return true;
-			else
-				return false;
+			}
+			return false;
 		}
 
 		/**
@@ -135,8 +136,8 @@ namespace fragcore {
 		 */
 		static Plane fromPoints(const Vector3 &v1, const Vector3 &v2, const Vector3 &v3) noexcept {
 			Plane tmp;
-			Vector3 e1 = v2 - v1;
-			Vector3 e2 = v3 - v1;
+			const Vector3 e1 = v2 - v1;
+			const Vector3 e2 = v3 - v1;
 
 			tmp.normal = e1.cross(e2).normalized();
 			tmp.d = -tmp.normal.dot(v2);

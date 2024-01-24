@@ -38,7 +38,6 @@ namespace fragcore {
 			return Math::max<T>(min, Math::min<T>(max, value));
 		}
 
-
 		/**
 		 *	Get max value of a and b.
 		 */
@@ -64,6 +63,12 @@ namespace fragcore {
 			return part;
 		}
 
+		template <typename T> static inline T sum(const std::vector<T> &list) noexcept {
+			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
+						  "Type Must Support addition operation.");
+			return Math::sum<T>(list.data(), list.size());
+		}
+
 		template <typename T> static T sum(const T *list, const size_t nrElements) noexcept {
 			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
 						  "Type Must Support addition operation.");
@@ -77,7 +82,7 @@ namespace fragcore {
 		/**
 		 *	Convert degree to radian.
 		 */
-		template <typename T> inline constexpr static T degToRad(T deg) noexcept {
+		template <typename T> inline constexpr static T degToRad(const T deg) noexcept {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
 			return deg * static_cast<T>(Deg2Rad);
 		}
@@ -85,9 +90,9 @@ namespace fragcore {
 		/**
 		 *	Convert radian to degree.
 		 */
-		template <typename T> inline constexpr static T radToDeg(T deg) noexcept {
+		template <typename T> inline constexpr static T radToDeg(const T rad) noexcept {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
-			return deg * static_cast<T>(Rad2Deg);
+			return rad * static_cast<T>(Rad2Deg);
 		}
 
 		/**
@@ -118,6 +123,7 @@ namespace fragcore {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
 			return (value0 + (value1 - value0) * interp);
 		}
+
 		template <typename T>
 		inline constexpr static T lerpClamped(const T value0, const T value1, const T interp) noexcept {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
@@ -141,10 +147,10 @@ namespace fragcore {
 		inline static constexpr double Rad2Deg = 180 / Math::PI;
 		inline static constexpr double NegativeInfinity = 0;
 
-		template <typename T> static inline constexpr T NextPowerOfTwo(T v) {
+		template <typename T> static inline constexpr T NextPowerOfTwo(const T value) noexcept {
 			static_assert(std::is_integral<T>::value, "Must be a integer type.");
 			T res = 1;
-			while (res < v) {
+			while (res < value) {
 				res <<= 1;
 			}
 			return res;
@@ -159,52 +165,74 @@ namespace fragcore {
 			return 0;
 		}
 
-		template <typename T> static inline constexpr bool IsPowerOfTwo(T v) {
+		template <typename T> static inline constexpr bool IsPowerOfTwo(const T value) noexcept {
 			static_assert(std::is_integral<T>::value, "Must be a integer type.");
-			return !(v == 0) && !((v - 1) & v);
+			return !(value == 0) && !((value - 1) & value);
 		}
 
 		/**
 		 *	Generate 1D guassian.
 		 */
 		template <typename T>
-		static inline void guassian(std::vector<T> &guassian, unsigned int height, T theta, T standard_deviation) {
+		static inline void guassian(std::vector<T> &guassian, const unsigned int height, const T theta,
+									const T standard_deviation) {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
-			Math::guassian<T>(static_cast<T &>(*guassian.data()), height, theta, standard_deviation);
+			guassian.reserve(height);
+			Math::guassian<T>(guassian.data(), height, theta, standard_deviation);
 		}
 
 		template <typename T>
-		static void guassian(T &guassian, unsigned int height, T theta, T standard_deviation) noexcept {
+		static constexpr void guassian(T *guassian, const unsigned int height, const T theta,
+									   const T standard_deviation) {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
-			const T a = (static_cast<T>(1.0) / (standard_deviation * static_cast<T>(std::sqrt(2.0 * Math::PI))));
 
-			/*	*/
-			T *pGuass = static_cast<T *>(&guassian);
+			const T exp_inverse =
+				(static_cast<T>(1.0) / (static_cast<T>(2.0) * standard_deviation * standard_deviation));
+			const T sqr_2_pi_inverse = 1.0 / (standard_deviation * static_cast<T>(std::sqrt(2 * Math::PI)));
+
+			const T offset = static_cast<T>(height) / -2;
 
 			for (unsigned int i = 0; i < height; i++) {
-				const T b = (-1.0f / 2.0f) * std::pow<T>(((i - standard_deviation) / theta), 2.0f);
-				pGuass[i] = a * std::pow<T>(Math::E, b);
+
+				const T exp_num_sqrt = (i - theta + offset);
+
+				const T exponent = exp_inverse * -(exp_num_sqrt * exp_num_sqrt);
+
+				guassian[i] = sqr_2_pi_inverse * std::exp(exponent);
 			}
 		}
-
 		/**
 		 *	Generate 2D guassian.
 		 */
 		template <typename T>
-		static inline void guassian(const std::vector<T> &guassian, unsigned int width, unsigned int height, T theta,
-									T standard_deviation) noexcept {
+		static inline void guassian(std::vector<T> &guassian, const unsigned int width, const unsigned int height,
+									const T theta, const T standard_deviation) {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
-			/*	TODO validate size.	*/
-
+			guassian.reserve(width * height);
 			Math::guassian<T>(static_cast<T &>(*guassian.data()), width, height, theta, standard_deviation);
 		}
 
 		template <typename T>
-		static inline void guassian(const T &guassian, unsigned int width, unsigned int height, T theta,
-									T standard_deviation) noexcept {
+		static inline void guassian(const T &guassian, const unsigned int width, const unsigned int height,
+									const T standard_deviation) noexcept {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
-			for (unsigned int i = 0; i < height; i++) {
-				// guassian(guassian[i * width],)
+
+			const T exp_inverse =
+				(static_cast<T>(1.0) / (static_cast<T>(2.0) * standard_deviation * standard_deviation));
+			const T sqr_2_pi_inverse = 1.0 / (standard_deviation * static_cast<T>(std::sqrt(2 * Math::PI)));
+
+			const T offset = static_cast<T>(height) / -2;
+
+			for (unsigned int y = 0; y < height; y++) {
+				for (unsigned int x = 0; x < width; x++) {
+
+					// TODO: add offset
+					// const T exp_num_sqrt = (i - theta + offset);
+
+					const T exponent = exp_inverse * -(x * x + y * y);
+
+					guassian[y * width + x] = sqr_2_pi_inverse * std::exp(exponent);
+				}
 			}
 		}
 
@@ -222,9 +250,9 @@ namespace fragcore {
 		/**
 		 *	Generate perlin noise value
 		 */
-		static float PerlinNoise(float x, float y) noexcept;
+		static float PerlinNoise(const float x, const float y) noexcept;
 		static float PerlinNoise(const Vector2 &point) noexcept;
-		static float PerlinNoise(float x, float y, float z) noexcept;
+		static float PerlinNoise(const float x, const float y, const float z) noexcept;
 		static float PerlinNoise(const Vector3 &point) noexcept;
 
 		/**

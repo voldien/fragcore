@@ -1,6 +1,5 @@
 #include "Core/IO/FileSystem.h"
 
-#include <Core/IO/FileSystem.h>
 #include <Core/IO/GZFileIO.h>
 #include <Core/SystemInfo.h>
 
@@ -240,8 +239,8 @@ FileSystem *FileSystem::getFileSystem() {
 	return fileSystem;
 }
 
-FileSystem *FileSystem::createFileSystem(Ref<IScheduler> &ref) {
-	fileSystem = new FileSystem(ref);
+FileSystem *FileSystem::createFileSystem(Ref<IScheduler> &schRef) {
+	fileSystem = new FileSystem(schRef);
 	return fileSystem;
 }
 
@@ -250,7 +249,7 @@ FileSystem *FileSystem::createFileSystem() {
 	return fileSystem;
 }
 
-FileSystem::FileSystem(Ref<IScheduler> &ref) : IFileSystem() {
+FileSystem::FileSystem(Ref<IScheduler> &schRef) : IFileSystem() {
 
 	/*  Lookup system io functions.  */
 	// TODO add support for adding lookup table for how to access VFS functions.
@@ -259,7 +258,7 @@ FileSystem::FileSystem(Ref<IScheduler> &ref) : IFileSystem() {
 		break;
 	}
 
-	this->setScheduleReference(ref);
+	this->setScheduleReference(schRef);
 }
 
 FileSystem::FileSystem() {}

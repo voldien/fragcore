@@ -28,6 +28,7 @@
 #include <cerrno>
 
 #include <Exception.hpp>
+
 namespace fragcore {
 
 	using RuntimeException = cxxexcept::RuntimeException;

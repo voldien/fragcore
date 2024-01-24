@@ -89,7 +89,7 @@ void Hash::final(std::vector<unsigned char> &hash) {
 	}
 }
 
-void Hash::reset() noexcept {
+void Hash::reset() {
 	this->nbytes = 0;
 	this->initHash(this->getAlgorithm());
 }
