@@ -19,7 +19,6 @@
 #ifndef _FRAG_CORE_ASYNC_H_
 #define _FRAG_CORE_ASYNC_H_ 1
 #include "../Ref.h"
-#include "../RefPtr.h"
 #include "../TaskScheduler/IScheduler.h"
 #include "../Threading/ISemaphore.h"
 #include "IO.h"
@@ -33,8 +32,8 @@
  */
 namespace fragcore {
 
-	typedef long ASyncHandle;										   /*  */
-	typedef void (*AsyncComplete)(ASyncIO *async, ASyncHandle handle); /*  */
+	using ASyncHandle = long;										   /*  */
+	using AsyncComplete = void (*)(ASyncIO *, ASyncHandle); /*  */
 
 	/**
 	 * @brief Asynchronous IO
@@ -61,7 +60,7 @@ namespace fragcore {
 
 		// TODO determine if adding support for dynamic sized buffer read and write.
 		// TODO add stragety perhaps for how to schedule it.
-		virtual ASyncHandle asyncOpen(Ref<IO> &io);
+		virtual ASyncHandle asyncOpen(Ref<IO> &ioRef);
 
 		/**
 		 * @brief

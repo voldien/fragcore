@@ -87,7 +87,7 @@ long FTPFileIO::length() {
 
 bool FTPFileIO::eof() const { return false; }
 
-void FTPFileIO::seek(long int nbytes, Seek seek) {
+void FTPFileIO::seek(long int nbytes, const Seek seek) {
 	// curl_easy_setopt(SEEK_CO)
 	// gzrewind
 	//	FileIO::seek(nbytes, seek);

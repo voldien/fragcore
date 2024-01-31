@@ -43,6 +43,7 @@ namespace fragcore {
 			reserve(stack.getReserved());
 			memcpy(this->data, stack.data, stack.getSize() * sizeof(T));
 		}
+
 		Stack(Stack &&other) {
 			this->data = std::exchange(other.data, nullptr);
 			this->nrElements = std::exchange(other.nrElements, 0);

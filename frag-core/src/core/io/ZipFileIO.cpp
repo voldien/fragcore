@@ -71,7 +71,7 @@ long ZipFileIO::length() {
 	return state.size;
 }
 
-void ZipFileIO::seek(long int nbytes, Seek seek) {
+void ZipFileIO::seek(long int nbytes, const Seek seek) {
 	int whence;
 	switch (seek) {
 	case SET:

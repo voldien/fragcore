@@ -155,7 +155,7 @@ long FileIO::length() {
 
 bool FileIO::eof() const { return feof(this->file) != 0; }
 
-void FileIO::seek(long int nbytes, Seek seek) {
+void FileIO::seek(long int nbytes, const Seek seek) {
 	int whence;
 	switch (seek) {
 	case SET:

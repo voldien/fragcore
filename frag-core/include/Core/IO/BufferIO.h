@@ -43,7 +43,7 @@ namespace fragcore {
 
 		long length() override;
 
-		void seek(long int nbytes, Seek seek) override;
+		void seek(long int nbytes, const Seek seek) override;
 
 		unsigned long getPos() override;
 

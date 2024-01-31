@@ -42,7 +42,7 @@ bool ModbusRegisterIO::eof() const { return false; }
 
 long int ModbusRegisterIO::length() { return this->size; }
 
-void ModbusRegisterIO::seek(long int nbytes, Seek seek) {
+void ModbusRegisterIO::seek(long int nbytes, const Seek seek) {
 
 	switch (seek) {
 	case SET:

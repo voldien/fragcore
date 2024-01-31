@@ -321,7 +321,7 @@ void TCPNetSocket::setBlocking(bool blocking) { /*	*/
 }
 TCPNetSocket::NetStatus TCPNetSocket::getStatus() const noexcept { return this->netStatus; }
 
-bool TCPNetSocket::isValidNetworkAddress(const INetAddress &address) {
+bool TCPNetSocket::isValidNetworkAddress(const INetAddress &address) noexcept {
 	return address.getNetworkProtocol() == INetAddress::NetworkProtocol::NetWorkProtocol_TCP_UDP && address.isValid();
 }
 
@@ -356,12 +356,12 @@ long int TCPNetSocket::getTimeout() {
 	return timeout.tv_sec * 1E6L + timeout.tv_usec;
 }
 
-int TCPNetSocket::getSocket() { return this->socket; }
+int TCPNetSocket::getSocket() const noexcept { return this->socket; }
 
-int TCPNetSocket::getPort() {
+int TCPNetSocket::getPort() const noexcept {
 	struct sockaddr_in sin;
 	socklen_t addrlen = sizeof(sin);
-	getsockname(getSocket(), (struct sockaddr *)&sin, &addrlen); // read binding
+	getsockname(this->getSocket(), (struct sockaddr *)&sin, &addrlen); // read binding
 
 	return ntohs(sin.sin_port); // get the port number
 }

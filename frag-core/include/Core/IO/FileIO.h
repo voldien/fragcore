@@ -43,7 +43,7 @@ namespace fragcore {
 
 		bool eof() const override;
 
-		void seek(long int nbytes, Seek seek) override;
+		void seek(long int nbytes, const Seek seek) override;
 
 		bool isWriteable() const override;
 

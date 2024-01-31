@@ -62,7 +62,7 @@ namespace fragcore {
 
 		virtual long int length() = 0;
 
-		virtual void seek(long int nbytes, Seek seek) = 0;
+		virtual void seek(long int nbytes, const Seek seek) = 0;
 
 		virtual unsigned long getPos() = 0;
 

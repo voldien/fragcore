@@ -71,7 +71,7 @@ long GZFileIO::length() {
 
 bool GZFileIO::eof() const { return FileIO::eof(); }
 
-void GZFileIO::seek(long int nbytes, Seek seek) {
+void GZFileIO::seek(long int nbytes, const Seek seek) {
 	// gzrewind
 	FileIO::seek(nbytes, seek);
 }

@@ -27,7 +27,7 @@ long BZFileIO::length() { return FileIO::length(); }
 
 bool BZFileIO::eof() const { return FileIO::eof(); }
 
-void BZFileIO::seek(long int nbytes, IO::Seek seek) { FileIO::seek(nbytes, seek); }
+void BZFileIO::seek(long int nbytes, const IO::Seek seek) { FileIO::seek(nbytes, seek); }
 
 unsigned long BZFileIO::getPos() { return FileIO::getPos(); }
 

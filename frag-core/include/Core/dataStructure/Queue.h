@@ -48,12 +48,12 @@ namespace fragcore {
 
 		~Queue() { delete[] this->mdata; }
 
-		T &front() const { return getData()[head]; }
+		T &front() const { return this->getData()[head]; }
 
-		T &back() const { return getData()[tail]; }
+		T &back() const { return this->getData()[tail]; }
 
 		T &dequeue() {
-			if (isEmpty()) {
+			if (this->isEmpty()) {
 				throw InvalidArgumentException("");
 			}
 			T *obj = &this->getData()[head];

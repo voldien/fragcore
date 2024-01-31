@@ -35,6 +35,10 @@ namespace fragcore {
 		Library(const Library &other);
 		Library(Library &&other);
 
+		Library &operator=(Library &&other);
+
+		Library &operator=(const Library &other);
+
 		~Library() override;
 
 		/**
@@ -56,14 +60,14 @@ namespace fragcore {
 		 *
 		 *	@return true if valid library.
 		 */
-		bool isValid() const;
+		bool isValid() const noexcept;
 
 		/**
 		 * @brief Get the Path object
 		 *
 		 * @return std::string
 		 */
-		std::string getPath() const { return this->path; }
+		std::string getPath() const noexcept { return this->path; }
 
 		/**
 		 *	Get function pointer.

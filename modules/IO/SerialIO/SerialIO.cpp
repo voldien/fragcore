@@ -77,7 +77,7 @@ long int SerialIO::peek([[maybe_unused]] long int nBytes, [[maybe_unused]] void 
 
 bool SerialIO::eof() const { return false; }
 long int SerialIO::length() { return 0; }
-void SerialIO::seek([[maybe_unused]] long int nbytes, [[maybe_unused]] Seek seek) {}
+void SerialIO::seek([[maybe_unused]] long int nbytes, [[maybe_unused]] const Seek seek) {}
 unsigned long SerialIO::getPos() { return 0; }
 bool SerialIO::isWriteable() const { return mode & IO::WRITE; }
 bool SerialIO::isReadable() const { return mode & IO::READ; }

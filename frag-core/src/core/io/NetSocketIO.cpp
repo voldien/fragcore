@@ -33,7 +33,7 @@ long SocketIO::length() { throw NotSupportedException(); }
 
 bool SocketIO::eof() const { return false; }
 
-void SocketIO::seek([[maybe_unused]] long int nbytes, [[maybe_unused]] Seek seek) { throw NotSupportedException(); }
+void SocketIO::seek([[maybe_unused]] long int nbytes, [[maybe_unused]] const Seek seek) { throw NotSupportedException(); }
 
 unsigned long SocketIO::getPos() { throw NotSupportedException(); }
 

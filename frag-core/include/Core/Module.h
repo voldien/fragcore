@@ -37,19 +37,20 @@ namespace fragcore {
 		virtual void OnDestruction() = 0;
 
 	  public: /*	*/
-	  
-		static Module *loadModule(const std::string &path, const std::string &moduleEntryPoint = "") {
+		template <typename T> static T *loadModule(const std::string &path, const std::string &moduleEntryPoint = "") {
+			static_assert(std::is_convertible<T *, Module *>::value, "Derived must inherit Module as public");
 			Library lib(path.c_str());
-			return Module::loadModule(lib, moduleEntryPoint);
+			return Module::loadModule<T>(lib, moduleEntryPoint);
 		}
 
-		static Module *loadModule(Library &library, const std::string &moduleEntryPoint) {
-			Module *module;
+		template <typename T> static T *loadModule(Library &library, const std::string &moduleEntryPoint) {
+			static_assert(std::is_convertible<T *, Module *>::value, "Derived must inherit Module as public");
+			T *module;
 			/*	*/
 			std::string moduleEntry = moduleEntryPoint;
 
 			if (moduleEntry.empty()) {
-				moduleEntry = getDefaultModuleName(library.getPath());
+				moduleEntry = Module::getDefaultModuleName(library.getPath());
 			}
 
 			CreateModule createModuleFunc = nullptr;
@@ -61,12 +62,13 @@ namespace fragcore {
 			if (createModuleFunc == nullptr) {
 				throw RuntimeException("Module Entrypoint {} not found for module", moduleEntry, library.getPath());
 			}
-			module = createModuleFunc(nullptr);
+			module = dynamic_cast<T *>(createModuleFunc(nullptr));
 
 			module->OnInitialization();
 
 			return module;
 		}
+
 		static std::string getDefaultModuleName(const std::string &name);
 	};
 } // namespace fragcore

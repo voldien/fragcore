@@ -62,14 +62,14 @@ namespace fragcore {
 		/*	TODO get info about connection IP and etc.	*/
 
 	  public:
-		int getSocket();
-		int getPort();
+		int getSocket() const noexcept;
+		int getPort() const noexcept;
 
 	  protected:
 		TCPNetSocket(int socket);
 
 		bool isNetworkLayerSupported(INetAddress::NetworkProtocol protocol);
-		bool isValidNetworkAddress(const INetAddress &address);
+		bool isValidNetworkAddress(const INetAddress &address) noexcept;
 
 		static int getDomain(const INetAddress &address);
 		static size_t setupIPAddress(sockaddr *addr, const INetAddress &p_addr, uint16_t p_port);

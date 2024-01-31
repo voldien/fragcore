@@ -29,6 +29,18 @@ Library::Library(Library &&other) { std::exchange(this->mlib, other.mlib); }
 Library::~Library() { /*	Nothing to release. Done by the kernel itself.	*/
 }
 
+Library &Library::operator=(Library &&other) {
+	this->path = other.path;
+	// TODO: fix.
+	return *this;
+}
+
+Library &Library::operator=(const Library &other) {
+	this->path = other.path;
+	// TODO: fix.
+	return *this;
+}
+
 bool Library::open(const char *clibrary) {
 #ifdef FV_UNIX
 	this->mlib = dlopen(clibrary, RTLD_LAZY | RTLD_NODELETE);
@@ -61,7 +73,7 @@ void Library::close() {
 	this->mlib = nullptr;
 }
 
-bool Library::isValid() const { return this->mlib != nullptr; }
+bool Library::isValid() const noexcept { return this->mlib != nullptr; }
 
 void *Library::getfunc(const char *cfunctionName) {
 #ifdef FV_UNIX

@@ -16,7 +16,6 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include <utility>
 #ifndef _FRAG_CORE_POOL_ALLACTOR_H_
 #define _FRAG_CORE_POOL_ALLACTOR_H_ 1
 #include "../../FragDef.h"
@@ -25,6 +24,7 @@
 #include <malloc.h>
 #include <memory>
 #include <string>
+#include <utility>
 
 /* add support for C++ allocates in order to remove pure function bug, if it's that it's the culprit*/
 // TODO resolve bug.
@@ -37,7 +37,7 @@ namespace fragcore {
 	 *
 	 * @tparam T
 	 */
-	template <class T> class PoolAllocator {
+	template <typename T> class PoolAllocator {
 	  public:
 		/*	TODO add align and pack .	*/
 		using PoolAllactorItem = struct poolallactoritem {
@@ -53,12 +53,12 @@ namespace fragcore {
 			this->setTypeSize(sizeof(T));
 		}
 
-		PoolAllocator(const PoolAllocator &pollallactor) {
+		PoolAllocator(const PoolAllocator &other) {
 			this->item = nullptr;
 			this->nrOfElements = 0;
 			this->mReserved = 0;
 			this->setTypeSize(sizeof(T));
-			*this = pollallactor;
+			*this = other;
 		}
 
 		PoolAllocator(PoolAllocator &&other) {
@@ -71,6 +71,7 @@ namespace fragcore {
 		PoolAllocator(unsigned int num) : PoolAllocator() { this->resize(num); }
 
 		~PoolAllocator() { delete[] this->item; }
+
 		/**
 		 *
 		 * @param allocator
@@ -83,7 +84,7 @@ namespace fragcore {
 			this->setTypeSize(allocator.getTypeSize());
 
 			/*  */
-			resize(allocator.reserved());
+			this->resize(allocator.reserved());
 			this->nrOfElements = allocator.nrOfElements;
 
 			/*  Copy the list.  */
@@ -125,7 +126,7 @@ namespace fragcore {
 			if (this->nrOfElements == 0) {
 				alloc = &this->item->data;
 			} else {
-				alloc = &this->item->next->data; /*changed.*/
+				alloc = &this->item->next->data; /*	changed.	*/
 			}
 
 			this->item->next = this->item->next->next; /*	TODO still some bugs in pool allactor.	*/
@@ -142,9 +143,12 @@ namespace fragcore {
 				throw InvalidArgumentException("invalid pointer returned");
 			}
 
-			PoolAllactorItem *alloc = (PoolAllactorItem *)element;
+			/*	*/
+			PoolAllactorItem *alloc = static_cast<PoolAllactorItem *>(element);
 			alloc->next = item->next;
 			item->next = alloc;
+
+			/*	*/
 			this->nrOfElements--;
 		}
 
@@ -156,11 +160,11 @@ namespace fragcore {
 		bool isValidItem(const T &data) const noexcept {
 			const T *tmp = &data;
 			/*  If pointer is less than the base pointer.*/
-			if ((void *)tmp < (void *)this->item) {
+			if (static_cast<void *>(tmp) < static_cast<void *>(this->item)) {
 				return false;
 			}
 			/*  Check if pointer is outside the end point*/
-			if (tmp >= (void *)&this->item[this->reserved()]) {
+			if (tmp >= static_cast<void *>(&this->item[this->reserved()])) {
 				return false;
 			}
 			/*	Check if memory is a multiple of the size from the base pointer.	*/
@@ -186,7 +190,7 @@ namespace fragcore {
 		 * Get datatype size.
 		 * @param size
 		 */
-		inline void setTypeSize(unsigned int size) noexcept { this->typeSize = size; }
+		inline void setTypeSize(const unsigned int size) noexcept { this->typeSize = size; }
 
 		/**
 		 *
@@ -200,7 +204,7 @@ namespace fragcore {
 		/*	TODO Fix, still some bugs!	*/
 		void resize(int size) {
 			int index;
-			const unsigned int itemSize = getItemSize();
+			const unsigned int itemSize = this->getItemSize();
 
 			assert(size >= 0);
 
@@ -212,6 +216,7 @@ namespace fragcore {
 					item[index].next = &item[index + 1];
 				}
 				item[size - 1].next = nullptr;
+
 			} else {
 				/*  */
 				if (size < this->reserved()) {
@@ -222,6 +227,7 @@ namespace fragcore {
 				index = this->reserved();
 				this->item = static_cast<PoolAllactorItem *>(realloc(this->item, itemSize * size));
 
+				/*	*/
 				PoolAllactorItem *lastItem = &this->item[index];
 				PoolAllactorItem *subpool = lastItem;
 				for (; index < size - 1; index++) {
@@ -263,11 +269,11 @@ namespace fragcore {
 		 */
 		unsigned int getItemSize() const noexcept { return sizeof(PoolAllactorItem); }
 
-	  private:					/*	attributes.	*/
-		PoolAllactorItem *item; /*	Pool data.	*/
-		int nrOfElements;		/*	number of elements used.	*/
-		int mReserved;			/*	number of allocated elements.	*/
-		unsigned int typeSize;	/*	size of the data type.	*/
+	  private:					   /*	attributes.	*/
+		PoolAllactorItem *item;	   /*	Pool data.	*/
+		unsigned int nrOfElements; /*	number of elements used.	*/
+		unsigned int mReserved;	   /*	number of allocated elements.	*/
+		unsigned int typeSize;	   /*	size of the data type.	*/
 	};
 } // namespace fragcore
 

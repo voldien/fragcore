@@ -1,5 +1,6 @@
 
 #include "NetModbusSocket.h"
+#include "Core/Network/TCPSocket.h"
 #include "Core/Network/TCPUDPAddress.h"
 #include <arpa/inet.h>
 #include <cassert>
@@ -27,7 +28,7 @@ ModbusNetSocket::ModbusNetSocket(int socket) : TCPNetSocket(socket), ctx(nullptr
 	if (this->ctx == nullptr) {
 		this->ctx = modbus_new_tcp(nullptr, getPort());
 		if (this->ctx == nullptr) {
-			throw RuntimeException("{}", modbus_strerror(errno));
+			throw RuntimeException("Failed to create empty: {}", modbus_strerror(errno));
 		}
 	}
 	/*	*/
@@ -39,14 +40,14 @@ ModbusNetSocket::ModbusNetSocket(int socket) : TCPNetSocket(socket), ctx(nullptr
 	/*	*/
 	rcode = modbus_set_debug(static_cast<modbus_t *>(this->ctx), 0);
 	if (rcode == -1) {
-		throw RuntimeException("{}", modbus_strerror(errno));
+		throw RuntimeException("Failed to set Debug: {}", modbus_strerror(errno));
 	}
 
 	/*	*/
 	if (modbus_set_error_recovery(static_cast<modbus_t *>(this->ctx),
 								  static_cast<modbus_error_recovery_mode>(MODBUS_ERROR_RECOVERY_PROTOCOL)) == -1) {
 		/*	*/
-		throw RuntimeException("{}", modbus_strerror(errno));
+		throw RuntimeException("Failed to set Error Recovery: {}", modbus_strerror(errno));
 	}
 }
 ModbusNetSocket::~ModbusNetSocket() { this->close(); }
@@ -56,8 +57,10 @@ ModbusNetSocket::TransportProtocol ModbusNetSocket::getTransportProtocol() const
 }
 
 int ModbusNetSocket::close() {
+
+	/*	*/
 	if (this->ctx != nullptr) {
-		modbus_close((modbus_t *)this->ctx);
+		TCPNetSocket::close();
 		modbus_free((modbus_t *)this->ctx);
 	}
 	/*	Reset variables.	*/
@@ -72,12 +75,15 @@ int ModbusNetSocket::bind(const INetAddress &p_addr) {
 	/*	*/
 	const TCPUDPAddress &tcpAddress = static_cast<const TCPUDPAddress &>(p_addr);
 	if (this->ctx == nullptr) {
+
 		this->ctx = modbus_new_tcp(nullptr, tcpAddress.getPort());
+
 		if (this->ctx == nullptr) {
 			throw RuntimeException("{}", modbus_strerror(errno));
 		}
 	}
 
+	/*	*/
 	TCPNetSocket::bind(tcpAddress);
 
 	/*	*/

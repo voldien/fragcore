@@ -58,7 +58,7 @@ bool BufferIO::eof() const { return false; }
 
 long BufferIO::length() { return this->nbytes; }
 
-void BufferIO::seek(long int nbytes, Seek seek) {
+void BufferIO::seek(long int nbytes, const Seek seek) {
 	switch (seek) {
 	case SET:
 		this->marker = nbytes;
