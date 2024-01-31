@@ -30,8 +30,8 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC ICompute : public Module {
 	  public:
-		virtual void OnInitialization();
-		virtual void OnDestruction();
+		void OnInitialization() override;
+		void OnDestruction() override;
 
 		/**
 		 * @brief
@@ -48,11 +48,11 @@ namespace fragcore {
 		 */
 		// virtual void dispatchCompute(Shaer* shader, unsigned int* global);
 		// TODO remove and let command list!
-		//virtual void dispatchCompute(unsigned int *global, unsigned int *local, unsigned int offset = 0) = 0;
+		// virtual void dispatchCompute(unsigned int *global, unsigned int *local, unsigned int offset = 0) = 0;
 		// TODO remove and let command list!
 		// TODO add memory barrier.
 		// TODO add enumerator as argumment for all types of barries.
-		//virtual void memoryBarrier() = 0;
+		// virtual void memoryBarrier() = 0;
 
 		// virtual Sync *createSync(SyncDesc *desc);
 
@@ -89,7 +89,7 @@ namespace fragcore {
 		ICompute() = default;
 		ICompute(const ICompute &other) = delete;
 		ICompute(ICompute &&other) = delete;
-		virtual ~ICompute() = default;
+		~ICompute() override = default;
 	};
 } // namespace fragcore
 #endif

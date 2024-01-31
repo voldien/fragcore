@@ -67,7 +67,7 @@ namespace fragcore {
 		IRenderer() = default;
 		IRenderer(const IRenderer &other) = delete;
 		IRenderer(IRenderer &&other) = delete;
-		virtual ~IRenderer() = default;
+		~IRenderer() override = default;
 
 		/**
 		 *	Create texture.
@@ -129,7 +129,6 @@ namespace fragcore {
 		virtual Buffer *createBuffer(BufferDesc *desc) = 0;
 
 		virtual void deleteBuffer(Buffer *object) = 0;
-
 
 		/**
 		 *
@@ -239,9 +238,9 @@ namespace fragcore {
 		// TODO imporove later
 		virtual void getStatus(MemoryInfo *memoryInfo) = 0;
 
-		virtual CommandList *createCommandBuffer() = 0;
-		virtual void submittCommand(Ref<CommandList> &list) = 0;
-		virtual void execute(CommandList *list) = 0;
+		CommandList *createCommandBuffer() override = 0;
+		void submittCommand(Ref<CommandList> &list) override = 0;
+		void execute(CommandList *list) override = 0;
 
 		virtual void *getData() const = 0;
 	};

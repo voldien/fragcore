@@ -38,9 +38,9 @@ namespace fragcore {
 
 		void close() override;
 
-		virtual void show() override;
+		void show() override;
 
-		virtual void hide() override;
+		void hide() override;
 
 		void focus() override;
 
@@ -50,57 +50,57 @@ namespace fragcore {
 
 		void minimize() override;
 
-		virtual void swapBuffer() override;
+		void swapBuffer() override;
 
-		virtual void setPosition(int x, int y) override;
+		void setPosition(int x, int y) override;
 
-		virtual void setSize(int width, int height) override;
+		void setSize(int width, int height) override;
 
-		virtual void vsync(bool state) override;
+		void vsync(bool state) override;
 
-		virtual void getPosition(int *x, int *y) const override;
+		void getPosition(int *x, int *y) const override;
 
-		virtual void getSize(int *width, int *height) const override;
+		void getSize(int *width, int *height) const override;
 
-		virtual int width() const override;
-		virtual int height() const override;
+		int width() const override;
+		int height() const override;
 
-		virtual void resizable(bool resizable) override;
+		void resizable(bool resizable) override;
 
-		virtual void setIcon(void *pVoid) override;
+		void setIcon(void *pVoid) override;
 
-		virtual void *getIcon() const override;
+		void *getIcon() const override;
 
-		virtual Display *getCurrentDisplay() const override;
+		Display *getCurrentDisplay() const override;
 
-		virtual void setFullScreen(bool fullscreen) override;
-		virtual void setFullScreen(Display &display) override;
+		void setFullScreen(bool fullscreen) override;
+		void setFullScreen(Display &display) override;
 
-		virtual bool isFullScreen() const override;
+		bool isFullScreen() const override;
 
-		virtual void setBordered(bool bordered) override;
+		void setBordered(bool bordered) override;
 
-		virtual void setMinimumSize(int width, int height) override;
-		virtual void getMinimumSize(int *width, int *height) override;
-		virtual void setMaximumSize(int width, int height) override;
-		virtual void getMaximumSize(int *width, int *height) override;
+		void setMinimumSize(int width, int height) override;
+		void getMinimumSize(int *width, int *height) override;
+		void setMaximumSize(int width, int height) override;
+		void getMaximumSize(int *width, int *height) override;
 
-		virtual float getGamma() const override;
+		float getGamma() const override;
 
-		virtual void setGamma(float gamma) override;
+		void setGamma(float gamma) override;
 
-		virtual void setTitle(const std::string &title) override;
-		virtual std::string getTitle() const override;
+		void setTitle(const std::string &title) override;
+		std::string getTitle() const override;
 
 		intptr_t getNativePtr() const override;
 
 	  public:
-		virtual ViewPort *getViewPort() override;
-		virtual FrameBuffer *getDefaultFrameBuffer() override;
+		ViewPort *getViewPort() override;
+		FrameBuffer *getDefaultFrameBuffer() override;
 
-		virtual void createWindow(int x, int y, int width, int height, const char *api) override;
-		virtual bool assertConfigAttributes(const IConfig *iConfig) override;
-		virtual void useWindow(void *pdata) override;
+		void createWindow(int x, int y, int width, int height, const char *api) override;
+		bool assertConfigAttributes(const IConfig *iConfig) override;
+		void useWindow(void *pdata) override;
 
 	  protected: /*	*/
 		virtual void createSwapChain();

@@ -29,32 +29,32 @@ namespace fragcore {
 		friend class IRenderer;
 
 	  public:
-		virtual ~GLRenderPipeline() = default;
+		~GLRenderPipeline() override = default;
 
 		/**
 		 *
 		 */
-		virtual void bind() override;
+		void bind() override;
 
-		virtual int getLocation(const char *name) override;
+		int getLocation(const char *name) override;
 
-		virtual void setInt(int location, int value) override;
+		void setInt(int location, int value) override;
 
-		virtual void setFloat(int location, float value) override;
+		void setFloat(int location, float value) override;
 
-		virtual void setFloatv(int location, int n, const float *values) override;
+		void setFloatv(int location, int n, const float *values) override;
 
-		virtual void setVec2(int location, const float v1, const float v2) override;
+		void setVec2(int location, const float v1, const float v2) override;
 
-		virtual void setVec2v(int location, int n, const float *values) override;
+		void setVec2v(int location, int n, const float *values) override;
 
-		virtual void setMatrix4f(int location, const float *pvalue) override;
+		void setMatrix4f(int location, const float *pvalue) override;
 
-		virtual void setMatrix4fv(int location, int n, const float *pvalue) override;
+		void setMatrix4fv(int location, int n, const float *pvalue) override;
 
-		virtual Shader *getShader(ShaderType type) override;
+		Shader *getShader(ShaderType type) override;
 
-		virtual void setShader(ShaderType type, Shader *shader) override;
+		void setShader(ShaderType type, Shader *shader) override;
 
 		intptr_t getNativePtr() const override;
 

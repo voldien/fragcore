@@ -88,6 +88,8 @@ void ProceduralGeometry::createFrustum(std::vector<Vertex> &vertices, const Matr
 		ProceduralGeometry::Vertex frustum_vertex;
 		// frustum_vertex.vertex = projectedVertex.head<3>();
 		vertices.emplace_back(frustum_vertex);
+
+		mesh_vertices.next();
 	}
 }
 

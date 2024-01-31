@@ -184,8 +184,9 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 				// Attempt Compatibility.
 				SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
 				this->openglcontext = SDL_GL_CreateContext(window);
-				if (this->openglcontext)
+				if (this->openglcontext) {
 					break;
+				}
 			}
 
 			// Last attempt creating an ES profile context.
@@ -220,21 +221,24 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 	int major, minor;
 	glGetIntegerv(GL_MAJOR_VERSION, &major);
 	glGetIntegerv(GL_MINOR_VERSION, &minor);
-	if (major > 0)
+	if (major > 0) {
 		this->majorVersion = major * 100;
-	else
+	} else {
 		this->majorVersion *= 100;
-	if (minor >= 0)
+	}
+	if (minor >= 0) {
 		this->minorVersion = minor * 10;
-	else
+	} else {
 		this->minorVersion *= 10;
+	}
 
 	/*  Set for core support or not for GLEW.   */
 	// TODO resolve.
-	if (1)
+	if (1) {
 		glewExperimental = GL_TRUE;
-	else
+	} else {
 		glewExperimental = GL_FALSE;
+	}
 
 	/*	Init GLEW library.	*/
 	status = glewInit();
@@ -350,8 +354,9 @@ GLRendererInterface::~GLRendererInterface() {
 	// if (this->drawwindow)
 	//	SDL_DestroyWindow(this->drawwindow);
 
-	if (this->openglcontext)
+	if (this->openglcontext) {
 		SDL_GL_DeleteContext(this->openglcontext);
+	}
 
 	SDL_QuitSubSystem(SDL_INIT_VIDEO);
 }
@@ -365,8 +370,9 @@ Texture *GLRendererInterface::createTexture(TextureDesc *desc) {
 		throw InvalidArgumentException("Invalid compression format - {}.", desc->compression);
 	}
 	if (desc->srgb) {
-		if (!this->capability.sSRGB)
+		if (!this->capability.sSRGB) {
 			throw InvalidArgumentException("sRGB is not supported.");
+		}
 	}
 
 	Sampler *sampler = nullptr;
@@ -583,8 +589,9 @@ void GLRendererInterface::deleteTexture(Texture *texture) {
 		unsigned int tex = textureObject->getTexture();
 		glDeleteTextures(1, &tex);
 		checkError();
-	} else
+	} else {
 		throw InvalidArgumentException("Invalid texture object.");
+	}
 
 	// delete texture->pdata;
 	delete texture;
@@ -593,14 +600,17 @@ void GLRendererInterface::deleteTexture(Texture *texture) {
 Sampler *GLRendererInterface::createSampler(SamplerDesc *desc) {
 
 	/*  Validate desc.  */
-	if (desc == nullptr)
+	if (desc == nullptr) {
 		throw InvalidArgumentException("Invalid sampler description pointer object.");
-	if (desc->anisotropy < 0)
+	}
+	if (desc->anisotropy < 0) {
 		throw InvalidArgumentException("Anisotropy can not be negative.");
+	}
 
 	/*  Does not support.   */
-	if (glGenSamplers == nullptr)
+	if (glGenSamplers == nullptr) {
 		throw RuntimeException("OpenGL sampler object not supported.");
+	}
 
 	GLuint sampler;
 
@@ -627,12 +637,14 @@ Sampler *GLRendererInterface::createSampler(SamplerDesc *desc) {
 	const GLint compareMode =
 		desc->compareMode == (int)SamplerDesc::CompareFunc::eNoCompare ? GL_NONE : GL_COMPARE_REF_TO_TEXTURE;
 	glSamplerParameteri(sampler, GL_TEXTURE_COMPARE_MODE, compareMode);
-	if (desc->compareMode)
+	if (desc->compareMode) {
 		glSamplerParameteri(sampler, GL_TEXTURE_COMPARE_FUNC, GLHelper::getCompareMode(desc->compareFunc));
+	}
 
 	/*  */
-	if (desc->anisotropy > 0)
+	if (desc->anisotropy > 0) {
 		glSamplerParameterf(sampler, GL_TEXTURE_MAX_ANISOTROPY_EXT, desc->anisotropy);
+	}
 
 	glSamplerParameterfv(sampler, GL_TEXTURE_BORDER_COLOR, &desc->borderColor[0]);
 
@@ -731,7 +743,7 @@ RenderPipeline *GLRendererInterface::createRenderPipeline(const RenderPipelineDe
 		glGetProgramPipelineiv(pipeline, GL_INFO_LOG_LENGTH, &logLength);
 		if (logLength > 0) {
 			char log[logLength];
-			glGetProgramPipelineInfoLog(pipeline, logLength, 0, log);
+			glGetProgramPipelineInfoLog(pipeline, logLength, nullptr, log);
 			glDeleteProgramPipelines(1, &pipeline);
 			// throw RuntimeException(fmt::format("Shader pipeline not valid:\n{}\n", log));
 		}
@@ -960,10 +972,11 @@ Shader *GLRendererInterface::createShader(ShaderDesc *desc) {
 void GLRendererInterface::deleteShader(Shader *shader) {
 	GLShaderObject *glShaderObject = (GLShaderObject *)shader;
 
-	if (glIsProgramARB(glShaderObject->program))
+	if (glIsProgramARB(glShaderObject->program)) {
 		glDeleteProgram(glShaderObject->program);
-	else
+	} else {
 		throw InvalidArgumentException("Not a valid shader object.");
+	}
 
 	//	delete shader->pdata;
 	delete shader;
@@ -972,10 +985,12 @@ void GLRendererInterface::deleteShader(Shader *shader) {
 Buffer *GLRendererInterface::createBuffer(BufferDesc *desc) {
 
 	/*	Verify the arguments.	*/
-	if (desc == nullptr)
+	if (desc == nullptr) {
 		throw InvalidArgumentException("Invalid buffer description pointer object.");
-	if (desc->size < 0)
+	}
+	if (desc->size < 0) {
 		throw InvalidArgumentException("Buffer size must be 0 or greater.");
+	}
 
 	GLBuffer *buffer = new GLBuffer();
 	// GLBufferObject *glbuf = nullptr;
@@ -1167,10 +1182,12 @@ FrameBuffer *GLRendererInterface::createFrameBuffer(FrameBufferDesc *desc) {
 	GLuint numatt = 0;				   /*	*/
 
 	/*  Validate the arguments. */
-	if (desc == nullptr)
+	if (desc == nullptr) {
 		throw InvalidArgumentException("Descriptor object must not be null");
-	if (desc->depth && desc->stencil && desc->depthstencil)
+	}
+	if (desc->depth && desc->stencil && desc->depthstencil) {
 		throw InvalidArgumentException("");
+	}
 
 	glfraobj = new GLFrameBuffer();
 	assert(glfraobj);
@@ -1359,19 +1376,23 @@ void GLRendererInterface::clear(unsigned int bitflag) {
 	glClear(mask);
 }
 
-void GLRendererInterface::clearColor(float r, float g, float b, float a) { glClearColor(r, g, b, a); }
+void GLRendererInterface::clearColor(float red, float green, float blue, float alpha) {
+	glClearColor(red, green, blue, alpha);
+}
 
-ViewPort *GLRendererInterface::getView(unsigned int i) {
+ViewPort *GLRendererInterface::getView(unsigned int index) {
 
 	/*  Validate the index. */
-	if (i >= this->capability.sMaxViewPorts)
-		throw InvalidArgumentException("Does not support viewport index {}, max index {}.", i,
+	if (index >= this->capability.sMaxViewPorts) {
+		throw InvalidArgumentException("Does not support viewport index {}, max index {}.", index,
 									   this->capability.sMaxViewPorts);
+	}
 
 	// If the view does not exits. Create it.
-	if (i == 0)
+	if (index == 0) {
 		return this->defaultViewport;
-	return this->viewports[i - 1];
+	}
+	return this->viewports[index - 1];
 }
 
 void GLRendererInterface::setDepthMask(bool flag) { glDepthMask(flag ? GL_TRUE : GL_FALSE); }
@@ -1415,8 +1436,9 @@ void GLRendererInterface::bindTextures(unsigned int firstUnit, const std::vector
 			const GLTexture *texture = (const GLTexture *)textures[i];
 			if (texture) {
 				texture_list[i] = texture->getTexture();
-			} else
+			} else {
 				texture_list[i] = 0;
+			}
 		}
 
 		glBindTextures(firstUnit, nTextures, &texture_list[0]);
@@ -1425,8 +1447,9 @@ void GLRendererInterface::bindTextures(unsigned int firstUnit, const std::vector
 			const GLTexture *texture = (const GLTexture *)textures[i];
 			if (texture) {
 				glBindTextureUnit(firstUnit + i, texture->getTexture());
-			} else
+			} else {
 				glBindTextureUnit(firstUnit + i, 0);
+			}
 		}
 	} else {
 		for (int i = 0; i < nTextures; i++) {
@@ -1450,8 +1473,9 @@ void GLRendererInterface::bindImages(unsigned int firstUnit, const std::vector<T
 			GLTexture *texture = (GLTexture *)textures[i];
 			if (texture) {
 				texture_list[i] = texture->getTexture();
-			} else
+			} else {
 				texture_list[i] = 0;
+			}
 		}
 		glBindImageTextures(firstUnit, nTextures, texture_list);
 	} else if (glBindImageTexture) {
@@ -1471,8 +1495,9 @@ void GLRendererInterface::bindImages(unsigned int firstUnit, const std::vector<T
 		//
 		//		glBindImageTexture(index, texobj->texture, level, GL_FALSE, 0, access, gformat);
 		throw NotImplementedException();
-	} else
+	} else {
 		throw RuntimeException("glBindImageTexture not supported,");
+	}
 }
 
 void GLRendererInterface::copyTexture(const Texture *source, Texture *target) {
@@ -1501,10 +1526,11 @@ void GLRendererInterface::dispatchCompute(unsigned int *global, unsigned int *lo
 	/*  */
 	resetErrorFlag();
 	if (global) {
-		if (local && glDispatchComputeGroupSizeARB)
+		if (local && glDispatchComputeGroupSizeARB) {
 			glDispatchComputeGroupSizeARB(global[0], global[1], global[2], local[0], local[1], local[2]);
-		else
+		} else {
 			glDispatchCompute(global[0], global[1], global[2]);
+		}
 	} else {
 		// Presume indirect.
 		glDispatchComputeIndirect(offset);
@@ -1523,7 +1549,7 @@ void GLRendererInterface::dispatchCompute(unsigned int *global, unsigned int *lo
 
 void GLRendererInterface::memoryBarrier() {}
 
-void default_callback_debug_gl(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length,
+static void default_callback_debug_gl(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length,
 							   const GLchar *message, GLvoid *userParam) {
 
 	const char *sourceString;
@@ -1566,7 +1592,7 @@ void default_callback_debug_gl(GLenum source, GLenum type, GLuint id, GLenum sev
 	}
 	} /**/
 	// Log::
-	printf(sourceString);
+	printf("%s", sourceString);
 
 	switch (type) {
 	case GL_DEBUG_TYPE_ERROR: {
@@ -1602,7 +1628,7 @@ void default_callback_debug_gl(GLenum source, GLenum type, GLuint id, GLenum sev
 		break;
 	}
 	} /**/
-	printf(typeString);
+	printf("%s", typeString);
 
 	switch (severity) {
 	case GL_DEBUG_SEVERITY_HIGH: {
@@ -1622,9 +1648,9 @@ void default_callback_debug_gl(GLenum source, GLenum type, GLuint id, GLenum sev
 		break;
 	}
 	} /**/
-	printf(severityString);
+	printf("%s", severityString);
 
-	printf(message);
+	printf("%s", message);
 	printf("\n");
 }
 
@@ -1719,29 +1745,38 @@ const char *GLRendererInterface::getAPIVersion() const { return (const char *)gl
 const char *GLRendererInterface::getVersion() const { return FV_STR_VERSION(1, 0, 0); }
 
 void GLRendererInterface::getSupportedTextureCompression(TextureDesc::Compression *pCompressions) {
-	if (pCompressions == nullptr)
+	if (pCompressions == nullptr) {
 		throw std::invalid_argument("pCompressions may not be a null pointer.");
+	}
 
 	unsigned int compressions = 0;
 
 	// TODO add and improve.
-	if (glewIsExtensionSupported("GL_ARB_texture_compression_bptc"))
+	if (glewIsExtensionSupported("GL_ARB_texture_compression_bptc")) {
 		compressions |= (unsigned int)TextureDesc::Compression::BPTC;
-	if (glewIsExtensionSupported("GL_ANGLE_texture_compression_dxt1"))
+	}
+	if (glewIsExtensionSupported("GL_ANGLE_texture_compression_dxt1")) {
 		compressions |= (unsigned int)TextureDesc::Compression::DXT1;
+	}
 	if (glewIsExtensionSupported("GL_EXT_texture_compression_rgtc") ||
-		glewIsExtensionSupported("GL_ARB_texture_compression_rgtc"))
+		glewIsExtensionSupported("GL_ARB_texture_compression_rgtc")) {
 		compressions |= (unsigned int)TextureDesc::Compression::RGTC;
-	if (glewIsExtensionSupported("GL_ANGLE_texture_compression_dxt5"))
+	}
+	if (glewIsExtensionSupported("GL_ANGLE_texture_compression_dxt5")) {
 		compressions |= (unsigned int)TextureDesc::Compression::DXT5;
-	if (glewIsExtensionSupported("GL_ATI_texture_compression_3dc"))
+	}
+	if (glewIsExtensionSupported("GL_ATI_texture_compression_3dc")) {
 		compressions |= (unsigned int)TextureDesc::Compression::_3DC;
-	if (glewIsExtensionSupported("GL_EXT_texture_compression_s3tc"))
+	}
+	if (glewIsExtensionSupported("GL_EXT_texture_compression_s3tc")) {
 		compressions |= (unsigned int)TextureDesc::Compression::S3TC;
-	if (glewIsExtensionSupported("GL_ANGLE_texture_compression_dxt3"))
+	}
+	if (glewIsExtensionSupported("GL_ANGLE_texture_compression_dxt3")) {
 		compressions |= (unsigned int)TextureDesc::Compression::DXT3;
-	if (glewIsExtensionSupported("GL_KHR_texture_compression_astc_ldr"))
+	}
+	if (glewIsExtensionSupported("GL_KHR_texture_compression_astc_ldr")) {
 		compressions |= (unsigned int)TextureDesc::Compression::ASTC_LDR;
+	}
 
 	// Add support for default compression fmt::format.
 	if (compressions != 0) {

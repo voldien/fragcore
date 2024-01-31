@@ -19,7 +19,7 @@ size_t AR_readOgg(void *dst, size_t size1, size_t size2, void *fh) {
 int AR_seekOgg(void *fh, ogg_int64_t to, int type) {
 	ogg_file *of = reinterpret_cast<ogg_file *>(fh);
 
-	const IO::Seek seek;
+	IO::Seek seek;
 	switch (type) {
 	case SEEK_CUR:
 		seek = IO::CUR;

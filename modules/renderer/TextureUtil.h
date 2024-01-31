@@ -32,10 +32,10 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC TextureUtil {
 	  public:
-		static void loadTexture(Image &image, IRenderer *renderer, Texture **texture);
+		static void loadTexture(const Image &image, IRenderer *renderer, Texture **texture);
 
 		/*	*/
-		static void saveTexture(Image &image, IRenderer *renderer, Texture *texture);
+		static void saveTexture(const Image &image, IRenderer *renderer, Texture *texture);
 
 		/*	*/
 		static Texture *createTexture(IRenderer *renderer, unsigned int width, unsigned int height, const Ref<IO> &io,

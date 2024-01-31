@@ -22,6 +22,10 @@
 #include <FragDef.h>
 
 namespace fragcore {
+	/**
+	 * @brief 
+	 * 
+	 */
 	enum class GLCommandBufferCmd {
 		ClearImage,
 		ClearColor,
@@ -62,6 +66,10 @@ namespace fragcore {
 		EndConditionalRendering,
 	};
 
+	/**
+	 * @brief 
+	 * 
+	 */
 	class FVDECLSPEC GLCommandBase {
 	  public:
 		GLCommandBase(GLCommandBufferCmd command) : cmd(command) {}
@@ -124,7 +132,7 @@ namespace fragcore {
 	  public:
 		GLViewPortCommand(int index, int x, int y, int width, int height)
 			: GLCommandBase(GLCommandBufferCmd::ViewPort), index(index), x(x), y(y), width(width), height(height) {}
-			
+
 		unsigned int index;
 		unsigned int x, y;
 		unsigned int width, height;

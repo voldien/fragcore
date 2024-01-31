@@ -16,11 +16,10 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "Core/Math3D.h"
 #ifndef _FRAG_CORE_AXIS_ALIGN_BOUNDIN_BOX_H_
 #define _FRAG_CORE_AXIS_ALIGN_BOUNDIN_BOX_H_ 1
 #include "../../FragDef.h"
-#include "../Math.h"
+#include "Core/Math3D.h"
 
 namespace fragcore {
 

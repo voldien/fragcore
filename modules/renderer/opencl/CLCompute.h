@@ -27,8 +27,8 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC CLCompute : public Module {
 	  public:
-		virtual void OnInitialization();
-		virtual void OnDestruction();
+		void OnInitialization() override;
+		void OnDestruction() override;
 
 		/**
 		 * @brief

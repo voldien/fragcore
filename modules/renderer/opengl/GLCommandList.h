@@ -32,46 +32,43 @@ namespace fragcore {
 
 	  public:
 		GLCommandList();
-		virtual ~GLCommandList();
+		~GLCommandList() override;
 
-		virtual void begin() override;
-		virtual void end() override;
+		void begin() override;
+		void end() override;
 
-		virtual void copyTexture(const Texture *src, Texture *dst) override;
+		void copyTexture(const Texture *src, Texture *dst) override;
 
-		virtual void bindPipeline(RenderPipeline *p) override;
-		virtual void bindComputePipeline(RenderPipeline *pipeline) override;
+		void bindPipeline(RenderPipeline *p) override;
+		void bindComputePipeline(RenderPipeline *pipeline) override;
 
-		virtual void bindFramebuffer(Ref<FrameBuffer> &framebuffer) override;
-		virtual void setScissor(int x, int y, unsigned int width, unsigned int height) override;
-		virtual void setViewport(int x, int y, unsigned int width, unsigned int height) override;
+		void bindFramebuffer(Ref<FrameBuffer> &framebuffer) override;
+		void setScissor(int x, int y, unsigned int width, unsigned int height) override;
+		void setViewport(int x, int y, unsigned int width, unsigned int height) override;
 
-		virtual void clearDepth(float depth) override;
-		virtual void clearColorTarget(uint index, const Color &color) override;
+		void clearDepth(float depth) override;
+		void clearColorTarget(uint index, const Color &color) override;
 
-		virtual void bindVertexBuffers(uint32_t firstBinding, uint32_t bindingCount,
-									   const std::vector<Ref<Buffer>> &buffer,
-									   const std::vector<size_t> pOffsets) override;
-		virtual void bindBindIndexBuffers(Ref<Buffer> &buffer, size_t offset, size_t indexType) override;
+		void bindVertexBuffers(uint32_t firstBinding, uint32_t bindingCount, const std::vector<Ref<Buffer>> &buffer,
+							   const std::vector<size_t> pOffsets) override;
+		void bindBindIndexBuffers(Ref<Buffer> &buffer, size_t offset, size_t indexType) override;
 
 		// virtual void draw(Ref<Buffer> &buffer, uint32_t vertexCount, uint32_t instanceCount) override;
-		virtual void draw(uint32_t vertexCount, uint32_t instanceCount, uint32_t firstVertex,
-						  uint32_t firstInstance) override;
-		virtual void drawIndexed(uint32_t indexCount, uint32_t instanceCount, uint32_t firstIndex, int32_t vertexOffset,
-								 uint32_t firstInstance) override;
-		virtual void drawIndirect(Ref<Buffer> &buffer, size_t offset, uint32_t drawCount, uint32_t stride) override;
-		virtual void drawIndexedIndirect(Ref<Buffer> &buffer, size_t offset, uint32_t drawCount,
-										 uint32_t stride) override;
+		void draw(uint32_t vertexCount, uint32_t instanceCount, uint32_t firstVertex, uint32_t firstInstance) override;
+		void drawIndexed(uint32_t indexCount, uint32_t instanceCount, uint32_t firstIndex, int32_t vertexOffset,
+						 uint32_t firstInstance) override;
+		void drawIndirect(Ref<Buffer> &buffer, size_t offset, uint32_t drawCount, uint32_t stride) override;
+		void drawIndexedIndirect(Ref<Buffer> &buffer, size_t offset, uint32_t drawCount, uint32_t stride) override;
 
-		virtual void dispatch(uint groupCountX, uint groupCountY, uint groupCountZ) override;
-		virtual void dispatchIndirect(Buffer *buffer, u_int64_t offset) override;
+		void dispatch(uint groupCountX, uint groupCountY, uint groupCountZ) override;
+		void dispatchIndirect(Buffer *buffer, u_int64_t offset) override;
 
-		virtual void setDepthBounds(float min, float max) override;
+		void setDepthBounds(float min, float max) override;
 
-		virtual void pushDebugGroup(const char *name) override;
+		void pushDebugGroup(const char *name) override;
 
-		virtual void popDebugGroup() override;
-		virtual void insertDebugMarker(const char *name) override;
+		void popDebugGroup() override;
+		void insertDebugMarker(const char *name) override;
 
 	  protected:
 		// TOOD expand the stack allocator to allow resize on demand.

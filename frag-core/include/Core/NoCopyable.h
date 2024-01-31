@@ -25,7 +25,7 @@ namespace fragcore {
 	 * @brief
 	 *
 	 */
-	class NoCopyable {
+	class FVDECLSPEC NoCopyable {
 	  public:
 		NoCopyable(const NoCopyable &) = delete;			// non construction-copyable
 		NoCopyable &operator=(const NoCopyable &) = delete; // non copyable

@@ -30,7 +30,7 @@ namespace fragcore {
 	  public:
 		GLSampler() = default;
 
-		virtual ~GLSampler();
+		~GLSampler() override;
 
 		virtual void setFilterMode(FilterMode mode) override;
 

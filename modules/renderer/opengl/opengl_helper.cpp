@@ -71,6 +71,9 @@ unsigned int GLHelper::getFilterMode(SamplerDesc::FilterMode mode, SamplerDesc::
 				break;
 			}
 			break;
+		case sampler_desc_t::FilterMode::NoFilterMode:
+		default:
+			break;
 		}
 	}
 	throw InvalidArgumentException("Invalid filter mode : {}", magic_enum::enum_name(mode));

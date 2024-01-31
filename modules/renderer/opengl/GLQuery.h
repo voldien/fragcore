@@ -28,7 +28,7 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC GLQueryObject : public QueryObject {
 	  public:
-		virtual ~GLQueryObject();
+		~GLQueryObject() override;
 
 	  public:
 		/**
@@ -36,7 +36,7 @@ namespace fragcore {
 		 * @param target
 		 * @param index
 		 */
-		virtual void begin(Target target, unsigned int index) override;
+		void begin(Target target, unsigned int index) override;
 
 		// TODO add for fetching the result.
 		/**
@@ -44,20 +44,20 @@ namespace fragcore {
 		 * @param target
 		 * @param index
 		 */
-		virtual void end(Target target, unsigned int index) override;
+		void end(Target target, unsigned int index) override;
 
-		virtual long int getResult(int index) override;
+		long int getResult(int index) override;
 
 		/**
 		 *
 		 * @param target
 		 */
-		virtual void beginConditionalRenderer(Condition target) override;
+		void beginConditionalRenderer(Condition target) override;
 
 		/**
 		 *
 		 */
-		virtual void endConditionalRenderer() override;
+		void endConditionalRenderer() override;
 
 		intptr_t getNativePtr() const override;
 

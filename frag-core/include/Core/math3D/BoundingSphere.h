@@ -18,7 +18,6 @@
  */
 #ifndef _FRAG_CORE_BOUNDING_SPHERE_H_
 #define _FRAG_CORE_BOUNDING_SPHERE_H_ 1
-#include "../Math.h"
 #include "Ray.h"
 
 namespace fragcore {

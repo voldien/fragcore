@@ -33,7 +33,7 @@ namespace fragcore {
 		eCustom,
 	};
 
-	typedef struct opencl_core_t {
+	using OpenCLCore = struct opencl_core_t {
 		IRenderer *back_renderer;
 		void *window; // TODO evoluate.
 		cl_context context;
@@ -47,55 +47,53 @@ namespace fragcore {
 
 		/*  */
 		Shader *current;
-	} OpenCLCore;
+	};
 
 	/**
 	 *
 	 */
-	typedef struct opencl_texture_object_t {
+	using CLTextureObject = struct opencl_texture_object_t {
 		TextureDesc desc;
 		unsigned int target;
 		cl_mem texture;
 		Texture *interp;
-	} CLTextureObject;
+	};
 
 	/**
 	 *
 	 */
-	typedef struct opencl_shader_object_t {
-		cl_program program;
-	} CLShaderObject;
+	using CLShaderObject = struct opencl_shader_object_t { cl_program program; };
 
 	/**
 	 *
 	 */
-	typedef struct opencl_buffer_object_t {
+	using CLBufferObject = struct opencl_buffer_object_t {
 		BufferDesc desc;
 		cl_mem target;
 		unsigned int buffer;
 		unsigned int base;
 		Buffer *interp;
-	} CLBufferObject;
+	};
 
 	/**
 	 *
 	 */
-	typedef struct opencl_geometry_object_t {
+	using CLGeometryObject = struct opencl_geometry_object_t {
 		GeometryDesc desc;
 		unsigned int mode;
 		unsigned int vao;
 		unsigned int indicesType;
 		Buffer *indicesbuffer;
 		Buffer *vertexbuffer;
-	} CLGeometryObject;
+	};
 
 	/**
 	 *
 	 */
-	typedef struct opengl_framebuffer_object_t {
+	using CLFrameBufferObject = struct opengl_framebuffer_object_t {
 		FrameBufferDesc desc;
 		unsigned int framebuffer;
-	} CLFrameBufferObject;
+	};
 } // namespace fragcore
 
 #endif

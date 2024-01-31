@@ -1,7 +1,6 @@
 #include "ShaderUtil.h"
 #include "../RenderPipeline.h"
 #include "Core/IO/FileSystem.h"
-#include "Core/IO/IOUtil.h"
 #include <../RenderDesc.h>
 #include <Core/IO/IFileSystem.h>
 
@@ -342,7 +341,7 @@ void ShaderUtil::loadShader(const char *source, const int size, ShaderType type,
 
 	ShaderDesc desc = {};
 	Shader *shader = nullptr;
-	char *invshad = "";
+	const char *invshad = "";
 	int nsources;
 	char glver[256];
 	const char *sources[4] = {nullptr};
@@ -484,6 +483,7 @@ void ShaderUtil::loadProgram(const void *vertex, const int vsize, const void *fr
 							 const void *tesselatione, const int tesize, ShaderCodeType codetype,
 							 ShaderLanguage language, Ref<IRenderer> &renderer, Shader **pshader) {
 	validateShaderArguments(ShaderType::Vertex, language, codetype);
+	
 	if (pshader == nullptr) {
 		throw InvalidArgumentException("");
 	}

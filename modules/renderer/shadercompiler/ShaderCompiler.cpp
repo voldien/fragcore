@@ -1,6 +1,7 @@
 #include "ShaderCompiler.h"
 #include "Core/IO/BufferIO.h"
 #include "Core/dataStructure/StackAllactor.h"
+#include "ShaderLanguage.h"
 #include "ShaderUtil.h"
 #include <spirv_glsl.hpp>
 #include <spirv_hlsl.hpp>
@@ -14,20 +15,30 @@ using namespace fragcore;
 std::vector<char> ShaderCompiler::convert(const std::vector<char> &sourceCode, ShaderLanguage source,
 										  ShaderLanguage target) {
 	spirv_cross::Compiler *compiler = nullptr;
-	// spirv_cross::CompilerHLSL(reinterpret_cast<const uint32_t *>(sourceCode.data()), sourceCode.size() /
-	// sizeof(uint32_t))
+
+	switch (source) {
+	case ShaderLanguage::GLSL:
+		break;
+	case ShaderLanguage::HLSL:
+		// spirv_cross::CompilerHLSL(reinterpret_cast<const uint32_t *>(sourceCode.data()), sourceCode.size() /
+		// sizeof(uint32_t))
+		break;
+	case SPIRV:
+	case CLC:
+	case CG:
+	case unKnownLanguage:
+		break;
+	default:
+		break;
+	}
 
 	return {};
 }
 
 std::vector<char> ShaderCompiler::convertSPIRV(const std::vector<uint32_t> &source,
 											   const CompilerConvertOption &target) {
-	// Read SPIR-V from disk or similar.
 
 	spirv_cross::CompilerGLSL glsl(source);
-
-
-
 
 	// Set some options.
 	spirv_cross::CompilerGLSL::Options options; // = glsl.get_common_options();

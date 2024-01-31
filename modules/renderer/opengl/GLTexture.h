@@ -27,9 +27,10 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC GLTexture : public Texture {
 		friend class IRenderer;
+
 	  public:
 		GLTexture() = default;
-		virtual ~GLTexture();
+		~GLTexture() override;
 
 		/**
 		 *

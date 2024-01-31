@@ -33,7 +33,7 @@ namespace fragcore {
 		RenderObject() = default;
 		RenderObject(IRenderer *renderer) { setRenderInterface(renderer); }
 		RenderObject(RenderObject &&other) = delete;
-		virtual ~RenderObject() = default;
+		~RenderObject() override = default;
 
 		/**
 		 * @brief Get the Renderer object

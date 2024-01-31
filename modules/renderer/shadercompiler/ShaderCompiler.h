@@ -29,6 +29,7 @@
 namespace fragcore {
 
 	/**
+	 * @brief
 	 *
 	 */
 	class FVDECLSPEC ShaderCompiler {
@@ -67,14 +68,15 @@ namespace fragcore {
 		  public:
 			std::vector<CompilerOption> option;
 		};
+
 		static std::map<long int, ShaderResult>
 		CompilePermutation(Ref<IRenderer> &renderer, CompilerSources *references, const CompilerOptionSet &optionset);
 
 	  public:
-		typedef struct compiler_convert_option_t {
+		using CompilerConvertOption = struct compiler_convert_option_t {
 			ShaderLanguage target;
 			unsigned int glslVersion;
-		} CompilerConvertOption;
+		};
 
 		/**
 		 * @brief
@@ -94,7 +96,7 @@ namespace fragcore {
 		 * @param shaderLanguage
 		 * @return std::vector<char>
 		 */
-		static std::vector<char> convertSPIRV(const std::vector<uint32_t> &source, const CompilerConvertOption& target);
+		static std::vector<char> convertSPIRV(const std::vector<uint32_t> &source, const CompilerConvertOption &target);
 
 		/**/
 		// void CompileCrossShader(Ref<IO> &io, Ref<IO> &out);

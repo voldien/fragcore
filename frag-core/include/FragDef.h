@@ -40,6 +40,7 @@ namespace fragcore {
 	using NotSupportedException = cxxexcept::NotSupportedException ;
 	using InvalidPointerException = cxxexcept::InvalidPointerException ;
 	using SystemException = cxxexcept::SystemException;
+	using IndexOutOfRangeException = cxxexcept::IndexOutOfRangeException;
 }
 
 /**

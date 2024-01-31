@@ -75,23 +75,23 @@ namespace fragcore {
 		 * @param desc
 		 * @return
 		 */
-		 Buffer *createBuffer(BufferDesc *desc) override;
+		Buffer *createBuffer(BufferDesc *desc) override;
 
-		 void deleteBuffer(Buffer *object) override;
+		void deleteBuffer(Buffer *object) override;
 
 		/**
 		 *
 		 * @param desc
 		 * @return
 		 */
-		 FrameBuffer *
-		createFrameBuffer(FrameBufferDesc *desc) override; // TODO determine what to do with the reference objects. Same for all
-												  // other object using reference object to GPU resources.
-		 void deleteFrameBuffer(FrameBuffer *obj) override;
+		FrameBuffer *createFrameBuffer(
+			FrameBufferDesc *desc) override; // TODO determine what to do with the reference objects. Same for all
+											 // other object using reference object to GPU resources.
+		void deleteFrameBuffer(FrameBuffer *obj) override;
 
-		 QueryObject *createQuery(QueryDesc *desc) override;
+		QueryObject *createQuery(QueryDesc *desc) override;
 
-		 void deleteQuery(QueryObject *query) override;
+		void deleteQuery(QueryObject *query) override;
 
 		/**
 		 *
@@ -101,13 +101,13 @@ namespace fragcore {
 		 * @param height
 		 * @return
 		 */
-		 RendererWindow *createWindow(int x, int y, int width, int height) override;
+		RendererWindow *createWindow(int x, int y, int width, int height) override;
 
 		/**
 		 *
 		 * @param window
 		 */
-		 void setCurrentWindow(RendererWindow *window) override;
+		void setCurrentWindow(RendererWindow *window) override;
 
 		/**
 		 * Create swapchain.
@@ -118,10 +118,10 @@ namespace fragcore {
 		 *
 		 * @return
 		 */
-		 FrameBuffer *getDefaultFramebuffer(void *window) override;
+		FrameBuffer *getDefaultFramebuffer(void *window) override;
 
 		// TODO add viewobject for handling as a object
-		 ViewPort *getView(unsigned int i) override;
+		ViewPort *getView(unsigned int i) override;
 		// TODO relocate to the render pipeline queue
 		/**
 		 *
@@ -204,9 +204,9 @@ namespace fragcore {
 		// TODO add memory barrier.
 		virtual void memoryBarrier();
 
-		 Sync *createSync(SyncDesc *desc) override;
+		Sync *createSync(SyncDesc *desc) override;
 
-		 void deleteSync(Sync *sync) override;
+		void deleteSync(Sync *sync) override;
 
 		// virtual void execute(CommandList *list);
 
@@ -214,37 +214,37 @@ namespace fragcore {
 		 * Set debug state.
 		 * @param enable
 		 */
-		 void setDebug(bool enable) override;
+		void setDebug(bool enable) override;
 
 		/**
 		 *	Get shader version.
 		 *	@return non-null terminated string.
 		 */
-		 const char *getShaderVersion(ShaderLanguage language) const override;
+		const char *getShaderVersion(ShaderLanguage language) const override;
 
 		/**
 		 * Get all support shader languages.
 		 * @return bitflag of all supported shader languages.
 		 */
-		 ShaderLanguage getShaderLanguage() const override;
+		ShaderLanguage getShaderLanguage() const override;
 
 		/**
 		 * Get the name of the rendering API.
 		 * @return non-null terminated string.
 		 */
-		 const char *getAPIVersion() const override;
+		const char *getAPIVersion() const override;
 
 		/**
 		 *	Get version of the interface.
 		 *	@return non-null terminated string.
 		 */
-		 const char *getVersion() const override;
+		const char *getVersion() const override;
 
 		/**
 		 * Get all supported texture formats.
 		 * @param pCompressions
 		 */
-		 void getSupportedTextureCompression(TextureDesc::Compression *pCompressions) override;
+		void getSupportedTextureCompression(TextureDesc::Compression *pCompressions) override;
 
 		// virtual void getSupportedTextureFormat(TextureFormat* textureFormat);
 		// virtual void getSupportedGraphicTextureFormat(TextureFormat* textureFormat);
@@ -255,12 +255,12 @@ namespace fragcore {
 		 * Get capability of the rendering API.
 		 * @param capability non-null object.
 		 */
-		 void getCapability(Capability *capability) override;
+		void getCapability(Capability *capability) override;
 
 		/**
 		 *
 		 */
-		 void getFeatures(Features *features) override;
+		void getFeatures(Features *features) override;
 
 		/**
 		 * TODO add for reading status such as memory.
@@ -268,19 +268,19 @@ namespace fragcore {
 		 *  ATI_meminfo
 		 */
 		// TODO imporove later
-		virtual void getStatus(MemoryInfo *memoryInfo);
+		void getStatus(MemoryInfo *memoryInfo) override;
 
-		virtual CommandList *createCommandBuffer();
-		virtual void submittCommand(Ref<CommandList> &list);
-		virtual void execute(CommandList *list);
+		CommandList *createCommandBuffer() override;
+		void submittCommand(Ref<CommandList> &list) override;
+		void execute(CommandList *list) override;
 
 		GLRendererInterface(IConfig *config);
 
-		virtual void *getData() const;
+		void *getData() const override;
 
 	  public:
 		const char *getExtensions() const noexcept;
-		bool isExtensionSupported(const char* extension) const noexcept;
+		bool isExtensionSupported(const char *extension) const noexcept;
 
 	  public: /*	OpenGL Specific methods.	*/
 		void *getOpenGLContext() noexcept;

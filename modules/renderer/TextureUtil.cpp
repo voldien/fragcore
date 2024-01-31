@@ -7,7 +7,7 @@
 #include <fmt/core.h>
 using namespace fragcore;
 
-void TextureUtil::loadTexture(Image &image, IRenderer *renderer, Texture **texture) {
+void TextureUtil::loadTexture(const Image &image, IRenderer *renderer, Texture **texture) {
 	TextureDesc desc = {};
 	TextureDesc::Format format;
 	TextureDesc::Format internalformat;
@@ -46,7 +46,7 @@ void TextureUtil::loadTexture(Image &image, IRenderer *renderer, Texture **textu
 	*texture = renderer->createTexture(&desc);
 }
 
-void TextureUtil::saveTexture(Image &image, IRenderer *renderer, Texture *texture) { /*	Image Loader.	*/
+void TextureUtil::saveTexture(const Image &image, IRenderer *renderer, Texture *texture) { /*	Image Loader.	*/
 																					 ///*	TODO verify.	*/
 	// void *pixels = texture->mapTexture(texture->getFormat(), 0);
 	// Image image(texture->width(), texture->height(), TextureFormat::Alpha8);

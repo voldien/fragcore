@@ -22,16 +22,20 @@
 
 namespace fragcore {
 
-	//TOOD rename
+	// TOOD rename
+	/**
+	 * @brief 
+	 * 
+	 */
 	class FrameBufferTexture : public GLTexture {
 	  public:
 		FrameBufferTexture();
 
-		virtual void *mapTexture(Format format, unsigned int level) override;
+		void *mapTexture(Format format, unsigned int level) override;
 
-		virtual void unMapTexture() override;
+		void unMapTexture() override;
 
-		virtual Format getFormat() const override;
+		Format getFormat() const override;
 
 		void bind(unsigned int index) override;
 
@@ -55,9 +59,9 @@ namespace fragcore {
 
 		void *getPixels(Format format, unsigned int level, unsigned long *nBytes);
 
-		virtual unsigned int width() override;
+		unsigned int width() override;
 
-		virtual unsigned int height() override;
+		unsigned int height() override;
 
 	  private:
 		unsigned int pbo; // TODO determine

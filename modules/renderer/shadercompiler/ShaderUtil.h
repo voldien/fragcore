@@ -30,18 +30,18 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC ShaderUtil {
 	  public:
-		typedef struct uniform_location_t {
+		using UniformLocation = struct uniform_location_t {
 			const char *texname; /*  */
 			int loc;			 /*  */
-		} UniformLocation;
+		};
 
 		// private:
-		typedef struct shader_object_t {
+		using ShaderObject = struct shader_object_t {
 			const char *buf;
 			unsigned long size;
 			ShaderLanguage language;
 			ShaderCodeType type;
-		} ShaderObject;
+		};
 
 	  public:
 		class ShaderObjectDesc {

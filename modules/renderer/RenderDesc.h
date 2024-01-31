@@ -22,8 +22,6 @@
 #include "RenderPrerequisites.h"
 #include "ShaderLanguage.h"
 #include <ImageFormat.h>
-#include <stddef.h>
-#include <stdint.h>
 
 namespace fragcore {
 

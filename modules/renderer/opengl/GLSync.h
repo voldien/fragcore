@@ -33,14 +33,14 @@ namespace fragcore {
 		 * @brief
 		 *
 		 */
-		virtual void fence() override;
+		void fence() override;
 
 		/**
 		 * @brief
 		 *
 		 * @param timeout
 		 */
-		virtual void wait(int timeout = 0) override;
+		void wait(int timeout = 0) override;
 
 		/**
 		 * @brief
@@ -48,9 +48,9 @@ namespace fragcore {
 		 * @param timeout
 		 * @return SyncStatus
 		 */
-		virtual SyncStatus waitClient(int timeout) override; /*  Wait in microseconds.   */
+		SyncStatus waitClient(int timeout) override; /*  Wait in microseconds.   */
 
-		virtual intptr_t getNativePtr() const override;
+		intptr_t getNativePtr() const override;
 
 	  private:
 		GLsync sync;

@@ -29,22 +29,22 @@ namespace fragcore {
 	/**
 	 *
 	 */
-	typedef struct opengl_shader_object_t {
+	using GLShaderObject = struct opengl_shader_object_t {
 		unsigned int program;
 		unsigned int shader;
-	} GLShaderObject;
+	};
 
 	/**
 	 *
 	 */
-	typedef struct opengl_geometry_object_t {
+	using GLGeometryObject = struct opengl_geometry_object_t {
 		GeometryDesc desc;
 		unsigned int mode;
 		unsigned int vao;
 		unsigned int indicesType;
 		Buffer *indicesbuffer;
 		Buffer *vertexbuffer;
-	} GLGeometryObject;
+	};
 
 	class FVDECLSPEC GLHelper {
 	  public:

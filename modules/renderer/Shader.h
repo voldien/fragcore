@@ -28,7 +28,7 @@ namespace fragcore {
 		friend class IRenderer;
 
 	  public:
-		virtual ~Shader() = default;
+		~Shader() override = default;
 
 		virtual void bind() = 0;
 
