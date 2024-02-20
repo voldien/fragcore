@@ -19,7 +19,6 @@
 #ifndef _FRAG_CORE_THREADING_H_
 #define _FRAG_CORE_THREADING_H_ 1
 #include "../../FragDef.h"
-#include "../Object.h"
 #include "../SmartReference.h"
 
 namespace fragcore {

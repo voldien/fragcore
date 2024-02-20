@@ -24,19 +24,24 @@ Library::Library(const std::string &clibrary) : Library(clibrary.c_str()) {}
 
 Library::Library(const Library &other) : Library(other.path.c_str()) {}
 
-Library::Library(Library &&other) { std::exchange(this->mlib, other.mlib); }
+Library::Library(Library &&other) { this->mlib = other.mlib; }
 
 Library::~Library() { /*	Nothing to release. Done by the kernel itself.	*/
 }
 
 Library &Library::operator=(Library &&other) {
+	Object::operator=(other);
+
 	this->path = other.path;
+	this->mlib = other.mlib;
 	// TODO: fix.
 	return *this;
 }
 
 Library &Library::operator=(const Library &other) {
+	Object::operator=(other);
 	this->path = other.path;
+	this->open(this->getPath().c_str());
 	// TODO: fix.
 	return *this;
 }
