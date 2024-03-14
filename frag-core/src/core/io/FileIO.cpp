@@ -41,33 +41,40 @@ FileIO::FileIO(FileIO &&other) {
 
 FileIO::~FileIO() { FileIO::close(); }
 
+static const char *open_mode(const FileIO::IOMode mode) {
+	const char *f_io_mode = nullptr;
+	bool append = (mode & IO::IOMode::APPEND);
+	switch (mode & FileIO::IOMode::ACCESS) {
+	case FileIO::IOMode::READ:
+		f_io_mode = "r";
+		break;
+	case FileIO::IOMode::WRITE:
+		if (append) {
+			f_io_mode = "w+";
+		} else {
+			f_io_mode = "w";
+		}
+		break;
+	case FileIO::IOMode::ACCESS:
+		if (append) {
+			f_io_mode = "a+";
+		} else {
+			f_io_mode = "a";
+		}
+		break;
+	default:
+		throw InvalidArgumentException("Invalid IO mode: {}", magic_enum::enum_name(mode));
+	}
+	return f_io_mode;
+}
+
 void FileIO::open(const char *path, IOMode mode) {
 
 	if (path == nullptr) {
 		throw InvalidPointerException("path must not be null.");
 	}
 
-	const char *f_io_mode = nullptr;
-	bool append = (mode & IO::IOMode::APPEND);
-	switch (mode & ACCESS) {
-	case READ:
-		f_io_mode = "r";
-		break;
-	case WRITE:
-		if (append)
-			f_io_mode = "w+";
-		else
-			f_io_mode = "w";
-		break;
-	case ACCESS:
-		if (append)
-			f_io_mode = "a+";
-		else
-			f_io_mode = "a";
-		break;
-	default:
-		throw InvalidArgumentException("Invalid IO mode: {}", magic_enum::enum_name(mode));
-	}
+	const char *f_io_mode = open_mode(mode);
 
 	this->file = fopen(path, f_io_mode);
 	/*	Check if open was successful.	*/
@@ -89,6 +96,29 @@ void FileIO::open(const char *path, IOMode mode) {
 	/*  keep the mode.  */
 	this->mode = mode;
 	this->setName(path);
+}
+
+FileIO::FileIO(int fd, IOMode mode) {
+
+	const char *f_io_mode = open_mode(mode);
+
+	this->file = fdopen(fd, f_io_mode);
+
+	/*	Check if open was successful.	*/
+	if (this->file == nullptr) {
+		// TODO check the error
+		switch (errno) {
+		case ENOENT:
+			throw InvalidArgumentException("Failed to open file: {}.", strerror(errno));
+		case EPERM: // TODO add support for exception for permission.
+			throw PermissionDeniedException("Failed to open file: {}.", strerror(errno));
+		case EACCES: // TODO add support for exception for permission.
+		case EBUSY:
+		case ENFILE:
+		default:
+			throw RuntimeException("Failed to open file: {}.", strerror(errno));
+		}
+	}
 }
 
 void FileIO::close() {

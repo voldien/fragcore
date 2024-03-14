@@ -222,9 +222,11 @@ bool FileSystem::isFIFO(const char *path) {
 // TODO realocate and improve
 void FileSystem::createFIFO(const std::string &path) {
 	// unlink(path.c_str());
-	if (!isFIFO(path.c_str())) {
+	if (!this->isFIFO(path.c_str())) {
 
-		int ret = mkfifo(path.c_str(), S_IWUSR | S_IRUSR | S_IRGRP | S_IROTH | O_RDWR);
+		/*	*/
+
+		int ret = mkfifo(path.c_str(), O_NONBLOCK | S_IWUSR | S_IRUSR | S_IRGRP | S_IROTH | O_RDWR);
 		if (ret != 0) {
 			throw SystemException(errno, std::system_category(), "Failed to create FIFO: {}", path);
 		}

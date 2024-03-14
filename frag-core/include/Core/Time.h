@@ -16,6 +16,7 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
 #ifndef _FRAG_CORE_TIME_H_
 #define _FRAG_CORE_TIME_H_ 1
 #include "Object.h"
@@ -58,6 +59,16 @@ namespace fragcore {
 		size_t getTimeResolution() const noexcept {
 			return static_cast<size_t>(1.0 / static_cast<double>(std::chrono::high_resolution_clock::period::num) /
 									   static_cast<double>(std::chrono::high_resolution_clock::period::den));
+		}
+
+		template <typename T> T now() const noexcept {
+			const auto t0 = steady_clock::now();
+			return static_cast<T>(t0.time_since_epoch().count());
+		}
+
+		template <typename T> T nowHighRes() const noexcept {
+			const auto t0 = std::chrono::high_resolution_clock::now();
+			return static_cast<T>(t0.time_since_epoch().count());
 		}
 
 	  private: /*  */

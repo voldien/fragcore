@@ -69,6 +69,7 @@ namespace fragcore {
 	  public:
 		FileIO(const char *path, IOMode mode);
 		FileIO(const std::string &path, IOMode mode);
+		FileIO(int fd, IOMode mode);
 		~FileIO() override;
 
 		FileIO(FILE *file); // TODO perhaps add IOMOde for overriding.
