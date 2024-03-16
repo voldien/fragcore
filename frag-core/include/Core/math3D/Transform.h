@@ -21,6 +21,7 @@
 #include "LinAlg.h"
 
 namespace fragcore {
+
 	/**
 	 * @brief Construct a new fv align object
 	 *

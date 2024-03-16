@@ -25,7 +25,6 @@ long BufferIO::read(long int requestedBytes, void *pbuffer) {
 	}
 
 	/*	Validate the state.	*/
-	assert(this->marker >= 0);
 	assert(this->marker < this->nbytes);
 	assert(this->marker + nReadBytes <= this->nbytes);
 
@@ -34,7 +33,7 @@ long BufferIO::read(long int requestedBytes, void *pbuffer) {
 
 	/*	*/
 	this->marker += nReadBytes;
-	
+
 	return nReadBytes;
 }
 
