@@ -16,47 +16,27 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef _FRAG_CORE_SDLDISPLAY_H_
-#define _FRAG_CORE_SDLDISPLAY_H_ 1
-#include "../Display.h"
+#ifndef _FRAG_CORE_INPUT_H_
+#define _FRAG_CORE_INPUT_H_ 1
+#include "Display.h"
+#include <Core/Math.h>
+#include <Core/SmartReference.h>
 
 namespace fragcore {
 
 	/**
-	 *
+	 * @brief
 	 */
-	class FVDECLSPEC SDLDisplay : public Display {
+	class Input : public Object {
 	  public:
-		SDLDisplay(int index);
-		~SDLDisplay() override = default;
+		Input();
 
-		unsigned int x() const override;
+		bool getKey();
+		bool getKeyPressed();
+		bool getKeyReleased();
 
-		unsigned int y() const override;
+		int getMousePosition();
 
-		unsigned int width() const override;
-
-		unsigned int height() const override;
-
-		unsigned int refreshRate() const override;
-
-		std::vector<Mode> getModes() const override;
-
-		void getDPI(DPI *dpi) override;
-		void setMode(const Mode &mode) override;
-
-		DisplayFormat getFormat() override;
-
-	  protected:
-		DisplayFormat translateFormat(unsigned int format);
-
-	  private:
-		unsigned int index;
-
-	  public:
-		static int getNumDisplays();
-		static SDLDisplay getPrimaryDisplay();
-		static SDLDisplay getDisplay(int index);
 	};
 } // namespace fragcore
 

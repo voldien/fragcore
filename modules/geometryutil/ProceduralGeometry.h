@@ -46,7 +46,8 @@ namespace fragcore {
 		static void createFrustum(std::vector<Vertex> &vertices, const float fov, const float aspect, const float near,
 								  const float far);
 
-		static void generateSphere(float radius, std::vector<Vertex> &vertices, std::vector<unsigned int> &indices);
+		static void generateSphere(float radius, std::vector<Vertex> &vertices, std::vector<unsigned int> &indices,
+								   int slices = 12, int segments = 12);
 
 		static void generateCube(const float scale, std::vector<Vertex> &vertices, std::vector<unsigned int> &indices);
 

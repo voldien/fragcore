@@ -25,7 +25,7 @@ VKRenderWindow::VKRenderWindow(Ref<VKRenderInterface> &renderer) : renderer(rend
 	SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_HIDDEN | SDL_WINDOW_VULKAN | SDL_WINDOW_RESIZABLE |
 													 SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_INPUT_FOCUS);
 	this->window = SDL_CreateWindow("", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, window_flags);
-	if (window == NULL) {
+	if (window == nullptr) {
 		throw cxxexcept::RuntimeException("failed create window - {}", SDL_GetError());
 	}
 
@@ -40,7 +40,7 @@ VKRenderWindow::VKRenderWindow(Ref<VKRenderInterface> &renderer) : renderer(rend
 	cmdPoolCreateInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
 
 	/*  Create command pool.    */
-	VKS_VALIDATE(vkCreateCommandPool(getDevice(), &cmdPoolCreateInfo, NULL, &this->cmd_pool));
+	VKS_VALIDATE(vkCreateCommandPool(getDevice(), &cmdPoolCreateInfo, nullptr, &this->cmd_pool));
 
 	/*	Create swap chain.	*/
 	createSwapChain();
@@ -91,8 +91,9 @@ bool VKRenderWindow::assertConfigAttributes(const fragcore::IConfig *iConfig) { 
 float VKRenderWindow::getGamma() const {
 	uint16_t ramp[256 * 3];
 	int err = SDL_GetWindowGammaRamp(this->window, &ramp[256 * 0], &ramp[256 * 1], &ramp[256 * 2]);
-	if (err == -1)
+	if (err == -1) {
 		throw NotSupportedException(SDL_GetError());
+	}
 
 	return this->computeGammaExponent<float, uint16_t>(ramp);
 }
@@ -135,8 +136,9 @@ void VKRenderWindow::createWindow(int x, int y, int width, int height, const cha
 	window = SDL_CreateWindow("", x, y, width, height, SDL_WINDOW_VULKAN | SDL_WINDOW_HIDDEN);
 
 	/*  */
-	if (window == nullptr)
+	if (window == nullptr) {
 		throw RuntimeException("Failed to create window {} for API {}", SDL_GetError(), api);
+	}
 	this->api = api;
 }
 
@@ -150,10 +152,11 @@ void VKRenderWindow::resizable(bool resizable) { SDL_SetWindowResizable(this->wi
 
 void VKRenderWindow::setFullScreen(bool fullscreen) {
 	// TODO add option for using either of the modes.
-	if (fullscreen)
+	if (fullscreen) {
 		SDL_SetWindowFullscreen(this->window, SDL_WINDOW_FULLSCREEN_DESKTOP);
-	else
+	} else {
 		SDL_SetWindowFullscreen(this->window, 0);
+	}
 }
 
 void VKRenderWindow::setFullScreen(Display &display) {}
@@ -220,8 +223,9 @@ intptr_t VKRenderWindow::getNativePtr() const {
 			break;
 #endif
 		}
-	} else
+	} else {
 		throw RuntimeException(fmt::format("{}", SDL_GetError()));
+	}
 	return 0;
 }
 
@@ -251,9 +255,8 @@ void VKRenderWindow::swapBuffer() {
 	if (result == VK_ERROR_OUT_OF_DATE_KHR) {
 		recreateSwapChain();
 		return;
-	} else {
-		VKS_VALIDATE(result);
 	}
+	VKS_VALIDATE(result);
 
 	if (this->imagesInFlight[imageIndex] != VK_NULL_HANDLE) {
 		vkWaitForFences(getDevice(), 1, &this->imagesInFlight[imageIndex], VK_TRUE, UINT64_MAX);
@@ -516,7 +519,7 @@ void VKRenderWindow::recreateSwapChain() {
 }
 
 void VKRenderWindow::cleanSwapChain() {
-	for (auto framebuffer : swapChain.swapChainFramebuffers) {
+	for (auto *framebuffer : swapChain.swapChainFramebuffers) {
 		vkDestroyFramebuffer(getDevice(), framebuffer, nullptr);
 	}
 	swapChain.swapChainFramebuffers.clear();
@@ -529,7 +532,7 @@ void VKRenderWindow::cleanSwapChain() {
 	vkDestroyRenderPass(getDevice(), swapChain.renderPass, nullptr);
 
 	/*	*/
-	for (auto imageView : swapChain.swapChainImageViews) {
+	for (auto *imageView : swapChain.swapChainImageViews) {
 		vkDestroyImageView(getDevice(), imageView, nullptr);
 	}
 	swapChain.swapChainImageViews.clear();
@@ -551,8 +554,9 @@ VkFormat VKRenderWindow::findDepthFormat() {
 VkSurfaceKHR VKRenderWindow::createSurface() {
 	VkSurfaceKHR surface;
 	bool surfaceResult = SDL_Vulkan_CreateSurface(this->window, this->renderer->getInstance()->getHandle(), &surface);
-	if (surfaceResult == SDL_FALSE)
+	if (surfaceResult == SDL_FALSE) {
 		throw cxxexcept::RuntimeException("failed create vulkan surface - {}", SDL_GetError());
+	}
 	return surface;
 	// VkXlibSurfaceCreateInfoKHR createInfo{};
 	// createInfo.sType = VK_STRUCTURE_TYPE_XLIB_SURFACE_CREATE_INFO_KHR;

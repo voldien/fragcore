@@ -28,17 +28,12 @@ namespace fragcore {
 	 * generic classes.
 	 * @tparam T
 	 */
-	template <class T> class Iterator {
+	template <typename T> class Iterator {
 	  public:
 		/**
 		 *	@return
 		 */
 		virtual Iterator &operator++() = 0;
-
-		/**
-		 *	@return
-		 */
-		virtual Iterator &operator++(int) = 0;
 
 		/**
 		 *	@return
@@ -73,7 +68,7 @@ namespace fragcore {
 		/**
 		 *	@return
 		 */
-		virtual T &operator->() const { return (T) * this->iterator; }
+		virtual T &operator->() const { return reinterpret_cast<T &>(*this->iterator); }
 
 		/**
 		 *	@return
@@ -117,7 +112,7 @@ namespace fragcore {
 			return *this;
 		}
 
-	  public:		 /*	Protected attributes.	*/
+	  protected:	 /*	Protected attributes.	*/
 		T *iterator; /**/
 	};
 

@@ -29,7 +29,7 @@ long BufferIO::read(long int requestedBytes, void *pbuffer) {
 	assert(this->marker + nReadBytes <= this->nbytes);
 
 	/*	*/
-	memcpy(pbuffer, &this->buffer[this->marker], nReadBytes);
+	std::memcpy(pbuffer, &this->buffer[this->marker], nReadBytes);
 
 	/*	*/
 	this->marker += nReadBytes;

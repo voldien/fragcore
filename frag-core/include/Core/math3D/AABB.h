@@ -41,13 +41,13 @@ namespace fragcore {
 		 * @param i
 		 * @return
 		 */
-		inline Vector3 operator[](int index) const { return ((Vector3 *)this)[index]; }
+		inline Vector3 operator[](const int index) const { return ((Vector3 *)this)[index]; }
 
 		/**
 		 *
 		 * @return
 		 */
-		inline Vector3 &operator[](int index) { return ((Vector3 *)this)[index]; }
+		inline Vector3 &operator[](const int index) { return ((Vector3 *)this)[index]; }
 
 		/**
 		 * Check if object is valid.
@@ -168,19 +168,6 @@ namespace fragcore {
 		}
 
 		/**
-		 * Create input stream for creating AABB
-		 * from input stream.
-		 * @return stream reference.
-		 */
-		// friend std::istream &operator>>(std::istream &is, AABB &t) {}
-
-		/**
-		 * Create output stream of AABB values.
-		 * @return stream reference.
-		 */
-		// friend std::ostream &operator<<(std::ostream &os, const AABB &t) {}
-
-		/**
 		 * Assign bound object.
 		 * @return reference of object.
 		 */
@@ -204,7 +191,7 @@ namespace fragcore {
 		 * @param divisor
 		 * @return reference of object.
 		 */
-		friend AABB operator/(const AABB &bound, float divisor) noexcept(noexcept(divisor == 0)) {
+		friend AABB operator/(const AABB &bound, const float divisor) noexcept(noexcept(divisor == 0)) {
 			return AABB(bound.getCenter(), bound.getSize() / divisor);
 		}
 
@@ -223,8 +210,8 @@ namespace fragcore {
 		 * @param divisor non-zero.
 		 * @return reference of object.
 		 */
-		AABB &operator/=(float divisor) noexcept {
-			this->setSize(getSize() / divisor);
+		AABB &operator/=(const float divisor) noexcept {
+			this->setSize(this->getSize() / divisor);
 			return *this;
 		}
 
@@ -247,9 +234,9 @@ namespace fragcore {
 		}
 
 		static AABB createMinMax(const Vector3 &min, const Vector3 &max) noexcept {
-			const Vector3 center = Vector3::Zero();
-			const Vector3 size = (min - max) / 2.0f;
-			return AABB(min, max);
+			const Vector3 center = (min - max) / 2.0f;
+			const Vector3 size = (max - min);
+			return {size, center};
 		}
 
 	  private:			   /*	Attributes.	*/

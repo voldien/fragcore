@@ -31,6 +31,12 @@ namespace fragcore {
 	 */
 	template <typename T> class FVDECLSPEC Singleton : public SmartReference {
 	  public:
+	  
+	  	/**
+	  	 * @brief Get the Instance object
+	  	 * 
+	  	 * @return Ref<T> 
+	  	 */
 		static Ref<T> getInstance() {
 			static T *_instance = nullptr;
 			if (_instance == nullptr) {
@@ -41,6 +47,11 @@ namespace fragcore {
 			return Ref<T>(_instance);
 		}
 
+		/**
+		 * @brief 
+		 * 
+		 * @param instance 
+		 */
 		virtual void onCreation(Ref<T> &instance) = 0;
 	};
 } // namespace fragcore

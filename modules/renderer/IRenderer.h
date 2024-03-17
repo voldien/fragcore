@@ -205,12 +205,6 @@ namespace fragcore {
 		virtual const char *getAPIVersion() const = 0;
 
 		/**
-		 *	Get version of the interface.
-		 *	@return non-null terminated string.
-		 */
-		virtual const char *getVersion() const = 0;
-
-		/**
 		 * Get all supported texture formats.
 		 * @param pCompressions
 		 */

@@ -103,4 +103,6 @@ SDLDisplay::DisplayFormat SDLDisplay::translateFormat(unsigned int format) {
 
 int SDLDisplay::getNumDisplays() { return SDL_GetNumVideoDisplays(); }
 
-SDLDisplay SDLDisplay::getPrimaryDisplay() { return SDLDisplay(0); }
+SDLDisplay SDLDisplay::getPrimaryDisplay() { return {0}; }
+
+SDLDisplay SDLDisplay::getDisplay(int index) { return {index}; }

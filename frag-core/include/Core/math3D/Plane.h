@@ -32,16 +32,15 @@ namespace fragcore {
 	template <typename T = float> struct FVDECLSPEC Plane {
 	  public:
 		Plane() = default;
-		Plane(const Vector3 &normal) noexcept {
+		Plane(const Vector3 &normal, T distance = 0) noexcept {
 			this->normal = normal;
-			this->d = 0;
+			this->d = distance;
 		}
 		Plane(const Vector3 &point, const Vector3 &normal) noexcept { this->setNormalAndPoint(normal, point); }
 		Plane(const Plane &other) noexcept {
 			this->normal = other.normal;
 			this->d = other.d;
 		}
-
 		Plane &operator=(const Plane &other) {
 			this->normal = other.normal;
 			this->d = other.d;
@@ -71,13 +70,15 @@ namespace fragcore {
 		 * @param point
 		 * @return
 		 */
-		inline float distance(const Vector3 &point) const noexcept { return normal.dot(point) + d; }
+		inline T distance(const Vector3 &point) const noexcept { return normal.dot(point) + d; }
+
+		inline T distanceSigned(const Vector3 &point) const noexcept { return normal.dot(point) - d; }
 
 		/**
 		 * Get distance.
 		 * @return
 		 */
-		inline float distance() const noexcept { return this->d; }
+		inline T distance() const noexcept { return this->d; }
 
 		/**
 		 * Get point.
@@ -91,7 +92,7 @@ namespace fragcore {
 		 */
 		void setNormalAndPoint(const Vector3 &normal, const Vector3 &point) noexcept {
 			this->normal = normal.normalized();
-			this->d = point.dot(this->normal);
+			this->d = std::abs(point.dot(this->normal));
 		}
 
 		/**
@@ -122,9 +123,9 @@ namespace fragcore {
 		 */
 		friend bool operator!=(const Plane &o1, const Plane &o2) noexcept { return !(o1 == o2); }
 
-	  protected:		/*	Attributes.	*/
-		Vector3 normal; /*	*/
-		float d;		/*	*/
+	  protected:					/*	Attributes.	*/
+		Vector3 normal = {0, 1, 0}; /*	*/
+		T d = 0;					/*	*/
 
 	  public: /*	Static methods.	*/
 		/**

@@ -56,6 +56,7 @@ namespace fragcore {
 			if (this->isEmpty()) {
 				throw InvalidArgumentException("");
 			}
+			/*	*/
 			T *obj = &this->getData()[head];
 			head = (head + 1) % getReserved();
 			this->nrElements--;
@@ -64,9 +65,11 @@ namespace fragcore {
 
 		// TODO resolve circluar queue for enqueue and dequeue.
 		T &enqueue(const T &item) {
+			/*	*/
 			if (this->getSize() >= this->getReserved() - 1) {
 				this->resize(this->getReserved() * 2);
 			}
+
 			T *obj = &this->getData()[tail];
 
 			*obj = item;
@@ -120,27 +123,35 @@ namespace fragcore {
 		/*  */
 		class QueueIterator : public Iterator<T> {
 		  public:
-			QueueIterator(Queue<T> *queue);
+			QueueIterator(const Queue<T> *queue, int index) : queue(queue), index(index) {
+				this->iterator = &queue->getData()[index];
+			}
 
-			virtual QueueIterator &operator++() { return *this; }
+			Iterator<T> &operator++() override {
+				this->index = (this->index + 1) % this->queue->getSize();
+				this->iterator = &queue->getData()[index];
+				return *this;
+			}
 
-			virtual QueueIterator &operator++(int) { return *this; }
+			Iterator<T> &operator--() override { return *this; }
 
-			virtual QueueIterator &operator--() { return *this; }
+			Iterator<T> &operator+=(int n) override { return *this; }
 
-			virtual QueueIterator &operator+=(int n) { return *this; }
+			Iterator<T> &operator-=(int n) override { return *this; }
 
-			virtual QueueIterator &operator-=(int n) { return *this; }
+			Iterator<T> &operator+(int n) override { return *this; }
 
-			virtual QueueIterator &operator+(int n) { return *this; }
+			Iterator<T> &operator-(int n) override { return *this; }
+			Iterator<T> &operator[](int index) const override { return *this; }
 
-			virtual QueueIterator &operator-(int n) { return *this; }
-			virtual QueueIterator &operator[](int index) const { return *this; }
+		  private:
+			int index;
+			const Queue<T> *queue;
 		};
 
-		Iterator<T> begin() { return QueueIterator(this); }
+		QueueIterator begin() const noexcept { return QueueIterator(this, this->tail); }
 
-		Iterator<T> end() { return QueueIterator(this); }
+		QueueIterator end() const noexcept { return QueueIterator(this, this->head); }
 
 	  private:
 		inline int getTypeSize() const noexcept { return sizeof(T); }

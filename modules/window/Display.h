@@ -108,29 +108,27 @@ namespace fragcore {
 		 */
 		virtual unsigned int refreshRate() const = 0;
 
-		typedef struct mode_t {
+		using Mode = struct mode_t {
 			int x;
 			int y;
 			unsigned int width;
 			unsigned int height;
 			unsigned int refreshRate;
 			DisplayFormat format;
-		} Mode;
+		};
 
-		typedef struct dpi_t {
+		using DPI = struct dpi_t {
 			float ddpi;
 			float hdpi;
 			float vdpi;
-		} DPI;
+		};
 
 		/**
 		 * @brief Look up Table for each
 		 * pixels value should be remapped to.
 		 *
 		 */
-		typedef struct lut_t {
-
-		} LUT;
+		using LUT = struct lut_t {};
 
 		/**
 		 * @brief Get the Modes object

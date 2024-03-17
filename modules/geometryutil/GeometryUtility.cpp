@@ -4,6 +4,7 @@
 #include "GeometryUtil.h"
 #include <Core/Math.h>
 #include <Core/math3D/LinAlg.h>
+#include <cstdint>
 #include <generator/SubdivideMesh.hpp>
 
 using namespace fragcore;
@@ -18,7 +19,7 @@ std::vector<Triangle> GeometryUtility::createPolygon(const std::vector<Vector3> 
 }
 
 bool GeometryUtility::isConvex(const std::vector<Vector3> &polygon) {
-	
+
 	if (polygon.size() < 3) {
 		return false;
 	}
@@ -48,16 +49,19 @@ bool GeometryUtility::isConvex(const std::vector<Vector3> &polygon) {
 	}
 	return true;
 }
-bool GeometryUtility::isConcave(const std::vector<Vector3> &points) { return !isConvex(points); }
+bool GeometryUtility::isConcave(const std::vector<Vector3> &points) { return !GeometryUtility::isConvex(points); }
 
-AABB GeometryUtility::computeBoundingBox(const Vector3 *vertices, const size_t nrVertices) {
+AABB GeometryUtility::computeBoundingBox(const Vector3 *vertices, const size_t nrVertices, const size_t stride) {
+
 	Vector3 min = Vector3(std::numeric_limits<float>::max(), std::numeric_limits<float>::max(),
 						  std::numeric_limits<float>::max());
 	Vector3 max = Vector3(std::numeric_limits<float>::min(), std::numeric_limits<float>::min(),
 						  std::numeric_limits<float>::min());
 
+	const uint8_t *dataPointer = reinterpret_cast<const uint8_t *>(vertices);
+
 	for (size_t i = 0; i < nrVertices; i++) {
-		const Vector3 &vertex = vertices[i];
+		const Vector3 &vertex = *reinterpret_cast<const Vector3 *>(&dataPointer[i * stride]);
 
 		/*	Max point.	*/
 		if (vertex.x() > max.x()) {
@@ -84,10 +88,13 @@ AABB GeometryUtility::computeBoundingBox(const Vector3 *vertices, const size_t n
 	return AABB::createMinMax(min, max);
 }
 
-BoundingSphere GeometryUtility::computeBoundingSphere(float *vertices, const size_t nrVertices) {
-	return BoundingSphere();
+BoundingSphere GeometryUtility::computeBoundingSphere(float *vertices, const size_t nrVertices, const size_t stride) {
+	Vector3 center;
+	float radius;
+	return BoundingSphere(center, radius);
 }
-OBB GeometryUtility::computeBoundingOBB(float *vertices, const size_t nrVertices) {
+
+OBB GeometryUtility::computeBoundingOBB(float *vertices, const size_t nrVertices, const size_t stride) {
 	// PCA
 	// LinAlg::PCA();
 

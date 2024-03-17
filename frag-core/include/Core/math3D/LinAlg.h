@@ -19,6 +19,7 @@
  */
 #ifndef _FRAG_CORE_LIN_ALG_H_
 #define _FRAG_CORE_LIN_ALG_H_ 1
+#include "../Math.h"
 #include "../Math3D.h"
 #include <cfloat>
 #include <cmath>
@@ -42,6 +43,22 @@ namespace fragcore {
 	typedef double fvvec2d FV_VECTORALIGN(16);
 	typedef double fvvec4d FV_VECTORALIGN(32);
 
+	using Bound = union bound_t {
+		struct aabb {
+			fvvec4f min;
+			fvvec4f max;
+		} aabb;
+		struct sphere_t {
+			fvvec4f center;
+			float radius;
+		} sphere;
+		struct obb_t {
+			fvvec4f u;
+			fvvec4f v;
+			fvvec4f w;
+		} obb;
+	};
+
 	/**
 	 * @brief
 	 *
@@ -50,8 +67,8 @@ namespace fragcore {
 	  public:
 		template <typename T> static std::vector<T> PCA(std::vector<T> &p) {
 			float nInverse = (1.0f / p.size());
-			T m = nInverse * Math::sum<T>(p);
-			//Matrix3x3 C = nInverse;
+			T m = nInverse * fragcore::Math::sum<T>(p);
+			// Matrix3x3 C = nInverse;
 		}
 	};
 } // namespace fragcore

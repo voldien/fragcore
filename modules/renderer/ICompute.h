@@ -58,7 +58,7 @@ namespace fragcore {
 
 		// virtual void deleteSync(Sync *sync);
 
-		virtual const char *getVersion() const;
+		virtual const char *getVersion() const = 0;
 
 		// virtual Shader* createComputeProgram();
 		// virtual Shader* deleteComputeProgram();
