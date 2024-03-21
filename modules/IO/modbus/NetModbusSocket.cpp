@@ -60,7 +60,7 @@ int ModbusNetSocket::close() {
 
 	/*	*/
 	if (this->ctx != nullptr) {
-		TCPNetSocket::close();
+		modbus_close((modbus_t *)this->ctx);
 		modbus_free((modbus_t *)this->ctx);
 	}
 	/*	Reset variables.	*/
@@ -74,26 +74,19 @@ int ModbusNetSocket::bind(const INetAddress &p_addr) {
 
 	/*	*/
 	const TCPUDPAddress &tcpAddress = static_cast<const TCPUDPAddress &>(p_addr);
+
 	if (this->ctx == nullptr) {
 
-		this->ctx = modbus_new_tcp(nullptr, tcpAddress.getPort());
+		this->ctx = modbus_new_tcp(tcpAddress.getIPAddress().getIP().c_str(), tcpAddress.getPort());
 
 		if (this->ctx == nullptr) {
 			throw RuntimeException("{}", modbus_strerror(errno));
 		}
+		// this->socket = this->listen(2);
 	}
 
 	/*	*/
-	TCPNetSocket::bind(tcpAddress);
-
-	/*	*/
-	int rcode = modbus_set_socket(static_cast<modbus_t *>(this->ctx), this->socket);
-	if (rcode == -1) {
-		throw RuntimeException("{}", modbus_strerror(errno));
-	}
-
-	/*	*/
-	rcode = modbus_set_debug(static_cast<modbus_t *>(this->ctx), 0);
+	int rcode = modbus_set_debug(static_cast<modbus_t *>(this->ctx), 0);
 	if (rcode == -1) {
 		throw RuntimeException("{}", modbus_strerror(errno));
 	}
@@ -107,7 +100,17 @@ int ModbusNetSocket::bind(const INetAddress &p_addr) {
 	return 0;
 }
 
-int ModbusNetSocket::listen(unsigned int maxListen) { return TCPNetSocket::listen(maxListen); }
+int ModbusNetSocket::listen(unsigned int maxListen) {
+	if (this->socket == -1) {
+		this->socket = modbus_tcp_listen(static_cast<modbus_t *>(this->ctx), maxListen);
+		if (this->socket < 0) {
+			throw RuntimeException("{}", modbus_strerror(errno));
+		}
+		return this->socket;
+	}
+	return 0;
+	// return TCPNetSocket::listen(maxListen);
+}
 
 int ModbusNetSocket::connect(const INetAddress &addr) {
 	uint32_t old_response_to_sec;
@@ -120,9 +123,7 @@ int ModbusNetSocket::connect(const INetAddress &addr) {
 			throw RuntimeException("Failed to create ModbusTCP Context: {}", modbus_strerror(errno));
 		}
 	}
-
-	/*	Connect over the transport layer.	*/
-	TCPNetSocket::connect(addr);
+	modbus_connect(static_cast<modbus_t *>(this->ctx));
 
 	/*	*/
 	int rcode = modbus_set_socket(static_cast<modbus_t *>(this->ctx), this->socket);
@@ -186,13 +187,15 @@ long int ModbusNetSocket::send(const void *pbuffer, int p_len, int &sent) {
 }
 
 Ref<NetSocket> ModbusNetSocket::accept(INetAddress &r_ip) {
-	Ref<NetSocket> base_socket = TCPNetSocket::accept(r_ip);
+	int accept_socket;
+	modbus_tcp_accept(static_cast<modbus_t *>(this->ctx), &accept_socket);
+	if (accept_socket < 0) {
+		throw RuntimeException(" Failed to Accept modbus {}", modbus_strerror(errno));
+	}
 
-	TCPNetSocket *tcp_net_socket = static_cast<TCPNetSocket *>(*base_socket);
-
-	ModbusNetSocket *_newsocket = new ModbusNetSocket(tcp_net_socket->getSocket());
+	ModbusNetSocket *_newsocket = new ModbusNetSocket(accept_socket);
 	/*	*/
-	return Ref<NetSocket>(_newsocket);
+	return {_newsocket};
 }
 
 ModbusNetSocket::NetStatus ModbusNetSocket::accept(NetSocket &socket) { return TCPNetSocket::accept(socket); }
@@ -206,7 +209,19 @@ void ModbusNetSocket::setBlocking(bool blocking) { /*	*/
 	TCPNetSocket::setBlocking(blocking);
 }
 
+void ModbusNetSocket::setTimeout(long int microsec) {
+
+	/*	Set timeout for client.	*/
+	uint32_t sec = microsec / 1000000;
+	uint32_t usec = microsec % 1000000;
+	modbus_set_indication_timeout((modbus_t *)this->ctx, sec, usec);
+	modbus_set_response_timeout((modbus_t *)this->ctx, sec, usec);
+}
+
+long int ModbusNetSocket::getTimeout() { return 0; }
+
 int ModbusNetSocket::writeRegister(unsigned int address, unsigned int nWords, void *pdata) {
+	/*	*/
 	auto rcode = modbus_write_registers((modbus_t *)this->getModbusContext(), static_cast<int>(address), nWords,
 										(uint16_t *)pdata);
 	if (rcode == -1) {

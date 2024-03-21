@@ -75,7 +75,7 @@ namespace fragcore {
 		static size_t setupIPAddress(sockaddr *addr, const INetAddress &p_addr, uint16_t p_port);
 
 	  protected:
-		int socket;
+		int socket = -1;
 		NetStatus netStatus;
 	};
 } // namespace fragcore

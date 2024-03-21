@@ -56,6 +56,9 @@ namespace fragcore {
 		bool isBlocking() override;
 		void setBlocking(bool blocking) override;
 
+		void setTimeout(long int microsec) override;
+		long int getTimeout() override;
+
 		NetStatus getStatus() const noexcept override;
 
 	  public: /*	Modbus specific methods.	*/
