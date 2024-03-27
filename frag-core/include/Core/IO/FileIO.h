@@ -58,7 +58,9 @@ namespace fragcore {
 		};
 
 	  public: /*	object specific methods.	*/
-		int getFileDescriptor() { return 0; }
+		int getFileDescriptor() { return fileno(this->file); }
+
+		void setBlocking(bool blocking);
 
 	  protected:
 		FILE *file;

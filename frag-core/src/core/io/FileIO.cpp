@@ -102,6 +102,10 @@ FileIO::FileIO(int fd, IOMode mode) {
 
 	const char *f_io_mode = open_mode(mode);
 
+	if (fd == -1) {
+		throw InvalidArgumentException("Failed to open file: {}.", strerror(errno));
+	}
+
 	this->file = fdopen(fd, f_io_mode);
 
 	/*	Check if open was successful.	*/
@@ -155,7 +159,7 @@ long FileIO::write(long int nbytes, const void *pbuffer) {
 
 	nreadBytes = fwrite(pbuffer, 1, nbytes, this->file);
 	if (nreadBytes != nbytes) {
-		throw RuntimeException("Failed to write to file, {}.", strerror(errno));
+		//throw RuntimeException("Failed to write to file, {}.", strerror(errno));
 	}
 
 	int err = ferror(this->file);
@@ -224,4 +228,9 @@ bool FileIO::isReadable() const { return (this->mode & READ) != 0; }
 bool FileIO::flush() {
 	int rc = fflush(this->file);
 	return rc == 0;
+}
+
+void FileIO::setBlocking(bool blocking) {
+	int saved_flags = fcntl(this->getFileDescriptor(), F_GETFL);
+	fcntl(this->getFileDescriptor(), F_SETFL, saved_flags & (blocking ? O_NONBLOCK : 0));
 }
