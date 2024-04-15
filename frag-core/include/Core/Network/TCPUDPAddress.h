@@ -51,7 +51,7 @@ namespace fragcore {
 			return NetworkProtocol::NetWorkProtocol_TCP_UDP;
 		}
 
-		const IPAddress &getIPAddress() const noexcept { return ipAddress; }
+		const IPAddress &getIPAddress() const noexcept { return this->ipAddress; }
 		unsigned int getPort() const noexcept { return this->port; }
 		bool isValid() const noexcept override;
 

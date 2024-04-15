@@ -82,7 +82,8 @@ int ModbusNetSocket::bind(const INetAddress &p_addr) {
 		if (this->ctx == nullptr) {
 			throw RuntimeException("{}", modbus_strerror(errno));
 		}
-		// this->socket = this->listen(2);
+
+	} else {
 	}
 
 	/*	*/
@@ -116,17 +117,24 @@ int ModbusNetSocket::connect(const INetAddress &addr) {
 	uint32_t old_response_to_sec;
 	uint32_t old_response_to_usec;
 
+	const TCPUDPAddress &tcpAddress = static_cast<const TCPUDPAddress &>(addr);
+
 	/*	*/
 	if (this->ctx == nullptr) {
-		this->ctx = modbus_new_tcp(nullptr, 0);
+		this->ctx = modbus_new_tcp(tcpAddress.getIPAddress().getIP().c_str(), tcpAddress.getPort());
+
 		if (this->ctx == nullptr) {
 			throw RuntimeException("Failed to create ModbusTCP Context: {}", modbus_strerror(errno));
 		}
 	}
-	modbus_connect(static_cast<modbus_t *>(this->ctx));
+
+	int rcode = modbus_connect(static_cast<modbus_t *>(this->ctx));
+	if (rcode == -1) {
+		throw RuntimeException("Failed to connect: {}", modbus_strerror(errno));
+	}
 
 	/*	*/
-	int rcode = modbus_set_socket(static_cast<modbus_t *>(this->ctx), this->socket);
+	rcode = modbus_set_socket(static_cast<modbus_t *>(this->ctx), this->socket);
 	if (rcode == -1) {
 		throw RuntimeException("Failed to set Socket: {}", modbus_strerror(errno));
 	}
@@ -214,8 +222,15 @@ void ModbusNetSocket::setTimeout(long int microsec) {
 	/*	Set timeout for client.	*/
 	uint32_t sec = microsec / 1000000;
 	uint32_t usec = microsec % 1000000;
-	modbus_set_indication_timeout((modbus_t *)this->ctx, sec, usec);
-	modbus_set_response_timeout((modbus_t *)this->ctx, sec, usec);
+	int rcode = modbus_set_indication_timeout((modbus_t *)this->ctx, sec, usec);
+	if (rcode == -1) {
+		throw RuntimeException("Failed to set indication timeout Mode: {}", modbus_strerror(errno));
+	}
+	rcode = modbus_set_response_timeout((modbus_t *)this->ctx, sec, usec);
+
+	if (rcode == -1) {
+		throw RuntimeException("Failed to set response timeout Mode: {}", modbus_strerror(errno));
+	}
 }
 
 long int ModbusNetSocket::getTimeout() { return 0; }
