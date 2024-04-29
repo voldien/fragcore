@@ -29,7 +29,8 @@ namespace fragcore {
 	class FVDECLSPEC ModbusRegisterIO : public IO {
 	  public:
 		// TODO add shared pointer.
-		ModbusRegisterIO(ModbusNetSocket &socket, const size_t address_start, const size_t size);
+		ModbusRegisterIO(ModbusNetSocket &socket, const size_t read_address_start, const size_t read_size_bytes,
+						 const size_t write_address_start, const size_t write_size_bytes);
 		~ModbusRegisterIO() override;
 
 		void open(const char *path, IOMode mode) override;
@@ -64,9 +65,12 @@ namespace fragcore {
 
 	  private:
 		ModbusNetSocket &socket;
-		size_t address_start;
-		size_t size;
-		size_t seek_offset = 0;
+		size_t address_write_start;
+		size_t address_read_start;
+		size_t write_size;
+		size_t read_size;
+		size_t seek_write_offset = 0;
+		size_t seek_read_offset = 0;
 	};
 } // namespace fragcore
 
