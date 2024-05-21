@@ -7,9 +7,16 @@ IF(NOT fmt)
 
 	FetchContent_GetProperties(fmt)
 
+	IF(NOT fmt_POPULATED)
 	FetchContent_Populate(fmt)
+	ELSE()
+		MESSAGE( WARNING "Could not find fmt source code")
+	ENDIF()
+	
 
-	ADD_SUBDIRECTORY(${fmt_SOURCE_DIR} ${fmt_BINARY_DIR} EXCLUDE_FROM_ALL)
+	IF(fmt_POPULATED)
+		ADD_SUBDIRECTORY(${fmt_SOURCE_DIR} ${fmt_BINARY_DIR} EXCLUDE_FROM_ALL)
+	ENDIF()
 ENDIF()
 
 IF(NOT spdlog)
@@ -19,9 +26,15 @@ IF(NOT spdlog)
 
 	FetchContent_GetProperties(spdlog)
 
-	FetchContent_Populate(spdlog)
+	IF(NOT spdlog_POPULATED)
+		FetchContent_Populate(spdlog)
+	ELSE()
+		MESSAGE( WARNING "Could not find spdlog source code")
+	ENDIF()
 
-	OPTION(SPDLOG_FMT_EXTERNAL ON)
 
-	ADD_SUBDIRECTORY(${spdlog_SOURCE_DIR} ${spdlog_BINARY_DIR} EXCLUDE_FROM_ALL)
+	SET(SPDLOG_FMT_EXTERNAL ON)
+	IF(spdlog_POPULATED)
+		ADD_SUBDIRECTORY(${spdlog_SOURCE_DIR} ${spdlog_BINARY_DIR} EXCLUDE_FROM_ALL)
+	ENDIF()
 ENDIF()

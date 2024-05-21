@@ -128,7 +128,15 @@ int ModbusNetSocket::connect(const INetAddress &addr) {
 		}
 	}
 
-	int rcode = modbus_connect(static_cast<modbus_t *>(this->ctx));
+	/*	*/
+	int rcode = modbus_set_error_recovery(
+		static_cast<modbus_t *>(this->ctx),
+		static_cast<modbus_error_recovery_mode>(MODBUS_ERROR_RECOVERY_PROTOCOL | MODBUS_ERROR_RECOVERY_LINK));
+	if (rcode == -1) {
+		throw RuntimeException("Failed to set Recovery Mode: {}", modbus_strerror(errno));
+	}
+
+	rcode = modbus_connect(static_cast<modbus_t *>(this->ctx));
 	if (rcode == -1) {
 		throw RuntimeException("Failed to connect: {}", modbus_strerror(errno));
 	}
@@ -144,13 +152,6 @@ int ModbusNetSocket::connect(const INetAddress &addr) {
 		modbus_get_response_timeout(static_cast<modbus_t *>(this->ctx), &old_response_to_sec, &old_response_to_usec);
 	if (rcode == -1) {
 		throw RuntimeException("Failed to set response timeout Mode: {}", modbus_strerror(errno));
-	}
-
-	/*	*/
-	rcode = modbus_set_error_recovery(static_cast<modbus_t *>(this->ctx),
-									  static_cast<modbus_error_recovery_mode>(MODBUS_ERROR_RECOVERY_PROTOCOL));
-	if (rcode == -1) {
-		throw RuntimeException("Failed to set Recovery Mode: {}", modbus_strerror(errno));
 	}
 
 	/*	*/
