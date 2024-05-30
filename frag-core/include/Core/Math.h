@@ -33,7 +33,7 @@ namespace fragcore {
 	class FVDECLSPEC Math {
 	  public:
 		template <class T> inline constexpr static T clamp(const T value, const T min, const T max) noexcept {
-			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
+			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value || std::is_enum<T>::value,
 						  "Must be a decimal type(float/double/half) or integer.");
 			return Math::max<T>(min, Math::min<T>(max, value));
 		}
@@ -42,7 +42,7 @@ namespace fragcore {
 		 *	Get max value of a and b.
 		 */
 		template <typename T> inline constexpr static T max(const T value0, const T value1) noexcept {
-			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
+			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value || std::is_enum<T>::value,
 						  "Must be a decimal type(float/double/half) or integer.");
 			return (static_cast<T>(value0) < static_cast<T>(value1)) ? static_cast<T>(value1) : static_cast<T>(value0);
 		}
@@ -51,7 +51,7 @@ namespace fragcore {
 		 *	Get min value of a and b.
 		 */
 		template <typename T> inline constexpr static T min(const T value0, const T value1) noexcept {
-			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
+			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value || std::is_enum<T>::value,
 						  "Must be a decimal type(float/double/half) or integer.");
 			return (static_cast<T>(value1) < static_cast<T>(value0)) ? static_cast<T>(value1) : static_cast<T>(value0);
 		}

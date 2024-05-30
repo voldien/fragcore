@@ -1,4 +1,3 @@
-
 #include "NetModbusSocket.h"
 #include "Core/Network/TCPSocket.h"
 #include "Core/Network/TCPUDPAddress.h"
@@ -138,7 +137,7 @@ int ModbusNetSocket::connect(const INetAddress &addr) {
 
 	rcode = modbus_connect(static_cast<modbus_t *>(this->ctx));
 	if (rcode == -1) {
-		throw RuntimeException("Failed to connect: {}", modbus_strerror(errno));
+		//throw RuntimeException("Failed to connect: {}", modbus_strerror(errno));
 	}
 
 	/*	*/
@@ -228,6 +227,12 @@ void ModbusNetSocket::setTimeout(long int microsec) {
 		throw RuntimeException("Failed to set indication timeout Mode: {}", modbus_strerror(errno));
 	}
 	rcode = modbus_set_response_timeout((modbus_t *)this->ctx, sec, usec);
+
+	if (rcode == -1) {
+		throw RuntimeException("Failed to set response timeout Mode: {}", modbus_strerror(errno));
+	}
+
+	rcode = modbus_set_byte_timeout((modbus_t *)this->ctx, sec, usec);
 
 	if (rcode == -1) {
 		throw RuntimeException("Failed to set response timeout Mode: {}", modbus_strerror(errno));
