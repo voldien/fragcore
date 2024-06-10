@@ -2,7 +2,7 @@ INCLUDE(FetchContent)
 
 FetchContent_Declare(exceptcxx_source
 	GIT_REPOSITORY https://github.com/voldien/exceptcxx
-	GIT_TAG 24f881afb2e93e9c187d0e350e66b7a2c445a5e3
+	GIT_TAG 35126d6b59ef48a73c904dbfab3e719c95bdc1a3
 ) # or whatever tag you want
 
 FetchContent_GetProperties(exceptcxx_source)

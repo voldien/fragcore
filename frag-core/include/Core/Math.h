@@ -32,6 +32,22 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC Math {
 	  public:
+		/**
+		 *
+		 */
+		template <typename T> inline constexpr static T abs(const T value) noexcept {
+			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
+						  "Must be a decimal type(float/double/half) or integer.");
+
+			if constexpr (std::is_integral<T>::value) {
+				return std::abs(static_cast<long>(value));
+			} else if constexpr (std::is_floating_point<T>::value) {
+				return std::fabs(value);
+			} else {
+				assert(0);
+			}
+		}
+
 		template <class T> inline constexpr static T clamp(const T value, const T min, const T max) noexcept {
 			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value || std::is_enum<T>::value,
 						  "Must be a decimal type(float/double/half) or integer.");
@@ -73,19 +89,131 @@ namespace fragcore {
 		}
 
 		template <typename T> static inline T sum(const std::vector<T> &list) noexcept {
-			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
+			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value || std::is_enum<T>::value,
 						  "Type Must Support addition operation.");
 			return Math::sum<T>(list.data(), list.size());
 		}
 
 		template <typename T> static T sum(const T *list, const size_t nrElements) noexcept {
+			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value || std::is_enum<T>::value,
+						  "Type Must Support addition operation.");
+			T sum = 0;
+			T value;
+			size_t index;
+			// #pragma omp simd reduction(+ : sum) private(value) simdlen(4) linear(index : 1)
+			for (index = 0; index < nrElements; index++) {
+				value = list[index];
+				sum += value;
+			}
+			return sum;
+		}
+
+		template <typename T> static inline T product(const std::vector<T> &list) noexcept {
+			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
+						  "Type Must Support addition operation.");
+			return Math::product<T>(list.data(), list.size());
+		}
+
+		template <typename T> static T product(const T *list, const size_t nrElements) noexcept {
+			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
+						  "Type Must Support addition operation.");
+			T product_combined = 1;
+			size_t index;
+
+#pragma omp simd reduction(* : product_combined) simdlen(4) linear(index : 1)
+			for (index = 0; index < nrElements; index++) {
+				product_combined *= list[index];
+			}
+			return product_combined;
+		}
+
+		template <typename T> static T dot(const T *listA, const T *listB, const size_t nrElements) noexcept {
 			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
 						  "Type Must Support addition operation.");
 			T sum = 0;
-			for (size_t i = 0; i < nrElements; i++) {
-				sum += list[i];
+			size_t index;
+#pragma omp simd reduction(+ : sum) simdlen(4) linear(index : 1)
+			for (index = 0; index < nrElements; index++) {
+				sum += listA[index] * listB[index];
 			}
 			return sum;
+		}
+
+		template <typename T> static void pow(const T exponent, T *list, const size_t nrElements) noexcept {
+			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
+						  "Type Must Support addition operation.");
+			/*	*/
+			size_t index;
+#pragma omp simd simdlen(4) linear(index : 1)
+			for (index = 0; index < nrElements; index++) {
+				list[index] = static_cast<T>(std::pow(list[index], exponent));
+			}
+		}
+
+		template <typename T> constexpr static T mean(const T *list, const size_t nrElements) noexcept {
+			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
+						  "Type Must Support addition operation.");
+			/*	*/
+			const T sum = Math::sum<T>(list, nrElements);
+			const float averageInverse = static_cast<float>(1) / static_cast<float>(nrElements);
+			return static_cast<T>(averageInverse * sum);
+		}
+
+		template <typename T> constexpr static T mean(const std::vector<T> &list) noexcept {
+			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
+						  "Type Must Support addition operation.");
+			const T sum = Math::sum<T>(list);
+			const float averageInverse = static_cast<float>(1) / static_cast<float>(list.size());
+			return static_cast<T>(averageInverse * sum);
+		}
+
+		template <typename T> static T variance(const T *list, const size_t nrElements, const T mean) noexcept {
+			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
+						  "Type Must Support addition operation.");
+			T sum = 0;
+			size_t index;
+#pragma omp simd reduction(+ : sum) simdlen(4) linear(index : 1)
+			for (index = 0; index < nrElements; index++) {
+				sum += (list[index] - mean) * (list[index] - mean);
+			}
+
+			return (static_cast<T>(1) / static_cast<T>((nrElements - 1))) * sum;
+		}
+
+		template <typename T> static inline T variance(const std::vector<T> &list, const T mean) {
+			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
+						  "Type Must Support addition operation.");
+			return Math::variance<T>(list.data(), list.size(), mean);
+		}
+
+		template <typename T> constexpr static inline T standardDeviation(const std::vector<T> &list, const T mean) {
+			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
+						  "Type Must Support addition operation.");
+			return static_cast<T>(std::sqrt(Math::variance<T>(list, mean)));
+		}
+
+		template <typename T>
+		static T cov(const std::vector<T> &listA, const std::vector<T> &listB, const T meanA, const T meanB) {
+			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
+						  "Type Must Support addition operation.");
+
+			T sum = 0;
+
+			const size_t nrElements = listB.size();
+#pragma omp parallel for simd reduction(+ : sum) shared(listA, listB)
+			for (size_t i = 0; i < nrElements; i++) {
+				sum += (listA[i] - meanA) * (listB[i] - meanB);
+			}
+
+			return (static_cast<T>(1) / static_cast<T>(listA.size())) * sum;
+		}
+
+		template <typename T>
+		constexpr static T cor(const std::vector<T> &listA, const std::vector<T> &listB, const T meanA, const T meanB) {
+			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
+
+			return cov<T>(listA, listB, meanA, meanB) /
+				   static_cast<T>(std::sqrt(variance<T>(listB, meanB) * variance<T>(listA, meanA)));
 		}
 
 		/**
@@ -191,8 +319,7 @@ namespace fragcore {
 		}
 
 		template <typename T>
-		static constexpr void guassian(T *guassian, const unsigned int height, const T theta,
-									   const T standard_deviation) {
+		static void guassian(T *guassian, const unsigned int height, const T theta, const T standard_deviation) {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
 
 			const T exp_inverse =
@@ -200,16 +327,18 @@ namespace fragcore {
 			const T sqr_2_pi_inverse = 1.0 / (standard_deviation * static_cast<T>(std::sqrt(2 * Math::PI)));
 
 			const T offset = static_cast<T>(height) / -2;
-
+			// #pragma omp simd
 			for (unsigned int i = 0; i < height; i++) {
 
 				const T exp_num_sqrt = (i - theta + offset);
 
 				const T exponent = exp_inverse * -(exp_num_sqrt * exp_num_sqrt);
+				const T value = sqr_2_pi_inverse * std::exp(exponent);
 
-				guassian[i] = sqr_2_pi_inverse * std::exp(exponent);
+				guassian[i] = value;
 			}
 		}
+
 		/**
 		 *	Generate 2D guassian.
 		 */
@@ -338,6 +467,125 @@ namespace fragcore {
 		template <typename T> static inline constexpr T align(const T size, const T alignment) noexcept {
 			static_assert(std::is_integral<T>::value, "Must be an integral type.");
 			return size + (alignment - (size % alignment));
+		}
+
+	  public:	/*	*/
+#pragma omp declare simd uniform(value) simdlen(4)
+		template <typename T> inline static T computeSigmoid(const T value) noexcept {
+			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
+						  "Must be a decimal type(float/double/half) or integer.");
+			return Math::clamp<T>(static_cast<T>(1) / (std::exp(-value) + static_cast<T>(1)), static_cast<T>(0),
+								  static_cast<T>(1));
+		}
+
+#pragma omp declare simd uniform(value) simdlen(4)
+		template <typename T> inline static T computeSigmoidDerivate(const T value) noexcept {
+			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
+						  "Must be a decimal type(float/double/half) or integer.");
+			const T sig = computeSigmoid(value);
+			return sig * (static_cast<T>(1) - sig);
+		}
+
+#pragma omp declare simd uniform(value) simdlen(4)
+		template <typename T> inline static constexpr T relu(const T value) noexcept {
+			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
+						  "Must be a decimal type(float/double/half) or integer.");
+			return Math::max<T>(0, value);
+		}
+
+#pragma omp declare simd uniform(value) simdlen(4)
+		template <typename T> inline static constexpr T reluDeriviate(const T value) noexcept {
+			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
+						  "Must be a decimal type(float/double/half) or integer.");
+			if (value >= 0) {
+				return 1;
+			}
+			return 0;
+		}
+
+#pragma omp declare simd uniform(value, alpha) simdlen(4)
+		template <typename T> inline static constexpr T leakyRelu(const T alpha, const T value) noexcept {
+			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
+						  "Must be a decimal type(float/double/half) or integer.");
+			if (value < 0) {
+				return alpha * value;
+			}
+			return std::max<T>(0, value);
+		}
+
+#pragma omp declare simd uniform(value, alpha) simdlen(4)
+		template <typename T> inline static constexpr T leakyReluDerivative(const T alpha, const T value) noexcept {
+			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
+						  "Must be a decimal type(float/double/half) or integer.");
+			if (value >= 0) {
+				return 1;
+			}
+			return alpha;
+		}
+
+#pragma omp declare simd uniform(value) simdlen(4)
+		template <typename T> inline static constexpr T computeTanh(const T value) noexcept {
+			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
+						  "Must be a decimal type(float/double/half) or integer.");
+			return std::tanh(value);
+		}
+
+#pragma omp declare simd uniform(value) simdlen(4)
+		template <typename T> inline static constexpr T computeTanhDerivate(const T value) noexcept {
+			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
+						  "Must be a decimal type(float/double/half) or integer.");
+			return 1.0 - (computeTanh<T>(value) * computeTanh<T>(value));
+		}
+
+#pragma omp declare simd uniform(coeff, value) simdlen(4)
+		template <typename T> inline static constexpr T computeLinear(const T coeff, const T value) noexcept {
+			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
+						  "Must be a decimal type(float/double/half) or integer.");
+			return coeff * value;
+		}
+
+#pragma omp declare simd uniform(coeff) simdlen(4)
+		template <typename T> inline static constexpr T computeLinearDerivative(const T coeff) noexcept {
+			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
+						  "Must be a decimal type(float/double/half) or integer.");
+			return coeff;
+		}
+
+#pragma omp declare simd uniform(coeff, value) simdlen(4)
+		template <typename T> inline static constexpr T computeExpLinear(const T coeff, const T value) noexcept {
+			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
+						  "Must be a decimal type(float/double/half) or integer.");
+			if (value >= 0) {
+				return value;
+			}
+			return coeff * (std::exp(value) - 1);
+		}
+
+#pragma omp declare simd uniform(coeff, value) simdlen(4)
+		template <typename T>
+		inline static constexpr T computeExpLinearDerivative(const T coeff, const T value) noexcept {
+			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
+						  "Must be a decimal type(float/double/half) or integer.");
+			if (value >= 0) {
+				return 1;
+			}
+			return coeff * std::exp(value);
+		}
+
+#pragma omp declare simd uniform(value, beta) simdlen(4)
+		template <typename T> inline static constexpr T computeSwish(const T value, const T beta) noexcept {
+			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
+						  "Must be a decimal type(float/double/half) or integer.");
+			return value * computeSigmoid<T>(beta * value);
+		}
+
+#pragma omp declare simd uniform(value, beta) simdlen(4)
+		template <typename T> inline static constexpr T computeSwishDerivative(const T value, const T beta) noexcept {
+			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
+						  "Must be a decimal type(float/double/half) or integer.");
+			const T fvalue = computeSwish(value, beta);
+			const T sigValue = computeSigmoid(value);
+			return fvalue + sigValue * (beta - fvalue);
 		}
 
 	  protected:

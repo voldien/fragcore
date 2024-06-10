@@ -1,5 +1,3 @@
-
-OPTION(BUILD_WITH_SDL_WINDOW "Use SDL for window mangement." ON)
 #OPTION(BUILD_WITH_TASK_SCHEDULER_SCHTASK ON)
 
 OPTION(BUILTIN_NANOSVG "Build with nanosvg" ON)
@@ -14,7 +12,11 @@ SET(THIRDPARTY_SOURCE "" PARENT_SCOPE)
 
 LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" )
 
+########################
+# External libraries.
+########################
 INCLUDE(infoware)
+INCLUDE(cxxconfig)
 IF(NOT TARGET spdlog)
 	INCLUDE(spdlog)
 ENDIF()
@@ -23,7 +25,7 @@ IF(NOT TARGET cxxexcept)
 ENDIF()
 #Eigen
 
-IF(BUILTIN_OPEN_SIMPLEX_NOISE )
+IF(BUILTIN_OPEN_SIMPLEX_NOISE)
 	SET(OPEN_SIMPLEX_NOISE_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/extern/open-simplex-noise-in-c)
 	FILE(GLOB OPEN_SIMPLEX_NOISE_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/extern/open-simplex-noise-in-c/*.c )
 ENDIF()

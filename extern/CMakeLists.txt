@@ -2,7 +2,7 @@
 # is not needed by the project.
 
 ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/task-scheduler EXCLUDE_FROM_ALL)
-ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/cxx-config EXCLUDE_FROM_ALL)
+#ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/cxx-config EXCLUDE_FROM_ALL)
 
 # 	# https://github.com/googlefonts/noto-fonts
 # 	# https://github.com/source-foundry/Hack

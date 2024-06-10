@@ -16,7 +16,6 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-
 #ifndef _FRAG_CORE_TIME_H_
 #define _FRAG_CORE_TIME_H_ 1
 #include "Object.h"

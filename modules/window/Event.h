@@ -16,39 +16,35 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef _ELT_EVENT_H_
-#define _ELT_EVENT_H_ 1
-#include "../ExNT.h"
-#include "../elt_FragDef.h"
+#ifndef _FRAGCORE_EVENT_H_
+#define _FRAGCORE_EVENT_H_ 1
+#include "Window.h"
+#include <FragCore.h>
 
-#ifdef __cplusplus /*	C++ Environment	*/
-extern "C" {
-#endif
+namespace fragcore {
 
-/**
- *
- */
-typedef struct ex_point_t {
-	int x, y; /*	*/
-} ExPoint;
+	/**
+	 *
+	 */
+	using Point = struct point_t { int x, y; /*	*/ };
 
-/**
- *
- */
-typedef struct ex_size_t {
-	unsigned int width;	 /*	*/
-	unsigned int height; /*	*/
-} ExSize;
+	/**
+	 *
+	 */
+	using Size = struct size_t {
+		unsigned int width;	 /*	*/
+		unsigned int height; /*	*/
+	};
 
-/**
- *
- */
-typedef struct ex_rect_t {
-	int x;		/*	*/
-	int y;		/*	*/
-	int width;	/*	*/
-	int height; /*	*/
-} ExRect;
+	/**
+	 *
+	 */
+	using Rect = struct rect_t {
+		int x;		/*	*/
+		int y;		/*	*/
+		int width;	/*	*/
+		int height; /*	*/
+	};
 
 /**
  *	Event flag.
@@ -77,125 +73,114 @@ typedef struct ex_rect_t {
 #define EX_EVENT_WINDOW_HIDE 0x100000	  /*	*/
 #define EX_EVENT_WINDOW_SHOW 0x200000	  /*	*/
 
-typedef struct ex_system_event_t {
-	unsigned int message; /**/
-} ExSystemEvent;
+	using SystemEvent = struct system_event_t { unsigned int message; /**/ };
 
-typedef struct ex_joy_stick_event_t {
+	using JoyStickEvent = struct joy_stick_event_t { unsigned char button[5]; /**/ };
 
-	unsigned char button[5]; /**/
-} ExJoyStickEvent;
+	using JoySticMoveEvent = struct joystick_move_event_t {
 
-typedef struct ex_joystick_move_event_t {
+		/*
+		 *
+		 */
+		unsigned int x[3];
+	};
 
-	/*
+	using JoySticButtonEvent = struct joystick_button_event_t {
+
+		/*
+		 *
+		 */
+		unsigned char button[8];
+	};
+
+	using MouseMoveEvent = struct mouse_move_event_t {
+		int x; /*	*/
+		int y; /*	*/
+	};
+
+	using MouseMotionEvent = struct mouse_motion_event_t {
+		int x;		/**/
+		int y;		/**/
+		int xdelta; /**/
+		int ydelta; /**/
+	};
+
+	using WinButtonEvent = struct win_button_event_t { unsigned char button; /**/ };
+
+	using MouseWheelEvent = struct mouse_wheel_event_t {
+		int delta; /**/
+		int x, y;  /**/
+	};
+
+	using KeyEvent = struct key_event_t {
+		unsigned char code;
+		unsigned char alt;
+		unsigned char shift;
+		unsigned char system;
+		unsigned char ctrl;
+	};
+
+	using DropEvent = struct drop_event_t {
+		/**/
+		int number;
+		/**/
+		int cize;
+	};
+
+	using TouchFingerEvent = struct touch_finger_event_t {
+		unsigned int type;	   /*              */
+		unsigned int touchid;  /*              */
+		unsigned int fingerid; /*              */
+		float x;			   /*              */
+		float y;			   /*              */
+		float dx;			   /*              */
+		float dy;			   /*              */
+		float pressure;		   /*              */
+	};
+
+	using EventDestroyedWindow = struct window_destroy_t { Window *window; /*	*/ };
+
+	using WindowReparent = struct window_reparent_t {
+		Window *parent; /*	*/
+		Window *child;	/*	*/
+	};
+
+	using WindowEvent = struct window_poll_events_t {
+		unsigned int event;				 /*      */
+		KeyEvent key;					 /*      */
+		Size size;						 /*      */
+		MouseMoveEvent mouse;			 /*      */
+		MouseWheelEvent mouseWheelEvent; /*      */
+		WinButtonEvent button;			 /*      */
+		DropEvent drop;					 /*      */
+		unsigned long int time;			 /*		*/
+		Display *display;				 /*		*/
+		Window *window;
+		WindowReparent reparent;
+	};
+
+	/**
 	 *
 	 */
-	unsigned int x[3];
-} ExJoySticMoveEvent;
+	using Event = struct poll_events_t {
+		unsigned int event;				 /*	event type fetched.	*/
+		KeyEvent key;					 /*	key event info.		*/
+		MouseMoveEvent mouse;			 /*          */
+		MouseWheelEvent mouseWheelEvent; /*          */
+		WinButtonEvent button;			 /*          */
+		SystemEvent sys;				 /*          */
+		DropEvent drop;					 /*          */
+		Size size;						 /*          */
+		SystemEvent system;				 /*          */
+		TouchFingerEvent touch;			 /*          */
+		MouseMotionEvent motion;		 /*			*/
+		EventDestroyedWindow destroy;	 /*			*/
+		unsigned long int time;			 /*			*/
+		Display *display;				 /*			*/
+		/*Point location;	*/
+		WindowReparent reparent; /*	*/
+		Window *window;			 /*	*/
+	};
+} // namespace fragcore
 
-typedef struct ex_joystick_button_event_t {
-
-	/*
-	 *
-	 */
-	unsigned char button[8];
-} ExJoySticButtonEvent;
-
-typedef struct ex_mouse_move_event_t {
-	int x; /*	*/
-	int y; /*	*/
-} ExMouseMoveEvent;
-
-typedef struct ex_mouse_motion_event_t {
-	int x;		/**/
-	int y;		/**/
-	int xdelta; /**/
-	int ydelta; /**/
-} ExMouseMotionEvent;
-
-typedef struct elt_win_button_event_t {
-	unsigned char button; /**/
-} ExWinButtonEvent;
-
-typedef struct ex_mouse_wheel_event_t {
-	int delta; /**/
-	int x, y;  /**/
-} ExMouseWheelEvent;
-
-typedef struct ex_key_event_t {
-	unsigned char code;
-	unsigned char alt;
-	unsigned char shift;
-	unsigned char system;
-	unsigned char ctrl;
-} ExKeyEvent;
-
-typedef struct ex_drop_event_t {
-	/**/
-	int number;
-	/**/
-	int cize;
-} ExDropEvent;
-
-typedef struct ex_touch_finger_event_t {
-	unsigned int type;	   /*              */
-	unsigned int touchid;  /*              */
-	unsigned int fingerid; /*              */
-	float x;			   /*              */
-	float y;			   /*              */
-	float dx;			   /*              */
-	float dy;			   /*              */
-	float pressure;		   /*              */
-} ExTouchFingerEvent;
-
-typedef struct ex_window_destroy_t {
-	ExWin window; /*	*/
-} ExEventDestroyedWindow;
-
-typedef struct ex_window_reparent_t {
-	ExWin parent; /*	*/
-	ExWin child;  /*	*/
-} ExWindowReparent;
-
-typedef struct window_poll_events_t {
-	unsigned int event;				   /*      */
-	ExKeyEvent key;					   /*      */
-	ExSize size;					   /*      */
-	ExMouseMoveEvent mouse;			   /*      */
-	ExMouseWheelEvent mouseWheelEvent; /*      */
-	ExWinButtonEvent button;		   /*      */
-	ExDropEvent drop;				   /*      */
-	unsigned long int time;			   /*		*/
-	ExDisplay display;				   /*		*/
-	ExWin window;
-	ExWindowReparent reparent;
-} ExWindowEvent;
-
-/**
- *
- */
-typedef struct elt_poll_events_t {
-	unsigned int event;				   /*	event type fetched.	*/
-	ExKeyEvent key;					   /*	key event info.		*/
-	ExMouseMoveEvent mouse;			   /*          */
-	ExMouseWheelEvent mouseWheelEvent; /*          */
-	ExWinButtonEvent button;		   /*          */
-	ExSystemEvent sys;				   /*          */
-	ExDropEvent drop;				   /*          */
-	ExSize size;					   /*          */
-	ExSystemEvent system;			   /*          */
-	ExTouchFingerEvent touch;		   /*          */
-	ExMouseMotionEvent motion;		   /*			*/
-	ExEventDestroyedWindow destroy;	   /*			*/
-	unsigned long int time;			   /*			*/
-	ExDisplay display;				   /*			*/
-	/*ExPoint location;	*/
-	ExWindowReparent reparent; /*	*/
-	ExWin window;			   /*	*/
-} ExEvent;
-
-#ifdef __cplusplus /*	C++ Environment	*/
-}
-#endif
 #endif

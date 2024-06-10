@@ -16,10 +16,10 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef _FRAG_CORE_INPUT_H_
-#define _FRAG_CORE_INPUT_H_ 1
-#include "Core/Math3D.h"
-#include "Display.h"
+#include <bitset>
+#ifndef _FRAG_CORE_SDL_INPUT_H_
+#define _FRAG_CORE_SDL_INPUT_H_ 1
+#include "../Input.h"
 #include <Core/Math.h>
 #include <Core/SmartReference.h>
 
@@ -28,30 +28,29 @@ namespace fragcore {
 	/**
 	 * @brief
 	 */
-	class Input : public Object {
+	class SDLInput : public Input {
 	  public:
-		Input() = default;
+		SDLInput() = default;
 
-	  public:
-		virtual void update() noexcept = 0;
+		void update() noexcept override;
+		bool anyKey() noexcept override;
 
-		enum class MouseButton : size_t {
-			LEFT_BUTTON = 0,
-			RIGHT_BUTTON = 1,
-			MIDDLE_BUTTON = 2,
-		};
+		// bool getKey() override;
+		// bool getKeyPressed() override;
+		// bool getKeyReleased() override;
 
-		virtual bool anyKey() noexcept = 0;
-		// virtual bool getKey() = 0;
-		// virtual bool getKeyPressed() = 0;
-		// virtual bool getKeyReleased() = 0;
+		bool getMousePosition(int *positionX, int *positionY) noexcept override;
+		Vector2 getMouseScroll() const noexcept override;
 
-		virtual bool getMousePosition(int *positionX, int *positionY) noexcept = 0;
-		virtual Vector2 getMouseScroll() const noexcept = 0;
+		bool getMousePressed(const MouseButton button) noexcept override;
+		bool getMouseDown(const MouseButton button) noexcept override;
+		bool getMouseReleased(const MouseButton button) noexcept override;
 
-		virtual bool getMousePressed(const MouseButton button) noexcept = 0;
-		virtual bool getMouseDown(const MouseButton button) noexcept = 0;
-		virtual bool getMouseReleased(const MouseButton button) noexcept = 0;
+	  private:
+		std::bitset<3> mousePressed = {0};
+		std::bitset<3> mouseDown = {0};
+		std::bitset<3> mouseReleased = {0};
+		int x, y;
 	};
 } // namespace fragcore
 

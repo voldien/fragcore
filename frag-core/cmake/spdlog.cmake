@@ -8,7 +8,7 @@ IF(NOT fmt)
 	FetchContent_GetProperties(fmt)
 
 	IF(NOT fmt_POPULATED)
-	FetchContent_Populate(fmt)
+		FetchContent_Populate(fmt)
 	ELSE()
 		MESSAGE( WARNING "Could not find fmt source code")
 	ENDIF()

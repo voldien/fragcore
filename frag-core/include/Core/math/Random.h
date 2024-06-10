@@ -19,7 +19,8 @@
 #ifndef _FRAG_CORE_RANDOM_H_
 #define _FRAG_CORE_RANDOM_H_ 1
 #include "../../FragDef.h"
-#include <climits>
+#include "NormalDistribution.h"
+#include <random>
 
 namespace fragcore {
 
@@ -28,13 +29,7 @@ namespace fragcore {
 	 *
 	 */
 	class FVDECLSPEC Random {
-
 	  public:
-		Random() = default;
-		Random(const Random &other) = default;
-		Random(Random &&other) = default;
-		~Random() = default;
-
 		template <typename U> static U rand() {
 			static_assert(std::is_floating_point<U>::value || std::is_integral<U>::value,
 						  "Must be a decimal type(float/double/half) or integer.");
@@ -58,7 +53,14 @@ namespace fragcore {
 
 	  private: /*	Attributes.	*/
 		static unsigned int rand_internal() noexcept;
+
+	  public:
+		Random() = delete;
+		Random(const Random &other) = delete;
+		Random(Random &&other) = delete;
+		~Random() = delete;
 	};
+
 } // namespace fragcore
 
 #endif

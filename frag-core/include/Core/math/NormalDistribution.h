@@ -19,29 +19,114 @@
 #ifndef _FRAG_CORE_NORMAL_DISTRIBUTION_H_
 #define _FRAG_CORE_NORMAL_DISTRIBUTION_H_ 1
 #include "../../FragDef.h"
-#include <climits>
+#include <random>
 
 namespace fragcore {
 
 	/**
 	 * @brief
 	 *
+	 * @tparam T
 	 */
-	class FVDECLSPEC NormalDistribution {
+	template <typename T = float> class FVDECLSPEC IRandom {
+		static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
+					  "Must be a decimal type(float/double/half) or integer.");
+
 	  public:
-		NormalDistribution() = default;
-		NormalDistribution(const Random &other) = default;
-		NormalDistribution(Random &&other) = default;
-		~NormalDistribution() = default;
+		using DType = T;
+		const size_t DTypeSize = sizeof(DType);
 
-		template <typename U> static U Guassian() { return 0; }
+		IRandom() {}
+		virtual ~IRandom() = default;
 
-		template <typename U> static U GlorotNormal() { return 0; }
+		virtual DType rand() noexcept = 0;
 
-		template <typename U> static U RandomNormal() { return 0; }
+		virtual void reset() noexcept = 0;
 
-		template <typename U> static U RandomUniform() { return 0; }
-		
+	  public:
+	  protected:
+		std::random_device random_device; // Will be used to obtain a seed for the random number engine
+	};
+
+	/**
+	 * @brief
+	 *
+	 * @tparam U
+	 */
+	template <typename U> class FVDECLSPEC RandomUniform : public IRandom<U> {
+	  public:
+		RandomUniform(const U min = 0.0, const U max = 1.0, const size_t seed = 0) {
+			this->distribution = std::uniform_real_distribution<U>(min, max);
+			this->generator.seed(seed);
+		}
+
+		U rand() noexcept override { return this->distribution(this->generator); }
+		void reset() noexcept override { this->distribution.reset(); }
+
+	  private:
+		std::uniform_real_distribution<U> distribution;
+		std::default_random_engine generator;
+	};
+
+	/**
+	 * @brief
+	 *
+	 * @tparam U
+	 */
+	template <typename U> class FVDECLSPEC RandomNormal : public IRandom<U> {
+	  public:
+		RandomNormal(const U mean = 0.0, const U stddev = 1.0, const size_t seed = 118284) {
+			this->distribution = std::normal_distribution<U>(mean, stddev);
+			std::random_device random_device;
+			this->gen = std::mt19937(random_device()); // Standard mersenne_twister_engine seeded with rd()
+			this->gen.seed(seed);
+		}
+
+		U rand() noexcept override { return this->distribution(this->gen); }
+		void reset() noexcept override { this->distribution.reset(); }
+
+	  private:
+		std::normal_distribution<U> distribution;
+		std::mt19937 gen;
+	};
+
+	/**
+	 * @brief
+	 *
+	 * @tparam U
+	 */
+	template <typename U> class FVDECLSPEC RandomBernoulli : public IRandom<U> {
+	  public:
+		RandomBernoulli(const U perc = 1.0, const size_t seed = 512523) {
+			this->distribution = std::bernoulli_distribution(perc);
+			std::random_device random_device;
+			this->generator = std::mt19937(random_device()); // Standard mersenne_twister_engine seeded with rd()
+			this->generator.seed(seed);
+		}
+
+		U rand() noexcept override { return this->distribution(this->generator); }
+		void reset() noexcept override { this->distribution.reset(); }
+
+	  private:
+		std::bernoulli_distribution distribution;
+		std::mt19937 generator;
+	};
+
+	template <typename U> class FVDECLSPEC RandomBinomial : public IRandom<U> {
+	  public:
+		RandomBinomial(const U perc = 0.5, const size_t seed = 123456) {
+			this->distribution = std::binomial_distribution<>(seed, perc);
+			std::random_device random_device;
+			this->generator = std::mt19937(random_device());
+			this->generator.seed(seed);
+		}
+
+		U rand() noexcept override { return this->distribution(this->generator); }
+		void reset() noexcept override { this->distribution.reset(); }
+
+	  private:
+		std::binomial_distribution<> distribution;
+		std::mt19937 generator;
 	};
 } // namespace fragcore
 

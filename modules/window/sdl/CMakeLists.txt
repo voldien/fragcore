@@ -1,7 +1,3 @@
-
-#
-#
-
 FIND_PACKAGE(SDL2 QUIET)
 
 IF(SDL2_FOUND)

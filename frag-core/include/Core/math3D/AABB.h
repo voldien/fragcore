@@ -182,7 +182,7 @@ namespace fragcore {
 		 * @return reference of object.
 		 */
 		friend AABB operator*(const AABB &bound, float scalar) noexcept {
-			return AABB(bound.getCenter(), bound.getSize() * scalar);
+			return {bound.getCenter(), bound.getSize() * scalar};
 		}
 
 		/**
@@ -192,7 +192,7 @@ namespace fragcore {
 		 * @return reference of object.
 		 */
 		friend AABB operator/(const AABB &bound, const float divisor) noexcept(noexcept(divisor == 0)) {
-			return AABB(bound.getCenter(), bound.getSize() / divisor);
+			return {bound.getCenter(), bound.getSize() / divisor};
 		}
 
 		/**
@@ -234,8 +234,8 @@ namespace fragcore {
 		}
 
 		static AABB createMinMax(const Vector3 &min, const Vector3 &max) noexcept {
-			const Vector3 center = (min - max) / 2.0f;
 			const Vector3 size = (max - min);
+			const Vector3 center = (min - max) / 2.0f;
 			return {size, center};
 		}
 
