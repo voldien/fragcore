@@ -23,8 +23,8 @@
 
 namespace fragcore {
 	/**
-	 * @brief 
-	 * 
+	 * @brief
+	 *
 	 */
 	enum class GLCommandBufferCmd {
 		ClearImage,
@@ -67,8 +67,8 @@ namespace fragcore {
 	};
 
 	/**
-	 * @brief 
-	 * 
+	 * @brief
+	 *
 	 */
 	class FVDECLSPEC GLCommandBase {
 	  public:

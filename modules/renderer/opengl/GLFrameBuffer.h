@@ -29,17 +29,18 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC GLFrameBuffer : public FrameBuffer {
 		friend class GLRendererInterface;
+
 	  public:
-		virtual int attachmentCount() override;
-		virtual std::vector<Texture *> getColorTargets() override;
+		int attachmentCount() override;
+		std::vector<Texture *> getColorTargets() override;
 
-		virtual void bind() override;
+		void bind() override;
 
-		virtual void unBind() override;
+		void unBind() override;
 
-		virtual void write() override;
+		void write() override;
 
-		virtual void read() const override;
+		void read() const override;
 
 		/**
 		 *	Get texture attached to framebuffer by index.
@@ -100,7 +101,7 @@ namespace fragcore {
 		virtual void setName(const std::string &name) override;
 
 	  private:
-        FrameBufferDesc desc;
+		FrameBufferDesc desc;
 		Texture *textures;
 		unsigned int numtextures;
 		unsigned int framebuffer;

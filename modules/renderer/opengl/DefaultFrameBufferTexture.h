@@ -16,8 +16,8 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef _FRAG_CORE_DEFAULTFRAMEBUFFERTEXTURE_H_
-#define _FRAG_CORE_DEFAULTFRAMEBUFFERTEXTURE_H_ 1
+#ifndef _FRAG_CORE_DEFAULT_FRAMEBUFFER_TEXTURE_H_
+#define _FRAG_CORE_DEFAULT_FRAMEBUFFER_TEXTURE_H_ 1
 #include "GLTexture.h"
 
 namespace fragcore {

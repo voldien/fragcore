@@ -79,7 +79,7 @@ VKRenderInterface::VKRenderInterface(IConfig *config) {
 	this->languageSupport = SPIRV;
 	this->getCapability(&this->capability);
 
-	this->queue = getDevice()->getDefaultGraphicQueue();
+	//this->queue = getDevice()->getDefaultGraphicQueue();
 }
 
 VKRenderInterface::~VKRenderInterface() {

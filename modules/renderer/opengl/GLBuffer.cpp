@@ -34,8 +34,9 @@ void GLBuffer::subData(const void *data, unsigned int offset, unsigned int size)
 	if (pmap) {
 		memcpy(pmap + offset, data, size);
 		this->unMapBuffer();
-	} else
+	} else {
 		glBufferSubDataARB(this->target, offset, size, data);
+	}
 }
 
 void *GLBuffer::getData(unsigned int offset, unsigned int size) {
@@ -71,29 +72,38 @@ long int GLBuffer::getSize() {
 static GLenum getAccessEnum(GLBuffer::MapTarget target) {
 	GLenum access = 0;
 
-	if (target & GLBuffer::MapTarget::Read)
+	if (target & GLBuffer::MapTarget::Read) {
 		access |= GL_MAP_READ_BIT;
-	if (target & GLBuffer::MapTarget::Write)
+	}
+	if (target & GLBuffer::MapTarget::Write) {
 		access |= GL_MAP_WRITE_BIT;
-	if (target & GLBuffer::MapTarget::ReadWrite)
+	}
+	if (target & GLBuffer::MapTarget::ReadWrite) {
 		access |= GL_MAP_WRITE_BIT | GL_MAP_READ_BIT;
-	if (target & GLBuffer::MapTarget::NoSync)
+	}
+	if (target & GLBuffer::MapTarget::NoSync) {
 		access |= GL_MAP_UNSYNCHRONIZED_BIT;
-	if (target & GLBuffer::MapTarget::PERSISTENT)
+	}
+	if (target & GLBuffer::MapTarget::PERSISTENT) {
 		access |= GL_MAP_PERSISTENT_BIT;
-	if (target & GLBuffer::MapTarget::FlushExplicit)
+	}
+	if (target & GLBuffer::MapTarget::FlushExplicit) {
 		access |= GL_MAP_FLUSH_EXPLICIT_BIT;
+	}
 	return access;
 }
 
 static GLenum getAccessOlder(GLBuffer::MapTarget target) {
 	GLenum access = 0;
-	if (target & GLBuffer::MapTarget::Read)
+	if (target & GLBuffer::MapTarget::Read) {
 		access |= GL_READ_ONLY_ARB;
-	if (target & GLBuffer::MapTarget::Write)
+	}
+	if (target & GLBuffer::MapTarget::Write) {
 		access |= GL_WRITE_ONLY_ARB;
-	if (target & GLBuffer::MapTarget::ReadWrite)
+	}
+	if (target & GLBuffer::MapTarget::ReadWrite) {
 		access |= GL_READ_WRITE_ARB;
+	}
 	return access;
 }
 
@@ -116,10 +126,9 @@ void *GLBuffer::mapBuffer(MapTarget target, unsigned long int offset, unsigned l
 
 	if (glMapNamedBufferRange) {
 		return glMapNamedBufferRange(this->buffer, offset, length, mode);
-	} else {
-		this->bind();
-		return glMapBufferRange(this->target, offset, length, mode);
 	}
+	this->bind();
+	return glMapBufferRange(this->target, offset, length, mode);
 }
 
 void GLBuffer::flush(unsigned long int offset, unsigned long int length) {

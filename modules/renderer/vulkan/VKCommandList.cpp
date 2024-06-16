@@ -20,7 +20,7 @@ VKCommandList::VKCommandList(Ref<VKRenderInterface> &renderer) : renderer(render
 	/*  Create command pool.    */
 	VkCommandPoolCreateInfo cmdPoolCreateInfo = {};
 	cmdPoolCreateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-	cmdPoolCreateInfo.queueFamilyIndex = renderer->getDevice()->getDefaultGraphicQueueIndex();
+	cmdPoolCreateInfo.queueFamilyIndex = 0;//renderer->getDevice()->getQueue(0, 0);
 	cmdPoolCreateInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
 
 	/*  Create command pool.    */

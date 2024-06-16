@@ -36,7 +36,7 @@ VKRenderWindow::VKRenderWindow(Ref<VKRenderInterface> &renderer) : renderer(rend
 	/*  Create command pool.    */
 	VkCommandPoolCreateInfo cmdPoolCreateInfo = {};
 	cmdPoolCreateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-	cmdPoolCreateInfo.queueFamilyIndex = renderer->device->getDefaultGraphicQueueIndex();
+	cmdPoolCreateInfo.queueFamilyIndex = 0; // renderer->device->getDefaultGraphicQueueIndex();
 	cmdPoolCreateInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
 
 	/*  Create command pool.    */
@@ -289,13 +289,13 @@ void VKRenderWindow::swapBuffer() {
 	/*	*/
 	presentInfo.pImageIndices = &imageIndex;
 
-	result = vkQueuePresentKHR(this->renderer->device->getDefaultPresent(), &presentInfo);
-	if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR) {
-		// framebufferResized = false;
-		recreateSwapChain();
-	} else if (result != VK_SUCCESS) {
-		throw cxxexcept::RuntimeException("failed to present swap chain image!");
-	}
+	//result = vkQueuePresentKHR(this->renderer->device->getDefaultPresent(), &presentInfo);
+	//if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR) {
+	//	// framebufferResized = false;
+	//	recreateSwapChain();
+	//} else if (result != VK_SUCCESS) {
+	//	throw cxxexcept::RuntimeException("failed to present swap chain image!");
+	//}
 
 	/*  Compute current frame.  */
 	this->swapChain.currentFrame =
@@ -596,9 +596,11 @@ VkImageView VKRenderWindow::getDefaultImageView() const {
 
 VkFormat VKRenderWindow::getDefaultImageFormat() const noexcept { return this->swapChain.swapChainImageFormat; }
 
-VkQueue VKRenderWindow::getDefaultGraphicQueue() const { return this->renderer->device->getDefaultGraphicQueue(); }
+VkQueue VKRenderWindow::getDefaultGraphicQueue() const {
+	return 0; /*this->renderer->device->getDefaultGraphicQueue(); */
+}
 
-VkQueue VKRenderWindow::getDefaultComputeQueue() const { return this->renderer->device->getDefaultCompute(); }
+VkQueue VKRenderWindow::getDefaultComputeQueue() const { return 0; /*this->renderer->device->getDefaultCompute(); */ }
 
 const std::vector<VkImage> &VKRenderWindow::getSwapChainImages() const noexcept {
 	return this->swapChain.swapChainImages;
