@@ -256,15 +256,16 @@ namespace fragcore {
 		 * 	and will thus exceed eitehr the start or the end point.
 		 * @return constexpr T
 		 */
-		template <typename T> inline constexpr static T lerp(const T value0, const T value1, const T interp) noexcept {
-			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
+		template <typename T, typename U>
+		inline constexpr static T lerp(const T value0, const T value1, const U interp) noexcept {
+			static_assert(std::is_floating_point<U>::value, "Must be a decimal type(float/double/half).");
 			return (value0 + (value1 - value0) * interp);
 		}
 
-		template <typename T>
-		inline constexpr static T lerpClamped(const T value0, const T value1, const T interp) noexcept {
-			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
-			return (value0 + (value1 - value0) * Math::clamp<T>(interp, static_cast<T>(0.0), static_cast<T>(1.0)));
+		template <typename T, typename U>
+		inline constexpr static T lerpClamped(const T value0, const T value1, const U interp) noexcept {
+			static_assert(std::is_floating_point<U>::value, "Must be a decimal type(float/double/half).");
+			return (value0 + (value1 - value0) * Math::clamp<U>(interp, static_cast<U>(0.0), static_cast<U>(1.0)));
 		}
 
 		template <typename T> inline constexpr static T mod(const T value, const T mod) noexcept {
@@ -469,7 +470,7 @@ namespace fragcore {
 			return size + (alignment - (size % alignment));
 		}
 
-	  public:	/*	*/
+	  public: /*	*/
 #pragma omp declare simd uniform(value) simdlen(4)
 		template <typename T> inline static T computeSigmoid(const T value) noexcept {
 			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
