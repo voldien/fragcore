@@ -18,7 +18,7 @@
  */
 #ifndef _FRAG_CORE_LINE_H_
 #define _FRAG_CORE_LINE_H_ 1
-#include "../../FragDef.h"
+#include"LinAlg.h"
 #include "Shape.h"
 #include <iostream>
 

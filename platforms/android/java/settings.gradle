@@ -1,4 +1,0 @@
-rootProject.name = "fragcore"
-
-include ':app'
-include ':lib'

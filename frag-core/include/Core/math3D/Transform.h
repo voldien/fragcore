@@ -40,7 +40,7 @@ namespace fragcore {
 			this->scale = other.scale;
 		}
 
-		Transform &operator=(Transform &other) {
+		Transform &operator=(const Transform &other) {
 			this->position = other.position;
 			this->quaternion = other.quaternion;
 			this->scale = other.scale;

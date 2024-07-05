@@ -28,7 +28,7 @@ namespace fragcore {
 	 * @brief
 	 *
 	 */
-	class Time : public Object {
+	class FVDECLSPEC Time : public Object {
 	  public:
 		Time() {}
 
@@ -38,6 +38,8 @@ namespace fragcore {
 		}
 
 		template <typename T> T getElapsed() const noexcept {
+			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
+
 			duration<T> time_span = duration_cast<duration<T>>(steady_clock::now() - start_timestamp);
 
 			return time_span.count();
@@ -61,11 +63,15 @@ namespace fragcore {
 		}
 
 		template <typename T> T now() const noexcept {
+			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
+
 			const auto t0 = steady_clock::now();
 			return static_cast<T>(t0.time_since_epoch().count());
 		}
 
 		template <typename T> T nowHighRes() const noexcept {
+			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
+
 			const auto t0 = std::chrono::high_resolution_clock::now();
 			return static_cast<T>(t0.time_since_epoch().count());
 		}

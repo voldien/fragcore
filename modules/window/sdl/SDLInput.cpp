@@ -13,25 +13,25 @@ void SDLInput::update() noexcept {
 							(SDL_BUTTON_LMASK & mask) != 0 &&
 								!this->mousePressed[static_cast<size_t>(MouseButton::LEFT_BUTTON)]);
 	this->mouseDown.set(static_cast<size_t>(MouseButton::RIGHT_BUTTON),
-							(SDL_BUTTON_MMASK & mask) != 0 &&
+							(SDL_BUTTON_RMASK & mask) != 0 &&
 								!this->mousePressed[static_cast<size_t>(MouseButton::RIGHT_BUTTON)]);
 	this->mouseDown.set(static_cast<size_t>(MouseButton::MIDDLE_BUTTON),
-							(SDL_BUTTON_RMASK & mask) != 0 &&
+							(SDL_BUTTON_MMASK & mask) != 0 &&
 								!this->mousePressed[static_cast<size_t>(MouseButton::MIDDLE_BUTTON)]);
 
 	this->mouseReleased.set(static_cast<size_t>(MouseButton::LEFT_BUTTON),
 							(SDL_BUTTON_LMASK & mask) == 0 &&
 								this->mousePressed[static_cast<size_t>(MouseButton::LEFT_BUTTON)]);
 	this->mouseReleased.set(static_cast<size_t>(MouseButton::RIGHT_BUTTON),
-							(SDL_BUTTON_MMASK & mask) == 0 &&
+							(SDL_BUTTON_RMASK & mask) == 0 &&
 								this->mousePressed[static_cast<size_t>(MouseButton::RIGHT_BUTTON)]);
 	this->mouseReleased.set(static_cast<size_t>(MouseButton::MIDDLE_BUTTON),
-							(SDL_BUTTON_RMASK & mask) == 0 &&
+							(SDL_BUTTON_MMASK & mask) == 0 &&
 								this->mousePressed[static_cast<size_t>(MouseButton::MIDDLE_BUTTON)]);
 
 	this->mousePressed.set(static_cast<size_t>(MouseButton::LEFT_BUTTON), (SDL_BUTTON_LMASK & mask) != 0);
-	this->mousePressed.set(static_cast<size_t>(MouseButton::RIGHT_BUTTON), (SDL_BUTTON_MMASK & mask) != 0);
-	this->mousePressed.set(static_cast<size_t>(MouseButton::MIDDLE_BUTTON), (SDL_BUTTON_RMASK & mask) != 0);
+	this->mousePressed.set(static_cast<size_t>(MouseButton::RIGHT_BUTTON), (SDL_BUTTON_RMASK & mask) != 0);
+	this->mousePressed.set(static_cast<size_t>(MouseButton::MIDDLE_BUTTON), (SDL_BUTTON_MMASK & mask) != 0);
 }
 
 bool SDLInput::anyKey() noexcept { return false; }

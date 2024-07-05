@@ -23,13 +23,14 @@
 
 namespace fragcore {
 	class IScheduler;
+
 	/**
 	 * @brief
 	 *
 	 */
 	class FVDECLSPEC Task : public Object {
 	  public:
-		virtual ~Task() = default;
+		~Task() override = default;
 
 		using TaskCallBack = void (*)(Task *);
 		TaskCallBack callback;
@@ -55,8 +56,8 @@ namespace fragcore {
 		class FVDECLSPEC TaskFunc : public Task {
 		  public:
 			template <class Function, class... Args> explicit TaskFunc(Function &&f, Args &&... args) {}
-			 void Execute() noexcept override {}
-			 void Complete() noexcept override {}
+			void Execute() noexcept override {}
+			void Complete() noexcept override {}
 		};
 
 	  public:

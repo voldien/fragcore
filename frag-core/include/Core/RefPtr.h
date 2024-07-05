@@ -29,7 +29,7 @@ namespace fragcore {
 	 *
 	 * @tparam T
 	 */
-	template <class T> class RefPtr {
+	template <class T> class FVDECLSPEC RefPtr {
 	  public:
 		static_assert(std::is_object<T>::value, "Must be a class object.");
 

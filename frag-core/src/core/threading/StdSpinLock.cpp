@@ -4,13 +4,12 @@ using namespace fragcore;
 
 StdSpinLock::StdSpinLock() {
 	int rc = schCreateSpinLock(&this->spinlock);
-	if (rc != SCH_OK)
+	if (rc != SCH_OK) {
 		throw RuntimeException("Failed to create spinlock: {}", schErrorMsg(rc));
+	}
 }
 
-StdSpinLock::~StdSpinLock() {
-	schDeleteSpinLock(this->spinlock);
-}
+StdSpinLock::~StdSpinLock() { schDeleteSpinLock(this->spinlock); }
 
 void StdSpinLock::lock() {
 

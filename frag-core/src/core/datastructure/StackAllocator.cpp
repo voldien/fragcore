@@ -25,7 +25,7 @@ StackAllocator::StackAllocator(const size_t stackSizeBytes) : StackAllocator() {
 
 StackAllocator::~StackAllocator() { free(this->mData); }
 
-void *StackAllocator::alloc(size_t sizeBytes) {
+void *StackAllocator::alloc(const size_t sizeBytes) {
 
 	this->mSize = sizeBytes;
 	this->mData = realloc(mData, sizeBytes);

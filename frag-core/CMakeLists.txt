@@ -1,5 +1,3 @@
-#OPTION(BUILD_WITH_TASK_SCHEDULER_SCHTASK ON)
-
 OPTION(BUILTIN_NANOSVG "Build with nanosvg" ON)
 OPTION(BUILTIN_EIGEN "Build with Eigne" ON)
 OPTION(BUILTIN_OPEN_SIMPLEX_NOISE "Build with open Simple Noise" ON)
@@ -116,6 +114,7 @@ FILE(GLOB SOURCE_FILES  ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
 
 #
 FILE(GLOB HEADER_FILES  ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h
+						${CMAKE_CURRENT_SOURCE_DIR}/include/Core/*.h
 						${CMAKE_CURRENT_SOURCE_DIR}/include/Utils/*.h)
 
 # Public headers - subset of header files.

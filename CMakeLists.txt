@@ -1,5 +1,5 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
-PROJECT(FragCore)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.9..3.20)
+PROJECT(FragCore CXX)
 
 # -----------------------------------------------------------------------------
 # Set policy
@@ -31,6 +31,7 @@ ENDIF()
 
 # Use GNUInstallDirs for Unix predefined directories
 INCLUDE(GNUInstallDirs)
+
 
 SET(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin CACHE INTERNAL "" FORCE)
 SET(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib CACHE INTERNAL "" FORCE)
@@ -330,17 +331,6 @@ IF(BUILD_WITH_TEST)
 	ENABLE_TESTING()
 ENDIF()
 
-# ###############################
-# Platform specific
-# ################################
-IF(ANDROID)
-	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/platforms/android)
-ENDIF()
-
-IF(UNIX)
-	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/platforms/unix)
-ENDIF()
-
 # #########################################################
 # Seperate Modules, based on the core library.
 # #########################################################
@@ -387,11 +377,6 @@ IF(BUILD_MODULES)
 	#
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/taskscheduler/TaskSch)
 
-	# Font Creation.
-	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/font)
-
-	# Video playback.
-	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/videoplayback)
 ENDIF(BUILD_MODULES)
 
 # #########################################

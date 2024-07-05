@@ -93,19 +93,16 @@ make
 ctest
 ```
 
-
 ## Modules
 
 The project is design that modules can be use to reduce both dependices and code depdending on what the library is integrate with. Currently, this can be done with CMake. The modules can be located in the [modules](modules) directory.
 
-- **Audio** - Currently it supports OpenAL and FMOD
-- **Font** - Create fonts sprites.
+- **Audio** - Currently it supports OpenAL.
 - **Geometry Util** - 
 - **Image Loader** - Load/Save Image.
 - **IO** - File, Memory, Modbus, Serial, TCP/UDP
 - **Physic** - Physic Simulator for Game Engines. Bullet/PhyX/RPC
 - **Renderer** - Vulkan/OpenGL
-- **VideoPlayback** - FFMPEG
 - **Window** - SDL/GLFW
 - **TaskScheduler** - Task scheduler for distrubte tasks on CPU.
 

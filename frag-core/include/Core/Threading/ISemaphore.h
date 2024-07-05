@@ -19,6 +19,7 @@
 #ifndef _FRAG_CORE_ISEMPAHORE_H_
 #define _FRAG_CORE_ISEMPAHORE_H_ 1
 #include "../UIDObject.h"
+
 namespace fragcore {
 	/**
 	 * @brief

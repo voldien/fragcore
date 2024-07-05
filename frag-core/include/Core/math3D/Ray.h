@@ -29,16 +29,16 @@ namespace fragcore {
 	struct FVDECLSPEC Ray {
 	  public:
 		Ray() = default;
-		Ray(const Vector3 &origin, const Vector3 &direction) {
+		Ray(const Vector3 &origin, const Vector3 &direction) noexcept {
 			this->setOrigin(origin);
 			this->setDirection(direction);
 		}
-		Ray(const Ray &ray) {
+		Ray(const Ray &ray) noexcept {
 			this->setOrigin(ray.getOrigin());
 			this->setDirection(ray.getDirection());
 		}
 
-		Ray &operator=(const Ray &other) {
+		Ray &operator=(const Ray &other) noexcept {
 			this->setOrigin(other.getOrigin());
 			this->setDirection(other.getDirection());
 			return *this;
@@ -71,7 +71,7 @@ namespace fragcore {
 		 * in respect to direction.
 		 * @return point on the ray.
 		 */
-		inline Vector3 pointAtParameter(float t) const noexcept { return this->getOrigin() + t * this->getDirection(); }
+		inline Vector3 pointAtParameter(const float t) const noexcept { return this->getOrigin() + t * this->getDirection(); }
 
 	  private: /*	Attributes.	*/
 		/**

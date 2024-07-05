@@ -10,8 +10,9 @@
 using namespace fragcore;
 
 static void validateAudioSourceDesc(AudioSourceDesc *desc) {
-	if (desc == nullptr)
+	if (desc == nullptr) {
 		throw InvalidPointerException("AudioSourceDesc invalid pointer");
+	}
 }
 
 static void validateClipDesc(AudioClipDesc *desc) {
@@ -125,8 +126,9 @@ AudioReverb *OpenALAudioInterface::createAudioReverb(AudioReverbDesc *desc) {
 	validateAudioReverbDesc(desc);
 
 	/*	Validate the system.	*/
-	if (!this->supportEffects)
+	if (!this->supportEffects) {
 		throw RuntimeException("");
+	}
 
 	return nullptr;
 }
@@ -222,8 +224,9 @@ void OpenALAudioInterface::setAudioDevice(const AudioPhysicalDevice &device) {
 		this->alDeleteEffects = (LPALDELETEEFFECTS)alGetProcAddress("alDeleteEffects");
 		this->alIsEffect = (LPALISEFFECT)alGetProcAddress("alIsEffect");
 
-		if (!(this->alGenEffects && this->alDeleteEffects && this->alIsEffect))
+		if (!(this->alGenEffects && this->alDeleteEffects && this->alIsEffect)) {
 			this->supportEffects = false;
+		}
 
 		/* Use Context creation hint to request 4 Auxiliary */ /* Sends per Source */
 		attribs[0] = ALC_MAX_AUXILIARY_SENDS;

@@ -2,7 +2,7 @@ INCLUDE(FetchContent)
 
 FetchContent_Declare(magic_enum_source
 	GIT_REPOSITORY https://github.com/Neargye/magic_enum.git
-	GIT_TAG v0.8.0
+	GIT_TAG v0.9.5
 ) # or whatever tag you want
 
 FetchContent_GetProperties(magic_enum_source)

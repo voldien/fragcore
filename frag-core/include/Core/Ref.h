@@ -28,7 +28,7 @@ namespace fragcore {
 	 *
 	 * @tparam T
 	 */
-	template <class T> class Ref { // TODO perhaps use the RefPtr as base?
+	template <class T> class FVDECLSPEC Ref { // TODO perhaps use the RefPtr as base?
 		static_assert(std::is_object<T>::value, "Must be a Object");
 		// static_assert(std::has_virtual_destructor<T>::value, "Must have a virtual deconstructor");
 

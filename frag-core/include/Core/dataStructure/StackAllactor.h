@@ -39,7 +39,7 @@ namespace fragcore {
 		 *	Allocate n number of bytes.
 		 *	@return first memory address.
 		 */
-		void *alloc(size_t sizeBytes);
+		void *alloc(const size_t sizeBytes);
 
 		/**
 		 *	Get size of the allocated data block

@@ -29,13 +29,13 @@ namespace fragcore {
 	class StdSpinLock : public ISpinLock {
 	  public:
 		StdSpinLock();
-		virtual ~StdSpinLock();
+		~StdSpinLock() override;
 
-		virtual void lock() = 0;
-		virtual void unlock() = 0;
-		virtual void wait(long int nanoTimeout = -1) = 0;
+		void lock() override = 0;
+		void unlock() override = 0;
+		void wait(long int nanoTimeout = -1) override = 0;
 
-		virtual intptr_t getNativePtr() const = 0;
+		intptr_t getNativePtr() const override = 0;
 
 	  private:
 		schSpinLock *spinlock; /*  */

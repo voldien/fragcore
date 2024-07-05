@@ -26,7 +26,7 @@ namespace fragcore {
 	 *	This is a simple UID generator.
 	 *	Each next will be an increment of previosuly.
 	 */
-	template <class T> class UIDGenerator {
+	template <class T> class FVDECLSPEC UIDGenerator {
 	  public:
 		static_assert(std::is_arithmetic<T>::value, "Must support artithmetic operations");
 		UIDGenerator() noexcept { this->nextUID = 0; }

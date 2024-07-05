@@ -108,17 +108,17 @@ namespace fragcore {
 		 */
 		enum class Format : uint32_t { // GraphicsFormat
 			NoFormat,
-			RGB = 0x1,	 /*	RGB components.	*/
+			RGB = 0x1,	/*	RGB components.	*/
 			RGBA = 0x2, /*	RGBA components.	*/
-			BGR = 0x3,	 /*	BGR components.	*/
+			BGR = 0x3,	/*	BGR components.	*/
 			BGRA = 0x4, /*	BGRA components.	*/
 			SRGB = 0x5, /*	SRGB components.	*/
 			RG = 0x6,
 			A = 0x8,
-			SRGBA = 0x7,		 /*	SRGBA components.	*/
-			SingleColor = 0x9,	 /*	Single color component.	*/
-			Depth = 0xA,		 /*	Depth component.	*/
-			Stencil = 0xB,		 /*	Stencil component.	*/
+			SRGBA = 0x7,		/*	SRGBA components.	*/
+			SingleColor = 0x9,	/*	Single color component.	*/
+			Depth = 0xA,		/*	Depth component.	*/
+			Stencil = 0xB,		/*	Stencil component.	*/
 			DepthStencil = 0xC, /*	Depth and stencil componets.	*/
 		};
 
@@ -128,14 +128,14 @@ namespace fragcore {
 		enum class Type : uint32_t {
 			NoType,
 			UnsignedByte = 0x1, /*	Each color component encoded in a single byte.	*/
-			SignedByte = 0x2,	 /*	Each color component encoded in a single signed byte.	*/
+			SignedByte = 0x2,	/*	Each color component encoded in a single signed byte.	*/
 			UnsignedShort = 0x3,
 			SignedShort = 0x4,
 			UnsignedInt = 0x5,
 			SignedInt = 0x6,
-			Float = 0x7,		 /*	Each color component encoded in a single float.	*/
-			HalfFloat = 0x8,	 /*  */
-			Double = 0x9,		 /*  */
+			Float = 0x7,		/*	Each color component encoded in a single float.	*/
+			HalfFloat = 0x8,	/*  */
+			Double = 0x9,		/*  */
 			Unsigned24_8 = 0xA, /*	Each color component encoded.	*/
 		};
 
@@ -144,17 +144,17 @@ namespace fragcore {
 		 */
 		enum class Compression : uint32_t {
 			NoCompression = 0x0, /*	Non-compressed texture.	*/
-			Compression = 0x1,	  /*	Compressed texture using default compression.   */
-			RGTC = 0x2,		  /*  */
-			DXT1 = 0x4,		  /*  */
-			DXT3 = 0x8,		  /*  */
-			DXT4 = 0x10,		  /*  */
-			DXT5 = 0x20,		  /*  */
-			S3TC = 0x20,		  /*  */
-			BPTC = 0x40,		  /*  */
-			_3DC = 0x80,		  /*  */
-			ASTC_LDR = 0x100,	  /*  */
-			ETC2 = 0x200,		  /*  */
+			Compression = 0x1,	 /*	Compressed texture using default compression.   */
+			RGTC = 0x2,			 /*  */
+			DXT1 = 0x4,			 /*  */
+			DXT3 = 0x8,			 /*  */
+			DXT4 = 0x10,		 /*  */
+			DXT5 = 0x20,		 /*  */
+			S3TC = 0x20,		 /*  */
+			BPTC = 0x40,		 /*  */
+			_3DC = 0x80,		 /*  */
+			ASTC_LDR = 0x100,	 /*  */
+			ETC2 = 0x200,		 /*  */
 		};
 
 		Texture *originalTexture; /*  Use viewport.   */
@@ -175,7 +175,7 @@ namespace fragcore {
 		Format format; /*	Texture input data type.	*/
 
 		// TODO Remove
-		Format internalformat; /*	Texture internal data type.	*/
+		Format internalformat;		 /*	Texture internal data type.	*/
 		TextureFormat pixelFormat;	 /*  */
 		GraphicFormat graphicFormat; /*  */
 
@@ -429,7 +429,7 @@ namespace fragcore {
 		unsigned int count;			/*  */
 		unsigned int instanceCount; /*  */
 		unsigned int firstIndex;	/*  */
-		unsigned int baseVertex;	/*  */
+		int baseVertex;				/*  */
 		unsigned int baseInstance;	/*  */
 	} IndirectDrawElement;
 
