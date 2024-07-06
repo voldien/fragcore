@@ -28,7 +28,7 @@ namespace fragcore {
 	  private:
 		RPCRigidBody() = default;
 
-		virtual ~RPCRigidBody();
+		virtual ~RPCRigidBody() = delete;
 
 	  public: /*	Public methods.	*/
 		virtual void useGravity(bool use) = 0;

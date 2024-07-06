@@ -35,10 +35,10 @@ namespace fragcore {
 	class FVDECLSPEC BulletPhysicInterface : public PhysicInterface { // TODO add a base object for all plugin based.
 	  public:
 		BulletPhysicInterface(IConfig *config);
-		virtual ~BulletPhysicInterface();
+		~BulletPhysicInterface() override;
 
-		virtual void OnInitialization();
-		virtual void OnDestruction();
+		void OnInitialization() override;
+		void OnDestruction() override;
 
 		/**
 		 * Start simulate.
@@ -46,128 +46,128 @@ namespace fragcore {
 		 * @param maxSubSteps
 		 * @param fixedTimeStep
 		 */
-		virtual void simulate(float timeStep, int maxSubSteps = 1, float fixedTimeStep = 1.0f / 60.0f) override;
+		void simulate(float timeStep, int maxSubSteps = 1, float fixedTimeStep = 1.0f / 60.0f) override;
 
 		/**
 		 * synchronize.
 		 */
-		virtual void sync() override;
+		void sync() override;
 
 		/**
 		 * Set gravity.
 		 */
-		virtual void setGravity(const Vector3 &gravity) override;
+		void setGravity(const Vector3 &gravity) override;
 
 		/**
 		 *	Get gravity.
 		 *	@return gravity vector.
 		 */
-		virtual Vector3 getGravity() const override;
+		Vector3 getGravity() const override;
 
 		/**
 		 * Add rigidbody to scene.
 		 * @param body
 		 */
-		virtual void addRigidBody(RigidBody *body) override;
+		void addRigidBody(RigidBody *body) override;
 
 		/**
 		 *
 		 * @param body
 		 */
-		virtual void removeRigidBody(RigidBody *body) override;
+		void removeRigidBody(RigidBody *body) override;
 
 		/**
 		 * Add constraint to scene.
 		 * @param constraints
 		 */
-		virtual void addConstraints(Constraints *constraints) override;
+		void addConstraints(Constraints *constraints) override;
 
 		/**
 		 *
 		 * @param constraints
 		 */
-		virtual void removeConstraints(Constraints *constraints) override;
+		void removeConstraints(Constraints *constraints) override;
 
 		/**
 		 *	Create collision object.
 		 *
 		 *	@return
 		 */
-		virtual Collision *createCollision(const CollisionDesc *desc) override;
+		Collision *createCollision(const CollisionDesc *desc) override;
 
 		/**
 		 *
 		 */
-		virtual void deleteCollision(Collision *collision) override;
+		void deleteCollision(Collision *collision) override;
 
 		/**
 		 *	Create constraint object.
 		 *
 		 *	@return
 		 */
-		virtual Constraints *createConstraints(const ConstraintsDesc *desc) override;
+		Constraints *createConstraints(const ConstraintsDesc *desc) override;
 
 		/**
 		 *
 		 */
-		virtual void deleteConstraints(Constraints *constraints) override;
+		void deleteConstraints(Constraints *constraints) override;
 
 		/**
 		 * Create rigidbody.
 		 * @param desc
 		 * @return
 		 */
-		virtual RigidBody *createRigibody(const RigidBodyDesc *desc) override;
+		RigidBody *createRigibody(const RigidBodyDesc *desc) override;
 
 		/**
 		 * Delete rigidbody.
 		 * @param rigidbody
 		 */
-		virtual void deleteRigibody(RigidBody *rigidbody) override;
+		void deleteRigibody(RigidBody *rigidbody) override;
 
 		/**
 		 *
 		 * @param softbodyDesc
 		 * @return
 		 */
-		virtual void *createSoftBody(SoftbodyDesc *softbodyDesc) override;
-		virtual void deleteSoftBody(void *softbody) override;
+		void *createSoftBody(SoftbodyDesc *softbodyDesc) override;
+		void deleteSoftBody(void *softbody) override;
 
-		virtual void *createCloth(ClothDesc *clothDesc) override;
-		virtual void deleteCloth(void *cloth) override;
-
-		/**
-		 *
-		 * @param desc
-		 * @return
-		 */
-		virtual void *createTerrain(const TerrainDesc *desc) override;
-		virtual void deleteTerrain(void *terrain) override;
+		void *createCloth(ClothDesc *clothDesc) override;
+		void deleteCloth(void *cloth) override;
 
 		/**
 		 *
 		 * @param desc
 		 * @return
 		 */
-		virtual CharacterController *createCharacterController(CharacterControllerDesc *desc) override;
+		void *createTerrain(const TerrainDesc *desc) override;
+		void deleteTerrain(void *terrain) override;
+
+		/**
+		 *
+		 * @param desc
+		 * @return
+		 */
+		CharacterController *createCharacterController(CharacterControllerDesc *desc) override;
 
 		/**
 		 *
 		 * @param characterController
 		 */
-		virtual void deleteCharacterController(CharacterController *characterController) override;
+		void deleteCharacterController(CharacterController *characterController) override;
 
 		/**
 		 *
 		 * @param controller
 		 */
-		virtual void addCharacterController(CharacterController *controller) override;
+		void addCharacterController(CharacterController *controller) override;
 
 		/**
 		 *
 		 * @param controller
 		 */
-		virtual void removeCharacterController(CharacterController *controller) override;
+		void removeCharacterController(CharacterController *controller) override;
 
 		/**
 		 * Perform ray test.
@@ -175,7 +175,7 @@ namespace fragcore {
 		 * @param hit
 		 * @return
 		 */
-		virtual bool rayTest(const Ray &ray, RayCastHit *hit) override;
+		bool rayTest(const Ray &ray, RayCastHit *hit) override;
 
 		/**
 		 *
@@ -183,13 +183,13 @@ namespace fragcore {
 		 * @param hit
 		 * @return
 		 */
-		virtual bool raySphereTest(const Ray &ray, RayCastHit *hit) override;
+		bool raySphereTest(const Ray &ray, RayCastHit *hit) override;
 
 		/**
 		 *
 		 *	@return
 		 */
-		virtual void *getState(unsigned int *len) override;
+		void *getState(unsigned int *len) override;
 
 		/**
 		 *
@@ -201,7 +201,7 @@ namespace fragcore {
 		 *	Get version of the interface.
 		 *	@return non-null terminated string.
 		 */
-		virtual const char *getVersion() const override;
+		const char *getVersion() const override;
 
 	  protected: /*	*/
 				 /**

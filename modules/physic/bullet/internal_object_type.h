@@ -19,17 +19,15 @@
 #ifndef _FRAG_CORE_PHYSIC_BULLET_INTERNAL_OBJECT_TYPE_H_
 #define _FRAG_CORE_PHYSIC_BULLET_INTERNAL_OBJECT_TYPE_H_ 1
 
-#include <bullet/BulletCollision/CollisionShapes/btHeightfieldTerrainShape.h>
-#include <bullet/BulletDynamics/Character/btKinematicCharacterController.h>
-#include <bullet/btBulletCollisionCommon.h>
-#include <bullet/btBulletDynamicsCommon.h>
+//#include <BulletCollision/CollisionShapes/btHeightfieldTerrainShape.h>
+//#include <BulletDynamics/Character/btKinematicCharacterController.h>
+#include <btBulletCollisionCommon.h>
+#include <btBulletDynamicsCommon.h>
 
-#include <bullet/BulletSoftBody/btSoftBodyHelpers.h>
-#include <bullet/BulletSoftBody/btSoftBodyRigidBodyCollisionConfiguration.h>
-#include <bullet/BulletSoftBody/btSoftRigidDynamicsWorld.h>
+#include <BulletSoftBody/btSoftBodyHelpers.h>
+#include <BulletSoftBody/btSoftBodyRigidBodyCollisionConfiguration.h>
+#include <BulletSoftBody/btSoftRigidDynamicsWorld.h>
 
-namespace fragcore {
-
-} // namespace fragcore
+namespace fragcore {} // namespace fragcore
 
 #endif

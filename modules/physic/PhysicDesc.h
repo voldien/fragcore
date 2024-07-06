@@ -16,9 +16,8 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef _FV_PHYSIC_DESC_H_ /*	TODO determine if this is the best header name or not.	*/
+#ifndef _FV_PHYSIC_DESC_H_
 #define _FV_PHYSIC_DESC_H_ 1
-
 #include "Collider.h"
 #include "RigidBody.h"
 
@@ -27,7 +26,7 @@ namespace fragcore {
 	/**
 	 *	Constrains physic object.
 	 */
-	typedef struct constraints_desc {
+	using ConstraintsDesc = struct constraints_desc {
 		/**
 		 *	Type of constraints
 		 */
@@ -61,26 +60,25 @@ namespace fragcore {
 		RigidBody *body2;	  /*	Second end point.	*/
 		ConstraintsType type; /*	Type of constraint.	*/
 		float breakforce;	  /*	Force to break constraints.	*/
-
-	} ConstraintsDesc;
+	};
 
 	/**
 	 * Physic description for creating collision
 	 * object.
 	 */
-	typedef struct collision_desc_t {
+	using CollisionDesc = struct collision_desc_t {
 		// TODO determine if relocated to add scope global of fragcore.
 		enum ShapePrimitive {
-			eBox,	  /*	*/
-			ePlane,	  /*	*/
-			eSphere,  /*	*/
-			eCapsule, /*	*/
-			eMesh,	  /*	*/
-			eTerrain  /*  */
+			Box,	 /*	*/
+			Plane,	 /*	*/
+			Sphere,	 /*	*/
+			Capsule, /*	*/
+			Mesh,	 /*	*/
+			Terrain	 /*  	*/
 		};
 		ShapePrimitive Primitive; /*	Collision type.	*/
-		float center[3];		  /*	Center of the collision object.	*/
-		float alignscale;		  /*	factor scalar.	*/
+		float center[3] = {0};	  /*	Center of the collision object.	*/
+		float alignscale = 1.0f;  /*	factor scalar.	*/
 
 		/**/
 		union {
@@ -120,21 +118,20 @@ namespace fragcore {
 				unsigned int indicesStrip; /*	*/
 			} meshshape;
 		};
-
-	} CollisionDesc;
+	};
 
 	/**
 	 *	Rigidbody description.
 	 */
-	typedef struct rigidbody_desc_t {
+	using RigidBodyDesc = struct rigidbody_desc_t {
 
-		Collision *collision; /*	Collision shape attached to rigidbody.	*/
-		float mass;			  /*	Mass of the object.	*/
-		float angularDrag;	  /*	Drag for angular momentium, aka* rotation.	*/
-		float drag;			  /*	Linear drag.	*/
-		bool useGravity;	  /*	Use gravity.	*/
-		float inertia;		  /*	Set the intertia of the object.	*/
-		bool isKinematic;	  /*	*/
+		Collision *collision = nullptr; /*	Collision shape attached to rigidbody.	*/
+		float mass = 1.0f;				/*	Mass of the object.	*/
+		float angularDrag = 0.05f;		/*	Drag for angular momentium, aka* rotation.	*/
+		float drag = 0.05f;				/*	Linear drag.	*/
+		bool useGravity = true;			/*	Use gravity.	*/
+		float inertia = 1.0;			/*	Set the intertia of the object.	*/
+		bool isKinematic = false;		/*	*/
 		/*int RigidbodyConstraints*/
 
 		/*	transformation	*/
@@ -143,24 +140,22 @@ namespace fragcore {
 		Quaternion quat;  /*	Oritention in world space.	*/
 
 		// Node *node;                        /*	Attached node.	*/
+	};
 
-	} RigidBodyDesc;
-
-	typedef struct character_controller_t {
+	using CharacterControllerDesc = struct character_controller_t {
 		CollisionDesc collisionDesc; // TODO remove.
-		Collision *collision;
-	} CharacterControllerDesc;
+		Collision *collision = nullptr;
+	};
 
-	typedef struct terrain_desc_t {
+	using TerrainDesc = struct terrain_desc_t {
 
 		//	Buffer *vertices;
 		//		Buffer *indices;
 		//
 		unsigned int stride;
+	};
 
-	} TerrainDesc;
-
-	typedef struct softbody_desc_t {
+	using SoftbodyDesc = struct softbody_desc_t {
 
 		//	Geometry *geometryObject;
 
@@ -169,14 +164,12 @@ namespace fragcore {
 
 		int *indices;
 		unsigned int nIndices;
+	};
 
-	} SoftbodyDesc;
-
-	typedef struct cloth_desc_t {
+	using ClothDesc = struct cloth_desc_t {
 
 		//	Geometry *geometryObject;
-
-	} ClothDesc;
+	};
 
 } // namespace fragcore
 

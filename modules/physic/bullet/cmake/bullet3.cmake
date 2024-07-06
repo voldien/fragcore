@@ -2,7 +2,7 @@ INCLUDE(FetchContent)
 
 FetchContent_Declare(libbullet3_source
 	GIT_REPOSITORY https://github.com/bulletphysics/bullet3.git
-	GIT_TAG 3.22b 
+	GIT_TAG 3.25
 ) # or whatever tag you want
 
 FetchContent_GetProperties(libbullet3_source)

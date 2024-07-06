@@ -19,9 +19,9 @@
 #ifndef _FV_PHYSIC_DEBUGDRAWER_H_
 #define _FV_PHYSIC_DEBUGDRAWER_H_ 1
 #include <FragCore.h>
-#include <bullet/LinearMath/btIDebugDraw.h>
-#include <bullet/btBulletCollisionCommon.h>
-#include <bullet/btBulletDynamicsCommon.h>
+#include <LinearMath/btIDebugDraw.h>
+#include <btBulletCollisionCommon.h>
+#include <btBulletDynamicsCommon.h>
 // #include <Renderer/IRenderer.h>
 // #include <Renderer/CommandList.h>
 #include "internal_object_type.h"

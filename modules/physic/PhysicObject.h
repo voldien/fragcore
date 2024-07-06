@@ -22,16 +22,13 @@
 #include <Core/SmartReference.h>
 
 namespace fragcore {
+
 	/**
 	 *
 	 */
 	class FVDECLSPEC PhysicObject : public SmartReference {
 	  public:
 		inline PhysicInterface *getPhysicInterface() const { return this->iRenderer; }
-
-		// inline Ref<PhysicObject> getRef() const{
-
-		// }
 
 		inline void *getObject() { return this->pdata; }
 

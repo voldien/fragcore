@@ -30,13 +30,13 @@ namespace fragcore {
 	  public:
 		CharacterController() = default;
 
-		virtual ~CharacterController() = default;
+		~CharacterController() override = default;
 
 	  public:	 /*	Public methods.	*/
 	  protected: /*	Protected virtual methods.	*/
-		virtual Vector3 getCenter();
+		virtual Vector3 getCenter() = 0;
 		// virtual const Vector3 &getConter() const;
-		virtual void setCenter(const Vector3 &center);
+		virtual void setCenter(const Vector3 &center) = 0;
 	};
 } // namespace fragcore
 

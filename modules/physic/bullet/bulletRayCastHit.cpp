@@ -1,5 +1,5 @@
 #include "bulletRayCastHit.h"
-#include <bullet/btBulletCollisionCommon.h>
+#include <btBulletCollisionCommon.h>
 using namespace fragcore;
 
 BulletRayCastHit::BulletRayCastHit() {}

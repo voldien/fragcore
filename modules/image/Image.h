@@ -75,7 +75,7 @@ namespace fragcore {
 		unsigned int h;
 		unsigned int depth{1};
 		TextureFormat format;
-		
+
 		// TODO encpsulate object.
 		void *pixelData = nullptr;
 		size_t bufferSize;

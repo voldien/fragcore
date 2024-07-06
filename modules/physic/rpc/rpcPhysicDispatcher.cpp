@@ -1,6 +1,6 @@
 #include "rpcPhysicDispatcher.h"
 #include "ProtocolHeaders.h"
-#include <stdarg.h>
+#include <cstdarg>
 using namespace fragcore;
 
 RPCPhysicDispatcher::RPCPhysicDispatcher() {}

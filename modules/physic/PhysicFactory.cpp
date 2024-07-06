@@ -7,7 +7,7 @@ using namespace fragcore;
  *	Internal function data type for creating physic
  *	interface.
  */
-typedef PhysicInterface *(*pcreateInternalPhysicInterface)(IConfig *overrideOption);
+using pcreateInternalPhysicInterface = PhysicInterface *(*)(IConfig *);
 
 /*	TODO update with the new naming.	*/
 const char *bulletlibpath = "libfragcore-pbu.so"; /*	Default bullet library.	*/
@@ -25,8 +25,9 @@ PhysicInterface *PhysicFactory::createPhysic(const char *libpath, IConfig *confi
 	Library library;
 
 	/*	Validate parameters.	*/
-	if (libpath == nullptr)
+	if (libpath == nullptr) {
 		throw InvalidArgumentException("Invalid filepath do dynamic library: {}", libpath);
+	}
 
 	/*	Open dynamicInterface library and create dynamicInterface object.	*/
 	library.open(libpath);
@@ -37,10 +38,10 @@ PhysicInterface *PhysicFactory::createPhysic(const char *libpath, IConfig *confi
 			interface = pfunc(config);
 		} else {
 			/*	Error	*/
-		//	Log::log("Couldn't find symbol %s in %s.\n", funcsymbol, libpath);
+			//	Log::log("Couldn't find symbol %s in %s.\n", funcsymbol, libpath);
 		}
 	} else {
-		//Log::error("Failed loading %s library for creating physic dynamicInterface.\n", libpath);
+		// Log::error("Failed loading %s library for creating physic dynamicInterface.\n", libpath);
 	}
 
 	//	if(connection != nullptr){
@@ -52,7 +53,7 @@ PhysicInterface *PhysicFactory::createPhysic(const char *libpath, IConfig *confi
 	//		apirequest.type = -1;
 	//		apirequest.pathlen = strlen(libpath);
 	//		//connection->sendPacket(RPCProtocolCommand::ePhysicAPIRequest, &apirequest,
-	//sizeof(PacketPhysicAPIRequest)); 		connection->send(libpath, apirequest.pathlen);
+	// sizeof(PacketPhysicAPIRequest)); 		connection->send(libpath, apirequest.pathlen);
 	//
 	//	}else
 

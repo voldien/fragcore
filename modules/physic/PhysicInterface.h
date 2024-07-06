@@ -31,15 +31,16 @@ namespace fragcore {
 	 *	Physic interface.
 	 *
 	 */
-	class FVDECLSPEC PhysicInterface : public Module { // TODO add a base object for all plugin based.
+	class FVDECLSPEC PhysicInterface : public Module {
 		friend class PhysicFactory;
 
 	  public:
-		PhysicInterface();
-		virtual ~PhysicInterface() = default;
+		PhysicInterface() = default;
+		PhysicInterface(const PhysicInterface &other) = delete;
+		~PhysicInterface() override = default;
 
-		virtual void OnInitialization() override;
-		virtual void OnDestruction() override;
+		void OnInitialization() override{};
+		void OnDestruction() override{};
 
 		/**
 		 * Start simulate.
@@ -47,128 +48,128 @@ namespace fragcore {
 		 * @param maxSubSteps
 		 * @param fixedTimeStep
 		 */
-		virtual void simulate(float timeStep, int maxSubSteps = 1, float fixedTimeStep = 1.0f / 60.0f);
+		virtual void simulate(float timeStep, int maxSubSteps = 1, float fixedTimeStep = 1.0f / 60.0f) = 0;
 
 		/**
 		 * synchronize.
 		 */
-		virtual void sync();
+		virtual void sync() = 0;
 
 		/**
 		 * Set gravity.
 		 */
-		virtual void setGravity(const Vector3 &gravity);
+		virtual void setGravity(const Vector3 &gravity) = 0;
 
 		/**
 		 *	Get gravity.
 		 *	@return gravity vector.
 		 */
-		virtual Vector3 getGravity() const;
+		virtual Vector3 getGravity() const = 0;
 
 		/**
 		 * Add rigidbody to scene.
 		 * @param body
 		 */
-		virtual void addRigidBody(RigidBody *body);
+		virtual void addRigidBody(RigidBody *body) = 0;
 
 		/**
 		 *
 		 * @param body
 		 */
-		virtual void removeRigidBody(RigidBody *body);
+		virtual void removeRigidBody(RigidBody *body) = 0;
 
 		/**
 		 * Add constraint to scene.
 		 * @param constraints
 		 */
-		virtual void addConstraints(Constraints *constraints);
+		virtual void addConstraints(Constraints *constraints) = 0;
 
 		/**
 		 *
 		 * @param constraints
 		 */
-		virtual void removeConstraints(Constraints *constraints);
+		virtual void removeConstraints(Constraints *constraints) = 0;
 
 		/**
 		 *	Create collision object.
 		 *
 		 *	@return
 		 */
-		virtual Collision *createCollision(const CollisionDesc *desc);
+		virtual Collision *createCollision(const CollisionDesc *desc) = 0;
 
 		/**
 		 *
 		 */
-		virtual void deleteCollision(Collision *collision);
+		virtual void deleteCollision(Collision *collision) = 0;
 
 		/**
 		 *	Create constraint object.
 		 *
 		 *	@return
 		 */
-		virtual Constraints *createConstraints(const ConstraintsDesc *desc);
+		virtual Constraints *createConstraints(const ConstraintsDesc *desc) = 0;
 
 		/**
 		 *
 		 */
-		virtual void deleteConstraints(Constraints *constraints);
+		virtual void deleteConstraints(Constraints *constraints) = 0;
 
 		/**
 		 * Create rigidbody.
 		 * @param desc
 		 * @return
 		 */
-		virtual RigidBody *createRigibody(const RigidBodyDesc *desc);
+		virtual RigidBody *createRigibody(const RigidBodyDesc *desc) = 0;
 
 		/**
 		 * Delete rigidbody.
 		 * @param rigidbody
 		 */
-		virtual void deleteRigibody(RigidBody *rigidbody);
+		virtual void deleteRigibody(RigidBody *rigidbody) = 0;
 
 		/**
 		 *
 		 * @param softbodyDesc
 		 * @return
 		 */
-		virtual void *createSoftBody(SoftbodyDesc *softbodyDesc);
-		virtual void deleteSoftBody(void *softbody);
+		virtual void *createSoftBody(SoftbodyDesc *softbodyDesc) = 0;
+		virtual void deleteSoftBody(void *softbody) = 0;
 
-		virtual void *createCloth(ClothDesc *clothDesc);
-		virtual void deleteCloth(void *cloth);
-
-		/**
-		 *
-		 * @param desc
-		 * @return
-		 */
-		virtual void *createTerrain(const TerrainDesc *desc);
-		virtual void deleteTerrain(void *terrain);
+		virtual void *createCloth(ClothDesc *clothDesc) = 0;
+		virtual void deleteCloth(void *cloth) = 0;
 
 		/**
 		 *
 		 * @param desc
 		 * @return
 		 */
-		virtual CharacterController *createCharacterController(CharacterControllerDesc *desc);
+		virtual void *createTerrain(const TerrainDesc *desc) = 0;
+		virtual void deleteTerrain(void *terrain) = 0;
+
+		/**
+		 *
+		 * @param desc
+		 * @return
+		 */
+		virtual CharacterController *createCharacterController(CharacterControllerDesc *desc) = 0;
 
 		/**
 		 *
 		 * @param characterController
 		 */
-		virtual void deleteCharacterController(CharacterController *characterController);
+		virtual void deleteCharacterController(CharacterController *characterController) = 0;
 
 		/**
 		 *
 		 * @param controller
 		 */
-		virtual void addCharacterController(CharacterController *controller);
+		virtual void addCharacterController(CharacterController *controller) = 0;
 
 		/**
 		 *
 		 * @param controller
 		 */
-		virtual void removeCharacterController(CharacterController *controller);
+		virtual void removeCharacterController(CharacterController *controller) = 0;
 
 		/**
 		 * Perform ray test.
@@ -176,7 +177,7 @@ namespace fragcore {
 		 * @param hit
 		 * @return
 		 */
-		virtual bool rayTest(const Ray &ray, RayCastHit *hit);
+		virtual bool rayTest(const Ray &ray, RayCastHit *hit) = 0;
 
 		/**
 		 *
@@ -184,13 +185,13 @@ namespace fragcore {
 		 * @param hit
 		 * @return
 		 */
-		virtual bool raySphereTest(const Ray &ray, RayCastHit *hit);
+		virtual bool raySphereTest(const Ray &ray, RayCastHit *hit) = 0;
 
 		/**
 		 *
 		 *	@return
 		 */
-		virtual void *getState(unsigned int *len);
+		virtual void *getState(unsigned int *len) = 0;
 
 		/**
 		 *
@@ -202,7 +203,7 @@ namespace fragcore {
 		 *	Get version of the interface.
 		 *	@return non-null terminated string.
 		 */
-		virtual const char *getVersion() const;
+		virtual const char *getVersion() const = 0;
 
 		// virtual intptr_t getNativePtr() const;
 
@@ -214,7 +215,6 @@ namespace fragcore {
 				 // virtual void initAllocate(InitAllocateTableInfo* table);
 
 	  protected: /*	*/
-		PhysicInterface(const PhysicInterface &other);
 		void *pdata;
 	};
 

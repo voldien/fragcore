@@ -1,12 +1,9 @@
 #include "bulletCollision.h"
-#include <bullet/btBulletCollisionCommon.h>
-#include <bullet/btBulletDynamicsCommon.h>
+#include <btBulletDynamicsCommon.h>
 using namespace fragcore;
 
-BulletCollision::BulletCollision() {}
+BulletCollision::BulletCollision(btCollisionShape *shape) { this->shape = shape; }
 BulletCollision::~BulletCollision() {}
-
-BulletCollision::BulletCollision(const BulletCollision &collision) {}
 
 Collider *BulletCollision::collider() const { return nullptr; }
 

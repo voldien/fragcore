@@ -358,8 +358,6 @@ IF(BUILD_MODULES)
 	# Build FragCore Physic modules
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/physic/)
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/physic/bullet/)
-
-	# ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/physic/physx/)
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/physic/rpc/)
 
 	# Database

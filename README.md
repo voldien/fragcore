@@ -101,7 +101,7 @@ The project is design that modules can be use to reduce both dependices and code
 - **Geometry Util** - 
 - **Image Loader** - Load/Save Image.
 - **IO** - File, Memory, Modbus, Serial, TCP/UDP
-- **Physic** - Physic Simulator for Game Engines. Bullet/PhyX/RPC
+- **Physic** - Physic Simulator for Game Engines. Bullet/RPC
 - **Renderer** - Vulkan/OpenGL
 - **Window** - SDL/GLFW
 - **TaskScheduler** - Task scheduler for distrubte tasks on CPU.

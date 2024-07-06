@@ -19,23 +19,27 @@
 #ifndef _FRAG_CORE_BULLET_PHYSIC_COLLISION_H_
 #define _FRAG_CORE_BULLET_PHYSIC_COLLISION_H_ 1
 #include "../Collision.h"
+#include "bulletPhysicInterface.h"
 
 namespace fragcore {
+
 	class FVDECLSPEC BulletCollision : public Collision {
+		friend class BulletPhysicInterface;
+
 	  public:
-		BulletCollision();
-		BulletCollision(const BulletCollision &collision);
-		virtual ~BulletCollision();
+		BulletCollision(btCollisionShape* shape);
+		BulletCollision(const BulletCollision &collision) = default;
+		~BulletCollision() override;
 
 		/**
 		 *	Get collider object.
 		 */
-		virtual Collider *collider() const override;
+		Collider *collider() const override;
 
 		/**
 		 *	Get relative velocity magnitude.
 		 */
-		virtual float relativeVelocity() const override;
+		float relativeVelocity() const override;
 
 		/**
 		 *	Get transform object.
@@ -45,7 +49,7 @@ namespace fragcore {
 		/**
 		 *	Get rigidbodt object.
 		 */
-		virtual RigidBody *rigidBody() const override;
+		RigidBody *rigidBody() const override;
 
 		/**
 		 *	Get contact.

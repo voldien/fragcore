@@ -29,8 +29,7 @@ namespace fragcore {
 
 	  public:
 		RigidBody() = default;
-
-		virtual ~RigidBody() = default;
+		~RigidBody() override = default;
 
 	  public: /*	Public methods.	*/
 		virtual void useGravity(bool use) = 0;
@@ -60,7 +59,7 @@ namespace fragcore {
 
 		virtual Vector3 getVelocity() = 0;
 
-		intptr_t getNativePtr() const = 0;
+		intptr_t getNativePtr() const override = 0;
 	};
 
 } // namespace fragcore

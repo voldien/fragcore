@@ -31,7 +31,6 @@ namespace fragcore {
 
 	  public:
 		Collider() = default;
-
 		virtual ~Collider() = default;
 
 	  public: /*	Public methods.	*/

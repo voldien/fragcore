@@ -22,14 +22,15 @@
 #include "PhysicObject.h"
 
 namespace fragcore {
+
 	/**
 	 *	RayCastHit.
 	 */
-	class FVDECLSPEC RayCastHit : public PhysicObject  {
+	class FVDECLSPEC RayCastHit : public PhysicObject {
 	  public:
 		// TODO add parmaters and methods.
-		RayCastHit();
-		virtual ~RayCastHit();
+		RayCastHit() = default;
+		~RayCastHit() override = default;
 
 		// Collider*  collider() const;
 

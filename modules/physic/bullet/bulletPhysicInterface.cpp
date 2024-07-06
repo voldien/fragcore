@@ -1,4 +1,9 @@
 #include "bulletPhysicInterface.h"
+#include "BulletDynamics/Dynamics/btRigidBody.h"
+#include "LinearMath/btVector3.h"
+#include "RigidBody.h"
+#include "bulletCollision.h"
+#include "bulletRigidBody.h"
 #include "debugDrawer.h"
 #include "internal_object_type.h"
 #include <FragCore.h>
@@ -82,17 +87,14 @@ Vector3 BulletPhysicInterface::getGravity() const {
 
 void BulletPhysicInterface::addRigidBody(RigidBody *body) {
 
-	btRigidBody *rigid = nullptr;
-
-	/*	*/
-	// rigid = (btRigidBody*)getPointerByIndex(body);
-
+	BulletRigidBody *bullet_rigidbody = static_cast<BulletRigidBody *>(body);
+	btRigidBody *rigid = static_cast<btRigidBody *>(bullet_rigidbody->getObject());
 	/*	*/
 	this->dynamicsWorld->addRigidBody(rigid);
 }
 void BulletPhysicInterface::removeRigidBody(RigidBody *body) {
 
-	btRigidBody *rigid= nullptr;
+	btRigidBody *rigid = nullptr;
 
 	/*	*/
 	// rigid = (btRigidBody*)getPointerByIndex(body);
@@ -115,35 +117,38 @@ void BulletPhysicInterface::removeConstraints(Constraints *constraints) {
 }
 
 Collision *BulletPhysicInterface::createCollision(const CollisionDesc *desc) {
-	btCollisionShape *shape= nullptr;
+	btCollisionShape *shape = nullptr;
 
 	switch (desc->Primitive) {
-	case CollisionDesc::ePlane: {
+	case CollisionDesc::Plane: {
 		btVector3 normal =
 			btVector3(desc->planeshape.normal[0], desc->planeshape.normal[1], desc->planeshape.normal[2]);
 		shape = new btStaticPlaneShape(normal, desc->planeshape.d);
 	} break;
-	case CollisionDesc::eBox: {
+	case CollisionDesc::Box: {
 		btVector3 size = btVector3(desc->boxshape.boxsize[0], desc->boxshape.boxsize[1], desc->boxshape.boxsize[2]);
 		shape = new btBoxShape(size);
 	} break;
-	case CollisionDesc::eSphere:
+	case CollisionDesc::Sphere:
 		shape = new btSphereShape(desc->sphereshape.radius);
 		break;
-	case CollisionDesc::eCapsule:
+	case CollisionDesc::Capsule:
 		shape = new btCapsuleShape(desc->capsuleshape.radius, desc->capsuleshape.height);
 		break;
-	case CollisionDesc::eMesh:
+	case CollisionDesc::Mesh:
 		// btBvhTriangleMeshShape
 		//			btTriangleMesh
 		//			btTriangleMesh
 		//			btBvhTriangleMeshShape
 		// shape = nullptr;//btTriangleMeshShape
 		break;
+	case collision_desc_t::Terrain:
+		break;
 	}
 
 	/*	*/
-	// return obtainMappedObject<Collision>(shape);
+	BulletCollision *collision = new BulletCollision(shape);
+	return collision;
 }
 void BulletPhysicInterface::deleteCollision(Collision *collision) {
 
@@ -192,6 +197,7 @@ Constraints *BulletPhysicInterface::createConstraints(const ConstraintsDesc *des
 	constr->setBreakingImpulseThreshold(desc->breakforce);
 
 	// return obtainMappedObject<Constraints>(constr);
+	return nullptr;
 }
 void BulletPhysicInterface::deleteConstraints(Constraints *constraints) {
 	//	btTypedConstraint* typedConstraint = (btTypedConstraint*)constraints->getMappedObject();
@@ -202,62 +208,55 @@ void BulletPhysicInterface::deleteConstraints(Constraints *constraints) {
 
 RigidBody *BulletPhysicInterface::createRigibody(const RigidBodyDesc *desc) {
 
-	RigidBody *body = nullptr;		   /*	*/
-	btCollisionShape *shape = nullptr; /*	*/
+	BulletRigidBody *body = nullptr; /*	*/
 
-	// assert(desc->node && desc->collision);
+	assert(desc && desc->collision);
 
-	// if (desc->node == nullptr)
-	// 	throw RuntimeException("Requires a non-null node reference");
+	if (desc == nullptr) {
+		throw RuntimeException("Requires a non-null descriptor");
+	}
 
 	if (desc->collision == nullptr) {
 		throw RuntimeException("Requires a non-null collision reference");
 	}
 
-	//	/*	Get collsion object.	*/
-	//	//shape = (btCollisionShape *) getPointerByIndex(desc->collision);
+	/*	Get collsion object.	*/
+	const BulletCollision *bulletCollision = dynamic_cast<BulletCollision *>(desc->collision);
+	btCollisionShape *shape = reinterpret_cast<btCollisionShape *>(bulletCollision->shape);
+
+	/*	Get world space variables.  */
+	btQuaternion rotation = btQuaternion(desc->quat.x(), desc->quat.y(), desc->quat.z(), desc->quat.w());
+	btVector3 position = btVector3(desc->position.x(), desc->position.y(), desc->position.z());
+	/*  */
+	btDefaultMotionState *fallMotionState = new btDefaultMotionState(btTransform(rotation, position));
+	btVector3 fallInertia(0, 0, 0);
+
+	/*	*/
+	btVector3 scale =
+		btVector3(1, 1, 1); // btVector3(node->getScale().x(), node->getScale().y(), node->getScale().z());
+	shape->setLocalScaling(scale);
+
+	shape->calculateLocalInertia(desc->mass, fallInertia);
+
+	/*  Create rigidbody.   */
+	btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(desc->mass, fallMotionState, shape, fallInertia);
+	btRigidBody *groundRigidBody = new btRigidBody(fallRigidBodyCI);
+	if (desc->isKinematic) {
+		groundRigidBody->setCollisionFlags(groundRigidBody->getCollisionFlags() |
+										   btCollisionObject::CF_KINEMATIC_OBJECT);
+	}
 	//
-	//	/*	Get world space variables.  */
-	////	Node *node = desc->node;
-	////	Quaternion nodeRotation = node->getRotation();
-	////	const Vector3 pos = node->getPosition();
-	////	btQuaternion rotation = btQuaternion(nodeRotation.x(), nodeRotation.y(), nodeRotation.z(),
-	/// nodeRotation.w()); /	btVector3 position = btVector3(pos.x(), /	                               pos.y(), /
-	/// pos.z());
-	////
-	//	/*  */
-	////	btDefaultMotionState *fallMotionState =
-	////			new btDefaultMotionState(btTransform(rotation, position));
-	////	btVector3 fallInertia(0, 0, 0);
-	//
-	//	/*	*/
-	////	btVector3 scale = btVector3(node->getScale().x(), node->getScale().y(), node->getScale().z());
-	////	shape->setLocalScaling(scale);
-	//
-	//	shape->calculateLocalInertia(desc->mass, fallInertia);
-	//
-	//	/*  Create rigidbody.   */
-	//	btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(desc->mass, fallMotionState, shape, fallInertia);
-	//	btRigidBody *groundRigidBody = new btRigidBody(fallRigidBodyCI);
-	//	if (desc->isKinematic)
-	//		groundRigidBody->setCollisionFlags(groundRigidBody->getCollisionFlags() |
-	// btCollisionObject::CF_KINEMATIC_OBJECT);
-	//
-	//	//groundRigidBody->setCcdSweptSphereRadius()
-	//	//groundRigidBody->setContactStiffnessAndDamping(300, 10);
-	//
-	//	/*	Create rigidbody.   */
-	//	//body = obtainMappedObject<RigidBody>(groundRigidBody);
-	//
-	//	/*  Bind rigidbody and node bidirectional.  */
-	//	//body->attachNode(desc->node);
-	//	//desc->node->getDynamicRef()->attachment = body;
-	//
-	//	/*  Final properties.  */
-	//	//body->setAngularDrag(desc->angularDrag);
-	//	//body->setDrag(desc->drag);
-	//	//body->useGravity(desc->useGravity);
-	//
+	groundRigidBody->setCcdSweptSphereRadius(0);
+	groundRigidBody->setContactStiffnessAndDamping(300, 10);
+
+	/*	Create rigidbody.   */
+	body = new BulletRigidBody(groundRigidBody);
+	/*  Bind rigidbody and node bidirectional.  */
+
+	/*  Final properties.  */
+	body->setAngularDrag(desc->angularDrag);
+	body->setDrag(desc->drag);
+	body->useGravity(desc->useGravity);
 
 	return body;
 }
@@ -309,11 +308,11 @@ void BulletPhysicInterface::deleteTerrain(void *terrain) {}
 
 CharacterController *BulletPhysicInterface::createCharacterController(CharacterControllerDesc *desc) {
 
-	btPairCachingGhostObject *ghostObject = nullptr; // new btPairCachingGhostObject();
-
-	btCapsuleShape *capsuleShape = new btCapsuleShape(2.0f, 1.0f);
-	btKinematicCharacterController *m_pTommyController =
-		new btKinematicCharacterController(ghostObject, capsuleShape, 1);
+	// btPairCachingGhostObject *ghostObject = nullptr; // new btPairCachingGhostObject();
+	//
+	// btCapsuleShape *capsuleShape = new btCapsuleShape(2.0f, 1.0f);
+	// btKinematicCharacterController *m_pTommyController =
+	//	new btKinematicCharacterController(ghostObject, capsuleShape, 1);
 
 	// m_pTommyController->updateAction(m_dynamicsWorld, timeSinceLast);
 

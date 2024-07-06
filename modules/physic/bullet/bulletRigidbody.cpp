@@ -1,11 +1,14 @@
 #include "bulletRigidBody.h"
 
-#include <bullet/btBulletCollisionCommon.h>
-#include <bullet/btBulletDynamicsCommon.h>
+#include <btBulletCollisionCommon.h>
+#include <btBulletDynamicsCommon.h>
 
 using namespace fragcore;
 
-BulletRigidBody::~BulletRigidBody() {}
+BulletRigidBody::BulletRigidBody(btRigidBody *body) { this->pdata = body; }
+
+void BulletRigidBody::useGravity(bool use) {}
+bool BulletRigidBody::useGravity() {return true;}
 
 float BulletRigidBody::getMass() {
 	btRigidBody *body = (btRigidBody *)this->getObject();
@@ -108,3 +111,5 @@ Vector3 BulletRigidBody::getVelocity() {
 	const btVector3 &linear = body->getLinearVelocity();
 	return Vector3(linear.x(), linear.y(), linear.z());
 }
+
+intptr_t BulletRigidBody::getNativePtr() const { return 0; }

@@ -18,8 +18,7 @@
  */
 #ifndef _FV_DYNAMIC_OBJECT_H_
 #define _FV_DYNAMIC_OBJECT_H_ 1
-#include"../Core/SmartReference.h"
-
+#include "../Core/SmartReference.h"
 
 /*  TODO rename.    */
 /**
@@ -30,22 +29,18 @@ namespace fragcore {
 	class FVDECLSPEC DynamicObjects {
 		friend class PhysicInterface;
 
-	public:
-		DynamicObjects() {
-			this->attachment = nullptr;
-		}
+	  public:
+		DynamicObjects() { this->attachment = nullptr; }
 
 		/**
 		 * Check if dynamic object is attached.
 		 * @return
 		 */
-		bool isAttached() const {
-			return attachment != nullptr;
-		}
+		bool isAttached() const { return attachment != nullptr; }
 
 		/*  */
-		//RigidBody *attachment;
+		// RigidBody *attachment;
 	};
-}
+} // namespace fragcore
 
 #endif
