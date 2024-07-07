@@ -26,7 +26,9 @@ namespace fragcore {
 	/**
 	 *
 	 */
-	using Point = struct point_t { int x, y; /*	*/ };
+	using Point = struct point_t {
+		int x, y; /*	*/
+	};
 
 	/**
 	 *
@@ -73,9 +75,13 @@ namespace fragcore {
 #define EX_EVENT_WINDOW_HIDE 0x100000	  /*	*/
 #define EX_EVENT_WINDOW_SHOW 0x200000	  /*	*/
 
-	using SystemEvent = struct system_event_t { unsigned int message; /**/ };
+	using SystemEvent = struct system_event_t {
+		unsigned int message; /**/
+	};
 
-	using JoyStickEvent = struct joy_stick_event_t { unsigned char button[5]; /**/ };
+	using JoyStickEvent = struct joy_stick_event_t {
+		unsigned char button[5]; /**/
+	};
 
 	using JoySticMoveEvent = struct joystick_move_event_t {
 
@@ -105,7 +111,9 @@ namespace fragcore {
 		int ydelta; /**/
 	};
 
-	using WinButtonEvent = struct win_button_event_t { unsigned char button; /**/ };
+	using WinButtonEvent = struct win_button_event_t {
+		unsigned char button; /**/
+	};
 
 	using MouseWheelEvent = struct mouse_wheel_event_t {
 		int delta; /**/
@@ -138,7 +146,9 @@ namespace fragcore {
 		float pressure;		   /*              */
 	};
 
-	using EventDestroyedWindow = struct window_destroy_t { Window *window; /*	*/ };
+	using EventDestroyedWindow = struct window_destroy_t {
+		Window *window; /*	*/
+	};
 
 	using WindowReparent = struct window_reparent_t {
 		Window *parent; /*	*/

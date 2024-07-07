@@ -3,8 +3,8 @@
 #include <Core/Ref.h>
 #include <cstring>
 #include <sqlite3.h>
-//#include <sqlite3ext.h>
-// SQLITE_EXTENSION_INIT1
+// #include <sqlite3ext.h>
+//  SQLITE_EXTENSION_INIT1
 #include <cassert>
 #include <cstring>
 
@@ -44,8 +44,8 @@ namespace fragcore {
 	/*
 	** Forward declaration of objects used by this utility
 	*/
-	typedef struct sqlite3_vfs MemVfs;
-	typedef struct IOFile MemFile;
+	using MemVfs = struct sqlite3_vfs;
+	using MemFile = struct IOFile;
 
 /* Access to a lower-level VFS that (might) implement dynamic loading,
 ** access to randomness, etc.

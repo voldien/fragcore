@@ -28,7 +28,7 @@ namespace fragcore {
 	/**
 	 * @brief
 	 */
-	class SDLInput : public Input {
+	class FVDECLSPEC SDLInput : public Input {
 	  public:
 		SDLInput() = default;
 

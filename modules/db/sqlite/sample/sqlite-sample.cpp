@@ -19,20 +19,25 @@ int main(int argc, const char **argv) {
 	// if (rc != SQLITE_OK)
 	// 	throw RuntimeException("Failed to configure to single threaded: {}", sqlite3_errstr(rc));
 	int rc = sqlite3_exec(db, "PRAGMA synchronous=OFF", NULL, NULL, &errMs);
-	if (rc != SQLITE_OK)
+	if (rc != SQLITE_OK) {
 		throw RuntimeException("Failed to open sqlite3: {}", sqlite3_errstr(rc));
+	}
 	rc = sqlite3_exec(db, "PRAGMA count_changes=OFF", NULL, NULL, &errMs);
-	if (rc != SQLITE_OK)
+	if (rc != SQLITE_OK) {
 		throw RuntimeException("Failed to open sqlite3: {}", sqlite3_errstr(rc));
+	}
 	rc = sqlite3_exec(db, "PRAGMA journal_mode=MEMORY", NULL, NULL, &errMs);
-	if (rc != SQLITE_OK)
+	if (rc != SQLITE_OK) {
 		throw RuntimeException("Failed to open sqlite3: {}", sqlite3_errstr(rc));
+	}
 	rc = sqlite3_exec(db, "PRAGMA temp_store=MEMORY", NULL, NULL, &errMs);
-	if (rc != SQLITE_OK)
+	if (rc != SQLITE_OK) {
 		throw RuntimeException("Failed to open sqlite3: {}", sqlite3_errstr(rc));
+	}
 	rc = sqlite3_exec(db, "PRAGMA cache_size=40000", NULL, NULL, &errMs);
-	if (rc != SQLITE_OK)
+	if (rc != SQLITE_OK) {
 		throw RuntimeException("Failed to open sqlite3: {}", sqlite3_errstr(rc));
+	}
 
 	sqlite3_stmt *res1;
 

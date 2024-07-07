@@ -38,7 +38,6 @@ namespace fragcore {
 		AudioEncoder(Ref<IO> &io) { this->io = io; }
 		virtual ~AudioEncoder() {}
 
-
 		/**
 		 * @brief Get the Format object
 		 *

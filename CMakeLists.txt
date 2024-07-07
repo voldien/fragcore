@@ -1,5 +1,5 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.9..3.20)
-PROJECT(FragCore CXX)
+PROJECT(FragCore CXX C)
 
 # -----------------------------------------------------------------------------
 # Set policy

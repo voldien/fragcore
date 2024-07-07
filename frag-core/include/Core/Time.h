@@ -30,7 +30,7 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC Time : public Object {
 	  public:
-		Time() {}
+		Time() = default;
 
 		void start() noexcept {
 			this->start_timestamp = steady_clock::now();

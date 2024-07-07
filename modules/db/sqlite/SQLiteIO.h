@@ -1,5 +1,5 @@
-#ifndef _KF_SQLITEIO_H_
-#define _KF_SQLITEIO_H_ 1
+#ifndef _FV_SQLITEIO_H_
+#define _FV_SQLITEIO_H_ 1
 #include <FragCore.h>
 #include <sqlite3.h>
 

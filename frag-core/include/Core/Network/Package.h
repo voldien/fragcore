@@ -19,9 +19,10 @@
 #ifndef _FRAG_CORE_PACKAGE_H_
 #define _FRAG_CORE_PACKAGE_H_ 1
 #include"../IO/IO.h"
+
 namespace fragcore {
 
-	class Package {
+	class FVDECLSPEC Package {
 	  public:
 		Package(Ref<IO>& ref);
 

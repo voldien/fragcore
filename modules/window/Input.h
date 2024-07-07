@@ -28,7 +28,7 @@ namespace fragcore {
 	/**
 	 * @brief
 	 */
-	class Input : public Object {
+	class FVDECLSPEC Input : public Object {
 	  public:
 		Input() = default;
 
