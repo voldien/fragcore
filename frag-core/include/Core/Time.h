@@ -63,14 +63,12 @@ namespace fragcore {
 		}
 
 		template <typename T> T now() const noexcept {
-			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
 
 			const auto t0 = steady_clock::now();
 			return static_cast<T>(t0.time_since_epoch().count());
 		}
 
 		template <typename T> T nowHighRes() const noexcept {
-			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
 
 			const auto t0 = std::chrono::high_resolution_clock::now();
 			return static_cast<T>(t0.time_since_epoch().count());
