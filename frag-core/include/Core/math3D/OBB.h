@@ -37,7 +37,7 @@ namespace fragcore {
 			this->setSize(size);
 		}
 
-		OBB(const Vector3 &u, const Vector3 &v, const Vector3 &w, const Vector3 &center, const Vector3 &size) {}
+		// OBB(const Vector3 &u, const Vector3 &v, const Vector3 &w, const Vector3 &center, const Vector3 &size) {}
 
 		/**
 		 * Get U axis.
@@ -84,9 +84,7 @@ namespace fragcore {
 		 *
 		 * @param size
 		 */
-		inline void setCenter(const Vector3 &size) {
-			
-		}
+		inline void setCenter(const Vector3 &size) {}
 
 		/**
 		 *

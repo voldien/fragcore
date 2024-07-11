@@ -370,7 +370,6 @@ int TCPNetSocket::getDomain(const INetAddress &address) {
 
 	const TCPUDPAddress &tcpAddress = dynamic_cast<const TCPUDPAddress &>(address);
 
-	int domain = 0; // TODO be override by the NetAddress!
 	switch (address.getNetworkProtocol()) {
 	case INetAddress::NetworkProtocol::NetWorkProtocol_TCP_UDP:
 	case INetAddress::NetworkProtocol::NetWorkProtocol_IP: {

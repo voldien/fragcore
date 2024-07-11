@@ -25,7 +25,7 @@ static inline glm::vec3 tangent(const glm::vec3 &normal) noexcept {
 void ProceduralGeometry::generatePlan(float scale, std::vector<Vertex> &vertices, std::vector<unsigned int> &indices,
 									  int segmentsX, int segmentsY) {
 
-	PlaneMesh mesh({1.0, 1.0}, glm::ivec2(segmentsX, segmentsY));
+	PlaneMesh mesh({1.0 * scale, 1.0 * scale}, glm::ivec2(segmentsX, segmentsY));
 
 	auto mesh_vertices = mesh.vertices();
 
@@ -147,7 +147,7 @@ void ProceduralGeometry::generateSphere(float radius, std::vector<Vertex> &verti
 
 	/*	*/
 	auto mesh_triangles = SphereMesh.triangles();
-	
+
 	while (!mesh_triangles.done()) {
 		const generator::Triangle triangle = mesh_triangles.generate();
 		// Do something with vertex
@@ -208,7 +208,7 @@ void ProceduralGeometry::generateCube(const float scale, std::vector<Vertex> &ve
 }
 
 void ProceduralGeometry::generateWireCube(const float scale, std::vector<Vertex> &vertices,
-										  std::vector<unsigned int> &indices) {
+										  [[maybe_unused]] std::vector<unsigned int> &indices) {
 	BoxMesh BoxMesh({1, 1, 1}, {1, 1, 1});
 
 	auto mesh_vertices = BoxMesh.vertices();

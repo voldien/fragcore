@@ -30,7 +30,7 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC RenderTargetFactory {
 	  public:
-		static FrameBuffer *createShadow(IRenderer *render, int width, int height);
+		static FrameBuffer *createShadow(IRenderer *render, const int width, const int height);
 
 		static FrameBuffer *createDeffered(IRenderer *render, int width, int height, unsigned int options = 0);
 

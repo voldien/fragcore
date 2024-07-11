@@ -25,20 +25,16 @@
 
 namespace fragcore {
 
-	typedef struct marker_debug_t {
-		const char *markerName;
-	} MarkerDebug;
+	using MarkerDebug = struct marker_debug_t { const char *markerName; };
 
-	typedef struct memory_info_t {
+	using MemoryInfo = struct memory_info_t {
 		long int totalVRam;
 		long int currentVRam;
-	} MemoryInfo;
+	};
 
-	typedef struct renderer_info_t {
-		MemoryInfo memoryInfo;
-	} RendererInfo;
+	using RendererInfo = struct renderer_info_t { MemoryInfo memoryInfo; };
 
-	typedef struct sampler_desc_t {
+	using SamplerDesc = struct sampler_desc_t {
 		/**
 		 *
 		 */
@@ -88,12 +84,12 @@ namespace fragcore {
 
 		/*  Debug attributes.   */
 		MarkerDebug *marker; // TODo add support for adding after creating the object.
-	} SamplerDesc;
+	};
 
 	/**
 	 *	Texture descriptor.
 	 */
-	typedef struct texture_desc_t {
+	using TextureDesc = struct texture_desc_t {
 		enum class Target : uint32_t {
 			Texture1D = 0x1,	   /*	1D texture.	*/
 			Texture2D = 0x2,	   /*	2D texture.	*/
@@ -219,12 +215,12 @@ namespace fragcore {
 
 		/*  Debug attributes.   */
 		MarkerDebug *marker;
-	} TextureDesc;
+	};
 
 	/**
 	 *
 	 */
-	typedef struct program_pipeline_desc_t {
+	using RenderPipelineDesc = struct program_pipeline_desc_t {
 		// TODO add binding.
 		Shader *v;
 		Shader *f;
@@ -234,7 +230,7 @@ namespace fragcore {
 		Shader *c;
 		/*  Debug attributes.   */
 		MarkerDebug marker;
-	} RenderPipelineDesc;
+	};
 
 	enum class ShaderType {
 		Unknown,
@@ -255,7 +251,7 @@ namespace fragcore {
 	/**
 	 *	Shader descriptor.
 	 */
-	typedef struct shader_desc_t {
+	using ShaderDesc = struct shader_desc_t {
 
 		struct {
 			const void *pdata;	 /*	*/
@@ -350,12 +346,12 @@ namespace fragcore {
 
 		/*  Debug attributes.   */
 		MarkerDebug *marker;
-	} ShaderDesc;
+	};
 
 	/**
 	 *	Buffer descriptor.
 	 */
-	typedef struct buffer_desc_t {
+	using BufferDesc = struct buffer_desc_t {
 		/**
 		 *
 		 */
@@ -395,12 +391,12 @@ namespace fragcore {
 		BufferHint hint;   /*	Buffer hint of usages.	*/
 		/*  Debug attributes.   */
 		MarkerDebug *marker;
-	} BufferDesc;
+	};
 
 	/**
 	 *	Framebuffer description.
 	 */
-	typedef struct framebuffer_desc_t {
+	using FrameBufferDesc = struct framebuffer_desc_t {
 		unsigned int nrAttachments;
 		Texture **attach; /*	Texture attachment.	*/
 
@@ -409,40 +405,40 @@ namespace fragcore {
 		Texture *depthstencil; /*	depth stencil attachment.	*/
 		/*  Debug attributes.   */
 		MarkerDebug *marker; // TODO add as pointer.
-	} FrameBufferDesc;
+	};
 
 	// TODO determine if packing compiler qualifier needed.
 	/**
 	 *
 	 */
-	typedef struct indirect_draw_array_t {
+	using IndirectDrawArray = struct indirect_draw_array_t {
 		unsigned int count;			/*  */
 		unsigned int instanceCount; /*  */
 		unsigned int first;			/*  */
 		unsigned int baseInstance;	/*  */
-	} IndirectDrawArray;
+	};
 
 	/**
 	 *
 	 */
-	typedef struct indirect_draw_element_t {
+	using IndirectDrawElement = struct indirect_draw_element_t {
 		unsigned int count;			/*  */
 		unsigned int instanceCount; /*  */
 		unsigned int firstIndex;	/*  */
 		int baseVertex;				/*  */
 		unsigned int baseInstance;	/*  */
-	} IndirectDrawElement;
+	};
 
-	typedef struct indirect_dispatch_t {
+	using IndirectDispatch = struct indirect_dispatch_t {
 		unsigned int num_groups_x;
 		unsigned int num_groups_y;
 		unsigned int num_groups_z;
-	} IndirectDispatch;
+	};
 
 	/**
 	 *	Geometry description.
 	 */
-	typedef struct geometry_desc_t {
+	using GeometryDesc = struct geometry_desc_t {
 		enum class Primitive : uint32_t {
 			Point = 0x1,			/**/
 			Lines = 0x2,			/**/
@@ -483,25 +479,25 @@ namespace fragcore {
 
 		/*  Debug attributes.   */
 		MarkerDebug *marker;
-	} GeometryDesc;
+	};
 
 	/**
 	 *	Query description.
 	 */
-	typedef struct query_desc_t {
+	using QueryDesc = struct query_desc_t {
 		/*  Debug attributes.   */
 		MarkerDebug *marker;
-	} QueryDesc;
+	};
 
-	typedef struct sync_desc_t {
+	using SyncDesc = struct sync_desc_t {
 		/*  Debug attributes.   */
 		MarkerDebug *marker;
-	} SyncDesc;
+	};
 
 	/**
 	 *
 	 */
-	typedef struct features_t {
+	using Features = struct features_t {
 		bool computeShaders;
 		bool geomtryShader;
 		bool tesselationShader;
@@ -518,12 +514,12 @@ namespace fragcore {
 		bool variableRateShading;
 		bool shaderFloat64;
 		bool ansi;
-	} Features;
+	};
 
 	/**
 	 *
 	 */
-	typedef struct compatibility_t {
+	using Capability = struct compatibility_t {
 		bool windowRenderer;
 		bool sDepthStencil; /*  */
 		bool sFramebuffer;
@@ -620,18 +616,18 @@ namespace fragcore {
 		float lineWidthRange[2];
 
 		int sMinMapBufferAlignment;
-	} Capability;
+	};
 
 	/**
 	 *
 	 */
 	// TODO improve.
-	typedef struct device_info_t {
+	using DeviceInfo = struct device_info_t {
 		const char *name;
 		const int deviceType;
 		const char *vendor;
 		Capability capability;
-	} DeviceInfo;
+	};
 } // namespace fragcore
 
 #endif

@@ -191,7 +191,9 @@ ENDIF()
 
 # GCC compiler flag options.
 IF((CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX) AND NOT CMAKE_COMPILER_IS_MINGW)
-	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -Wpedantic -Wextra  -Wall -Wno-attributes")
+	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic -Wextra -Wall")
+	SET(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -pedantic -Wextra -Wall")
+
 
 	IF(CMAKE_BUILD_TYPE STREQUAL "Release")
 		MESSAGE(STATUS "Compile for release.")

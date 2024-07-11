@@ -37,20 +37,23 @@ std::vector<char> ShaderCompiler::convert(const std::vector<char> &sourceCode, S
 
 std::vector<char> ShaderCompiler::convertSPIRV(const std::vector<uint32_t> &source,
 											   const CompilerConvertOption &target) {
+	if (target.target == ShaderLanguage::GLSL) {
+		spirv_cross::CompilerGLSL glsl(source);
 
-	spirv_cross::CompilerGLSL glsl(source);
+		// Set some options.
+		spirv_cross::CompilerGLSL::Options options; // = glsl.get_common_options();
+		options.version = target.glslVersion;
+		options.es = false;
+		glsl.set_common_options(options);
 
-	// Set some options.
-	spirv_cross::CompilerGLSL::Options options; // = glsl.get_common_options();
-	options.version = target.glslVersion;
-	options.es = false;
-	glsl.set_common_options(options);
+		// Compile to GLSL, ready to give to GL driver.
+		const std::string converted_source = glsl.compile();
 
-	// Compile to GLSL, ready to give to GL driver.
-	const std::string converted_source = glsl.compile();
+		/*	Includes the null terminator.	*/
+		return std::vector<char>(converted_source.begin(), converted_source.end() + 1);
+	}
 
-	/*	Includes the null terminator.	*/
-	return std::vector<char>(converted_source.begin(), converted_source.end() + 1);
+	return {};
 }
 
 // std::map<long int, ShaderCompiler::ShaderResult>

@@ -18,9 +18,9 @@ std::vector<Triangle> GeometryUtility::createPolygon(const std::vector<Vector3> 
 	return {};
 }
 
-bool GeometryUtility::isConvex(const std::vector<Vector3> &polygon) {
+bool GeometryUtility::isConvex(const std::vector<Vector3> &points) {
 
-	if (polygon.size() < 3) {
+	if (points.size() < 3) {
 		return false;
 	}
 
@@ -29,13 +29,13 @@ bool GeometryUtility::isConvex(const std::vector<Vector3> &polygon) {
 	Vector3 u;
 
 	int res = 0;
-	for (size_t i = 0; i < polygon.size(); i++) {
-		p = polygon[i];
-		Vector3 tmp = polygon[(i + 1) % polygon.size()];
+	for (size_t i = 0; i < points.size(); i++) {
+		p = points[i];
+		Vector3 tmp = points[(i + 1) % points.size()];
 		v = Vector3::Zero();
 		v.x() = tmp.x() - p.x();
 		v.y() = tmp.y() - p.y();
-		u = polygon[(i + 2) % polygon.size()];
+		u = points[(i + 2) % points.size()];
 
 		if (i == 0) // in first loop direction is unknown, so save it in res
 			res = u.x() * v.y() - u.y() * v.x() + v.x() * p.y() - v.y() * p.x();

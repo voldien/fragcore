@@ -19,6 +19,7 @@
 #ifndef _FV_PHYSIC_DESC_H_
 #define _FV_PHYSIC_DESC_H_ 1
 #include "Collider.h"
+#include "Core/Math3D.h"
 #include "RigidBody.h"
 
 namespace fragcore {
@@ -67,7 +68,6 @@ namespace fragcore {
 	 * object.
 	 */
 	using CollisionDesc = struct collision_desc_t {
-		// TODO determine if relocated to add scope global of fragcore.
 		enum ShapePrimitive {
 			Box,	 /*	*/
 			Plane,	 /*	*/
@@ -76,11 +76,11 @@ namespace fragcore {
 			Mesh,	 /*	*/
 			Terrain	 /*  	*/
 		};
-		ShapePrimitive Primitive; /*	Collision type.	*/
-		float center[3] = {0};	  /*	Center of the collision object.	*/
-		float alignscale = 1.0f;  /*	factor scalar.	*/
+		ShapePrimitive Primitive = Plane; /*	Collision type.	*/
+		float center[3] = {0, 0, 0};	  /*	Center of the collision object.	*/
+		float alignscale = 1.0f;		  /*	factor scalar.	*/
 
-		/**/
+		/*	*/
 		union {
 			struct /*plane_shape*/ {
 				float normal[3];

@@ -24,7 +24,7 @@ namespace fragcore {
 
 	class FVDECLSPEC Contact {
 	  public:
-		Contact() = default
+		Contact() = default;
 		Contact(const Contact &contact) = default;
 		/**
 		 *	@return

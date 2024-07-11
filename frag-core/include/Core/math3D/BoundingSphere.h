@@ -80,7 +80,16 @@ namespace fragcore {
 		 * @param sphere sphere inside this sphere.
 		 * @return true if object contains, false otherwise.
 		 */
-		bool contains(const BoundingSphere &sphere) const noexcept { return false; }
+		bool contains(const BoundingSphere &sphere) const noexcept {
+			
+			//TODO: add within radius.
+			if (this->contains(sphere.getCenter())) {
+				return true;
+			}
+			return false;
+		}
+
+		bool contains(const Vector3 &point) const noexcept { return (point - getCenter()).norm() < this->getRadius(); }
 
 		/**
 		 * @brief

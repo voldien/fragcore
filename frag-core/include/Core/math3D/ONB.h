@@ -21,6 +21,7 @@
 #include "../Math.h"
 
 namespace fragcore {
+
 	/**
 	 *	ORTHONORMAL BASED AND FRAMES
 	 */
@@ -33,7 +34,7 @@ namespace fragcore {
 		/**
 		 *
 		 */
-		void initFromU(const Vector3 &u) {
+		void initFromU(const Vector3 &u) noexcept {
 			Vector3 n(1.0f, 0.0f, 0.0f);
 			Vector3 m(0.0f, 1.0f, 0.0f);
 
@@ -44,7 +45,7 @@ namespace fragcore {
 			}
 			this->setW(this->u().cross(this->v()));
 		}
-		void initFromV(const Vector3 &v) {
+		void initFromV(const Vector3 &v) noexcept {
 			Vector3 n(1.0f, 0.0f, 0.0f);
 			Vector3 m(0.0f, 1.0f, 0.0f);
 
@@ -55,7 +56,8 @@ namespace fragcore {
 			}
 			this->setW(this->u().cross(this->v()));
 		}
-		void initFromW(const Vector3 &w) {
+
+		void initFromW(const Vector3 &w) noexcept {
 			Vector3 n(1.0f, 0.0f, 0.0f);
 			Vector3 m(0.0f, 1.0f, 0.0f);
 
@@ -82,20 +84,20 @@ namespace fragcore {
 		/**
 		 *
 		 */
-		void initFromUV(const Vector3 &u, const Vector3 &v) { this->m[2] = u.cross(v); }
-		void initFromVU(const Vector3 &v, const Vector3 &u) { this->m[2] = v.cross(u); }
+		void initFromUV(const Vector3 &u, const Vector3 &v) noexcept { this->m[2] = u.cross(v); }
+		void initFromVU(const Vector3 &v, const Vector3 &u) noexcept { this->m[2] = v.cross(u); }
 
 		/**
 		 *
 		 */
-		void initFromUW(const Vector3 &u, const Vector3 &w) { this->m[1] = u.cross(w); }
-		void initFromWU(const Vector3 &w, const Vector3 &u) { this->m[1] = w.cross(u); }
+		void initFromUW(const Vector3 &u, const Vector3 &w) noexcept { this->m[1] = u.cross(w); }
+		void initFromWU(const Vector3 &w, const Vector3 &u) noexcept { this->m[1] = w.cross(u); }
 
 		/**
 		 *
 		 */
-		void initFromVW(const Vector3 &v, const Vector3 &w) { this->m[0] = v.cross(w); }
-		void initFromWV(const Vector3 &w, const Vector3 &v) { this->m[0] = w.cross(v); }
+		void initFromVW(const Vector3 &v, const Vector3 &w) noexcept { this->m[0] = v.cross(w); }
+		void initFromWV(const Vector3 &w, const Vector3 &v) noexcept { this->m[0] = w.cross(v); }
 
 		/**
 		 *
@@ -144,17 +146,17 @@ namespace fragcore {
 		/**
 		 * @return
 		 */
-		inline const Vector3 &u() const { return this->m[0]; }
+		inline const Vector3 &u() const noexcept { return this->m[0]; }
 
 		/**
 		 * @return
 		 */
-		inline const Vector3 &v() const { return this->m[1]; }
+		inline const Vector3 &v() const noexcept { return this->m[1]; }
 
 		/**
 		 * @return
 		 */
-		inline const Vector3 &w() const { return this->m[2]; }
+		inline const Vector3 &w() const noexcept { return this->m[2]; }
 
 	  private:		  /*	Attributes.	*/
 		Vector3 m[3]; /*	*/

@@ -30,11 +30,12 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC Image : public Object {
 	  public:
-		Image(unsigned int width, unsigned int height, TextureFormat format);
-		Image(unsigned int width, unsigned int height, unsigned int layer, TextureFormat format);
+		Image(const unsigned int width, const unsigned int height, const TextureFormat format);
+		Image(const unsigned int width, const unsigned int height, const unsigned int layer,
+			  const TextureFormat format);
 
-		Image(const Image &other) {}
-		Image(Image &&other) {}
+		Image(const Image &other) { Object::operator=(other); }
+		Image(Image &&other) { Object::operator=(other); }
 
 		~Image() override;
 
@@ -53,7 +54,7 @@ namespace fragcore {
 		virtual size_t getSize() const noexcept { return this->bufferSize; }
 
 		virtual void *getPixelData() const noexcept;
-		virtual void setPixelData(void *srcPixelData, size_t size); // TODO add offset
+		virtual void setPixelData(void *srcPixelData, const size_t size); // TODO add offset
 
 	  protected:
 		void allocateMemory(unsigned int width, unsigned int height, unsigned depth, TextureFormat format);

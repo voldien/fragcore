@@ -75,14 +75,14 @@ bool SDLWindow::isFullScreen() const { return false; }
 void SDLWindow::setBordered(bool bordered) { SDL_SetWindowBordered(this->window, (SDL_bool)bordered); }
 
 int SDLWindow::width() const {
-	int w, h;
-	getSize(&w, &h);
-	return w;
+	int width, height;
+	getSize(&width, &height);
+	return width;
 }
 int SDLWindow::height() const {
-	int w, h;
-	getSize(&w, &h);
-	return h;
+	int width, height;
+	getSize(&width, &height);
+	return height;
 }
 
 float SDLWindow::getGamma() const { return 0; }

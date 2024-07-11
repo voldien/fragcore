@@ -256,7 +256,8 @@ void GLTexture::resize(int width, int height, GLTexture::Format format, bool has
 	// this->bind(0);
 
 	// GL_TEXTURE_IMMUTABLE_FORMAT'
-	glTexImage2D(this->target, 0, GLHelper::getImageInternalFormat(format), width, height, 0, GL_RED, GL_UNSIGNED_BYTE, nullptr);
+	glTexImage2D(this->target, 0, GLHelper::getImageInternalFormat(format), width, height, 0, GL_RED, GL_UNSIGNED_BYTE,
+				 nullptr);
 	// glTextureStorage2D(this->texture, 1, getImageInternalFormat(GLTexture::Format::eR8G8B8A8), width,
 	//               height); // TODO add only if mipmaps is used with nullptr pixel object.
 
@@ -365,9 +366,9 @@ void *GLTexture::getPixels(TextureFormat format, unsigned int level, unsigned lo
 
 void GLTexture::clear() {
 
-	if (glClearTexImage)
+	if (glClearTexImage) {
 		glClearTexImage(this->texture, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
-	else {
+	} else {
 	}
 }
 

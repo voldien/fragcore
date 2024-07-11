@@ -101,16 +101,12 @@ int UDPNetSocket::listen(unsigned int maxListen) {
 }
 
 int UDPNetSocket::connect(const INetAddress &p_addr) {
-	socklen_t addrlen = 0;		 /*	*/
-	const struct sockaddr *addr; /*	*/
 	union {
 		struct sockaddr_in addr4;  /*	*/
 		struct sockaddr_in6 addr6; /*	*/
 	} addrU;
-	struct hostent *hosten = nullptr; /*	*/
 	int domain;
 	int flags = SOCK_DGRAM;
-	struct timeval timeout;
 
 	// if (!isValidNetworkAddress(p_addr)) {
 	//	throw RuntimeException("Invalid Net Address");
@@ -252,7 +248,6 @@ int UDPNetSocket::getDomain(const INetAddress &address) {
 
 	const TCPUDPAddress &tcpAddress = dynamic_cast<const TCPUDPAddress &>(address);
 
-	int domain = 0; // TODO be override by the NetAddress!
 	switch (address.getNetworkProtocol()) {
 	case INetAddress::NetworkProtocol::NetWorkProtocol_TCP_UDP:
 	case INetAddress::NetworkProtocol::NetWorkProtocol_IP: {

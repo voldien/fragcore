@@ -7,8 +7,18 @@ using namespace fragcore;
 
 BulletRigidBody::BulletRigidBody(btRigidBody *body) { this->pdata = body; }
 
-void BulletRigidBody::useGravity(bool use) {}
-bool BulletRigidBody::useGravity() {return true;}
+void BulletRigidBody::useGravity(bool use) {
+	btRigidBody *body = (btRigidBody *)this->getObject();
+	if (use) {
+		body->applyGravity();
+	} else {
+		body->clearGravity();
+	}
+}
+bool BulletRigidBody::useGravity() {
+	btRigidBody *body = (btRigidBody *)this->getObject();
+	return !body->getGravity().isZero();
+}
 
 float BulletRigidBody::getMass() {
 	btRigidBody *body = (btRigidBody *)this->getObject();

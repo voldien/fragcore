@@ -19,13 +19,14 @@
 #ifndef _FRAG_CORE_SOFTBODY_H_
 #define _FRAG_CORE_SOFTBODY_H_ 1
 #include "../FragDef.h"
+#include "PhysicObject.h"
 #include "Prerequisites.h"
 
 namespace fragcore {
 	/**
 	 *
 	 */
-	class FVDECLSPEC SoftBody {
+	class FVDECLSPEC SoftBody : public PhysicObject {
 	  private:
 		inline SoftBody() = default;
 		virtual ~SoftBody() = 0;

@@ -32,7 +32,7 @@ namespace fragcore {
 		Transform(const Vector3 &position, const Quaternion &rotation, const Vector3 &scale)
 			: position(position), quaternion(rotation), scale(scale) {}
 
-		explicit Transform(const Matrix3x3 &basis, const Vector3 &c = Vector3::Zero()) {}
+		// explicit Transform(const Matrix3x3 &basis, const Vector3 &c = Vector3::Zero()) {}
 
 		Transform(const Transform &other) {
 			this->position = other.position;
@@ -61,9 +61,9 @@ namespace fragcore {
 
 		FV_ALWAYS_INLINE void setRotation(const Quaternion &quat) noexcept { this->quaternion = quat; }
 
-		FV_ALWAYS_INLINE Transform inverse() const {
+		FV_ALWAYS_INLINE Transform inverse() const noexcept {
 			Transform transform;
-			Matrix3x3 inv = this->getBasis().transpose();
+			// Matrix3x3 inv = this->getBasis().transpose();
 			return transform;
 		}
 
@@ -71,20 +71,22 @@ namespace fragcore {
 
 		FV_ALWAYS_INLINE const Matrix3x3 getBasis() const noexcept { return this->quaternion.matrix(); }
 
-		FV_ALWAYS_INLINE Transform &operator*=(const Transform &t) {
-			Matrix3x3 basis = this->getBasis() * t.getBasis();
+		FV_ALWAYS_INLINE Transform &operator*=(const Transform &t) noexcept {
+			// Matrix3x3 basis = this->getBasis() * t.getBasis();
 			return *this;
 		}
 
-		FV_ALWAYS_INLINE Transform operator*(const Transform &t) const {
-			Matrix3x3 basis = this->getBasis() * t.getBasis();
+		FV_ALWAYS_INLINE Transform operator*(const Transform &t) const noexcept {
+			// Matrix3x3 basis = this->getBasis() * t.getBasis();
 
 			return *this;
 		}
 
-		FV_ALWAYS_INLINE Vector3 operator*(const Vector3 &v) const { return this->getBasis() * v; }
+		FV_ALWAYS_INLINE Vector3 operator*(const Vector3 &vector) const noexcept { return this->getBasis() * vector; }
 
-		FV_ALWAYS_INLINE Quaternion operator*(const Quaternion &q) const { return this->getRotation() * q; }
+		FV_ALWAYS_INLINE Quaternion operator*(const Quaternion &quat) const noexcept {
+			return this->getRotation() * quat;
+		}
 
 	  private:				   /*	Attributes.	*/
 		Vector3 position;	   /*	Position in world space.	*/

@@ -84,7 +84,7 @@ namespace fragcore {
 
 		static std::vector<Triangle> split(const std::vector<Triangle> &triangle, const Plane<float> &plane);
 
-		static std::vector<Triangle> createPolygon(const std::vector<Vector3> &triangle);
+		static std::vector<Triangle> createPolygon(const std::vector<Vector3> &points);
 
 		static std::vector<Triangle> generateSmoothNormals(const std::vector<Triangle> &triangle, const float angle);
 

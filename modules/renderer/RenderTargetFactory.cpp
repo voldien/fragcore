@@ -3,7 +3,7 @@
 
 using namespace fragcore;
 
-FrameBuffer *RenderTargetFactory::createShadow(IRenderer *render, int width, int height) {
+FrameBuffer *RenderTargetFactory::createShadow(IRenderer *render, const int width,const  int height) {
 
 	FrameBufferDesc desc = {};
 	TextureDesc depthdesc;

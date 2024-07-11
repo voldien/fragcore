@@ -232,8 +232,7 @@ RigidBody *BulletPhysicInterface::createRigibody(const RigidBodyDesc *desc) {
 	btVector3 fallInertia(0, 0, 0);
 
 	/*	*/
-	btVector3 scale =
-		btVector3(1, 1, 1); // btVector3(node->getScale().x(), node->getScale().y(), node->getScale().z());
+	btVector3 scale = btVector3(1, 1, 1);
 	shape->setLocalScaling(scale);
 
 	shape->calculateLocalInertia(desc->mass, fallInertia);
@@ -241,10 +240,13 @@ RigidBody *BulletPhysicInterface::createRigibody(const RigidBodyDesc *desc) {
 	/*  Create rigidbody.   */
 	btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(desc->mass, fallMotionState, shape, fallInertia);
 	btRigidBody *groundRigidBody = new btRigidBody(fallRigidBodyCI);
+	
+	/*	*/
 	if (desc->isKinematic) {
 		groundRigidBody->setCollisionFlags(groundRigidBody->getCollisionFlags() |
 										   btCollisionObject::CF_KINEMATIC_OBJECT);
 	}
+
 	//
 	groundRigidBody->setCcdSweptSphereRadius(0);
 	groundRigidBody->setContactStiffnessAndDamping(300, 10);

@@ -16,7 +16,7 @@ SDLWindowManager::~SDLWindowManager() {
 	SDL_QuitSubSystem(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER);
 }
 
-Display *SDLWindowManager::getDisplay(unsigned int index) { return new SDLDisplay(0); }
+Display *SDLWindowManager::getDisplay(unsigned int index) { return new SDLDisplay(index); }
 unsigned int SDLWindowManager::getNumDisplays() const noexcept { return SDLDisplay::getNumDisplays(); }
 Display *SDLWindowManager::getAssociatedDisplay(Ref<Window> &window) { return nullptr; }
 Window *SDLWindowManager::createWindow(const std::string &title) {
