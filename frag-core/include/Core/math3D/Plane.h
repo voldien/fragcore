@@ -84,7 +84,7 @@ namespace fragcore {
 		 * Get point.
 		 * @return
 		 */
-		inline Vector3 getPoint() const noexcept { return d * this->getNormal(); }
+		inline Vector3 getPoint() const noexcept { return this->distance() * this->getNormal(); }
 
 		/**
 		 * Set normal and point and

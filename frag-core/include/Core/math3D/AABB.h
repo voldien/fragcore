@@ -115,7 +115,7 @@ namespace fragcore {
 		 * @param worldPosition
 		 * @return  true if object contains.
 		 */
-		bool contains(const Vector3 &point, const Vector3 worldPosition = Vector3()) noexcept {
+		bool contains(const Vector3 &point, const Vector3 worldPosition = Vector3::Zero()) const noexcept {
 			return (point.x() > minX() + worldPosition.x() && point.x() < maxX() + worldPosition.x() &&
 					point.y() > minY() + worldPosition.y() && point.y() < maxY() + worldPosition.y() &&
 					point.z() > minZ() + worldPosition.z() && point.z() < maxZ() + worldPosition.z());
@@ -127,7 +127,7 @@ namespace fragcore {
 		 * @param bounds
 		 * @return true if completly contains, false otherwise.
 		 */
-		constexpr bool contains(const AABB &bounds) noexcept { return false; }
+		constexpr bool contains(const AABB &bounds) const noexcept { return false; }
 
 		/**
 		 *
@@ -181,7 +181,7 @@ namespace fragcore {
 		 *
 		 * @return reference of object.
 		 */
-		friend AABB operator*(const AABB &bound, float scalar) noexcept {
+		friend AABB operator*(const AABB &bound, const float scalar) noexcept {
 			return {bound.getCenter(), bound.getSize() * scalar};
 		}
 
@@ -200,8 +200,8 @@ namespace fragcore {
 		 * @param scalar real number.
 		 * @return reference of object.
 		 */
-		AABB &operator*=(float scalar) noexcept {
-			this->setSize(getSize() * scalar);
+		AABB &operator*=(const float scalar) noexcept {
+			this->setSize(this->getSize() * scalar);
 			return *this;
 		}
 

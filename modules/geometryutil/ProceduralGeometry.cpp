@@ -161,9 +161,9 @@ void ProceduralGeometry::generateSphere(float radius, std::vector<Vertex> &verti
 }
 
 void ProceduralGeometry::generateCube(const float scale, std::vector<Vertex> &vertices,
-									  std::vector<unsigned int> &indices) {
+									  std::vector<unsigned int> &indices, const int segments) {
 
-	BoxMesh BoxMesh;
+	BoxMesh BoxMesh(gml::dvec3(scale, scale, scale), {segments, segments, segments});
 
 	auto mesh_vertices = BoxMesh.vertices();
 

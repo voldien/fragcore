@@ -21,12 +21,13 @@
 #define _FRAG_CORE_BULLET_RIGIDBODY_H_ 1
 #include "../RigidBody.h"
 #include "BulletDynamics/Dynamics/btRigidBody.h"
+#include "bulletPhysicInterface.h"
 
 namespace fragcore {
 
 	class FVDECLSPEC BulletRigidBody : public RigidBody {
 		friend class DynamicInterface;
-		friend class BulletRigidBody;
+		friend class BulletPhysicInterface;
 
 	  public:
 		BulletRigidBody() = default;

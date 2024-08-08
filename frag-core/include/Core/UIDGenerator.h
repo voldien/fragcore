@@ -19,6 +19,7 @@
 #ifndef _FRAG_CORE_UID_GENERATOR_H_
 #define _FRAG_CORE_UID_GENERATOR_H_ 1
 #include "../FragDef.h"
+#include <atomic>
 
 namespace fragcore {
 	/**
@@ -26,22 +27,26 @@ namespace fragcore {
 	 *	This is a simple UID generator.
 	 *	Each next will be an increment of previosuly.
 	 */
-	template <class T> class FVDECLSPEC UIDGenerator {
+	template <typename T = uint32_t> class FVDECLSPEC UIDGenerator {
 	  public:
-		static_assert(std::is_arithmetic<T>::value, "Must support artithmetic operations");
-		UIDGenerator() noexcept { this->nextUID = 0; }
-		UIDGenerator(UIDGenerator &&other) = default;
-		UIDGenerator(const UIDGenerator &other) = default;
+		using UIDType = T;
 
-		UIDGenerator &operator=(const UIDGenerator &other) = default;
-		UIDGenerator &operator=(UIDGenerator &&other) = default;
+	  public:
+		static_assert(std::is_arithmetic<UIDType>::value, "Must support artithmetic operations");
+		UIDGenerator() noexcept { this->nextUID = 0; }
+		UIDGenerator(UIDGenerator &&other) {}
+		UIDGenerator(const UIDGenerator &other) {}
+		~UIDGenerator() {}
+
+		UIDGenerator &operator=(const UIDGenerator &other) { return *this; }
+		UIDGenerator &operator=(UIDGenerator &&other) { return *this; }
 
 		/**
 		 * @brief Get the Next U I D object
 		 *
 		 * @return next unique id.
 		 */
-		T getNextUID() noexcept { return this->nextUID++; }
+		UIDType getNextUID() noexcept { return this->nextUID.fetch_add(1, std::memory_order_relaxed); }
 
 		bool operator==(const UIDGenerator &other) noexcept {
 			if (this == &other) {
@@ -51,9 +56,9 @@ namespace fragcore {
 		}
 		bool operator!=(const UIDGenerator &other) noexcept { return !(*this == other); }
 
-	  private:	   /*	Attributes.	*/
-		T nextUID; /*	*/
-		T uid;	   // TODO resolve.
+	  private:						  /*	Attributes.	*/
+		std::atomic<UIDType> nextUID; /*	*/
+		std::atomic<UIDType> uid;	  // TODO resolve.
 	};
 
 } // namespace fragcore

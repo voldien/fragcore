@@ -1,4 +1,5 @@
 #include "bulletRigidBody.h"
+#include "LinearMath/btVector3.h"
 
 #include <btBulletCollisionCommon.h>
 #include <btBulletDynamicsCommon.h>
@@ -15,6 +16,7 @@ void BulletRigidBody::useGravity(bool use) {
 		body->clearGravity();
 	}
 }
+
 bool BulletRigidBody::useGravity() {
 	btRigidBody *body = (btRigidBody *)this->getObject();
 	return !body->getGravity().isZero();
@@ -49,7 +51,13 @@ void BulletRigidBody::setPosition(const Vector3 &position) {
 	btRigidBody *body;
 	body = (btRigidBody *)this->getObject();
 
-	/*  Both internal and BulletRigidBody.    */
+	btTransform initialTransform;
+
+	initialTransform.setOrigin(btVector3(position.x(), position.y(), position.z()));
+	initialTransform.setRotation(body->getOrientation());
+
+	body->setWorldTransform(initialTransform);
+	body->getMotionState()->setWorldTransform(initialTransform);
 }
 
 Quaternion BulletRigidBody::getOrientation() {
@@ -86,6 +94,8 @@ void BulletRigidBody::setScale(const Vector3 &scale) {
 void BulletRigidBody::addForce(const Vector3 &force) {
 	btRigidBody *body;
 	body = (btRigidBody *)this->getObject();
+	body->activate(true);
+	body->applyCentralImpulse(btVector3(force.x(), force.y(), force.z()));
 }
 
 float BulletRigidBody::getDrag() {

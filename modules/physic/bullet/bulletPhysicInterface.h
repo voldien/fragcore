@@ -46,7 +46,7 @@ namespace fragcore {
 		 * @param maxSubSteps
 		 * @param fixedTimeStep
 		 */
-		void simulate(float timeStep, int maxSubSteps = 1, float fixedTimeStep = 1.0f / 60.0f) override;
+		void simulate(const float timeStep, const int maxSubSteps = 1, const float fixedTimeStep = 1.0f / 60.0f) override;
 
 		/**
 		 * synchronize.

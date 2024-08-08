@@ -1,4 +1,5 @@
 #include "bulletPhysicInterface.h"
+#include "BulletCollision/CollisionDispatch/btCollisionObject.h"
 #include "BulletDynamics/Dynamics/btRigidBody.h"
 #include "LinearMath/btVector3.h"
 #include "RigidBody.h"
@@ -8,15 +9,6 @@
 #include "internal_object_type.h"
 #include <FragCore.h>
 using namespace fragcore;
-
-// void BulletPhysicInterface::initAllocate(InitAllocateTableInfo* table){
-//	table->interfacetype = ePhysic;
-//	/*  */
-//	table->initphyic.collisionsize = sizeof(btCollisionShape);
-//	table->initphyic.constraintssize = sizeof(btUniversalConstraint);
-//	table->initphyic.rigidbodysize = sizeof(btRigidBody);
-//	table->initphyic.characterController = sizeof(btKinematicCharacterController);
-//}
 
 BulletPhysicInterface::BulletPhysicInterface(IConfig *config) {
 	this->setName("BulletPhysic");
@@ -30,11 +22,12 @@ BulletPhysicInterface::BulletPhysicInterface(IConfig *config) {
 	this->dispatcher = new btCollisionDispatcher(this->collisionConfiguration);
 
 	/*	*/
-	this->solver = new btSequentialImpulseConstraintSolver;
+	this->solver = new btSequentialImpulseConstraintSolver();
 
 	/*	*/
 	this->dynamicsWorld =
 		new btSoftRigidDynamicsWorld(this->dispatcher, this->broadphase, this->solver, this->collisionConfiguration);
+
 	/*	*/
 	this->setGravity(Vector3(0.0f, -9.82f, 0.0f));
 
@@ -45,9 +38,8 @@ BulletPhysicInterface::BulletPhysicInterface(IConfig *config) {
 	this->softBodyWorldInfo.m_sparsesdf.Initialize();
 }
 
-BulletPhysicInterface::BulletPhysicInterface(const BulletPhysicInterface &other) {
-	//	*this = other;
-}
+BulletPhysicInterface::BulletPhysicInterface(const BulletPhysicInterface &other) {}
+
 BulletPhysicInterface::~BulletPhysicInterface() {
 
 	/*	Clean up.	*/
@@ -63,9 +55,11 @@ BulletPhysicInterface::~BulletPhysicInterface() {
 void BulletPhysicInterface::OnInitialization() {}
 void BulletPhysicInterface::OnDestruction() {}
 
-void BulletPhysicInterface::simulate(float timeStep, int maxSubSteps, float fixedTimeStep) {
+void BulletPhysicInterface::simulate(const float timeStep, const int maxSubSteps, const float fixedTimeStep) {
 
 	this->dynamicsWorld->stepSimulation(timeStep, maxSubSteps, fixedTimeStep);
+	
+	/*	*/
 	if (this->debug) {
 		this->dynamicsWorld->debugDrawWorld();
 	}
@@ -94,7 +88,7 @@ void BulletPhysicInterface::addRigidBody(RigidBody *body) {
 }
 void BulletPhysicInterface::removeRigidBody(RigidBody *body) {
 
-	btRigidBody *rigid = nullptr;
+	btRigidBody *rigid = (btRigidBody *)body->getObject();
 
 	/*	*/
 	// rigid = (btRigidBody*)getPointerByIndex(body);
@@ -199,6 +193,7 @@ Constraints *BulletPhysicInterface::createConstraints(const ConstraintsDesc *des
 	// return obtainMappedObject<Constraints>(constr);
 	return nullptr;
 }
+
 void BulletPhysicInterface::deleteConstraints(Constraints *constraints) {
 	//	btTypedConstraint* typedConstraint = (btTypedConstraint*)constraints->getMappedObject();
 
@@ -228,32 +223,35 @@ RigidBody *BulletPhysicInterface::createRigibody(const RigidBodyDesc *desc) {
 	btQuaternion rotation = btQuaternion(desc->quat.x(), desc->quat.y(), desc->quat.z(), desc->quat.w());
 	btVector3 position = btVector3(desc->position.x(), desc->position.y(), desc->position.z());
 	/*  */
-	btDefaultMotionState *fallMotionState = new btDefaultMotionState(btTransform(rotation, position));
+	btTransform initTransform(rotation, position);
+	btDefaultMotionState *fallMotionState = new btDefaultMotionState(initTransform);
 	btVector3 fallInertia(0, 0, 0);
 
 	/*	*/
 	btVector3 scale = btVector3(1, 1, 1);
 	shape->setLocalScaling(scale);
-
-	shape->calculateLocalInertia(desc->mass, fallInertia);
+	if (desc->mass > 0) {
+		shape->calculateLocalInertia(desc->mass, fallInertia);
+	}
 
 	/*  Create rigidbody.   */
 	btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(desc->mass, fallMotionState, shape, fallInertia);
-	btRigidBody *groundRigidBody = new btRigidBody(fallRigidBodyCI);
-	
+	btRigidBody *rigidBody = new btRigidBody(fallRigidBodyCI);
+
 	/*	*/
 	if (desc->isKinematic) {
-		groundRigidBody->setCollisionFlags(groundRigidBody->getCollisionFlags() |
-										   btCollisionObject::CF_KINEMATIC_OBJECT);
+		rigidBody->setCollisionFlags(btCollisionObject::CF_KINEMATIC_OBJECT);
+	} else {
+		rigidBody->forceActivationState(DISABLE_DEACTIVATION);
 	}
 
 	//
-	groundRigidBody->setCcdSweptSphereRadius(0);
-	groundRigidBody->setContactStiffnessAndDamping(300, 10);
+	// groundRigidBody->setCcdSweptSphereRadius(0);
+	// groundRigidBody->setContactStiffnessAndDamping(300, 10);
+	rigidBody->setUserIndex(-1);
 
 	/*	Create rigidbody.   */
-	body = new BulletRigidBody(groundRigidBody);
-	/*  Bind rigidbody and node bidirectional.  */
+	body = new BulletRigidBody(rigidBody);
 
 	/*  Final properties.  */
 	body->setAngularDrag(desc->angularDrag);
@@ -266,14 +264,11 @@ RigidBody *BulletPhysicInterface::createRigibody(const RigidBodyDesc *desc) {
 void BulletPhysicInterface::deleteRigibody(RigidBody *rigidbody) {
 
 	btRigidBody *body = nullptr;
-
 	/*  */
 	// body = (btRigidBody*)getPointerByIndex(rigidbody);
 	assert(body);
-
 	/*	*/
 	delete body;
-	// returnRefObj(rigidbody);
 }
 
 void *BulletPhysicInterface::createSoftBody(SoftbodyDesc *softbodyDesc) {
@@ -284,6 +279,7 @@ void *BulletPhysicInterface::createSoftBody(SoftbodyDesc *softbodyDesc) {
 																softbodyDesc->indices, softbodyDesc->nVertices / 3);
 	return nullptr;
 }
+
 void BulletPhysicInterface::deleteSoftBody(void *softbody) {}
 
 void *BulletPhysicInterface::createCloth(ClothDesc *clothDesc) {
@@ -354,8 +350,8 @@ void *BulletPhysicInterface::getState(unsigned int *len) {
 }
 
 bool BulletPhysicInterface::rayTest(const Ray &ray, RayCastHit *hit) {
-	/*	*/
 
+	/*	*/
 	btSoftRigidDynamicsWorld *world = this->dynamicsWorld;
 
 	struct AllRayResultCallback : public btCollisionWorld::RayResultCallback {
@@ -368,7 +364,7 @@ bool BulletPhysicInterface::rayTest(const Ray &ray, RayCastHit *hit) {
 		btVector3 m_hitNormalWorld;
 		btVector3 m_hitPointWorld;
 
-		virtual btScalar addSingleResult(btCollisionWorld::LocalRayResult &rayResult, bool normalInWorldSpace) {
+		btScalar addSingleResult(btCollisionWorld::LocalRayResult &rayResult, bool normalInWorldSpace) override {
 
 			// caller already does the filter on the m_closestHitFraction
 			btAssert(rayResult.m_hitFraction <= m_closestHitFraction);
@@ -396,6 +392,7 @@ bool BulletPhysicInterface::rayTest(const Ray &ray, RayCastHit *hit) {
 
 	return result.hasHit();
 }
+
 bool BulletPhysicInterface::raySphereTest(const Ray &ray, RayCastHit *hit) {
 	btSoftRigidDynamicsWorld *world = this->dynamicsWorld;
 

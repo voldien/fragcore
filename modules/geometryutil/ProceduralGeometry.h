@@ -49,7 +49,8 @@ namespace fragcore {
 		static void generateSphere(float radius, std::vector<Vertex> &vertices, std::vector<unsigned int> &indices,
 								   int slices = 12, int segments = 12);
 
-		static void generateCube(const float scale, std::vector<Vertex> &vertices, std::vector<unsigned int> &indices);
+		static void generateCube(const float scale, std::vector<Vertex> &vertices, std::vector<unsigned int> &indices,
+								 const int segments = 8);
 
 		static void generateWireCube(const float scale, std::vector<Vertex> &vertices,
 									 std::vector<unsigned int> &indices);

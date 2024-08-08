@@ -48,7 +48,7 @@ namespace fragcore {
 		 * @param maxSubSteps
 		 * @param fixedTimeStep
 		 */
-		virtual void simulate(float timeStep, int maxSubSteps = 1, float fixedTimeStep = 1.0f / 60.0f) = 0;
+		virtual void simulate(const float timeStep, const int maxSubSteps = 1, const float fixedTimeStep = 1.0f / 60.0f) = 0;
 
 		/**
 		 * synchronize.
@@ -224,7 +224,7 @@ namespace fragcore {
 	 *
 	 *	@return non-null physic interface object.
 	 */
-	extern "C" PhysicInterface *createInternalPhysicInterface(IConfig *config);
+	extern "C" PhysicInterface *createInternalPhysicInterface(IConfig *options);
 } // namespace fragcore
 
 #endif

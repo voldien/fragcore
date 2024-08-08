@@ -32,45 +32,45 @@ namespace fragcore {
 
 		~GLSampler() override;
 
-		virtual void setFilterMode(FilterMode mode) override;
+		void setFilterMode(FilterMode mode) override;
 
-		virtual FilterMode getFilterMode() override;
+		FilterMode getFilterMode() override;
 
-		virtual void setWrapMode(WrapMode mode) override;
+		void setWrapMode(WrapMode mode) override;
 
-		virtual WrapMode getWrapMode() override;
+		WrapMode getWrapMode() override;
 
 		//
 
-		virtual void setAnisotropic(float anisotropy) override;
+		void setAnisotropic(float anisotropy) override;
 
-		virtual float getAnisotropic() const override;
+		float getAnisotropic() const override;
 
-		virtual CompareFunc getCompare() const override;
+		CompareFunc getCompare() const override;
 
-		virtual void setCompareFunc(CompareFunc compareFunc) override;
+		void setCompareFunc(CompareFunc compareFunc) override;
 
-		virtual void setMipMapBaseLevel(unsigned int level) override;
+		void setMipMapBaseLevel(unsigned int level) override;
 
-		virtual unsigned int getMipMapBaseLevel() const override;
+		unsigned int getMipMapBaseLevel() const override;
 
-		virtual void setMipMapBias(float bias) override;
+		void setMipMapBias(float bias) override;
 
-		virtual float getMipMapBias(float bias) const override;
+		float getMipMapBias(float bias) const override;
 
-		virtual void setBorderColor(float color) override;
+		void setBorderColor(float color) override;
 
-		virtual float getBorderColor() const override;
+		float getBorderColor() const override;
 
-		virtual unsigned int setMaxLod(unsigned int level) override;
+		unsigned int setMaxLod(unsigned int level) override;
 
-		virtual unsigned int getMaxLod() const override;
+		unsigned int getMaxLod() const override;
 
-		virtual unsigned int setMinLod(unsigned int level) override;
+		unsigned int setMinLod(unsigned int level) override;
 
-		virtual unsigned int getMinLod() const override;
+		unsigned int getMinLod() const override;
 
-		virtual void setName(const std::string &name) override;
+		void setName(const std::string &name) override;
 
 		intptr_t getNativePtr() const override;
 
