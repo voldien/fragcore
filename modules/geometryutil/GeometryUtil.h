@@ -30,54 +30,33 @@ namespace fragcore {
 	/**
 	 *
 	 */
-	// TODO name class to match the file name.
 	class FVDECLSPEC GeometryUtility {
 	  public:
 		template <typename T> static bool TestPlanesAABB(const Plane<T> &plane, const AABB &bound) {
-			Vector3 p = bound.min();
-			Vector3 n = bound.max();
-			Vector3 N = plane.getNormal();
 
-			if (N.x() >= 0) {
-				p[0] = bound.max().x();
-				n[0] = bound.min().x();
-			}
-			if (N.y() >= 0) {
-				p[1] = bound.max().y();
-				n[1] = bound.min().y();
-			}
-			if (N.z() >= 0) {
-				p[2] = bound.max().z();
-				n[2] = bound.min().z();
-			}
+			const float r = bound.getSize().dot(plane.getNormal().cwiseAbs());
 
-			const float r = bound.getSize().dot(Vector3(
-				std::abs(plane.getNormal().x()), std::abs(plane.getNormal().y()), std::abs(plane.getNormal().z())));
 			return -r <= plane.distanceSigned(bound.getCenter());
-
-			if (plane.distance(p) < 0.0f) {
-				return false;
-			}
-			if (plane.distance(n) < 0.0f) {
-				return true;
-			}
-			return true;
 		}
 
+		/**
+		 * @brief
+		 */
 		template <typename T> static bool TestPlanesSphere(const Plane<T> &plane, const BoundingSphere &bound) {
 
-			T distance = plane.distance(bound.getCenter());
+			const T distance = plane.distance(bound.getCenter());
 
 			return distance > -bound.getRadius();
 		}
 
 		template <typename T> static inline bool TestPlanesOBB(const Plane<T> &plane, const OBB &bound) { return true; }
 
+		/**
+		 * @brief Positive
+		 */
 		template <typename T> static inline bool TestPlanesPoint(const Plane<T> &plane, const Vector3 &point) {
 			return plane.distance(point) > 0;
 		}
-
-		// TODO  Transform
 
 		//
 		static std::vector<Triangle> subdivide(const std::vector<Triangle> &triangles);
@@ -96,6 +75,9 @@ namespace fragcore {
 									   const size_t stride = sizeof(float) * 3);
 
 		static AABB computeBoundingBox(const std::vector<AABB &> &aabbs) noexcept;
+
+		static AABB computeBoundingBox(const AABB &aabbs, const Matrix4x4 &matrix) noexcept;
+
 		/**
 		 * @brief
 		 *

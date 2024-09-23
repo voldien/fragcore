@@ -402,8 +402,12 @@ namespace fragcore {
 		 */
 		template <typename T> static inline T random() {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
-			return {static_cast<T>(drand48()), static_cast<T>(drand48())};
+			return static_cast<T>(drand48());
 		}
+		// template <typename T> static inline T random() {
+		// 	static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
+		// 	return {static_cast<T>(drand48()), static_cast<T>(drand48())};
+		// }
 
 		template <typename T> static std::vector<T> &random(std::vector<T> &samples) {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");

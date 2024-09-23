@@ -88,7 +88,7 @@ Image ImageLoader::loadImage(Ref<IO> &io) {
 			imageFormat = TextureFormat::RGBAFloat;
 			break;
 		default:
-			throw NotSupportedException("None Supported Color Type {} ", magic_enum::enum_name(imageType));
+			throw NotSupportedException("None Supported (RGB) Color Type {} ", magic_enum::enum_name(imageType));
 		}
 		break;
 	case FIC_RGBALPHA:
@@ -103,12 +103,11 @@ Image ImageLoader::loadImage(Ref<IO> &io) {
 			imageFormat = TextureFormat::RGBAFloat;
 			break;
 		default:
-			throw NotSupportedException("None Supported Color Type {} ", magic_enum::enum_name(imageType));
+			throw NotSupportedException("None Supported (RGBA) Color Type {} ", magic_enum::enum_name(imageType));
 		}
 		break;
 	case FIC_MINISWHITE:
 	case FIC_MINISBLACK:
-
 		switch (imageType) {
 		case FREE_IMAGE_TYPE::FIT_BITMAP:
 			imageFormat = TextureFormat::Alpha8;
@@ -116,13 +115,26 @@ Image ImageLoader::loadImage(Ref<IO> &io) {
 		case FREE_IMAGE_TYPE::FIT_FLOAT:
 			imageFormat = TextureFormat::RFloat;
 			break;
+		case FREE_IMAGE_TYPE::FIT_UINT16:
+			imageFormat = TextureFormat::R16U;
+			break;
+		case FREE_IMAGE_TYPE::FIT_INT16:
+			imageFormat = TextureFormat::R16;
+			break;
+		case FREE_IMAGE_TYPE::FIT_UINT32:
+			imageFormat = TextureFormat::R32U;
+			break;
+		case FREE_IMAGE_TYPE::FIT_INT32:
+			imageFormat = TextureFormat::R32;
+			break;
 		default:
-			throw NotSupportedException("None Supported Color Type {} ", magic_enum::enum_name(imageType));
+			throw NotSupportedException("None Supported (Single Channel) Color Type {} ",
+										magic_enum::enum_name(imageType));
 		}
 		break;
 	case FIC_CMYK:
 	default:
-		throw NotSupportedException("None Supported Color Type {} ", magic_enum::enum_name(imageType));
+		throw NotSupportedException("None Supported (Unknown) Color Type {} ", magic_enum::enum_name(imageType));
 	}
 
 	/*  */

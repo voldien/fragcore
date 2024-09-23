@@ -3,7 +3,8 @@
 
 using namespace fragcore;
 
-Image::Image(const unsigned int width, const unsigned int height, const TextureFormat format) : Image(width, height, 1, format) {}
+Image::Image(const unsigned int width, const unsigned int height, const TextureFormat format)
+	: Image(width, height, 1, format) {}
 Image::Image(const unsigned int width, const unsigned int height, const unsigned int layer, const TextureFormat format)
 	: w(width), h(height), depth(layer), format(format) {
 	this->allocateMemory(width, height, depth, format);
@@ -38,6 +39,12 @@ size_t Image::getFormatPixelSize(TextureFormat format) {
 	case TextureFormat::Alpha8:
 	case TextureFormat::R8:
 		return 1l * 8l;
+	case TextureFormat::R16:
+	case TextureFormat::R16U:
+		return 1l * 16;
+	case TextureFormat::R32:
+	case TextureFormat::R32U:
+		return 1l * 32;
 	case TextureFormat::ARGB4444:
 	case TextureFormat::RGBA4444:
 		return 4l * 4l;
@@ -50,8 +57,6 @@ size_t Image::getFormatPixelSize(TextureFormat format) {
 		return 4l * 8l;
 	case TextureFormat::RGB565:
 		return 5l + 6l + 5l;
-	case TextureFormat::R16:
-		return 1l * 16l;
 	case TextureFormat::DXT1:
 		break;
 	case TextureFormat::DXT5:

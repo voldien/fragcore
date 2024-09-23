@@ -29,7 +29,7 @@ namespace fragcore {
 	class FVDECLSPEC GLRendererInterface : public IRenderer {
 	  public:
 		// TODO make it less state machine and allow it to become more modern.
-		virtual ~GLRendererInterface();
+		~GLRendererInterface() override;
 
 		void OnInitialization() override;
 		void OnDestruction() override;
