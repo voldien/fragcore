@@ -1,20 +1,19 @@
 /*
- *	FragCore - Core Framework Functionalities for Game Engines
- *	Copyright (C) 2018  Valdemar Lindberg
+ *	FragCore - Fragment Core - Engine Core
+ *	Copyright (C) 2018 Valdemar Lindberg
  *
- *	This program is free software: you can redistribute it and/or modify
- *	it under the terms of the GNU General Public License as published by
- *	the Free Software Foundation, either version 3 of the License, or
- *	(at your option) any later version.
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
  *
- *	This program is distributed in the hope that it will be useful,
- *	but WITHOUT ANY WARRANTY; without even the implied warranty of
- *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *	GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
  *
- *	You should have received a copy of the GNU General Public License
- *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program;
  */
 #ifndef _FRAG_CORE_FRAG_CORECORE_H_
 #define _FRAG_CORE_FRAG_CORECORE_H_ 1
@@ -28,29 +27,36 @@
  *
  */
 
-/*  */
+/*  Core.   */
 #include "Core/IConfig.h"
+#include "Core/Library.h"
 #include "Core/SystemInfo.h"
-/*  */
+
+/*  Memory Management.  */
 #include "Core/Ref.h"
 #include "Core/RefPtr.h"
 #include "Core/SmartReference.h"
-/*  */
+
+/*  IO. */
 #include "Core/IO/BufferIO.h"
 #include "Core/IO/FileSystem.h"
 #include "Core/IO/GZFileIO.h"
 #include "Core/IO/ZipFileSystem.h"
-/*  */
+
+/*  Data Structure. */
+#include "Core/dataStructure/Queue.h"
+#include "Core/dataStructure/Stack.h"
+#include "Core/dataStructure/StackAllactor.h"
 #include "Core/dataStructure/StackBufferedAllocator.h"
-/*  */
-#include "Core/Library.h"
 
 /*  */
 #include "Core/TaskScheduler/IScheduler.h"
 
-/*  */
+/*  Networking. */
 #include "Core/Network/NetSocket.h"
 
+/*  Math.   */
+#include "Core/Math.h"
 #include "Core/math3D/AABB.h"
 #include "Core/math3D/BoundingSphere.h"
 #include "Core/math3D/OBB.h"

@@ -114,15 +114,13 @@ FILE(GLOB SOURCE_FILES  ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
 
 #
 FILE(GLOB HEADER_FILES  ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h
-						${CMAKE_CURRENT_SOURCE_DIR}/include/Core/*.h
-						${CMAKE_CURRENT_SOURCE_DIR}/include/Utils/*.h)
+						${CMAKE_CURRENT_SOURCE_DIR}/include/Core/*.h)
 
 # Public headers - subset of header files.
 FILE(GLOB DEVELOPMENT_HEADER_FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h
 									${CMAKE_CURRENT_SOURCE_DIR}/include/Core/*.h
 									${CMAKE_CURRENT_SOURCE_DIR}/include/Core/event/*.h
-									${CMAKE_CURRENT_SOURCE_DIR}/include/Core/IO/*.h
-									${CMAKE_CURRENT_SOURCE_DIR}/include/Utils/*.h)
+									${CMAKE_CURRENT_SOURCE_DIR}/include/Core/IO/*.h)
 
 SET(FRAG_CORE_INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 SET(FRAG_CORE_INCLUDE_SUB_DIR

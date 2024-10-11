@@ -15,47 +15,23 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _FRAG_CORE_SYNC_H_
-#define _FRAG_CORE_SYNC_H_ 1
-#include"RenderObject.h"
+#ifndef _FRAG_CORE_CURVE_UTIL_H_
+#define _FRAG_CORE_CURVE_UTIL_H_ 1
+#include "../FragDef.h"
 
 namespace fragcore {
-	/**
-	 *
-	 */
-	class FVDECLSPEC Sync : public RenderObject {
-		friend class IRenderer;
 
-	public:
-
-		enum class SyncStatus {
-			Complete = 0x0,
-			TimeOutExpired = 0x1,
-			Error = 0x2,
-		};
-
-		/**
-		 * @brief
-		 *
-		 */
-		virtual void fence() = 0;
-
-		/**
-		 * @brief
-		 *
-		 * @param timeout
-		 */
-		virtual void wait(int timeout = 0) = 0;
-
-		/**
-		 * @brief
-		 *
-		 * @param timeout
-		 * @return SyncStatus
-		 */
-		virtual SyncStatus waitClient(int timeout) = 0; /*  Wait in microseconds.   */
-
+	class FVDECLSPEC CurveUtil {
+	  public:
+		template <typename T, class U>
+		std::vector<U> BezierCurve(std::vector<U> &points, int start, float t, int degree) {
+			if (points.size() < degree)
+				return points[0];
+			for (int i = 0; i < degree; i++) {
+				std::pow(1.0f - t, i) * pow(t, i) * points[(i + start)];
+			}
+			return {}
+		}
 	};
-}
-
+} // namespace fragcore
 #endif
