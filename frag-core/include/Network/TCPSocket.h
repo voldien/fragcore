@@ -43,7 +43,7 @@ namespace fragcore {
 		int recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddress &r_ip, bool p_peek = false) override;
 		int recv(void *pbuffer, int p_len, int &sent, bool peek = false) override;
 		int send(const uint8_t *p_buffer, int p_len, int &r_sent) override;
-		int sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const INetAddress &p_ip) override;
+		int sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const INetAddress &p_addr) override;
 		long int send(const void *pbuffer, int p_len, int &sent) override;
 		Ref<NetSocket> accept(INetAddress &r_ip) override;
 		NetStatus accept(NetSocket &socket) override;

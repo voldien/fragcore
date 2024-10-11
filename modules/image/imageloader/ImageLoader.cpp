@@ -1,16 +1,16 @@
 #include "ImageLoader.h"
-#include <IO/IOUtil.h>
 #include <FreeImage.h>
+#include <IO/IOUtil.h>
 #include <magic_enum.hpp>
 
 using namespace fragcore;
 
-ImageLoader::ImageLoader(const ImageLoader &other) {}
+ImageLoader::ImageLoader(const ImageLoader &other) : Object(other) {}
 ImageLoader::ImageLoader(ImageLoader &&other) {}
 ImageLoader &ImageLoader::operator=(const ImageLoader &other) { return *this; }
 ImageLoader &ImageLoader::operator=(ImageLoader &&other) { return *this; }
 
-Image ImageLoader::loadImage(Ref<IO> &io) {
+Image ImageLoader::loadImage(Ref<IO> &io_in) {
 
 	/*	Free image.	*/
 	FREE_IMAGE_FORMAT imgtype; /**/
@@ -25,7 +25,7 @@ Image ImageLoader::loadImage(Ref<IO> &io) {
 	char *imageData = nullptr;
 
 	/*	Load image data.	*/
-	size_t imageSize = IOUtil::loadFileMem(io, &imageData);
+	size_t imageSize = IOUtil::loadFileMem(io_in, &imageData);
 
 	/*	Create memory object.*/
 	stream = FreeImage_OpenMemory((BYTE *)imageData, imageSize);
@@ -150,7 +150,7 @@ Image ImageLoader::loadImage(Ref<IO> &io) {
 	return image;
 }
 
-void ImageLoader::saveImage(Ref<IO> &IO, const Image &Image, const FileFormat fileformat) {
+void ImageLoader::saveImage(Ref<IO> &io_in, const Image &Image, const FileFormat fileformat) {
 
 	void *pixels = nullptr;
 	FIMEMORY *fimemory = nullptr;
@@ -158,7 +158,6 @@ void ImageLoader::saveImage(Ref<IO> &IO, const Image &Image, const FileFormat fi
 	FIBITMAP *finalImage = nullptr;
 	FREE_IMAGE_FORMAT image_format = FIF_UNKNOWN;
 	std::string filepath;
-	int flag = 0;
 
 	const size_t size = Image.getSize();
 
@@ -221,7 +220,7 @@ void ImageLoader::saveImage(Ref<IO> &IO, const Image &Image, const FileFormat fi
 		BYTE *save_pixel_data;
 		DWORD save_size;
 		if (FreeImage_AcquireMemory(mem, &save_pixel_data, &save_size)) {
-			IOUtil::saveFileMem(IO, (char *)save_pixel_data, save_size);
+			IOUtil::saveFileMem(io_in, (char *)save_pixel_data, save_size);
 		}
 	}
 

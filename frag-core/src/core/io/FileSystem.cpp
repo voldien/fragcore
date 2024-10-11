@@ -126,11 +126,11 @@ std::string FileSystem::getFileExtension(const char *path) {
 }
 
 void FileSystem::createFile(const char *path) {
-	FILE *f = fopen(path, "ab+");
-	if (f == nullptr) {
+	FILE *file = fopen(path, "ab+");
+	if (file == nullptr) {
 		throw RuntimeException("Failed to open file {}, {}", path, strerror(errno));
 	}
-	fclose(f);
+	fclose(file);
 }
 
 void FileSystem::createDirectory(const char *path) {

@@ -24,7 +24,14 @@ using namespace fragcore;
 
 CANNetSocket::CANNetSocket() : socket(0), netStatus(NetStatus::Status_Disconnected) {}
 CANNetSocket::CANNetSocket(int socket) : socket(socket) {}
-CANNetSocket::~CANNetSocket() { this->close(); }
+CANNetSocket::~CANNetSocket() {
+
+	// TODO: improve, to remove try catch.
+	try {
+		this->close();
+	} catch (std::exception &other) {
+	}
+}
 
 CANNetSocket::TransportProtocol CANNetSocket::getTransportProtocol() const noexcept {
 	return CANNetSocket::TransportProtocol::TransportProtocolCAN;

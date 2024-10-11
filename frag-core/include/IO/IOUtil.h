@@ -45,7 +45,7 @@ namespace fragcore {
 		 * @param out
 		 * @return long int
 		 */
-		static long int loadFile(Ref<IO> &in, Ref<IO> &out);
+		static long int loadFile(Ref<IO> &in_io, Ref<IO> &out);
 
 		/**
 		 * @brief
@@ -54,7 +54,7 @@ namespace fragcore {
 		 * @param data
 		 * @return long int
 		 */
-		static long int loadStringMem(Ref<IO> &io, char **data);
+		static long int loadStringMem(Ref<IO> &in_io, char **data);
 
 		/**
 		 * @brief

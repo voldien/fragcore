@@ -42,10 +42,10 @@ namespace fragcore {
 		// TODO add support to load image in specific format.
 		Image loadImage(const std::string &path) {
 			FileSystem::createFileSystem();
-			Ref<IO> ref = Ref<IO>(FileSystem::getFileSystem()->openFile(path.c_str(), IO::IOMode::READ));
-			return loadImage(ref);
+			Ref<IO> io_ref = Ref<IO>(FileSystem::getFileSystem()->openFile(path.c_str(), IO::IOMode::READ));
+			return loadImage(io_ref);
 		}
-		Image loadImage(Ref<IO> &io);
+		Image loadImage(Ref<IO> &io_in);
 
 		void loadImageData(const std::string &path, unsigned int *width, unsigned int *height);
 
@@ -53,11 +53,11 @@ namespace fragcore {
 
 		// TODO add fileformat enum.
 		void saveImage(const std::string &path, const Image &image, const FileFormat fileformat = FileFormat::Default) {
-			Ref<IO> io = Ref<IO>(new FileIO(path.c_str(), FileIO::WRITE));
-			saveImage(io, image, fileformat);
-			io->close();
+			Ref<IO> io_out = Ref<IO>(new FileIO(path.c_str(), FileIO::WRITE));
+			saveImage(io_out, image, fileformat);
+			io_out->close();
 		}
-		void saveImage(Ref<IO> &IO, const Image &image, const FileFormat fileformat);
+		void saveImage(Ref<IO> &in_out, const Image &image, const FileFormat fileformat);
 	};
 } // namespace fragcore
 

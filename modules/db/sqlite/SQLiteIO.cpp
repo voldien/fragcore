@@ -6,36 +6,35 @@
 // #include <sqlite3ext.h>
 //  SQLITE_EXTENSION_INIT1
 #include <cassert>
-#include <cstring>
 
 namespace fragcore {
 	const char *fragcore_sqlite_vfs_name = "iovfs";
 
 	int fragcore_sqlite3_open(Ref<IO> &io, sqlite3 **db) {
-		int rc;
+		int result_code;
 		char *errMs;
 		sqlite3_vfs vfs;
 		fragcore::getIOVFS(&vfs);
 		/*  */
-		rc = sqlite3_vfs_register(&vfs, 0);
-		if (rc != SQLITE_OK) {
-			throw RuntimeException("Failed to register sqlite3 VFS: {}", sqlite3_errstr(rc));
+		result_code = sqlite3_vfs_register(&vfs, 0);
+		if (result_code != SQLITE_OK) {
+			throw RuntimeException("Failed to register sqlite3 VFS: {}", sqlite3_errstr(result_code));
 		}
 		/*	*/
 		const sqlite3_vfs *iovfsFound = sqlite3_vfs_find(fragcore_sqlite_vfs_name);
 		if (!iovfsFound) {
-			throw RuntimeException("Failed to find previously registered VFS: {}", sqlite3_errstr(rc));
+			throw RuntimeException("Failed to find previously registered VFS: {}", sqlite3_errstr(result_code));
 		}
 
 		/*	*/
 		char bufURI[1024];
 		sprintf(bufURI, "fileIO?ptr=%llu", (sqlite3_uint64)((void *)&io));
-		rc = sqlite3_open_v2(bufURI, db,
+		result_code = sqlite3_open_v2(bufURI, db,
 							 SQLITE_OPEN_CREATE | SQLITE_OPEN_READWRITE | SQLITE_OPEN_MAIN_DB | SQLITE_OPEN_FULLMUTEX |
 								 SQLITE_OPEN_URI,
 							 fragcore_sqlite_vfs_name);
-		if (rc != SQLITE_OK) {
-			throw RuntimeException("Failed to open sqlite3: {}", sqlite3_errstr(rc));
+		if (result_code != SQLITE_OK) {
+			throw RuntimeException("Failed to open sqlite3: {}", sqlite3_errstr(result_code));
 		}
 
 		return SQLITE_OK;
@@ -253,12 +252,12 @@ namespace fragcore {
 	static int memFileControl(sqlite3_file *pFile, int op, void *pArg) {
 		IOFile *p = reinterpret_cast<IOFile *>(pFile);
 
-		int rc = SQLITE_NOTFOUND;
+		int result_code = SQLITE_NOTFOUND;
 		if (op == SQLITE_FCNTL_VFSNAME) {
 			//	*(char **) pArg = sqlite3_mprintf("mem(%p,%lld)", p->aData, p->sz);
-			rc = SQLITE_OK;
+			result_code = SQLITE_OK;
 		}
-		return rc;
+		return result_code;
 	}
 
 	/*

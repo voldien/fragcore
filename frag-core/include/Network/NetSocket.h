@@ -18,7 +18,6 @@
 #ifndef _FRAG_CORE_NETSOCKET_H_
 #define _FRAG_CORE_NETSOCKET_H_ 1
 #include "../Core/Ref.h"
-#include "../IO/IO.h"
 #include "../Core/SmartReference.h"
 #include "INetAddress.h"
 #include "NetInterface.h"

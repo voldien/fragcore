@@ -112,11 +112,11 @@ Config::Config(const Config &other) {
 	//*this = other;
 }
 
-Config::~Config(void) {}
+Config::~Config() {}
 
-fragcore::IConfig *Config::getSuperInstance(void) { return new Config(); }
+fragcore::IConfig *Config::getSuperInstance() { return new Config(); }
 
-void Config::setDefaultOption(void) {
+void Config::setDefaultOption() {
 
 	IConfig &global = *this;
 #if defined(_DEBUG)
@@ -273,7 +273,7 @@ void Config::parseGetOpt(int argc, const char **argv) {
 		case 'f': { /*  */
 			/*  */
 			int num = sandboxConfig.get<int>("num_shaders");
-			sandboxConfig.set<const char *>(fmt::format("shader%d", num).c_str(), optarg);
+			sandboxConfig.set<const char *>(fmt::format("shader%d", num), optarg);
 
 			/*  Update number of textures.  */
 			num++;
@@ -283,7 +283,7 @@ void Config::parseGetOpt(int argc, const char **argv) {
 			if (optarg) {
 				/*  */
 				int num = sandboxConfig.get<int>("num_textures");
-				sandboxConfig.set<const char *>(fmt::format("texture%d", num).c_str(), optarg);
+				sandboxConfig.set<const char *>(fmt::format("texture%d", num), optarg);
 
 				/*  Update number of textures.  */
 				num++;
@@ -295,7 +295,7 @@ void Config::parseGetOpt(int argc, const char **argv) {
 		case 'C': { /*  */
 			/*  */
 			int num = sandboxConfig.get<int>("num_compute");
-			sandboxConfig.set<const char *>(fmt::format("compute%d", num).c_str(), optarg);
+			sandboxConfig.set<const char *>(fmt::format("compute%d", num), optarg);
 
 			/*  Update number of textures.  */
 			num++;
@@ -352,10 +352,12 @@ void Config::parseGetOpt(int argc, const char **argv) {
 			// if (strcmp(option, "renderer-directx") == 0)
 			// 	this->set<const char *>("renderer-dynamicInterface",
 			// 							RenderingFactory::getInterfaceLibraryPath(RenderingFactory::DirectX));
-			if (strcmp(option, "no-decoration") == 0)
+			if (strcmp(option, "no-decoration") == 0) {
 				this->set("window-bordered", false);
-			if (strcmp(option, "v-sync") == 0)
+			}
+			if (strcmp(option, "v-sync") == 0) {
 				this->set("v-sync", true);
+			}
 			break;
 		default: /*  */
 			break;
@@ -373,12 +375,14 @@ Config *Config::createConfig(int argc, const char **argv, const char *configpath
 	/*	Check path.	*/
 	if (configpath) {
 		/*	Check if file exists.	*/
-		if (!FileSystem::getFileSystem()->exists(configpath))
+		if (!FileSystem::getFileSystem()->exists(configpath)) {
 			throw InvalidArgumentException(fmt::format("Configuration file '%s' does not exists", configpath));
+		}
 	}
 	/*	Assess the parameter argument.	*/
-	if (!argv)
+	if (!argv) {
 		throw InvalidArgumentException("The argv parameter cannot be nullptr");
+	}
 
 	/*	Allocate config object.	*/
 	Config *config = new Config();

@@ -30,7 +30,7 @@ namespace fragcore {
 	class FVDECLSPEC CommandList : public SmartReference {
 	  public:
 		enum CommandBufferFlag { Single, Continuous };
-		virtual ~CommandList() = default;
+		~CommandList() override = default;
 
 		virtual void begin() = 0;
 		virtual void end() = 0;

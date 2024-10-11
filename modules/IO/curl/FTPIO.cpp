@@ -3,7 +3,6 @@
 #endif
 
 #include "FTPIO.h"
-#include "IO/GZFileIO.h"
 
 #include <curl/curl.h>
 #include <curl/multi.h>
@@ -43,16 +42,16 @@ void FTPFileIO::close() { curl_easy_cleanup(this->handle); }
 
 long FTPFileIO::read(long int nbytes, void *pbuffer) {
 	size_t nRecv;
-	CURLcode rc;
+	CURLcode result_code;
 	do {
-		rc = curl_easy_recv(this->handle, pbuffer, nbytes, &nRecv);
+		result_code = curl_easy_recv(this->handle, pbuffer, nbytes, &nRecv);
 
-		if (rc == CURLE_AGAIN && !wait_on_socket(this->sockfd, 1, 1000L)) {
+		if (result_code == CURLE_AGAIN && !wait_on_socket(this->sockfd, 1, 1000L)) {
 			return -1;
 		}
-	} while (rc == CURLE_AGAIN);
+	} while (result_code == CURLE_AGAIN);
 
-	if (rc == CURLE_OK) {
+	if (result_code == CURLE_OK) {
 		return nRecv;
 	}
 	return -1;
@@ -60,16 +59,16 @@ long FTPFileIO::read(long int nbytes, void *pbuffer) {
 
 long FTPFileIO::write(long int nbytes, const void *pbuffer) {
 	size_t nRecv;
-	CURLcode rc;
+	CURLcode result_code;
 	do {
-		rc = curl_easy_send(this->handle, pbuffer, nbytes, &nRecv);
+		result_code = curl_easy_send(this->handle, pbuffer, nbytes, &nRecv);
 
-		if (rc == CURLE_AGAIN && !wait_on_socket(this->sockfd, 0, 1000L)) {
+		if (result_code == CURLE_AGAIN && !wait_on_socket(this->sockfd, 0, 1000L)) {
 			return -1;
 		}
-	} while (rc == CURLE_AGAIN);
+	} while (result_code == CURLE_AGAIN);
 
-	if (rc == CURLE_OK) {
+	if (result_code == CURLE_OK) {
 		return nRecv;
 	}
 	return -1;
@@ -77,10 +76,10 @@ long FTPFileIO::write(long int nbytes, const void *pbuffer) {
 
 long FTPFileIO::length() {
 	double filesize = 0.0;
-	CURLcode rc = curl_easy_getinfo(this->handle, CURLINFO_CONTENT_LENGTH_DOWNLOAD, &filesize);
-	if (rc != CURLE_OK) {
+	CURLcode result_code = curl_easy_getinfo(this->handle, CURLINFO_CONTENT_LENGTH_DOWNLOAD, &filesize);
+	if (result_code != CURLE_OK) {
 
-		throw RuntimeException("{}", curl_easy_strerror(rc));
+		throw RuntimeException("{}", curl_easy_strerror(result_code));
 	}
 	return filesize;
 }
@@ -163,7 +162,7 @@ FTPFileIO::FTPFileIO(const char *path, IOMode mode) {
 
 		curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 5L);
 	}
-	CURLcode rc = curl_easy_perform(curl);
+	CURLcode result_code = curl_easy_perform(curl);
 }
 
 int debug_callback(CURL *handle, curl_infotype type, char *data, size_t size, void *userptr) {
@@ -177,43 +176,43 @@ FTPFileIO::FTPFileIO(CURL *handle, const char *URL, IOMode mode) {
 		throw InvalidArgumentException("");
 	}
 	this->handle = handle;
-	CURLcode rc;
+	CURLcode result_code;
 	if (this->handle) {
 		// "ftp://ftp.example.com/curl/curl-7.9.2.tar.gz");
-		rc = curl_easy_setopt(this->handle, CURLOPT_URL, URL);
+		result_code = curl_easy_setopt(this->handle, CURLOPT_URL, URL);
 		this->ioMode = mode;
 
 		if (mode & IOMode::READ) {
-			rc = curl_easy_setopt(this->handle, CURLOPT_READFUNCTION, ftpio_fwrite);
+			result_code = curl_easy_setopt(this->handle, CURLOPT_READFUNCTION, ftpio_fwrite);
 			/* Set a pointer to our struct to pass to the callback */
-			rc = curl_easy_setopt(this->handle, CURLOPT_READDATA, this);
+			result_code = curl_easy_setopt(this->handle, CURLOPT_READDATA, this);
 		}
 		if (mode & IOMode::WRITE) {
-			rc = curl_easy_setopt(this->handle, CURLOPT_WRITEFUNCTION, ftpio_fwrite);
+			result_code = curl_easy_setopt(this->handle, CURLOPT_WRITEFUNCTION, ftpio_fwrite);
 			/* Set a pointer to our struct to pass to the callback */
-			rc = curl_easy_setopt(this->handle, CURLOPT_WRITEDATA, this);
+			result_code = curl_easy_setopt(this->handle, CURLOPT_WRITEDATA, this);
 		}
 
-		rc = curl_easy_setopt(this->handle, CURLOPT_HEADERFUNCTION, throw_away);
+		result_code = curl_easy_setopt(this->handle, CURLOPT_HEADERFUNCTION, throw_away);
 
-		rc = curl_easy_setopt(this->handle, CURLOPT_HEADER, 0L);
+		result_code = curl_easy_setopt(this->handle, CURLOPT_HEADER, 0L);
 
-		rc = curl_easy_setopt(this->handle, CURLOPT_SEEKFUNCTION, seek_cb);
+		result_code = curl_easy_setopt(this->handle, CURLOPT_SEEKFUNCTION, seek_cb);
 
-		rc = curl_easy_setopt(this->handle, CURLOPT_SEEKDATA, (void *)this);
+		result_code = curl_easy_setopt(this->handle, CURLOPT_SEEKDATA, (void *)this);
 
 		/* Switch on full protocol/debug output */
-		rc = curl_easy_setopt(this->handle, CURLOPT_VERBOSE, 1L);
-		rc = curl_easy_setopt(this->handle, CURLOPT_DEBUGFUNCTION, debug_callback);
+		result_code = curl_easy_setopt(this->handle, CURLOPT_VERBOSE, 1L);
+		result_code = curl_easy_setopt(this->handle, CURLOPT_DEBUGFUNCTION, debug_callback);
 
-		rc = curl_easy_setopt(this->handle, CURLOPT_CONNECTTIMEOUT, 5L);
+		result_code = curl_easy_setopt(this->handle, CURLOPT_CONNECTTIMEOUT, 5L);
 
-		// rc = curl_easy_setopt(this->handle, CURLOPT_CONNECT_ONLY, 1L);
+		// result_code = curl_easy_setopt(this->handle, CURLOPT_CONNECT_ONLY, 1L);
 	}
-	rc = curl_easy_perform(this->handle);
-	if (rc != CURLE_OK) {
-		throw RuntimeException("{}", curl_easy_strerror(rc));
+	result_code = curl_easy_perform(this->handle);
+	if (result_code != CURLE_OK) {
+		throw RuntimeException("{}", curl_easy_strerror(result_code));
 	}
 
-	rc = curl_easy_getinfo(this->handle, CURLINFO_ACTIVESOCKET, &this->sockfd);
+	result_code = curl_easy_getinfo(this->handle, CURLINFO_ACTIVESOCKET, &this->sockfd);
 }

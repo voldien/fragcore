@@ -19,7 +19,6 @@
 #define _FRAG_CORE_NET_INTERFACE_H_ 1
 #include "../Core/Object.h"
 #include "NetInterface.h"
-#include <vector>
 
 namespace fragcore {
 	/**

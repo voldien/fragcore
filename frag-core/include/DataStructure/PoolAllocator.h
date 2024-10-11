@@ -21,8 +21,6 @@
 #include <cassert>
 #include <cstdio>
 #include <malloc.h>
-#include <memory>
-#include <string>
 #include <utility>
 
 /* add support for C++ allocates in order to remove pure function bug, if it's that it's the culprit*/

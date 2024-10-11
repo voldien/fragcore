@@ -20,7 +20,6 @@
 #include <VKUtil.h>
 #include <climits>
 #include <fmt/core.h>
-#include <iostream>
 #include <vector>
 
 using namespace fragcore;
@@ -79,7 +78,7 @@ VKRenderInterface::VKRenderInterface(IConfig *config) {
 	this->languageSupport = SPIRV;
 	this->getCapability(&this->capability);
 
-	//this->queue = getDevice()->getDefaultGraphicQueue();
+	// this->queue = getDevice()->getDefaultGraphicQueue();
 }
 
 VKRenderInterface::~VKRenderInterface() {
@@ -95,13 +94,13 @@ Texture *VKRenderInterface::createTexture(TextureDesc *desc) {
 
 	VkPhysicalDevice physicalDevice = nullptr;
 
-	unsigned int texWidth, texHeight, internal, type, format;
-	unsigned long pixelSize;
-	void *pixels;
+	unsigned int texWidth = 0, texHeight = 0, internal, type, format;
+	unsigned long pixelSize = 0;
+	void *pixels = nullptr;
 
 	VkDeviceSize imageSize = pixelSize;
 	VkPhysicalDeviceMemoryProperties memProperties;
-	VkCommandPool commandPool;
+	VkCommandPool commandPool = nullptr;
 	VkImage textureImage;
 	// TODO replace with buffer object.
 	VkDeviceMemory textureImageMemory;
@@ -155,8 +154,9 @@ void VKRenderInterface::deleteTexture(Texture *texture) { delete texture; }
 
 Sampler *VKRenderInterface::createSampler(SamplerDesc *desc) {
 
-	if (desc == nullptr)
+	if (desc == nullptr) {
 		throw InvalidArgumentException("Invalid sampler description pointer object.");
+}
 
 	/*  */
 	VKSampler *sampler = new VKSampler();
@@ -203,23 +203,29 @@ Shader *VKRenderInterface::createShader(ShaderDesc *desc) {
 
 	// Validate the shader language.
 	ShaderLanguage supportedLanguage = (ShaderLanguage)(~this->getShaderLanguage());
-	if (desc->vertex.language & supportedLanguage)
+	if (desc->vertex.language & supportedLanguage) {
 		throw RuntimeException("Vertex shader language is not supported");
-	if (desc->fragment.language & supportedLanguage)
+}
+	if (desc->fragment.language & supportedLanguage) {
 		throw RuntimeException("Fragment shader language is not supported");
-	if (desc->geometry.language & supportedLanguage)
+}
+	if (desc->geometry.language & supportedLanguage) {
 		throw RuntimeException("Geometry shader language is not supported");
-	if (desc->tessellationControl.language & supportedLanguage)
+}
+	if (desc->tessellationControl.language & supportedLanguage) {
 		throw RuntimeException("Tessellation Control shader language is not supported");
-	if (desc->tessellationEvolution.language & supportedLanguage)
+}
+	if (desc->tessellationEvolution.language & supportedLanguage) {
 		throw RuntimeException("Tessellation Evolution shader language is not supported");
-	if (desc->Compute.language & supportedLanguage)
+}
+	if (desc->Compute.language & supportedLanguage) {
 		throw RuntimeException("Compute shader language is not supported");
+}
 
 	/*  Create shader module code containers.   */
 	// TODO fix the code for the shader desc.
 	//	if(desc->vertex.vertexBinary && desc->vertex.language == SPIRV){
-	if (1) {
+	if (true) {
 		// vertShaderModule = createShaderModule(device->getHandle(), (const char*)desc->vertex.vertexBinary,
 		// desc->vertex.size);
 		// vertShaderModule = createShaderModule(device->getHandle(), (const char *)nullptr, 0); // FIXME
@@ -233,7 +239,7 @@ Shader *VKRenderInterface::createShader(ShaderDesc *desc) {
 		shaderStages.push_back(vertShaderStageInfo);
 	}
 	//	if(desc->fragment.fragmentBinary && desc->fragment.language == SPIRV){
-	if (1) {
+	if (true) {
 		// fragShaderModule = createShaderModule(device->getHandle(),  (const char*)desc->fragment.fragmentBinary,
 		// desc->fragment.size);
 		// fragShaderModule = createShaderModule(device->getHandle(), (const char *)nullptr, 0); // FIXME
@@ -492,16 +498,21 @@ Shader *VKRenderInterface::createShader(ShaderDesc *desc) {
 	}
 
 	/*  Release shader moudles once used.  */
-	if (vertShaderModule)
+	if (vertShaderModule) {
 		vkDestroyShaderModule(device->getHandle(), vertShaderModule, nullptr);
-	if (fragShaderModule)
+}
+	if (fragShaderModule) {
 		vkDestroyShaderModule(device->getHandle(), fragShaderModule, nullptr);
-	if (geomShaderModule)
+}
+	if (geomShaderModule) {
 		vkDestroyShaderModule(device->getHandle(), geomShaderModule, nullptr);
-	if (tessCShaderModule)
+}
+	if (tessCShaderModule) {
 		vkDestroyShaderModule(device->getHandle(), tessCShaderModule, nullptr);
-	if (tessEShaderModule)
+}
+	if (tessEShaderModule) {
 		vkDestroyShaderModule(device->getHandle(), tessEShaderModule, nullptr);
+}
 
 	return shader;
 }
@@ -680,31 +691,35 @@ void VKRenderInterface::setDebug(bool enable) {
 
 		if (CreateDebugUtilsMessengerEXT(core->getHandle(), &createInfo, nullptr, &debugMessenger) != VK_SUCCESS) {
 			throw std::runtime_error("failed to set up debug messenger!");
-		} else {
-			// return VK_ERROR_EXTENSION_NOT_PRESENT;
-		}
+		}  			// return VK_ERROR_EXTENSION_NOT_PRESENT;
+	
 	}
 }
 
 void VKRenderInterface::getSupportedTextureCompression(TextureDesc::Compression *pCompressions) {
-	if (pCompressions == nullptr)
+	if (pCompressions == nullptr) {
 		throw InvalidArgumentException("pCompressions may not be a null pointer.");
+}
 
 	unsigned int compressions = 0;
 	VkPhysicalDeviceFeatures deviceFeatures;
 
 	// vkGetPhysicalDeviceFeatures(getDevice()-> gpu, &deviceFeatures);
 
-	if (deviceFeatures.textureCompressionBC)
+	if (deviceFeatures.textureCompressionBC) {
 		compressions |= (unsigned int)TextureDesc::Compression::NoCompression;
-	if (deviceFeatures.textureCompressionETC2)
+}
+	if (deviceFeatures.textureCompressionETC2) {
 		compressions |= (unsigned int)TextureDesc::Compression::ETC2;
-	if (deviceFeatures.textureCompressionASTC_LDR)
+}
+	if (deviceFeatures.textureCompressionASTC_LDR) {
 		compressions |= (unsigned int)TextureDesc::Compression::ASTC_LDR;
+}
 
 	// Add support for default compression format.
-	if (compressions != 0)
+	if (compressions != 0) {
 		compressions |= (unsigned int)TextureDesc::Compression::Compression;
+}
 
 	*pCompressions = (TextureDesc::Compression)compressions;
 }
@@ -713,8 +728,9 @@ void VKRenderInterface::getCapability(Capability *capability) {
 
 	assert(capability);
 
-	if (capability == nullptr)
+	if (capability == nullptr) {
 		throw InvalidArgumentException("Must not be a null pointer.");
+}
 
 	/*  */
 	VkPhysicalDeviceProperties properties;
@@ -857,8 +873,9 @@ void VKRenderInterface::getFeatures(Features *features) {
 
 	assert(features);
 
-	if (features == nullptr)
+	if (features == nullptr) {
 		throw InvalidArgumentException("Must not be a null pointer.");
+}
 }
 
 const char *VKRenderInterface::getShaderVersion(ShaderLanguage language) const {

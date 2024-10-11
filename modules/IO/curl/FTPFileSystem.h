@@ -72,7 +72,7 @@ namespace fragcore {
 		 * @param sch
 		 * @return FTPFileSystem*
 		 */
-		static FTPFileSystem *createFileSystem(const char *ip, int port,
+		static FTPFileSystem *createFileSystem(const char *ip_address, int port,
 											   const Ref<IScheduler> &sch = Ref<IScheduler>(nullptr));
 
 		/**
@@ -82,7 +82,7 @@ namespace fragcore {
 		 * @param sch
 		 * @return FTPFileSystem*
 		 */
-		static FTPFileSystem *createFileSystem(const IPAddress &, int port,
+		static FTPFileSystem *createFileSystem(const IPAddress & ip_address, int port,
 											   const Ref<IScheduler> &sch = Ref<IScheduler>(nullptr));
 
 		FTPFileSystem(FTPFileSystem &&other);
@@ -99,8 +99,8 @@ namespace fragcore {
 
 	  protected:
 		FTPFileSystem() = default;
-		FTPFileSystem(const char *ip, int port, const char *username, const char *password, const Ref<IScheduler> &sch);
-		FTPFileSystem(const char *ip, int port, const char *username, const char *password);
+		FTPFileSystem(const char *ip_address, int port, const char *username, const char *password, const Ref<IScheduler> &sch);
+		FTPFileSystem(const char *ip_address, int port, const char *username, const char *password);
 		~FTPFileSystem() override;
 
 	  private:

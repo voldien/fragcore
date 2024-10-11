@@ -8,6 +8,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <ctime>
+#include <exception>
 #include <net/if.h>
 #include <netdb.h>
 #include <netinet/in.h>
@@ -63,7 +64,13 @@ TCPNetSocket::TCPNetSocket() : socket(0), netStatus(NetStatus::Status_Disconnect
 TCPNetSocket::TCPNetSocket(int socket) : socket(socket) {
 	// TODO set status.
 }
-TCPNetSocket::~TCPNetSocket() { this->close(); }
+TCPNetSocket::~TCPNetSocket() {
+	// TODO: improve, to remove try catch.
+	try {
+		this->close();
+	} catch (std::exception &other) {
+	}
+}
 
 NetSocket::TransportProtocol TCPNetSocket::getTransportProtocol() const noexcept {
 	return NetSocket::TransportProtocol::TransportProtocolTCP;

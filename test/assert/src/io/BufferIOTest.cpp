@@ -6,19 +6,19 @@ using namespace fragcore;
 class BufferIOTest : public testing::Test {
   protected:
 	void SetUp() override {
-		files.push_back("Makefile");
-		files.push_back("CMakeLists.txt");
-		files.push_back("src/IO.cpp");
+		files.emplace_back("Makefile");
+		files.emplace_back("CMakeLists.txt");
+		files.emplace_back("src/IO.cpp");
 		FileWrite = "tmp.txt";
 
-		gzFiles.push_back("");
-		gzFiles.push_back("");
-		gzFiles.push_back("");
+		gzFiles.emplace_back("");
+		gzFiles.emplace_back("");
+		gzFiles.emplace_back("");
 		gzFileWrite = "tmp.gz";
 
-		zipInFiles.push_back("glsl/wave.frag");
-		zipInFiles.push_back("glsl/sepia.frag");
-		zipInFiles.push_back("glsl/sepia.comp");
+		zipInFiles.emplace_back("glsl/wave.frag");
+		zipInFiles.emplace_back("glsl/sepia.frag");
+		zipInFiles.emplace_back("glsl/sepia.comp");
 
 		zipFile = "zipfile.zip";
 	}

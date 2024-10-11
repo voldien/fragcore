@@ -33,7 +33,7 @@ namespace fragcore {
 		Image(const unsigned int width, const unsigned int height, const unsigned int layer,
 			  const TextureFormat format);
 
-		Image(const Image &other) { Object::operator=(other); }
+		Image(const Image &other) : Object(other) { Object::operator=(other); }
 		Image(Image &&other) { Object::operator=(other); }
 
 		~Image() override;

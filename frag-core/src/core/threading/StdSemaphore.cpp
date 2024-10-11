@@ -3,30 +3,30 @@
 using namespace fragcore;
 
 stdSemaphore::stdSemaphore() {
-	int rc = schCreateSemaphore(&this->semaphore);
-	if (rc != SCH_OK) {
-		throw RuntimeException("Failed to create semaphore: {}", schErrorMsg(rc));
+	const int result_code = schCreateSemaphore(&this->semaphore);
+	if (result_code != SCH_OK) {
+		throw RuntimeException("Failed to create semaphore: {}", schErrorMsg(result_code));
 	}
 }
 
 stdSemaphore::~stdSemaphore() { schDeleteSemaphore(this->semaphore); }
 
 void stdSemaphore::lock() {
-	int rc = schSemaphoreWait(this->semaphore);
-	if (rc != SCH_OK) {
-		throw RuntimeException("Failed lock semaphore: {}", schErrorMsg(rc));
+	const int result_code = schSemaphoreWait(this->semaphore);
+	if (result_code != SCH_OK) {
+		throw RuntimeException("Failed lock semaphore: {}", schErrorMsg(result_code));
 	}
 }
 void stdSemaphore::unlock() {
-	int rc = schSemaphorePost(this->semaphore);
-	if (rc != SCH_OK) {
-		throw RuntimeException("Failed to unlock semaphore: {}", schErrorMsg(rc));
+	const int result_code = schSemaphorePost(this->semaphore);
+	if (result_code != SCH_OK) {
+		throw RuntimeException("Failed to unlock semaphore: {}", schErrorMsg(result_code));
 	}
 }
 void stdSemaphore::wait(long int nanoTimeout) {
-	int rc = schSemaphoreWait(this->semaphore);
-	if (rc != SCH_OK) {
-		throw RuntimeException("Failed to wait semaphore: {}", schErrorMsg(rc));
+	const int result_code = schSemaphoreWait(this->semaphore);
+	if (result_code != SCH_OK) {
+		throw RuntimeException("Failed to wait semaphore: {}", schErrorMsg(result_code));
 	}
 }
 

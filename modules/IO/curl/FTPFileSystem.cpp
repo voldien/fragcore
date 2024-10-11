@@ -45,7 +45,7 @@ bool FTPFileSystem::isWriteable(const char *path) const { throw NotImplementedEx
 // std::string FTPFileSystem::getRelativePath(const char *path) { throw NotImplementedException(); }
 //
 // const char *FTPFileSystem::getFileExtension(const char *path) {
-//	const char *dot = strrchr(path, '.');
+//	const char *dot = strresult_codehr(path, '.');
 //	if (!dot || dot == path)
 //		return "";
 //	return dot + 1;
@@ -80,7 +80,7 @@ std::vector<std::string> FTPFileSystem::listFiles(const char *directory) const {
 
 	curl_easy_perform(fileHandle);
 
-	return std::vector<std::string>();
+	return {};
 }
 
 std::vector<std::string> FTPFileSystem::listDirectories(const char *directory) const {
@@ -95,10 +95,10 @@ std::vector<std::string> FTPFileSystem::listDirectories(const char *directory) c
 		/* list only */
 		curl_easy_setopt(curl, CURLOPT_DIRLISTONLY, 1L);
 
-		CURLcode rc = curl_easy_perform(curl);
-		if (rc != CURLE_OK) {
+		CURLcode result_code = curl_easy_perform(curl);
+		if (result_code != CURLE_OK) {
 
-			throw RuntimeException("{}", curl_easy_strerror(rc));
+			throw RuntimeException("{}", curl_easy_strerror(result_code));
 		}
 
 		curl_easy_cleanup(curl);
@@ -116,22 +116,22 @@ std::vector<std::string> FTPFileSystem::list(const char *directory) const {
 		curl_global_cleanup();
 	}
 	char *url = nullptr;
-	CURLcode rc = curl_easy_getinfo(handle, CURLINFO_EFFECTIVE_URL, &url);
-	if (rc != CURLE_OK) {
+	CURLcode result_code = curl_easy_getinfo(handle, CURLINFO_EFFECTIVE_URL, &url);
+	if (result_code != CURLE_OK) {
 
-		throw RuntimeException("Failed fetch URL: {}", curl_easy_strerror(rc));
+		throw RuntimeException("Failed fetch URL: {}", curl_easy_strerror(result_code));
 	}
-	rc = curl_easy_setopt(fileHandle, CURLOPT_URL, fmt::format("{}/{}", url, directory).c_str());
+	result_code = curl_easy_setopt(fileHandle, CURLOPT_URL, fmt::format("{}/{}", url, directory).c_str());
 
-	rc = curl_easy_setopt(fileHandle, CURLOPT_WRITEFUNCTION, write_file_dir_callback);
+	result_code = curl_easy_setopt(fileHandle, CURLOPT_WRITEFUNCTION, write_file_dir_callback);
 
-	rc = curl_easy_setopt(fileHandle, CURLOPT_WRITEDATA, &list);
+	result_code = curl_easy_setopt(fileHandle, CURLOPT_WRITEDATA, &list);
 
-	rc = curl_easy_setopt(fileHandle, CURLOPT_DIRLISTONLY, 1L);
+	result_code = curl_easy_setopt(fileHandle, CURLOPT_DIRLISTONLY, 1L);
 
-	rc = curl_easy_perform(fileHandle);
-	if (rc != CURLE_OK) {
-		throw RuntimeException("Failed to Fetch List: {}", curl_easy_strerror(rc));
+	result_code = curl_easy_perform(fileHandle);
+	if (result_code != CURLE_OK) {
+		throw RuntimeException("Failed to Fetch List: {}", curl_easy_strerror(result_code));
 	}
 
 	/*	*/
@@ -140,15 +140,16 @@ std::vector<std::string> FTPFileSystem::list(const char *directory) const {
 	return list;
 }
 
-FTPFileSystem *FTPFileSystem::createFileSystem(const char *ip, int port, const Ref<IScheduler> &sch) {
+FTPFileSystem *FTPFileSystem::createFileSystem(const char *ip_address, int port, const Ref<IScheduler> &sch) {
 
-	FTPFileSystem *filesystem = new FTPFileSystem(ip, port, nullptr, nullptr, sch);
+	FTPFileSystem *filesystem = new FTPFileSystem(ip_address, port, nullptr, nullptr, sch);
 	return filesystem;
 }
 
 void FTPFileSystem::setCredentials(const std::string &username, const std::string &password) {
-	if (handle == nullptr)
+	if (handle == nullptr) {
 		throw RuntimeException("FTP FileSystem Not Setup Properly");
+	}
 
 	std::string cred = fmt::format("{}:{}", username, password);
 	curl_easy_setopt(handle, CURLOPT_USERPWD, cred.c_str());
@@ -156,17 +157,17 @@ void FTPFileSystem::setCredentials(const std::string &username, const std::strin
 	memset(cred.data(), 0, cred.length());
 }
 
-FTPFileSystem::FTPFileSystem(const char *ip, int port, const char *username, const char *password,
+FTPFileSystem::FTPFileSystem(const char *ip_address, int port, const char *username, const char *password,
 							 const Ref<IScheduler> &ref)
-	: FTPFileSystem(ip, port, username, password) {
+	: FTPFileSystem(ip_address, port, username, password) {
 
 	this->setScheduleReference(ref);
 }
 
 FTPFileSystem::FTPFileSystem(const char *hostname, int port, const char *username, const char *password) {
-	CURLcode rc = curl_global_init(CURL_GLOBAL_ALL);
-	if (rc) {
-		throw RuntimeException("Failed: {}", curl_easy_strerror(rc));
+	CURLcode result_code = curl_global_init(CURL_GLOBAL_ALL);
+	if (result_code) {
+		throw RuntimeException("Failed: {}", curl_easy_strerror(result_code));
 	}
 
 	handle = curl_easy_init();
@@ -176,16 +177,17 @@ FTPFileSystem::FTPFileSystem(const char *hostname, int port, const char *usernam
 		// return CURLE_OUT_OF_MEMORY;
 	}
 
-	rc = curl_easy_setopt(handle, CURLOPT_URL, fmt::format("ftp://{}/", hostname).c_str());
+	result_code = curl_easy_setopt(handle, CURLOPT_URL, fmt::format("ftp://{}/", hostname).c_str());
 
 	char *url;
-	rc = curl_easy_getinfo(handle, CURLINFO_EFFECTIVE_URL, &url);
+	result_code = curl_easy_getinfo(handle, CURLINFO_EFFECTIVE_URL, &url);
 	this->URL = url;
 
-	if (password && username)
+	if (password && username) {
 		setCredentials(username, password);
+	}
 }
 
-FTPFileSystem::~FTPFileSystem() { /*  Release all resources.  */
+FTPFileSystem::~FTPFileSystem() { /*  Release all resouresult_codees.  */
 	curl_easy_cleanup(handle);
 }

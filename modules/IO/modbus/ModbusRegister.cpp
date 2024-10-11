@@ -8,8 +8,8 @@ using namespace fragcore;
 ModbusRegisterIO::ModbusRegisterIO(ModbusNetSocket &socket, const size_t read_address_start,
 								   const size_t read_size_bytes, const size_t write_address_start,
 								   const size_t write_size_bytes)
-	: socket(socket), address_write_start(write_address_start), write_size(write_size_bytes),
-	  read_size(read_size_bytes), address_read_start(read_address_start) {}
+	: socket(socket), address_write_start(write_address_start), address_read_start(read_address_start),
+	  write_size(write_size_bytes), read_size(read_size_bytes) {}
 
 ModbusRegisterIO::~ModbusRegisterIO() {}
 

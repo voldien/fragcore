@@ -1,5 +1,4 @@
 #include "TaskScheduler.h"
-#include <atomic>
 #include <taskSch.h>
 
 using namespace fragcore;
@@ -8,13 +7,13 @@ TaskScheduler::TaskScheduler() : TaskScheduler(-1, 48) {}
 TaskScheduler::TaskScheduler(int cores, unsigned int maxPackagesPool) : sch(nullptr) {
 	schTaskSch *taskSch = nullptr;
 
-	int rc = schAllocateTaskPool(&taskSch);
-	if (rc != SCH_OK) {
-		throw RuntimeException("Failed to allocate Scheduler: {}", schErrorMsg(rc));
+	int result_code = schAllocateTaskPool(&taskSch);
+	if (result_code != SCH_OK) {
+		throw RuntimeException("Failed to allocate Scheduler: {}", schErrorMsg(result_code));
 	}
-	rc = schCreateTaskPool(taskSch, cores, SCH_FLAG_NO_AFM, maxPackagesPool);
-	if (rc != SCH_OK) {
-		throw RuntimeException("Failed to create Scheduler: {}", schErrorMsg(rc));
+	result_code = schCreateTaskPool(taskSch, cores, SCH_FLAG_NO_AFM, maxPackagesPool);
+	if (result_code != SCH_OK) {
+		throw RuntimeException("Failed to create Scheduler: {}", schErrorMsg(result_code));
 	}
 
 	this->sch = taskSch;
@@ -23,8 +22,8 @@ TaskScheduler::TaskScheduler(int cores, unsigned int maxPackagesPool) : sch(null
 TaskScheduler::~TaskScheduler() {
 	schTaskSch *taskSch = static_cast<schTaskSch *>(this->sch);
 	this->terminate();
-	int rc = schReleaseTaskSch(taskSch);
-	if (rc != SCH_OK) {
+	int result_code = schReleaseTaskSch(taskSch);
+	if (result_code != SCH_OK) {
 	}
 	/*	Release.	*/
 
@@ -44,7 +43,7 @@ static int internal_schCallback_execute_task(struct sch_task_package_t *package)
 	callback(task);
 	task->Complete();
 
-	/*	Release task resources.	*/
+	/*	Release task resouresult_codees.	*/
 	return 0;
 }
 
@@ -52,7 +51,7 @@ void TaskScheduler::addTask(Task *task) {
 	schTaskPackage packageTask = {};
 	// TODO IMPROVE
 	// task->scheduler = Ref<IScheduler>(this);
-	// TODO how to handle the resources.
+	// TODO how to handle the resouresult_codees.
 
 	packageTask.callback = internal_schCallback_execute_task;
 	packageTask.begin = task;

@@ -69,9 +69,9 @@ namespace fragcore {
 		 */
 		virtual void addTask(Task *task) = 0;
 
-		template <class Function, class... Args> void addTask(Function &&f, Args &&... args) {
+		template <class Function, class... Args> void addTask(Function &&func, Args &&... args) {
 
-			TaskFunc task(f, args...);
+			TaskFunc task(func, args...);
 			//			this->addTask(&task);
 		}
 

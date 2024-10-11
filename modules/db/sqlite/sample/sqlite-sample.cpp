@@ -11,56 +11,56 @@ int main(int argc, const char **argv) {
 
 	Ref<IO> io = Ref<IO>(filesystem->openFile("example.db", IO::IOMode::ACCESS));
 
-	sqlite3 *db;
-	fragcore_sqlite3_open(io, &db);
+	sqlite3 *database;
+	fragcore_sqlite3_open(io, &database);
 
 	char *errMs;
-	// int rc = sqlite3_db_config(db, SQLITE_CONFIG_SINGLETHREAD, nullptr);
-	// if (rc != SQLITE_OK)
-	// 	throw RuntimeException("Failed to configure to single threaded: {}", sqlite3_errstr(rc));
-	int rc = sqlite3_exec(db, "PRAGMA synchronous=OFF", NULL, NULL, &errMs);
-	if (rc != SQLITE_OK) {
-		throw RuntimeException("Failed to open sqlite3: {}", sqlite3_errstr(rc));
+	// int result_code = sqlite3_db_config(db, SQLITE_CONFIG_SINGLETHREAD, nullptr);
+	// if (result_code != SQLITE_OK)
+	// 	throw RuntimeException("Failed to configure to single threaded: {}", sqlite3_errstr(result_code));
+	int result_code = sqlite3_exec(database, "PRAGMA synchronous=OFF", nullptr, nullptr, &errMs);
+	if (result_code != SQLITE_OK) {
+		throw RuntimeException("Failed to open sqlite3: {}", sqlite3_errstr(result_code));
 	}
-	rc = sqlite3_exec(db, "PRAGMA count_changes=OFF", NULL, NULL, &errMs);
-	if (rc != SQLITE_OK) {
-		throw RuntimeException("Failed to open sqlite3: {}", sqlite3_errstr(rc));
+	result_code = sqlite3_exec(database, "PRAGMA count_changes=OFF", nullptr, nullptr, &errMs);
+	if (result_code != SQLITE_OK) {
+		throw RuntimeException("Failed to open sqlite3: {}", sqlite3_errstr(result_code));
 	}
-	rc = sqlite3_exec(db, "PRAGMA journal_mode=MEMORY", NULL, NULL, &errMs);
-	if (rc != SQLITE_OK) {
-		throw RuntimeException("Failed to open sqlite3: {}", sqlite3_errstr(rc));
+	result_code = sqlite3_exec(database, "PRAGMA journal_mode=MEMORY", nullptr, nullptr, &errMs);
+	if (result_code != SQLITE_OK) {
+		throw RuntimeException("Failed to open sqlite3: {}", sqlite3_errstr(result_code));
 	}
-	rc = sqlite3_exec(db, "PRAGMA temp_store=MEMORY", NULL, NULL, &errMs);
-	if (rc != SQLITE_OK) {
-		throw RuntimeException("Failed to open sqlite3: {}", sqlite3_errstr(rc));
+	result_code = sqlite3_exec(database, "PRAGMA temp_store=MEMORY", nullptr, nullptr, &errMs);
+	if (result_code != SQLITE_OK) {
+		throw RuntimeException("Failed to open sqlite3: {}", sqlite3_errstr(result_code));
 	}
-	rc = sqlite3_exec(db, "PRAGMA cache_size=40000", NULL, NULL, &errMs);
-	if (rc != SQLITE_OK) {
-		throw RuntimeException("Failed to open sqlite3: {}", sqlite3_errstr(rc));
+	result_code = sqlite3_exec(database, "PRAGMA cache_size=40000", nullptr, nullptr, &errMs);
+	if (result_code != SQLITE_OK) {
+		throw RuntimeException("Failed to open sqlite3: {}", sqlite3_errstr(result_code));
 	}
 
 	sqlite3_stmt *res1;
 
-	if (rc != SQLITE_OK) {
+	if (result_code != SQLITE_OK) {
 
-		fprintf(stderr, "Cannot open database: %s\n", sqlite3_errmsg(db));
-		sqlite3_close(db);
+		fprintf(stderr, "Cannot open database: %s\n", sqlite3_errmsg(database));
+		sqlite3_close(database);
 		return EXIT_FAILURE;
 	}
 
-	rc = sqlite3_prepare_v2(db, "SELECT SQLITE_VERSION()", -1, &res1, 0); // OPT for usage
+	result_code = sqlite3_prepare_v2(database, "SELECT SQLITE_VERSION()", -1, &res1, nullptr); // OPT for usage
 
-	if (rc != SQLITE_OK) {
+	if (result_code != SQLITE_OK) {
 
-		fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(db));
-		sqlite3_close(db);
+		fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(database));
+		sqlite3_close(database);
 
 		return EXIT_FAILURE;
 	}
 
-	rc = sqlite3_step(res1);
+	result_code = sqlite3_step(res1);
 
-	if (rc == SQLITE_ROW) {
+	if (result_code == SQLITE_ROW) {
 		printf("%s\n", sqlite3_column_text(res1, 0));
 	}
 

@@ -17,9 +17,7 @@
  */
 #ifndef _FRAG_CORE_FILE_H_
 #define _FRAG_CORE_FILE_H_ 1
-#include "../DataStructure/PoolAllocator.h"
 #include "../FragDef.h"
-#include "ASyncIO.h"
 #include "IFileSystem.h"
 #include "IO.h"
 

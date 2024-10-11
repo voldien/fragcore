@@ -27,7 +27,13 @@ UDPNetSocket::UDPNetSocket(int socket) : UDPNetSocket() {
 	// TODO get the status of the socket.
 	this->netStatus = NetStatus::Status_Done;
 }
-UDPNetSocket::~UDPNetSocket() { this->close(); }
+UDPNetSocket::~UDPNetSocket() {
+	// TODO: improve, to remove try catch.
+	try {
+		this->close();
+	} catch (std::exception &other) {
+	}
+}
 
 NetSocket::TransportProtocol UDPNetSocket::getTransportProtocol() const noexcept {
 	return NetSocket::TransportProtocol::TransportProtocolUDP;

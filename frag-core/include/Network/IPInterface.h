@@ -17,7 +17,6 @@
  */
 #ifndef _FRAG_CORE_IP_INTERFACE_H_
 #define _FRAG_CORE_IP_INTERFACE_H_ 1
-#include "../Core/Object.h"
 #include "NetInterface.h"
 #include <vector>
 

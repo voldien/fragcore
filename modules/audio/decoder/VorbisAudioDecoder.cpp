@@ -12,12 +12,12 @@ struct ogg_file {
 };
 
 size_t AR_readOgg(void *dst, size_t size1, size_t size2, void *fh) {
-	ogg_file *of = reinterpret_cast<ogg_file *>(fh);
-	return of->io->read(size1 * size2, dst);
+	ogg_file *ogg_f = reinterpret_cast<ogg_file *>(fh);
+	return ogg_f->io->read(size1 * size2, dst);
 }
 
 int AR_seekOgg(void *fh, ogg_int64_t to, int type) {
-	ogg_file *of = reinterpret_cast<ogg_file *>(fh);
+	ogg_file *ogg_f = reinterpret_cast<ogg_file *>(fh);
 
 	IO::Seek seek;
 	switch (type) {
@@ -33,21 +33,21 @@ int AR_seekOgg(void *fh, ogg_int64_t to, int type) {
 	default:
 		return -1;
 	}
-	of->io->seek(to, seek);
+	ogg_f->io->seek(to, seek);
 	return 0;
 }
 
 int AR_closeOgg(void *fh) { return 0; }
 
 long AR_tellOgg(void *fh) {
-	ogg_file *of = reinterpret_cast<ogg_file *>(fh);
-	return of->io->getPos();
+	ogg_file *ogg_f = reinterpret_cast<ogg_file *>(fh);
+	return ogg_f->io->getPos();
 }
 
 VorbisAudioDecoder::VorbisAudioDecoder(Ref<IO> &io) : AudioDecoder(io) {
 	ov_callbacks callbacks;
-	ogg_file *t = new ogg_file();
-	t->io = io;
+	ogg_file *ogg_f = new ogg_file();
+	ogg_f->io = io;
 	// t.fileSize = io->length();
 
 	/*	Required IO operation to be supported.	*/
@@ -68,7 +68,7 @@ VorbisAudioDecoder::VorbisAudioDecoder(Ref<IO> &io) : AudioDecoder(io) {
 	callbacks.tell_func = AR_tellOgg;
 
 	io->seek(0, IO::SET);
-	int ret = ov_open_callbacks((void *)t, ov, nullptr, 0, callbacks);
+	int ret = ov_open_callbacks((void *)ogg_f, ov, nullptr, 0, callbacks);
 	if (ret < 0) {
 		throw RuntimeException("Failed to create custom callback: {}", ret);
 	}

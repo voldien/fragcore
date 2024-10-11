@@ -12,20 +12,20 @@ void GZFileIO::open(const char *path, IOMode mode) {
 	FileIO::open(path, mode);
 
 	// TODO add other access modes.
-	const char *m = nullptr;
+	const char *gz_mode = nullptr;
 	switch (mode & ACCESS) {
 	case READ:
-		m = "rb";
+		gz_mode = "rb";
 		break;
 	case WRITE:
-		m = "wb";
+		gz_mode = "wb";
 		break;
 	default:
 		throw InvalidArgumentException("Invalid IO mode.");
 	}
 
 	/*  */
-	this->gzFi = gzdopen(fileno(this->file), m);
+	this->gzFi = gzdopen(fileno(this->file), gz_mode);
 	if (this->gzFi == nullptr) {
 		int error;
 		const char *errMsg = gzerror(this->gzFi, &error);

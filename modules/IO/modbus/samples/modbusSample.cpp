@@ -23,8 +23,9 @@ int main(int argc, const char **argv) {
 			if (c < 0) {
 				break;
 			}
-			for (int i = 0; i < c; i++)
+			for (int i = 0; i < c; i++) {
 				printf("%d", data[i]);
+			}
 			printf("\n");
 			sleep(1);
 		} while (true);

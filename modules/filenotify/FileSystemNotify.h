@@ -138,7 +138,7 @@ namespace fragcore {
 		 */
 		FileNotificationEntry *getEntry(const char *path) override;
 
-	  private:
+	  protected:
 		/**
 		 *
 		 * @param events

@@ -17,7 +17,6 @@
  */
 #ifndef _FRAG_CORE_COLOR_H_
 #define _FRAG_CORE_COLOR_H_ 1
-#include "../FragDef.h"
 #include "../Math/Math.h"
 
 namespace fragcore {

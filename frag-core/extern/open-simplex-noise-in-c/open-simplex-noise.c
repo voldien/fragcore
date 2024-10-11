@@ -94,27 +94,27 @@ static const signed char gradients4D[] = {
 	-3, -1, -1, -1,     -1, -3, -1, -1,     -1, -1, -3, -1,     -1, -1, -1, -3,
 };
 
-static double extrapolate2(struct osn_context *ctx, int xsb, int ysb, double dx, double dy)
+static double extrapolate2(const struct osn_context *ctx, int xsb, int ysb, double dx, double dy)
 {
-	int16_t *perm = ctx->perm;	
+	const int16_t *perm = ctx->perm;
 	int index = perm[(perm[xsb & 0xFF] + ysb) & 0xFF] & 0x0E;
 	return gradients2D[index] * dx
 		+ gradients2D[index + 1] * dy;
 }
 	
-static double extrapolate3(struct osn_context *ctx, int xsb, int ysb, int zsb, double dx, double dy, double dz)
+static double extrapolate3(const struct osn_context *ctx, int xsb, int ysb, int zsb, double dx, double dy, double dz)
 {
-	int16_t *perm = ctx->perm;	
-	int16_t *permGradIndex3D = ctx->permGradIndex3D;
+	const int16_t *perm = ctx->perm;
+	const int16_t *permGradIndex3D = ctx->permGradIndex3D;
 	int index = permGradIndex3D[(perm[(perm[xsb & 0xFF] + ysb) & 0xFF] + zsb) & 0xFF];
 	return gradients3D[index] * dx
 		+ gradients3D[index + 1] * dy
 		+ gradients3D[index + 2] * dz;
 }
 	
-static double extrapolate4(struct osn_context *ctx, int xsb, int ysb, int zsb, int wsb, double dx, double dy, double dz, double dw)
+static double extrapolate4(const struct osn_context *ctx, int xsb, int ysb, int zsb, int wsb, double dx, double dy, double dz, double dw)
 {
-	int16_t *perm = ctx->perm;
+	const int16_t *perm = ctx->perm;
 	int index = perm[(perm[(perm[(perm[xsb & 0xFF] + ysb) & 0xFF] + zsb) & 0xFF] + wsb) & 0xFF] & 0xFC;
 	return gradients4D[index] * dx
 		+ gradients4D[index + 1] * dy
@@ -223,7 +223,7 @@ void open_simplex_noise_free(struct osn_context *ctx)
 }
 	
 /* 2D OpenSimplex (Simplectic) Noise. */
-double open_simplex_noise2(struct osn_context *ctx, double x, double y) 
+double open_simplex_noise2(const struct osn_context *ctx, double x, double y)
 {
 	
 	/* Place input coordinates onto grid. */
@@ -351,7 +351,7 @@ double open_simplex_noise2(struct osn_context *ctx, double x, double y)
 /*
  * 3D OpenSimplex (Simplectic) Noise
  */
-double open_simplex_noise3(struct osn_context *ctx, double x, double y, double z)
+double open_simplex_noise3(const struct osn_context *ctx, double x, double y, double z)
 {
 
 	/* Place input coordinates on simplectic honeycomb. */
@@ -697,22 +697,22 @@ double open_simplex_noise3(struct osn_context *ctx, double x, double y, double z
 		if (p3 > 1) {
 			score = p3 - 1;
 			if (aScore <= bScore && aScore < score) {
-				aScore = score;
+				// aScore = score; dead store
 				aPoint = 0x06;
 				aIsFurtherSide = 1;
 			} else if (aScore > bScore && bScore < score) {
-				bScore = score;
+				// bScore = score; dead store
 				bPoint = 0x06;
 				bIsFurtherSide = 1;
 			}
 		} else {
 			score = 1 - p3;
 			if (aScore <= bScore && aScore < score) {
-				aScore = score;
+				// aScore = score; dead store
 				aPoint = 0x01;
 				aIsFurtherSide = 0;
 			} else if (aScore > bScore && bScore < score) {
-				bScore = score;
+				// bScore = score; dead store
 				bPoint = 0x01;
 				bIsFurtherSide = 0;
 			}
@@ -924,7 +924,7 @@ double open_simplex_noise3(struct osn_context *ctx, double x, double y, double z
 /* 
  * 4D OpenSimplex (Simplectic) Noise.
  */
-double open_simplex_noise4(struct osn_context *ctx, double x, double y, double z, double w)
+double open_simplex_noise4(const struct osn_context *ctx, double x, double y, double z, double w)
 {
 	double uins;
 	double dx1, dy1, dz1, dw1;
@@ -1464,11 +1464,11 @@ double open_simplex_noise4(struct osn_context *ctx, double x, double y, double z
 		/* Decide if (0,0,0,1) is closer. */
 		p4 = 2 - inSum + wins;
 		if (aScore >= bScore && p4 > bScore) {
-			bScore = p4;
+			// bScore = p4; dead store
 			bPoint = 0x08;
 			bIsBiggerSide = 0;
 		} else if (aScore < bScore && p4 > aScore) {
-			aScore = p4;
+			// aScore = p4; dead store
 			aPoint = 0x08;
 			aIsBiggerSide = 0;
 		}
@@ -1888,11 +1888,11 @@ double open_simplex_noise4(struct osn_context *ctx, double x, double y, double z
 		/* Decide if (1,1,1,0) is closer. */
 		p4 = 3 - inSum + wins;
 		if (aScore <= bScore && p4 < bScore) {
-			bScore = p4;
+			// bScore = p4; dead store
 			bPoint = 0x07;
 			bIsBiggerSide = 0;
 		} else if (aScore > bScore && p4 < aScore) {
-			aScore = p4;
+			// aScore = p4; dead store
 			aPoint = 0x07;
 			aIsBiggerSide = 0;
 		}
