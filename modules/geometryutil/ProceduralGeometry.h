@@ -17,7 +17,7 @@
  */
 #ifndef _FRAG_CORE_PROCEDURAL_GEOMETRY_H_
 #define _FRAG_CORE_PROCEDURAL_GEOMETRY_H_ 1
-#include "Core/Math3D/Math3D.h"
+#include "Math3D/Math3D.h"
 #include <FragCore.h>
 
 namespace fragcore {

@@ -59,6 +59,7 @@
 #include "Math/Math.h"
 #include "Math3D/AABB.h"
 #include "Math3D/BoundingSphere.h"
+#include "Math3D/LinAlg.h"
 #include "Math3D/OBB.h"
 #include "Math3D/Plane.h"
 

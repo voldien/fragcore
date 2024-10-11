@@ -71,7 +71,7 @@ make install
 In order to compile the program on Linux based machine, the following Debian packages are required.
 
 ```bash
-  sudo apt-get install g++-10 pkg-config libjson-c-dev libxml2-dev libyaml-dev libsdl2-dev libfreeimage-dev libssl-dev
+  sudo apt-get install g++-10 pkg-config libsdl2-dev libfreeimage-dev libssl-dev
   sudo apt-get install libsdl2-dev libglew-dev libvulkan-dev libgl1-mesa-dev opencl-headers \
   libgtest-dev libsubunit-dev libogg-dev libopus-dev libvorbis-dev \
   libzip-dev libbullet-dev libopenal-dev mesa-common-dev ocl-icd-opencl-dev libnoise-dev libvdpau-dev \
