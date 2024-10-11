@@ -7,7 +7,7 @@ INCLUDE(fswatch)
 
 # Library target.
 ADD_LIBRARY(fragcore-fswatch-filenotify SHARED ${FILESYSTEN_FSWATCH_SOURCE_FILES} ${FILESYSTEN_FSWATCH_HEADER_FILES})
-TARGET_LINK_LIBRARIES(fragcore-fswatch-filenotify PUBLIC fragcore private libfswatch)
+TARGET_LINK_LIBRARIES(fragcore-fswatch-filenotify PUBLIC fragcore PRIVATE libfswatch)
 TARGET_COMPILE_DEFINITIONS(fragcore-fswatch-filenotify PRIVATE FRAG_CORE_INTERNAL_IMP=1)
 
 #

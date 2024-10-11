@@ -90,7 +90,7 @@ TEST_P(GuassianDistributionTest, Values) {
 INSTANTIATE_TEST_SUITE_P(Math, GuassianDistributionTest,
 						 ::testing::Values(std::make_tuple(0.5, 0.5, std::vector<float>{1, 2, 3, 4, 5, 5, 5}),
 										   std::make_tuple(0.5, 0.5, std::vector<float>{5, 5, 5, 5, 5, 5, 5})));
-TEST(Math, Distrubtion_GammaCorrection) {
+TEST(Math, Distribution_GammaCorrection) {
 	/*	Gamma space */
 	const int sample_space = 1024;
 	float pre_gamma = 0.0f;
@@ -102,7 +102,7 @@ TEST(Math, Distrubtion_GammaCorrection) {
 	}
 }
 
-TEST(Math, Distrubtion) {
+TEST(Math, Distribution) {
 	/*	Guassian distribution.	*/
 	// TODO add
 	const float theta = 0.7f;

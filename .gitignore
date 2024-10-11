@@ -210,3 +210,4 @@ lint/tmp/
 *.hprof
 
 fragcore_revision.h
+.cache/

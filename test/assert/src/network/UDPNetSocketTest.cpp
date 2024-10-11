@@ -22,7 +22,6 @@ TEST_F(UDPNetworkTest, CreateLocal_RecvFrom_No_Throw_Exception) {}
 
 TEST_F(UDPNetworkTest, CreateLocal_Bind_No_Throw_Exception) {
 	UDPNetSocket netSocket;
-	const int port = 43323;
 	const char *ipAddress = "127.0.0.1";
 
 	IPAddress localHost(ipAddress, IPAddress::IPAddressType::IPAddress_Type_IPV4);

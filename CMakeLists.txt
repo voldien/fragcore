@@ -360,13 +360,12 @@ IF(BUILD_MODULES)
 	# Build FragCore Physic modules
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/physic/)
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/physic/bullet/)
-	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/physic/rpc/)
 
 	# Database
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/db/sqlite)
 
 	# File watcher.
-	# ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/filenotify)
+	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/filenotify)
 
 	# IO
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/IO/curl)

@@ -2,7 +2,7 @@ INCLUDE(FetchContent)
 
 FetchContent_Declare(fswatch
         GIT_REPOSITORY https://github.com/emcrisostomo/fswatch.git
-		GIT_TAG "1.16.0+cmake") # or whatever tag you want
+		GIT_TAG "1.17.1")
 
 FetchContent_GetProperties(fswatch)
 

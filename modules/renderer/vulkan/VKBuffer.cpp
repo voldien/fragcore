@@ -1,6 +1,5 @@
 
 #include "VKBuffer.h"
-#include "../RenderPrerequisites.h"
 #include "VKRenderInterface.h"
 #include "internal_object_type.h"
 
@@ -46,8 +45,9 @@ void *VKBuffer::mapBuffer(VKBuffer::MapTarget target) {
 	// result = vkMapMemory(bufobj->vulkanCore->device, bufobj->vertexBufferMemory, 0, (VkDeviceSize)
 	// memRequirements.size,
 	//                      mapTarget, &pbuf);
-	if (result != VK_SUCCESS)
+	if (result != VK_SUCCESS) {
 		throw RuntimeException("");
+	}
 	return pbuf;
 }
 

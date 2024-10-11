@@ -6,32 +6,91 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
+
 #ifndef _FRAG_CORE_FILE_NOTIFY_H_
 #define _FRAG_CORE_FILE_NOTIFY_H_ 1
+#include "Core/IO/IO.h"
 #include <Core/Object.h>
+#include <Core/TaskScheduler/IScheduler.h>
 #include <Core/TaskScheduler/IThreading.h>
-#include <Core/TaskScheduler/TaskScheduler.h>
 #include <Core/dataStructure/PoolAllocator.h>
-#include <Core/event/IFileNotify.h>
-// TODO resolve include path and other solution.
-#include <libfswatch/c/cevent.h>
-#include <libfswatch/c/libfswatch_types.h>
-#include <libfswatch/libfswatch_config.h>
 #include <map>
 #include <vector>
 
 namespace fragcore {
 
-	typedef void *NotifyHandle;
+	class IFileNotify;
+	class FileNotificationEntry;
+
+	using FileWatchEvent = void (*)(IFileNotify *, const FileNotificationEntry *); /*  */
+
+	class FVDECLSPEC FileNotificationEntry {
+	  public:
+		int key;			  /*  */
+		std::string filepath; /*  */
+		void *userdata;
+		Ref<IO> refIO;
+		FileWatchEvent callback;
+	};
+
+	/**
+	 * @brief
+	 *
+	 */
+	class FVDECLSPEC IFileNotify : public SmartReference {
+	  public:
+		/**
+		 *
+		 */
+
+		~IFileNotify() override {}
+
+		virtual void start() = 0;
+		virtual void stop() = 0;
+
+		/**
+		 * @brief
+		 *
+		 * @param path
+		 * @param object
+		 */
+		virtual void addFilePath(const char *path, FileWatchEvent event, void *object = nullptr) = 0;
+
+		/**
+		 * @brief
+		 *
+		 * @param path
+		 * @param object
+		 */
+		virtual void removeFilePath(const char *path) = 0;
+
+		/**
+		 * @brief Get the Object object
+		 *
+		 * @param path
+		 * @return Object*
+		 */
+		virtual void *getObject(const char *path) = 0;
+
+		/**
+		 * @brief Get the Entry object
+		 *
+		 * @param object
+		 * @return FileNoticationEntry*
+		 */
+		virtual FileNotificationEntry *getEntry(const char *path);
+	};
+
+	using NotifyHandle = void *;
 	/**
 	 * @brief
 	 *
@@ -41,75 +100,51 @@ namespace fragcore {
 		/**
 		 * Start the file notification process.
 		 */
-		void start();
-		void stop();
-		// void restart();
+		void start() override;
+		void stop() override;
 
-	  protected:
-		/**
-		 *
-		 */
-		class FVDECLSPEC FileNoticationEntry {
-		  public:
-			int key;			  /*  */
-			std::string filepath; /*  */
-			Object *assetObject;  /*  */
-			void *userdata;
-			Ref<IO> refIO;
-			// TOOD change!
-			// AssetType type;         /*  */
-		};
-
-	  public:
-		// TODO relocate to another class.
-		// TODO use std::string
-		void registerAsset(const char *filepath, Object *object);
-		void registerAsset(Ref<IO> &io);
-		void unregisterAsset(Object *notify);
-		void unregisterAsset(Ref<IO> &io);
-		void unRegisterAllAsset();
-
-		void eventDone(FileNotificationEvent *event);
+	  private:
+		void eventDone(FileNotificationEntry *event);
 
 		// TODO improve
 		bool pollEvent();
-		void eventDone(const std::vector<FileNotificationEvent> &events) const;
+		void eventDone(const std::vector<FileNotificationEntry> &events) const;
 		bool releaseEventBuffer();
 
-	  private:
+	  public:
 		/**
 		 *
 		 * @param path
 		 */
-		 void addFilePath(const char *path, Object *object) override;
+		void addFilePath(const char *path, FileWatchEvent event, void *object = nullptr) override;
 
 		/**
 		 *
 		 * @param path
 		 */
-		 void removeFilePath(const char *path, Object *object) override;
+		void removeFilePath(const char *path) override;
 
 		/**
 		 *
 		 * @param path
 		 * @return
 		 */
-		 Object *getObject(const char *path) override;
+		void *getObject(const char *path) override;
 
 		/**
 		 *
 		 * @param object
 		 * @return
 		 */
-		virtual FileNoticationEntry *getEntry(Object *object);
+		FileNotificationEntry *getEntry(const char *path) override;
 
+	  private:
 		/**
 		 *
 		 * @param events
 		 * @param event_num
 		 * @param data
 		 */
-		static void callback(fsw_cevent const *const events, const unsigned int event_num, void *data);
 
 		static void fileFetchTask(Task *package);
 
@@ -119,19 +154,19 @@ namespace fragcore {
 		static void *fswatch(const void *psession);
 
 	  private:
-		std::map<int, FileNoticationEntry> notify; /*  List of update-able assets.  */
-		std::map<std::string, Object *> objectMap; /*  */
-		FSW_HANDLE session;						   /*  */
+		std::map<int, FileNotificationEntry> notify; /*  List of update-able assets.  */
+		std::map<std::string, void *> objectMap;	 /*  */
+		NotifyHandle session;						 /*  */
 
 		void *pthread; /*  Thread for async operations. */
 		Ref<IThreading> thread;
 		Ref<IScheduler> scheduler;
-		PoolAllocator<FileNotificationEvent> fileChangeEvents;
+		PoolAllocator<FileNotificationEntry> fileChangeEvents;
 
 	  public: /*  */
 		FileSystemNotify(Ref<IScheduler> &sch);
 
-		virtual ~FileSystemNotify();
+		~FileSystemNotify() override;
 	};
 } // namespace fragcore
 
