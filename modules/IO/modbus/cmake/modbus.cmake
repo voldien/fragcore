@@ -9,7 +9,7 @@ INCLUDE(FetchContent)
 
 FetchContent_Declare(libmodbus_source
 	GIT_REPOSITORY https://github.com/stephane/libmodbus.git
-	GIT_TAG v3.1.7
+	GIT_TAG v3.1.10
 ) # or whatever tag you want
 
 FetchContent_GetProperties(libmodbus_source)

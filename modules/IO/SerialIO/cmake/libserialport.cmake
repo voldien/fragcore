@@ -8,7 +8,7 @@ INCLUDE(FetchContent)
 
 FetchContent_Declare(libserialport_source
 	GIT_REPOSITORY https://github.com/sigrokproject/libserialport.git
-	GIT_TAG 6f9b03e597ea7200eb616a4e410add3dd1690cb1
+	GIT_TAG 21b3dfe5f68c205be4086469335fd2fc2ce11ed2
 ) # or whatever tag you want
 
 FetchContent_GetProperties(libserialport_source)

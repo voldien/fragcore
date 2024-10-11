@@ -297,7 +297,7 @@ namespace fragcore {
 		/**
 		 *
 		 */
-		template <typename T> static inline constexpr T ClosestPowerOfTwo(T v) {
+		template <typename T> static inline constexpr T ClosestPowerOfTwo(const T v) {
 			T n = NextPowerOfTwo(v);
 			T p = 0;
 			return 0;
@@ -375,13 +375,11 @@ namespace fragcore {
 			}
 		}
 
-		template <typename T, typename U> static constexpr inline T gammaCorrection(T x, U gamma) noexcept {
-
+		template <typename T, typename U> static constexpr inline T gammaCorrection(const T value, U gamma) noexcept {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
-			// TODO add support for using vector components.
-			T exponent = static_cast<T>(1.0) / gamma;
 
-			return static_cast<T>(std::pow(x, exponent));
+			T exponent = static_cast<T>(1.0) / gamma;
+			return static_cast<T>(std::pow(value, exponent));
 		}
 
 		template <typename T> static T gameSpaceToLinear(T gamma, T exp) noexcept { return std::pow(gamma, exp); }
@@ -404,10 +402,6 @@ namespace fragcore {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
 			return static_cast<T>(drand48());
 		}
-		// template <typename T> static inline T random() {
-		// 	static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
-		// 	return {static_cast<T>(drand48()), static_cast<T>(drand48())};
-		// }
 
 		template <typename T> static std::vector<T> &random(std::vector<T> &samples) {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
@@ -449,25 +443,11 @@ namespace fragcore {
 			}
 			return samples;
 		}
-		template <typename T> static T phi(int j) {
-			T x = 0.0;
-			T f = 0.5;
-			while (j) {
-				// x += j /= f *=
-
-				// 	f * (double)(!j & 1);
-				// 2;
-				// 0.5;
-			}
-			return (x);
-		}
 
 		template <typename T> static std::vector<T> &hammersley(std::vector<T> &samples) {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
 			return {};
 		}
-
-		// void multijitter(Vector2 *samples, int num_samples) { int sqrt_samples = (int)sqrt(num_samples); }
 
 		template <typename T> static inline constexpr T align(const T size, const T alignment) noexcept {
 			static_assert(std::is_integral<T>::value, "Must be an integral type.");

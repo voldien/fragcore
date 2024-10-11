@@ -1,4 +1,5 @@
 #include "SerialIO.h"
+#include <exception>
 #include <libserialport.h>
 #include <optional>
 
@@ -91,16 +92,16 @@ void SerialIO::setBaudRate(unsigned int baudRate) {
 
 	sp_return res = sp_get_config(serialPort, this->config);
 	if (res != SP_OK) {
-		throw RuntimeException("Failed to get config: {} ({})", sp_last_error_message(), res);
+		throw RuntimeException("Failed to get config: {} ({})", sp_last_error_message(), (int)res);
 	}
 	res = sp_set_config_baudrate(this->config, baudRate);
 	if (res != SP_OK) {
-		throw RuntimeException("Failed to set baud Rate {} - {} ({})", baudRate, sp_last_error_message(), res);
+		throw RuntimeException("Failed to set baud Rate {} - {} ({})", baudRate, sp_last_error_message(), (int)res);
 	}
 
 	res = sp_set_config(serialPort, this->config);
 	if (res != SP_OK) {
-		throw RuntimeException("Failed to set config: {} ({})", sp_last_error_message(), res);
+		throw RuntimeException("Failed to set config: {} ({})", sp_last_error_message(), (int)res);
 	}
 }
 
@@ -109,7 +110,7 @@ SerialIO::BaudRate SerialIO::getBaudRate() const {
 
 	sp_return res = sp_get_config(serialPort, this->config);
 	if (res != SP_OK) {
-		throw RuntimeException("Failed to get config: {} ({})", sp_last_error_message(), res);
+		throw RuntimeException("Failed to get config: {} ({})", sp_last_error_message(), (int)res);
 	}
 
 	int baudRate;
@@ -126,7 +127,7 @@ void SerialIO::setStopBits(StopBits stopBits) {
 
 	sp_return res = sp_get_config(serialPort, this->config);
 	if (res != SP_OK) {
-		throw RuntimeException("Failed to get config: {} ({})", sp_last_error_message(), res);
+		throw RuntimeException("Failed to get config: {} ({})", sp_last_error_message(), (int)res);
 	}
 	res = sp_set_config_stopbits(config, static_cast<int>(stopBits));
 	if (res != SP_OK) {
@@ -135,7 +136,7 @@ void SerialIO::setStopBits(StopBits stopBits) {
 
 	res = sp_set_config(serialPort, this->config);
 	if (res != SP_OK) {
-		throw RuntimeException("Failed to set config: {} ({})", sp_last_error_message(), res);
+		throw RuntimeException("Failed to set config: {} ({})", sp_last_error_message(), (int)res);
 	}
 }
 
@@ -145,7 +146,7 @@ SerialIO::StopBits SerialIO::getStopBits() const {
 
 	sp_return res = sp_get_config(serialPort, this->config);
 	if (res != SP_OK) {
-		throw RuntimeException("Failed to get config: {} ({})", sp_last_error_message(), res);
+		throw RuntimeException("Failed to get config: {} ({})", sp_last_error_message(), (int)res);
 	}
 
 	res = sp_get_config_stopbits(config, &stopBit);
@@ -180,7 +181,7 @@ void SerialIO::setFlowControl(FlowControl flowControl) {
 
 	sp_return res = sp_get_config(serialPort, this->config);
 	if (res != SP_OK) {
-		throw RuntimeException("Failed to get config: {} ({})", sp_last_error_message(), res);
+		throw RuntimeException("Failed to get config: {} ({})", sp_last_error_message(), (int)res);
 	}
 	res = sp_set_config_flowcontrol(config, sp_flowcontrol);
 	if (res != SP_OK) {
@@ -190,7 +191,7 @@ void SerialIO::setFlowControl(FlowControl flowControl) {
 
 	res = sp_set_config(serialPort, this->config);
 	if (res != SP_OK) {
-		throw RuntimeException("Failed to set config: {} ({})", sp_last_error_message(), res);
+		throw RuntimeException("Failed to set config: {} ({})", sp_last_error_message(), (int)res);
 	}
 }
 
@@ -229,17 +230,17 @@ void SerialIO::setParity(Parity parity) {
 
 	sp_return res = sp_get_config(serialPort, this->config);
 	if (res != SP_OK) {
-		throw RuntimeException("Failed to get config: {} ({})", sp_last_error_message(), res);
+		throw RuntimeException("Failed to get config: {} ({})", sp_last_error_message(), (int)res);
 	}
 
 	res = sp_set_config_parity(config, sp_parity);
 	if (res != SP_OK) {
-		throw RuntimeException("Failed to set parity: {} ({})", sp_last_error_message(), res);
+		throw RuntimeException("Failed to set parity: {} ({})", sp_last_error_message(), (int)res);
 	}
 
 	res = sp_set_config(serialPort, this->config);
 	if (res != SP_OK) {
-		throw RuntimeException("Failed to set config: {} ({})", sp_last_error_message(), res);
+		throw RuntimeException("Failed to set config: {} ({})", sp_last_error_message(), (int)res);
 	}
 }
 SerialIO::Parity SerialIO::getParity() const {
@@ -247,13 +248,13 @@ SerialIO::Parity SerialIO::getParity() const {
 
 	sp_return res = sp_get_config(serialPort, this->config);
 	if (res != SP_OK) {
-		throw RuntimeException("Failed to get config: {} ({})", sp_last_error_message(), res);
+		throw RuntimeException("Failed to get config: {} ({})", sp_last_error_message(), (int)res);
 	}
 
 	sp_parity parity;
 	res = sp_get_config_parity(config, &parity);
 	if (res != SP_OK) {
-		throw RuntimeException("Failed to get parity {} ({})", sp_last_error_message(), res);
+		throw RuntimeException("Failed to get parity {} ({})", sp_last_error_message(), (int)res);
 	}
 
 	return static_cast<SerialIO::Parity>(parity);
@@ -282,7 +283,7 @@ void SerialIO::setXonXoff(XonXoff XonXoff) {
 
 	sp_return res = sp_get_config(serialPort, this->config);
 	if (res != SP_OK) {
-		throw RuntimeException("Failed to get config: {} ({})", sp_last_error_message(), res);
+		throw RuntimeException("Failed to get config: {} ({})", sp_last_error_message(), (int)res);
 	}
 
 	res = sp_set_config_xon_xoff(config, sp_xonoxoff);
@@ -292,7 +293,7 @@ void SerialIO::setXonXoff(XonXoff XonXoff) {
 
 	res = sp_set_config(serialPort, this->config);
 	if (res != SP_OK) {
-		throw RuntimeException("Failed to set config: {} ({})", sp_last_error_message(), res);
+		throw RuntimeException("Failed to set config: {} ({})", sp_last_error_message(), (int)res);
 	}
 }
 
@@ -301,7 +302,7 @@ SerialIO::XonXoff SerialIO::getXonXoff() {
 
 	sp_return res = sp_get_config(serialPort, this->config);
 	if (res != SP_OK) {
-		throw RuntimeException("Failed to get config: {} ({})", sp_last_error_message(), res);
+		throw RuntimeException("Failed to get config: {} ({})", sp_last_error_message(), (int)res);
 	}
 
 	sp_xonxoff xonxoff;
@@ -318,7 +319,7 @@ void SerialIO::setPayloadBits(unsigned int nrBits) {
 
 	sp_return res = sp_get_config(serialPort, this->config);
 	if (res != SP_OK) {
-		throw RuntimeException("Failed to get config: {} ({})", sp_last_error_message(), res);
+		throw RuntimeException("Failed to get config: {} ({})", sp_last_error_message(), (int)res);
 	}
 
 	res = sp_set_config_bits(config, nrBits);
@@ -328,7 +329,7 @@ void SerialIO::setPayloadBits(unsigned int nrBits) {
 
 	res = sp_set_config(serialPort, this->config);
 	if (res != SP_OK) {
-		throw RuntimeException("Failed to set config: {} ({})", sp_last_error_message(), res);
+		throw RuntimeException("Failed to set config: {} ({})", sp_last_error_message(), (int)res);
 	}
 }
 
@@ -336,7 +337,7 @@ int SerialIO::getPayloadBits() const {
 	struct sp_port *serialPort = static_cast<struct sp_port *>(this->port);
 	sp_return res = sp_get_config(serialPort, this->config);
 	if (res != SP_OK) {
-		throw RuntimeException("Failed to get config: {} ({})", sp_last_error_message(), res);
+		throw RuntimeException("Failed to get config: {} ({})", sp_last_error_message(), (int)res);
 	}
 	int nrBits;
 	res = sp_get_config_bits(config, &nrBits);
@@ -363,7 +364,7 @@ SerialIO::SerialIO(const std::string &path, IOMode mode) : port(nullptr) {
 		break;
 	default:
 		assert(0);
-		throw InvalidArgumentException("Invalid IO Mode: {} - {}", path, mode);
+		throw InvalidArgumentException("Invalid IO Mode: {} - {}", path, (int)mode);
 	}
 
 	/*	*/
@@ -371,7 +372,7 @@ SerialIO::SerialIO(const std::string &path, IOMode mode) : port(nullptr) {
 	sp_return res = sp_get_port_by_name(path.c_str(), &serialPort);
 	if (res != SP_OK) {
 		this->close();
-		throw RuntimeException("Failed get this->port {} - {}  ({})", path, sp_last_error_message(), res);
+		throw RuntimeException("Failed get this->port {} - {}  ({})", path, sp_last_error_message(), (int)res);
 	}
 	this->port = serialPort;
 
@@ -379,7 +380,7 @@ SerialIO::SerialIO(const std::string &path, IOMode mode) : port(nullptr) {
 	res = sp_open(serialPort, serial_mode);
 	if (res != SP_OK) {
 		throw RuntimeException("Failed to open {} in mode: {} - {}  ({})", path, (int)mode, sp_last_error_message(),
-							   res);
+							   (int)res);
 	}
 
 	res = sp_set_baudrate(serialPort, 4800);
@@ -391,25 +392,29 @@ SerialIO::SerialIO(const std::string &path, IOMode mode) : port(nullptr) {
 	res = sp_new_config(&this->config);
 	if (res != SP_OK) {
 		this->close();
-		throw RuntimeException("Failed to create config: {}  ({})", sp_last_error_message(), res);
+		throw RuntimeException("Failed to create config: {}  ({})", sp_last_error_message(), (int)res);
 	}
 
 	res = sp_get_config(serialPort, this->config);
 	if (res != SP_OK) {
-		throw RuntimeException("Failed to get config: {} ({})", sp_last_error_message(), res);
+		throw RuntimeException("Failed to get config: {} ({})", sp_last_error_message(), (int)res);
 	}
 
 	res = sp_set_config(serialPort, this->config);
 	if (res != SP_OK) {
 		this->close();
-		throw RuntimeException("Failed to set config: {} ({})", sp_last_error_message(), res);
+		throw RuntimeException("Failed to set config: {} ({})", sp_last_error_message(), (int)res);
 	}
 
 	this->mode = mode;
 }
 
 SerialIO ::~SerialIO() {
-	this->close();
+	try {
+		this->close();
+	} catch (const std::exception &ex) {
+	}
+
 	sp_free_config(this->config);
 	this->config = nullptr;
 	if (this->port) {

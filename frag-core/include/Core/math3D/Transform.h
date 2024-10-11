@@ -47,7 +47,7 @@ namespace fragcore {
 			return *this;
 		}
 
-		FV_ALWAYS_INLINE void rotate(const Vector3 &eular) noexcept { this->quaternion = Quaternion(); }
+		FV_ALWAYS_INLINE void rotate([[maybe_unused]] const Vector3 &eular) noexcept { this->quaternion = Quaternion(); }
 
 		FV_ALWAYS_INLINE void setPosition(const Vector3 &position) noexcept { this->position = position; }
 
@@ -71,12 +71,12 @@ namespace fragcore {
 
 		FV_ALWAYS_INLINE const Matrix3x3 getBasis() const noexcept { return this->quaternion.matrix(); }
 
-		FV_ALWAYS_INLINE Transform &operator*=(const Transform &t) noexcept {
+		FV_ALWAYS_INLINE Transform &operator*=([[maybe_unused]]const Transform &t) noexcept {
 			// Matrix3x3 basis = this->getBasis() * t.getBasis();
 			return *this;
 		}
 
-		FV_ALWAYS_INLINE Transform operator*(const Transform &t) const noexcept {
+		FV_ALWAYS_INLINE Transform operator*([[maybe_unused]]const Transform &t) const noexcept {
 			// Matrix3x3 basis = this->getBasis() * t.getBasis();
 
 			return *this;
