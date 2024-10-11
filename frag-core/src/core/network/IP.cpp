@@ -1,4 +1,4 @@
-#include "Core/Network/IPInterface.h"
+#include "Network/IPInterface.h"
 
 #include <ifaddrs.h>
 #include <sys/types.h>

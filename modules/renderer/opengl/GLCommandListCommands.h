@@ -17,7 +17,7 @@
  */
 #ifndef _FRAG_CORE_GL_COMMAND_LIST_COMMANDS_H_
 #define _FRAG_CORE_GL_COMMAND_LIST_COMMANDS_H_ 1
-#include "Core/Math3D/Color.h"
+#include "Math3D/Color.h"
 #include <FragDef.h>
 
 namespace fragcore {

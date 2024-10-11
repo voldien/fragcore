@@ -1,5 +1,5 @@
 #include "Config.h"
-#include "Core/IO/FileSystem.h"
+#include "IO/FileSystem.h"
 
 #include <csignal>
 #include <cstdlib>
@@ -12,26 +12,26 @@ static const char *shortarg = "vVdqh"
 							  "wSp:r:P:dD:Isar:g:C:f:A:t:vF:cRH:E:nNC:G:p:UbP:~_";
 static struct option longoptions[] = {
 	/*  First pass arguments.   */
-	{"version", no_argument, nullptr, 'v'},	  /*	Print version of application.	*/
-	{"verbose", no_argument, nullptr, 'V'},	  /*	Print.	*/
-	{"debug", no_argument, nullptr, 'd'},		  /*	Debug.	*/
-	{"quite", no_argument, nullptr, 'q'},		  /*	Quite .	*/
-	{"help", no_argument, nullptr, 'h'},		  /*	Help.	*/
+	{"version", no_argument, nullptr, 'v'},		 /*	Print version of application.	*/
+	{"verbose", no_argument, nullptr, 'V'},		 /*	Print.	*/
+	{"debug", no_argument, nullptr, 'd'},		 /*	Debug.	*/
+	{"quite", no_argument, nullptr, 'q'},		 /*	Quite .	*/
+	{"help", no_argument, nullptr, 'h'},		 /*	Help.	*/
 	{"config", required_argument, nullptr, 'D'}, /*	Override the configuration.	*/
 
 	/*  Screen override options.    */
-	{"fullscreen", no_argument, nullptr, ' '},			 /*  	*/
-	{"screen-width", required_argument, nullptr, '_'},	 /*	    */
+	{"fullscreen", no_argument, nullptr, ' '},			/*  	*/
+	{"screen-width", required_argument, nullptr, '_'},	/*	    */
 	{"screen-height", required_argument, nullptr, '_'}, /*	    */
-	{"screen-x", required_argument, nullptr, '_'},		 /*	    */
-	{"screen-y", required_argument, nullptr, '_'},		 /*	    */
-	{"no-decoration", no_argument, nullptr, '~'},		 /*	Use no window decoration.	*/
-	{"wallpaper", optional_argument, nullptr, 'w'},	 /*	use as wallpaper.	*/
+	{"screen-x", required_argument, nullptr, '_'},		/*	    */
+	{"screen-y", required_argument, nullptr, '_'},		/*	    */
+	{"no-decoration", no_argument, nullptr, '~'},		/*	Use no window decoration.	*/
+	{"wallpaper", optional_argument, nullptr, 'w'},		/*	use as wallpaper.	*/
 
 	/*	Long options for rendering interface.   */
-	{"renderer-opengl", no_argument, nullptr, '~'},  /*	Force rendering API OpenGL. */
-	{"renderer-opencl", no_argument, nullptr, '~'},  /*	Force rendering API OpenCL. */
-	{"renderer-vulkan", no_argument, nullptr, '~'},  /*	Force rendering API Vulkan. */
+	{"renderer-opengl", no_argument, nullptr, '~'},	 /*	Force rendering API OpenGL. */
+	{"renderer-opencl", no_argument, nullptr, '~'},	 /*	Force rendering API OpenCL. */
+	{"renderer-vulkan", no_argument, nullptr, '~'},	 /*	Force rendering API Vulkan. */
 	{"renderer-directx", no_argument, nullptr, '~'}, /*	Force rendering API DirectX. */
 	/*  Long options with arguments.    */
 	{"renderer", required_argument, nullptr, 'r'}, /*	Set renderer by rendering path.   */
@@ -43,24 +43,24 @@ static struct option longoptions[] = {
 
 	/*  Rendering Settings. */
 	{"anti-aliasing", required_argument, nullptr, '_'}, /*	Set antialiasing.   */
-	{"srgb", no_argument, nullptr, 'S'},				 /*	sRGB, gamma correction.	*/
-	{"alpha", no_argument, nullptr, 'a'},				 /*	use alpha channel.	*/
-	{"v-sync", no_argument, nullptr, '~'},				 /*	Enable vsync.   */
+	{"srgb", no_argument, nullptr, 'S'},				/*	sRGB, gamma correction.	*/
+	{"alpha", no_argument, nullptr, 'a'},				/*	use alpha channel.	*/
+	{"v-sync", no_argument, nullptr, '~'},				/*	Enable vsync.   */
 
 	/*  FragView behaviour options.  */
-	{"disable-notify-file", no_argument, nullptr, 'N'},  /*  Disable inotify notification.	*/
-	{"cache-shader", optional_argument, nullptr, '_'},	  /*  Enable cache shader.	*/
-	{"use-cache-shaders", no_argument, nullptr, '_'},	  /*  Enable cache shader.	*/
+	{"disable-notify-file", no_argument, nullptr, 'N'},	 /*  Disable inotify notification.	*/
+	{"cache-shader", optional_argument, nullptr, '_'},	 /*  Enable cache shader.	*/
+	{"use-cache-shaders", no_argument, nullptr, '_'},	 /*  Enable cache shader.	*/
 	{"no-use-cache-shaders", no_argument, nullptr, '_'}, /*  Enable cache shader.	*/
 
 	{"scene", required_argument, nullptr, 'B'}, /*		*/
 
 	/*  */
-	{"poly", required_argument, nullptr, 'p'},	  /*	Polygon - .	*/
-	{"param", required_argument, nullptr, 'P'},  /*  Parameters. */
-	{"stdin", optional_argument, nullptr, 'I'},  /*	stdin data as buffer.	*/
+	{"poly", required_argument, nullptr, 'p'},	 /*	Polygon - .	*/
+	{"param", required_argument, nullptr, 'P'},	 /*  Parameters. */
+	{"stdin", optional_argument, nullptr, 'I'},	 /*	stdin data as buffer.	*/
 	{"stream", required_argument, nullptr, 's'}, /*  Stream file. */
-	{"stream-pipe", no_argument, nullptr, 'O'},  /*  Stream, enabled via stream object. */
+	{"stream-pipe", no_argument, nullptr, 'O'},	 /*  Stream, enabled via stream object. */
 
 	{"sample", required_argument, nullptr, '_'}, /*	*/
 	/*  */
@@ -68,37 +68,37 @@ static struct option longoptions[] = {
 
 	/*  Shader types.   */
 	{"file", required_argument, nullptr, 'f'},
-	/*	Default shader file.	*/							  // TODO resolve if to be remove.
-	{"fragment", required_argument, nullptr, 'F'},				  /*	Fragment shader source.	*/
-	{"geometry", required_argument, nullptr, 'G'},				  /*	Geometry shader source.	*/
-	{"compute", required_argument, nullptr, 'H'},				  /*	Compute shader source.	*/
-	{"tessellation-control", required_argument, nullptr, 'C'},	  /*	Tessellation C shader source.	*/
+	/*	Default shader file.	*/								 // TODO resolve if to be remove.
+	{"fragment", required_argument, nullptr, 'F'},				 /*	Fragment shader source.	*/
+	{"geometry", required_argument, nullptr, 'G'},				 /*	Geometry shader source.	*/
+	{"compute", required_argument, nullptr, 'H'},				 /*	Compute shader source.	*/
+	{"tessellation-control", required_argument, nullptr, 'C'},	 /*	Tessellation C shader source.	*/
 	{"tessellation-evolution", required_argument, nullptr, 'E'}, /*	Tessellation E shader source.	*/
-	{"binary-program", required_argument, nullptr, 'B'},		  /*		*/
+	{"binary-program", required_argument, nullptr, 'B'},		 /*		*/
 
 	/*  Texture arguments.  16 texture unit support by default. */
-	{"texture0", required_argument, nullptr, ' '},	   /*	Texture on index 0. */
-	{"texture1", required_argument, nullptr, ' '},	   /*	*/
-	{"texture2", required_argument, nullptr, ' '},	   /*	*/
-	{"texture3", required_argument, nullptr, ' '},	   /*	*/
-	{"texture4", required_argument, nullptr, ' '},	   /*	*/
-	{"texture5", required_argument, nullptr, ' '},	   /*	*/
-	{"texture6", required_argument, nullptr, ' '},	   /*	*/
-	{"texture7", required_argument, nullptr, ' '},	   /*	*/
-	{"texture8", required_argument, nullptr, ' '},	   /*	*/
-	{"texture9", required_argument, nullptr, ' '},	   /*	*/
-	{"texture10", required_argument, nullptr, ' '},   /*	*/
-	{"texture11", required_argument, nullptr, ' '},   /*	*/
-	{"texture12", required_argument, nullptr, ' '},   /*	*/
-	{"texture13", required_argument, nullptr, ' '},   /*	*/
-	{"texture14", required_argument, nullptr, ' '},   /*	*/
-	{"texture15", required_argument, nullptr, ' '},   /*	*/
-	{"texture", required_argument, nullptr, 't'},	   /*	Texture, next texture unit. */
+	{"texture0", required_argument, nullptr, ' '},	  /*	Texture on index 0. */
+	{"texture1", required_argument, nullptr, ' '},	  /*	*/
+	{"texture2", required_argument, nullptr, ' '},	  /*	*/
+	{"texture3", required_argument, nullptr, ' '},	  /*	*/
+	{"texture4", required_argument, nullptr, ' '},	  /*	*/
+	{"texture5", required_argument, nullptr, ' '},	  /*	*/
+	{"texture6", required_argument, nullptr, ' '},	  /*	*/
+	{"texture7", required_argument, nullptr, ' '},	  /*	*/
+	{"texture8", required_argument, nullptr, ' '},	  /*	*/
+	{"texture9", required_argument, nullptr, ' '},	  /*	*/
+	{"texture10", required_argument, nullptr, ' '},	  /*	*/
+	{"texture11", required_argument, nullptr, ' '},	  /*	*/
+	{"texture12", required_argument, nullptr, ' '},	  /*	*/
+	{"texture13", required_argument, nullptr, ' '},	  /*	*/
+	{"texture14", required_argument, nullptr, ' '},	  /*	*/
+	{"texture15", required_argument, nullptr, ' '},	  /*	*/
+	{"texture", required_argument, nullptr, 't'},	  /*	Texture, next texture unit. */
 	{"compression", optional_argument, nullptr, 'c'}, /*	Texture compression.	*/
 
 	/*  TODO: Future version using DSL for materials.   */
 	{"inline-script", required_argument, nullptr, 'O'}, /*  Inline script. */
-	{"script", required_argument, nullptr, 'O'},		 /*  Script file. */
+	{"script", required_argument, nullptr, 'O'},		/*  Script file. */
 
 	/*  */
 	{"save-config", optional_argument, nullptr,
@@ -228,17 +228,17 @@ void Config::parseGetOpt(int argc, const char **argv) {
 		switch (c) {
 		case 'h':
 			/*  Print help. */
-			
+
 			exit(EXIT_SUCCESS);
 		case 'd': /*  Enable debug mode.  */
 			this->set<int>("debug", 1);
-	
+
 			break;
 		case 'V': /*  Enable verbosity logging.   */
 
 			break;
 		case 'q': /*  Set logging to quite.   */
-	
+
 			break;
 		default:
 			break;
@@ -392,7 +392,7 @@ Config *Config::createConfig(int argc, const char **argv, const char *configpath
 	if (configpath) {
 		Ref<IO> Ref_io = Ref<IO>(FileSystem::getFileSystem()->openFile(configpath, IO::READ));
 		/*  */
-		//config->parseConfigFile(Ref_io);
+		// config->parseConfigFile(Ref_io);
 		FileSystem::getFileSystem()->closeFile(*Ref_io);
 	}
 

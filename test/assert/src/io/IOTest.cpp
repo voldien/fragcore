@@ -1,30 +1,30 @@
-#include <Core/IO/BufferIO.h>
-#include <Core/IO/FileIO.h>
-#include <Core/IO/FileSystem.h>
-#include <Core/IO/GZFileIO.h>
-#include <Core/IO/ZipFileIO.h>
-#include <Core/IO/ZipFileSystem.h>
 #include <Core/RefPtr.h>
 #include <FragCore.h>
+#include <IO/BufferIO.h>
+#include <IO/FileIO.h>
+#include <IO/FileSystem.h>
+#include <IO/GZFileIO.h>
+#include <IO/ZipFileIO.h>
+#include <IO/ZipFileSystem.h>
 #include <gtest/gtest.h>
 using namespace fragcore;
 
 class IOTest : public testing::Test {
   protected:
 	void SetUp() override {
-		files.push_back("Makefile");
-		files.push_back("CMakeLists.txt");
-		files.push_back("src/IO.cpp");
+		files.emplace_back("Makefile");
+		files.emplace_back("CMakeLists.txt");
+		files.emplace_back("src/IO.cpp");
 		FileWrite = "tmp.txt";
 
-		gzFiles.push_back("");
-		gzFiles.push_back("");
-		gzFiles.push_back("");
+		gzFiles.emplace_back("");
+		gzFiles.emplace_back("");
+		gzFiles.emplace_back("");
 		gzFileWrite = "tmp.gz";
 
-		zipInFiles.push_back("glsl/wave.frag");
-		zipInFiles.push_back("glsl/sepia.frag");
-		zipInFiles.push_back("glsl/sepia.comp");
+		zipInFiles.emplace_back("glsl/wave.frag");
+		zipInFiles.emplace_back("glsl/sepia.frag");
+		zipInFiles.emplace_back("glsl/sepia.comp");
 
 		zipFile = "zipfile.zip";
 	}

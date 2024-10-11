@@ -2,7 +2,7 @@
 #define FRAG_CORE_INTERNAL_IMP 1
 #endif
 
-#include "Core/IO/GZFileIO.h"
+#include "IO/GZFileIO.h"
 #include <fmt/core.h>
 #include <zlib.h>
 using namespace fragcore;

@@ -1,4 +1,4 @@
-#include "Core/Math/Random.h"
+#include "Math/Random.h"
 #include <pcg_basic.h>
 
 using namespace fragcore;

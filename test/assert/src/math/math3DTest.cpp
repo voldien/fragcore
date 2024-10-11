@@ -1,5 +1,5 @@
-#include <Core/Math3D/AABB.h>
-#include <Core/Math3D/Line.h>
+#include <Math3D/AABB.h>
+#include <Math3D/Line.h>
 #include <gtest/gtest.h>
 
 using namespace fragcore;

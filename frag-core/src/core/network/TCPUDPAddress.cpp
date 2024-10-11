@@ -1,5 +1,5 @@
-#include "Core/Network/TCPUDPAddress.h"
-#include "Core/Network/IPAddress.h"
+#include "Network/TCPUDPAddress.h"
+#include "Network/IPAddress.h"
 
 using namespace fragcore;
 

@@ -1,10 +1,10 @@
-#include<gtest/gtest.h>
-#include<Core/IConfig.h>
-#include<Core/IO/BufferIO.h>
-#include<Core/IO/IO.h>
-#include<Core/IO/FileSystem.h>
-#include<Core/Ref.h>
-#include"IConfigTest.h"
+#include "IConfigTest.h"
+#include <Core/IConfig.h>
+#include <Core/Ref.h>
+#include <IO/BufferIO.h>
+#include <IO/FileSystem.h>
+#include <IO/IO.h>
+#include <gtest/gtest.h>
 
 #define CONFIG_DEFAULT_NAME "Config"
 
@@ -48,7 +48,7 @@ using namespace fragcore;
 // }
 
 // TEST(Config, XMLSaveConfiguration) {
-	
+
 // }
 
 // TEST(Config, YAMLLoadConfiguration) {

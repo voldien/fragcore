@@ -18,7 +18,7 @@
 #ifndef _FRAG_CORE_MODBUS_NETSOCKET_H_
 #define _FRAG_CORE_MODBUS_NETSOCKET_H_ 1
 #include "ModBusAddress.h"
-#include <Core/Network/TCPSocket.h>
+#include <Network/TCPSocket.h>
 #include <sys/socket.h>
 
 namespace fragcore {

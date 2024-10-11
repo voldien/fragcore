@@ -18,11 +18,11 @@
 
 #ifndef _FRAG_CORE_FILE_NOTIFY_H_
 #define _FRAG_CORE_FILE_NOTIFY_H_ 1
-#include "Core/IO/IO.h"
+#include "IO/IO.h"
 #include <Core/Object.h>
-#include <Core/TaskScheduler/IScheduler.h>
-#include <Core/TaskScheduler/IThreading.h>
-#include <Core/DataStructure/PoolAllocator.h>
+#include <DataStructure/PoolAllocator.h>
+#include <TaskScheduler/IScheduler.h>
+#include <TaskScheduler/IThreading.h>
 #include <map>
 #include <vector>
 

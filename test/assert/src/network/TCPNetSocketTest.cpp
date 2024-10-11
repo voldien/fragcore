@@ -1,7 +1,7 @@
-#include "Core/IO/SocketIO.h"
-#include "Core/Network/IPAddress.h"
-#include "Core/Network/TCPSocket.h"
-#include "Core/Network/TCPUDPAddress.h"
+#include "IO/SocketIO.h"
+#include "Network/IPAddress.h"
+#include "Network/TCPSocket.h"
+#include "Network/TCPUDPAddress.h"
 #include <gtest/gtest.h>
 
 using namespace fragcore;

@@ -19,7 +19,7 @@
 #define _FRAG_CORE_GL_COMMAND_LIST_H_ 1
 #include "../CommandList.h"
 #include "GLCommandListCommands.h"
-#include <Core/DataStructure/StackAllactor.h>
+#include <DataStructure/StackAllactor.h>
 #include <vector>
 
 namespace fragcore {

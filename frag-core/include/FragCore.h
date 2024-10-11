@@ -38,28 +38,28 @@
 #include "Core/SmartReference.h"
 
 /*  IO. */
-#include "Core/IO/BufferIO.h"
-#include "Core/IO/FileSystem.h"
-#include "Core/IO/GZFileIO.h"
-#include "Core/IO/ZipFileSystem.h"
+#include "IO/BufferIO.h"
+#include "IO/FileSystem.h"
+#include "IO/GZFileIO.h"
+#include "IO/ZipFileSystem.h"
 
 /*  Data Structure. */
-#include "Core/DataStructure/Queue.h"
-#include "Core/DataStructure/Stack.h"
-#include "Core/DataStructure/StackAllactor.h"
-#include "Core/DataStructure/StackBufferedAllocator.h"
+#include "DataStructure/Queue.h"
+#include "DataStructure/Stack.h"
+#include "DataStructure/StackAllactor.h"
+#include "DataStructure/StackBufferedAllocator.h"
 
 /*  */
-#include "Core/TaskScheduler/IScheduler.h"
+#include "TaskScheduler/IScheduler.h"
 
 /*  Networking. */
-#include "Core/Network/NetSocket.h"
+#include "Network/NetSocket.h"
 
 /*  Math.   */
-#include "Core/Math/Math.h"
-#include "Core/Math3D/AABB.h"
-#include "Core/Math3D/BoundingSphere.h"
-#include "Core/Math3D/OBB.h"
-#include "Core/Math3D/Plane.h"
+#include "Math/Math.h"
+#include "Math3D/AABB.h"
+#include "Math3D/BoundingSphere.h"
+#include "Math3D/OBB.h"
+#include "Math3D/Plane.h"
 
 #endif

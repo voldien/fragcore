@@ -1,9 +1,9 @@
 
 
 #include "NetModbusSocket.h"
-#include <Core/Network/IPAddress.h>
-#include <Core/Network/TCPSocket.h>
-#include <Core/Network/TCPUDPAddress.h>
+#include <Network/IPAddress.h>
+#include <Network/TCPSocket.h>
+#include <Network/TCPUDPAddress.h>
 #include <gtest/gtest.h>
 
 using namespace fragcore;

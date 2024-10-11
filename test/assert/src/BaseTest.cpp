@@ -1,7 +1,7 @@
 #include <Core/Base16.h>
 #include <Core/Base32.h>
 #include <Core/Base64.h>
-#include <Core/IO/BufferIO.h>
+#include <IO/BufferIO.h>
 #include <gtest/gtest.h>
 
 using namespace fragcore;

@@ -115,9 +115,13 @@ FILE(GLOB SOURCE_FILES  ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
 #
 FILE(GLOB HEADER_FILES  ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h
 						${CMAKE_CURRENT_SOURCE_DIR}/include/Core/*.h
-						${CMAKE_CURRENT_SOURCE_DIR}/include/Core/Compression/*.h
-						${CMAKE_CURRENT_SOURCE_DIR}/include/Core/DataStructure/*.h
-						${CMAKE_CURRENT_SOURCE_DIR}/include/Core/IO/*.h
+						${CMAKE_CURRENT_SOURCE_DIR}/include/Compression/*.h
+						${CMAKE_CURRENT_SOURCE_DIR}/include/DataStructure/*.h
+						${CMAKE_CURRENT_SOURCE_DIR}/include/Math/*.h
+						${CMAKE_CURRENT_SOURCE_DIR}/include/Math3D/*.h
+						${CMAKE_CURRENT_SOURCE_DIR}/include/Threading/*.h
+						${CMAKE_CURRENT_SOURCE_DIR}/include/Networking/*.h
+						${CMAKE_CURRENT_SOURCE_DIR}/include/IO/*.h
 						)
 
 # Public headers - subset of header files.

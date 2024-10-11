@@ -2,8 +2,8 @@
 #include "ALAudioClip.h"
 #include "ALAudioListener.h"
 #include "ALAudioSource.h"
-#include "Core/Math/Math.h"
 #include "Core/SystemInfo.h"
+#include "Math/Math.h"
 #include "OpenALAudioInterface.h"
 #include "internal_object_type.h"
 #include <TaskScheduler.h>

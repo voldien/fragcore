@@ -1,15 +1,15 @@
 #ifndef FRAG_CORE_ICONFIGTEST_H_
 #define FRAG_CORE_ICONFIGTEST_H_ 1
-#include"common.h"
-
+#include "common.h"
+#include <Core/IConfig.h>
 
 class IConfigTest : public CommonBaseTest {
-protected:
+  protected:
 	void TearDown() override;
 
 	void SetUp() override;
 
-	fragcore::IConfig* config;
+	fragcore::IConfig *config;
 };
 
 #endif

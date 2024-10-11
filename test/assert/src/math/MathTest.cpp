@@ -1,4 +1,4 @@
-#include <Core/Math/Math.h>
+#include <Math/Math.h>
 #include <gtest/gtest.h>
 
 using namespace fragcore;

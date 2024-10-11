@@ -1,6 +1,6 @@
-#include <Core/Network/IPAddress.h>
-#include <Core/Network/IPInterface.h>
 #include <Core/RefPtr.h>
+#include <Network/IPAddress.h>
+#include <Network/IPInterface.h>
 #include <gtest/gtest.h>
 
 using namespace fragcore;

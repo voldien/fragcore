@@ -1,4 +1,4 @@
-#include "Core/IO/BZFileIO.h"
+#include "IO/BZFileIO.h"
 
 #include <bzlib.h>
 #include <fmt/core.h>

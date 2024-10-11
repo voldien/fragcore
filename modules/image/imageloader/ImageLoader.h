@@ -19,10 +19,10 @@
 #ifndef _FRAG_CORE_IMAGE_LOADER_H_
 #define _FRAG_CORE_IMAGE_LOADER_H_ 1
 #include "Image.h"
-#include <Core/IO/FileSystem.h>
-#include <Core/IO/IO.h>
 #include <Core/Object.h>
 #include <Core/Ref.h>
+#include <IO/FileSystem.h>
+#include <IO/IO.h>
 
 namespace fragcore {
 

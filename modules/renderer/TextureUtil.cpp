@@ -1,9 +1,9 @@
 
 #include "TextureUtil.h"
-#include "Core/IO/IOUtil.h"
-#include "Core/Math/Math.h"
+#include "IO/IOUtil.h"
+#include "Math/Math.h"
 #include "Texture.h"
-#include <Core/IO/FileSystem.h>
+#include <IO/FileSystem.h>
 #include <fmt/core.h>
 using namespace fragcore;
 
@@ -47,7 +47,7 @@ void TextureUtil::loadTexture(const Image &image, IRenderer *renderer, Texture *
 }
 
 void TextureUtil::saveTexture(const Image &image, IRenderer *renderer, Texture *texture) { /*	Image Loader.	*/
-																					 ///*	TODO verify.	*/
+																						   ///*	TODO verify.	*/
 	// void *pixels = texture->mapTexture(texture->getFormat(), 0);
 	// Image image(texture->width(), texture->height(), TextureFormat::Alpha8);
 	// image.setPixelData(pixels, -1);

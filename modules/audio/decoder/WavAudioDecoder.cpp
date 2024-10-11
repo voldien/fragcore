@@ -3,7 +3,7 @@
 #include <vorbis/codec.h>
 #include <vorbis/vorbisfile.h>
 
-#include "Core/IO/IO.h"
+#include "IO/IO.h"
 #include "decoder/VorbisDecoder.h"
 #include "decoder/WavDecoder.h"
 using namespace fragcore;
@@ -14,11 +14,9 @@ WavAudioDecoder::~WavAudioDecoder() {}
 
 void WavAudioDecoder::seek(long int microseconds) {}
 
-void *WavAudioDecoder::getData(long int *size) {	return nullptr;}
+void *WavAudioDecoder::getData(long int *size) { return nullptr; }
 
-void *WavAudioDecoder::getPage(int i) {
-	return nullptr;
-}
+void *WavAudioDecoder::getPage(int i) { return nullptr; }
 
 AudioFormat WavAudioDecoder::getFormat() const {
 	switch (this->channels) {
@@ -31,11 +29,7 @@ AudioFormat WavAudioDecoder::getFormat() const {
 }
 unsigned int WavAudioDecoder::getSampleRate() const { return 0; }
 
-unsigned int WavAudioDecoder::getNrChannels() const {
-	return 0;
-}
-unsigned int WavAudioDecoder::getSampleBitResolution() const {
-	return 0;
-}
+unsigned int WavAudioDecoder::getNrChannels() const { return 0; }
+unsigned int WavAudioDecoder::getSampleBitResolution() const { return 0; }
 
 double WavAudioDecoder::getTotalTime() const { return this->length; }

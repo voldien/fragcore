@@ -1,6 +1,6 @@
-#include "Core/Network/INetAddress.h"
-#include "Core/Network/TCPUDPAddress.h"
-#include "Core/Network/UDPSocket.h"
+#include "Network/INetAddress.h"
+#include "Network/TCPUDPAddress.h"
+#include "Network/UDPSocket.h"
 #include <arpa/inet.h>
 #include <cassert>
 #include <cerrno>

@@ -3,7 +3,7 @@
 #endif
 
 #include "FTPIO.h"
-#include "Core/IO/GZFileIO.h"
+#include "IO/GZFileIO.h"
 
 #include <curl/curl.h>
 #include <curl/multi.h>

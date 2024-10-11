@@ -1,6 +1,5 @@
-#include "Core/DataStructure/StackBufferedAllocator.h"
-#include "Core/Math/Math.h"
-#include <utility>
+#include "DataStructure/StackBufferedAllocator.h"
+#include "Math/Math.h"
 using namespace fragcore;
 
 // StackBufferedAllocator::StackBufferedAllocator(size_t nrStack) {

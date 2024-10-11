@@ -1,5 +1,5 @@
-#include "Core/Network/IPAddress.h"
-#include "Core/Network/UDPSocket.h"
+#include "Network/IPAddress.h"
+#include "Network/UDPSocket.h"
 #include <gtest/gtest.h>
 
 using namespace fragcore;
@@ -27,5 +27,4 @@ TEST_F(UDPNetworkTest, CreateLocal_Bind_No_Throw_Exception) {
 	IPAddress localHost(ipAddress, IPAddress::IPAddressType::IPAddress_Type_IPV4);
 
 	ASSERT_NO_THROW(netSocket.bind(localHost));
-
 }

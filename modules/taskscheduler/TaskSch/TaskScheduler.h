@@ -19,7 +19,7 @@
 #define _FRAG_SCHTASK_TASK_SCHEDULER_H_ 1
 #include <Core/Ref.h>
 #include <Core/RefPtr.h>
-#include <Core/TaskScheduler/IScheduler.h>
+#include <TaskScheduler/IScheduler.h>
 #include <map>
 
 namespace fragcore {

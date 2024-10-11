@@ -1,4 +1,4 @@
-#include "Core/Network/NetSocket.h"
+#include "Network/NetSocket.h"
 using namespace fragcore;
 
 NetSocket::~NetSocket() { /*Make sure it gets disconnected.   */

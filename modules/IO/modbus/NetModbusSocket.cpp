@@ -1,6 +1,6 @@
 #include "NetModbusSocket.h"
-#include "Core/Network/TCPSocket.h"
-#include "Core/Network/TCPUDPAddress.h"
+#include "Network/TCPSocket.h"
+#include "Network/TCPUDPAddress.h"
 #include <arpa/inet.h>
 #include <cassert>
 #include <cerrno>
@@ -137,7 +137,7 @@ int ModbusNetSocket::connect(const INetAddress &addr) {
 
 	rcode = modbus_connect(static_cast<modbus_t *>(this->ctx));
 	if (rcode == -1) {
-		//throw RuntimeException("Failed to connect: {}", modbus_strerror(errno));
+		// throw RuntimeException("Failed to connect: {}", modbus_strerror(errno));
 	}
 
 	/*	*/

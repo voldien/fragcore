@@ -1,5 +1,5 @@
 #include "ImageLoader.h"
-#include <Core/IO/IOUtil.h>
+#include <IO/IOUtil.h>
 #include <FreeImage.h>
 #include <magic_enum.hpp>
 

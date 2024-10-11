@@ -1,7 +1,7 @@
 
 #include "NetCANSocket.h"
 #include "CANAddress.h"
-#include <Core/Math/Math.h>
+#include <Math/Math.h>
 #include <linux/can.h>
 #include <linux/can/raw.h>
 

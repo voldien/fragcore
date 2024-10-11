@@ -18,7 +18,7 @@
 #ifndef _FRAG_CORE_CAN_NETSOCKET_H_
 #define _FRAG_CORE_CAN_NETSOCKET_H_ 1
 #include "CANAddress.h"
-#include <Core/Network/NetSocket.h>
+#include <Network/NetSocket.h>
 #include <sys/socket.h>
 
 namespace fragcore {

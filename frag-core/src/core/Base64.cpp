@@ -1,5 +1,5 @@
 #include "Core/Base64.h"
-#include "Core/IO/IOUtil.h"
+#include "IO/IOUtil.h"
 
 using namespace fragcore;
 
@@ -7,7 +7,7 @@ static const std::string base64_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 										"abcdefghijklmnopqrstuvwxyz"
 										"0123456789+/";
 
-static inline bool is_base64(unsigned char c) { return (isalnum(c) || (c == '+') || (c == '/')); }
+static inline bool is_base64(unsigned char value) { return (isalnum(value) || (value == '+') || (value == '/')); }
 
 void Base64::encode(Ref<IO> &input, Ref<IO> &encoded) { /*	*/
 	size_t i = 0;

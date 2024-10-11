@@ -1,14 +1,14 @@
 #include <Core/Hash.h>
-#include <Core/IO/BufferIO.h>
-#include <Core/IO/FileIO.h>
-#include <Core/IO/FileSystem.h>
-#include <Core/IO/ZipFileIO.h>
-#include <Core/IO/ZipFileSystem.h>
 #include <Core/RefPtr.h>
 #include <FragCore.h>
+#include <IO/BufferIO.h>
+#include <IO/FileIO.h>
+#include <IO/FileSystem.h>
+#include <IO/ZipFileIO.h>
+#include <IO/ZipFileSystem.h>
 #include <gtest/gtest.h>
 
-#include "Core/IO/GZFileIO.h"
+#include "IO/GZFileIO.h"
 
 using namespace fragcore;
 template <typename T>

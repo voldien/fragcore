@@ -17,7 +17,7 @@
  */
 #ifndef _FRAG_CORE_CAN_ADDRESS_H_
 #define _FRAG_CORE_CAN_ADDRESS_H_ 1
-#include <Core/Network/INetAddress.h>
+#include <Network/INetAddress.h>
 #include <string>
 
 namespace fragcore {
