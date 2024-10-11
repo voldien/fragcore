@@ -1,5 +1,5 @@
-#include "Core/Math.h"
-#include "Core/dataStructure/StackAllactor.h"
+#include "Core/Math/Math.h"
+#include "Core/DataStructure/StackAllactor.h"
 #include <cstring>
 #include <malloc.h>
 #include <utility>

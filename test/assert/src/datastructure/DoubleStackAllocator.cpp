@@ -1,4 +1,4 @@
-#include <Core/dataStructure/DoubleBufferedAllocator.h>
+#include <Core/DataStructure/DoubleBufferedAllocator.h>
 #include <gtest/gtest.h>
 using namespace fragcore;
 

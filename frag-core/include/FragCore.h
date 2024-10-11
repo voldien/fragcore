@@ -44,10 +44,10 @@
 #include "Core/IO/ZipFileSystem.h"
 
 /*  Data Structure. */
-#include "Core/dataStructure/Queue.h"
-#include "Core/dataStructure/Stack.h"
-#include "Core/dataStructure/StackAllactor.h"
-#include "Core/dataStructure/StackBufferedAllocator.h"
+#include "Core/DataStructure/Queue.h"
+#include "Core/DataStructure/Stack.h"
+#include "Core/DataStructure/StackAllactor.h"
+#include "Core/DataStructure/StackBufferedAllocator.h"
 
 /*  */
 #include "Core/TaskScheduler/IScheduler.h"
@@ -56,10 +56,10 @@
 #include "Core/Network/NetSocket.h"
 
 /*  Math.   */
-#include "Core/Math.h"
-#include "Core/math3D/AABB.h"
-#include "Core/math3D/BoundingSphere.h"
-#include "Core/math3D/OBB.h"
-#include "Core/math3D/Plane.h"
+#include "Core/Math/Math.h"
+#include "Core/Math3D/AABB.h"
+#include "Core/Math3D/BoundingSphere.h"
+#include "Core/Math3D/OBB.h"
+#include "Core/Math3D/Plane.h"
 
 #endif

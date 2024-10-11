@@ -18,7 +18,7 @@
 #ifndef _FRAG_CORE_AXIS_ALIGN_BOUNDIN_BOX_H_
 #define _FRAG_CORE_AXIS_ALIGN_BOUNDIN_BOX_H_ 1
 #include "../../FragDef.h"
-#include "Core/Math3D.h"
+#include "Core/Math3D/Math3D.h"
 
 namespace fragcore {
 

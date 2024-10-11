@@ -1,9 +1,9 @@
-#include "Core/Math3D.h"
-#include "Core/math3D/AABB.h"
-#include "Core/math3D/OBB.h"
+#include "Core/Math3D/Math3D.h"
+#include "Core/Math3D/AABB.h"
+#include "Core/Math3D/OBB.h"
 #include "GeometryUtil.h"
-#include <Core/Math.h>
-#include <Core/math3D/LinAlg.h>
+#include <Core/Math/Math.h>
+#include <Core/Math3D/LinAlg.h>
 #include <cstdint>
 #include <generator/SubdivideMesh.hpp>
 

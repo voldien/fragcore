@@ -1,7 +1,7 @@
 
 #include "TextureUtil.h"
 #include "Core/IO/IOUtil.h"
-#include "Core/Math.h"
+#include "Core/Math/Math.h"
 #include "Texture.h"
 #include <Core/IO/FileSystem.h>
 #include <fmt/core.h>

@@ -1,5 +1,5 @@
 #include "ProceduralGeometry.h"
-#include "Core/Math3D.h"
+#include "Core/Math3D/Math3D.h"
 #include <generator/BoxMesh.hpp>
 #include <generator/CircleShape.hpp>
 #include <generator/HelixPath.hpp>

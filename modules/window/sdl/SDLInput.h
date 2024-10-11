@@ -15,11 +15,11 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#include <bitset>
 #ifndef _FRAG_CORE_SDL_INPUT_H_
 #define _FRAG_CORE_SDL_INPUT_H_ 1
+#include <bitset>
 #include "../Input.h"
-#include <Core/Math.h>
+#include <Core/Math/Math.h>
 #include <Core/SmartReference.h>
 
 namespace fragcore {

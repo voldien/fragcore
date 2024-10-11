@@ -1,4 +1,4 @@
-#include "Core/Math.h"
+#include "Core/Math/Math.h"
 
 #include "open-simplex-noise.h"
 using namespace fragcore;

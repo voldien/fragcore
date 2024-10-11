@@ -19,7 +19,7 @@
 #define _FRAG_CORE_RIGIDBODY_H_ 1
 #include "PhysicObject.h"
 #include "PhysicPrerequisites.h"
-#include <Core/Math3D.h>
+#include <Core/Math3D/Math3D.h>
 
 namespace fragcore {
 

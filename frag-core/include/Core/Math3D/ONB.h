@@ -17,7 +17,7 @@
  */
 #ifndef _FRAG_CORE_ONB_H_
 #define _FRAG_CORE_ONB_H_ 1
-#include "../Math.h"
+#include "../Math/Math.h"
 
 namespace fragcore {
 

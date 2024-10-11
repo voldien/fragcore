@@ -17,9 +17,8 @@
  */
 #ifndef _FRAG_CORE_INPUT_H_
 #define _FRAG_CORE_INPUT_H_ 1
-#include "Core/Math3D.h"
-#include "Display.h"
-#include <Core/Math.h>
+#include "Core/Math3D/Math3D.h"
+#include <Core/Math/Math.h>
 #include <Core/SmartReference.h>
 
 namespace fragcore {

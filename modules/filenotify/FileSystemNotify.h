@@ -22,7 +22,7 @@
 #include <Core/Object.h>
 #include <Core/TaskScheduler/IScheduler.h>
 #include <Core/TaskScheduler/IThreading.h>
-#include <Core/dataStructure/PoolAllocator.h>
+#include <Core/DataStructure/PoolAllocator.h>
 #include <map>
 #include <vector>
 

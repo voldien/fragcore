@@ -1,4 +1,4 @@
-#include <Core/dataStructure/ITree.h>
+#include <Core/DataStructure/ITree.h>
 #include <gtest/gtest.h>
 using namespace fragcore;
 

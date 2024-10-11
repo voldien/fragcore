@@ -18,8 +18,7 @@
  */
 #ifndef _FRAG_CORE_LIN_ALG_H_
 #define _FRAG_CORE_LIN_ALG_H_ 1
-#include "../Math.h"
-#include "../Math3D.h"
+#include "../Math/Math.h"
 #include <cfloat>
 #include <cmath>
 #include <vector>

@@ -1,4 +1,4 @@
-#include <Core/dataStructure/StackAllactor.h>
+#include <Core/DataStructure/StackAllactor.h>
 #include <gtest/gtest.h>
 using namespace fragcore;
 

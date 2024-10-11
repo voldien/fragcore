@@ -17,7 +17,7 @@
  */
 #ifndef _FRAG_CORE_PHYSIC_CONTACT_H_
 #define _FRAG_CORE_PHYSIC_CONTACT_H_ 1
-#include <Core/Math3D.h>
+#include <Core/Math3D/Math3D.h>
 
 namespace fragcore {
 

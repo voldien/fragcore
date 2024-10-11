@@ -18,7 +18,7 @@
 #ifndef _FRAG_CORE_RAY_H_
 #define _FRAG_CORE_RAY_H_ 1
 #include "../../FragDef.h"
-#include "../Math3D.h"
+#include "Math3D.h"
 
 namespace fragcore {
 	/**

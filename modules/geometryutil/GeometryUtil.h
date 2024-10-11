@@ -17,12 +17,12 @@
  */
 #ifndef _FRAG_CORE_GEOMETRYUTIL_H_
 #define _FRAG_CORE_GEOMETRYUTIL_H_ 1
-#include "Core/Math3D.h"
-#include "Core/math3D/AABB.h"
-#include "Core/math3D/BoundingSphere.h"
-#include "Core/math3D/OBB.h"
-#include "Core/math3D/Plane.h"
-#include <Core/math3D/Triangle.h>
+#include "Core/Math3D/Math3D.h"
+#include "Core/Math3D/AABB.h"
+#include "Core/Math3D/BoundingSphere.h"
+#include "Core/Math3D/OBB.h"
+#include "Core/Math3D/Plane.h"
+#include <Core/Math3D/Triangle.h>
 
 namespace fragcore {
 

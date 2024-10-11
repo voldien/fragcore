@@ -18,7 +18,7 @@
 #ifndef _FRAG_CORE_WINDOW_H_
 #define _FRAG_CORE_WINDOW_H_ 1
 #include "Display.h"
-#include <Core/Math.h>
+#include <Core/Math/Math.h>
 #include <Core/SmartReference.h>
 
 namespace fragcore {
