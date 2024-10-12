@@ -6,12 +6,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
@@ -20,6 +20,7 @@
 #include "PhysicObject.h"
 
 namespace fragcore {
+	
 	class FVDECLSPEC Collision {
 	  public:
 		Collision() = default;
@@ -28,7 +29,7 @@ namespace fragcore {
 		/**
 		 *	Get collider object.
 		 */
-		virtual Collider *collider() const = 0; 
+		virtual Collider *collider() const = 0;
 
 		/**
 		 *	Get relative velocity magnitude.
@@ -38,7 +39,7 @@ namespace fragcore {
 		/**
 		 *	Get transform object.
 		 */
-		//VDTransform *transform() const;
+		// VDTransform *transform() const;
 
 		/**
 		 *	Get rigidbodt object.
@@ -48,7 +49,7 @@ namespace fragcore {
 		/**
 		 *	Get contact.
 		 */
-	//	Contact contacts() const;
+		//	Contact contacts() const;
 
 	  private: /*	Attributes.	*/
 		void *pair;

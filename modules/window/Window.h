@@ -50,14 +50,6 @@ namespace fragcore {
 
 		virtual std::string getTitle() const = 0;
 
-		// TODO change the type to image.
-		virtual void setIcon(void *) = 0;
-		//		virtual void setIcon(Image& image) = 0;
-
-		virtual void *getIcon() const = 0;
-		// virtual Image getIcon() const = 0;
-		//		virtual Image* setIcon(Image* image) = 0;
-
 		virtual void getPosition(int *xPosition, int *yPosition) const = 0;
 
 		virtual void setPosition(int xPosition, int yPosition) = 0;

@@ -200,8 +200,4 @@ intptr_t GLRenderWindow::getNativePtr() const {
 	//     throw NotImplementedException("Window format not implemented");
 }
 
-void GLRenderWindow::setIcon(void *pVoid) {}
-
-void *GLRenderWindow::getIcon() const { return nullptr; }
-
 void GLRenderWindow::createSwapChain() {}

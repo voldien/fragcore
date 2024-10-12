@@ -11,13 +11,12 @@ using pcreateInternalPhysicInterface = PhysicInterface *(*)(IConfig *);
 
 /*	TODO update with the new naming.	*/
 const char *bulletlibpath = "libfragcore-pbu.so"; /*	Default bullet library.	*/
-const char *physxlibpath = "libfragcore-pbu.so";  /*	Nvidia's physic library. ( Not supported ) */
 
 PhysicInterface *PhysicFactory::createPhysic(PhysicAPI api, IConfig *overrideOption) {
 	return PhysicFactory::createPhysic(PhysicFactory::getInterfaceLibraryPath(api), overrideOption);
 }
 
-PhysicInterface *PhysicFactory::createPhysic(const char *libpath, IConfig *config) {
+PhysicInterface *PhysicFactory::createPhysic(const char *libpath, IConfig *overrideOption) {
 
 	const char *funcsymbol = "createInternalPhysicInterface";
 	pcreateInternalPhysicInterface pfunc = nullptr;
@@ -35,7 +34,7 @@ PhysicInterface *PhysicFactory::createPhysic(const char *libpath, IConfig *confi
 		pfunc = (pcreateInternalPhysicInterface)library.getfunc(funcsymbol);
 
 		if (pfunc) {
-			interface = pfunc(config);
+			interface = pfunc(overrideOption);
 		} else {
 			/*	Error	*/
 			//	Log::log("Couldn't find symbol %s in %s.\n", funcsymbol, libpath);
@@ -43,29 +42,6 @@ PhysicInterface *PhysicFactory::createPhysic(const char *libpath, IConfig *confi
 	} else {
 		// Log::error("Failed loading %s library for creating physic dynamicInterface.\n", libpath);
 	}
-
-	//	if(connection != nullptr){
-	//
-	//		/*	Create RPC physic dynamicInterface.	*/
-	//		/*	Assign connection.	*/
-	//		PacketPhysicAPIRequest apirequest;
-	//		apirequest.offset = sizeof(apirequest);
-	//		apirequest.type = -1;
-	//		apirequest.pathlen = strlen(libpath);
-	//		//connection->sendPacket(RPCProtocolCommand::ePhysicAPIRequest, &apirequest,
-	// sizeof(PacketPhysicAPIRequest)); 		connection->send(libpath, apirequest.pathlen);
-	//
-	//	}else
-
-	/*	Check.	*/
-	//	if(interface != nullptr){
-	//		interface->setResource(resources);
-	//		if(interface->dispatcher != nullptr){
-	//			interface->dispatcher->connection = connection;
-	//		}
-	//	}else{
-	//		Debug::log("Failed to create physic dynamicInterface.\n");
-	//	}
 
 	return interface;
 }
@@ -75,8 +51,6 @@ const char *PhysicFactory::getInterfaceLibraryPath(PhysicAPI api) {
 	switch (api) {
 	case PhysicFactory::PhysicAPI::Bullet:
 		return bulletlibpath;
-	case PhysicFactory::PhysicAPI::PhysX:
-		return physxlibpath;
 	default:
 		throw InvalidArgumentException("");
 	}

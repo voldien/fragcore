@@ -6,12 +6,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
@@ -26,25 +26,25 @@ namespace fragcore {
 	class FVDECLSPEC GLFWWindow : public Window {
 	  public:
 		GLFWWindow();
-		virtual ~GLFWWindow();
+		~GLFWWindow() override;
 
-		virtual void show() override;
+		void show() override;
 
-		virtual void hide() override;
+		void hide() override;
 
-		virtual void close() override;
+		void close() override;
 
-		virtual void focus() override;
+		void focus() override;
 
-		virtual void restore() override;
+		void restore() override;
 
-		virtual void maximize() override;
+		void maximize() override;
 
-		virtual void minimize() override;
+		void minimize() override;
 
-		virtual void setTitle(const std::string &title) override;
+		void setTitle(const std::string &title) override;
 
-		virtual std::string getTitle() const override;
+		std::string getTitle() const override;
 
 		// virtual int x() const noexcept override;
 		// virtual int y() const noexcept override;
@@ -52,32 +52,32 @@ namespace fragcore {
 		// virtual int width() const override;
 		// virtual int height() const override;
 
-		virtual void getPosition(int *x, int *y) const override;
+		void getPosition(int *x, int *y) const override;
 
-		virtual void setPosition(int x, int y) noexcept override;
+		void setPosition(int x, int y) noexcept override;
 
-		virtual void setSize(int width, int height) noexcept override;
+		void setSize(int width, int height) noexcept override;
 
-		virtual void getSize(int *width, int *height) const override;
+		void getSize(int *width, int *height) const override;
 
-		virtual void resizable(bool resizable) noexcept override;
+		void resizable(bool resizable) noexcept override;
 
-		virtual void setFullScreen(bool fullscreen) override;
+		void setFullScreen(bool fullscreen) override;
 
-		virtual bool isFullScreen() const override;
+		bool isFullScreen() const override;
 
-		virtual void setBordered(bool borded) override;
+		void setBordered(bool borded) override;
 
-		virtual float getGamma() const override;
+		float getGamma() const override;
 
-		virtual void setGamma(float gamma) override;
+		void setGamma(float gamma) override;
 
-		virtual void setMinimumSize(int width, int height) override;
-		virtual void getMinimumSize(int *width, int *height) override;
-		virtual void setMaximumSize(int width, int height) override;
-		virtual void getMaximumSize(int *width, int *height) override;
+		void setMinimumSize(int width, int height) override;
+		void getMinimumSize(int *width, int *height) override;
+		void setMaximumSize(int width, int height) override;
+		void getMaximumSize(int *width, int *height) override;
 
-		virtual intptr_t getNativePtr() const override; /*  Get native window reference object. */
+		intptr_t getNativePtr() const override; /*  Get native window reference object. */
 
 	  protected:
 		std::string title;

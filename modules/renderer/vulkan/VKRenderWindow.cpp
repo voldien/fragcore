@@ -229,10 +229,6 @@ intptr_t VKRenderWindow::getNativePtr() const {
 	return 0;
 }
 
-void VKRenderWindow::setIcon(void *pVoid) {}
-
-void *VKRenderWindow::getIcon() const { return nullptr; }
-
 void VKRenderWindow::swapBuffer() {
 	VkResult result;
 

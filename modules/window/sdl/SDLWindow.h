@@ -6,12 +6,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
@@ -47,14 +47,6 @@ namespace fragcore {
 		void setTitle(const std::string &title) override;
 
 		std::string getTitle() const override;
-
-		// TODO change the type to image.
-		void setIcon(void *) override;
-		//		virtual void setIcon(Image& image) = 0;
-
-		void *getIcon() const override;
-		// virtual Image getIcon() const = 0;
-		//		virtual Image* setIcon(Image* image) = 0;
 
 		// virtual int x() const noexcept override;
 		// virtual int y() const noexcept override;

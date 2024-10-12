@@ -20,6 +20,7 @@
 #include "../AudioInterface.h"
 #include "AL/alc.h"
 #include "AL/efx.h"
+#include "internal_object_type.h"
 
 namespace fragcore {
 

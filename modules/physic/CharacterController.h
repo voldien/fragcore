@@ -6,12 +6,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
@@ -31,8 +31,7 @@ namespace fragcore {
 
 		~CharacterController() override = default;
 
-	  public:	 /*	Public methods.	*/
-	  protected: /*	Protected virtual methods.	*/
+	  public: /*	Public methods.	*/
 		virtual Vector3 getCenter() = 0;
 		// virtual const Vector3 &getConter() const;
 		virtual void setCenter(const Vector3 &center) = 0;

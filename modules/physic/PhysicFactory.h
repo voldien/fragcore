@@ -6,12 +6,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
@@ -28,8 +28,6 @@ namespace fragcore {
 		/*  Official physic api.  */
 		enum class PhysicAPI {
 			Bullet, /*	Bullet physic API.	*/
-			PhysX,	/*	Nvidia PhysicX.	*/
-			RPC,
 		};
 
 		/**
@@ -61,10 +59,10 @@ namespace fragcore {
 		 */
 		static const char *getInterfaceLibraryPath(PhysicAPI api);
 
-	  private: /*	Prevent one from creating an instance of this class.	*/
-		PhysicFactory();
-		PhysicFactory(const PhysicFactory &other);
-		PhysicFactory(PhysicFactory &&other);
+	  public: /*	Prevent one from creating an instance of this class.	*/
+		PhysicFactory() = delete;
+		PhysicFactory(const PhysicFactory &other) = delete;
+		PhysicFactory(PhysicFactory &&other) = delete;
 	};
 } // namespace fragcore
 

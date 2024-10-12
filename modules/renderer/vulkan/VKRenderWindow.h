@@ -6,12 +6,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
@@ -33,13 +33,13 @@ namespace fragcore {
 	class FVDECLSPEC VKRenderWindow : public RendererWindow {
 	  public:
 		VKRenderWindow(Ref<VKRenderInterface> &renderer);
-		~VKRenderWindow();
+		~VKRenderWindow() override;
 
 		void close() override;
 
-		virtual void show() override;
+		void show() override;
 
-		virtual void hide() override;
+		void hide() override;
 
 		void focus() override;
 
@@ -49,58 +49,54 @@ namespace fragcore {
 
 		void minimize() override;
 
-		virtual void swapBuffer() override;
+		void swapBuffer() override;
 
-		virtual void setPosition(int x, int y) override;
+		void setPosition(int x, int y) override;
 
-		virtual void setSize(int width, int height) override;
+		void setSize(int width, int height) override;
 
-		virtual void vsync(bool state) override;
+		void vsync(bool state) override;
 
-		virtual void getPosition(int *x, int *y) const override;
+		void getPosition(int *x, int *y) const override;
 
-		virtual void getSize(int *width, int *height) const override;
+		void getSize(int *width, int *height) const override;
 
-		virtual int width() const override;
-		virtual int height() const override;
+		int width() const override;
+		int height() const override;
 
 		void resizable(bool resizable) override;
 
-		void setIcon(void *pVoid) override;
-
-		void *getIcon() const override;
-
-		virtual Display *getCurrentDisplay() const override;
+		Display *getCurrentDisplay() const override;
 
 		void setFullScreen(bool fullscreen) override;
-		virtual void setFullScreen(Display &display) override;
+		void setFullScreen(Display &display) override;
 
 		bool isFullScreen() const override;
 
 		void setBordered(bool bordered) override;
 
 		void setMinimumSize(int width, int height) override;
-		virtual void getMinimumSize(int *width, int *height) override;
+		void getMinimumSize(int *width, int *height) override;
 		void setMaximumSize(int width, int height) override;
-		virtual void getMaximumSize(int *width, int *height) override;
+		void getMaximumSize(int *width, int *height) override;
 
-		virtual float getGamma() const override;
+		float getGamma() const override;
 
-		virtual void setGamma(float gamma) override;
+		void setGamma(float gamma) override;
 
-		virtual void setTitle(const std::string &title) override;
-		virtual std::string getTitle() const override;
+		void setTitle(const std::string &title) override;
+		std::string getTitle() const override;
 
 		intptr_t getNativePtr() const override;
 
-		virtual ViewPort *getViewPort() override;
-		virtual FrameBuffer *getDefaultFrameBuffer() override;
+		ViewPort *getViewPort() override;
+		FrameBuffer *getDefaultFrameBuffer() override;
 
-		virtual void createWindow(int x, int y, int width, int height, const char *api) override;
-		virtual bool assertConfigAttributes(const IConfig *iConfig) override;
-		virtual void useWindow(void *pdata) override;
+		void createWindow(int x, int y, int width, int height, const char *api) override;
+		bool assertConfigAttributes(const IConfig *iConfig) override;
+		void useWindow(void *pdata) override;
 
-	  public: /*	Vulkan methods.	*/
+		/*	Vulkan methods.	*/
 		/*	*/
 		VkDevice getDevice() const noexcept;
 		/*	*/
@@ -130,7 +126,6 @@ namespace fragcore {
 		VkCommandBuffer getCommandBuffers(unsigned int index) const noexcept;
 		VkCommandPool getGraphicCommandPool() const noexcept;
 
-	  public:
 		// VkCommandPool getComputeCommandPool() const noexcept;
 		const VkPhysicalDeviceProperties &physicalDeviceProperties() const noexcept;
 
@@ -165,7 +160,7 @@ namespace fragcore {
 		SDL_Window *window;
 		Ref<VKRenderInterface> renderer;
 
-		typedef struct _SwapchainBuffers {
+		using SwapchainBuffers = struct _SwapchainBuffers {
 			struct SwapChainSupportDetails {
 				VkSurfaceCapabilitiesKHR capabilities;
 				std::vector<VkSurfaceFormatKHR> formats;
@@ -193,7 +188,7 @@ namespace fragcore {
 			int currentFrame = 0;
 			bool vsync = false;
 			int width, height;
-		} SwapchainBuffers;
+		};
 
 		SwapchainBuffers swapChain;
 		int currentFrame;

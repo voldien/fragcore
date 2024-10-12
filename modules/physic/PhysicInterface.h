@@ -6,12 +6,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
@@ -19,6 +19,7 @@
 #define _FRAG_CORE_PHYSIC_INTERFACE_H_ 1
 #include "PhysicDesc.h"
 #include "Prerequisites.h"
+#include "SoftBody.h"
 #include <Core/IConfig.h>
 #include <Core/Module.h>
 #include <Core/Ref.h>
@@ -47,7 +48,8 @@ namespace fragcore {
 		 * @param maxSubSteps
 		 * @param fixedTimeStep
 		 */
-		virtual void simulate(const float timeStep, const int maxSubSteps = 1, const float fixedTimeStep = 1.0f / 60.0f) = 0;
+		virtual void simulate(const float timeStep, const int maxSubSteps = 1,
+							  const float fixedTimeStep = 1.0f / 60.0f) = 0;
 
 		/**
 		 * synchronize.
@@ -205,13 +207,6 @@ namespace fragcore {
 		virtual const char *getVersion() const = 0;
 
 		// virtual intptr_t getNativePtr() const;
-
-	  protected: /*	*/
-				 /**
-				  *	Initialize Allocation.
-				  *	Can be used for resources to allocate.
-				  */
-				 // virtual void initAllocate(InitAllocateTableInfo* table);
 
 	  protected: /*	*/
 		void *pdata;

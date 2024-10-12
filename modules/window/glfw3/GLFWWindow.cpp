@@ -15,9 +15,7 @@ void GLFWWindow::close() {
 
 void GLFWWindow::setPosition(int x, int y) noexcept { glfwSetWindowPos(this->window, x, y); }
 
-void GLFWWindow::setSize(int width, int height) noexcept {
-
-}
+void GLFWWindow::setSize(int width, int height) noexcept {}
 
 void GLFWWindow::getPosition(int *x, int *y) const { glfwGetWindowPos(this->window, x, y); }
 
@@ -26,16 +24,7 @@ void GLFWWindow::setTitle(const std::string &title) { glfwSetWindowTitle(this->w
 
 std::string GLFWWindow::getTitle() const { return this->title; }
 
-// int GLFWWindow::x() const noexcept {
-// 	int x, y;
 
-// 	return x;
-// }
-// int GLFWWindow::y() const noexcept {
-// 	int x, y;
-
-// 	return y;
-// }
 void GLFWWindow::resizable(bool resizable) noexcept {}
 
 void GLFWWindow::setFullScreen(bool fullscreen) {}

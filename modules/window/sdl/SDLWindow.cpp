@@ -32,13 +32,6 @@ void SDLWindow::setTitle(const std::string &title) { SDL_SetWindowTitle(window, 
 
 std::string SDLWindow::getTitle() const { return SDL_GetWindowTitle(window); }
 
-// TODO change the type to image.
-void SDLWindow::setIcon(void *) {}
-//		virtual void setIcon(Image& image) = 0;
-
-void *SDLWindow::getIcon() const { return nullptr; }
-// virtual Image getIcon() const = 0;
-//		virtual Image* setIcon(Image* image) = 0;
 
 void SDLWindow::setPosition(int x, int y) noexcept { SDL_SetWindowPosition(this->window, x, y); }
 
