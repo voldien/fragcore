@@ -3,7 +3,7 @@ INCLUDE(FetchContent)
 FetchContent_Declare(cxxconfig_source
 	GIT_REPOSITORY https://github.com/voldien/cxx-config.git
 	GIT_TAG develop
-) # or whatever tag you want
+)
 
 FetchContent_GetProperties(cxxconfig_source)
 

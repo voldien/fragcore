@@ -66,25 +66,9 @@ jobs:
       - name: Build-Core
         working-directory: ${{runner.workspace}}/build
         shell: bash
-        run: cmake --build . --config $BUILD_TYPE --target fragcore-assert
+        run: cmake --build . --config $BUILD_TYPE
 
       - name: Test
         working-directory: ${{runner.workspace}}/build
         shell: bash
         run: ctest -C $BUILD_TYPE
-
-      - name: Construct package
-        working-directory: ${{runner.workspace}}/build
-        shell: bash
-        run: cpack
-
-      - name: Move deb packages
-        working-directory: ${{runner.workspace}}/build
-        run: |
-          mkdir deb && mv -v *.deb deb/
-
-      - name: Upload deb packages
-        uses: actions/upload-artifact@v4
-        with:
-          name: package
-          path: ${{runner.workspace}}/build/deb

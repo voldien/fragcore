@@ -30,7 +30,7 @@ namespace fragcore {
 	class FVDECLSPEC TaskScheduler : public IScheduler {
 	  public:
 		TaskScheduler();
-		TaskScheduler(int cores, unsigned int maxPackagesPool);
+		TaskScheduler(int cores = -1);
 		~TaskScheduler() override;
 
 		void addTask(Task *task) override;

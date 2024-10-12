@@ -2,7 +2,7 @@ INCLUDE(FetchContent)
 
 FetchContent_Declare(infoware
         GIT_REPOSITORY https://github.com/voldien/infoware.git
-		GIT_TAG "arm-improvements") # or whatever tag you want
+		GIT_TAG "arm-improvements") 
 
 FetchContent_GetProperties(infoware)
 

@@ -6,12 +6,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
@@ -26,21 +26,21 @@ namespace fragcore {
 	class FVDECLSPEC VorbisAudioDecoder : public AudioDecoder {
 	  public:
 		VorbisAudioDecoder(Ref<IO> &io);
-		virtual ~VorbisAudioDecoder();
+		~VorbisAudioDecoder() override;
 
-		virtual void seek(long int microseconds);
+		void seek(long int microseconds) override;
 
-		virtual void *getData(long int *size);
+		void *getData(long int *size) override;
 
-		virtual void *getPage(int i);
+		void *getPage(int i) override;
 
-		virtual AudioFormat getFormat() const;
-		virtual unsigned int getSampleRate() const;
+		AudioFormat getFormat() const override;
+		unsigned int getSampleRate() const override;
 
-		virtual unsigned int getNrChannels() const;
-		virtual unsigned int getSampleBitResolution() const;
+		unsigned int getNrChannels() const override;
+		unsigned int getSampleBitResolution() const override;
 
-		virtual double getTotalTime() const;
+		double getTotalTime() const override;
 
 	  protected:
 		OggVorbis_File *ov;

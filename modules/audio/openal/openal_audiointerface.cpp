@@ -51,7 +51,7 @@ OpenALAudioInterface::OpenALAudioInterface(IConfig *config) {
 	setAudioDevice(current_device);
 
 	/*	Internal.	*/
-	this->scheduler = Ref<IScheduler>(new TaskScheduler(Math::clamp<int>(SystemInfo::getCPUCoreCount(), 1, 2), 48));
+	this->scheduler = Ref<IScheduler>(new TaskScheduler(Math::clamp<int>(SystemInfo::getCPUCoreCount(), 1, 2)));
 }
 
 OpenALAudioInterface::~OpenALAudioInterface() {

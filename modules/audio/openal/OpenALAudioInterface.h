@@ -6,20 +6,20 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
 #ifndef _FRAG_CORE_OPENAL_AUDIOINTERFACE_H_
 #define _FRAG_CORE_OPENAL_AUDIOINTERFACE_H_ 1
 #include "../AudioInterface.h"
-// TODO rename
-#include "internal_object_type.h"
+#include "AL/alc.h"
+#include "AL/efx.h"
 
 namespace fragcore {
 
@@ -30,69 +30,68 @@ namespace fragcore {
 	class FVDECLSPEC OpenALAudioInterface : public AudioInterface {
 	  public:
 		OpenALAudioInterface(IConfig *config = nullptr);
-		virtual ~OpenALAudioInterface();
+		~OpenALAudioInterface() override;
 
-		virtual void OnInitialization();
-		virtual void OnDestruction();
-
-		/**
-		 *
-		 * @param desc
-		 * @return
-		 */
-		virtual AudioClip *createAudioClip(AudioClipDesc *desc);
-		virtual void deleteAudioClip(AudioClip *audioClip);
+		void OnInitialization() override;
+		void OnDestruction() override;
 
 		/**
 		 *
 		 * @param desc
 		 * @return
 		 */
-		virtual AudioSource *createAudioSource(AudioSourceDesc *desc);
-		virtual void deleteAudioSource(AudioSource *audioSource);
-
-		virtual AudioReverb *createAudioReverb(AudioReverbDesc *desc);
-		virtual void deleteAudioReverb(AudioReverb *reverb);
+		AudioClip *createAudioClip(AudioClipDesc *desc) override;
+		void deleteAudioClip(AudioClip *audioClip) override;
 
 		/**
 		 *
 		 * @param desc
 		 * @return
 		 */
-		virtual AudioListener *createAudioListener(AudioListenerDesc *desc);
+		AudioSource *createAudioSource(AudioSourceDesc *desc) override;
+		void deleteAudioSource(AudioSource *audioSource) override;
+
+		AudioReverb *createAudioReverb(AudioReverbDesc *desc) override;
+		void deleteAudioReverb(AudioReverb *reverb) override;
+
+		/**
+		 *
+		 * @param desc
+		 * @return
+		 */
+		AudioListener *createAudioListener(AudioListenerDesc *desc) override;
 
 		/**
 		 *
 		 * @param listener
 		 */
-		virtual void deleteAudioListener(AudioListener *listener);
+		void deleteAudioListener(AudioListener *listener) override;
 
 		/**
 		 *
 		 * @param listener
 		 */
-		virtual void setAudioListener(AudioListener *listener);
+		void setAudioListener(AudioListener *listener) override;
 
 		/**
 		 * @brief Create a Audio Capture object
 		 *
 		 * @return AudioCapture*
 		 */
-		virtual AudioCapture *createAudioCapture();
-		virtual void deleteAudioCapture(AudioCapture *capture);
+		AudioCapture *createAudioCapture() override;
+		void deleteAudioCapture(AudioCapture *capture) override;
 
-		virtual std::vector<AudioPhysicalDevice> getDevices() const;
-
-		/*	*/
-		virtual void setAudioDevice(const AudioPhysicalDevice &device);
-		virtual const AudioPhysicalDevice &getAudioDevice() const;
+		std::vector<AudioPhysicalDevice> getDevices() const override;
 
 		/*	*/
-		virtual const char *getVersion() const;
+		void setAudioDevice(const AudioPhysicalDevice &device) override;
+		const AudioPhysicalDevice &getAudioDevice() const override;
+
+		/*	*/
+		const char *getVersion() const override;
 
 	  private:
 		OpenALAudioInterface() = default;
-		void *pdata;
 
 		ALCdevice *device;
 		ALCcontext *context;

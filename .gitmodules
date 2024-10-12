@@ -1,3 +1,0 @@
-[submodule "extern/task-scheduler"]
-	path = extern/task-scheduler
-	url = https://github.com/voldien/task-scheduler

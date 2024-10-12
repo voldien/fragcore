@@ -18,12 +18,11 @@
 #ifndef _FRAG_CORE_SYSTEMINFO_H_
 #define _FRAG_CORE_SYSTEMINFO_H_ 1
 #include "../FragDef.h"
+#include "Environment.h"
 #include "IO/IO.h"
 #include "Ref.h"
 
 namespace fragcore {
-
-
 
 	/**
 	 * @brief

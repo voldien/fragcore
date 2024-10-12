@@ -178,7 +178,6 @@ SET(CMAKE_CXX_EXTENSIONS OFF)
 # ################################
 # Inlucde external resources.
 # ################################
-ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/extern)
 INCLUDE(magicEnum)
 
 # Compiler toolchain
@@ -348,7 +347,6 @@ IF(BUILD_MODULES)
 
 	# Rendering interfaces.
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/renderer/)
-
 	#
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/renderer/opengl/)
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/renderer/vulkan/)
@@ -356,6 +354,9 @@ IF(BUILD_MODULES)
 	# Build FragCore Audio modules
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/audio)
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/audio/openal/)
+
+	# 
+	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/geometryutil/)
 
 	# Build FragCore Physic modules
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/physic/)

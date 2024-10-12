@@ -35,7 +35,7 @@ namespace fragcore {
 	class FVDECLSPEC AudioDecoder : public SmartReference {
 	  public:
 		AudioDecoder(Ref<IO> &io) { this->io = io; }
-		virtual ~AudioDecoder() {}
+		~AudioDecoder() override {}
 
 		/**
 		 * @brief

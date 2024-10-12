@@ -14,7 +14,8 @@ LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" )
 ########################
 INCLUDE(infoware)
 INCLUDE(cxxconfig)
-
+#INCLUDE(config-cpp)
+INCLUDE(taskscheduler)
 IF(NOT TARGET spdlog)
 	INCLUDE(spdlog)
 ENDIF()
