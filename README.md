@@ -75,7 +75,7 @@ In order to compile the program on Linux based machine, the following Debian pac
   sudo apt-get install libsdl2-dev libglew-dev libvulkan-dev libgl1-mesa-dev opencl-headers \
   libgtest-dev libsubunit-dev libogg-dev libopus-dev libvorbis-dev \
   libzip-dev libbullet-dev libopenal-dev mesa-common-dev ocl-icd-opencl-dev libnoise-dev libvdpau-dev \
-  libalut-dev libspdlog-dev libbz2-dev libcurl4 libcurl4-gnutls-dev libfmt-dev binutils-dev libeigen3-dev libglfw3-dev
+  libalut-dev libspdlog-dev libbz2-dev libcurl4 libcurl4-gnutls-dev libfmt-dev binutils-dev libeigen3-dev libglfw3-dev libglm-dev
 ```
 
 ## Testing
