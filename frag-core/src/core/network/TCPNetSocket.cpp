@@ -277,8 +277,8 @@ Ref<NetSocket> TCPNetSocket::accept(INetAddress &r_ip) {
 		throw SystemException(errno, std::system_category(), "Failed to accept TCP connection");
 	}
 
-	// TODO assign r_ip
-	IPAddress *ipAddress = reinterpret_cast<IPAddress *>(&r_ip);
+	/*	*/
+	IPAddress *ipAddress = dynamic_cast<IPAddress *>(&r_ip);
 	if (addr.ss_family == AF_INET) {
 		struct sockaddr_in *address = reinterpret_cast<struct sockaddr_in *>(&addr);
 		*ipAddress = IPAddress(&address->sin_addr, IPAddress::IPAddressType::IPAddress_Type_IPV4);

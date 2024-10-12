@@ -1,14 +1,11 @@
 #include "Network/TCPUDPAddress.h"
 #include "Network/IPAddress.h"
+#include <limits>
 
 using namespace fragcore;
 
-TCPUDPAddress::TCPUDPAddress(const IPAddress &ipaddr, unsigned int port) {
-
-	this->ipAddress = ipaddr;
-	this->port = port;
-}
+TCPUDPAddress::TCPUDPAddress(const IPAddress &ipaddr, unsigned int port) : IPAddress(ipaddr) { this->port = port; }
 
 bool TCPUDPAddress::isValid() const noexcept {
-	return this->getIPAddress().isValid() && this->port > 0 && this->port < 65536;
+	return IPAddress::isValid() && this->port > 0 && this->port <= std::numeric_limits<unsigned short>::max();
 }
