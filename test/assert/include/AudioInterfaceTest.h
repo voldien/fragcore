@@ -3,9 +3,8 @@
 #include "common.h"
 using namespace fragcore;
 
-class AudioInterfaceTest : public CommonBaseTest
-{
-protected:
+class AudioInterfaceTest : public CommonBaseTest {
+  protected:
 	void TearDown() override;
 
 	void SetUp() override;

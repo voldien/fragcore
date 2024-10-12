@@ -37,9 +37,9 @@ bool GeometryUtility::isConvex(const std::vector<Vector3> &points) {
 		v.y() = tmp.y() - p.y();
 		u = points[(i + 2) % points.size()];
 
-		if (i == 0) // in first loop direction is unknown, so save it in res
+		if (i == 0) { // in first loop direction is unknown, so save it in res
 			res = u.x() * v.y() - u.y() * v.x() + v.x() * p.y() - v.y() * p.x();
-		else {
+		} else {
 			/*	*/
 			int newres = u.x() * v.y() - u.y() * v.x() + v.x() * p.y() - v.y() * p.x();
 			if ((newres > 0 && res < 0) || (newres < 0 && res > 0)) {
@@ -90,7 +90,7 @@ AABB GeometryUtility::computeBoundingBox(const Vector3 *vertices, const size_t n
 
 BoundingSphere GeometryUtility::computeBoundingSphere(float *vertices, const size_t nrVertices, const size_t stride) {
 	Vector3 center;
-	float radius;
+	float radius = 0;
 	return BoundingSphere(center, radius);
 }
 
@@ -98,5 +98,5 @@ OBB GeometryUtility::computeBoundingOBB(float *vertices, const size_t nrVertices
 	// PCA
 	// LinAlg::PCA();
 
-	return OBB();
+	return {};
 }

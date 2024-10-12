@@ -1,4 +1,0 @@
-#ifndef FRAG_CORE_FRAG_COREEDITOR_H_
-#define FRAG_CORE_FRAG_COREEDITOR_H_
-
-#endif
