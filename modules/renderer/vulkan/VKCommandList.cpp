@@ -4,7 +4,6 @@
 #include "VKFrameBuffer.h"
 #include "VKRenderInterface.h"
 #include "VKRenderPipeline.h"
-#include "VKTexture.h"
 #include "internal_object_type.h"
 
 #include <vulkan/vulkan.h>
@@ -33,7 +32,7 @@ VKCommandList::VKCommandList(Ref<VKRenderInterface> &renderer) : renderer(render
 	cbAI.commandPool = _pool;
 	cbAI.commandBufferCount = 1;
 	cbAI.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-	VkResult result = vkAllocateCommandBuffers(renderer->getDevice()->getHandle(), &cbAI, &cmdbuffers[0]);
+	VkResult result = vkAllocateCommandBuffers(renderer->getDevice()->getHandle(), &cbAI, cmdbuffers.data());
 	VKS_VALIDATE(result);
 	cmdBuffer = cmdbuffers[0];
 
@@ -83,7 +82,7 @@ void VKCommandList::beginCurrentRenderPass() {
 	// renderPassInfo.renderArea.offset = {0, 0};
 	// renderPassInfo.renderArea.extent = vulkancore->swapChain->chainExtend;
 
-	VkClearValue clearColor = {{0.0f, 1.0f, 0.0f, 1.0f}};
+	VkClearValue clearColor = {{{0.0f, 1.0f, 0.0f, 1.0f}}};
 	renderPassInfo.clearValueCount = 1;
 	renderPassInfo.pClearValues = &clearColor;
 

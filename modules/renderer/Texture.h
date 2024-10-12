@@ -6,19 +6,18 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
+#include "ImageFormat.h"
 #ifndef _FRAG_CORE_TEXTURE_H_
 #define _FRAG_CORE_TEXTURE_H_ 1
-#include "RenderDesc.h"
-#include "RenderObject.h"
 #include "Sampler.h"
 #include <Core/Object.h>
 
@@ -30,6 +29,7 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC Texture : public Sampler {
 		friend class IRenderer;
+
 	  public:
 		/**
 		 *
@@ -122,7 +122,7 @@ namespace fragcore {
 			eReadWrite = 3, /*  */
 		};
 
-		virtual ~Texture() = default;
+		~Texture() override = default;
 
 		/**
 		 *
@@ -160,61 +160,61 @@ namespace fragcore {
 		 *
 		 * @param mode
 		 */
-		virtual void setFilterMode(FilterMode mode) = 0;
+		void setFilterMode(FilterMode mode) override = 0;
 
 		/**
 		 *
 		 * @return
 		 */
-		virtual FilterMode getFilterMode() = 0;
+		FilterMode getFilterMode() override = 0;
 
 		/**
 		 *
 		 * @param mode
 		 */
-		virtual void setWrapMode(WrapMode mode) = 0;
+		void setWrapMode(WrapMode mode) override = 0;
 
 		/**
 		 *
 		 * @return
 		 */
-		virtual WrapMode getWrapMode() = 0;
+		WrapMode getWrapMode() override = 0;
 
 		/**
 		 *
 		 * @param anisotropic
 		 */
-		virtual void setAnisotropic(float anisotropic) = 0;
+		void setAnisotropic(float anisotropic) override = 0;
 
 		/**
 		 *
 		 * @return
 		 */
-		virtual float getAnisotropic() const = 0;
+		float getAnisotropic() const override = 0;
 
-		virtual CompareFunc getCompare() const = 0;
+		CompareFunc getCompare() const override = 0;
 
-		virtual void setCompareFunc(CompareFunc compareFunc) = 0;
+		void setCompareFunc(CompareFunc compareFunc) override = 0;
 
-		virtual void setMipMapBaseLevel(unsigned int level) = 0;
+		void setMipMapBaseLevel(unsigned int level) override = 0;
 
-		unsigned int getMipMapBaseLevel() const = 0;
+		unsigned int getMipMapBaseLevel() const override = 0;
 
-		void setMipMapBias(float bias) = 0;
+		void setMipMapBias(float bias) override = 0;
 
-		float getMipMapBias(float bias) const = 0;
+		float getMipMapBias(float bias) const override = 0;
 
-		void setBorderColor(float color) = 0;
+		void setBorderColor(float color) override = 0;
 
-		float getBorderColor() const = 0;
+		float getBorderColor() const override = 0;
 
-		unsigned int setMaxLod(unsigned int level) = 0;
+		unsigned int setMaxLod(unsigned int level) override = 0;
 
-		unsigned int getMaxLod() const = 0;
+		unsigned int getMaxLod() const override = 0;
 
-		unsigned int setMinLod(unsigned int level) = 0;
+		unsigned int setMinLod(unsigned int level) override = 0;
 
-		unsigned int getMinLod() const = 0;
+		unsigned int getMinLod() const override = 0;
 
 		virtual Format getFormat() const = 0;
 

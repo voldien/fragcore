@@ -25,12 +25,12 @@ class AudioPlaybackExample {
 
 		/*	*/
 		std::vector<AudioPhysicalDevice> devices = iaudio->getDevices();
-		std::vector<AudioPhysicalDevice>::iterator it = devices.begin();
+		std::vector<AudioPhysicalDevice>::iterator device_it = devices.begin();
 
 		/*	*/
 		std::cout << "Physical Audio Devices" << std::endl;
-		for (; it != devices.end(); it++) {
-			std::cout << fmt::format("{}", (*it).getName()) << std::endl;
+		for (; device_it != devices.end(); device_it++) {
+			std::cout << fmt::format("{}", (*device_it).getName()) << std::endl;
 		}
 
 		AudioListenerDesc list_desc = {.position = Vector3(0, 0, 0), .rotation = Quaternion::Identity()};
@@ -42,10 +42,10 @@ class AudioPlaybackExample {
 		Ref<AudioSource> audioSource = Ref<AudioSource>(iaudio->createAudioSource(&source_desc));
 
 		AudioClipDesc clip_desc = {};
-		Ref<IO> f = Ref<IO>(fileSystem->openFile(argv[1], IO::READ));
-		f->seek(0, IO::SET);
+		Ref<IO> file = Ref<IO>(fileSystem->openFile(argv[1], IO::READ));
+		file->seek(0, IO::SET);
 
-		Ref<AudioDecoder> decoder = Ref<AudioDecoder>(new VorbisAudioDecoder(f));
+		Ref<AudioDecoder> decoder = Ref<AudioDecoder>(new VorbisAudioDecoder(file));
 		printf("bits ! %d\n", decoder->getSampleBitResolution());
 		clip_desc.decoder = decoder;
 		clip_desc.samples = decoder->getSampleBitResolution();

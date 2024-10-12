@@ -33,7 +33,7 @@ long int VKBuffer::getSize() {
 }
 
 void *VKBuffer::mapBuffer(VKBuffer::MapTarget target) {
-	void *pbuf;
+	void *pbuf = nullptr;
 	VkResult result;
 	VkMemoryRequirements memRequirements;
 	VkMemoryMapFlags mapTarget = 0;

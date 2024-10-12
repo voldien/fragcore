@@ -8,7 +8,7 @@
 #include <fmt/core.h>
 
 using namespace fragcore;
-typedef IRenderer *(*pcreateinternalrendering)(IConfig *config);
+using pcreateinternalrendering = IRenderer *(*)(IConfig *);
 
 IRenderer *RenderingFactory::createRendering(RenderingFactory::RenderingAPI renderingapi, IConfig *config) {
 	return RenderingFactory::createRendering(getInterfaceLibraryPath(renderingapi), config);
@@ -48,10 +48,6 @@ const char *RenderingFactory::getInterfaceLibraryPath(RenderingFactory::Renderin
 		return "libfragcore-rgl.so";
 	case RenderingFactory::Vulkan:
 		return "libfragcore-rvk.so";
-	case RenderingAPI::DirectX:
-		throw InvalidArgumentException("Not supported on Unix Systems.");
-	case RenderingAPI::OpenCL:
-		return "libfragcore-rcl.so";
 	default:
 		throw InvalidArgumentException("Not a valid rendering API enumerator.");
 	}
@@ -61,10 +57,6 @@ const char *RenderingFactory::getInterfaceLibraryPath(RenderingFactory::Renderin
 		return "libfragcore-rgl.dll";
 	case RenderingFactory::eVulkan:
 		return "libfragcore-rvk.dll";
-	case RenderingAPI::eDirectX:
-		return "libfragcore-rdx.dll";
-	case RenderingAPI::eOpenCL:
-		return "libfragcore-rcl.dll";
 	default:
 		throw InvalidArgumentException("Not a valid rendering API enumerator.");
 	}

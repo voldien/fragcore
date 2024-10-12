@@ -1,11 +1,7 @@
 #include "ShaderCompiler.h"
-#include "IO/BufferIO.h"
-#include "DataStructure/StackAllactor.h"
 #include "ShaderLanguage.h"
-#include "ShaderUtil.h"
 #include <spirv_glsl.hpp>
 #include <spirv_hlsl.hpp>
-#include <utility>
 #include <vector>
 //#include <spirv_cross/spirv_msl.hpp>
 

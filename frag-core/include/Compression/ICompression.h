@@ -17,9 +17,9 @@
  */
 #ifndef _FRAG_CORE_ICOMPRESSION_H_
 #define _FRAG_CORE_ICOMPRESSION_H_ 1
+#include "../Core/Ref.h"
 #include "../FragDef.h"
 #include "../IO/IO.h"
-#include "../Ref.h"
 
 namespace fragcore {
 

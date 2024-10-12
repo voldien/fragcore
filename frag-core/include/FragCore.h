@@ -63,4 +63,8 @@
 #include "Math3D/OBB.h"
 #include "Math3D/Plane.h"
 
+/*  */
+#include "Compression/GZIPCompression.h"
+#include "Compression/LZ4Compression.h"
+
 #endif

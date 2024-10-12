@@ -22,11 +22,11 @@
 namespace fragcore {
 	class FVDECLSPEC GZIPCompression : public ICompression {
 	  public:
-		virtual void inflate(Ref<IO> in, Ref<IO> out);
-		virtual void inflate(const void *in, size_t inSize, void *out, size_t size);
+		void inflate(Ref<IO> in, Ref<IO> out) override;
+		void inflate(const void *in, size_t inSize, void *out, size_t size) override;
 
-		virtual void deflate(Ref<IO> in, Ref<IO> out);
-		virtual void deflate(const void *in, size_t inSize, void *out, size_t size);
+		void deflate(Ref<IO> in, Ref<IO> out) override;
+		void deflate(const void *in, size_t inSize, void *out, size_t size) override;
 	};
 } // namespace fragcore
 

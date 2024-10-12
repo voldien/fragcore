@@ -101,4 +101,4 @@ void OpenALAudioSource::setPos(float position) { FAOPAL_VALIDATE(alSourcef(this-
 
 intptr_t OpenALAudioSource::getNativePtr() const { return (intptr_t)this->source; }
 
-OpenALAudioSource::OpenALAudioSource(AudioSourceDesc &desc, unsigned int source) : desc(desc), source(source) {}
+OpenALAudioSource::OpenALAudioSource(AudioSourceDesc &desc, unsigned int source) : source(source), desc(desc) {}

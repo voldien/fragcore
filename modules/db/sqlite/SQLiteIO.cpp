@@ -61,58 +61,58 @@ namespace fragcore {
 	/*
 	** Methods for IOFile
 	*/
-	static int memClose(sqlite3_file *);
+	static int memClose(sqlite3_file * /*pFile*/);
 
-	static int memRead(sqlite3_file *, void *, int iAmt, sqlite3_int64 iOfst);
+	static int memRead(sqlite3_file * /*pFile*/, void * /*zBuf*/, int iAmt, sqlite3_int64 iOfst);
 
-	static int memWrite(sqlite3_file *, const void *, int iAmt, sqlite3_int64 iOfst);
+	static int memWrite(sqlite3_file * /*pFile*/, const void * /*z*/, int iAmt, sqlite3_int64 iOfst);
 
-	static int memTruncate(sqlite3_file *, sqlite3_int64 size);
+	static int memTruncate(sqlite3_file * /*pFile*/, sqlite3_int64 size);
 
-	static int memSync(sqlite3_file *, int flags);
+	static int memSync(sqlite3_file * /*pFile*/, int flags);
 
-	static int memFileSize(sqlite3_file *, sqlite3_int64 *pSize);
+	static int memFileSize(sqlite3_file * /*pFile*/, sqlite3_int64 *pSize);
 
-	static int memLock(sqlite3_file *, int);
+	static int memLock(sqlite3_file * /*pFile*/, int /*eLock*/);
 
-	static int memUnlock(sqlite3_file *, int);
+	static int memUnlock(sqlite3_file * /*pFile*/, int /*eLock*/);
 
-	static int memCheckReservedLock(sqlite3_file *, int *pResOut);
+	static int memCheckReservedLock(sqlite3_file * /*pFile*/, int *pResOut);
 
-	static int memFileControl(sqlite3_file *, int op, void *pArg);
+	static int memFileControl(sqlite3_file * /*pFile*/, int op, void *pArg);
 
-	static int memSectorSize(sqlite3_file *);
+	static int memSectorSize(sqlite3_file * /*pFile*/);
 
-	static int memDeviceCharacteristics(sqlite3_file *);
+	static int memDeviceCharacteristics(sqlite3_file * /*pFile*/);
 
 	/*
 	** Methods for MemVfs
 	*/
-	static int memOpen(sqlite3_vfs *, const char *, sqlite3_file *, int, int *);
+	static int memOpen(sqlite3_vfs * /*pVfs*/, const char * /*zName*/, sqlite3_file * /*pFile*/, int /*flags*/, int * /*pOutFlags*/);
 
-	static int memDelete(sqlite3_vfs *, const char *zName, int syncDir);
+	static int memDelete(sqlite3_vfs * /*pVfs*/, const char *zName, int syncDir);
 
-	static int memAccess(sqlite3_vfs *, const char *zName, int flags, int *);
+	static int memAccess(sqlite3_vfs * /*pVfs*/, const char *zName, int flags, int * /*pResOut*/);
 
-	static int memFullPathname(sqlite3_vfs *, const char *zName, int, char *zOut);
+	static int memFullPathname(sqlite3_vfs * /*pVfs*/, const char *zPath, int /*nOut*/, char *zOut);
 
-	static void *memDlOpen(sqlite3_vfs *, const char *zFilename);
+	static void *memDlOpen(sqlite3_vfs * /*pVfs*/, const char *zPath);
 
-	static void memDlError(sqlite3_vfs *, int nByte, char *zErrMsg);
+	static void memDlError(sqlite3_vfs * /*pVfs*/, int nByte, char *zErrMsg);
 
 	static void (*memDlSym(sqlite3_vfs *pVfs, void *p, const char *zSym))(void);
 
-	static void memDlClose(sqlite3_vfs *, void *);
+	static void memDlClose(sqlite3_vfs * /*pVfs*/, void * /*pHandle*/);
 
-	static int memRandomness(sqlite3_vfs *, int nByte, char *zOut);
+	static int memRandomness(sqlite3_vfs * /*pVfs*/, int nByte, char *zBufOut);
 
-	static int memSleep(sqlite3_vfs *, int microseconds);
+	static int memSleep(sqlite3_vfs * /*pVfs*/, int nMicro);
 
-	static int memCurrentTime(sqlite3_vfs *, double *);
+	static int memCurrentTime(sqlite3_vfs * /*pVfs*/, double * /*pTimeOut*/);
 
-	static int memGetLastError(sqlite3_vfs *, int, char *);
+	static int memGetLastError(sqlite3_vfs * /*pVfs*/, int /*a*/, char * /*b*/);
 
-	static int memCurrentTimeInt64(sqlite3_vfs *, sqlite3_int64 *);
+	static int memCurrentTimeInt64(sqlite3_vfs * /*pVfs*/, sqlite3_int64 * /*p*/);
 
 	static sqlite3_vfs mem_vfs = {
 		1,						  /* iVersion */

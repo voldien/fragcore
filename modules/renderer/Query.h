@@ -6,12 +6,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
@@ -24,34 +24,33 @@ namespace fragcore {
 	 *
 	 */
 	class FVDECLSPEC QueryObject : public RenderObject {
-	public:
-		virtual ~QueryObject() = default;
+	  public:
+		~QueryObject() override = default;
 
-	public:
-
+	  public:
 		/**
 		 *
 		 */
 		enum Target {
-			Samples,               /*  */
+			Samples, /*  */
 			AnySamples,
 			AnySamplesInverted,
 
 			// GL_ANY_SAMPLES_PASSED_CONSERVATIVE
 			// GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN
-					PrimitiveGenerate,      /*  */
-			TimePassed,             /*  */
+			PrimitiveGenerate, /*  */
+			TimePassed,		   /*  */
 			eCurrentTime,
 			// GL_TIME_ELAPSED
-			//GL_TIMESTAMP
+			// GL_TIMESTAMP
 		};
 
 		enum Condition {
 			eNoWait = 0x1
 			// GL_QUERY_NO_WAIT​
 			// GL_QUERY_WAIT​
-			//GL_QUERY_BY_REGION_WAIT
-			//GL_QUERY_BY_REGION_NO_WAIT
+			// GL_QUERY_BY_REGION_WAIT
+			// GL_QUERY_BY_REGION_NO_WAIT
 		};
 
 		/**
@@ -61,7 +60,7 @@ namespace fragcore {
 		 */
 		virtual void begin(Target target, unsigned int index) = 0;
 
-		//TODO add for fetching the result.
+		// TODO add for fetching the result.
 		/**
 		 *
 		 * @param target
@@ -81,7 +80,6 @@ namespace fragcore {
 		 *
 		 */
 		virtual void endConditionalRenderer() = 0;
-
 	};
-}
+} // namespace fragcore
 #endif

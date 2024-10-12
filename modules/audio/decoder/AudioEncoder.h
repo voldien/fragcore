@@ -18,9 +18,9 @@
 #ifndef _FRAG_CORE_AUDIO_ENCODER_H_
 #define _FRAG_CORE_AUDIO_ENCODER_H_ 1
 #include "../AudioTypes.h"
-#include <Core/IO/IO.h>
 #include <Core/Ref.h>
 #include <Core/SmartReference.h>
+#include <IO/IO.h>
 #include <ogg/ogg.h>
 #include <opus/opus.h>
 #include <vorbis/codec.h>
@@ -35,7 +35,7 @@ namespace fragcore {
 	class FVDECLSPEC AudioEncoder : public SmartReference {
 	  public:
 		AudioEncoder(Ref<IO> &io) { this->io = io; }
-		 ~AudioEncoder() override {}
+		~AudioEncoder() override {}
 
 		/**
 		 * @brief Get the Format object
