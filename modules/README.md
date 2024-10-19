@@ -1,6 +1,5 @@
 # Builtin Modules
 
-
 ## AudioDecoder
 
 ## OpenAL
@@ -8,8 +7,6 @@
 ```bash
 apt install libopenal-dev libalut-dev
 ```
-
-## FMOD
 
 ### Rendering Interface
 
@@ -49,15 +46,7 @@ apt install libbullet-dev
 
 Nvidia PhysX
 
-## RPC
 
-Remote procedure call, remote physic,
-
-### Font
-
-```bash
-apt install libfreetype-dev 
-```
 
 ## Communication Protocols
 

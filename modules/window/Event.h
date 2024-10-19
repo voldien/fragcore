@@ -6,17 +6,17 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _FRAGCORE_EVENT_H_
-#define _FRAGCORE_EVENT_H_ 1
+#ifndef _FRAGCORE_WINDOW_EVENT_H_
+#define _FRAGCORE_WINDOW_EVENT_H_ 1
 #include "Window.h"
 #include <FragCore.h>
 
@@ -25,9 +25,7 @@ namespace fragcore {
 	/**
 	 *
 	 */
-	using Point = struct point_t {
-		int x, y; /*	*/
-	};
+	using Point = struct point_t { int x, y; /*	*/ };
 
 	/**
 	 *
@@ -50,37 +48,33 @@ namespace fragcore {
 /**
  *	Event flag.
  */
-#define EX_EVENT_KEY 0x1				  /*	Any key at any state.	*/
-#define EX_EVENT_KEY_RELEASE 0x2		  /*	Any key in release state.	*/
-#define EX_EVENT_KEY_PRESSED 0x4		  /*	Any key in pressed state.	*/
-#define EX_EVENT_MOUSE 0x8				  /*	*/
-#define EX_EVENT_MOUSE_PRESSED 0x10		  /*	On any mouse button pressed.	*/
-#define EX_EVENT_MOUSE_RELEASED 0x20	  /*	On any mouse button released.	*/
-#define EX_EVENT_SIZE 0x40				  /*	On window size change.	*/
-#define EX_EVENT_RESIZE 0x40			  /*	TODO fix, does not really work.	*/
-#define EX_EVENT_SYSTEM 0x80			  /*	On system event.	*/
-#define EX_EVENT_MOUSEWHEEL 0x100		  /*	*/
-#define EX_EVENT_JOYSTICK 0x200			  /*	*/
-#define EX_EVENT_TOUCH 0x400			  /*	*/
-#define EX_EVENT_DROP 0x800				  /*	*/
-#define EX_EVENT_QUIT 0x1000			  /*	*/
-#define EX_EVENT_MOUSE_MOTION 0x2000	  /*	*/
-#define EX_EVENT_EXPOSE 0x4000			  /*	*/
-#define EX_EVENT_ON_FOCUSE 0x8000		  /*	On window in focus.	*/
-#define EX_EVENT_ON_UNFOCUSE 0x10000	  /*	On window unfocus.	*/
-#define EX_EVENT_WINDOW_MOVE 0x20000	  /*	*/
-#define EX_EVENT_WINDOW_DESTROYED 0x40000 /*	*/
-#define EX_EVENT_WINDOW_REPARENT 0x80000  /*	*/
-#define EX_EVENT_WINDOW_HIDE 0x100000	  /*	*/
-#define EX_EVENT_WINDOW_SHOW 0x200000	  /*	*/
+#define FV_EVENT_KEY 0x1				  /*	Any key at any state.	*/
+#define FV_EVENT_KEY_RELEASE 0x2		  /*	Any key in release state.	*/
+#define FV_EVENT_KEY_PRESSED 0x4		  /*	Any key in pressed state.	*/
+#define FV_EVENT_MOUSE 0x8				  /*	*/
+#define FV_EVENT_MOUSE_PRESSED 0x10		  /*	On any mouse button pressed.	*/
+#define FV_EVENT_MOUSE_RELEASED 0x20	  /*	On any mouse button released.	*/
+#define FV_EVENT_SIZE 0x40				  /*	On window size change.	*/
+#define FV_EVENT_RESIZE 0x40			  /*	TODO fix, does not really work.	*/
+#define FV_EVENT_SYSTEM 0x80			  /*	On system event.	*/
+#define FV_EVENT_MOUSEWHEEL 0x100		  /*	*/
+#define FV_EVENT_JOYSTICK 0x200			  /*	*/
+#define FV_EVENT_TOUCH 0x400			  /*	*/
+#define FV_EVENT_DROP 0x800				  /*	*/
+#define FV_EVENT_QUIT 0x1000			  /*	*/
+#define FV_EVENT_MOUSE_MOTION 0x2000	  /*	*/
+#define FV_EVENT_EXPOSE 0x4000			  /*	*/
+#define FV_EVENT_ON_FOCUSE 0x8000		  /*	On window in focus.	*/
+#define FV_EVENT_ON_UNFOCUSE 0x10000	  /*	On window unfocus.	*/
+#define FV_EVENT_WINDOW_MOVE 0x20000	  /*	*/
+#define FV_EVENT_WINDOW_DESTROYED 0x40000 /*	*/
+#define FV_EVENT_WINDOW_REPARENT 0x80000  /*	*/
+#define FV_EVENT_WINDOW_HIDE 0x100000	  /*	*/
+#define FV_EVENT_WINDOW_SHOW 0x200000	  /*	*/
 
-	using SystemEvent = struct system_event_t {
-		unsigned int message; /**/
-	};
+	using SystemEvent = struct system_event_t { unsigned int message; /**/ };
 
-	using JoyStickEvent = struct joy_stick_event_t {
-		unsigned char button[5]; /**/
-	};
+	using JoyStickEvent = struct joy_stick_event_t { unsigned char button[5]; /**/ };
 
 	using JoySticMoveEvent = struct joystick_move_event_t {
 
@@ -110,9 +104,7 @@ namespace fragcore {
 		int ydelta; /**/
 	};
 
-	using WinButtonEvent = struct win_button_event_t {
-		unsigned char button; /**/
-	};
+	using WinButtonEvent = struct win_button_event_t { unsigned char button; /**/ };
 
 	using MouseWheelEvent = struct mouse_wheel_event_t {
 		int delta; /**/
@@ -145,9 +137,7 @@ namespace fragcore {
 		float pressure;		   /*              */
 	};
 
-	using EventDestroyedWindow = struct window_destroy_t {
-		Window *window; /*	*/
-	};
+	using EventDestroyedWindow = struct window_destroy_t { Window *window; /*	*/ };
 
 	using WindowReparent = struct window_reparent_t {
 		Window *parent; /*	*/

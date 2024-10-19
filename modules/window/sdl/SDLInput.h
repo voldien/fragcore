@@ -32,11 +32,11 @@ namespace fragcore {
 		SDLInput() = default;
 
 		void update() noexcept override;
-		bool anyKey() noexcept override;
 
-		// bool getKey() override;
-		// bool getKeyPressed() override;
-		// bool getKeyReleased() override;
+		bool anyKey() noexcept override;
+		bool getKey(const unsigned int key) override;
+		bool getKeyPressed(const unsigned int key_down) override;
+		bool getKeyReleased(const unsigned int key_released) override;
 
 		bool getMousePosition(int *positionX, int *positionY) noexcept override;
 		Vector2 getMouseScroll() const noexcept override;

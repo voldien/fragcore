@@ -13,7 +13,6 @@
 #include "GLSampler.h"
 #include "GLSync.h"
 #include "GLTexture.h"
-#include "GLViewport.h"
 #include "internal_object_type.h"
 #include <../RenderDesc.h>
 #include <../RendererWindow.h>
@@ -234,7 +233,7 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 
 	/*  Set for core support or not for GLEW.   */
 	// TODO resolve.
-	if (1) {
+	if (true) {
 		glewExperimental = GL_TRUE;
 	} else {
 		glewExperimental = GL_FALSE;
@@ -291,51 +290,6 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 
 	this->setDebug(this->debug);
 	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
-
-	// TODO, add support for version without viewports.
-	/*  Create default viewport object. */
-	// this->defaultViewport = new ViewPort();
-	// // this->defaultViewport->iRenderer = this;
-	// GLViewPort *glViewPort = new GLViewPort();
-	// glViewPort->viewport = 0;
-	// // this->defaultViewport->pdata = glViewPort;
-	// for (int i = 0; i < this->capability.sMaxViewPorts - 1; i++) {
-	// 	ViewPort *virtualView = new ViewPort();
-	// 	// virtualView->iRenderer = this;
-	// 	GLViewPort *glViewPort = new GLViewPort();
-	// 	glViewPort->viewport = i + 1;
-	// 	// virtualView->pdata = glViewPort;
-	// 	this->viewports.push_back(virtualView);
-	// }
-
-	this->defaultFrameBuffer = new GLFrameBuffer();
-	GLFrameBuffer *frameBufferObject = new GLFrameBuffer();
-	frameBufferObject->framebuffer = 0;
-	frameBufferObject->numtextures = 1;
-	// this->defaultFrameBuffer->pdata = frameBufferObject;
-	// this->defaultFrameBuffer->iRenderer = this;
-	Texture *framebuffers[] = {new FrameBufferTexture()};
-	frameBufferObject->desc.attach = (Texture **)&framebuffers;
-	// frameBufferObject->desc.nrAttachments = 1;
-	// frameBufferObject->desc.attach[0]->iRenderer = this;
-	GLenum drawbuffers[] = {GL_FRONT, GL_BACK};
-	// glNamedFramebufferDrawBuffers(0, 2, drawbuffers);
-
-	// TODO determine how to utualize the PBO.
-	/*  Create PBO for image transfer. */
-	// BufferDesc pbo = {};
-	// pbo.size = 0;
-	// pbo.data = nullptr;
-	// pbo.hint = (BufferDesc::BufferHint)(BufferDesc::eStream | BufferDesc::eWrite);
-	// pbo.type = BufferDesc::ePixelUnpack;
-	// this->pboUnPack = this->createBuffer(&pbo);
-
-	// /*  Create PBO for image transfer. */
-	// pbo.size = 0;
-	// pbo.data = nullptr;
-	// pbo.hint = (BufferDesc::BufferHint)(BufferDesc::eStream | BufferDesc::eWrite);
-	// pbo.type = BufferDesc::ePixelPack;
-	// this->pboPack = this->createBuffer(&pbo);
 }
 
 GLRendererInterface::~GLRendererInterface() {
@@ -346,13 +300,8 @@ GLRendererInterface::~GLRendererInterface() {
 	delete this->defaultFrameBuffer;
 	//	this->deleteFrameBuffer(this->defaultFrameBuffer);
 
-	// TODO release all the viewports.
-
 	/*  Unbind opengl context.  */
 	SDL_GL_MakeCurrent(nullptr, nullptr);
-
-	// if (this->drawwindow)
-	//	SDL_DestroyWindow(this->drawwindow);
 
 	if (this->openglcontext) {
 		SDL_GL_DeleteContext(this->openglcontext);
@@ -700,40 +649,6 @@ RenderPipeline *GLRendererInterface::createRenderPipeline(const RenderPipelineDe
 	unsigned int pipeline = 0;
 
 	GLRenderPipeline *programPipeline = new GLRenderPipeline();
-
-	// glCreateProgramPipelines(1, &pipeline);
-	// checkError();
-
-	// if (desc->v) {
-	// 	GLShaderObject *v = (GLShaderObject *)desc->v;
-	// 	glUseProgramStages(pipeline, GL_VERTEX_SHADER_BIT, v->program);
-	// 	pipe->v = desc->v;
-	// }
-	// if (desc->f) {
-	// 	GLShaderObject *f = (GLShaderObject *)desc->f;
-	// 	glUseProgramStages(pipeline, GL_FRAGMENT_SHADER_BIT, f->program);
-	// 	pipe->f = desc->f;
-	// }
-	// if (desc->g) {
-	// 	GLShaderObject *g = (GLShaderObject *)desc->g;
-	// 	glUseProgramStages(pipeline, GL_GEOMETRY_SHADER_BIT, g->program);
-	// 	pipe->g = desc->g;
-	// }
-	// if (desc->tc) {
-	// 	GLShaderObject *tc = (GLShaderObject *)desc->c;
-	// 	glUseProgramStages(pipeline, GL_TESS_CONTROL_SHADER_BIT, tc->program);
-	// 	pipe->tc = desc->tc;
-	// }
-	// if (desc->te) {
-	// 	GLShaderObject *te = (GLShaderObject *)desc->te;
-	// 	glUseProgramStages(pipeline, GL_TESS_EVALUATION_SHADER_BIT, te->program);
-	// 	pipe->te = desc->te;
-	// }
-	// if (desc->c) {
-	// 	GLShaderObject *c = (GLShaderObject *)desc->c;
-	// 	glUseProgramStages(pipeline, GL_COMPUTE_SHADER_BIT, c->program);
-	// 	pipe->c = desc->c;
-	// }
 
 	GLint status;
 	glValidateProgramPipeline(pipeline);

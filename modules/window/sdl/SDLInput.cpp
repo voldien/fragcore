@@ -8,16 +8,15 @@ using namespace fragcore;
 void SDLInput::update() noexcept {
 	const uint32_t mask = SDL_GetMouseState(&this->x, &this->y);
 
-
 	this->mouseDown.set(static_cast<size_t>(MouseButton::LEFT_BUTTON),
-							(SDL_BUTTON_LMASK & mask) != 0 &&
-								!this->mousePressed[static_cast<size_t>(MouseButton::LEFT_BUTTON)]);
+						(SDL_BUTTON_LMASK & mask) != 0 &&
+							!this->mousePressed[static_cast<size_t>(MouseButton::LEFT_BUTTON)]);
 	this->mouseDown.set(static_cast<size_t>(MouseButton::RIGHT_BUTTON),
-							(SDL_BUTTON_RMASK & mask) != 0 &&
-								!this->mousePressed[static_cast<size_t>(MouseButton::RIGHT_BUTTON)]);
+						(SDL_BUTTON_RMASK & mask) != 0 &&
+							!this->mousePressed[static_cast<size_t>(MouseButton::RIGHT_BUTTON)]);
 	this->mouseDown.set(static_cast<size_t>(MouseButton::MIDDLE_BUTTON),
-							(SDL_BUTTON_MMASK & mask) != 0 &&
-								!this->mousePressed[static_cast<size_t>(MouseButton::MIDDLE_BUTTON)]);
+						(SDL_BUTTON_MMASK & mask) != 0 &&
+							!this->mousePressed[static_cast<size_t>(MouseButton::MIDDLE_BUTTON)]);
 
 	this->mouseReleased.set(static_cast<size_t>(MouseButton::LEFT_BUTTON),
 							(SDL_BUTTON_LMASK & mask) == 0 &&
@@ -34,10 +33,27 @@ void SDLInput::update() noexcept {
 	this->mousePressed.set(static_cast<size_t>(MouseButton::MIDDLE_BUTTON), (SDL_BUTTON_MMASK & mask) != 0);
 }
 
-bool SDLInput::anyKey() noexcept { return false; }
-// bool SDLInput::getKey() noexcept { return false; }
-// bool SDLInput::getKeyPressed() noexcept { return false; }
-// bool SDLInput::getKeyReleased() noexcept { return false; }
+bool SDLInput::anyKey() noexcept {
+	const Uint8 *state = SDL_GetKeyboardState(nullptr);
+
+	return false;
+}
+
+bool SDLInput::getKey(const unsigned int key) {
+	const Uint8 *state = SDL_GetKeyboardState(nullptr);
+
+	return state[key];
+}
+bool SDLInput::getKeyPressed(const unsigned int key_down) {
+	const Uint8 *state = SDL_GetKeyboardState(nullptr);
+
+	return state[key_down];
+}
+bool SDLInput::getKeyReleased(const unsigned int key_released) {
+	const Uint8 *state = SDL_GetKeyboardState(nullptr);
+
+	return state[key_released];
+}
 
 bool SDLInput::getMousePosition(int *positionX, int *positionY) noexcept {
 

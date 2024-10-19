@@ -6,12 +6,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
@@ -54,9 +54,11 @@ namespace fragcore {
 		// TODO determine where it shall be located within the project.
 		class FVDECLSPEC TaskFunc : public Task {
 		  public:
-			template <class Function, class... Args> explicit TaskFunc(Function &&f, Args &&... args) {}
+			template <class Function, class... Args> explicit TaskFunc(Function &&function, Args &&... args) {}
 			void Execute() noexcept override {}
 			void Complete() noexcept override {}
+
+		  private:
 		};
 
 	  public:
@@ -70,9 +72,8 @@ namespace fragcore {
 		virtual void addTask(Task *task) = 0;
 
 		template <class Function, class... Args> void addTask(Function &&func, Args &&... args) {
-
 			TaskFunc task(func, args...);
-			//			this->addTask(&task);
+			this->addTask(&task);
 		}
 
 		/**

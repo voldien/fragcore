@@ -15,35 +15,17 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _FRAGCORE_OCTREE_H_
-#define _FRAGCORE_OCTREE_H_ 1
-#include <FragCore.h>
+#ifndef _FRAG_CORE_IMAGE_UTIL_H_
+#define _FRAG_CORE_IMAGE_UTIL_H_ 1
+#include "Image.h"
 
 namespace fragcore {
-	
-	template <class T> class Octree {
-		using Node = struct node {
-			Octree *m[8];
-			T element;
-		};
 
+	class FVDECLSPEC ImageUtil {
 	  public:
-		Octree() {
-			nodes = nullptr;
-			nrOfElements = 0;
-			reserved = 0;
-		}
-
-		Octree(const Octree &octree) {}
-
-		~Octree() {}
-
-		void resize(int n) { nodes = realloc(nodes, sizeof(Node) * n); }
-
-		Node *nodes;
-		unsigned int nrOfElements;
-		unsigned int reserved;
+		static Image convert2NormalMap(const Image &image);
 	};
+
 } // namespace fragcore
 
 #endif

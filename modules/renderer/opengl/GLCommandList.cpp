@@ -1,5 +1,4 @@
 #include "GLCommandList.h"
-#include "internal_object_type.h"
 #include <GL/glew.h>
 
 using namespace fragcore;

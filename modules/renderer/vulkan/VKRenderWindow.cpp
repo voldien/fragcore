@@ -9,6 +9,9 @@
 #include <SDLWindowManager.h>
 #include <fmt/core.h>
 #include <vulkan/vulkan.h>
+
+#include <cstddef>
+
 using namespace fragcore;
 using namespace fvkcore;
 
@@ -90,7 +93,8 @@ bool VKRenderWindow::assertConfigAttributes(const fragcore::IConfig *iConfig) { 
 
 float VKRenderWindow::getGamma() const {
 	uint16_t ramp[256 * 3];
-	int err = SDL_GetWindowGammaRamp(this->window, &ramp[256 * 0], &ramp[256 * 1], &ramp[256 * 2]);
+	int err = SDL_GetWindowGammaRamp(this->window, &ramp[static_cast<ptrdiff_t>(256 * 0)],
+									 &ramp[static_cast<ptrdiff_t>(256 * 1)], &ramp[static_cast<ptrdiff_t>(256 * 2)]);
 	if (err == -1) {
 		throw NotSupportedException(SDL_GetError());
 	}
@@ -102,7 +106,8 @@ void VKRenderWindow::setGamma(float gamma) {
 	uint16_t ramp[256 * 3] = {0};
 
 	this->calculateGammaLookupTable<float, uint16_t>(gamma, ramp);
-	int err = SDL_SetWindowGammaRamp(this->window, &ramp[256 * 0], &ramp[256 * 1], &ramp[256 * 2]);
+	int err = SDL_SetWindowGammaRamp(this->window, &ramp[static_cast<ptrdiff_t>(256 * 0)],
+									 &ramp[static_cast<ptrdiff_t>(256 * 1)], &ramp[static_cast<ptrdiff_t>(256 * 2)]);
 	if (err == -1) {
 		throw NotSupportedException("Failed to set window gamma {}: {}", gamma, SDL_GetError());
 	}
@@ -285,8 +290,8 @@ void VKRenderWindow::swapBuffer() {
 	/*	*/
 	presentInfo.pImageIndices = &imageIndex;
 
-	//result = vkQueuePresentKHR(this->renderer->device->getDefaultPresent(), &presentInfo);
-	//if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR) {
+	// result = vkQueuePresentKHR(this->renderer->device->getDefaultPresent(), &presentInfo);
+	// if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR) {
 	//	// framebufferResized = false;
 	//	recreateSwapChain();
 	//} else if (result != VK_SUCCESS) {
@@ -593,10 +598,12 @@ VkImageView VKRenderWindow::getDefaultImageView() const {
 VkFormat VKRenderWindow::getDefaultImageFormat() const noexcept { return this->swapChain.swapChainImageFormat; }
 
 VkQueue VKRenderWindow::getDefaultGraphicQueue() const {
-	return 0; /*this->renderer->device->getDefaultGraphicQueue(); */
+	return nullptr; /*this->renderer->device->getDefaultGraphicQueue(); */
 }
 
-VkQueue VKRenderWindow::getDefaultComputeQueue() const { return 0; /*this->renderer->device->getDefaultCompute(); */ }
+VkQueue VKRenderWindow::getDefaultComputeQueue() const {
+	return nullptr; /*this->renderer->device->getDefaultCompute(); */
+}
 
 const std::vector<VkImage> &VKRenderWindow::getSwapChainImages() const noexcept {
 	return this->swapChain.swapChainImages;

@@ -89,7 +89,7 @@ namespace fragcore {
 		 * @param io
 		 * @return std::vector<T>
 		 */
-		template <typename T> static std::vector<T> readFile(Ref<IO> &io) {
+		template <typename T> static std::vector<T> readFileData(Ref<IO> &io) {
 
 			size_t fileSize = (size_t)io->length();
 			std::vector<T> buffer(fileSize / sizeof(T));

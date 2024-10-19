@@ -42,8 +42,9 @@ void GLTexture::bindImage(unsigned int index, int level, MapTarget target, Forma
 		GLenum gformat = GLHelper::getImageInternalFormat(format);
 
 		glBindImageTexture(index, this->texture, level, GL_FALSE, 0, access, gformat);
-	} else
+	} else {
 		throw RuntimeException("glBindImageTexture not supported");
+	}
 }
 
 bool GLTexture::isValid() { return glIsTexture(this->texture) == GL_TRUE; }
@@ -190,9 +191,8 @@ GLTexture::CompareFunc GLTexture::getCompare() const {
 
 	if (glGetTextureParameterfv) {
 		return GLTexture::CompareFunc::NoCompare;
-	} else {
-		return GLTexture::CompareFunc::NoCompare;
 	}
+	return GLTexture::CompareFunc::NoCompare;
 }
 
 void GLTexture::setCompareFunc(CompareFunc compareFunc) {
@@ -303,8 +303,9 @@ void *GLTexture::mapTexture(Format format, unsigned int level) {
 void GLTexture::unMapTexture() {
 
 	glUnmapBufferARB(GL_PIXEL_PACK_BUFFER);
-	if (glInvalidateBufferData)
+	if (glInvalidateBufferData) {
 		glInvalidateBufferData(this->pbo);
+	}
 	glDeleteBuffers(1, &this->pbo);
 	this->pbo = 0;
 }
@@ -335,7 +336,7 @@ void GLTexture::setPixels(Format format, unsigned int level, const void *pixels,
 	}
 }
 
-void *GLTexture::getPixels(TextureFormat format, unsigned int level, unsigned long *nBytes) {
+void *GLTexture::getPixels(ImageFormat format, unsigned int level, unsigned long *nBytes) {
 
 	unsigned int width = this->width();
 	unsigned int height = this->height();

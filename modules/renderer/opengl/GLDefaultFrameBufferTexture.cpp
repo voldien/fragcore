@@ -1,9 +1,6 @@
 #include "../IRenderer.h"
-#include "../RenderObject.h"
-#include "../RendererWindow.h"
 #include "../Texture.h"
 #include "DefaultFrameBufferTexture.h"
-#include "GLRendererInterface.h"
 #include "internal_object_type.h"
 #include <GL/glew.h>
 
@@ -15,7 +12,7 @@ FrameBufferTexture::FrameBufferTexture() {
 	glGenBuffersARB(1, &this->pbo);
 	glBindBufferARB(GL_PIXEL_PACK_BUFFER, pbo);
 	// TODO improve
-	glBufferDataARB(GL_PIXEL_PACK_BUFFER, 4147200 * 4, nullptr,
+	glBufferDataARB(GL_PIXEL_PACK_BUFFER, static_cast<GLsizeiptrARB>(4147200 * 4), nullptr,
 					GL_DYNAMIC_COPY); // TODO deal with the allocation and etc.
 }
 

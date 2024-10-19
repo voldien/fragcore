@@ -40,9 +40,9 @@ namespace fragcore {
 		};
 
 		virtual bool anyKey() noexcept = 0;
-		// virtual bool getKey() = 0;
-		// virtual bool getKeyPressed() = 0;
-		// virtual bool getKeyReleased() = 0;
+		virtual bool getKey(const unsigned int key) = 0;
+		virtual bool getKeyPressed(const unsigned int key_down) = 0;
+		virtual bool getKeyReleased(const unsigned int key_released) = 0;
 
 		virtual bool getMousePosition(int *positionX, int *positionY) noexcept = 0;
 		virtual Vector2 getMouseScroll() const noexcept = 0;

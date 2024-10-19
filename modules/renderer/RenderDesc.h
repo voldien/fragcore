@@ -171,7 +171,7 @@ namespace fragcore {
 
 		// TODO Remove
 		Format internalformat;		 /*	Texture internal data type.	*/
-		TextureFormat pixelFormat;	 /*  */
+		ImageFormat pixelFormat;	 /*  */
 		GraphicFormat graphicFormat; /*  */
 
 		bool immutable; /**/
@@ -557,7 +557,7 @@ namespace fragcore {
 		bool sConditionalRendering;
 		bool sShaderBinary;
 		bool sVirtualTexture; /*  */
-		bool variableRateShading;
+		bool sVariableRateShading;
 
 		/*	*/
 		long int sMaxElementVertices;

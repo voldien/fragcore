@@ -29,16 +29,29 @@ namespace fragcore {
 	template <typename T = uint32_t> class FVDECLSPEC UIDGenerator {
 	  public:
 		using UIDType = T;
-
 	  public:
 		static_assert(std::is_arithmetic<UIDType>::value, "Must support artithmetic operations");
 		UIDGenerator() noexcept { this->nextUID = 0; }
-		UIDGenerator(UIDGenerator &&other) {}
-		UIDGenerator(const UIDGenerator &other) {}
-		~UIDGenerator() {}
+		UIDGenerator(UIDGenerator &&other) {
+			this->nextUID.store(other.nextUID);
+			this->uid.store(other.uid);
+		}
+		UIDGenerator(const UIDGenerator &other) {
+			this->nextUID.store(other.nextUID);
+			this->uid.store(other.uid);
+		}
+		~UIDGenerator() = default;
 
-		UIDGenerator &operator=(const UIDGenerator &other) { return *this; }
-		UIDGenerator &operator=(UIDGenerator &&other) { return *this; }
+		UIDGenerator &operator=(const UIDGenerator &other) {
+			this->nextUID.store(other.nextUID);
+			this->uid.store(other.uid);
+			return *this;
+		}
+		UIDGenerator &operator=(UIDGenerator &&other) {
+			this->nextUID.store(other.nextUID);
+			this->uid.store(other.uid);
+			return *this;
+		}
 
 		/**
 		 * @brief Get the Next U I D object

@@ -29,26 +29,26 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC Image : public Object {
 	  public:
-		Image(const unsigned int width, const unsigned int height, const TextureFormat format);
-		Image(const unsigned int width, const unsigned int height, const unsigned int layer,
-			  const TextureFormat format);
+		Image(const unsigned int width, const unsigned int height, const ImageFormat format);
+		Image(const unsigned int width, const unsigned int height, const unsigned int layer, const ImageFormat format);
 
-		Image(const Image &other) : Object(other) { Object::operator=(other); }
-		Image(Image &&other) { Object::operator=(other); }
+		Image(const Image &other);
+		Image(Image &&other);
+
+		Image &operator=(const Image &other);
+		Image &operator=(Image &&other);
 
 		~Image() override;
 
-		virtual unsigned int width() const noexcept { return this->w; }
-
-		virtual unsigned int height() const noexcept { return this->h; }
-
+		virtual unsigned int width() const noexcept { return this->m_width; }
+		virtual unsigned int height() const noexcept { return this->m_height; }
 		virtual unsigned int layers() const noexcept { return this->depth; }
+		virtual ImageFormat getFormat() const noexcept { return this->format; }
 
-		virtual TextureFormat getFormat() const noexcept { return this->format; }
+		virtual Color operator[](unsigned int index) const;
 
-		virtual Color operator[](unsigned int index) const { return Color::black(); }
-
-		virtual Color getColor(unsigned int x, unsigned int y, unsigned int z) const { return Color::black(); }
+		virtual Color getColor(unsigned int x_offset, unsigned int y_offset, unsigned int z_offset) const;
+		virtual void setColor(unsigned int x_offset, unsigned int y_offset, unsigned int z_offset, const Color &color);
 
 		virtual size_t getSize() const noexcept { return this->bufferSize; }
 
@@ -56,29 +56,27 @@ namespace fragcore {
 		virtual void setPixelData(void *srcPixelData, const size_t size); // TODO add offset
 
 	  protected:
-		void allocateMemory(unsigned int width, unsigned int height, unsigned depth, TextureFormat format);
+		void allocateMemory(unsigned int width, unsigned int height, unsigned depth, ImageFormat format);
+		unsigned int getPixelMemoryOffset(const unsigned int x_offset, const unsigned int y_offset,
+										  const unsigned int z_offset) const noexcept;
 
-	  public:
-		static size_t getTextureSize(unsigned int width, unsigned int height, unsigned depth, TextureFormat format);
-		/**
-		 * @brief Get the Format Pixel Size in bits
-		 *
-		 * @param format
-		 * @return size_t
-		 */
-		static size_t getFormatPixelSize(TextureFormat format);
+	  public: /*	*/
+		static size_t getTextureByteSize(const unsigned int width, const unsigned int height, const unsigned int depth,
+										 const ImageFormat format);
 
-		Image &convertImage(Image &image, TextureFormat textureFormat);
+		static unsigned int getFormatPixelBitSize(const ImageFormat format);
+
+		static Image &convertImage(Image &image, ImageFormat textureFormat);
 
 	  private:
-		unsigned int w;
-		unsigned int h;
+		unsigned int m_width;
+		unsigned int m_height;
 		unsigned int depth{1};
-		TextureFormat format;
+		ImageFormat format;
 
 		// TODO encpsulate object.
 		void *pixelData = nullptr;
-		size_t bufferSize;
+		size_t bufferSize = 0;
 	};
 } // namespace fragcore
 

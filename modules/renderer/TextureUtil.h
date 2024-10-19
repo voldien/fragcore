@@ -38,9 +38,9 @@ namespace fragcore {
 
 		/*	*/
 		static Texture *createTexture(IRenderer *renderer, unsigned int width, unsigned int height, const Ref<IO> &io,
-									  TextureFormat format, GraphicFormat graphicformat);
+									  ImageFormat format, GraphicFormat graphicformat);
 		static Texture *createTexture(IRenderer *renderer, unsigned int width, unsigned int height, const void *pixels,
-									  unsigned int size, TextureFormat format, GraphicFormat graphicformat);
+									  unsigned int size, ImageFormat format, GraphicFormat graphicformat);
 
 	  private: /*	Prevent one from creating an instance of this class.	*/
 		TextureUtil() = default;

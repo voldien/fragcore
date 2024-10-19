@@ -4,14 +4,14 @@
 #include <fmt/core.h>
 using namespace fragcore;
 
-ASyncHandle ASyncIO::asyncOpen(Ref<IO> &io) {
+ASyncHandle ASyncIO::asyncOpen(Ref<IO> &ioRef) {
 
 	/*	Check if scheduler is initialized.	*/
 	if (scheduler == nullptr) {
 		throw RuntimeException("Async not initialized with a scheduler object");
 	}
 	/*  Check parameters.   */
-	if (io == nullptr) {
+	if (ioRef == nullptr) {
 		throw InvalidArgumentException("Invalid IO reference.");
 	}
 
@@ -19,8 +19,8 @@ ASyncHandle ASyncIO::asyncOpen(Ref<IO> &io) {
 	const IO::IOOperation requiredIOReadSupported = static_cast<IO::IOOperation>(IO::OP_READ | IO::OP_WRITE);
 
 	/*	Check if IO operations are supported.	*/
-	if (!io->isOperationSupported(requiredIOReadSupported)) {
-		throw InvalidArgumentException("IO: {} requires read/write operation support", io->getName());
+	if (!ioRef->isOperationSupported(requiredIOReadSupported)) {
+		throw InvalidArgumentException("IO: {} requires read/write operation support", ioRef->getName());
 	}
 
 	/*	Generate new handle*/
@@ -29,7 +29,7 @@ ASyncHandle ASyncIO::asyncOpen(Ref<IO> &io) {
 	/*  Create async object.*/
 	AsyncObject *asyncObject = this->createObject(handle);
 	/*	*/
-	asyncObject->ref = io;
+	asyncObject->ref = ioRef;
 	asyncObject->sem = nullptr;
 	asyncObject->buffer = nullptr;
 	asyncObject->size = 0;
@@ -125,6 +125,31 @@ void ASyncIO::asyncWriteFile(ASyncHandle handle, char *buffer, unsigned int size
 }
 
 void ASyncIO::asyncWriteFile(ASyncHandle handle, Ref<IO> &io, AsyncComplete complete) { /*	*/
+
+	AsyncObject *ao = getObject(handle);
+
+	assert(ao);
+
+	if (!ao->ref->isWriteable()) {
+		throw RuntimeException("IO object is not writable {}", ao->ref->getUID());
+	}
+
+	/*  Assign variables.   */
+	ao->sem = new stdSemaphore();
+
+	ao->target = io;
+	ao->size = io->length();
+	ao->callback = complete;
+	ao->userData = nullptr;
+
+	/*  Reset status counter.   */
+	ao->status.nbytes = 0;
+	ao->status.offset = 0;
+
+	AsyncTask readTask(*ao);
+	readTask.callback = async_write;
+	readTask.userData = ao;
+	this->scheduler->addTask(&readTask);
 }
 
 Ref<IO> ASyncIO::getIO(ASyncHandle handle) const { return getObject(handle)->ref; }
@@ -185,30 +210,30 @@ void ASyncIO::async_open(Task *task) {
 
 void ASyncIO::async_read(Task *task) {
 	AsyncTask *asynctask = static_cast<AsyncTask *>(task);
-	AsyncObject *ao = &asynctask->asyncObject;
+	AsyncObject *async_obj = &asynctask->asyncObject;
 	const size_t block_size = 512;
 
-	ao->sem->lock();
+	async_obj->sem->lock();
 
-	Ref<IO> &io = ao->ref;
-	ao->status.offset = io->getPos();
-	while (ao->status.nbytes < ao->size) {
+	Ref<IO> &io = async_obj->ref;
+	async_obj->status.offset = io->getPos();
+	while (async_obj->status.nbytes < async_obj->size) {
 		/*	*/
-		long int nread = io->read(block_size, &ao->buffer[ao->status.nbytes]);
+		long int nread = io->read(block_size, &async_obj->buffer[async_obj->status.nbytes]);
 		if (nread <= 0) {
 			break;
 		}
 
-		ao->status.nbytes += nread;
-		ao->status.offset += nread;
+		async_obj->status.nbytes += nread;
+		async_obj->status.offset += nread;
 	}
 
 	/*  Finished.   */
-	if (ao->callback) {
-		ao->callback(nullptr, 0);
+	if (async_obj->callback) {
+		async_obj->callback(nullptr, 0);
 	}
 	/*  Finish and posted for the data is available.  */
-	ao->sem->unlock();
+	async_obj->sem->unlock();
 }
 
 void ASyncIO::async_read_io(Task *task) {
@@ -238,6 +263,7 @@ void ASyncIO::async_read_io(Task *task) {
 }
 
 void ASyncIO::async_write(Task *task) {
+
 	AsyncObject *ao = static_cast<AsyncObject *>(task->userData);
 	const size_t block_size = 512;
 	ao->sem->lock();

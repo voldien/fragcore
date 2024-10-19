@@ -30,29 +30,29 @@ namespace fragcore {
 	  public:
 		GLBuffer() = default;
 
-		virtual ~GLBuffer() = default;
+		 ~GLBuffer() override = default;
 
-		virtual void bind() override;
+		 void bind() override;
 
-		virtual void bind(unsigned int offset, unsigned int size) override;
+		 void bind(unsigned int offset, unsigned int size) override;
 
-		virtual void bindBase(unsigned int base) override;
+		 void bindBase(unsigned int base) override;
 
-		virtual void subData(const void *data, unsigned int offset, unsigned int size) override;
+		 void subData(const void *data, unsigned int offset, unsigned int size) override;
 
-		virtual void *getData(unsigned int offset, unsigned int size) override;
+		 void *getData(unsigned int offset, unsigned int size) override;
 
-		virtual bool isValid() override;
+		 bool isValid() override;
 
-		virtual long int getSize() override;
+		 long int getSize() override;
 
-		virtual void *mapBuffer(MapTarget target) override;
+		 void *mapBuffer(MapTarget target) override;
 
-		virtual void *mapBuffer(MapTarget target, unsigned long int offset, unsigned long int length) override;
+		 void *mapBuffer(MapTarget target, unsigned long int offset, unsigned long int length) override;
 
-		virtual void flush(unsigned long int offset, unsigned long int length) override;
+		 void flush(unsigned long int offset, unsigned long int length) override;
 
-		virtual void unMapBuffer() override;
+		 void unMapBuffer() override;
 
 		// virtual void clear(uint32_t i);
 		void setName(const std::string &name) override;

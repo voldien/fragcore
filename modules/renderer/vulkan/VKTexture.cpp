@@ -86,7 +86,7 @@ void VKTexture::unMapTexture() {
 
 void VKTexture::setPixels(Texture::Format format, unsigned int level, const void *pixels, unsigned long size) {}
 
-void *VKTexture::getPixels(TextureFormat format, unsigned int level, unsigned long *nBytes) { return nullptr; }
+void *VKTexture::getPixels(ImageFormat format, unsigned int level, unsigned long *nBytes) { return nullptr; }
 
 void VKTexture::clear() {}
 

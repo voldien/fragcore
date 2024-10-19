@@ -247,63 +247,63 @@ unsigned int GLHelper::getGraphicFormat(GraphicFormat graphicFormat) {
 	throw InvalidArgumentException("Invalid texture format : {}", magic_enum::enum_name(graphicFormat));
 }
 
-unsigned int GLHelper::getTextureFormat(TextureFormat textureFormat, unsigned int *pixelType) {
+unsigned int GLHelper::getTextureFormat(ImageFormat textureFormat, unsigned int *pixelType) {
 	switch (textureFormat) {
-	case TextureFormat::Alpha8:
+	case ImageFormat::Alpha8:
 		*pixelType = GL_UNSIGNED_BYTE;
 		return GL_ALPHA;
-	case TextureFormat::ARGB4444:
+	case ImageFormat::ARGB4444:
 		*pixelType = GL_UNSIGNED_SHORT_4_4_4_4;
 		return GL_RGB;
-	case TextureFormat::RGB24:
+	case ImageFormat::RGB24:
 		*pixelType = GL_UNSIGNED_BYTE;
 		return GL_RGBA;
-	case TextureFormat::RGBA32:
+	case ImageFormat::RGBA32:
 		*pixelType = GL_UNSIGNED_BYTE;
 		return GL_RGBA;
-	case TextureFormat::ARGB32:
+	case ImageFormat::ARGB32:
 		*pixelType = GL_UNSIGNED_BYTE;
 		return 0;
-	case TextureFormat::RGB565:
+	case ImageFormat::RGB565:
 		*pixelType = GL_UNSIGNED_SHORT_5_6_5;
 		return GL_RGB565;
-	case TextureFormat::R16:
+	case ImageFormat::R16:
 		break;
-	case TextureFormat::R8:
+	case ImageFormat::R8:
 		*pixelType = GL_UNSIGNED_BYTE;
 		return GL_RED;
-	case TextureFormat::DXT1:
+	case ImageFormat::DXT1:
 		break;
-	case TextureFormat::DXT5:
+	case ImageFormat::DXT5:
 		break;
-	case TextureFormat::RGBA4444:
+	case ImageFormat::RGBA4444:
 		*pixelType = GL_UNSIGNED_SHORT_4_4_4_4;
 		return GL_RGBA;
-	case TextureFormat::BGR24:
+	case ImageFormat::BGR24:
 		*pixelType = GL_UNSIGNED_BYTE;
 		return GL_BGR;
-	case TextureFormat::BGRA32:
+	case ImageFormat::BGRA32:
 		*pixelType = GL_UNSIGNED_BYTE;
 		return GL_BGRA;
-	case TextureFormat::RHalf:
+	case ImageFormat::RHalf:
 		*pixelType = GL_HALF_FLOAT;
 		return GL_RED;
-	case TextureFormat::RGHalf:
+	case ImageFormat::RGHalf:
 		*pixelType = GL_HALF_FLOAT;
 		return GL_RG;
-	case TextureFormat::RGBAHalf:
+	case ImageFormat::RGBAHalf:
 		*pixelType = GL_HALF_FLOAT;
 		return GL_RGBA;
-	case TextureFormat::RFloat:
+	case ImageFormat::RFloat:
 		*pixelType = GL_FLOAT;
 		return GL_RED;
-	case TextureFormat::RGFloat:
+	case ImageFormat::RGFloat:
 		*pixelType = GL_FLOAT;
 		return GL_RG;
-	case TextureFormat::RGBAFloat:
+	case ImageFormat::RGBAFloat:
 		*pixelType = GL_FLOAT;
 		return GL_RGBA;
-	case TextureFormat::YUY2:
+	case ImageFormat::YUY2:
 	default:
 		break;
 	}

@@ -10,8 +10,9 @@ using namespace fragcore;
 TaskScheduler::TaskScheduler() : TaskScheduler(-1) {}
 
 TaskScheduler::TaskScheduler(int cores) : sch(nullptr) {
-
-	marl::Scheduler *scheduler = new marl::Scheduler(marl::Scheduler::Config::allCores());
+	marl::Scheduler::Config config;
+	config.setWorkerThreadCount(cores);
+	marl::Scheduler *scheduler = new marl::Scheduler(config);
 	scheduler->bind();
 
 	this->sch = scheduler;

@@ -6,20 +6,20 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
 #ifndef _FRAG_CORE_GEOMETRYUTIL_H_
 #define _FRAG_CORE_GEOMETRYUTIL_H_ 1
-#include "Math3D/Math3D.h"
 #include "Math3D/AABB.h"
 #include "Math3D/BoundingSphere.h"
+#include "Math3D/Math3D.h"
 #include "Math3D/OBB.h"
 #include "Math3D/Plane.h"
 #include <Math3D/Triangle.h>
@@ -96,10 +96,16 @@ namespace fragcore {
 		static bool isConvex(const std::vector<Vector3> &points);
 		static bool isConcave(const std::vector<Vector3> &points);
 
-	  private:
-		GeometryUtility() = default;
-		GeometryUtility(const GeometryUtility &other) = default;
-		GeometryUtility(GeometryUtility &&other) = default;
+		struct Face {
+			uint Indices[3];
+		};
+
+		void convert2Adjcent(float *vertices, const size_t nrVertices, std::vector<unsigned int> &Indices, const size_t stride = sizeof(float) * 3);
+
+	  public:
+		GeometryUtility() = delete;
+		GeometryUtility(const GeometryUtility &other) = delete;
+		GeometryUtility(GeometryUtility &&other) = delete;
 	};
 } // namespace fragcore
 #endif

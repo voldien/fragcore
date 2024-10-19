@@ -60,7 +60,7 @@ namespace fragcore {
 		static unsigned int getCompareMode(fragcore::SamplerDesc::CompareFunc mode);
 
 		static unsigned int getGraphicFormat(fragcore::GraphicFormat graphicFormat);
-		static unsigned int getTextureFormat(fragcore::TextureFormat textureFormat, unsigned int *pixelType);
+		static unsigned int getTextureFormat(fragcore::ImageFormat textureFormat, unsigned int *pixelType);
 
 		static unsigned int getTextureFormat(fragcore::TextureDesc::Format format);
 		static unsigned int getInternalTextureFormat(fragcore::TextureDesc::Format format, bool sRGB,

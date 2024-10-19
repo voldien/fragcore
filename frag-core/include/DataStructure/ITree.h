@@ -98,7 +98,7 @@ namespace fragcore {
 			return chi;
 		}
 
-		virtual bool isChild(ITree<T> *item) const noexcept {
+		virtual bool isChild(ITree<T> *item) const {
 			for (unsigned int i = 0; i < getNumChildren(); i++) {
 				if (item == getChild(i)) {
 					return true;
@@ -109,12 +109,12 @@ namespace fragcore {
 
 		virtual int getNodeChildIndex(ITree<T> *node) noexcept {
 			ITree<T> *n = this->child;
-			int i = 0;
+			int index = 0;
 			while (n) {
 				if (n == node) {
-					return i;
+					return index;
 				}
-				i++;
+				index++;
 				n = n->child;
 			}
 			return -1;

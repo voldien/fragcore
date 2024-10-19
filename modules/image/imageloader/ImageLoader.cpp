@@ -1,4 +1,5 @@
 #include "ImageLoader.h"
+#include "ImageFormat.h"
 #include <FreeImage.h>
 #include <IO/IOUtil.h>
 #include <magic_enum.hpp>
@@ -18,7 +19,7 @@ Image ImageLoader::loadImage(Ref<IO> &io_in) {
 	FIBITMAP *firsbitmap;	   /**/
 	void *pixelData;		   /**/
 	size_t bitsPerPixel;	   /*	*/
-	TextureFormat imageFormat = TextureFormat::Alpha8;
+	ImageFormat imageFormat = ImageFormat::Alpha8;
 	size_t pixelSize = 0;		 /*	*/
 	size_t width, height, depth; /*	*/
 
@@ -76,16 +77,16 @@ Image ImageLoader::loadImage(Ref<IO> &io_in) {
 	case FIC_RGB:
 		switch (imageType) {
 		case FREE_IMAGE_TYPE::FIT_BITMAP:
-			imageFormat = TextureFormat::BGR24;
+			imageFormat = ImageFormat::BGR24;
 			break;
 		case FREE_IMAGE_TYPE::FIT_RGB16:
-			imageFormat = TextureFormat::RGB24;
+			imageFormat = ImageFormat::RGB24;
 			break;
 		case FREE_IMAGE_TYPE::FIT_RGBF:
-			imageFormat = TextureFormat::RGBFloat;
+			imageFormat = ImageFormat::RGBFloat;
 			break;
 		case FREE_IMAGE_TYPE::FIT_RGBAF:
-			imageFormat = TextureFormat::RGBAFloat;
+			imageFormat = ImageFormat::RGBAFloat;
 			break;
 		default:
 			throw NotSupportedException("None Supported (RGB) Color Type {} ", magic_enum::enum_name(imageType));
@@ -94,13 +95,13 @@ Image ImageLoader::loadImage(Ref<IO> &io_in) {
 	case FIC_RGBALPHA:
 		switch (imageType) {
 		case FREE_IMAGE_TYPE::FIT_BITMAP:
-			imageFormat = TextureFormat::BGRA32;
+			imageFormat = ImageFormat::BGRA32;
 			break;
 		case FREE_IMAGE_TYPE::FIT_RGBA16: // TODO add unsigned int
-			imageFormat = TextureFormat::RGBAHalf;
+			imageFormat = ImageFormat::RGBAHalf;
 			break;
 		case FREE_IMAGE_TYPE::FIT_RGBAF:
-			imageFormat = TextureFormat::RGBAFloat;
+			imageFormat = ImageFormat::RGBAFloat;
 			break;
 		default:
 			throw NotSupportedException("None Supported (RGBA) Color Type {} ", magic_enum::enum_name(imageType));
@@ -110,22 +111,22 @@ Image ImageLoader::loadImage(Ref<IO> &io_in) {
 	case FIC_MINISBLACK:
 		switch (imageType) {
 		case FREE_IMAGE_TYPE::FIT_BITMAP:
-			imageFormat = TextureFormat::Alpha8;
+			imageFormat = ImageFormat::Alpha8;
 			break;
 		case FREE_IMAGE_TYPE::FIT_FLOAT:
-			imageFormat = TextureFormat::RFloat;
+			imageFormat = ImageFormat::RFloat;
 			break;
 		case FREE_IMAGE_TYPE::FIT_UINT16:
-			imageFormat = TextureFormat::R16U;
+			imageFormat = ImageFormat::R16U;
 			break;
 		case FREE_IMAGE_TYPE::FIT_INT16:
-			imageFormat = TextureFormat::R16;
+			imageFormat = ImageFormat::R16;
 			break;
 		case FREE_IMAGE_TYPE::FIT_UINT32:
-			imageFormat = TextureFormat::R32U;
+			imageFormat = ImageFormat::R32U;
 			break;
 		case FREE_IMAGE_TYPE::FIT_INT32:
-			imageFormat = TextureFormat::R32;
+			imageFormat = ImageFormat::R32;
 			break;
 		default:
 			throw NotSupportedException("None Supported (Single Channel) Color Type {} ",
@@ -199,8 +200,8 @@ void ImageLoader::saveImage(Ref<IO> &io_in, const Image &Image, const FileFormat
 
 	/*  Allocate image buffer.  */
 	image = FreeImage_ConvertFromRawBits((BYTE *)pixels, Image.width(), Image.height(),
-										 (Image::getFormatPixelSize(Image.getFormat()) * Image.width()) / 8,
-										 Image::getFormatPixelSize(Image.getFormat()), 0x000000FF, 0x0000FF00,
+										 (Image::getFormatPixelBitSize(Image.getFormat()) * Image.width()) / 8,
+										 Image::getFormatPixelBitSize(Image.getFormat()), 0x000000FF, 0x0000FF00,
 										 0x00FF0000, FALSE);
 	if (image == nullptr) {
 		FreeImage_DeInitialise();

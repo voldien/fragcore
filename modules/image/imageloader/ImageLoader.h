@@ -32,6 +32,10 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC ImageLoader : public Object {
 	  public:
+		enum class FileFormat { Default, Png, Jpeg, Exr };
+		enum class Compression { None, Default };
+
+	  public:
 		ImageLoader() = default;
 		ImageLoader(const ImageLoader &other);
 		ImageLoader(ImageLoader &&other);
@@ -39,8 +43,7 @@ namespace fragcore {
 		ImageLoader &operator=(ImageLoader &&other);
 		~ImageLoader() override = default;
 
-		// TODO add support to load image in specific format.
-		Image loadImage(const std::string &path) {
+		Image loadImage(const std::string &path, const FileFormat fileformat = FileFormat::Default) {
 			FileSystem::createFileSystem();
 			Ref<IO> io_ref = Ref<IO>(FileSystem::getFileSystem()->openFile(path.c_str(), IO::IOMode::READ));
 			return loadImage(io_ref);
@@ -49,9 +52,6 @@ namespace fragcore {
 
 		void loadImageData(const std::string &path, unsigned int *width, unsigned int *height);
 
-		enum class FileFormat { Default, Png, Jpeg, Exr };
-
-		// TODO add fileformat enum.
 		void saveImage(const std::string &path, const Image &image, const FileFormat fileformat = FileFormat::Default) {
 			Ref<IO> io_out = Ref<IO>(new FileIO(path.c_str(), FileIO::WRITE));
 			saveImage(io_out, image, fileformat);

@@ -22,7 +22,7 @@ void TextureUtil::loadTexture(const Image &image, IRenderer *renderer, Texture *
 	/*  Texture.    */
 	desc.target = TextureDesc::Target::Texture2D;
 	desc.format = format;
-	desc.pixelFormat = (TextureFormat)format;
+	desc.pixelFormat = (ImageFormat)format;
 	desc.internalformat = internalformat;
 	desc.graphicFormat = (GraphicFormat)internalformat;
 	desc.type = type;
@@ -54,7 +54,7 @@ void TextureUtil::saveTexture(const Image &image, IRenderer *renderer, Texture *
 }
 
 Texture *TextureUtil::createTexture(IRenderer *renderer, unsigned int width, unsigned int height, const Ref<IO> &io,
-									TextureFormat format, GraphicFormat graphicformat) {
+									ImageFormat format, GraphicFormat graphicformat) {
 	long int size = 0;
 	void *pixels = nullptr;
 	// size = IOUtil::loadFileMem(io, &pixels);
@@ -65,7 +65,7 @@ Texture *TextureUtil::createTexture(IRenderer *renderer, unsigned int width, uns
 }
 
 Texture *TextureUtil::createTexture(IRenderer *renderer, unsigned int width, unsigned int height, const void *pixels,
-									unsigned int size, TextureFormat format, GraphicFormat graphicformat) {
+									unsigned int size, ImageFormat format, GraphicFormat graphicformat) {
 	/*  */
 	TextureDesc desc = {};
 	desc.width = width;

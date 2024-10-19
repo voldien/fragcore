@@ -256,7 +256,7 @@ namespace fragcore {
 		 * @param mipmap
 		 * @return
 		 */
-		virtual void *getPixels(TextureFormat format, unsigned int level,
+		virtual void *getPixels(ImageFormat format, unsigned int level,
 								unsigned long *nBytes) = 0; // TOOD add fvformatf.
 
 		// virtual bool UseSRGB();

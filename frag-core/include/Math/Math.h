@@ -6,20 +6,20 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
 #ifndef _FRAG_CORE_MATH_H_
 #define _FRAG_CORE_MATH_H_ 1
 #include "../FragDef.h"
-#include "../Math3D/Math3D.h"
 #include "../Math/Random.h"
+#include "../Math3D/Math3D.h"
 #include <cfloat>
 #include <cmath>
 #include <vector>
@@ -327,6 +327,7 @@ namespace fragcore {
 			const T sqr_2_pi_inverse = 1.0 / (standard_deviation * static_cast<T>(std::sqrt(2 * Math::PI)));
 
 			const T offset = static_cast<T>(height) / -2;
+			
 			// #pragma omp simd
 			for (unsigned int i = 0; i < height; i++) {
 
@@ -386,9 +387,9 @@ namespace fragcore {
 		/**
 		 *	Generate perlin noise value
 		 */
-		static float PerlinNoise(const float x, const float y) noexcept;
+		static float PerlinNoise(const float position_x, const float position_y) noexcept;
 		static float PerlinNoise(const Vector2 &point) noexcept;
-		static float PerlinNoise(const float x, const float y, const float z) noexcept;
+		static float PerlinNoise(const float position_x, const float position_y, const float position_z) noexcept;
 		static float PerlinNoise(const Vector3 &point) noexcept;
 
 		/**
@@ -416,8 +417,8 @@ namespace fragcore {
 			size_t sqrt_samples = (size_t)(std::sqrt(samples.size()));
 			for (size_t i = 0; i < sqrt_samples; i++) {
 				for (size_t j = 0; j < sqrt_samples; j++) {
-					T x = (static_cast<T>(i) + Random::rand<T>()) / static_cast<T>(sqrt_samples);
-					T y = (static_cast<T>(j) + Random::rand<T>()) / static_cast<T>(sqrt_samples);
+					const T x = (static_cast<T>(i) + Random::rand<T>()) / static_cast<T>(sqrt_samples);
+					const T y = (static_cast<T>(j) + Random::rand<T>()) / static_cast<T>(sqrt_samples);
 
 					samples[i * sqrt_samples + j] = x;
 					samples[i * sqrt_samples + j] = y;
@@ -453,7 +454,7 @@ namespace fragcore {
 			return size + (alignment - (size % alignment));
 		}
 
-	  public: /*	*/
+		/*	*/
 #pragma omp declare simd uniform(value) simdlen(4)
 		template <typename T> inline static T computeSigmoid(const T value) noexcept {
 			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,

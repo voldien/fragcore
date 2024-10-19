@@ -141,7 +141,7 @@ FrameBuffer *RenderTargetFactory::createColor(IRenderer *render, int width, int 
 	texdesc.height = height;
 	texdesc.format = TextureDesc::Format::RGBA;
 	texdesc.internalformat = TextureDesc::Format::RGBA;
-	texdesc.pixelFormat = TextureFormat::BGR24;
+	texdesc.pixelFormat = ImageFormat::BGR24;
 	texdesc.graphicFormat = GraphicFormat::R8G8B8_SRGB;
 	texdesc.type = TextureDesc::Type::UnsignedByte;
 	texdesc.srgb = 1;
