@@ -543,7 +543,6 @@ namespace fragcore {
 		bool sIndirectMultiDraw;
 		bool sSpritePoint;		   /*  Point sprite supported. */
 		bool sRenderTargetCubeMap; /*  */
-		bool sShadow;			   /*  */
 		bool sVertexShader;
 		bool sFragmentShader;	  /*  */
 		bool sGeometryShader;	  /*  */

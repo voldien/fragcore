@@ -3,6 +3,7 @@
 #include "marl/event.h"
 #include "marl/scheduler.h"
 #include "marl/task.h"
+#include "marl/thread.h"
 #include "marl/waitgroup.h"
 #include <exception>
 
@@ -11,7 +12,12 @@ TaskScheduler::TaskScheduler() : TaskScheduler(-1) {}
 
 TaskScheduler::TaskScheduler(int cores) : sch(nullptr) {
 	marl::Scheduler::Config config;
-	config.setWorkerThreadCount(cores);
+	if (cores == -1) {
+		config.setWorkerThreadCount(marl::Thread::numLogicalCPUs());
+	} else {
+		config.setWorkerThreadCount(cores);
+	}
+
 	marl::Scheduler *scheduler = new marl::Scheduler(config);
 	scheduler->bind();
 
@@ -52,8 +58,8 @@ void TaskScheduler::terminate() {
 	defer(scheduler->unbind());
 }
 
-void TaskScheduler::wait() {}
-void TaskScheduler::wait(Task *task) {}
+void TaskScheduler::wait() { marl::Scheduler *scheduler = static_cast<marl::Scheduler *>(this->sch); }
+void TaskScheduler::wait(Task *task) { marl::Scheduler *scheduler = static_cast<marl::Scheduler *>(this->sch); }
 
 void TaskScheduler::lock() {}
 void TaskScheduler::unLock() {}

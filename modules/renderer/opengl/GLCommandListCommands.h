@@ -27,11 +27,13 @@ namespace fragcore {
 	 * @brief
 	 *
 	 */
-	enum class GLCommandBufferCmd {
+	enum class GLCommandBufferCmd : unsigned int {
 		ClearImage,
 		ClearColor,
+		/*	*/
 		Dispatch,
 		DispatchIndirect,
+		/*	*/
 		PushGroupMarker,
 		PopGroupMarker,
 		InsertGroupMarker,
@@ -43,21 +45,24 @@ namespace fragcore {
 		UpdateBuffer,
 		BindVertexBuffers,
 		BindIndiceBuffer,
+		/*	*/
 		Draw,
 		DrawIndice,
 		DrawIndirect,
 		DrawIndirectIndices,
+		/*	*/
 		DepthBounds,
 		BindGraphicPipeline,
 		BindComputePipeline,
 
+		/*	*/
 		LineWidth,
 		DepthBias,
 		BlendConstant,
 		StencilCompare,
 		StencilWriteMask,
 		StencilReference,
-
+		/*	*/
 		QueryBegin,
 		QueryEnd,
 		BufferArrayBind,
@@ -99,7 +104,8 @@ namespace fragcore {
 
 	class FVDECLSPEC GLCommandDispatch : public GLCommandBase {
 	  public:
-		GLCommandDispatch(int x, int y, int z) : GLCommandBase(GLCommandBufferCmd::Dispatch), x(x), y(y), z(z) {}
+		GLCommandDispatch(const int x, const int y, const int z)
+			: GLCommandBase(GLCommandBufferCmd::Dispatch), x(x), y(y), z(z) {}
 		int x, y, z;
 	};
 
@@ -131,7 +137,7 @@ namespace fragcore {
 
 	class FVDECLSPEC GLViewPortCommand : public GLCommandBase {
 	  public:
-		GLViewPortCommand(int index, int x, int y, int width, int height)
+		GLViewPortCommand(const int index, const int x, const int y, const int width, const int height)
 			: GLCommandBase(GLCommandBufferCmd::ViewPort), index(index), x(x), y(y), width(width), height(height) {}
 
 		unsigned int index;
@@ -141,7 +147,7 @@ namespace fragcore {
 
 	class FVDECLSPEC GLScissorPortCommand : public GLCommandBase {
 	  public:
-		GLScissorPortCommand(int index, int x, int y, int width, int height)
+		GLScissorPortCommand(const int index, const int x, const int y, const int width, const int height)
 			: GLCommandBase(GLCommandBufferCmd::Scissor), index(index), x(x), y(y), width(width), height(height) {}
 
 		unsigned int index;
@@ -251,8 +257,8 @@ namespace fragcore {
 	class FVDECLSPEC GLDepthBoundsCommand : public GLCommandBase {
 	  public:
 		// TODO add the rest of require param
-		GLDepthBoundsCommand(float min, float max)
-			: GLCommandBase(GLCommandBufferCmd::DepthBounds), min(min), max(max) {}
+		GLDepthBoundsCommand(const float min_depth, const float max_depth)
+			: GLCommandBase(GLCommandBufferCmd::DepthBounds), min(min_depth), max(max_depth) {}
 
 		float min, max;
 	};

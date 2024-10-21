@@ -121,21 +121,6 @@ namespace fragcore {
 
 		// TODO add viewobject for handling as a object
 		ViewPort *getView(unsigned int i) override;
-		// TODO relocate to the render pipeline queue
-		/**
-		 *
-		 * @param bitflag
-		 */
-		virtual void clear(unsigned int bitflag); // TODO relocate to the default framebuffer.
-
-		/**
-		 * Set clear color RGBA.
-		 * @param r
-		 * @param g
-		 * @param b
-		 * @param a
-		 */
-		virtual void clearColor(float red, float green, float blue, float alpha); // TODO relocate to the framebuffer.
 
 		/**
 		 *	Set depth mask.
@@ -191,14 +176,6 @@ namespace fragcore {
 		// TODO add version with regiion specifiction.
 		virtual void copyTexture(const Texture *source, Texture *target);
 		// virtual void copyTexture(const Texture* source, Texture* target, int* sourceCoord, int* targetCoord);
-
-		/**
-		 * Dispatch compute program.
-		 * @param global global workgroup.
-		 * @param local local workgroup
-		 * @param offset offset in indirect buffer in number of bytes.
-		 */
-		virtual void dispatchCompute(unsigned int *global, unsigned int *local, unsigned int offset = 0);
 
 		// TODO add memory barrier.
 		virtual void memoryBarrier();

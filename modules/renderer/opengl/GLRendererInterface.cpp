@@ -4,6 +4,7 @@
 #include "../ViewPort.h"
 #include "Core/IConfig.h"
 #include "DefaultFrameBufferTexture.h"
+#include "FragDef.h"
 #include "GLBuffer.h"
 #include "GLCommandList.h"
 #include "GLFrameBuffer.h"
@@ -280,15 +281,15 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 	glCullFace(GL_FRONT_AND_BACK);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	if (this->alpha) {
-		this->enableState(State::AlphaTest);
 		glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 	}
-	this->clearColor(0.2f, 0.2f, 0.2f, 1.0f);
+	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 	if (this->gamma) {
 		this->enableState(GLRendererInterface::State::SRGB);
 	}
 
 	this->setDebug(this->debug);
+	
 	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 }
 
@@ -1283,18 +1284,6 @@ FrameBuffer *GLRendererInterface::getDefaultFramebuffer(void *window) {
 	return defaultFrambuffer;
 }
 
-void GLRendererInterface::clear(unsigned int bitflag) {
-	GLbitfield mask = 0;
-	mask |= (bitflag & (unsigned int)CLEARBITMASK::Color) != 0 ? GL_COLOR_BUFFER_BIT : 0;
-	mask |= (bitflag & (unsigned int)CLEARBITMASK::Depth) != 0 ? GL_DEPTH_BUFFER_BIT : 0;
-	mask |= (bitflag & (unsigned int)CLEARBITMASK::Stencil) != 0 ? GL_STENCIL_BUFFER_BIT : 0;
-	glClear(mask);
-}
-
-void GLRendererInterface::clearColor(float red, float green, float blue, float alpha) {
-	glClearColor(red, green, blue, alpha);
-}
-
 ViewPort *GLRendererInterface::getView(unsigned int index) {
 
 	/*  Validate the index. */
@@ -1436,32 +1425,6 @@ Sync *GLRendererInterface::createSync(SyncDesc *desc) {
 
 void GLRendererInterface::deleteSync(Sync *sync) { delete sync; }
 
-void GLRendererInterface::dispatchCompute(unsigned int *global, unsigned int *local, unsigned int offset) {
-
-	/*  */
-	resetErrorFlag();
-	if (global) {
-		if (local && glDispatchComputeGroupSizeARB) {
-			glDispatchComputeGroupSizeARB(global[0], global[1], global[2], local[0], local[1], local[2]);
-		} else {
-			glDispatchCompute(global[0], global[1], global[2]);
-		}
-	} else {
-		// Presume indirect.
-		glDispatchComputeIndirect(offset);
-	}
-
-	GLenum errorStatus = glGetError();
-	if (errorStatus != GL_NO_ERROR) {
-		throw RuntimeException("Error when dispatching compute - {}, {}", errorStatus,
-							   (const char *)gluErrorString(errorStatus));
-	}
-
-	// TODO relocate
-	glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
-	glMemoryBarrier(GL_TEXTURE_UPDATE_BARRIER_BIT);
-}
-
 void GLRendererInterface::memoryBarrier() {}
 
 static void default_callback_debug_gl(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length,
@@ -1597,14 +1560,12 @@ void GLRendererInterface::setDebug(bool enable) {
 		if (callback) {
 			callback(default_callback_debug_gl, nullptr);
 		}
+
 		glDisable(GL_DEBUG_OUTPUT);
 		glDisable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 	}
 }
 
-// GL_NV_gpu_program4: SM 4.0 or better.
-// GL_NV_vertex_program3: SM 3.0 or better.
-// GL_ARB_fragment_program: SM 2.0 or better
 const char *GLRendererInterface::getShaderVersion(ShaderLanguage language) const {
 	const char *strcore;
 	bool profile;
@@ -1650,7 +1611,7 @@ const char *GLRendererInterface::getShaderVersion(ShaderLanguage language) const
 	if (language == SPIRV) {
 		return "100";
 	}
-	throw std::invalid_argument("Invalid shader language");
+	throw InvalidArgumentException("Invalid shader language");
 }
 
 ShaderLanguage GLRendererInterface::getShaderLanguage() const { return this->supportedLanguages; }
@@ -1660,8 +1621,9 @@ const char *GLRendererInterface::getAPIVersion() const { return (const char *)gl
 const char *GLRendererInterface::getVersion() const { return FV_STR_VERSION(1, 0, 0); }
 
 void GLRendererInterface::getSupportedTextureCompression(TextureDesc::Compression *pCompressions) {
+
 	if (pCompressions == nullptr) {
-		throw std::invalid_argument("pCompressions may not be a null pointer.");
+		throw InvalidArgumentException("pCompressions may not be a null pointer.");
 	}
 
 	unsigned int compressions = 0;
@@ -1719,57 +1681,20 @@ void GLRendererInterface::getCapability(Capability *capability) {
 		glGetIntegerv(GL_MAX_ELEMENTS_VERTICES, (GLint *)&capability->sMaxElementVertices);
 		glGetIntegerv(GL_MAX_ELEMENTS_INDICES, (GLint *)&capability->sMaxElementIndices);
 	}
-	//	/*	*/
-	//	GLIF_CONSTANTI_PRINT(GL_MAX_VERTEX_ATTRIB_RELATIVE_OFFSET);
-	//	GLIF_CONSTANTI_PRINT(GL_MAX_VERTEX_ATTRIB_BINDINGS);
-	//	GLIF_CONSTANTI_PRINT(GL_MAX_ELEMENT_INDEX);
-	// GL_MAX_ELEMENTS_INDICES
-	// GL_MAX_ELEMENTS_VERTICES
 
 	/*	TODO resolve*/
 	glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &capability->sMaxTextureUnitActive);		/*	GL_MAX_TEXTURE_IMAGE_UNITS	*/
 	glGetIntegerv(GL_MAX_SUBROUTINE_UNIFORM_LOCATIONS, &capability->numMaxSubRoutines); /*	*/
 
-	// glGetIntegerv(GL_MAX_COMBINED_SHADER_STORAGE_BLOCKS, &capability->sMaxCombinedShaderStorageBlocks);
-
 	/*  Compute shader. */
-	// glGetIntegerv(GL_MAX_COMPUTE_SHADER_STORAGE_BLOCKS, &capability->sMaxComputeShaderStorageBlocks);
-	// glGetIntegerv(GL_MAX_COMPUTE_UNIFORM_BLOCKS, &capability->sMaxComputeUniformBlocks);
 	glGetIntegerv(GL_MAX_COMPUTE_TEXTURE_IMAGE_UNITS, &capability->sMaxComputeTextureImageUnits);
 	glGetIntegerv(GL_MAX_COMPUTE_SHARED_MEMORY_SIZE, &capability->sMaxComputeSharedMemory);
-	// glGetIntegerv(GL_MAX_COMPUTE_UNIFORM_COMPONENTS, &capability->sMaxComputeUniformComponents);
-	//	glGetIntegerv(GL_MAX_COMPUTE_ATOMIC_COUNTERS, &capability->sMaxDrawBuffers);
-	//	glGetIntegerv(GL_MAX_COMPUTE_ATOMIC_COUNTER_BUFFERS, &capability->sMaxDrawBuffers);
-	//	glGetIntegerv(GL_MAX_COMBINED_COMPUTE_UNIFORM_COMPONENTS, &capability->sMaxDrawBuffers);
+
 	capability->sWorkGroupDimensions = 3;
-	// glGetIntegerv(GL_MAX_COMPUTE_WORK_GROUP_INVOCATIONS, &capability->sWorkGroupDimensions);
 	glGetIntegerv(GL_MAX_COMPUTE_WORK_GROUP_COUNT, capability->sMaxWorKGroupSize);
 	glGetIntegerv(GL_MAX_COMPUTE_WORK_GROUP_SIZE, capability->sMaxLocalWorkGroupSize);
-	// glGetIntegerv(MAX_COMPUTE_VARIABLE_GROUP_INVOCATIONS_ARB, capability->sMaxLocalWorkGroupSize);
-	// glGetIntegerv(MAX_COMPUTE_VARIABLE_GROUP_SIZE_ARB, capability->sMaxLocalWorkGroupSize);
-	// glGetIntegerv(GL_MAX_COMPUTE_UNIFORM_BLOCKS, &capability->sMaxDrawBuffers);
-	// glGetIntegerv(GL_MAX_COMPUTE_SHADER_STORAGE_BLOCKS, &capability->sMaxDrawBuffers);
 
-	// glGetIntegerv(GL_MAX_DEBUG_GROUP_STACK_DEPTH, &capability->sMaxDrawBuffers);
-	// glGetIntegerv(GL_MAX_COMBINED_SHADER_STORAGE_BLOCKS, &capability->sMaxDrawBuffers);
-
-	//	GLIF_CONSTANTI_PRINT(GL_MAX_ARRAY_TEXTURE_LAYERS);
-	//	GLIF_CONSTANTI_PRINT(GL_MAX_CLIP_DISTANCES);
-	//	GLIF_CONSTANTI_PRINT(GL_MAX_COLOR_TEXTURE_SAMPLES);
-	//	GLIF_CONSTANTI_PRINT(GL_MAX_COMBINED_ATOMIC_COUNTERS);
-	//	GLIF_CONSTANTI_PRINT(GL_MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS);
-	//	GLIF_CONSTANTI_PRINT(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS);
-	//	GLIF_CONSTANTI_PRINT(GL_MAX_COMBINED_UNIFORM_BLOCKS);
-
-	//	GLIF_CONSTANTI_PRINT(GL_MAX_DEPTH_TEXTURE_SAMPLES);
-
-	//	GLIF_CONSTANTI_PRINT(GL_MAX_FRAGMENT_ATOMIC_COUNTERS);
-	//	GLIF_CONSTANTI_PRINT(GL_MAX_FRAGMENT_SHADER_STORAGE_BLOCKS);
-	//	GLIF_CONSTANTI_PRINT(GL_MAX_FRAGMENT_INPUT_COMPONENTS);
-	//	GLIF_CONSTANTI_PRINT(GL_MAX_FRAGMENT_UNIFORM_COMPONENTS);
-	//	GLIF_CONSTANTI_PRINT(GL_MAX_FRAGMENT_UNIFORM_VECTORS);
-	//	GLIF_CONSTANTI_PRINT(GL_MAX_FRAGMENT_UNIFORM_BLOCKS);
-
+	/*	*/
 	glGetIntegerv(GL_MAX_FRAMEBUFFER_WIDTH, &capability->sMaxFrameBufferWidth);
 	glGetIntegerv(GL_MAX_FRAMEBUFFER_HEIGHT, &capability->sMaxFrameBufferHeight);
 	glGetIntegerv(GL_MAX_FRAMEBUFFER_LAYERS, &capability->sMaxFrameBufferLayers);
@@ -1778,30 +1703,6 @@ void GLRendererInterface::getCapability(Capability *capability) {
 	glGetIntegerv(GL_MAX_DRAW_BUFFERS, &capability->sMaxDrawBuffers);
 	glGetIntegerv(GL_MAX_COLOR_ATTACHMENTS, &capability->sMaxColorAttachments);
 	glGetIntegerv(GL_MAX_COLOR_ATTACHMENTS, &capability->sMaxFrameBufferAttachment); /*	*/
-	//	GLIF_CONSTANTI_PRINT(GL_MAX_DUAL_SOURCE_DRAW_BUFFERS);
-
-	//	GLIF_CONSTANTI_PRINT(GL_MAX_GEOMETRY_ATOMIC_COUNTERS);
-	//	GLIF_CONSTANTI_PRINT(GL_MAX_GEOMETRY_SHADER_STORAGE_BLOCKS);
-	//	GLIF_CONSTANTI_PRINT(GL_MAX_GEOMETRY_INPUT_COMPONENTS);
-	//	GLIF_CONSTANTI_PRINT(GL_MAX_GEOMETRY_OUTPUT_COMPONENTS);
-	//	GLIF_CONSTANTI_PRINT(GL_MAX_GEOMETRY_TEXTURE_IMAGE_UNITS);
-	//	GLIF_CONSTANTI_PRINT(GL_MAX_GEOMETRY_UNIFORM_BLOCKS);
-	//	GLIF_CONSTANTI_PRINT(GL_MAX_GEOMETRY_UNIFORM_COMPONENTS);
-
-	//	GLIF_CONSTANTI_PRINT(GL_MAX_SAMPLE_MASK_WORDS);
-
-	//	GLIF_CONSTANTI_PRINT(GL_MIN_MAP_BUFFER_ALIGNMENT);
-	//	GLIF_CONSTANTI_PRINT(GL_MIN_PROGRAM_TEXEL_OFFSET);
-	//	GLIF_CONSTANTI_PRINT(GL_MAX_RECTANGLE_TEXTURE_SIZE);
-
-	//	GLIF_CONSTANTI64_PRINT(GL_MAX_SERVER_WAIT_TIMEOUT);
-	//
-	//	/*	*/
-	//	GLIF_CONSTANTI_PRINT(GL_MAX_SHADER_STORAGE_BUFFER_BINDINGS);
-	//	GLIF_CONSTANTI_PRINT(GL_MAX_TESS_CONTROL_ATOMIC_COUNTERS);
-	//	GLIF_CONSTANTI_PRINT(GL_MAX_TESS_EVALUATION_ATOMIC_COUNTERS);
-	//	GLIF_CONSTANTI_PRINT(GL_MAX_TESS_CONTROL_SHADER_STORAGE_BLOCKS);
-	//	GLIF_CONSTANTI_PRINT(GL_MAX_TESS_EVALUATION_SHADER_STORAGE_BLOCKS);
 
 	/*	*/
 	glGetIntegerv(GL_NUM_COMPRESSED_TEXTURE_FORMATS, &capability->sNumCompressedTexture);
@@ -1819,18 +1720,8 @@ void GLRendererInterface::getCapability(Capability *capability) {
 	glGetIntegerv(GL_MAX_UNIFORM_BUFFER_BINDINGS, &capability->sMaxUniformBufferBinding);
 	glGetIntegerv(GL_MAX_UNIFORM_BLOCK_SIZE, &capability->sMaxUniformBlockSize);
 	glGetIntegerv(GL_MAX_UNIFORM_LOCATIONS, &capability->sMaxUniformLocations);
-	//	GLIF_CONSTANTI_PRINT(GL_MAX_VARYING_COMPONENTS);
-	//	GLIF_CONSTANTI_PRINT(GL_MAX_VARYING_VECTORS);
-	//	GLIF_CONSTANTI_PRINT(GL_MAX_VARYING_FLOATS);
-	//	GLIF_CONSTANTI_PRINT(GL_MAX_VERTEX_ATOMIC_COUNTERS);
-	//	GLIF_CONSTANTI_PRINT(GL_MAX_VERTEX_ATTRIBS);
-	//	GLIF_CONSTANTI_PRINT(GL_MAX_VERTEX_SHADER_STORAGE_BLOCKS);
-	//	GLIF_CONSTANTI_PRINT(GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS);
-	//	GLIF_CONSTANTI_PRINT(GL_MAX_VERTEX_UNIFORM_COMPONENTS);
-	//	GLIF_CONSTANTI_PRINT(GL_MAX_VERTEX_UNIFORM_VECTORS);
-	//	GLIF_CONSTANTI_PRINT(GL_MAX_VERTEX_OUTPUT_COMPONENTS);
-	//	GLIF_CONSTANTI_PRINT(GL_MAX_VERTEX_UNIFORM_BLOCKS);
 
+	/*	*/
 	glGetIntegerv(GL_MAX_VIEWPORT_DIMS, &capability->sMaxViewPortDims);
 	glGetIntegerv(GL_MAX_VIEWPORTS, &capability->sMaxViewPorts);
 	glGetIntegerv(GL_VIEWPORT_BOUNDS_RANGE, &capability->sViewPortBoundRange[0]);
@@ -1840,10 +1731,8 @@ void GLRendererInterface::getCapability(Capability *capability) {
 	glGetFloatv(GL_SMOOTH_LINE_WIDTH_GRANULARITY, &capability->lineWidthGranularity);
 
 	glGetIntegerv(GL_MIN_MAP_BUFFER_ALIGNMENT, &capability->sMinMapBufferAlignment);
-	//
 
 	/*  */
-	capability->sShadow = glewIsExtensionSupported("GL_ARB_texture_float");
 	capability->sTransformFeedback =
 		glewIsExtensionSupported("GL_EXT_transform_feedback") || glewIsExtensionSupported("GL_NV_transform_feedback");
 
@@ -1882,8 +1771,6 @@ void GLRendererInterface::getCapability(Capability *capability) {
 	capability->sIndirectMultiDraw = glewIsExtensionSupported("GL_ARB_multi_draw_indirect") ||
 									 glewIsExtensionSupported("GL_AMD_multi_draw_indirect");
 
-	// capability->sRenderTarget = glewIsExtensionSupported("GL_ARB_occlusion_query");
-	//	capability->sShaderImageLoadStorage = VDSystemInfo::supportShaderImageLoadStorage();
 	capability->sUniformBuffer = glewIsExtensionSupported("GL_ARB_uniform_buffer_object");
 	capability->sShaderStorageBuffer = glewIsExtensionSupported("GL_ARB_shader_storage_buffer_object");
 
@@ -1903,16 +1790,13 @@ void GLRendererInterface::getCapability(Capability *capability) {
 	GLint nShaderBinary;
 	glGetIntegerv(GL_NUM_SHADER_BINARY_FORMATS, &nShaderBinary);
 	capability->sShaderBinary = nShaderBinary > 0 && glewIsExtensionSupported("GL_ARB_get_program_binary");
-
-	// GL_EXT_texture_sRGB_decode
-	// GL_DECODE_EXT;
 }
 
 void GLRendererInterface::getStatus(MemoryInfo *memoryInfo) {
 
 	GLint dedicatedVRMem;
 
-	// GL_ATI_meminfo
+	/* GL_ATI_meminfo	*/
 	glGetIntegerv(GL_VBO_FREE_MEMORY_ATI,
 				  &dedicatedVRMem); // dedicated video memory, total size (in kb) of the GPU memory
 	glGetIntegerv(GL_TEXTURE_FREE_MEMORY_ATI,
@@ -1920,7 +1804,7 @@ void GLRendererInterface::getStatus(MemoryInfo *memoryInfo) {
 	glGetIntegerv(GL_RENDERBUFFER_FREE_MEMORY_ATI,
 				  &dedicatedVRMem); // dedicated video memory, total size (in kb) of the GPU memory
 
-	// GL_NVX_gpu_memory_info
+	/*	GL_NVX_gpu_memory_info	*/
 	glGetIntegerv(GL_GPU_MEMORY_INFO_DEDICATED_VIDMEM_NVX,
 				  &dedicatedVRMem); // dedicated video memory, total size (in kb) of the GPU memory
 	memoryInfo->totalVRam = dedicatedVRMem;
@@ -1928,6 +1812,7 @@ void GLRendererInterface::getStatus(MemoryInfo *memoryInfo) {
 		GL_GPU_MEMORY_INFO_TOTAL_AVAILABLE_MEMORY_NVX,
 		&dedicatedVRMem); // total available memory, total size (in Kb) of the memory available for allocations
 
+	/*	*/
 	glGetIntegerv(GL_GPU_MEMORY_INFO_CURRENT_AVAILABLE_VIDMEM_NVX,
 				  &dedicatedVRMem); // current available dedicated video memory (in kb),
 	memoryInfo->currentVRam = dedicatedVRMem;
@@ -1949,7 +1834,7 @@ void GLRendererInterface::submittCommand(Ref<CommandList> &list) { this->execute
 
 void GLRendererInterface::execute(CommandList *list) {
 
-	GLCommandList *glist = static_cast<GLCommandList *>(list);
+	const GLCommandList *glist = static_cast<const GLCommandList *>(list);
 
 	for (size_t i = 0; i < glist->commands.size(); i++) {
 		const GLCommandBase *base = glist->commands[i];
@@ -1965,6 +1850,7 @@ void GLRendererInterface::execute(CommandList *list) {
 			const GLCommandClearColor *clearColor = static_cast<const GLCommandClearColor *>(base);
 			glClearColor(clearColor->clear.x(), clearColor->clear.y(), clearColor->clear.z(), clearColor->clear.w());
 			glClear(GL_COLOR_BUFFER_BIT);
+
 			if (glClearNamedFramebufferfv) {
 
 			} else if (glClearNamedFramebufferfv) {

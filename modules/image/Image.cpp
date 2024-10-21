@@ -210,7 +210,7 @@ unsigned int Image::getFormatPixelBitSize(const ImageFormat format) {
 		break;
 	}
 
-	throw NotSupportedException("Invalid texture format: {}", std::string(magic_enum::enum_name(format)));
+	throw NotSupportedException("None Supported image format: {}", std::string(magic_enum::enum_name(format)));
 }
 
 size_t Image::getTextureByteSize(const unsigned int width, const unsigned int height, const unsigned int depth,
