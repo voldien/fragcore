@@ -55,7 +55,7 @@ namespace fragcore {
 	  public:
 		static int getNumDisplays();
 		static SDLDisplay getPrimaryDisplay();
-		static SDLDisplay getDisplay(int index);
+		static SDLDisplay getDisplay(const int index);
 	};
 } // namespace fragcore
 

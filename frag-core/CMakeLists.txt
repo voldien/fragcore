@@ -13,8 +13,6 @@ LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" )
 # External libraries.
 ########################
 INCLUDE(infoware)
-INCLUDE(cxxconfig)
-#INCLUDE(config-cpp)
 INCLUDE(taskscheduler)
 IF(NOT TARGET spdlog)
 	INCLUDE(spdlog)
@@ -126,14 +124,14 @@ SET(FRAG_CORE_INCLUDE_SUB_DIR
 ADD_LIBRARY(fragcore ${SOURCE_FILES} ${HEADER_FILES}
  							${OPEN_SIMPLEX_NOISE_SOURCE} ${PCG_C_BASIC_SOURCE}
 							${MISC_SOURCE})
-ADD_DEPENDENCIES(fragcore taskSch infoware cxxexcept cxx-config)
+ADD_DEPENDENCIES(fragcore taskSch infoware cxxexcept )
 
 #
 TARGET_COMPILE_DEFINITIONS(fragcore PRIVATE FRAG_CORE_INTERNAL_IMP=1)
 TARGET_COMPILE_FEATURES(fragcore PUBLIC cxx_std_17 cxx_constexpr)
 
 #
-TARGET_LINK_LIBRARIES(fragcore PUBLIC Eigen3::Eigen taskSch cxxexcept spdlog_header_only fmt cxx-config magic_enum PRIVATE stdc++ atomic dl ${ZLIB_LIBRARIES} 
+TARGET_LINK_LIBRARIES(fragcore PUBLIC Eigen3::Eigen taskSch cxxexcept spdlog_header_only fmt  magic_enum PRIVATE stdc++ atomic dl ${ZLIB_LIBRARIES} 
 													${ZIP_LIBRARIES} m ${OPENSSL_CRYPTO_LIBRARY} infoware )
 
 #

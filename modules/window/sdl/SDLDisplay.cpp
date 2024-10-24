@@ -112,4 +112,4 @@ int SDLDisplay::getNumDisplays() { return SDL_GetNumVideoDisplays(); }
 
 SDLDisplay SDLDisplay::getPrimaryDisplay() { return {0}; }
 
-SDLDisplay SDLDisplay::getDisplay(int index) { return {index}; }
+SDLDisplay SDLDisplay::getDisplay(const int index) { return {index}; }

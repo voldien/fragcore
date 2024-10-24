@@ -819,7 +819,6 @@ void VKRenderInterface::getCapability(Capability *capability) {
 
 	capability->sVertexShader = true;
 	capability->sFragmentShader = true;
-	capability->sShadow = true;
 	capability->sInstancing = true;
 	capability->sTextureCompression = deviceFeatures2.features.textureCompressionASTC_LDR |
 									  deviceFeatures2.features.textureCompressionETC2 |
