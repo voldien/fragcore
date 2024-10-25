@@ -21,6 +21,7 @@
 #include "../Window.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_video.h>
+#include <cstdint>
 #include <string>
 
 namespace fragcore {
@@ -28,6 +29,7 @@ namespace fragcore {
 	class FVDECLSPEC SDLWindow : public Window {
 	  public:
 		SDLWindow();
+		SDLWindow(intptr_t reference);
 		~SDLWindow() override;
 
 		void show() override;
@@ -48,28 +50,25 @@ namespace fragcore {
 
 		std::string getTitle() const override;
 
-		// virtual int x() const noexcept override;
-		// virtual int y() const noexcept override;
-
 		int width() const override;
 		int height() const override;
 
 		void getPosition(int *x, int *y) const override;
 
-		void setPosition(int x, int y) noexcept override;
+		void setPosition(int x, int y) override;
 
-		void setSize(int width, int height) noexcept override;
+		void setSize(int width, int height) override;
 
 		void getSize(int *width, int *height) const override;
 
-		void resizable(bool resizable) noexcept override;
+		void resizable(bool resizable) override;
 
 		void setFullScreen(bool fullscreen) override;
 		void setFullScreen(fragcore::Display &display) override;
 
 		bool isFullScreen() const override;
 
-		void setBordered(bool borded) override;
+		void setBordered(bool bordered) override;
 
 		float getGamma() const override;
 

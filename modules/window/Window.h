@@ -20,6 +20,7 @@
 #include "Display.h"
 #include <Core/SmartReference.h>
 #include <Math/Math.h>
+#include <cstdint>
 
 namespace fragcore {
 
@@ -86,6 +87,7 @@ namespace fragcore {
 		FV_ALWAYS_INLINE virtual void *getUserData() const noexcept { return this->userData; }
 
 		virtual intptr_t getNativePtr() const = 0; /*  Get native window reference object. */
+												   // virtual intptr_t getWindowNativePtr() const  = 0;
 
 		// TODO add getWindowManager()
 

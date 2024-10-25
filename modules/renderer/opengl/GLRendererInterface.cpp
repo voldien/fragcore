@@ -289,7 +289,7 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 	}
 
 	this->setDebug(this->debug);
-	
+
 	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 }
 
@@ -1229,11 +1229,12 @@ void GLRendererInterface::deleteQuery(QueryObject *query) {
 
 RendererWindow *GLRendererInterface::createWindow(int x, int y, int width, int height) {
 
-	// WindowManager::getInstance();
 	Ref<GLRendererInterface> rendRef(this);
 
 	GLRenderWindow *renderWindow = new GLRenderWindow(rendRef);
 	renderWindow->show();
+	renderWindow->setPosition(x, y);
+	renderWindow->setSize(width, height);
 
 	/*	Cleanup.	*/
 	if (this->tpmwindow) {
@@ -1242,26 +1243,12 @@ RendererWindow *GLRendererInterface::createWindow(int x, int y, int width, int h
 	}
 
 	return renderWindow;
-
-	// rendererWindow->createWindow(x, y, width, height, "opengl");
-	// rendererWindow->renderer = this;
-	// rendererWindow->renderer->increment();
-
-	/*  */
-	createSwapChain();
-	return nullptr;
-	// return rendererWindow;
 }
 
 void GLRendererInterface::setCurrentWindow(RendererWindow *window) {
 
 	// window->useWindow(this->openglcontext);
 	this->drawwindow = window;
-
-	//	this->drawwindow = (SDL_Window *) window;
-	//	if (SDL_GL_MakeCurrent(this->drawwindow, this->openglcontext) != 0) {
-	//		throw RuntimeException(fmt::format(""));
-	//	}
 }
 
 void GLRendererInterface::createSwapChain() {}

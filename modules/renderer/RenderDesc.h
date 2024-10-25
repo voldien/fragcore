@@ -203,11 +203,9 @@ namespace fragcore {
 
 		/*	Texture pixel data.	*/
 		union {
-			const void *pixel; /*  Pixel pointer.  */
-			struct {
-				const void *cubepixel[6]; /*	Cubemap pixel point references. */
-			};
-			const void *pixelarray; /*  */
+			const void *pixel;		  /*  Pixel pointer.  */
+			const void *cubepixel[6]; /*	Cubemap pixel point references. */
+			const void *pixelarray;	  /*  */
 		};
 		size_t pixelSize;	 /*  Image size in bytes.    */
 		SamplerDesc sampler; /*  Texture sampling.   */

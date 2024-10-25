@@ -33,63 +33,11 @@ namespace fragcore {
 	class FVDECLSPEC GLRenderWindow : public RendererWindow {
 	  public:
 		GLRenderWindow(Ref<GLRendererInterface> &renderer);
-		virtual ~GLRenderWindow();
-
-		void close() override;
-
-		void show() override;
-
-		void hide() override;
-
-		void focus() override;
-
-		void restore() override;
-
-		void maximize() override;
-
-		void minimize() override;
+		~GLRenderWindow() override;
 
 		void swapBuffer() override;
-
-		void setPosition(int x, int y) override;
-
-		void setSize(int width, int height) override;
-
 		void vsync(bool state) override;
 
-		void getPosition(int *x, int *y) const override;
-
-		void getSize(int *width, int *height) const override;
-
-		int width() const override;
-		int height() const override;
-
-		void resizable(bool resizable) override;
-
-		Display *getCurrentDisplay() const override;
-
-		void setFullScreen(bool fullscreen) override;
-		void setFullScreen(Display &display) override;
-
-		bool isFullScreen() const override;
-
-		void setBordered(bool bordered) override;
-
-		void setMinimumSize(int width, int height) override;
-		void getMinimumSize(int *width, int *height) override;
-		void setMaximumSize(int width, int height) override;
-		void getMaximumSize(int *width, int *height) override;
-
-		float getGamma() const override;
-
-		void setGamma(float gamma) override;
-
-		void setTitle(const std::string &title) override;
-		std::string getTitle() const override;
-
-		intptr_t getNativePtr() const override;
-
-	  public:
 		ViewPort *getViewPort() override;
 		FrameBuffer *getDefaultFrameBuffer() override;
 
@@ -102,9 +50,8 @@ namespace fragcore {
 
 	  private: /*	*/
 		// TODO add proxy window.
-		SDL_Window *window;
-		Ref<GLRendererInterface> renderer;
-		Ref<GLFrameBuffer> defaultFrameBuffer;
+		Ref<GLRendererInterface> renderer = {nullptr};
+		Ref<GLFrameBuffer> defaultFrameBuffer = {nullptr};
 	};
 } // namespace fragcore
 

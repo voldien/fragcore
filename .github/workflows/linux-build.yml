@@ -28,6 +28,12 @@ jobs:
         - os: ubuntu-20.04
           platform: x32
           compiler: gcc
+        - os: ubuntu-22.04
+          platform: x64
+          compiler: gcc
+        - os: ubuntu-24.04
+          platform: x64
+          compiler: gcc
     name: Linux FragCore Library ${{ matrix.os }} ${{ matrix.platform }}  ${{ matrix.compiler }}
     steps:
       - uses: actions/checkout@v4
@@ -38,9 +44,9 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install g++-10 pkg-config libsdl2-dev libfreeimage-dev libssl-dev
-          sudo apt-get install libsdl2-dev libvulkan-dev libgl1-mesa-dev opencl-headers \
+          sudo apt-get install libsdl2-dev libvulkan-dev libgl1-mesa-dev \
           libgtest-dev libsubunit-dev libogg-dev libopus-dev libvorbis-dev \
-          libzip-dev libopenal-dev mesa-common-dev ocl-icd-opencl-dev libnoise-dev libvdpau-dev \
+          libzip-dev libopenal-dev mesa-common-dev libnoise-dev libvdpau-dev \
           libalut-dev libspdlog-dev libbz2-dev libcurl4 libcurl4-gnutls-dev libfmt-dev binutils-dev libeigen3-dev \
           zip gzip googletest libglfw3-dev libglm-dev
 

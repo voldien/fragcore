@@ -7,7 +7,7 @@
 using namespace fragcore;
 
 SDLWindowManager::SDLWindowManager() {
-	int err = SDL_InitSubSystem(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER);
+	int err = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER);
 	if (err != 0) {
 		throw RuntimeException("Failed to init SDL Window Manager: {}", SDL_GetError());
 	}
@@ -25,3 +25,5 @@ Window *SDLWindowManager::createWindow(const std::string &title) {
 	return window;
 }
 Display *SDLWindowManager::primaryDisplay() const noexcept { return nullptr; }
+
+const std::vector<Display *> &SDLWindowManager::getDisplays() const { return {}; }
