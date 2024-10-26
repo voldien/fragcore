@@ -48,18 +48,18 @@ void Hash::update(const void *pdata, size_t nbytes) {
 	this->nbytes += nbytes;
 }
 
-void Hash::update(Ref<IO> &io) {
+void Hash::update(Ref<IO> &io_in) {
 	char buffer[4096];
-	long int prev_pos = io->getPos();
+	long int prev_pos = io_in->getPos();
 	long int len;
 
 	/*	*/
-	while ((len = io->read(sizeof(buffer), buffer)) > 0) {
+	while ((len = io_in->read(sizeof(buffer), buffer)) > 0) {
 		this->update(buffer, len);
 	}
 
 	/*	retain the original state.	*/
-	io->seek(prev_pos, IO::Seek::SET);
+	io_in->seek(prev_pos, IO::Seek::SET);
 }
 
 void Hash::final(std::vector<unsigned char> &hash) {

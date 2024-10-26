@@ -4,6 +4,9 @@
 #include <filesystem>
 #include <infoware.hpp>
 #include <magic_enum.hpp>
+#if defined(PLATFORM_POSIX) || defined(__linux__) // check defines for your setup
+#include <pwd.h>
+#endif
 
 using namespace fragcore;
 
@@ -107,7 +110,6 @@ bool SystemInfo::isSupportedInstruction(SIMD instruction) noexcept {
 	case SystemInfo::SIMD::SSE4_1:
 		_instruction = iware::cpu::instruction_set_t::sse41;
 		break;
-
 	case SystemInfo::SIMD::SSE4_2:
 		_instruction = iware::cpu::instruction_set_t::sse42;
 		break;
@@ -121,6 +123,8 @@ bool SystemInfo::isSupportedInstruction(SIMD instruction) noexcept {
 		_instruction = iware::cpu::instruction_set_t::avx_512;
 		break;
 	case SystemInfo::SIMD::NEON:
+		_instruction = iware::cpu::instruction_set_t::neon;
+		break;
 	default:
 		return false;
 	}
@@ -167,6 +171,8 @@ std::vector<SystemInfo::SIMD> SystemInfo::getSupportedSIMD() {
 		case iware::cpu::instruction_set_t::avx_512:
 			supportedSIMDS.push_back(SystemInfo::SIMD::AVX512);
 			break;
+		case iware::cpu::instruction_set_t::neon:
+			supportedSIMDS.push_back(SystemInfo::SIMD::NEON);
 		default:
 			break;
 		}
@@ -194,7 +200,9 @@ std::vector<SystemInfo::GPUInformation> SystemInfo::getGPUDevices() noexcept {
 	for (size_t i = 0; i < devices.size(); i++) {
 		gpuDevices[i].name = devices[i].name;
 		gpuDevices[i].memorySize = devices[i].memory_size;
+		gpuDevices[i].max_frequency = devices[i].max_frequency;
 	}
+
 	return gpuDevices;
 }
 
@@ -216,7 +224,18 @@ std::string SystemInfo::getApplicationName() {
 #endif
 }
 
-const char *SystemInfo::getUserName() { return ""; }
+const char *SystemInfo::getUserName() {
+#if defined(PLATFORM_POSIX) || defined(__linux__) // check defines for your setup
+	uid_t uid = geteuid();
+	struct passwd *passw = getpwuid(uid);
+	if (passw) {
+		return passw->pw_name;
+	}
+#else
+
+#endif
+	return "";
+}
 
 unsigned int SystemInfo::getPageSize() {
 #if defined(PLATFORM_POSIX) || defined(__linux__) // check defines for your setup
@@ -229,27 +248,22 @@ unsigned int SystemInfo::getPageSize() {
 
 std::vector<SystemInfo::CPUPackage> SystemInfo::getCPUPackages() {
 	std::vector<SystemInfo::CPUPackage> packages(iware::cpu::quantities().packages);
-
 	return packages;
 }
 
 unsigned int SystemInfo::getCPUCoreCount() { return iware::cpu::quantities().logical; }
 
-unsigned int SystemInfo::getCPUCacheLine(size_t level) {
+unsigned int SystemInfo::getCPUCacheLine(const size_t level) {
 	const auto cache = iware::cpu::cache(level);
 	return cache.line_size;
 }
 
-bool SystemInfo::supportsVibration() { return false; }
-
-unsigned long int SystemInfo::systemMemorySize() {
+unsigned long int SystemInfo::systemMemorySize() noexcept {
 	const auto memory = iware::system::memory();
 	return memory.physical_total;
 }
 
 std::string SystemInfo::getCurrentDirectory() { return std::filesystem::current_path(); }
-
-// TODO relocate to system or something, since it they are always exist more of the time.
 
 Ref<IO> &SystemInfo::getStdOut() {
 	static Ref<IO> stdoutRef = Ref<IO>(new FileIO(stdout));

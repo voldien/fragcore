@@ -218,7 +218,7 @@ namespace fragcore {
 		btDefaultCollisionConfiguration *collisionConfiguration;
 		btCollisionDispatcher *dispatcher;
 		btSequentialImpulseConstraintSolver *solver;
-		btSoftRigidDynamicsWorld *dynamicsWorld;
+		btDiscreteDynamicsWorld *dynamicsWorld;
 		btSoftBodyWorldInfo softBodyWorldInfo;
 		btIDebugDraw *drawDebugger;
 		//	std::vector<btKinematicCharacterController*> characterControllers;

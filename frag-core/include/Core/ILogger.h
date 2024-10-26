@@ -17,9 +17,7 @@
  */
 #ifndef _FRAG_CORE_LOGGER_H_
 #define _FRAG_CORE_LOGGER_H_ 1
-#include "IO/IO.h"
 #include "Object.h"
-#include "Ref.h"
 
 namespace fragcore {
 	/**

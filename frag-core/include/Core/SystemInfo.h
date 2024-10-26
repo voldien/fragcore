@@ -18,7 +18,6 @@
 #ifndef _FRAG_CORE_SYSTEMINFO_H_
 #define _FRAG_CORE_SYSTEMINFO_H_ 1
 #include "../FragDef.h"
-#include "Environment.h"
 #include "IO/IO.h"
 #include "Ref.h"
 
@@ -30,7 +29,7 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC SystemInfo {
 	  public:
-		enum class OperatingSystem {
+		enum class OperatingSystem : unsigned int {
 			Unix = 0x1,				/*	*/
 			Linux = (0x2 | Unix),	/*	*/
 			Window = 0x4,			/*	*/
@@ -38,7 +37,7 @@ namespace fragcore {
 			Mac = (0x10 | Unix),	/*	*/
 			Android = 0x20,			/*	*/
 			IOS = 0x40,				/*	*/
-			Unknown = (1 << 31)		/*  */
+			Unknown = (1u << 31)	/*  */
 		};
 
 		enum class CPUArchicture {
@@ -50,7 +49,8 @@ namespace fragcore {
 		};
 
 		enum class SIMD : unsigned int {
-			NONE,	/*	No SIMD exention flag.	*/
+			NONE, /*	No SIMD exention flag.	*/
+			/*	X86/AMD64	*/
 			MMX,	/*	MMX. (Yet not supported)	*/
 			S3DNOW, /*	3DNOW. (Yet not supported)	*/
 			SSE,	/*	SSE (Streaming SIMD Extensions).	*/
@@ -62,7 +62,8 @@ namespace fragcore {
 			AVX,	/*	AVX Version 1 (Advanced Vector Extension).	*/
 			AVX2,	/*	AVX Version 2 (Advanced Vector Extension).	(Not tested)*/
 			AVX512, /*	AVX512 (Advanced Vector Extension). (Yet not supported)	*/
-			NEON,	/*	ARM	FPU (floating-point unit) feature.	*/
+			/*	ARM Specific*/
+			NEON, /*	ARM	FPU (floating-point unit) feature.	*/
 		};
 
 		/*	The kernel of the Operating system.	*/
@@ -118,7 +119,7 @@ namespace fragcore {
 		 *
 		 * @return unsigned int
 		 */
-		static unsigned int getCPUCacheLine(size_t level = 2);
+		static unsigned int getCPUCacheLine(const size_t level = 2);
 
 		/**
 		 * @brief Get the Endianness object
@@ -131,6 +132,7 @@ namespace fragcore {
 		using GPUInformation = struct gpu_information_t {
 			std::string name;
 			size_t memorySize;
+			size_t max_frequency;
 		};
 
 		static std::vector<GPUInformation> getGPUDevices() noexcept;
@@ -141,7 +143,7 @@ namespace fragcore {
 		 *
 		 * @return unsigned long int
 		 */
-		static unsigned long int systemMemorySize();
+		static unsigned long int systemMemorySize() noexcept;
 
 		/**
 		 * @brief Get the Page Size object
@@ -171,14 +173,6 @@ namespace fragcore {
 		 * @return const char*
 		 */
 		static std::string getCurrentDirectory();
-
-		/**
-		 * @brief
-		 *
-		 * @return true
-		 * @return false
-		 */
-		static bool supportsVibration();
 
 		// TODO relocate
 		static Ref<IO> &getStdOut();

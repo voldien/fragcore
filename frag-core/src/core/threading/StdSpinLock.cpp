@@ -3,9 +3,9 @@
 using namespace fragcore;
 
 StdSpinLock::StdSpinLock() {
-	int rc = schCreateSpinLock(&this->spinlock);
-	if (rc != SCH_OK) {
-		throw RuntimeException("Failed to create spinlock: {}", schErrorMsg(rc));
+	int rcode = schCreateSpinLock(&this->spinlock);
+	if (rcode != SCH_OK) {
+		throw RuntimeException("Failed to create spinlock: {}", schErrorMsg(rcode));
 	}
 }
 
@@ -13,16 +13,16 @@ StdSpinLock::~StdSpinLock() { schDeleteSpinLock(this->spinlock); }
 
 void StdSpinLock::lock() {
 
-	int rc = schLockSpinLock(this->spinlock);
-	if (rc != SCH_OK) {
-		throw RuntimeException("Failed lock spinlock: {}", schErrorMsg(rc));
+	int rcode = schLockSpinLock(this->spinlock);
+	if (rcode != SCH_OK) {
+		throw RuntimeException("Failed lock spinlock: {}", schErrorMsg(rcode));
 	}
 }
 void StdSpinLock::unlock() {
 
-	int rc = schUnlockSpinLock(this->spinlock);
-	if (rc != SCH_OK) {
-		throw RuntimeException("Failed to unlock spinlock: {}", schErrorMsg(rc));
+	int rcode = schUnlockSpinLock(this->spinlock);
+	if (rcode != SCH_OK) {
+		throw RuntimeException("Failed to unlock spinlock: {}", schErrorMsg(rcode));
 	}
 }
 void StdSpinLock::wait(long int nanoTimeout) {}

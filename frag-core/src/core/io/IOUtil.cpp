@@ -61,12 +61,12 @@ long int IOUtil::loadFile(Ref<IO> &inRef, Ref<IO> &outRef) {
 	return dataSize;
 }
 
-long int IOUtil::loadStringMem(Ref<IO> &io, char **string) {
+long int IOUtil::loadStringMem(Ref<IO> &in_io, char **data) {
 	long int nbytes;
 
-	nbytes = IOUtil::loadFileMem(io, string);
-	*string = static_cast<char *>(realloc(*string, nbytes + 1));
-	(*string)[nbytes] = '\0';
+	nbytes = IOUtil::loadFileMem(in_io, data);
+	*data = static_cast<char *>(realloc(*data, nbytes + 1));
+	(*data)[nbytes] = '\0';
 
 	return nbytes;
 }

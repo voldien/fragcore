@@ -19,7 +19,7 @@ ZipFileIO::ZipFileIO(const ZipFileIO &other) { this->file = other.file; }
 
 ZipFileIO::~ZipFileIO() {}
 
-void ZipFileIO::open(const char *path, IOMode mode) {}
+void ZipFileIO::open([[maybe_unused]] const char *path, [[maybe_unused]] IOMode mode) {}
 
 void ZipFileIO::close() {
 	int err;

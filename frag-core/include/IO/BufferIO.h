@@ -32,7 +32,7 @@ namespace fragcore {
 
 		void close() override;
 
-		long read(long int nbytes, void *pbuffer) override;
+		long read(long int requestedBytes, void *pbuffer) override;
 
 		long write(long int nbytes, const void *pbuffer) override;
 
@@ -52,7 +52,7 @@ namespace fragcore {
 
 		bool flush() override;
 
-		bool isOperationSupported(IOOperation operations) const noexcept override {
+		bool isOperationSupported(const IOOperation operations) const noexcept override {
 			return (operations & OP_ALL) != operations;
 		};
 

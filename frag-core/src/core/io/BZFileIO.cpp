@@ -1,7 +1,7 @@
 #include "IO/BZFileIO.h"
-
 #include <bzlib.h>
 #include <fmt/core.h>
+
 using namespace fragcore;
 
 long BZFileIO::read(long int nbytes, void *pbuffer) {

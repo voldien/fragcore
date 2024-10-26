@@ -18,7 +18,7 @@ TARGET_INCLUDE_DIRECTORIES(fragcore-scheduler-tasksch PUBLIC
 							${CMAKE_CURRENT_SOURCE_DIR}
 							$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 							$<INSTALL_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}> )
-ADD_DEPENDENCIES(fragcore-scheduler-tasksch fragcore )
+ADD_DEPENDENCIES(fragcore-scheduler-tasksch fragcore marl)
 
 #
 IF(BUILD_WITH_INSTALL)

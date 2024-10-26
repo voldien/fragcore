@@ -9,7 +9,7 @@
 #include <zlib.h>
 using namespace fragcore;
 
-IO *ZipFileSystem::openFile(const char *path, IO::IOMode mode) {
+IO *ZipFileSystem::openFile(const char *path, [[maybe_unused]] IO::IOMode mode) {
 	struct zip_file *zfile;
 	struct zip_stat stat;
 	struct zip *zip = (struct zip *)this->pzip;
@@ -312,22 +312,22 @@ static zip_int64_t io_callback(void *userdata, void *data, zip_uint64_t len, zip
 		return 0;
 	}
 	case ZIP_SOURCE_STAT: {
-		zip_stat_t *st;
-		if (len < sizeof(*st)) {
+		zip_stat_t *stat;
+		if (len < sizeof(*stat)) {
 			//::zip_error_set(&ctx->libzip_error_, ZIP_ER_INVAL, 0);
 			return -1;
 		}
 
-		st = (zip_stat_t *)data;
-		zip_stat_init(st);
-		st->mtime = time(nullptr);
-		st->size = (*ioRef)->length();
-		st->comp_size = st->size;
-		st->comp_method = ZIP_CM_STORE;
-		st->encryption_method = ZIP_EM_NONE;
-		st->valid =
+		stat = (zip_stat_t *)data;
+		zip_stat_init(stat);
+		stat->mtime = time(nullptr);
+		stat->size = (*ioRef)->length();
+		stat->comp_size = stat->size;
+		stat->comp_method = ZIP_CM_STORE;
+		stat->encryption_method = ZIP_EM_NONE;
+		stat->valid =
 			ZIP_STAT_MTIME | ZIP_STAT_SIZE | ZIP_STAT_COMP_SIZE | ZIP_STAT_COMP_METHOD | ZIP_STAT_ENCRYPTION_METHOD;
-		return sizeof(*st);
+		return sizeof(*stat);
 	}
 	case ZIP_SOURCE_ERROR:
 		return 0;

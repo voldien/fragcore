@@ -43,16 +43,15 @@ jobs:
       - name: Configure dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install g++-10 pkg-config libsdl2-dev libfreeimage-dev libssl-dev
-          sudo apt-get install libsdl2-dev libvulkan-dev libgl1-mesa-dev \
-          libgtest-dev libsubunit-dev libogg-dev libopus-dev libvorbis-dev \
-          libzip-dev libopenal-dev mesa-common-dev libnoise-dev libvdpau-dev \
-          libalut-dev libspdlog-dev libbz2-dev libcurl4 libcurl4-gnutls-dev libfmt-dev binutils-dev libeigen3-dev \
-          zip gzip googletest libglfw3-dev libglm-dev
+          sudo apt-get install pkg-config libssl-dev libgtest-dev libsubunit-dev libogg-dev libopus-dev libvorbis-dev \
+          libzip-dev  libnoise-dev libvdpau-dev libalut-dev libspdlog-dev libbz2-dev \
+          libcurl4 libcurl4-gnutls-dev libfmt-dev binutils-dev libeigen3-dev \
+          zip gzip googletest libglm-dev 
 
       - name: Configure modules dependencies
         run: |
-          sudo apt-get install libavcodec-dev libavfilter-dev libavformat-dev libfreetype6-dev
+          sudo apt-get install libavcodec-dev libavfilter-dev libavformat-dev libfreetype6-dev libsqlite3-dev \
+          libglfw3-dev libopenal-dev mesa-common-dev libvulkan-dev libgl1-mesa-dev libsdl2-dev libsdl2-dev libfreeimage-dev
 
       - name: Create Build Environment
         # Some projects don't allow in-source building, so create a separate build directory

@@ -1,7 +1,7 @@
 #include "IO/FileSystem.h"
 
-#include <IO/GZFileIO.h>
 #include <Core/SystemInfo.h>
+#include <IO/GZFileIO.h>
 
 #include <cassert>
 #include <cerrno>
@@ -222,7 +222,6 @@ bool FileSystem::isFIFO(const char *path) {
 void FileSystem::createFIFO(const std::string &path) {
 	// unlink(path.c_str());
 	if (!this->isFIFO(path.c_str())) {
-
 		/*	*/
 
 		int ret = mkfifo(path.c_str(), O_NONBLOCK | S_IWUSR | S_IRUSR | S_IRGRP | S_IROTH | O_RDWR);

@@ -6,12 +6,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
@@ -52,7 +52,7 @@ namespace fragcore {
 
 		bool flush() override;
 
-		bool isOperationSupported(IOOperation operations) const noexcept override {
+		bool isOperationSupported(const IOOperation operations) const noexcept override {
 			return (operations & OP_ALL) == operations;
 		};
 
@@ -70,7 +70,7 @@ namespace fragcore {
 	  public:
 		FileIO(const char *path, IOMode mode);
 		FileIO(const std::string &path, IOMode mode);
-		FileIO(int fd, IOMode mode);
+		FileIO(int file_d, IOMode mode);
 		~FileIO() override;
 
 		FileIO(FILE *file); // TODO perhaps add IOMOde for overriding.

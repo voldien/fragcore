@@ -56,7 +56,7 @@ namespace fragcore {
 
 		bool flush() override;
 
-		bool isOperationSupported(IOOperation operations) const noexcept override {
+		bool isOperationSupported(const IOOperation operations) const noexcept override {
 			const IOOperation supportedIO =
 				static_cast<IOOperation>(OP_READ | OP_WRITE | OP_SEEK | OP_FLUSH | OP_LENGTH);
 			return (operations & supportedIO) == operations;

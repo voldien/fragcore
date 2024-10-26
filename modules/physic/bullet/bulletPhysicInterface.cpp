@@ -1,35 +1,108 @@
 #include "bulletPhysicInterface.h"
+#include "BulletCollision/CollisionDispatch/btCollisionDispatcherMt.h"
 #include "BulletCollision/CollisionDispatch/btCollisionObject.h"
+#include "BulletCollision/CollisionDispatch/btGhostObject.h"
+#include "BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolverMt.h"
+#include "BulletDynamics/Dynamics/btDiscreteDynamicsWorldMt.h"
 #include "BulletDynamics/Dynamics/btRigidBody.h"
+#include "Core/SystemInfo.h"
+#include "LinearMath/btThreads.h"
 #include "LinearMath/btVector3.h"
 #include "RigidBody.h"
 #include "bulletCollision.h"
 #include "bulletRigidBody.h"
-#include "debugDrawer.h"
-#include "internal_object_type.h"
 #include <FragCore.h>
+#include <thread>
 using namespace fragcore;
+
+class FragBulletTaskSchedulear : public btITaskScheduler {
+  public:
+	class CBody : public btIParallelForBody {
+	  public:
+		CBody(const btIParallelForBody *pBody) : m_pBody(pBody) {}
+
+		void forLoop(int iStart, int iEnd) const override { m_pBody->forLoop(iStart, iEnd); };
+
+	  protected:
+		const btIParallelForBody *m_pBody;
+	};
+
+  public:
+	FragBulletTaskSchedulear() : btITaskScheduler("fragcore - threading") {}
+
+	int getMaxNumThreads() const override { return std::thread::hardware_concurrency(); }
+	int getNumThreads() const override { return 64; }
+	void setNumThreads(int numThreads) override {}
+	void parallelFor(int iBegin, int iEnd, int grainSize, const btIParallelForBody &body) override {
+		const int RangeCount = iEnd - iBegin;
+
+		if (iBegin >= iEnd) {
+			return;
+		}
+		if (RangeCount < 1) {
+			return;
+		}
+
+		/*	*/
+		if (RangeCount <= getMaxNumThreads()) {
+			// TODO: distribute
+			body.forLoop(iBegin, iEnd);
+		} else {
+			body.forLoop(iBegin, iEnd);
+		}
+	}
+	btScalar parallelSum(int iBegin, int iEnd, int grainSize, const btIParallelSumBody &body) override {
+		return body.sumLoop(iBegin, iEnd);
+	}
+};
 
 BulletPhysicInterface::BulletPhysicInterface(IConfig *config) {
 	this->setName("BulletPhysic");
 
 	/*	*/
+	btGhostPairCallback *m_pGHostPairCallback = new btGhostPairCallback();
 	this->broadphase = new btDbvtBroadphase();
+	// this->broadphase->getOverlappingPairCache()->setInternalGhostPairCallback(m_pGHostPairCallback);
 	assert(this->broadphase);
+
+	bool multi_threading = true;
 
 	/*	*/
 	this->collisionConfiguration = new btDefaultCollisionConfiguration();
-	this->dispatcher = new btCollisionDispatcher(this->collisionConfiguration);
 
-	/*	*/
-	this->solver = new btSequentialImpulseConstraintSolver();
+	if (multi_threading) {
 
-	/*	*/
-	this->dynamicsWorld =
-		new btSoftRigidDynamicsWorld(this->dispatcher, this->broadphase, this->solver, this->collisionConfiguration);
+		FragBulletTaskSchedulear *taskScheduler = new FragBulletTaskSchedulear();
+		btITaskScheduler *scheduler = btGetOpenMPTaskScheduler();
+		scheduler->setNumThreads(Math::max<size_t>(1, SystemInfo::getCPUCoreCount() / 3));
+		btSetTaskScheduler(scheduler);
 
-	/*	*/
+		this->dispatcher = new btCollisionDispatcherMt(this->collisionConfiguration);
+		this->solver = new btSequentialImpulseConstraintSolverMt();
+
+		int maxThreadCount = 1;
+		btConstraintSolverPoolMt *pSolverPool = new btConstraintSolverPoolMt(maxThreadCount);
+
+		this->dynamicsWorld = new btDiscreteDynamicsWorldMt(this->dispatcher, this->broadphase, pSolverPool,
+															this->solver, this->collisionConfiguration);
+
+	} else {
+
+		this->dispatcher = new btCollisionDispatcher(this->collisionConfiguration);
+
+		/*	*/
+		this->solver = new btSequentialImpulseConstraintSolver();
+
+		/*	*/
+		this->dynamicsWorld = new btSoftRigidDynamicsWorld(this->dispatcher, this->broadphase, this->solver,
+														   this->collisionConfiguration);
+	}
+
+	/*	Default gravity.	*/
 	this->setGravity(Vector3(0.0f, -9.82f, 0.0f));
+
+	this->dynamicsWorld->getSolverInfo().m_numIterations = 10;
+	this->dynamicsWorld->setForceUpdateAllAabbs(false);
 
 	/*  Set softbody world info.    */
 	this->softBodyWorldInfo.m_broadphase = this->broadphase;
@@ -58,14 +131,14 @@ void BulletPhysicInterface::OnDestruction() {}
 void BulletPhysicInterface::simulate(const float timeStep, const int maxSubSteps, const float fixedTimeStep) {
 
 	this->dynamicsWorld->stepSimulation(timeStep, maxSubSteps, fixedTimeStep);
-	
+
 	/*	*/
 	if (this->debug) {
 		this->dynamicsWorld->debugDrawWorld();
 	}
 }
 
-void BulletPhysicInterface::sync() { this->dynamicsWorld->synchronizeMotionStates(); }
+void BulletPhysicInterface::sync() { this->dynamicsWorld->getSynchronizeAllMotionStates(); }
 
 void BulletPhysicInterface::setGravity(const Vector3 &gravity) {
 
@@ -352,7 +425,7 @@ void *BulletPhysicInterface::getState(unsigned int *len) {
 bool BulletPhysicInterface::rayTest(const Ray &ray, RayCastHit *hit) {
 
 	/*	*/
-	btSoftRigidDynamicsWorld *world = this->dynamicsWorld;
+	btDiscreteDynamicsWorld *world = this->dynamicsWorld;
 
 	struct AllRayResultCallback : public btCollisionWorld::RayResultCallback {
 		AllRayResultCallback(const btVector3 &rayFromWorld, const btVector3 &rayToWorld)
@@ -394,7 +467,7 @@ bool BulletPhysicInterface::rayTest(const Ray &ray, RayCastHit *hit) {
 }
 
 bool BulletPhysicInterface::raySphereTest(const Ray &ray, RayCastHit *hit) {
-	btSoftRigidDynamicsWorld *world = this->dynamicsWorld;
+	btDiscreteDynamicsWorld *world = this->dynamicsWorld;
 
 	// world->convexSweepTest
 	return false;

@@ -8,6 +8,7 @@
 #include <cassert>
 
 namespace fragcore {
+
 	const char *fragcore_sqlite_vfs_name = "iovfs";
 
 	int fragcore_sqlite3_open(Ref<IO> &io, sqlite3 **db) {
@@ -20,6 +21,7 @@ namespace fragcore {
 		if (result_code != SQLITE_OK) {
 			throw RuntimeException("Failed to register sqlite3 VFS: {}", sqlite3_errstr(result_code));
 		}
+
 		/*	*/
 		const sqlite3_vfs *iovfsFound = sqlite3_vfs_find(fragcore_sqlite_vfs_name);
 		if (!iovfsFound) {
@@ -30,9 +32,9 @@ namespace fragcore {
 		char bufURI[1024];
 		sprintf(bufURI, "fileIO?ptr=%llu", (sqlite3_uint64)((void *)&io));
 		result_code = sqlite3_open_v2(bufURI, db,
-							 SQLITE_OPEN_CREATE | SQLITE_OPEN_READWRITE | SQLITE_OPEN_MAIN_DB | SQLITE_OPEN_FULLMUTEX |
-								 SQLITE_OPEN_URI,
-							 fragcore_sqlite_vfs_name);
+									  SQLITE_OPEN_CREATE | SQLITE_OPEN_READWRITE | SQLITE_OPEN_MAIN_DB |
+										  SQLITE_OPEN_FULLMUTEX | SQLITE_OPEN_URI,
+									  fragcore_sqlite_vfs_name);
 		if (result_code != SQLITE_OK) {
 			throw RuntimeException("Failed to open sqlite3: {}", sqlite3_errstr(result_code));
 		}
@@ -88,7 +90,8 @@ namespace fragcore {
 	/*
 	** Methods for MemVfs
 	*/
-	static int memOpen(sqlite3_vfs * /*pVfs*/, const char * /*zName*/, sqlite3_file * /*pFile*/, int /*flags*/, int * /*pOutFlags*/);
+	static int memOpen(sqlite3_vfs * /*pVfs*/, const char * /*zName*/, sqlite3_file * /*pFile*/, int /*flags*/,
+					   int * /*pOutFlags*/);
 
 	static int memDelete(sqlite3_vfs * /*pVfs*/, const char *zName, int syncDir);
 

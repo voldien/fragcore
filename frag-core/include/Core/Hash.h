@@ -59,7 +59,7 @@ namespace fragcore {
 		 *
 		 * @param io
 		 */
-		void update(Ref<IO> &io);
+		void update(Ref<IO> &io_in);
 
 		/**
 		 * @brief Construct the final hash value.

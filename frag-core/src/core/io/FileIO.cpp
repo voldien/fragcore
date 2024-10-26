@@ -21,10 +21,10 @@ FileIO::FileIO(FILE *file) {
 
 	/*	Extract stat of the file.	*/
 	struct stat stat;
-	const int rc = fstat(fileno(this->file), &stat);
+	const int rcode = fstat(fileno(this->file), &stat);
 
 	/*	Check file mode.	*/
-	if (rc == 0) {
+	if (rcode == 0) {
 		if (stat.st_mode & S_IWUSR) {
 			this->mode = (IOMode)(this->mode | (int)IOMode::WRITE);
 		}
@@ -98,15 +98,15 @@ void FileIO::open(const char *path, IOMode mode) {
 	this->setName(path);
 }
 
-FileIO::FileIO(int fd, IOMode mode) {
+FileIO::FileIO(int file_d, IOMode mode) {
 
 	const char *f_io_mode = open_mode(mode);
 
-	if (fd == -1) {
+	if (file_d == -1) {
 		throw InvalidArgumentException("Failed to open file: {}.", strerror(errno));
 	}
 
-	this->file = fdopen(fd, f_io_mode);
+	this->file = fdopen(file_d, f_io_mode);
 
 	/*	Check if open was successful.	*/
 	if (this->file == nullptr) {
@@ -127,14 +127,14 @@ FileIO::FileIO(int fd, IOMode mode) {
 
 void FileIO::close() {
 	if (this->file != nullptr) {
-		int rc = fclose(this->file);
+		int rcode = fclose(this->file);
 
 		/*	Reset the value.	*/
 		this->file = nullptr;
 		this->mode = (IOMode)0;
 
 		/*	Check the result.	*/
-		switch (rc) {
+		switch (rcode) {
 		case EIO:
 		case EBADF:
 		case EINTR:
@@ -159,7 +159,7 @@ long FileIO::write(long int nbytes, const void *pbuffer) {
 
 	nreadBytes = fwrite(pbuffer, 1, nbytes, this->file);
 	if (nreadBytes != nbytes) {
-		//throw RuntimeException("Failed to write to file, {}.", strerror(errno));
+		// throw RuntimeException("Failed to write to file, {}.", strerror(errno));
 	}
 
 	int err = ferror(this->file);
@@ -175,8 +175,8 @@ long int FileIO::peek(long int nBytes, void *pbuffer) {
 
 	long int nrBytes = this->read(nBytes, pbuffer);
 
-	int rc = fseek(this->file, cur_pos, SEEK_SET);
-	if (rc != 0) {
+	int rcode = fseek(this->file, cur_pos, SEEK_SET);
+	if (rcode != 0) {
 	}
 	return nrBytes;
 }
@@ -205,17 +205,18 @@ void FileIO::seek(long int nbytes, const Seek seek) {
 		throw InvalidArgumentException("Invalid seek enumerator");
 	}
 
-	int rc = fseek(this->file, nbytes, whence);
-	if (rc != 0) {
-		if (ferror(this->file))
+	int rcode = fseek(this->file, nbytes, whence);
+	if (rcode != 0) {
+		if (ferror(this->file)) {
 			throw SystemException(errno, std::system_category(), fmt::format("{}", strerror(errno)));
+		}
 	}
 }
 
 unsigned long FileIO::getPos() {
 	fpos_t pos;
-	int rc = fgetpos(this->file, &pos);
-	if (rc != 0) {
+	int rcode = fgetpos(this->file, &pos);
+	if (rcode != 0) {
 		throw SystemException(errno, std::system_category(), fmt::format("{}", strerror(errno)));
 	}
 	return pos.__pos;
@@ -226,8 +227,8 @@ bool FileIO::isWriteable() const { return (this->mode & WRITE) != 0; }
 bool FileIO::isReadable() const { return (this->mode & READ) != 0; }
 
 bool FileIO::flush() {
-	int rc = fflush(this->file);
-	return rc == 0;
+	int rcode = fflush(this->file);
+	return rcode == 0;
 }
 
 void FileIO::setBlocking(bool blocking) {

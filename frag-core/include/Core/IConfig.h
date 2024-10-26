@@ -22,7 +22,6 @@
 #include <cctype>
 #include <cstring>
 #include <fmt/format.h>
-#include <limits>
 #include <map>
 #include <string>
 #include <typeinfo>
@@ -36,12 +35,14 @@
 
 namespace fragcore {
 
+	/*	forward decl.	*/
 	template <typename T> class ValueType;
 
 	class AbstractValue {
 	  public:
 		template <class T> const ValueType<T> &as() const { return reinterpret_cast<const ValueType<T> &>(*this); }
 		template <class T> ValueType<T> &as() { return reinterpret_cast<ValueType<T> &>(*this); }
+		/*	*/
 		// template <class T> const ValueType<T> &as_ptr() const { return reinterpret_cast<const ValueType<T>>(this); }
 	};
 
@@ -111,7 +112,7 @@ namespace fragcore {
 		IConfig &operator=(const IConfig &other) { return *this; }
 		IConfig &operator=(IConfig &&other) { return *this; }
 
-	  public: /*	Get and set methods.	*/
+		/*	Get and set methods.	*/
 		const AbstractValue &operator[](const std::string &key) { return *this->va_va[key]; }
 
 		template <class T> T get(const std::string &key) const {
@@ -120,9 +121,11 @@ namespace fragcore {
 						  "Invalid Data Type");
 			return this->va_va.at(key)->as<T>().getValue();
 		}
+
 		template <class T> T &get_ref(const std::string &key) const {
 			return this->va_va.at(key)->as<T &>().getValue();
 		}
+
 		template <class T> T *get_ref(const std::string &key) const {
 			return this->va_va.at(key)->as<T *>().getValue();
 		}

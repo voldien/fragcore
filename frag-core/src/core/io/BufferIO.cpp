@@ -68,7 +68,7 @@ void BufferIO::seek(long int nbytes, const Seek seek) {
 	case END:
 		break;
 	default:
-		throw InvalidArgumentException("");
+		throw InvalidArgumentException("Invalid Seek Mode");
 	}
 }
 

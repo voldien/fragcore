@@ -75,18 +75,18 @@ void ASyncIO::asyncReadFile(ASyncHandle handle, char *buffer, unsigned int size,
 }
 
 void ASyncIO::asyncReadFile(ASyncHandle handle, Ref<IO> &writeIO, AsyncComplete complete) {
-	AsyncObject *ao = getObject(handle);
+	AsyncObject *async_o = getObject(handle);
 
 	/*  Check that open file is readable.   */
-	if (!ao->ref->isReadable()) {
-		throw RuntimeException("IO object is not writable {}", ao->ref->getUID());
+	if (!async_o->ref->isReadable()) {
+		throw RuntimeException("IO object is not writable {}", async_o->ref->getUID());
 	}
 	/*  Check if IO object is writeable.    */
 	if (!writeIO->isWriteable()) {
 		throw RuntimeException("IO object is not writable {}", writeIO->getUID());
 	}
 
-	ao->callback = complete;
+	async_o->callback = complete;
 }
 
 void ASyncIO::asyncWriteFile(ASyncHandle handle, char *buffer, unsigned int size, AsyncComplete complete) {
@@ -126,29 +126,29 @@ void ASyncIO::asyncWriteFile(ASyncHandle handle, char *buffer, unsigned int size
 
 void ASyncIO::asyncWriteFile(ASyncHandle handle, Ref<IO> &io, AsyncComplete complete) { /*	*/
 
-	AsyncObject *ao = getObject(handle);
+	AsyncObject *async_o = getObject(handle);
 
-	assert(ao);
+	assert(async_o);
 
-	if (!ao->ref->isWriteable()) {
-		throw RuntimeException("IO object is not writable {}", ao->ref->getUID());
+	if (!async_o->ref->isWriteable()) {
+		throw RuntimeException("IO object is not writable {}", async_o->ref->getUID());
 	}
 
 	/*  Assign variables.   */
-	ao->sem = new stdSemaphore();
+	async_o->sem = new stdSemaphore();
 
-	ao->target = io;
-	ao->size = io->length();
-	ao->callback = complete;
-	ao->userData = nullptr;
+	async_o->target = io;
+	async_o->size = io->length();
+	async_o->callback = complete;
+	async_o->userData = nullptr;
 
 	/*  Reset status counter.   */
-	ao->status.nbytes = 0;
-	ao->status.offset = 0;
+	async_o->status.nbytes = 0;
+	async_o->status.offset = 0;
 
-	AsyncTask readTask(*ao);
+	AsyncTask readTask(*async_o);
 	readTask.callback = async_write;
-	readTask.userData = ao;
+	readTask.userData = async_o;
 	this->scheduler->addTask(&readTask);
 }
 
@@ -162,13 +162,13 @@ void ASyncIO::asyncWait(ASyncHandle handle) { asyncWait(handle, -1); }
 
 bool ASyncIO::asyncWait(ASyncHandle handle, long int timeout) {
 
-	AsyncObject *ao = getObject(handle);
+	AsyncObject *async_o = getObject(handle);
 
-	assert(ao);
+	assert(async_o);
 
-	if (ao->sem) {
+	if (async_o->sem) {
 		/*	Wait	*/
-		ao->sem->wait(timeout);
+		async_o->sem->wait(timeout);
 	}
 
 	// TODO return status.

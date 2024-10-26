@@ -54,7 +54,7 @@ namespace fragcore {
 
 		void open(const char *path, IOMode mode) override;
 
-		bool isOperationSupported(IOOperation operations) const noexcept override {
+		bool isOperationSupported(const IOOperation operations) const noexcept override {
 			const IOOperation supportedIO = static_cast<IOOperation>(OP_READ | OP_WRITE | OP_LENGTH);
 			return (operations & supportedIO) != operations;
 		};

@@ -18,4 +18,4 @@ IF (BUILD_SHARED_LIBS AND CMAKE_SIZEOF_VOID_P EQUAL 8)
 	SET_PROPERTY(TARGET fragcore-physic-bullet PROPERTY POSITION_INDEPENDENT_CODE ON)
 ENDIF()
 
-INSTALL(TARGETS fragcore-physic-bullet fragcore-physic-interface DESTINATION lib)
+INSTALL(TARGETS fragcore-physic-bullet fragcore-physic-interface BulletCollision BulletDynamics BulletSoftBody DESTINATION lib)

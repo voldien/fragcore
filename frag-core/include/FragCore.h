@@ -28,6 +28,7 @@
  */
 
 /*  Core.   */
+#include "Core/Environment.h"
 #include "Core/IConfig.h"
 #include "Core/Library.h"
 #include "Core/SystemInfo.h"
@@ -49,7 +50,7 @@
 #include "DataStructure/StackAllactor.h"
 #include "DataStructure/StackBufferedAllocator.h"
 
-/*  */
+/*  Task Schedular/Threading.   */
 #include "TaskScheduler/IScheduler.h"
 
 /*  Networking. */
@@ -63,7 +64,7 @@
 #include "Math3D/OBB.h"
 #include "Math3D/Plane.h"
 
-/*  */
+/*  Compression.    */
 #include "Compression/GZIPCompression.h"
 #include "Compression/LZ4Compression.h"
 

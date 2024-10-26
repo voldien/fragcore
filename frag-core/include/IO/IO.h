@@ -99,7 +99,7 @@ namespace fragcore {
 			OP_PEEK = 1 << 8		/*	*/
 		};
 
-		virtual bool isOperationSupported(IOOperation operationFlags) const noexcept = 0;
+		virtual bool isOperationSupported(const IOOperation operationFlags) const noexcept = 0;
 
 	  protected: /*  Internal methods.   */
 				 // TOOD determine how it should be used?

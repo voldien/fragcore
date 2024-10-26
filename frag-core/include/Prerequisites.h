@@ -29,6 +29,9 @@ namespace fragcore {
 
 	/*	*/
 	class IScheduler;
+	class ISpinLock;
+	class IMutex;
+	class ISemaphore;
 
 	/*  IO  */
 	class IO;
@@ -41,6 +44,7 @@ namespace fragcore {
 	class ZipFileSystem;
 	class IFileSystem;
 	class FileSystem;
+	
 	/*	*/
 	class Hash;
 	class Random;
