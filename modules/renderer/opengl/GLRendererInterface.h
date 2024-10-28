@@ -150,35 +150,11 @@ namespace fragcore {
 		 */
 		virtual void setLineWidth(float width);
 
-		/**
-		 *
-		 * @param source
-		 * @param dest
-		 */
-		virtual void
-		blit(const FrameBuffer *source, FrameBuffer *dest,
-			 Texture::FilterMode filterMode); // TODO add filter mode.    /*  TODO add filter and buffer bit.    */
-		// virtual void blit(const FrameBuffer* source, FrameBuffer* dest, int* source, int* dest, Texture::FilterMode
-		// filterMode, FrameBuffer::BufferAttachment attachment);
-		// TODO add additional version of the blit for sub image specifiction.
-
 		virtual void bindTextures(unsigned int firstUnit, const std::vector<Texture *> &textures);
 
 		virtual void bindImages(unsigned int firstUnit, const std::vector<Texture *> &textures,
 								const std::vector<Texture::MapTarget> &mapping,
 								const std::vector<Texture::Format> &formats);
-
-		/**
-		 *
-		 * @param source
-		 * @param target
-		 */
-		// TODO add version with regiion specifiction.
-		virtual void copyTexture(const Texture *source, Texture *target);
-		// virtual void copyTexture(const Texture* source, Texture* target, int* sourceCoord, int* targetCoord);
-
-		// TODO add memory barrier.
-		virtual void memoryBarrier();
 
 		Sync *createSync(SyncDesc *desc) override;
 

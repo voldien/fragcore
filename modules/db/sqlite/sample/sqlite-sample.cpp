@@ -26,23 +26,23 @@ int main(int argc, const char **argv) {
 
 		result_code = sqlite3_exec(database, "PRAGMA synchronous=OFF", nullptr, nullptr, &errMs);
 		if (result_code != SQLITE_OK) {
-			throw RuntimeException("Failed to open sqlite3: {}", sqlite3_errstr(result_code));
+			throw RuntimeException("Failed to exec sqlite3: {}", sqlite3_errstr(result_code));
 		}
 		result_code = sqlite3_exec(database, "PRAGMA count_changes=OFF", nullptr, nullptr, &errMs);
 		if (result_code != SQLITE_OK) {
-			throw RuntimeException("Failed to open sqlite3: {}", sqlite3_errstr(result_code));
+			throw RuntimeException("Failed to exec sqlite3: {}", sqlite3_errstr(result_code));
 		}
 		result_code = sqlite3_exec(database, "PRAGMA journal_mode=MEMORY", nullptr, nullptr, &errMs);
 		if (result_code != SQLITE_OK) {
-			throw RuntimeException("Failed to open sqlite3: {}", sqlite3_errstr(result_code));
+			throw RuntimeException("Failed to exec sqlite3: {}", sqlite3_errstr(result_code));
 		}
 		result_code = sqlite3_exec(database, "PRAGMA temp_store=MEMORY", nullptr, nullptr, &errMs);
 		if (result_code != SQLITE_OK) {
-			throw RuntimeException("Failed to open sqlite3: {}", sqlite3_errstr(result_code));
+			throw RuntimeException("Failed to exec sqlite3: {}", sqlite3_errstr(result_code));
 		}
 		result_code = sqlite3_exec(database, "PRAGMA cache_size=40000", nullptr, nullptr, &errMs);
 		if (result_code != SQLITE_OK) {
-			throw RuntimeException("Failed to open sqlite3: {}", sqlite3_errstr(result_code));
+			throw RuntimeException("Failed to exec sqlite3: {}", sqlite3_errstr(result_code));
 		}
 
 		sqlite3_stmt *res1;

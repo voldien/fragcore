@@ -112,8 +112,9 @@ void *VorbisAudioDecoder::getData(long int *psize) {
 	size_t data_len = ov_pcm_total(ov, -1) * vi->channels * 4;
 
 	void *pcmout1 = malloc(data_len);
-	if (pcmout1 == 0)
+	if (pcmout1 == nullptr) {
 		throw RuntimeException("Out of memory.\n");
+	}
 
 	// fill pcmout buffer with ov_read data samples
 	// you can't just slap data_len in place of 4096, it doesn't work that way
@@ -122,8 +123,9 @@ void *VorbisAudioDecoder::getData(long int *psize) {
 	// 1 is the signedness you want, I want short not unsigned short (for openal) so 1
 	for (long size = 0, offset = 0, sel = 0;
 		 (size = ov_read(ov, (char *)pcmout1 + offset, 4096, 0, 2, 1, (int *)&sel)) != 0; offset += size) {
-		if (size < 0)
+		if (size < 0) {
 			throw RuntimeException("");
+		}
 	}
 
 	*psize = data_len;

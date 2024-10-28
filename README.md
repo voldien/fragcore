@@ -71,11 +71,15 @@ make install
 In order to compile the program on Linux based machine, the following Debian packages are required.
 
 ```bash
-  sudo apt-get install g++-10 pkg-config libsdl2-dev libfreeimage-dev libssl-dev
-  sudo apt-get install libsdl2-dev libglew-dev libvulkan-dev libgl1-mesa-dev opencl-headers \
-  libgtest-dev libsubunit-dev libogg-dev libopus-dev libvorbis-dev \
-  libzip-dev libbullet-dev libopenal-dev mesa-common-dev ocl-icd-opencl-dev libnoise-dev libvdpau-dev \
-  libalut-dev libspdlog-dev libbz2-dev libcurl4 libcurl4-gnutls-dev libfmt-dev binutils-dev libeigen3-dev libglfw3-dev libglm-dev
+sudo apt-get install pkg-config libssl-dev libgtest-dev libsubunit-dev libogg-dev libopus-dev libvorbis-dev \
+libzip-dev  libnoise-dev libvdpau-dev libalut-dev libspdlog-dev libbz2-dev \
+libcurl4 libcurl4-gnutls-dev libfmt-dev binutils-dev libeigen3-dev libomp-dev \
+zip gzip googletest libglm-dev 
+```
+
+```bash
+sudo apt-get install libavcodec-dev libavfilter-dev libavformat-dev libfreetype6-dev libsqlite3-dev \
+libglfw3-dev libopenal-dev mesa-common-dev libopengl-dev libglu1-mesa-dev libvulkan-dev libgl1-mesa-dev libsdl2-dev libsdl2-dev libfreeimage-dev
 ```
 
 ## Testing
@@ -101,7 +105,7 @@ The project is design that modules can be use to reduce both dependices and code
 - **Geometry Util** - 
 - **Image Loader** - Load/Save Image.
 - **IO** - File, Memory, Modbus, Serial, TCP/UDP
-- **Physic** - Physic Simulator for Game Engines. Bullet/RPC
+- **Physic** - BulletPhysic
 - **Renderer** - Vulkan/OpenGL
 - **Window** - SDL/GLFW
 - **TaskScheduler** - Task scheduler for distrubte tasks on CPU.

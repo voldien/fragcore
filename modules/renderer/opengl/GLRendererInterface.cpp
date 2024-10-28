@@ -1303,25 +1303,6 @@ bool GLRendererInterface::isStateEnabled(GLRendererInterface::State state) {
 
 void GLRendererInterface::setLineWidth(float width) { glLineWidth(width); }
 
-void GLRendererInterface::blit(const FrameBuffer *source, FrameBuffer *dest, Texture::FilterMode filterMode) {
-	GLFrameBuffer *read = (GLFrameBuffer *)source;
-	GLFrameBuffer *write = (GLFrameBuffer *)dest;
-
-	GLenum filter = GLHelper::getTextureFilterModeNoMip(filterMode);
-	GLenum attachment = GL_COLOR_BUFFER_BIT;
-
-	// if (glBlitNamedFramebuffer) {
-
-	// 	glBlitNamedFramebuffer(read->framebuffer, write->framebuffer, 0, 0, source->width(), source->height(), 0, 0,
-	// 						   dest->width(), dest->height(), attachment, filter);
-	// } else {
-	// 	source->read();
-	// 	dest->write();
-	// 	glBlitFramebuffer(0, 0, source->width(), source->height(), 0, 0, dest->width(), dest->height(), attachment,
-	// 					  filter);
-	// }
-}
-
 void GLRendererInterface::bindTextures(unsigned int firstUnit, const std::vector<Texture *> &textures) {
 	const int nTextures = textures.size();
 
@@ -1396,18 +1377,6 @@ void GLRendererInterface::bindImages(unsigned int firstUnit, const std::vector<T
 	}
 }
 
-void GLRendererInterface::copyTexture(const Texture *source, Texture *target) {
-	const GLTexture *so = static_cast<const GLTexture *>(source);
-	GLTexture *ta = static_cast<GLTexture *>(target);
-
-	if (glCopyImageSubData) {
-		//	glCopyImageSubData(so->texture, so->target, 0, 0, 0, 0, ta->texture, ta->target, 0, 0, 0, 0,
-		// target->width(), 					   target->height(), 1); // TODO add depth and region.
-	} else {
-		throw RuntimeException("copyTexture not supported");
-	}
-}
-
 Sync *GLRendererInterface::createSync(SyncDesc *desc) {
 	// sync->iRenderer = this;
 	GLSync *glSync = new GLSync();
@@ -1416,8 +1385,6 @@ Sync *GLRendererInterface::createSync(SyncDesc *desc) {
 }
 
 void GLRendererInterface::deleteSync(Sync *sync) { delete sync; }
-
-void GLRendererInterface::memoryBarrier() {}
 
 static void default_callback_debug_gl(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length,
 									  const GLchar *message, GLvoid *userParam) {
@@ -1881,6 +1848,7 @@ void GLRendererInterface::execute(CommandList *list) {
 			}
 		} break;
 		case GLCommandBufferCmd::InsertGroupMarker: {
+			const GLInsertGroupMarkerCommand *glInsertGroupMarker = base->as<const GLInsertGroupMarkerCommand>();
 			if (glDebugMessageInsert) {
 			}
 

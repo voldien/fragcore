@@ -13,9 +13,9 @@ namespace fragcore {
 
 	int fragcore_sqlite3_open(Ref<IO> &io, sqlite3 **db) {
 		int result_code;
-		char *errMs;
 		sqlite3_vfs vfs;
 		fragcore::getIOVFS(&vfs);
+
 		/*  */
 		result_code = sqlite3_vfs_register(&vfs, 0);
 		if (result_code != SQLITE_OK) {
@@ -30,11 +30,13 @@ namespace fragcore {
 
 		/*	*/
 		char bufURI[1024];
-		sprintf(bufURI, "fileIO?ptr=%llu", (sqlite3_uint64)((void *)&io));
+		//vfs.pAppData.
+		sprintf(bufURI, "ptr=%llu", (sqlite3_uint64)((void *)&io));
 		result_code = sqlite3_open_v2(bufURI, db,
 									  SQLITE_OPEN_CREATE | SQLITE_OPEN_READWRITE | SQLITE_OPEN_MAIN_DB |
 										  SQLITE_OPEN_FULLMUTEX | SQLITE_OPEN_URI,
 									  fragcore_sqlite_vfs_name);
+
 		if (result_code != SQLITE_OK) {
 			throw RuntimeException("Failed to open sqlite3: {}", sqlite3_errstr(result_code));
 		}
@@ -163,6 +165,7 @@ namespace fragcore {
 
 	static int memClose(sqlite3_file *pFile) {
 		IOFile *p = reinterpret_cast<IOFile *>(pFile);
+		p->ref->close();
 		return SQLITE_OK;
 	}
 
@@ -283,8 +286,10 @@ namespace fragcore {
 
 		/*	*/
 		IOFile *p = (IOFile *)pFile;
+
 		// cevfs_info *pInfo = (cevfs_info *)pVfs->pAppData;
 		// sqlite3_vfs *pRoot = pInfo->pRootVfs;
+
 		if ((flags & SQLITE_OPEN_MAIN_DB) == 0) {
 			return SQLITE_CANTOPEN;
 		}
@@ -293,6 +298,7 @@ namespace fragcore {
 
 		sqlite3_int64 refV = sqlite3_uri_int64(zName, "ptr", 0);
 		Ref<IO> *ref = reinterpret_cast<Ref<IO> *>(refV);
+
 		if (ref == nullptr) {
 			return SQLITE_CANTOPEN;
 		}
@@ -307,7 +313,7 @@ namespace fragcore {
 			bool writeable = (*ref)->isWriteable();
 
 			if (!(writeable && readable)) {
-				return SQLITE_CANTOPEN;
+				return SQLITE_PERM;
 			}
 		}
 
@@ -402,8 +408,10 @@ namespace fragcore {
 
 	void getIOVFS(sqlite3_vfs *vfs) {
 		memcpy(vfs, &mem_vfs, sizeof(sqlite3_vfs));
+
 		/*	*/
 		mem_vfs.szOsFile = sizeof(IOFile);
 		mem_vfs.pAppData = sqlite3_vfs_find(nullptr);
+		mem_vfs.zName = fragcore_sqlite_vfs_name;
 	}
 } // namespace fragcore

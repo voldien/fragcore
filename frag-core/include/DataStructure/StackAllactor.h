@@ -32,7 +32,7 @@ namespace fragcore {
 		StackAllocator(const StackAllocator &stack);
 		StackAllocator(StackAllocator &&other);
 		explicit StackAllocator(const size_t stackSizeBytes);
-		~StackAllocator();
+		virtual ~StackAllocator();
 
 		/**
 		 *	Allocate n number of bytes.

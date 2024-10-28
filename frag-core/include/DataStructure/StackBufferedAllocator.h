@@ -33,7 +33,7 @@ namespace fragcore {
 		StackBufferedAllocator(const StackBufferedAllocator &doublebuffer);
 		StackBufferedAllocator(StackBufferedAllocator &&other);
 		explicit StackBufferedAllocator(size_t sizeBytes);
-		~StackBufferedAllocator();
+		virtual ~StackBufferedAllocator();
 
 		/**
 		 *	Allocate n number of bytes.
