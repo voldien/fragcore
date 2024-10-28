@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _FRAG_CORE_VK_BUFFER_H_
-#define _FRAG_CORE_VK_BUFFER_H_ 1
+#ifndef _FRAGCORE_VK_BUFFER_H_
+#define _FRAGCORE_VK_BUFFER_H_ 1
 #include "../Buffer.h"
 #include "internal_object_type.h"
 

@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _FRAG_CORE_VULKAN_WINDOW_H_
-#define _FRAG_CORE_VULKAN_WINDOW_H_ 1
+#ifndef _FRAGCORE_VULKAN_WINDOW_H_
+#define _FRAGCORE_VULKAN_WINDOW_H_ 1
 #include "VKRenderInterface.h"
 #include <../IRenderer.h>
 #include <../RendererWindow.h>

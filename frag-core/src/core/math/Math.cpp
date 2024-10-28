@@ -1,6 +1,8 @@
 #include "Math/Math.h"
-
+/*	*/
+#undef INLINE
 #include "open-simplex-noise.h"
+
 using namespace fragcore;
 
 static struct osn_context *ctx = nullptr;

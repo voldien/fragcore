@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _FRAG_CORE_DISPLAY_H_
-#define _FRAG_CORE_DISPLAY_H_ 1
+#ifndef _FRAGCORE_DISPLAY_H_
+#define _FRAGCORE_DISPLAY_H_ 1
 #include <Core/Object.h>
 #include <FragDef.h>
 #include <vector>

@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _FRAG_CORE_VK_TEXTURE_H_
-#define _FRAG_CORE_VK_TEXTURE_H_ 1
+#ifndef _FRAGCORE_VK_TEXTURE_H_
+#define _FRAGCORE_VK_TEXTURE_H_ 1
 #include "../Texture.h"
 #include "RenderDesc.h"
 #include <vulkan/vulkan.h>

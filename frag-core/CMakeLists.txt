@@ -33,23 +33,20 @@ IF(BUILTIN_PCG_C_BASIC)
 	${CMAKE_CURRENT_SOURCE_DIR}/extern/pcg-c-basic/*.c )
 ENDIF()
 
-# Find all required libaries for the program.
+# Find all required libaries.
 FIND_PACKAGE(ZLIB QUIET)
 FIND_PACKAGE(Backtrace QUIET)
-FIND_PACKAGE(OpenSSL QUIET)
-FIND_PACKAGE(JeMalloc QUIET)
-FIND_PACKAGE(LLVM QUIET)
 FIND_PACKAGE(LZO QUIET)
+FIND_PACKAGE(OpenSSL REQUIRED)
+# Find all optional libaries.
+FIND_PACKAGE(JeMalloc QUIET)
 
 #
 IF(PKG_CONFIG_FOUND)
 	MESSAGE(STATUS "Found pkg-config: ${PKG_CONFIG_EXECUTABLE} -- version ${PKG_CONFIG_VERSION_STRING}.")
-	# Find library and compiling options.
-	#TODO add logic for handling if any of the pkg fails.
 	PKG_CHECK_MODULES(ZIP QUIET libzip)
 ELSE()
 	MESSAGE(ERROR "Could not find PKG COnfig")
-	# TODO add logic for handling if pkg-config not available.
 ENDIF()
 
 IF(ZLIB_FOUND)
@@ -66,24 +63,17 @@ ENDIF()
 
 IF(OPENSSL_FOUND)
 	MESSAGE(STATUS "OpenSSL found: ${OPENSSL_LIBRARIES} -- ${OPENSSL_VERSION}")
-ELSE()
-
 ENDIF()
 
-FIND_PACKAGE(JeMalloc QUIET)
-IF(JeMalloc_FOUND)
-
-ENDIF()
-
-FIND_PACKAGE(LZO QUIET)
 IF(LZO_FOUND)
 
 ENDIF()
 
-
 FIND_PACKAGE(Eigen3 3.3 NO_MODULE QUIET)
 IF(EIGEN3_FOUND)
 	MESSAGE(STATUS "Using eigen3 version.")
+ELSE()
+
 ENDIF()
 
 # Define all file lists.
@@ -128,6 +118,10 @@ ADD_DEPENDENCIES(fragcore taskSch infoware cxxexcept )
 
 #
 TARGET_COMPILE_DEFINITIONS(fragcore PRIVATE FRAG_CORE_INTERNAL_IMP=1)
+
+IF(EIGEN3_FOUND)
+	TARGET_COMPILE_DEFINITIONS(fragcore PUBLIC FRAGCORE_USE_EIGEN=1)
+ENDIF()
 TARGET_COMPILE_FEATURES(fragcore PUBLIC cxx_std_17 cxx_constexpr)
 
 #

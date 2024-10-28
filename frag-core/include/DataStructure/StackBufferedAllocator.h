@@ -6,17 +6,18 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _FRAG_CORE_DOUBLE_BUFFERED_ALLACATOR_H_
-#define _FRAG_CORE_DOUBLE_BUFFERED_ALLACATOR_H_ 1
+#ifndef _FRAGCORE_DOUBLE_BUFFERED_ALLACATOR_H_
+#define _FRAGCORE_DOUBLE_BUFFERED_ALLACATOR_H_ 1
+#include "Core/UIDObject.h"
 #include "Queue.h"
 #include "StackAllactor.h"
 
@@ -26,7 +27,7 @@ namespace fragcore {
 	 * @brief Stack of buffer allocator.
 	 *
 	 */
-	class FVDECLSPEC StackBufferedAllocator {
+	class FVDECLSPEC StackBufferedAllocator : public UIDObject {
 	  public:
 		// StackBufferedAllocator(size_t nrStack = 0);
 		StackBufferedAllocator(const StackBufferedAllocator &doublebuffer);

@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _FRAG_CORE_ASYNC_H_
-#define _FRAG_CORE_ASYNC_H_ 1
+#ifndef _FRAGCORE_ASYNC_H_
+#define _FRAGCORE_ASYNC_H_ 1
 #include "../Core/Ref.h"
 #include "../TaskScheduler/IScheduler.h"
 #include "../Threading/ISemaphore.h"

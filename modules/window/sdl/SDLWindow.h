@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _FRAG_CORE_SDL_WINDOW_H_
-#define _FRAG_CORE_SDL_WINDOW_H_ 1
+#ifndef _FRAGCORE_SDL_WINDOW_H_
+#define _FRAGCORE_SDL_WINDOW_H_ 1
 #include "../Display.h"
 #include "../Window.h"
 #include <SDL2/SDL.h>

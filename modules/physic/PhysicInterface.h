@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _FRAG_CORE_PHYSIC_INTERFACE_H_
-#define _FRAG_CORE_PHYSIC_INTERFACE_H_ 1
+#ifndef _FRAGCORE_PHYSIC_INTERFACE_H_
+#define _FRAGCORE_PHYSIC_INTERFACE_H_ 1
 #include "PhysicDesc.h"
 #include "Prerequisites.h"
 #include "SoftBody.h"

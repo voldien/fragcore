@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _FRAG_CORE_GLFW_WINDOW_H_
-#define _FRAG_CORE_GLFW_WINDOW_H_ 1
+#ifndef _FRAGCORE_GLFW_WINDOW_H_
+#define _FRAGCORE_GLFW_WINDOW_H_ 1
 #include "../Window.h"
 #include <GLFW/glfw3.h>
 #include <string>

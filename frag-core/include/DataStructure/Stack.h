@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _FRAG_CORE_STACK_H_
-#define _FRAG_CORE_STACK_H_ 1
+#ifndef _FRAGCORE_STACK_H_
+#define _FRAGCORE_STACK_H_ 1
 #include "../FragDef.h"
 #include "Iterator.h"
 #include <utility>
@@ -29,14 +29,14 @@ namespace fragcore {
 	 * @tparam T
 	 */
 	// TODO add atomic support
-	template <class T> class Stack : public std::allocator<T> {
+	template <class T> class Stack {
 	  public:
 		Stack() {
 			this->data = nullptr;
 			this->nrElements = 0;
 			this->mreserved = 0;
 		}
-		Stack(size_t size) : Stack() { this->reserve(size); }
+		Stack(const size_t size) : Stack() { this->reserve(size); }
 
 		Stack(const Stack &stack) : Stack() {
 			reserve(stack.getReserved());
@@ -56,23 +56,23 @@ namespace fragcore {
 		 * @param allocator
 		 * @return
 		 */
-		Stack &operator=(const Stack &allocator) {
-			reserve(allocator.getReserved());
-			mempcpy(this->data, allocator.data, sizeof(T) * allocator.getReserved());
-			this->nrElements = allocator.nrElements;
-			this->mreserved = allocator.mreserved;
+		Stack &operator=(const Stack &other) {
+			reserve(other.getReserved());
+			mempcpy(this->data, other.data, sizeof(T) * other.getReserved());
+			this->nrElements = other.nrElements;
+			this->mreserved = other.mreserved;
 			return *this;
 		}
 
-		Stack &operator=(Stack &&alloctor) {
-			this->data = std::exchange(alloctor.data, nullptr);
-			this->nrElements = std::exchange(alloctor.nrElements, 0);
-			this->mreserved = std::exchange(alloctor.mreserved, 0);
+		Stack &operator=(Stack &&other) {
+			this->data = std::exchange(other.data, nullptr);
+			this->nrElements = std::exchange(other.nrElements, 0);
+			this->mreserved = std::exchange(other.mreserved, 0);
 			return *this;
 		}
 
-		T &push(const T &p) {
-			this->data[this->nrElements] = p;
+		T &push(const T &push_element) {
+			this->data[this->nrElements] = push_element;
 			this->nrElements++;
 			return this->data[this->nrElements - 1];
 		}
@@ -88,11 +88,11 @@ namespace fragcore {
 			throw RuntimeException();
 		}
 
-		T &operator[](int index) { return this->data[index]; }
+		T &operator[](const size_t index) { return this->data[index]; }
 
-		const T &operator[](int index) const { return this->data[index]; }
+		const T &operator[](const size_t index) const { return this->data[index]; }
 
-		void reserve(int nrOfElement) {
+		void reserve(const size_t nrOfElement) {
 			this->data = static_cast<T *>(realloc(this->data, nrOfElement * sizeof(T)));
 			if (this->data == nullptr) {
 				throw RuntimeException("Out of memory"); // TODO replace with the system exception.

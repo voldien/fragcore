@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _FRAG_CORE_OPENGL_WINDOW_H_
-#define _FRAG_CORE_OPENGL_WINDOW_H_ 1
+#ifndef _FRAGCORE_OPENGL_WINDOW_H_
+#define _FRAGCORE_OPENGL_WINDOW_H_ 1
 #include "../RendererWindow.h"
 #include "GLFrameBuffer.h"
 #include "GLRendererInterface.h"

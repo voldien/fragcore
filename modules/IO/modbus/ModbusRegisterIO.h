@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _FRAG_CORE_MODBUS_REGISTER_IO_H_
-#define _FRAG_CORE_MODBUS_REGISTER_IO_H_ 1
+#ifndef _FRAGCORE_MODBUS_REGISTER_IO_H_
+#define _FRAGCORE_MODBUS_REGISTER_IO_H_ 1
 #include "IO/IO.h"
 #include "NetModbusSocket.h"
 

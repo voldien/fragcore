@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _FRAG_CORE_FTP_IO_H_
-#define _FRAG_CORE_FTP_IO_H_ 1
+#ifndef _FRAGCORE_FTP_IO_H_
+#define _FRAGCORE_FTP_IO_H_ 1
 #include <FragCore.h>
 #if defined(FRAG_CORE_INTERNAL_IMP) // TODO resolve to a single file or something later
 #include <curl/curl.h>

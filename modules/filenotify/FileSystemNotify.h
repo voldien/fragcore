@@ -16,8 +16,8 @@
  * along with this program;
  */
 
-#ifndef _FRAG_CORE_FILE_NOTIFY_H_
-#define _FRAG_CORE_FILE_NOTIFY_H_ 1
+#ifndef _FRAGCORE_FILE_NOTIFY_H_
+#define _FRAGCORE_FILE_NOTIFY_H_ 1
 #include "IO/IO.h"
 #include <Core/Object.h>
 #include <DataStructure/PoolAllocator.h>

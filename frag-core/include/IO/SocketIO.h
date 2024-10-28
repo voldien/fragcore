@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _FRAG_CORE_SOCKET_IO_H_
-#define _FRAG_CORE_SOCKET_IO_H_ 1
+#ifndef _FRAGCORE_SOCKET_IO_H_
+#define _FRAGCORE_SOCKET_IO_H_ 1
 #include "../Network/NetSocket.h"
 #include "../Core/Ref.h"
 #include "IO.h"

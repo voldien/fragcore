@@ -47,9 +47,8 @@ long ZipFileIO::read(long int nbytes, void *pbuffer) {
 	return nread;
 }
 
-long ZipFileIO::write(long int nbytes, const void *pbuffer) {
+long ZipFileIO::write([[maybe_unused]] long int nbytes, [[maybe_unused]] const void *pbuffer) {
 	throw NotImplementedException();
-
 	return nbytes;
 }
 
@@ -72,7 +71,7 @@ long ZipFileIO::length() {
 }
 
 void ZipFileIO::seek(long int nbytes, const Seek seek) {
-	int whence;
+	int whence = 0;
 	switch (seek) {
 	case SET:
 		whence = SEEK_SET;
@@ -87,12 +86,12 @@ void ZipFileIO::seek(long int nbytes, const Seek seek) {
 		throw InvalidArgumentException("Invalid seek enumerator.");
 	}
 
-	// zip_int8_t err = zip_fseek(this->file, nbytes, whence);
-	// if (err == -1) {
-	//	//	char buf[1024];
-	//	//	int sys_err;
-	//	//	throw InvalidArgumentException("Can not seek {}", zip_file_strerror(this->file));
-	//}
+	zip_int8_t err = zip_fseek(this->file, nbytes, whence);
+	if (err == -1) {
+		char buf[1024];
+		zip_error_to_str(buf, sizeof(buf), err, errno);
+		throw InvalidArgumentException("Can not seek {}", zip_file_strerror(this->file));
+	}
 }
 
 unsigned long ZipFileIO::getPos() {

@@ -16,8 +16,8 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-#ifndef _FRAG_CORE_IMAGE_LOADER_H_
-#define _FRAG_CORE_IMAGE_LOADER_H_ 1
+#ifndef _FRAGCORE_IMAGE_LOADER_H_
+#define _FRAGCORE_IMAGE_LOADER_H_ 1
 #include "Image.h"
 #include <Core/Object.h>
 #include <Core/Ref.h>

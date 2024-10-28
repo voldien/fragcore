@@ -15,10 +15,10 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _FRAG_CORE_STACK_ALLACTOR_H_
-#define _FRAG_CORE_STACK_ALLACTOR_H_ 1
+#ifndef _FRAGCORE_STACK_ALLACTOR_H_
+#define _FRAGCORE_STACK_ALLACTOR_H_ 1
 #include "../FragDef.h"
-#include <cstdint>
+#include "Core/UIDObject.h"
 
 namespace fragcore {
 
@@ -26,7 +26,7 @@ namespace fragcore {
 	 * @brief Single stack buffer.
 	 *
 	 */
-	class FVDECLSPEC StackAllocator {
+	class FVDECLSPEC StackAllocator : public UIDObject {
 	  public:
 		StackAllocator();
 		StackAllocator(const StackAllocator &stack);
@@ -50,7 +50,7 @@ namespace fragcore {
 		 *	Allocate aligned memory block.
 		 *	@return first memory address.
 		 */
-		void *allocateAligned(size_t sizeBytes, unsigned int alignment);
+		void *allocateAligned(const size_t sizeBytes, const unsigned int alignment);
 
 		/**
 		 *	Set marker to zero.

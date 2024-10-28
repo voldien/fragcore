@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _FRAG_CORE_TCP_NETSOCKET_H_
-#define _FRAG_CORE_TCP_NETSOCKET_H_ 1
+#ifndef _FRAGCORE_TCP_NETSOCKET_H_
+#define _FRAGCORE_TCP_NETSOCKET_H_ 1
 #include "NetSocket.h"
 #include <sys/socket.h>
 

@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _FRAG_CORE_COLOR_H_
-#define _FRAG_CORE_COLOR_H_ 1
+#ifndef _FRAGCORE_COLOR_H_
+#define _FRAGCORE_COLOR_H_ 1
 #include "../Math/Math.h"
 
 namespace fragcore {
@@ -29,36 +29,36 @@ namespace fragcore {
 	  public:
 		using Precision = float;
 		Color() = default;
-		Color(float red, float green, float blue, float alpha) noexcept : Vector4(red, green, blue, alpha) {}
-		Color(uint32_t hex) noexcept {					 /*	Convert */
-			float red = ((hex >> 24) & 0xFF) / 255.0f;	 // Extract the RR byte
-			float green = ((hex >> 16) & 0xFF) / 255.0f; // Extract the GG byte
-			float blue = ((hex >> 8) & 0xFF) / 255.0f;	 // Extract the GG byte
-			float alpha = ((hex)&0xFF) / 255.0f;		 // Extract the BB byte
+		Color(const Precision red, const Precision green, const Precision blue, const Precision alpha) noexcept
+			: Vector4(red, green, blue, alpha) {}
+		Color(const uint32_t hex) noexcept {				 /*	Convert */
+			Precision red = ((hex >> 24) & 0xFF) / 255.0f;	 // Extract the RR byte
+			Precision green = ((hex >> 16) & 0xFF) / 255.0f; // Extract the GG byte
+			Precision blue = ((hex >> 8) & 0xFF) / 255.0f;	 // Extract the GG byte
+			Precision alpha = ((hex)&0xFF) / 255.0f;		 // Extract the BB byte
 			this->r(red);
 			this->g(green);
 			this->b(blue);
 			this->a(alpha);
 		}
 
-		inline float r() const noexcept { return x(); }
-		inline float g() const noexcept { return y(); }
-		inline float b() const noexcept { return z(); }
-		inline float a() const noexcept { return w(); }
+		inline float r() const noexcept { return this->x(); }
+		inline float g() const noexcept { return this->y(); }
+		inline float b() const noexcept { return this->z(); }
+		inline float a() const noexcept { return this->w(); }
 
-		inline void r(float red) noexcept { *this = {red, g(), b(), a()}; }
-		inline void g(float green) noexcept { *this = {r(), green, b(), a()}; }
-		inline void b(float blue) noexcept { *this = {r(), g(), blue, a()}; }
-		inline void a(float alpha) noexcept { *this = {r(), g(), b(), alpha}; }
+		inline void r(const Precision red) noexcept { *this = {red, g(), b(), a()}; }
+		inline void g(const Precision green) noexcept { *this = {r(), green, b(), a()}; }
+		inline void b(const Precision blue) noexcept { *this = {r(), g(), blue, a()}; }
+		inline void a(const Precision alpha) noexcept { *this = {r(), g(), b(), alpha}; }
 
-	  public:
 		/**
 		 * @brief
 		 *
 		 * @param gamma
 		 * @return Color
 		 */
-		template <typename T> Color gammaCorrect(T gamma) const noexcept {
+		template <typename T> Color gammaCorrect(const T gamma) const noexcept {
 			return Color(Math::gammaCorrection(this->r(), static_cast<T>(gamma)),
 						 Math::gammaCorrection(this->g(), static_cast<T>(gamma)),
 						 Math::gammaCorrection(this->b(), static_cast<T>(gamma)),
@@ -72,7 +72,7 @@ namespace fragcore {
 		 * @param kelvin
 		 * @return Color
 		 */
-		template <typename T> static Color CorrelatedColorTemperatureToRGB(T kelvin) noexcept {
+		template <typename T> static Color correlatedColorTemperatureToRGB(const T kelvin) noexcept {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
 			const T temp = kelvin / static_cast<T>(100.0);
 
@@ -108,7 +108,7 @@ namespace fragcore {
 						 Math::clamp<T>(blue, 0, 255) / 255.0f, 1);
 		}
 
-	  public:
+		/*	Static colors.	*/
 		static Color clear() noexcept { return {0.0f, 0.0f, 0.0f, 0.0f}; }	// Clear Color {0,0,0,0}
 		static Color black() noexcept { return {0.0f, 0.0f, 0.0f, 1.0f}; }	// Black Color {0,0,0,1}
 		static Color white() noexcept { return {1.0f, 1.0f, 1.0f, 1.0f}; }	// White Color {1,1,1,constexpr

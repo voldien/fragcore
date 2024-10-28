@@ -15,17 +15,17 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _FRAG_CORE_FRAG_DEF_H_
-#define _FRAG_CORE_FRAG_DEF_H_ 1
+#ifndef _FRAGCORE_FRAG_DEF_H_
+#define _FRAGCORE_FRAG_DEF_H_ 1
 
 #include <cstdio>
-#include <cstdint>
 #include <cstring>
 #include <cstdlib>
 #include <unistd.h>
 #include <cassert>
 #include <cerrno>
 
+/*	*/
 #include <Exception.hpp>
 
 namespace fragcore {
@@ -355,7 +355,7 @@ namespace fragcore {
 #define FV_STR(x) FV_STR_HELPER(x)                                  /*	Convert input to a double quoate string.	*/
 #define FV_TEXT(quote) quote                                        /*	*/
 
-//TODO relocate
+
 #if FV_UNIX
 	#include <unistd.h>
 #endif
@@ -363,9 +363,6 @@ namespace fragcore {
 #ifdef __cplusplus /*	C++ Environment	*/
 extern "C" {
 #endif
-
-
-
 #ifdef __cplusplus /*	C++ Environment	*/
 }
 #endif

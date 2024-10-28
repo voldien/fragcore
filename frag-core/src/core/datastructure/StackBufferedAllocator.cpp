@@ -2,13 +2,9 @@
 #include "Math/Math.h"
 using namespace fragcore;
 
-// StackBufferedAllocator::StackBufferedAllocator(size_t nrStack) {
-// 	this->m_curStack = 0;
-// 	this->m_stack[0] = StackAllocator();
-// 	this->m_stack[1] = StackAllocator();
-// }
-
-StackBufferedAllocator::StackBufferedAllocator(const StackBufferedAllocator &doublebuffer) { *this = doublebuffer; }
+StackBufferedAllocator::StackBufferedAllocator(const StackBufferedAllocator &doublebuffer) : UIDObject(doublebuffer) {
+	*this = doublebuffer;
+}
 
 StackBufferedAllocator::StackBufferedAllocator(StackBufferedAllocator &&other) {
 	this->m_stack[0] = std::move(other.m_stack[0]);

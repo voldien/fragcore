@@ -49,7 +49,19 @@ const unsigned int numReqConfigKeys = sizeof(reqConfigKey) / sizeof(reqConfigKey
 void GLRendererInterface::OnInitialization() {}
 void GLRendererInterface::OnDestruction() {}
 
-GLRendererInterface::GLRendererInterface(IConfig *config) {
+IConfig GLRendererInterface::getDefaultConfig() const noexcept {
+	IConfig defaultConfig;
+	defaultConfig.set("core", true);
+	defaultConfig.set("debug", false);
+	defaultConfig.set("alpha", true);
+	defaultConfig.set("opengl", -1);
+	defaultConfig.set("anti-aliasing-samples", 0);
+	defaultConfig.set("anti-aliasing", false);
+	defaultConfig.set("gamma-correction", false);
+	return defaultConfig;
+}
+
+GLRendererInterface::GLRendererInterface(const IConfig *config) {
 
 	SDL_Window *window = nullptr;
 	GLenum status;
@@ -58,13 +70,7 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 
 	IConfig setupConfig;
 	if (config == nullptr) {
-		setupConfig.set("core", true);
-		setupConfig.set("debug", false);
-		setupConfig.set("alpha", true);
-		setupConfig.set("opengl", -1);
-		setupConfig.set("anti-aliasing-samples", 0);
-		setupConfig.set("anti-aliasing", false);
-		setupConfig.set("gamma-correction", false);
+		setupConfig = std::move(this->getDefaultConfig());
 	} else {
 		setupConfig = *config;
 	}
@@ -148,7 +154,6 @@ GLRendererInterface::GLRendererInterface(IConfig *config) {
 	}
 
 	/*	Create OpenGL context.	*/ // TODO add config attribute for auto or force the version.
-	// config->get<const char*>("version");
 	this->openglcontext = SDL_GL_CreateContext(window);
 	if (this->openglcontext == nullptr) {
 		const unsigned int validGLVersion[][2] = {

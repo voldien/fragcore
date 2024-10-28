@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _FRAG_CORE_SFTP_FILESYSTEM_H_
-#define _FRAG_CORE_SFTP_FILESYSTEM_H_ 1
+#ifndef _FRAGCORE_SFTP_FILESYSTEM_H_
+#define _FRAGCORE_SFTP_FILESYSTEM_H_ 1
 #include "FTPFileSystem.h"
 
 namespace fragcore {

@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _FRAG_CORE_ICOMPRESSION_H_
-#define _FRAG_CORE_ICOMPRESSION_H_ 1
+#ifndef _FRAGCORE_ICOMPRESSION_H_
+#define _FRAGCORE_ICOMPRESSION_H_ 1
 #include "../Core/Ref.h"
 #include "../FragDef.h"
 #include "../IO/IO.h"
@@ -29,11 +29,11 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC ICompression : public Object {
 	  public:
-		virtual void inflate(Ref<IO> in, Ref<IO> out) = 0;
-		virtual void inflate(const void *in, size_t inSize, void *out, size_t size) = 0;
+		virtual void inflate(Ref<IO> io_in, Ref<IO> out) = 0;
+		virtual void inflate(const void *data_in, size_t inSize, void *out, size_t size) = 0;
 
-		virtual void deflate(Ref<IO> in, Ref<IO> out) = 0;
-		virtual void deflate(const void *in, size_t inSize, void *out, size_t size) = 0;
+		virtual void deflate(Ref<IO> io_in, Ref<IO> out) = 0;
+		virtual void deflate(const void *data_in, size_t inSize, void *out, size_t size) = 0;
 	};
 } // namespace fragcore
 

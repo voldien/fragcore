@@ -16,8 +16,8 @@
  * along with this program;
  */
 
-#ifndef _FRAG_CORE_RENDERWINDOW_H_
-#define _FRAG_CORE_RENDERWINDOW_H_ 1
+#ifndef _FRAGCORE_RENDERWINDOW_H_
+#define _FRAGCORE_RENDERWINDOW_H_ 1
 #include "IRenderer.h"
 #include "RenderObject.h"
 #include "SDLWindow.h"

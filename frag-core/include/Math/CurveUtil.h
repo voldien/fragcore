@@ -15,16 +15,17 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _FRAG_CORE_CURVE_UTIL_H_
-#define _FRAG_CORE_CURVE_UTIL_H_ 1
+#ifndef _FRAGCORE_CURVE_UTIL_H_
+#define _FRAGCORE_CURVE_UTIL_H_ 1
 #include "../FragDef.h"
 
 namespace fragcore {
 
 	class FVDECLSPEC CurveUtil {
 	  public:
+		/*	*/
 		template <typename T, class U>
-		std::vector<U> BezierCurve(std::vector<U> &points, int start, float t, int degree) {
+		std::vector<U> BezierCurve(std::vector<U> &points, int start, const float t, const int degree) {
 			if (points.size() < degree) {
 				return points[0];
 			}

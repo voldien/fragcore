@@ -15,20 +15,21 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _FRAG_CORE_MATH_3D_H_
-#define _FRAG_CORE_MATH_3D_H_ 1
+#ifndef _FRAGCORE_MATH_3D_H_
+#define _FRAGCORE_MATH_3D_H_ 1
 
 //#define FRAGCORE_USE_HPMCPP
-#define FRAGCORE_USE_EIGEN
+//#define FRAGCORE_USE_EIGEN
 //#define FRAGCORE_USE_GLM
 
-#ifdef FRAGCORE_USE_HPMCPP
+#if defined(FRAGCORE_USE_HPMCPP)
 #include <Ext/HCPlane.hpp>
 #include <HCQuaternion.hpp>
 #include <HCVector2.hpp>
 #include <HCVector3.hpp>
 #include <HCVector4.hpp>
 #include <Hpm.hpp>
+
 namespace fragcore {
 	using Vector3 = LIBHPM::Vector3;
 	using Vector4 = LIBHPM::Vector4;
@@ -36,11 +37,6 @@ namespace fragcore {
 	using Matrix4x4 = LIBHPM::Matrix4x4;
 	using Matrix3x3 = LIBHPM::Matrix3x3;
 	using Quaternion = LIBHPM::Quaternion;
-	using Plane = LIBHPM::Plane;
-	using AABB = LIBHPM::AABB;
-	using BoundingSphere = LIBHPM::BoundingSphere;
-	using OBB = LIBHPM::OBB;
-	using Ray = LIBHPM::Ray;
 } // namespace fragcore
 #elif defined(FRAGCORE_USE_EIGEN)
 #include <Eigen/Dense>

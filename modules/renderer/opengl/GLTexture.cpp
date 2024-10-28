@@ -347,7 +347,7 @@ void *GLTexture::getPixels(ImageFormat format, unsigned int level, unsigned long
 
 	// GL_TEXTURE_COMPRESSED_IMAGE_SIZE
 	GLenum _type = 0;
-	GLenum _format = GLHelper::getTextureFormat(format, &type);
+	GLenum _format = GLHelper::getTextureFormat(format, &_type);
 
 	const unsigned int bufferSize = (width * height * depth * pixelSize) / (level + 1);
 	void *pbuffer = malloc(bufferSize);

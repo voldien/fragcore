@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _LIB_FRAG_CORE_VK_RENDERER_INTERFACE_H_
-#define _LIB_FRAG_CORE_VK_RENDERER_INTERFACE_H_ 1
+#ifndef _LIB_FRAGCORE_VK_RENDERER_INTERFACE_H_
+#define _LIB_FRAGCORE_VK_RENDERER_INTERFACE_H_ 1
 #include "Prerequisites.h"
 #include <../Buffer.h>
 #include <../IRenderer.h>

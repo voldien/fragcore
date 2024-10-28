@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _FRAG_CORE_SYSTEMINFO_H_
-#define _FRAG_CORE_SYSTEMINFO_H_ 1
+#ifndef _FRAGCORE_SYSTEMINFO_H_
+#define _FRAGCORE_SYSTEMINFO_H_ 1
 #include "../FragDef.h"
 #include "IO/IO.h"
 #include "Ref.h"
@@ -62,7 +62,7 @@ namespace fragcore {
 			AVX,	/*	AVX Version 1 (Advanced Vector Extension).	*/
 			AVX2,	/*	AVX Version 2 (Advanced Vector Extension).	(Not tested)*/
 			AVX512, /*	AVX512 (Advanced Vector Extension). (Yet not supported)	*/
-			/*	ARM Specific*/
+			/*	ARM Specific.	*/
 			NEON, /*	ARM	FPU (floating-point unit) feature.	*/
 		};
 
@@ -86,7 +86,6 @@ namespace fragcore {
 		static std::string getOperatingSystemName(OperatingSystem operatingSystem);
 
 	  public: /*	System CPU Information.	*/
-		// TODO add support for NUMA.
 		static std::string getCPUName() noexcept;
 		static CPUArchicture getCPUArchitecture2() noexcept;
 		static const char *getCPUArchitecture() noexcept;

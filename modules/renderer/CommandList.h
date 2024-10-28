@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _FRAG_CORE_COMMAND_LIST_H_
-#define _FRAG_CORE_COMMAND_LIST_H_ 1
+#ifndef _FRAGCORE_COMMAND_LIST_H_
+#define _FRAGCORE_COMMAND_LIST_H_ 1
 #include "IRenderer.h"
 #include <Core/NoCopyable.h>
 #include <Core/Ref.h>

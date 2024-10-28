@@ -16,8 +16,8 @@
  * along with this program;
  */
 
-#ifndef _FRAG_CORE_GL_COMMAND_LIST_COMMANDS_H_
-#define _FRAG_CORE_GL_COMMAND_LIST_COMMANDS_H_ 1
+#ifndef _FRAGCORE_GL_COMMAND_LIST_COMMANDS_H_
+#define _FRAGCORE_GL_COMMAND_LIST_COMMANDS_H_ 1
 #include "Buffer.h"
 #include "Math3D/Color.h"
 #include <FragDef.h>

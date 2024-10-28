@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _FRAG_CORE_AUDIODESC_H_
-#define _FRAG_CORE_AUDIODESC_H_ 1
+#ifndef _FRAGCORE_AUDIODESC_H_
+#define _FRAGCORE_AUDIODESC_H_ 1
 #include "AudioTypes.h"
 #include <FragDef.h>
 #include <IO/IO.h>

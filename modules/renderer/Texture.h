@@ -16,8 +16,8 @@
  * along with this program;
  */
 #include "ImageFormat.h"
-#ifndef _FRAG_CORE_TEXTURE_H_
-#define _FRAG_CORE_TEXTURE_H_ 1
+#ifndef _FRAGCORE_TEXTURE_H_
+#define _FRAGCORE_TEXTURE_H_ 1
 #include "Sampler.h"
 #include <Core/Object.h>
 

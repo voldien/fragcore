@@ -15,10 +15,9 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _FRAG_CORE_TREE_H_
-#define _FRAG_CORE_TREE_H_ 1
+#ifndef _FRAGCORE_TREE_H_
+#define _FRAGCORE_TREE_H_ 1
 #include "../FragDef.h"
-#include "Iterator.h"
 #include <utility>
 
 namespace fragcore {
@@ -26,7 +25,7 @@ namespace fragcore {
 	/**
 	 *
 	 */
-	template <typename T> class ITree {
+	template <typename T> class FVDECLSPEC ITree {
 	  public:
 		ITree() {
 			this->sibling = nullptr;
@@ -80,10 +79,10 @@ namespace fragcore {
 		}
 
 		virtual void removeChild(unsigned int index) {
-			ITree<T> *sn = getChild(index - 1);
-			ITree<T> *n = sn->sibling;
+			ITree<T> *node_sibling = getChild(index - 1);
+			ITree<T> *n = node_sibling->sibling;
 
-			sn->setSibling(n->sibling);
+			node_sibling->setSibling(n->sibling);
 			n->parent = nullptr;
 		}
 
@@ -92,7 +91,7 @@ namespace fragcore {
 				throw InvalidArgumentException("Exceeded {} has {}", index, this->getNumChildren());
 			}
 			ITree<T> *chi = this->child;
-			for (unsigned int x = 0; x <= index; x++) {
+			for (unsigned int nth_child = 0; nth_child <= index; nth_child++) {
 				chi = chi->sibling;
 			}
 			return chi;
@@ -108,91 +107,20 @@ namespace fragcore {
 		}
 
 		virtual int getNodeChildIndex(ITree<T> *node) noexcept {
-			ITree<T> *n = this->child;
+			ITree<T> *child_node = this->child;
 			int index = 0;
-			while (n) {
-				if (n == node) {
+			while (child_node) {
+				if (child_node == node) {
 					return index;
 				}
 				index++;
-				n = n->child;
+				child_node = child_node->child;
 			}
 			return -1;
 		}
 
-		// T *operator->() { return (T *)this; }
-
-		// T *operator*() { return (T *)this; }
-
-		// const T *operator->() const { return (T *)this; }
-
 		virtual const T *ptr() const noexcept { return (T *)this; }
 		virtual T *ptr() noexcept { return (T *)this; }
-
-		class TIterator : public Iterator<T> {
-		  public:
-			/*			TIterator &operator++() override {
-							return Iterator::operator++();
-						}
-
-						TIterator &operator++(int i) override {
-							return Iterator::operator++(i);
-						}
-
-						TIterator &operator--() override {
-							return Iterator::operator--();
-						}
-
-						TIterator &operator+=(int n) override {
-							return Iterator::operator+=(n);
-						}
-		virtual const T *ptr() const { return (T *)this; }
-		virtual T *ptr() { return (T *)this; }
-
-						TIterator &operator-=(int n) override {
-							return Iterator::operator-=(n);
-						}
-
-						TIterator &operator+(int n) override {
-							return Iterator::operator+(n);
-						}
-
-						TIterator &operator-(int n) override {
-							return Iterator::operator-(n);
-						}
-
-						TIterator &operator[](int index) const override {
-							return Iterator::operator[](index);
-						}
-
-						T &operator->() const override {
-							return Iterator::operator->();
-						}
-
-						T &operator*() const override {
-							return Iterator::operator*();
-						}
-
-						T &operator*() override {
-							return Iterator::operator*();
-						}
-
-						bool operator==(const TIterator &iterator) override {
-							return Iterator::operator==(iterator);
-						}
-
-						bool operator!=(const TIterator &iterator) override {
-							return Iterator::operator!=(iterator);
-						}
-
-						Iterator<T> &operator=(const TIterator &iterator) override {
-							return Iterator::operator=(iterator);
-						}*/
-		};
-
-		/*  TODO determine if iterator can be added.    */
-		//		virtual TIterator<T> begin();
-		//		virtual TIterator<T> end();
 
 	  protected: /*  */
 		void setSibling(ITree<T> *sibling) noexcept { this->sibling = sibling; }

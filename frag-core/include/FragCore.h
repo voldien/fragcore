@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _FRAG_CORE_FRAG_CORECORE_H_
-#define _FRAG_CORE_FRAG_CORECORE_H_ 1
+#ifndef _FRAGCORE_FRAGCORECORE_H_
+#define _FRAGCORE_FRAGCORECORE_H_ 1
 #include "Prerequisites.h"
 
 /**
@@ -45,6 +45,7 @@
 #include "IO/ZipFileSystem.h"
 
 /*  Data Structure. */
+#include "DataStructure/PoolAllocator.h"
 #include "DataStructure/Queue.h"
 #include "DataStructure/Stack.h"
 #include "DataStructure/StackAllactor.h"
@@ -61,8 +62,11 @@
 #include "Math3D/AABB.h"
 #include "Math3D/BoundingSphere.h"
 #include "Math3D/LinAlg.h"
+#include "Math3D/Line.h"
 #include "Math3D/OBB.h"
 #include "Math3D/Plane.h"
+#include "Math3D/Transform.h"
+#include "Math3D/Triangle.h"
 
 /*  Compression.    */
 #include "Compression/GZIPCompression.h"

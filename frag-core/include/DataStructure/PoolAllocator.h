@@ -15,18 +15,14 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _FRAG_CORE_POOL_ALLACTOR_H_
-#define _FRAG_CORE_POOL_ALLACTOR_H_ 1
+#ifndef _FRAGCORE_POOL_ALLACTOR_H_
+#define _FRAGCORE_POOL_ALLACTOR_H_ 1
 #include "../FragDef.h"
 #include <cassert>
 #include <cstdio>
 #include <malloc.h>
 #include <utility>
 
-/* add support for C++ allocates in order to remove pure function bug, if it's that it's the culprit*/
-// TODO resolve bug.
-/*TODO extract the pool information into a subclass such that the memory consumption can be monitored.*/
-// TODO add
 namespace fragcore {
 
 	/**
@@ -42,7 +38,6 @@ namespace fragcore {
 			poolallactoritem *next;
 		};
 
-	  public:
 		PoolAllocator() {
 			this->item = nullptr;
 			this->nrOfElements = 0;
@@ -65,7 +60,7 @@ namespace fragcore {
 			this->setTypeSize(sizeof(T));
 		}
 
-		PoolAllocator(unsigned int num) : PoolAllocator() { this->resize(num); }
+		PoolAllocator(const unsigned int num) : PoolAllocator() { this->resize(num); }
 
 		~PoolAllocator() { delete[] this->item; }
 
@@ -85,7 +80,7 @@ namespace fragcore {
 			this->nrOfElements = allocator.nrOfElements;
 
 			/*  Copy the list.  */
-			memcpy(this->item, allocator.item, allocator.getTypeSize() * allocator.reserved());
+			std::memcpy(this->item, allocator.item, allocator.getTypeSize() * allocator.reserved());
 
 			/*	Reconstruct next list.	*/
 			PoolAllactorItem *item = this->item;
@@ -136,7 +131,7 @@ namespace fragcore {
 		 * @param element
 		 */
 		void Return(T *element) {
-			if (!isValidItem(*element)) {
+			if (!this->isValidItem(*element)) {
 				throw InvalidArgumentException("invalid pointer returned");
 			}
 

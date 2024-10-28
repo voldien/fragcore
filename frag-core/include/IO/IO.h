@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _FRAG_CORE_ABSTRACT_IO_H_
-#define _FRAG_CORE_ABSTRACT_IO_H_ 1
+#ifndef _FRAGCORE_ABSTRACT_IO_H_
+#define _FRAGCORE_ABSTRACT_IO_H_ 1
 #include "../Prerequisites.h"
 #include "FileAccess.h"
 

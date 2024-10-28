@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _FRAG_CORE_CONFIG_H_
-#define _FRAG_CORE_CONFIG_H_ 1
+#ifndef _FRAGCORE_CONFIG_H_
+#define _FRAGCORE_CONFIG_H_ 1
 #include "Core/Object.h"
 #include "DataStructure/ITree.h"
 #include <cctype>
@@ -102,15 +102,26 @@ namespace fragcore {
 		 * @param parent
 		 */
 		IConfig(IConfig *parent = nullptr) { this->setParent(parent); }
-		IConfig(const IConfig &other) : ValueType(other) {}
-		IConfig(IConfig &&other) {
+		IConfig(const IConfig &other) : ValueType(other) {
+			this->va_va = other.va_va;
+			this->_mapSubConfig = other._mapSubConfig;
+		}
+		IConfig(IConfig &&other) : ValueType(other) {
 			this->_mapSubConfig = std::move(other._mapSubConfig);
 			this->va_va = std::move(other.va_va);
 		}
-		~IConfig() {}
+		virtual ~IConfig() {}
 
-		IConfig &operator=(const IConfig &other) { return *this; }
-		IConfig &operator=(IConfig &&other) { return *this; }
+		IConfig &operator=(const IConfig &other) {
+			this->va_va = other.va_va;
+			this->_mapSubConfig = other._mapSubConfig;
+			return *this;
+		}
+		IConfig &operator=(IConfig &&other) {
+			this->_mapSubConfig = std::move(other._mapSubConfig);
+			this->va_va = std::move(other.va_va);
+			return *this;
+		}
 
 		/*	Get and set methods.	*/
 		const AbstractValue &operator[](const std::string &key) { return *this->va_va[key]; }

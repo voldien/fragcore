@@ -16,8 +16,8 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-#ifndef _FRAG_CORE_GRAPHIC_FORMAT_H_
-#define _FRAG_CORE_GRAPHIC_FORMAT_H_ 1
+#ifndef _FRAGCORE_GRAPHIC_FORMAT_H_
+#define _FRAGCORE_GRAPHIC_FORMAT_H_ 1
 
 namespace fragcore {
 	enum class GraphicFormat {

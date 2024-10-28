@@ -16,8 +16,8 @@
  * along with this program;
  */
 
-#ifndef _FRAG_CORE_BULLET_RIGIDBODY_H_
-#define _FRAG_CORE_BULLET_RIGIDBODY_H_ 1
+#ifndef _FRAGCORE_BULLET_RIGIDBODY_H_
+#define _FRAGCORE_BULLET_RIGIDBODY_H_ 1
 #include "../RigidBody.h"
 #include "BulletDynamics/Dynamics/btRigidBody.h"
 #include "bulletPhysicInterface.h"

@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _FRAG_CORE_IP_ADDRESS_H_
-#define _FRAG_CORE_IP_ADDRESS_H_ 1
+#ifndef _FRAGCORE_IP_ADDRESS_H_
+#define _FRAGCORE_IP_ADDRESS_H_ 1
 #include "INetAddress.h"
 #include "IPInterface.h"
 #include <string>
@@ -36,14 +36,14 @@ namespace fragcore {
 			IPAddress_Type_ANY = 3,
 		};
 		IPAddress();
-		IPAddress(void *encoded, IPAddressType type); // TODO add binary as the address.
+		IPAddress(void *encoded, const IPAddressType type); // TODO add binary as the address.
 		IPAddress(const std::vector<uint8_t> &encoded_address);
 		IPAddress(const IPAddress &other) = default;
 		IPAddress &operator=(const IPAddress &other) = default;
 		IPAddress(IPAddress &&other) = default;
 		IPAddress &operator=(IPAddress &&other) = default;
 
-		IPAddress(const std::string &ipAddress, IPAddressType type);
+		IPAddress(const std::string &ipAddress,const  IPAddressType type);
 		IPAddress(const std::string &hostname);
 
 		bool operator==(const IPAddress &ipAddress) const {

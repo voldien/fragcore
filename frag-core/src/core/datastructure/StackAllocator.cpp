@@ -11,7 +11,7 @@ StackAllocator::StackAllocator() {
 	this->mSize = 0;
 }
 
-StackAllocator::StackAllocator(const StackAllocator &stack) {
+StackAllocator::StackAllocator(const StackAllocator &stack) : UIDObject(stack) {
 	this->mSize = 0;
 	*this = stack;
 }
@@ -37,7 +37,7 @@ void *StackAllocator::alloc(const size_t sizeBytes) {
 
 size_t StackAllocator::getSize() const noexcept { return this->mSize; }
 
-void *StackAllocator::allocateAligned(size_t sizeBytes, unsigned int alignment) {
+void *StackAllocator::allocateAligned(const size_t sizeBytes, const unsigned int alignment) {
 	size_t allocateSize = Math::align<size_t>(sizeBytes, alignment);
 	return this->alloc(allocateSize);
 }

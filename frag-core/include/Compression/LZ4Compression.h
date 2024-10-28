@@ -15,18 +15,18 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _FRAG_CORE_LZ4_COMPRESSION_H_
-#define _FRAG_CORE_LZ4_COMPRESSION_H_ 1
+#ifndef _FRAGCORE_LZ4_COMPRESSION_H_
+#define _FRAGCORE_LZ4_COMPRESSION_H_ 1
 #include "ICompression.h"
 
 namespace fragcore {
 	class FVDECLSPEC LZ4Compression : public ICompression {
 	  public:
-		void inflate(Ref<IO> in, Ref<IO> out) override;
-		void inflate(const void *in, size_t inSize, void *out, size_t size) override;
+		 void inflate(Ref<IO> io_in, Ref<IO> out) override;
+		 void inflate(const void *data_in, size_t inSize, void *out, size_t size) override;
 
-		void deflate(Ref<IO> in, Ref<IO> out) override;
-		void deflate(const void *in, size_t inSize, void *out, size_t size) override;
+		 void deflate(Ref<IO> io_in, Ref<IO> out) override;
+		 void deflate(const void *data_in, size_t inSize, void *out, size_t size) override;
 	};
 } // namespace fragcore
 

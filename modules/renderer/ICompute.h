@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _FRAG_CORE_ICOMPUTE_H_
-#define _FRAG_CORE_ICOMPUTE_H_ 1
+#ifndef _FRAGCORE_ICOMPUTE_H_
+#define _FRAGCORE_ICOMPUTE_H_ 1
 #include "RenderPrerequisites.h"
 #include <Core/Module.h>
 #include <Core/Ref.h>

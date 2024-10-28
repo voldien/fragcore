@@ -99,12 +99,7 @@ int UDPNetSocket::bind(const INetAddress &p_addr) {
 	return 0;
 }
 
-int UDPNetSocket::listen(unsigned int maxListen) {
-	//	if (::listen(socket, maxListen) < 0) {
-	//	}
-
-	return 0;
-}
+int UDPNetSocket::listen([[maybe_unused]] unsigned int maxListen) { return 0; }
 
 int UDPNetSocket::connect(const INetAddress &p_addr) {
 	union {
@@ -172,7 +167,7 @@ Ref<NetSocket> UDPNetSocket::accept(INetAddress &r_ip) {
 	}
 
 	UDPNetSocket *_newsocket = new UDPNetSocket(aaccept_socket);
-	return Ref<NetSocket>(_newsocket);
+	return {_newsocket};
 }
 UDPNetSocket::NetStatus UDPNetSocket::accept(NetSocket &socket) { return UDPNetSocket::NetStatus::Status_Disconnected; }
 int UDPNetSocket::read() { return 0; }

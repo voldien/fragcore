@@ -5,16 +5,18 @@ using namespace fragcore;
 
 IPAddress::IPAddress() : valid(false) {}
 
-IPAddress::IPAddress(const std::string &ipAddress, IPAddressType type) : ip(ipAddress), type(type), valid(false) {
+IPAddress::IPAddress(const std::string &ipAddress, const IPAddressType type) : ip(ipAddress), type(type), valid(false) {
 
-	int domain = getDomain(type);
+	/*	*/
+	const int domain = getDomain(type);
 	if (inet_pton(domain, ipAddress.c_str(), &field8[0]) < 0) {
 		throw RuntimeException("Failed to convert {} to IP Address", ipAddress);
 	}
+
 	this->valid = true;
 }
 
-IPAddress::IPAddress(void *encoded, IPAddressType type) {
+IPAddress::IPAddress(void *encoded, const IPAddressType type) {
 	// TODO: impl
 }
 

@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _FRAG_CORE_AXIS_ALIGN_BOUNDIN_BOX_H_
-#define _FRAG_CORE_AXIS_ALIGN_BOUNDIN_BOX_H_ 1
+#ifndef _FRAGCORE_AXIS_ALIGN_BOUNDIN_BOX_H_
+#define _FRAGCORE_AXIS_ALIGN_BOUNDIN_BOX_H_ 1
 #include "../FragDef.h"
 #include "Math3D/Math3D.h"
 

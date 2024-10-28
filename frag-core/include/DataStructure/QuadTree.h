@@ -15,10 +15,9 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#include "FragDef.h"
-#ifndef _FRAG_CORE_QUAD_TREE_H_
-#define _FRAG_CORE_QUAD_TREE_H_ 1
-#include <FragCore.h>
+#ifndef _FRAGCORE_QUAD_TREE_H_
+#define _FRAGCORE_QUAD_TREE_H_ 1
+#include "../FragDef.h"
 
 namespace fragcore {
 

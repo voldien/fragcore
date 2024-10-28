@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _FRAG_CORE_MATH_H_
-#define _FRAG_CORE_MATH_H_ 1
+#ifndef _FRAGCORE_MATH_H_
+#define _FRAGCORE_MATH_H_ 1
 #include "../FragDef.h"
 #include "../Math/Random.h"
 #include "../Math3D/Math3D.h"
@@ -118,8 +118,9 @@ namespace fragcore {
 						  "Type Must Support addition operation.");
 			T product_combined = 1;
 			size_t index;
-
+#ifdef _OPENMP
 #pragma omp simd reduction(* : product_combined) simdlen(4) linear(index : 1)
+#endif
 			for (index = 0; index < nrElements; index++) {
 				product_combined *= list[index];
 			}
@@ -131,7 +132,9 @@ namespace fragcore {
 						  "Type Must Support addition operation.");
 			T sum = 0;
 			size_t index;
+#ifdef _OPENMP
 #pragma omp simd reduction(+ : sum) simdlen(4) linear(index : 1)
+#endif
 			for (index = 0; index < nrElements; index++) {
 				sum += listA[index] * listB[index];
 			}
@@ -143,7 +146,9 @@ namespace fragcore {
 						  "Type Must Support addition operation.");
 			/*	*/
 			size_t index;
+#ifdef _OPENMP
 #pragma omp simd simdlen(4) linear(index : 1)
+#endif
 			for (index = 0; index < nrElements; index++) {
 				list[index] = static_cast<T>(std::pow(list[index], exponent));
 			}
@@ -171,7 +176,9 @@ namespace fragcore {
 						  "Type Must Support addition operation.");
 			T sum = 0;
 			size_t index;
+#ifdef _OPENMP
 #pragma omp simd reduction(+ : sum) simdlen(4) linear(index : 1)
+#endif
 			for (index = 0; index < nrElements; index++) {
 				sum += (list[index] - mean) * (list[index] - mean);
 			}
@@ -199,7 +206,9 @@ namespace fragcore {
 			T sum = 0;
 
 			const size_t nrElements = listB.size();
+#ifdef _OPENMP
 #pragma omp parallel for simd reduction(+ : sum) shared(listA, listB)
+#endif
 			for (size_t i = 0; i < nrElements; i++) {
 				sum += (listA[i] - meanA) * (listB[i] - meanB);
 			}
@@ -296,8 +305,8 @@ namespace fragcore {
 		/**
 		 *
 		 */
-		template <typename T> static inline constexpr T ClosestPowerOfTwo(const T v) {
-			T n = NextPowerOfTwo(v);
+		template <typename T> static inline constexpr T ClosestPowerOfTwo(const T value) {
+			T n = NextPowerOfTwo(value);
 			T p = 0;
 			return 0;
 		}
@@ -327,7 +336,7 @@ namespace fragcore {
 			const T sqr_2_pi_inverse = 1.0 / (standard_deviation * static_cast<T>(std::sqrt(2 * Math::PI)));
 
 			const T offset = static_cast<T>(height) / -2;
-			
+
 			// #pragma omp simd
 			for (unsigned int i = 0; i < height; i++) {
 
@@ -375,14 +384,17 @@ namespace fragcore {
 			}
 		}
 
-		template <typename T, typename U> static constexpr inline T gammaCorrection(const T value, U gamma) noexcept {
+		template <typename T, typename U>
+		static constexpr inline T gammaCorrection(const T value, const U gamma) noexcept {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
 
 			T exponent = static_cast<T>(1.0) / gamma;
 			return static_cast<T>(std::pow(value, exponent));
 		}
 
-		template <typename T> static T gameSpaceToLinear(T gamma, T exp) noexcept { return std::pow(gamma, exp); }
+		template <typename T> static T gameSpaceToLinear(const T gamma, const T exp) noexcept {
+			return std::pow(gamma, exp);
+		}
 
 		/**
 		 *	Generate perlin noise value
@@ -454,16 +466,19 @@ namespace fragcore {
 			return size + (alignment - (size % alignment));
 		}
 
-		/*	*/
+/*	*/
+#ifdef _OPENMP
 #pragma omp declare simd uniform(value) simdlen(4)
+#endif
 		template <typename T> inline static T computeSigmoid(const T value) noexcept {
 			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
 						  "Must be a decimal type(float/double/half) or integer.");
 			return Math::clamp<T>(static_cast<T>(1) / (std::exp(-value) + static_cast<T>(1)), static_cast<T>(0),
 								  static_cast<T>(1));
 		}
-
+#ifdef _OPENMP
 #pragma omp declare simd uniform(value) simdlen(4)
+#endif
 		template <typename T> inline static T computeSigmoidDerivate(const T value) noexcept {
 			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
 						  "Must be a decimal type(float/double/half) or integer.");
@@ -471,14 +486,18 @@ namespace fragcore {
 			return sig * (static_cast<T>(1) - sig);
 		}
 
+#ifdef _OPENMP
 #pragma omp declare simd uniform(value) simdlen(4)
+#endif
 		template <typename T> inline static constexpr T relu(const T value) noexcept {
 			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
 						  "Must be a decimal type(float/double/half) or integer.");
 			return Math::max<T>(0, value);
 		}
 
+#ifdef _OPENMP
 #pragma omp declare simd uniform(value) simdlen(4)
+#endif
 		template <typename T> inline static constexpr T reluDeriviate(const T value) noexcept {
 			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
 						  "Must be a decimal type(float/double/half) or integer.");
@@ -487,8 +506,9 @@ namespace fragcore {
 			}
 			return 0;
 		}
-
+#ifdef _OPENMP
 #pragma omp declare simd uniform(value, alpha) simdlen(4)
+#endif
 		template <typename T> inline static constexpr T leakyRelu(const T alpha, const T value) noexcept {
 			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
 						  "Must be a decimal type(float/double/half) or integer.");
@@ -497,8 +517,9 @@ namespace fragcore {
 			}
 			return std::max<T>(0, value);
 		}
-
+#ifdef _OPENMP
 #pragma omp declare simd uniform(value, alpha) simdlen(4)
+#endif
 		template <typename T> inline static constexpr T leakyReluDerivative(const T alpha, const T value) noexcept {
 			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
 						  "Must be a decimal type(float/double/half) or integer.");
@@ -507,36 +528,41 @@ namespace fragcore {
 			}
 			return alpha;
 		}
-
+#ifdef _OPENMP
 #pragma omp declare simd uniform(value) simdlen(4)
+#endif
 		template <typename T> inline static constexpr T computeTanh(const T value) noexcept {
 			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
 						  "Must be a decimal type(float/double/half) or integer.");
 			return std::tanh(value);
 		}
-
+#ifdef _OPENMP
 #pragma omp declare simd uniform(value) simdlen(4)
+#endif
 		template <typename T> inline static constexpr T computeTanhDerivate(const T value) noexcept {
 			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
 						  "Must be a decimal type(float/double/half) or integer.");
 			return 1.0 - (computeTanh<T>(value) * computeTanh<T>(value));
 		}
-
+#ifdef _OPENMP
 #pragma omp declare simd uniform(coeff, value) simdlen(4)
+#endif
 		template <typename T> inline static constexpr T computeLinear(const T coeff, const T value) noexcept {
 			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
 						  "Must be a decimal type(float/double/half) or integer.");
 			return coeff * value;
 		}
-
+#ifdef _OPENMP
 #pragma omp declare simd uniform(coeff) simdlen(4)
+#endif
 		template <typename T> inline static constexpr T computeLinearDerivative(const T coeff) noexcept {
 			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
 						  "Must be a decimal type(float/double/half) or integer.");
 			return coeff;
 		}
-
+#ifdef _OPENMP
 #pragma omp declare simd uniform(coeff, value) simdlen(4)
+#endif
 		template <typename T> inline static constexpr T computeExpLinear(const T coeff, const T value) noexcept {
 			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
 						  "Must be a decimal type(float/double/half) or integer.");
@@ -545,8 +571,9 @@ namespace fragcore {
 			}
 			return coeff * (std::exp(value) - 1);
 		}
-
+#ifdef _OPENMP
 #pragma omp declare simd uniform(coeff, value) simdlen(4)
+#endif
 		template <typename T>
 		inline static constexpr T computeExpLinearDerivative(const T coeff, const T value) noexcept {
 			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
@@ -556,15 +583,17 @@ namespace fragcore {
 			}
 			return coeff * std::exp(value);
 		}
-
+#ifdef _OPENMP
 #pragma omp declare simd uniform(value, beta) simdlen(4)
+#endif
 		template <typename T> inline static constexpr T computeSwish(const T value, const T beta) noexcept {
 			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
 						  "Must be a decimal type(float/double/half) or integer.");
 			return value * computeSigmoid<T>(beta * value);
 		}
-
+#ifdef _OPENMP
 #pragma omp declare simd uniform(value, beta) simdlen(4)
+#endif
 		template <typename T> inline static constexpr T computeSwishDerivative(const T value, const T beta) noexcept {
 			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
 						  "Must be a decimal type(float/double/half) or integer.");

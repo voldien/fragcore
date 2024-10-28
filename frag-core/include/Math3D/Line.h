@@ -6,20 +6,18 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _FRAG_CORE_LINE_H_
-#define _FRAG_CORE_LINE_H_ 1
-#include"LinAlg.h"
+#ifndef _FRAGCORE_LINE_H_
+#define _FRAGCORE_LINE_H_ 1
 #include "Shape.h"
-#include <iostream>
 
 namespace fragcore {
 	/**
@@ -41,9 +39,9 @@ namespace fragcore {
 			this->normal = other.normal;
 			this->d = other.d;
 		}
-		Line(const Vector2 &normal, float d) noexcept {
+		Line(const Vector2 &normal, float distance) noexcept {
 			this->normal = normal;
-			this->d = d;
+			this->d = distance;
 		}
 
 		Line &operator=(const Line &other) noexcept {
@@ -113,12 +111,13 @@ namespace fragcore {
 		 * @return true if equal.
 		 */
 		friend bool operator==(const Line &o1, const Line &o2) noexcept {
-			if (&o1 == &o2)
+			if (&o1 == &o2) {
 				return true;
-			else if (o1.normal == o2.normal && o1.d == o2.d)
+			}
+			if (o1.normal == o2.normal && o1.d == o2.d) {
 				return true;
-			else
-				return false;
+			}
+			return false;
 		}
 
 		/**

@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _FRAG_CORE_IP_INTERFACE_H_
-#define _FRAG_CORE_IP_INTERFACE_H_ 1
+#ifndef _FRAGCORE_IP_INTERFACE_H_
+#define _FRAGCORE_IP_INTERFACE_H_ 1
 #include "NetInterface.h"
 #include <vector>
 

@@ -70,12 +70,17 @@ BulletPhysicInterface::BulletPhysicInterface(IConfig *config) {
 	/*	*/
 	this->collisionConfiguration = new btDefaultCollisionConfiguration();
 
+	btITaskScheduler *scheduler = btGetOpenMPTaskScheduler();
+	if (scheduler) {
+		scheduler->setNumThreads(Math::max<size_t>(1, SystemInfo::getCPUCoreCount() / 3));
+		btSetTaskScheduler(scheduler);
+	} else {
+		multi_threading = false;
+	}
+
 	if (multi_threading) {
 
 		FragBulletTaskSchedulear *taskScheduler = new FragBulletTaskSchedulear();
-		btITaskScheduler *scheduler = btGetOpenMPTaskScheduler();
-		scheduler->setNumThreads(Math::max<size_t>(1, SystemInfo::getCPUCoreCount() / 3));
-		btSetTaskScheduler(scheduler);
 
 		this->dispatcher = new btCollisionDispatcherMt(this->collisionConfiguration);
 		this->solver = new btSequentialImpulseConstraintSolverMt();
