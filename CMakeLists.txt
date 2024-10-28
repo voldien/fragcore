@@ -89,17 +89,6 @@ ENDIF(NOT BUILD_SHARED_LIBS)
 OPTION(WITH_CPU_SSE "Enable SIMD instruction if they're detected on the host machine" ON)
 MARK_AS_ADVANCED(WITH_CPU_SSE)
 
-# LLVM
-OPTION(WITH_LLVM "Use LLVM" OFF)
-
-IF(APPLE)
-	OPTION(LLVM_STATIC "Link with LLVM static libraries" ON)
-ELSE()
-	OPTION(LLVM_STATIC "Link with LLVM static libraries" OFF)
-ENDIF()
-
-MARK_AS_ADVANCED(LLVM_STATIC)
-
 #
 OPTION(WITH_MEM_JEMALLOC "Enable malloc replacement (http://www.canonware.com/jemalloc)" ON)
 MARK_AS_ADVANCED(WITH_MEM_JEMALLOC)

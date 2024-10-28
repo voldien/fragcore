@@ -9,10 +9,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Configure dependencies
+      - name: Configure Docs dependencies
 
         run: |
-          sudo apt-get install check libsubunit-dev doxygen doxygen-latex texlive
+          sudo apt-get install doxygen doxygen-latex texlive
+
+      - name: Configure dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install pkg-config libssl-dev libgtest-dev libsubunit-dev libogg-dev libopus-dev libvorbis-dev \
+          libzip-dev  libnoise-dev libvdpau-dev libalut-dev libspdlog-dev libbz2-dev \
+          libcurl4 libcurl4-gnutls-dev libfmt-dev binutils-dev libeigen3-dev libomp-dev \
+          zip gzip googletest libglm-dev 
+
+      - name: Configure modules dependencies
+        run: |
+          sudo apt-get install libavcodec-dev libavfilter-dev libavformat-dev libfreetype6-dev libsqlite3-dev \
+          libglfw3-dev libopenal-dev mesa-common-dev libopengl-dev libglu1-mesa-dev libvulkan-dev libgl1-mesa-dev libsdl2-dev libsdl2-dev libfreeimage-dev
 
       - name: Create Build Environment
         # Some projects don't allow in-source building, so create a separate build directory
