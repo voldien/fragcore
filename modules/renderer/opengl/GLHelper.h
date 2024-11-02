@@ -37,7 +37,8 @@ namespace fragcore {
 
 	extern FVDECLSPEC void checkError();
 	extern FVDECLSPEC void resetErrorFlag();
-	extern FVDECLSPEC bool validateProgram();
+	extern FVDECLSPEC bool validateExistingProgram();
+	extern FVDECLSPEC std::string getProgramValidateString();
 } // namespace fragcore
 
 #endif

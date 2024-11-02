@@ -91,6 +91,8 @@ Color Image::getColor(unsigned int x_offset, unsigned int y_offset, unsigned int
 		return {static_cast<float>(color[0] / 255.0f), static_cast<float>(color[1] / 255.0f),
 				static_cast<float>(color[2] / 255.0f), 1};
 	}
+	case ImageFormat::RGBAFloat:
+	case ImageFormat::RGBFloat:
 	default:
 		return Color::black();
 	}
@@ -124,15 +126,18 @@ void Image::setColor(unsigned int x_offset, unsigned int y_offset, unsigned int 
 		rgb24[0] = (255 * color.r());
 		rgb24[1] = (255 * color.g());
 		rgb24[2] = (255 * color.b());
-	}
+	} break;
 	case ImageFormat::BGR24: {
 		const size_t index = pixel_index * (Image::getFormatPixelBitSize(this->getFormat()) / 8);
+
 		uint8_t *rgb24 = &reinterpret_cast<uint8_t *>(this->pixelData)[index];
 		rgb24[0] = (255 * color.b());
 		rgb24[1] = (255 * color.g());
 		rgb24[2] = (255 * color.r());
 		break;
 	}
+	case ImageFormat::RGBAFloat:
+	case ImageFormat::RGBFloat:
 	default:
 		break;
 	}

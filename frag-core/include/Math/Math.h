@@ -53,6 +53,19 @@ namespace fragcore {
 			return Math::max<T>(min, Math::min<T>(max, value));
 		}
 
+		template <typename T> static T *clamp(T *list, const T min, const T max, const size_t nrElements) noexcept {
+			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value || std::is_enum<T>::value,
+						  "Must be a decimal type(float/double/half) or integer.");
+			size_t index = 0;
+#ifdef _OPENMP
+#pragma omp simd simdlen(4) linear(index : 1)
+#endif
+			for (index = 0; index < nrElements; index++) {
+				list[index] = Math::clamp<T>(list[index], min, max);
+			}
+			return list;
+		}
+
 		/**
 		 *	Get max value of a and b.
 		 */

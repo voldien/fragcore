@@ -10,7 +10,8 @@ namespace fragcore {
 	void checkError() {
 		GLenum error = glGetError();
 		if (error != GL_NO_ERROR) {
-			throw RuntimeException("glGetError indicated an error: {} ({})", (const char *)glewGetErrorString(error), error);
+			throw RuntimeException("glGetError indicated an error: {} ({})", (const char *)glewGetErrorString(error),
+								   error);
 		}
 	}
 
@@ -23,7 +24,27 @@ namespace fragcore {
 		}
 	}
 
-	bool validateProgram(){
-		return false;
+	bool validateExistingProgram() {
+		int program;
+		glGetIntegerv(GL_CURRENT_PROGRAM, &program);
+		glValidateProgram(program);
+		fragcore::checkError();
+		int status;
+		glGetProgramiv(program, GL_VALIDATE_STATUS, &status);
+		return status == GL_TRUE;
+	}
+
+	std::string getProgramValidateString() {
+		int program;
+		glGetIntegerv(GL_CURRENT_PROGRAM, &program);
+
+		int status;
+		glGetProgramiv(program, GL_VALIDATE_STATUS, &status);
+		if (!status) {
+			GLchar errorLog[1024] = {0};
+			glGetProgramInfoLog(program, 1024, nullptr, errorLog);
+			return errorLog;
+		}
+		return "";
 	}
 } // namespace fragcore

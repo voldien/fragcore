@@ -26,7 +26,7 @@ namespace fragcore {
 	 *
 	 * @tparam T
 	 */
-	template <class T> class FVDECLSPEC Ref { // TODO perhaps use the RefPtr as base?
+	template <class T> class FVDECLSPEC Ref {
 		static_assert(std::is_object<T>::value, "Must be a Object");
 		// static_assert(std::has_virtual_destructor<T>::value, "Must have a virtual deconstructor");
 
@@ -34,27 +34,27 @@ namespace fragcore {
 		T *reference;
 
 	  public:
-		FV_ALWAYS_INLINE bool operator==(const T *p_ptr) const { return reference == p_ptr; }
+		FV_ALWAYS_INLINE bool operator==(const T *p_ptr) const { return this->reference == p_ptr; }
 
-		FV_ALWAYS_INLINE bool operator!=(const T *p_ptr) const { return reference != p_ptr; }
+		FV_ALWAYS_INLINE bool operator!=(const T *p_ptr) const { return this->reference != p_ptr; }
 
-		FV_ALWAYS_INLINE bool operator<(const Ref<T> &p_r) const { return reference < p_r.reference; }
+		FV_ALWAYS_INLINE bool operator<(const Ref<T> &p_r) const { return this->reference < p_r.reference; }
 
-		FV_ALWAYS_INLINE bool operator==(const Ref<T> &p_r) const { return reference == p_r.reference; }
+		FV_ALWAYS_INLINE bool operator==(const Ref<T> &p_r) const { return this->reference == p_r.reference; }
 
-		FV_ALWAYS_INLINE bool operator!=(const Ref<T> &p_r) const { return reference != p_r.reference; }
+		FV_ALWAYS_INLINE bool operator!=(const Ref<T> &p_r) const { return this->reference != p_r.reference; }
 
-		FV_ALWAYS_INLINE T *operator->() { return reference; }
+		FV_ALWAYS_INLINE T *operator->() { return this->reference; }
 
-		FV_ALWAYS_INLINE T *operator*() { return reference; }
+		FV_ALWAYS_INLINE T *operator*() { return this->reference; }
 
-		FV_ALWAYS_INLINE const T *operator->() const { return reference; }
+		FV_ALWAYS_INLINE const T *operator->() const { return this->reference; }
 
-		FV_ALWAYS_INLINE const T *ptr() const { return reference; }
+		FV_ALWAYS_INLINE const T *ptr() const { return this->reference; }
 
-		FV_ALWAYS_INLINE T *ptr() { return reference; }
+		FV_ALWAYS_INLINE T *ptr() { return this->reference; }
 
-		FV_ALWAYS_INLINE const T *operator*() const { return reference; }
+		FV_ALWAYS_INLINE const T *operator*() const { return this->reference; }
 
 	  public:
 		Ref() : reference(nullptr) {}
@@ -74,7 +74,10 @@ namespace fragcore {
 			}
 		}
 
-		Ref(T &&other) { this->reference = std::exchange(other.reference, nullptr); }
+		Ref(T &&other) {
+			/*	*/
+			this->reference = std::exchange(other.reference, nullptr);
+		}
 
 		Ref(const Ref &other) : Ref() {
 			if (other.reference) {
@@ -89,23 +92,26 @@ namespace fragcore {
 			return *this;
 		}
 
-		~Ref() { unref(); }
+		Ref &operator=(Ref &&other) {
+			this->reference = std::exchange(other.reference, nullptr);
+			return *this;
+		}
+
+		~Ref() { this->unref(); }
 
 	  private:
 		void ref_pointer(T *p_ref) {
 			assert(p_ref);
 
-			// if (p_ref->init_ref())
 			this->reference = p_ref;
 			this->reference->increment();
-			//	reference = p_ref;
 		}
 
 		void unref() {
 			if (this->reference) {
+				/*	*/
 				if (this->reference->deincreemnt()) {
 					delete reference;
-					// memdelete(reference);
 				}
 			}
 

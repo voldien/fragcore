@@ -18,8 +18,6 @@
 #ifndef _FRAGCORE_RANDOM_H_
 #define _FRAGCORE_RANDOM_H_ 1
 #include "../FragDef.h"
-#include "NormalDistribution.h"
-#include <random>
 
 namespace fragcore {
 

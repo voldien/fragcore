@@ -110,7 +110,12 @@ namespace fragcore {
 			this->_mapSubConfig = std::move(other._mapSubConfig);
 			this->va_va = std::move(other.va_va);
 		}
-		virtual ~IConfig() {}
+		virtual ~IConfig() {
+			/*	Delete attributes.	*/
+			for (auto it = this->va_va.begin(); it != this->va_va.end(); it++) {
+				delete (*it).second;
+			}
+		}
 
 		IConfig &operator=(const IConfig &other) {
 			this->va_va = other.va_va;
