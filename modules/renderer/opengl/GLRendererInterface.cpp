@@ -82,6 +82,7 @@ GLRendererInterface::GLRendererInterface(const IConfig *config) {
 		}
 	}
 
+	/*	*/
 	if (SDL_InitSubSystem(SDL_INIT_VIDEO) != 0) {
 		throw RuntimeException("SDL_InitSubSystem failed, {}", SDL_GetError());
 	}
@@ -194,7 +195,7 @@ GLRendererInterface::GLRendererInterface(const IConfig *config) {
 				}
 			}
 
-			// Last attempt creating an ES profile context.
+			/*	Last attempt creating an ES profile context.	*/
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
 			this->openglcontext = SDL_GL_CreateContext(window);
 

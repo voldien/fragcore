@@ -1,6 +1,6 @@
 #include "SDLDisplay.h"
-#include <SDL_rect.h>
-#include <SDL_video.h>
+#include <SDL2/SDL_rect.h>
+#include <SDL2/SDL_video.h>
 
 using namespace fragcore;
 

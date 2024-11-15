@@ -20,6 +20,7 @@
 #include "RenderObject.h"
 
 namespace fragcore {
+	
 	/**
 	 * Shader.
 	 */

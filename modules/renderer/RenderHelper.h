@@ -15,24 +15,44 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _FRAGCORE_RENDERER_PREREQUISITES_H_
-#define _FRAGCORE_RENDERER_PREREQUISITES_H_ 1
-#include <Prerequisites.h>
+#ifndef _FRAGCORE_RENDER_HELPER_H_
+#define _FRAGCORE_RENDER_HELPER_H_ 1
+#include <cstdint>
 
 namespace fragcore {
-	class RendererWindow;
-	class Shader;
-	class RenderPipeline;
-	class Texture;
-	class Sampler;
-	class FrameBuffer;
-	class Shader;
-	class Buffer;
-	class IRenderer;
-	class ViewPort;
-	class QueryObject;
-	class Sync;
-	class CommandList;
-} // namespace fragcore
 
+	// TODO: relocate.
+	enum class AddressMode {
+		Repeat,		  /*  */
+		RepeatMirror, /*  */
+		Clamp,		  /*  */
+		ClampBorder,  /*  */
+	};
+
+	enum class FilterMode : uint32_t {
+		NoFilterMode, /*  */
+		Nearset,	  /*  */
+		Linear,		  /*  */
+		Trilinear
+	};
+
+	enum class UVMappingMode {
+		UV,		/*  */
+		Sphere, /*  */
+		Box		/*  */
+	};
+
+	enum class CompareFunc {
+		NoCompare,	  /*  */
+		lessEqual,	  /*  */
+		greaterEqual, /*  */
+		less,		  /*  */
+		greater,	  /*  */
+		equal,		  /*  */
+		notequal,	  /*  */
+		always,		  /*  */
+		never,		  /*  */
+	};
+
+} // namespace fragcore
 #endif

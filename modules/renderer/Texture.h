@@ -248,18 +248,15 @@ namespace fragcore {
 		 * @param pixels
 		 * @param size
 		 */
-		virtual void setPixels(Format format, unsigned int level, const void *pixels,
-							   unsigned long size) = 0; // TODO add fvformatf
+		virtual void setPixels(Format format, unsigned int level, const void *pixels, unsigned long size) = 0;
 
 		/**
 		 *
 		 * @param mipmap
 		 * @return
 		 */
-		virtual void *getPixels(ImageFormat format, unsigned int level,
-								unsigned long *nBytes) = 0; // TOOD add fvformatf.
+		virtual void *getPixels(ImageFormat format, unsigned int level, unsigned long *nBytes) = 0;
 
-		// virtual bool UseSRGB();
 		virtual void clear() = 0;
 	};
 } // namespace fragcore

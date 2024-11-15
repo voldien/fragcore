@@ -51,7 +51,6 @@ bool Library::open(const char *clibrary) {
 
 	/*	Check for error.	*/
 	if (this->mlib == nullptr) {
-
 		throw RuntimeException("Failed open library : {}", dlerror());
 	}
 

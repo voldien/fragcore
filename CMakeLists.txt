@@ -53,8 +53,6 @@ OPTION(BUILD_WITH_COVERAGE "Enable profiling and coverage report analysis." OFF)
 OPTION(BUILD_WITH_PROFILER "Enable profiling." OFF)
 OPTION(BUILD_WITH_UBSAN "Enable Undefined Behavior Sanitizer." OFF)
 OPTION(BUILD_WITH_ASAN "Enable AddressSanitizer." OFF)
-OPTION(WITH_CXX_GUARDEDALLOC "Enable GuardedAlloc for C++ memory allocation tracking (only enable for development)" OFF)
-MARK_AS_ADVANCED(WITH_CXX_GUARDEDALLOC)
 
 #
 OPTION(BUILD_WITH_TEST "Enable Testing." OFF)
@@ -221,11 +219,19 @@ IF((CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX) AND NOT CMAKE_COMPILER_
 		SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -pg")
 	ENDIF()
 
+	IF(BUILD_WITH_ASAN)
+		MESSAGE(STATUS "AddressSanitizer enabled")
+		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address")
+		SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address")
+		SET(CMAKE_LINKER_FLAGS "${CMAKE_LINKER_FLAGS_DEBUG} -fsanitize=address")
+	ENDIF()
+
 	#
 	IF(BUILD_WITH_UBSAN)
 		MESSAGE(STATUS "Undefined Behavior sanitizer enabled")
 		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined,shift,shift-exponent,integer-divide-by-zero,unreachable,vla-bound,null,return,signed-integer-overflow,bounds,float-divide-by-zero,float-cast-overflow,nonnull-attribute,returns-nonnull-attribute,bool,enum,vptr,pointer-overflow,builtin -fno-sanitize-recover=all")
 		SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=undefined,shift,shift-exponent,integer-divide-by-zero,unreachable,vla-bound,null,return,signed-integer-overflow,bounds,float-divide-by-zero,float-cast-overflow,nonnull-attribute,returns-nonnull-attribute,bool,enum,vptr,pointer-overflow,builtin -fno-sanitize-recover=all")
+		SET(CMAKE_LINKER_FLAGS "${CMAKE_LINKER_FLAGS_DEBUG} -fsanitize=address")
 	ENDIF()
 
 ELSEIF("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
@@ -237,6 +243,7 @@ ELSEIF("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
 		MESSAGE(STATUS "AddressSanitizer enabled")
 		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address")
 		SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address")
+		SET(CMAKE_LINKER_FLAGS "${CMAKE_LINKER_FLAGS_DEBUG} -fsanitize=address")
 	ENDIF()
 
 ELSEIF(MSVC)
@@ -248,22 +255,21 @@ ELSEIF(MSVC)
 	ENDIF()
 
 	SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /D_DEBUG /Zi /Od")
-ELSEIF("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
-	SET(CMAKE_CXX_FLAGS "-g -fvisibility=hidden -fno-strict-aliasing -Wall -Wno-long-long ${CMAKE_CXX_FLAGS}")
-	SET(CMAKE_C_FLAGS "-fno-strict-aliasing ${CMAKE_C_FLAGS}")
 ELSEIF(CMAKE_COMPILER_IS_MINGW)
 	SET(CMAKE_CXX_FLAGS "-fvisibility=hidden -fno-strict-aliasing -Wall -Wno-long-long -Wa,-mbig-obj ${CMAKE_CXX_FLAGS}")
 	SET(CMAKE_C_FLAGS "-fno-strict-aliasing ${CMAKE_C_FLAGS}")
 	ADD_DEFINITIONS(-U__STRICT_ANSI__)
 ELSE()
+	MESSAGE(ERROR "No Compiler Found")
 ENDIF()
 
 IF(WITH_CPU_SSE)
 	INCLUDE(FindSSE)
-
+	#
 	IF(FOUND_FindSEE)
 		TEST_SSE_SUPPORT(COMPILER_SSE_FLAG COMPILER_SSE2_FLAG)
 	ENDIF()
+
 ELSE()
 	MESSAGE(STATUS "SSE and SSE2 optimizations are DISABLED!")
 	SET(COMPILER_SSE_FLAG)
@@ -274,19 +280,7 @@ ENDIF()
 IF(UNIX AND NOT APPLE)
 	IF(NOT WITH_CXX11_ABI)
 		STRING(APPEND PLATFORM_CFLAGS " -D_GLIBCXX_USE_CXX11_ABI=0")
-	ENDIF()
-ENDIF()
-
-#
-IF(IOS)
-	IF(CMAKE_BUILD_TYPE STREQUAL "Debug")
-		SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fembed-bitcode -Og")
-		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fembed-bitcode -Og")
-	ELSE()
-		SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fembed-bitcode -O3")
-		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fembed-bitcode -O3")
-
-		# Experimental for pdb generation
+		STRING(APPEND PLATFORM_CXXFLAGS " -D_GLIBCXX_USE_CXX11_ABI=0")
 	ENDIF()
 ENDIF()
 

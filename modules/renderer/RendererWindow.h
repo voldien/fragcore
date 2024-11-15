@@ -19,7 +19,6 @@
 #ifndef _FRAGCORE_RENDERWINDOW_H_
 #define _FRAGCORE_RENDERWINDOW_H_ 1
 #include "IRenderer.h"
-#include "RenderObject.h"
 #include "SDLWindow.h"
 #include <Core/Ref.h>
 #include <Core/SmartReference.h>

@@ -17,8 +17,6 @@
  */
 #ifndef _FRAGCORE_SHADER_LANGUAGE_H_
 #define _FRAGCORE_SHADER_LANGUAGE_H_ 1
-#include "GraphicFormat.h"
-#include "RenderPrerequisites.h"
 #include <ImageFormat.h>
 
 namespace fragcore {
