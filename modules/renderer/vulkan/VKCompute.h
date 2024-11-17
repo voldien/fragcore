@@ -6,12 +6,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
@@ -20,7 +20,6 @@
 #include "../ICompute.h"
 #include "../RenderPrerequisites.h"
 #include <Core/Module.h>
-#include <Core/Ref.h>
 #include <Core/SmartReference.h>
 #include <FragDef.h>
 
@@ -30,8 +29,8 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC VKCompute : public ICompute {
 	  public:
-		virtual void OnInitialization();
-		virtual void OnDestruction();
+		void OnInitialization() override;
+		void OnDestruction() override;
 
 		/**
 		 * @brief
@@ -39,7 +38,7 @@ namespace fragcore {
 		 * @return true
 		 * @return false
 		 */
-		virtual bool supportCompute() noexcept;
+		bool supportCompute() noexcept override;
 		/**
 		 * Dispatch compute program.
 		 * @param global global workgroup.
@@ -58,7 +57,7 @@ namespace fragcore {
 
 		// virtual void deleteSync(Sync *sync);
 
-		virtual const char *getVersion() const;
+		const char *getVersion() const override;
 
 		// virtual Shader* createComputeProgram();
 		// virtual Shader* deleteComputeProgram();
@@ -70,26 +69,26 @@ namespace fragcore {
 		 *
 		 * @return CommandList*
 		 */
-		virtual CommandList *createCommandBuffer();
+		CommandList *createCommandBuffer() override;
 
 		/**
 		 * @brief
 		 *
 		 * @param list
 		 */
-		virtual void submittCommand(Ref<CommandList> &list);
+		void submittCommand(Ref<CommandList> &list) override;
 
 		/**
 		 * @brief
 		 *
 		 * @param list
 		 */
-		virtual void execute(CommandList *list);
+		void execute(CommandList *list) override;
 
 		ICompute() = default;
 		ICompute(const ICompute &other) = default;
 		ICompute(ICompute &&other) = delete;
-		virtual ~ICompute() = default;
+		~VKCompute() override = default;
 	};
 } // namespace fragcore
 #endif

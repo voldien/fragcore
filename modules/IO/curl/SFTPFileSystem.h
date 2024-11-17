@@ -51,7 +51,7 @@ namespace fragcore {
 		SFTPFileSystem(SFTPFileSystem &&other);
 		// TODO add remove function.
 
-	  public:
+	  
 		/**
 		 * @brief Set the Credentials object
 		 *

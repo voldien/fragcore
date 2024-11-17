@@ -18,7 +18,6 @@
 #ifndef _FRAGCORE_AUDIO_DECODER_H_
 #define _FRAGCORE_AUDIO_DECODER_H_ 1
 #include "../AudioTypes.h"
-#include <Core/Ref.h>
 #include <Core/SmartReference.h>
 #include <IO/IO.h>
 #include <ogg/ogg.h>

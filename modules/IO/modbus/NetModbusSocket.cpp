@@ -8,7 +8,6 @@
 #include <cstdlib>
 #include <cstring>
 #include <ctime>
-#include <modbus/modbus-rtu.h>
 #include <modbus/modbus-tcp.h>
 #include <modbus/modbus.h>
 #include <net/if.h>

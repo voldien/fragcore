@@ -1,6 +1,5 @@
 #include "Core/SmartReference.h"
 #include "Core/Object.h"
-#include "Core/Ref.h"
 #include <gtest/gtest.h>
 using namespace fragcore;
 

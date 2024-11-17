@@ -19,7 +19,6 @@
 #define _FRAGCORE_COMMAND_LIST_H_ 1
 #include "IRenderer.h"
 #include <Core/NoCopyable.h>
-#include <Core/Ref.h>
 #include <Math3D/Color.h>
 
 namespace fragcore {

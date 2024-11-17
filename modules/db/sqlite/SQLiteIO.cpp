@@ -1,5 +1,4 @@
 #include "SQLiteIO.h"
-#include <Core/Ref.h>
 #include <IO/IO.h>
 #include <cstring>
 #include <sqlite3.h>

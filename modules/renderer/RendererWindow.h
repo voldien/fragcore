@@ -20,7 +20,6 @@
 #define _FRAGCORE_RENDERWINDOW_H_ 1
 #include "IRenderer.h"
 #include "SDLWindow.h"
-#include <Core/Ref.h>
 #include <Core/SmartReference.h>
 #include <Display.h>
 #include <FragDef.h>

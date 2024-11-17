@@ -6,19 +6,18 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
 #ifndef _FRAGCORE_OPENGL_FRAMEBUFFER_H_
 #define _FRAGCORE_OPENGL_FRAMEBUFFER_H_ 1
 #include "../IRenderer.h"
-#include "../RenderObject.h"
 #include <vector>
 
 namespace fragcore {
@@ -46,58 +45,57 @@ namespace fragcore {
 		 *
 		 *	@return Non null texture pointer if successfully.
 		 */
-		virtual Texture *getAttachment(unsigned int index) override;
+		Texture *getAttachment(unsigned int index) override;
 
 		/**
 		 *
 		 * @return
 		 */
-		virtual Texture *getDepthAttachment() override;
+		Texture *getDepthAttachment() override;
 
 		/**
 		 *
 		 * @return
 		 */
-		virtual Texture *getStencilAttachment() override;
+		Texture *getStencilAttachment() override;
 
 		/**
 		 *
 		 */
-		virtual int width() const override;
+		int width() const override;
 
 		/**
 		 *
 		 */
-		virtual int height() const override;
+		int height() const override;
 
 		/**
 		 *
 		 */
-		virtual int layers() override;
+		int layers() override;
 
-		virtual int nrSamples() override;
+		int nrSamples() override;
 
 		/*  */
-		virtual void blend(BlendEqu equ, BlendFunc sfactor, BlendFunc dfactor,
+		void blend(BlendEqu equ, BlendFunc sfactor, BlendFunc dfactor, BufferAttachment bufferAttachment) override;
+
+		void blendSeperate(BlendEqu equ, BlendFunc srcRGB, BlendFunc dstRGB, BlendFunc srcAlpha, BlendFunc dstAlpha,
 						   BufferAttachment bufferAttachment) override;
 
-		virtual void blendSeperate(BlendEqu equ, BlendFunc srcRGB, BlendFunc dstRGB, BlendFunc srcAlpha,
-								   BlendFunc dstAlpha, BufferAttachment bufferAttachment) override;
+		void clear(unsigned int clear) override;
 
-		virtual void clear(unsigned int clear) override;
+		void clearColor(BufferAttachment colorAttachment, const float *color) override;
 
-		virtual void clearColor(BufferAttachment colorAttachment, const float *color) override;
-
-		virtual void clearDepthStencil(float depth, int stencil) override;
+		void clearDepthStencil(float depth, int stencil) override;
 
 		/*  */
-		virtual void setDraws(unsigned int nr, BufferAttachment *attachment) override;
+		void setDraws(unsigned int nr, BufferAttachment *attachment) override;
 
-		virtual void setDraw(BufferAttachment attachment) override;
+		void setDraw(BufferAttachment attachment) override;
 
-		virtual intptr_t getNativePtr() const override;
+		intptr_t getNativePtr() const override;
 
-		virtual void setName(const std::string &name) override;
+		void setName(const std::string &name) override;
 
 	  private:
 		FrameBufferDesc desc;
@@ -107,7 +105,7 @@ namespace fragcore {
 
 	  public:
 		GLFrameBuffer();
-		virtual ~GLFrameBuffer() = default;
+		~GLFrameBuffer() override = default;
 	};
 } // namespace fragcore
 #endif

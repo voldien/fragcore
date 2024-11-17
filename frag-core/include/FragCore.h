@@ -27,6 +27,8 @@
  *
  */
 
+ #include"FragDef.h"
+
 /*  Core.   */
 #include "Core/Environment.h"
 #include "Core/IConfig.h"
@@ -34,7 +36,6 @@
 #include "Core/SystemInfo.h"
 
 /*  Memory Management.  */
-#include "Core/Ref.h"
 #include "Core/RefPtr.h"
 #include "Core/SmartReference.h"
 

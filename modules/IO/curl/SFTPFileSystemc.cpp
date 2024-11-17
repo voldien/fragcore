@@ -48,10 +48,9 @@ SFTPFileSystem::SFTPFileSystem(const char *ipAddress, int port, const char *user
 	curl_easy_setopt(handle, CURLOPT_SSH_AUTH_TYPES, CURLSSH_AUTH_AGENT);
 #endif
 
-	if (password && username)
+	if (password && username) {
 		setCredentials(username, password);
+	}
 }
 
-SFTPFileSystem::~SFTPFileSystem() { /*  Release all resources.  */
-	curl_easy_cleanup(handle);
-}
+SFTPFileSystem::~SFTPFileSystem() { /*  Release all resources.  */ curl_easy_cleanup(handle); }

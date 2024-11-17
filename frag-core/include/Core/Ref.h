@@ -17,7 +17,7 @@
  */
 #ifndef _FRAGCORE_REF_H_
 #define _FRAGCORE_REF_H_ 1
-#include "../FragDef.h"
+#include <cassert>
 #include <utility>
 
 namespace fragcore {
@@ -26,7 +26,7 @@ namespace fragcore {
 	 *
 	 * @tparam T
 	 */
-	template <class T> class FVDECLSPEC Ref {
+	template <class T> class Ref {
 		static_assert(std::is_object<T>::value, "Must be a Object");
 		// static_assert(std::has_virtual_destructor<T>::value, "Must have a virtual deconstructor");
 
@@ -34,27 +34,27 @@ namespace fragcore {
 		T *reference;
 
 	  public:
-		FV_ALWAYS_INLINE bool operator==(const T *p_ptr) const { return this->reference == p_ptr; }
+		bool operator==(const T *p_ptr) const { return this->reference == p_ptr; }
 
-		FV_ALWAYS_INLINE bool operator!=(const T *p_ptr) const { return this->reference != p_ptr; }
+		bool operator!=(const T *p_ptr) const { return this->reference != p_ptr; }
 
-		FV_ALWAYS_INLINE bool operator<(const Ref<T> &p_r) const { return this->reference < p_r.reference; }
+		bool operator<(const Ref<T> &p_r) const { return this->reference < p_r.reference; }
 
-		FV_ALWAYS_INLINE bool operator==(const Ref<T> &p_r) const { return this->reference == p_r.reference; }
+		bool operator==(const Ref<T> &p_r) const { return this->reference == p_r.reference; }
 
-		FV_ALWAYS_INLINE bool operator!=(const Ref<T> &p_r) const { return this->reference != p_r.reference; }
+		bool operator!=(const Ref<T> &p_r) const { return this->reference != p_r.reference; }
 
-		FV_ALWAYS_INLINE T *operator->() { return this->reference; }
+		T *operator->() { return this->reference; }
 
-		FV_ALWAYS_INLINE T *operator*() { return this->reference; }
+		T *operator*() { return this->reference; }
 
-		FV_ALWAYS_INLINE const T *operator->() const { return this->reference; }
+		const T *operator->() const { return this->reference; }
 
-		FV_ALWAYS_INLINE const T *ptr() const { return this->reference; }
+		const T *ptr() const { return this->reference; }
 
-		FV_ALWAYS_INLINE T *ptr() { return this->reference; }
+		T *ptr() { return this->reference; }
 
-		FV_ALWAYS_INLINE const T *operator*() const { return this->reference; }
+		const T *operator*() const { return this->reference; }
 
 	  public:
 		Ref() : reference(nullptr) {}

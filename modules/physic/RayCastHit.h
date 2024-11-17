@@ -17,7 +17,6 @@
  */
 #ifndef _FRAGCORE_RAY_CAST_HIT_H_
 #define _FRAGCORE_RAY_CAST_HIT_H_ 1
-#include "PhysicInterface.h"
 #include "PhysicObject.h"
 
 namespace fragcore {

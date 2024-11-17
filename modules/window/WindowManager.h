@@ -19,7 +19,6 @@
 #define _FRAGCORE_WINDOW_MANAGER_H_ 1
 #include "Display.h"
 #include "Window.h"
-#include <Core/Ref.h>
 
 namespace fragcore {
 

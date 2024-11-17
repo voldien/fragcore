@@ -1,4 +1,3 @@
-#include "Core/Ref.h"
 #include "Core/Object.h"
 #include "Core/SmartReference.h"
 #include <gtest/gtest.h>

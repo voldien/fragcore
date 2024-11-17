@@ -20,7 +20,6 @@
 #define _FRAGCORE_IMAGE_LOADER_H_ 1
 #include "Image.h"
 #include <Core/Object.h>
-#include <Core/Ref.h>
 #include <IO/FileSystem.h>
 #include <IO/IO.h>
 

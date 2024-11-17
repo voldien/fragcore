@@ -18,7 +18,6 @@
 #ifndef _FRAGCORE_AUDIOOBJECT_H_
 #define _FRAGCORE_AUDIOOBJECT_H_ 1
 #include "AudioPrerequisites.h"
-#include <Core/Ref.h>
 #include <Core/SmartReference.h>
 
 namespace fragcore {

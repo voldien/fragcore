@@ -19,7 +19,6 @@
 #define _FRAGCORE_SHADER_COMPILER_H_ 1
 #include "../Shader.h"
 #include "ShaderUtil.h"
-#include <Core/Ref.h>
 #include <FragDef.h>
 #include <map>
 #include <vector>

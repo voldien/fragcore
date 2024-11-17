@@ -18,7 +18,6 @@
 #ifndef _FRAGCORE_SHADERUTIL_H_
 #define _FRAGCORE_SHADERUTIL_H_ 1
 #include "../IRenderer.h"
-#include <Core/Ref.h>
 #include <IO/IO.h>
 #include <vector>
 

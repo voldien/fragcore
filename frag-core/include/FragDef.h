@@ -42,6 +42,15 @@ namespace fragcore {
 	using IndexOutOfRangeException = cxxexcept::IndexOutOfRangeException;
 }
 
+#ifdef FV_USE_SHARED_POINTER
+#include<memory>
+namespace fragcore{
+	using Ref = std::shared_ptr;
+}
+#else
+#include"Core/Ref.h"
+#endif
+
 /**
  *	Compiler version macro.
  */

@@ -22,7 +22,6 @@
 #include "internal_object_type.h"
 #include <Core/IConfig.h>
 #include <Core/Module.h>
-#include <Core/Ref.h>
 #include <Core/SmartReference.h>
 
 namespace fragcore {

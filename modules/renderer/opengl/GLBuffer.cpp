@@ -112,12 +112,12 @@ void *GLBuffer::mapBuffer(GLBuffer::MapTarget target) {
 	GLenum mode = getAccessOlder(target);
 
 	// GL_MIN_MAP_BUFFER_ALIGNMENT
-	if (glMapNamedBuffer)
+	if (glMapNamedBuffer) {
 		return glMapNamedBuffer(this->buffer, mode);
-	else {
-		this->bind();
+}
+	 		this->bind();
 		return glMapBufferARB(this->target, mode);
-	}
+
 }
 
 void *GLBuffer::mapBuffer(MapTarget target, unsigned long int offset, unsigned long int length) {

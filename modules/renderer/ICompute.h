@@ -19,7 +19,6 @@
 #define _FRAGCORE_ICOMPUTE_H_ 1
 #include "RenderPrerequisites.h"
 #include <Core/Module.h>
-#include <Core/Ref.h>
 #include <Core/SmartReference.h>
 #include <FragDef.h>
 
