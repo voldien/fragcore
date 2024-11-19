@@ -29,8 +29,8 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC VKCompute : public ICompute {
 	  public:
-		void OnInitialization() override;
-		void OnDestruction() override;
+		void onInitialization() override;
+		void onDestruction() override;
 
 		/**
 		 * @brief
@@ -85,9 +85,9 @@ namespace fragcore {
 		 */
 		void execute(CommandList *list) override;
 
-		ICompute() = default;
-		ICompute(const ICompute &other) = default;
-		ICompute(ICompute &&other) = delete;
+		VKCompute() = default;
+		VKCompute(const VKCompute &other) = delete;
+		VKCompute(VKCompute &&other) = delete;
 		~VKCompute() override = default;
 	};
 } // namespace fragcore

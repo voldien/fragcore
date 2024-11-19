@@ -126,7 +126,10 @@ namespace fragcore {
 		 * @param bounds
 		 * @return true if completly contains, false otherwise.
 		 */
-		constexpr bool contains(const AABB &bounds) const noexcept { return false; }
+		bool contains(const AABB &bounds) const noexcept {
+			// TODO: test
+			return this->contains(bounds.max(), bounds.getCenter()) && this->contains(bounds.min(), bounds.getCenter());
+		}
 
 		/**
 		 *

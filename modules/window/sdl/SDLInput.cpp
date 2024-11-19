@@ -33,11 +33,7 @@ void SDLInput::update() noexcept {
 	this->mousePressed.set(static_cast<size_t>(MouseButton::MIDDLE_BUTTON), (SDL_BUTTON_MMASK & mask) != 0);
 }
 
-bool SDLInput::anyKey() noexcept {
-	const Uint8 *state = SDL_GetKeyboardState(nullptr);
-
-	return false;
-}
+bool SDLInput::anyKey() noexcept { return false; }
 
 bool SDLInput::getKey(const unsigned int key) {
 	const Uint8 *state = SDL_GetKeyboardState(nullptr);

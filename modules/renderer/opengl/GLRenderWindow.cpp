@@ -1,4 +1,3 @@
-#define FRAG_CORE_INTERNAL_IMP 1
 #include "GLRenderWindow.h"
 
 #include <SDL2/SDL_egl.h>
@@ -14,8 +13,7 @@ GLRenderWindow::GLRenderWindow(Ref<GLRendererInterface> &renderer) {
 	this->renderer = renderer;
 
 	SDL_WindowFlags window_flags =
-		(SDL_WindowFlags)(SDL_WINDOW_HIDDEN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_INPUT_FOCUS |
-						  SDL_WINDOW_OPENGL);
+		(SDL_WindowFlags)(SDL_WINDOW_HIDDEN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_OPENGL);
 	this->window = SDL_CreateWindow("", 0, 0, 800, 600, window_flags);
 
 	/*  */
@@ -30,9 +28,6 @@ GLRenderWindow::GLRenderWindow(Ref<GLRendererInterface> &renderer) {
 
 GLRenderWindow::~GLRenderWindow() {}
 
-ViewPort *GLRenderWindow::getViewPort() { return this->renderer->getView(0); }
-FrameBuffer *GLRenderWindow::getDefaultFrameBuffer() { return this->renderer->getDefaultFramebuffer(nullptr); }
-
 void GLRenderWindow::swapBuffer() { SDL_GL_SwapWindow(this->window); }
 
 void GLRenderWindow::vsync(bool state) { int errcode = SDL_GL_SetSwapInterval(state); }
@@ -40,8 +35,8 @@ void GLRenderWindow::vsync(bool state) { int errcode = SDL_GL_SetSwapInterval(st
 bool GLRenderWindow::assertConfigAttributes(const fragcore::IConfig *iConfig) { return false; }
 
 void GLRenderWindow::createWindow(int x, int y, int width, int height, const char *api) {
-	this->window = SDL_CreateWindow("", x, y, width, height, SDL_WINDOW_HIDDEN | SDL_WINDOW_RESIZABLE  | SDL_WINDOW_INPUT_FOCUS |
-						  SDL_WINDOW_OPENGL);
+	this->window = SDL_CreateWindow(
+		"", x, y, width, height, SDL_WINDOW_HIDDEN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_OPENGL);
 
 	/*  */
 	if (window == nullptr) {
@@ -50,6 +45,6 @@ void GLRenderWindow::createWindow(int x, int y, int width, int height, const cha
 	// this->api = api;
 }
 
-void GLRenderWindow::useWindow(void *pdata) {}
+void GLRenderWindow::useWindow([[maybe_unused]] void *pdata) {}
 
 void GLRenderWindow::createSwapChain() {}

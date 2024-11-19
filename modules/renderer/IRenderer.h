@@ -69,85 +69,6 @@ namespace fragcore {
 		~IRenderer() override = default;
 
 		/**
-		 *	Create texture.
-		 *
-		 *	@return non null texture object if succesfully. Null otherwise.
-		 */
-		virtual Texture *createTexture(TextureDesc *desc) noexcept(false) = 0;
-
-		/**
-		 * @brief
-		 *
-		 * @param texture
-		 */
-		virtual void deleteTexture(Texture *texture) noexcept(false) = 0;
-
-		/**
-		 * @brief Create a Sampler object
-		 *
-		 * @param desc
-		 * @return Sampler*
-		 */
-		virtual Sampler *createSampler(SamplerDesc *desc) = 0;
-
-		/**
-		 * @brief
-		 *
-		 * @param texture
-		 */
-		virtual void deleteSampler(Sampler *texture) = 0;
-
-		/**
-		 *
-		 * @param desc
-		 * @return
-		 */
-		virtual RenderPipeline *createRenderPipeline(const RenderPipelineDesc *desc) = 0;
-
-		/**
-		 *
-		 * @param obj
-		 * @return
-		 */
-		virtual void deleteRenderPipeline(RenderPipeline *obj) = 0;
-
-		/**
-		 *	Create shader.
-		 *
-		 *	@return
-		 */
-		virtual Shader *createShader(ShaderDesc *desc) = 0;
-
-		virtual void deleteShader(Shader *shader) = 0;
-
-		/**
-		 *
-		 * @param desc
-		 * @return
-		 */
-		virtual Buffer *createBuffer(BufferDesc *desc) = 0;
-
-		virtual void deleteBuffer(Buffer *object) = 0;
-
-		/**
-		 *
-		 * @param desc
-		 * @return
-		 */
-		virtual FrameBuffer *
-		createFrameBuffer(FrameBufferDesc *desc) = 0; // TODO determine what to do with the reference objects. Same for
-													  // all other object using reference object to GPU resources.
-		virtual void deleteFrameBuffer(FrameBuffer *obj) = 0;
-
-		virtual QueryObject *createQuery(QueryDesc *desc) = 0;
-
-		virtual void deleteQuery(QueryObject *query) = 0;
-
-		virtual Sync *createSync(SyncDesc *desc) = 0;
-
-		virtual void deleteSync(Sync *sync) = 0;
-
-		/**
 		 *
 		 * @param x
 		 * @param y
@@ -162,22 +83,6 @@ namespace fragcore {
 		 * @param window
 		 */
 		virtual void setCurrentWindow(RendererWindow *window) = 0;
-
-		/**
-		 *
-		 * @return
-		 */
-		virtual FrameBuffer *getDefaultFramebuffer(void *window) = 0;
-
-		virtual ViewPort *getView(unsigned int i) = 0;
-
-		// virtual void bindTextures(unsigned int firstUnit, const std::vector<Texture *> &textures) = 0;
-
-		// virtual void bindImages(unsigned int firstUnit, const std::vector<Texture *> &textures,
-		// 						const std::vector<Texture::MapTarget> &mapping,
-		// 						const std::vector<Texture::Format> &formats) = 0;
-
-		// virtual void execute(CommandList *list);
 
 		/**
 		 * Set debug state.
@@ -230,10 +135,6 @@ namespace fragcore {
 		 */
 		// TODO imporove later
 		virtual void getStatus(MemoryInfo *memoryInfo) = 0;
-
-		CommandList *createCommandBuffer() override = 0;
-		void submittCommand(Ref<CommandList> &list) override = 0;
-		void execute(CommandList *list) override = 0;
 
 		virtual void *getData() const = 0;
 	};

@@ -33,6 +33,15 @@ namespace fragcore {
 			this->child = nullptr;
 			this->parent = nullptr;
 		}
+
+				
+		ITree(const ITree &other) {
+			//this->child = std::exchange(other.child, nullptr);
+			//this->parent = std::exchange(other.parent, nullptr);
+			//this->sibling = std::exchange(other.sibling, nullptr);
+			this->numChildren = other.numChildren;
+		}
+
 		ITree(ITree &&other) {
 			this->child = std::exchange(other.child, nullptr);
 			this->parent = std::exchange(other.parent, nullptr);
@@ -80,10 +89,10 @@ namespace fragcore {
 
 		virtual void removeChild(unsigned int index) {
 			ITree<T> *node_sibling = getChild(index - 1);
-			ITree<T> *n = node_sibling->sibling;
+			ITree<T> *sib = node_sibling->sibling;
 
-			node_sibling->setSibling(n->sibling);
-			n->parent = nullptr;
+			node_sibling->setSibling(sib->sibling);
+			sib->parent = nullptr;
 		}
 
 		virtual ITree<T> *getChild(unsigned int index) const {

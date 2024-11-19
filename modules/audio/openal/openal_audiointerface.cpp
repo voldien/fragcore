@@ -69,7 +69,7 @@ OpenALAudioInterface::~OpenALAudioInterface() {
 	alcCloseDevice(this->device);
 }
 
-void OpenALAudioInterface::OnInitialization() {
+void OpenALAudioInterface::onInitialization() {
 
 	// TODO allocate pool.
 	/*	Allocate data.	*/
@@ -78,7 +78,7 @@ void OpenALAudioInterface::OnInitialization() {
 	// this->reverbs.resize(32);
 }
 
-void OpenALAudioInterface::OnDestruction() {}
+void OpenALAudioInterface::onDestruction() {}
 
 AudioClip *OpenALAudioInterface::createAudioClip(AudioClipDesc *desc) {
 	validateClipDesc(desc);

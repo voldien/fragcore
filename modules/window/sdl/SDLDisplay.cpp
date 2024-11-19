@@ -73,7 +73,7 @@ void SDLDisplay::getDPI(Display::DPI *dpi) {
 	}
 }
 
-void SDLDisplay::setMode(const Mode &mode) {}
+void SDLDisplay::setMode([[maybe_unused]] const Mode &mode) {}
 
 SDLDisplay::DisplayFormat SDLDisplay::getFormat() {
 	SDL_DisplayMode mode;

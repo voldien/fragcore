@@ -45,9 +45,9 @@ namespace fragcore {
 		Image loadImage(const std::string &path, const FileFormat fileformat = FileFormat::Default) {
 			FileSystem::createFileSystem();
 			Ref<IO> io_ref = Ref<IO>(FileSystem::getFileSystem()->openFile(path.c_str(), IO::IOMode::READ));
-			return loadImage(io_ref);
+			return loadImage(io_ref, fileformat);
 		}
-		Image loadImage(Ref<IO> &io_in);
+		Image loadImage(Ref<IO> &io_in, const FileFormat fileformat = FileFormat::Default);
 
 		void loadImageData(const std::string &path, unsigned int *width, unsigned int *height);
 

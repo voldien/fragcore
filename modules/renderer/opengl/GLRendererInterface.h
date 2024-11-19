@@ -18,7 +18,6 @@
 #ifndef _FRAGCORE_GL_RENDERER_INTERFACE_H_
 #define _FRAGCORE_GL_RENDERER_INTERFACE_H_ 1
 #include "../IRenderer.h"
-#include "GLHelper.h"
 
 namespace fragcore {
 
@@ -30,67 +29,8 @@ namespace fragcore {
 		// TODO make it less state machine and allow it to become more modern.
 		~GLRendererInterface() override;
 
-		void OnInitialization() override;
-		void OnDestruction() override;
-
-		/**
-		 *	Create texture.
-		 *
-		 *	@return non null texture object if succesfully. Null otherwise.
-		 */
-		Texture *createTexture(TextureDesc *desc) override;
-
-		void deleteTexture(Texture *texture) override;
-
-		Sampler *createSampler(SamplerDesc *desc) override;
-
-		void deleteSampler(Sampler *texture) override;
-
-		/**
-		 *
-		 * @param desc
-		 * @return
-		 */
-		RenderPipeline *createRenderPipeline(const RenderPipelineDesc *desc) override;
-
-		/**
-		 *
-		 * @param obj
-		 * @return
-		 */
-		void deleteRenderPipeline(RenderPipeline *obj) override;
-
-		/**
-		 *	Create shader.
-		 *
-		 *	@return
-		 */
-		Shader *createShader(ShaderDesc *desc) override;
-
-		void deleteShader(Shader *shader) override;
-
-		/**
-		 *
-		 * @param desc
-		 * @return
-		 */
-		Buffer *createBuffer(BufferDesc *desc) override;
-
-		void deleteBuffer(Buffer *object) override;
-
-		/**
-		 *
-		 * @param desc
-		 * @return
-		 */
-		FrameBuffer *createFrameBuffer(
-			FrameBufferDesc *desc) override; // TODO determine what to do with the reference objects. Same for all
-											 // other object using reference object to GPU resources.
-		void deleteFrameBuffer(FrameBuffer *obj) override;
-
-		QueryObject *createQuery(QueryDesc *desc) override;
-
-		void deleteQuery(QueryObject *query) override;
+		void onInitialization() override;
+		void onDestruction() override;
 
 		/**
 		 *
@@ -114,15 +54,6 @@ namespace fragcore {
 		virtual void createSwapChain();
 
 		/**
-		 *
-		 * @return
-		 */
-		FrameBuffer *getDefaultFramebuffer(void *window) override;
-
-		// TODO add viewobject for handling as a object
-		ViewPort *getView(unsigned int i) override;
-
-		/**
 		 *	Set depth mask.
 		 */
 		virtual void setDepthMask(bool flag);
@@ -143,24 +74,6 @@ namespace fragcore {
 		 * @return
 		 */
 		virtual bool isStateEnabled(IRenderer::State state);
-
-		/**
-		 *
-		 * @param width
-		 */
-		virtual void setLineWidth(float width);
-
-		virtual void bindTextures(unsigned int firstUnit, const std::vector<Texture *> &textures);
-
-		virtual void bindImages(unsigned int firstUnit, const std::vector<Texture *> &textures,
-								const std::vector<Texture::MapTarget> &mapping,
-								const std::vector<Texture::Format> &formats);
-
-		Sync *createSync(SyncDesc *desc) override;
-
-		void deleteSync(Sync *sync) override;
-
-		// virtual void execute(CommandList *list);
 
 		/**
 		 * Set debug state.
@@ -232,11 +145,10 @@ namespace fragcore {
 
 		IConfig getDefaultConfig() const noexcept;
 
-	  public:
 		const char *getExtensions() const noexcept;
 		bool isExtensionSupported(const char *extension) const noexcept;
 
-	  public: /*	OpenGL Specific methods.	*/
+		/*	OpenGL Specific methods.	*/
 		void *getOpenGLContext() noexcept;
 		void bindWindowContext(void *window, void *context);
 
@@ -270,9 +182,9 @@ namespace fragcore {
 		bool debug;
 		bool alpha;
 
-		ViewPort *defaultViewport;
+		ViewPort *defaultViewport = nullptr;
 		std::vector<ViewPort *> viewports; // TODO remove pointer.
-		FrameBuffer *defaultFrameBuffer;
+		FrameBuffer *defaultFrameBuffer = nullptr;
 		/*  Texture gamma corrections.  */
 		bool gamma;
 		ShaderLanguage supportedLanguages;

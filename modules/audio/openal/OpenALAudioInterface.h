@@ -33,8 +33,8 @@ namespace fragcore {
 		OpenALAudioInterface(IConfig *config = nullptr);
 		~OpenALAudioInterface() override;
 
-		void OnInitialization() override;
-		void OnDestruction() override;
+		void onInitialization() override;
+		void onDestruction() override;
 
 		/**
 		 *

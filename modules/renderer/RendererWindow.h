@@ -40,8 +40,6 @@ namespace fragcore {
 	  public:
 		virtual void swapBuffer() = 0;
 		virtual void vsync(bool state) = 0;
-		virtual ViewPort *getViewPort() = 0;
-		virtual FrameBuffer *getDefaultFrameBuffer() = 0;
 
 	  protected: /*  Renderer methods.   */
 		// TODO determine how to resolve and

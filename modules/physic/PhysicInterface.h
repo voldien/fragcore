@@ -36,8 +36,8 @@ namespace fragcore {
 		PhysicInterface(const PhysicInterface &other) = delete;
 		~PhysicInterface() override = default;
 
-		void OnInitialization() override{};
-		void OnDestruction() override{};
+		void onInitialization() override{};
+		void onDestruction() override{};
 
 		/**
 		 * Start simulate.

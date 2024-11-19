@@ -18,7 +18,6 @@
 #ifndef _FRAGCORE_OPENGL_WINDOW_H_
 #define _FRAGCORE_OPENGL_WINDOW_H_ 1
 #include "../RendererWindow.h"
-#include "GLFrameBuffer.h"
 #include "GLRendererInterface.h"
 #if defined(FRAG_CORE_INTERNAL_IMP) // TODO resolve to a single file or
 									// something later
@@ -38,9 +37,6 @@ namespace fragcore {
 		void swapBuffer() override;
 		void vsync(bool state) override;
 
-		ViewPort *getViewPort() override;
-		FrameBuffer *getDefaultFrameBuffer() override;
-
 		void createWindow(int x, int y, int width, int height, const char *api) override;
 		bool assertConfigAttributes(const IConfig *iConfig) override;
 		void useWindow(void *pdata) override;
@@ -51,7 +47,6 @@ namespace fragcore {
 	  private: /*	*/
 		// TODO add proxy window.
 		Ref<GLRendererInterface> renderer = {nullptr};
-		Ref<GLFrameBuffer> defaultFrameBuffer = {nullptr};
 	};
 } // namespace fragcore
 

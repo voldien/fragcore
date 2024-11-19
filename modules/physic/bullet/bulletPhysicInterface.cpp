@@ -130,8 +130,8 @@ BulletPhysicInterface::~BulletPhysicInterface() {
 	/**/
 }
 
-void BulletPhysicInterface::OnInitialization() {}
-void BulletPhysicInterface::OnDestruction() {}
+void BulletPhysicInterface::onInitialization() {}
+void BulletPhysicInterface::onDestruction() {}
 
 void BulletPhysicInterface::simulate(const float timeStep, const int maxSubSteps, const float fixedTimeStep) {
 

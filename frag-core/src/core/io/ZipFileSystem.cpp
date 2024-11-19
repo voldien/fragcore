@@ -81,8 +81,8 @@ IO *ZipFileSystem::openFile(unsigned int index) {
 
 bool ZipFileSystem::isASyncSupported() const { return *this->getScheduler() != nullptr; }
 
-bool ZipFileSystem::isDirectory(const char *path) const { return false; }
-bool ZipFileSystem::isFile(const char *path) const { return false; }
+bool ZipFileSystem::isDirectory([[maybe_unused]] const char *path) const { return false; }
+bool ZipFileSystem::isFile([[maybe_unused]] const char *path) const { return false; }
 
 std::vector<std::string> ZipFileSystem::listFiles(const char *path) const {
 
@@ -179,7 +179,7 @@ void ZipFileSystem::release() {
 	this->pzip = nullptr;
 }
 
-void ZipFileSystem::closeFile(IO *io) {}
+void ZipFileSystem::closeFile([[maybe_unused]] IO *io) {}
 
 void ZipFileSystem::remove(const char *path) {
 	int err;
@@ -236,12 +236,12 @@ void ZipFileSystem::createDirectory(const char *path) {
 	}
 }
 
-bool ZipFileSystem::isReadable(const char *path) const {
+bool ZipFileSystem::isReadable([[maybe_unused]] const char *path) const {
 	// err = zip_file_get_external_attributes((zip_t*)zip, index, 0, &osSys, &attr);
 	return false;
 }
 
-bool ZipFileSystem::isWriteable(const char *path) const {
+bool ZipFileSystem::isWriteable([[maybe_unused]] const char *path) const {
 	// err = zip_file_get_external_attributes((zip_t*)zip, index, 0, &osSys, &attr);
 	return false;
 }

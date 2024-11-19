@@ -45,8 +45,6 @@ namespace fragcore {
 		virtual unsigned int layers() const noexcept { return this->depth; }
 		virtual ImageFormat getFormat() const noexcept { return this->format; }
 
-		virtual Color operator[](unsigned int index) const;
-
 		virtual Color getColor(unsigned int x_offset, unsigned int y_offset, unsigned int z_offset) const;
 		virtual void setColor(unsigned int x_offset, unsigned int y_offset, unsigned int z_offset, const Color &color);
 

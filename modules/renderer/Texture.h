@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#include "ImageFormat.h"
 #ifndef _FRAGCORE_TEXTURE_H_
 #define _FRAGCORE_TEXTURE_H_ 1
+#include "ImageFormat.h"
 #include "Sampler.h"
 #include <Core/Object.h>
 

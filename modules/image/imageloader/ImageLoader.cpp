@@ -7,11 +7,11 @@
 using namespace fragcore;
 
 ImageLoader::ImageLoader(const ImageLoader &other) : Object(other) {}
-ImageLoader::ImageLoader(ImageLoader &&other) {}
+ImageLoader::ImageLoader(ImageLoader &&other) : Object(other) {}
 ImageLoader &ImageLoader::operator=(const ImageLoader &other) { return *this; }
 ImageLoader &ImageLoader::operator=(ImageLoader &&other) { return *this; }
 
-Image ImageLoader::loadImage(Ref<IO> &io_in) {
+Image ImageLoader::loadImage(Ref<IO> &io_in, const FileFormat fileformat) {
 
 	/*	Free image.	*/
 	FREE_IMAGE_FORMAT imgtype; /**/

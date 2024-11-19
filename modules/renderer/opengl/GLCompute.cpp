@@ -3,8 +3,8 @@
 using namespace fragcore;
 
 bool ICompute::supportCompute() noexcept { return true; }
-void ICompute::OnInitialization() {}
-void ICompute::OnDestruction() {}
+void ICompute::onInitialization() {}
+void ICompute::onDestruction() {}
 
 const char *ICompute::getVersion() const { return ""; }
 

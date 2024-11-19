@@ -16,7 +16,6 @@ Image ImageUtil::convert2NormalMap(const Image &image) {
 	for (unsigned int index_x = 0; index_x < image.width(); index_x++) {
 		for (unsigned int index_y = 0; index_y < image.height(); index_y++) {
 
-			const float s11 = image.getColor(index_x, index_y, 0).x();
 			const float s01 = image.getColor((index_x + 1) % image.width(), (index_y + 1) % image.height(), 0).x();
 			const float s21 = image.getColor((index_x + -1) % image.width(), (index_y + 1) % image.height(), 0).x();
 			const float s10 = image.getColor((index_x + 1) % image.width(), (index_y + -1) % image.height(), 0).x();

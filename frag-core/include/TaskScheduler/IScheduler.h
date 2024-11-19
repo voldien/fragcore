@@ -73,7 +73,7 @@ namespace fragcore {
 
 		template <class Function, class... Args> void addTask(Function &&func, Args &&... args) {
 			TaskFunc task(func, args...);
-			this->addTask(&task);
+			//this->addTask(&task);
 		}
 
 		/**

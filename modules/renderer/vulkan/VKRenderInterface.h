@@ -17,11 +17,8 @@
  */
 #ifndef _LIB_FRAGCORE_VK_RENDERER_INTERFACE_H_
 #define _LIB_FRAGCORE_VK_RENDERER_INTERFACE_H_ 1
-#include "../Buffer.h"
 #include "../IRenderer.h"
 #include "../RenderDesc.h"
-#include "../Sampler.h"
-#include "Prerequisites.h"
 #include <VKDevice.h>
 #include <vulkan/vulkan.h>
 
@@ -43,49 +40,14 @@ namespace fragcore {
 
 		// TODO make it less state machine and allow it to become more modern.
 
-		void OnInitialization() override;
-		void OnDestruction() override;
+		void onInitialization() override;
+		void onDestruction() override;
 
-		Texture *createTexture(TextureDesc *desc) override;
-
-		void deleteTexture(Texture *texture) override;
-
-		Sampler *createSampler(SamplerDesc *desc) override;
-
-		void deleteSampler(Sampler *texture) override;
-
-		RenderPipeline *createRenderPipeline(const RenderPipelineDesc *desc) override;
-
-		void deleteRenderPipeline(RenderPipeline *obj) override;
-
-		Shader *createShader(ShaderDesc *desc) override;
-
-		void deleteShader(Shader *shader) override;
-
-		Buffer *createBuffer(BufferDesc *desc) override;
-
-		void deleteBuffer(Buffer *object) override;
-
-		FrameBuffer *createFrameBuffer(
-			FrameBufferDesc *desc) override; // TODO determine what to do with the reference objects. Same for
-											 // all other object using reference object to GPU resources.
-		void deleteFrameBuffer(FrameBuffer *obj) override;
-
-		QueryObject *createQuery(QueryDesc *desc) override;
-
-		void deleteQuery(QueryObject *query) override;
-
-		Sync *createSync(SyncDesc *desc) override;
-
-		void deleteSync(Sync *sync) override;
 
 		RendererWindow *createWindow(int x, int y, int width, int height) override;
 
 		void setCurrentWindow(RendererWindow *window) override;
 
-		FrameBuffer *getDefaultFramebuffer(void *window) override;
-
-		ViewPort *getView(unsigned int i) override;
 
 		void setDebug(bool enable) override;
 
@@ -104,12 +66,6 @@ namespace fragcore {
 
 		void getStatus(MemoryInfo *memoryInfo) override;
 
-	  public: /*	Command buffer methods.	*/
-		CommandList *createCommandBuffer() override;
-
-		// TODO add array support .
-		void submittCommand(Ref<CommandList> &list) override;
-		void execute(CommandList *list) override;
 
 	  public:
 		void *getData() const override;

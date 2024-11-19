@@ -172,8 +172,32 @@ Ref<NetSocket> UDPNetSocket::accept(INetAddress &r_ip) {
 UDPNetSocket::NetStatus UDPNetSocket::accept(NetSocket &socket) { return UDPNetSocket::NetStatus::Status_Disconnected; }
 int UDPNetSocket::read() { return 0; }
 int UDPNetSocket::write() { return 0; }
-bool UDPNetSocket::isBlocking() { return false; }
-void UDPNetSocket::setBlocking(bool blocking) {}
+bool UDPNetSocket::isBlocking() {
+	int flags = fcntl(this->socket, F_GETFL, 0);
+	if (flags == -1) {
+		throw SystemException(errno, std::system_category(), "Failed to get flag");
+	}
+	return (flags & ~O_NONBLOCK) == 0;
+}
+void UDPNetSocket::setBlocking(bool blocking) {
+	/*	*/
+	int flags = fcntl(this->socket, F_GETFL, 0);
+	if (flags == -1) {
+		throw SystemException(errno, std::system_category(), "Failed to get Socket Flag");
+	}
+
+	if (blocking) {
+		flags = (flags & ~O_NONBLOCK);
+	} else {
+		flags = (flags & O_NONBLOCK);
+	}
+
+	int rcode = fcntl(this->socket, F_SETFL, flags);
+
+	if (rcode < 0) {
+		throw SystemException(errno, std::system_category(), "Failed to set Blocking State {}", blocking);
+	}
+}
 UDPNetSocket::NetStatus UDPNetSocket::getStatus() const noexcept { return this->netStatus; }
 
 void UDPNetSocket::setTimeout(long int microsec) {

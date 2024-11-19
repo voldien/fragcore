@@ -32,8 +32,8 @@ namespace fragcore {
 	  public:
 		Module();
 		~Module() override = default;
-		virtual void OnInitialization() = 0;
-		virtual void OnDestruction() = 0;
+		virtual void onInitialization() = 0;
+		virtual void onDestruction() = 0;
 
 	  public: /*	*/
 		template <typename T> static T *loadModule(const std::string &path, const std::string &moduleEntryPoint = "") {

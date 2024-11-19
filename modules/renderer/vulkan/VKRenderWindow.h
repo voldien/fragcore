@@ -89,9 +89,6 @@ namespace fragcore {
 
 		intptr_t getNativePtr() const override;
 
-		ViewPort *getViewPort() override;
-		FrameBuffer *getDefaultFrameBuffer() override;
-
 		void createWindow(int x, int y, int width, int height, const char *api) override;
 		bool assertConfigAttributes(const IConfig *iConfig) override;
 		void useWindow(void *pdata) override;

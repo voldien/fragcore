@@ -3,11 +3,7 @@
 
 #include "../RenderDesc.h"
 
-#include "VKBuffer.h"
-#include "VKCommandList.h"
 #include "VKRenderWindow.h"
-#include "VKSampler.h"
-#include "VKShader.h"
 #include "internal_object_type.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_surface.h>
@@ -86,542 +82,9 @@ VKRenderInterface::~VKRenderInterface() {
 	SDL_QuitSubSystem(SDL_INIT_VIDEO);
 }
 
-void VKRenderInterface::OnInitialization() {}
+void VKRenderInterface::onInitialization() {}
 
-void VKRenderInterface::OnDestruction() {}
-
-Texture *VKRenderInterface::createTexture(TextureDesc *desc) {
-
-	VkPhysicalDevice physicalDevice = nullptr;
-
-	unsigned int texWidth = 0, texHeight = 0, internal, type, format;
-	unsigned long pixelSize = 0;
-	void *pixels = nullptr;
-
-	VkDeviceSize imageSize = pixelSize;
-	VkPhysicalDeviceMemoryProperties memProperties;
-	VkCommandPool commandPool = nullptr;
-	VkImage textureImage;
-	// TODO replace with buffer object.
-	VkDeviceMemory textureImageMemory;
-
-	vkGetPhysicalDeviceMemoryProperties(physicalDevice, &memProperties);
-
-	if (!pixels) {
-		throw cxxexcept::RuntimeException("failed to load texture image!");
-	}
-
-	VkCommandBuffer cmd = VKHelper::beginSingleTimeCommands(getDevice()->getHandle(), commandPool);
-
-	/*	*/
-	VkBuffer stagingBuffer;
-	VkDeviceMemory stagingBufferMemory;
-	VKHelper::createBuffer(getDevice()->getHandle(), imageSize, memProperties, VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
-						   VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, stagingBuffer, stagingBufferMemory);
-
-	void *stageData;
-	vkMapMemory(getDevice()->getHandle(), stagingBufferMemory, 0, imageSize, 0, &stageData);
-	memcpy(stageData, pixels, static_cast<size_t>(imageSize));
-	vkUnmapMemory(getDevice()->getHandle(), stagingBufferMemory);
-
-	/*	Create staging buffer.	*/
-	VKHelper::createImage(getDevice()->getHandle(), texWidth, texHeight, 1, VK_FORMAT_B8G8R8A8_SRGB,
-						  VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
-						  VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, memProperties, textureImage, textureImageMemory);
-	/*	*/
-	VKHelper::transitionImageLayout(cmd, textureImage, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-
-	VKHelper::copyBufferToImageCmd(cmd, stagingBuffer, textureImage,
-								   {static_cast<uint32_t>(texWidth), static_cast<uint32_t>(texHeight), 1});
-
-	/*	*/
-	VKHelper::transitionImageLayout(cmd, textureImage, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-									VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-
-	/*	*/
-	VKHelper::endSingleTimeCommands(getDevice()->getHandle(), queue, cmd, commandPool);
-
-	vkDestroyBuffer(getDevice()->getHandle(), stagingBuffer, nullptr);
-	vkFreeMemory(getDevice()->getHandle(), stagingBufferMemory, nullptr);
-
-	free(pixels);
-
-	VKTexture *texture = new VKTexture();
-	return texture;
-}
-
-void VKRenderInterface::deleteTexture(Texture *texture) { delete texture; }
-
-Sampler *VKRenderInterface::createSampler(SamplerDesc *desc) {
-
-	if (desc == nullptr) {
-		throw InvalidArgumentException("Invalid sampler description pointer object.");
-}
-
-	/*  */
-	VKSampler *sampler = new VKSampler();
-	VkSampler vkSampler;
-	VKHelper::createSampler(getDevice()->getHandle(), vkSampler);
-	// sampler->pdata= samplerObject;
-	return sampler;
-}
-
-void VKRenderInterface::deleteSampler(Sampler *sampler) {}
-
-RenderPipeline *VKRenderInterface::createRenderPipeline(const RenderPipelineDesc *desc) {
-
-	//    desc.
-	return nullptr;
-}
-
-void VKRenderInterface::deleteRenderPipeline(RenderPipeline *obj) {}
-
-Shader *VKRenderInterface::createShader(ShaderDesc *desc) {
-
-	/*  Create shader interface object. */
-	VKShader *shader = new VKShader();
-	// VKShaderObject *shaobj = new VKShaderObject();
-	//	shader->pdata = shaobj;
-	// shaobj->vulkanCore = vulkanCore;
-
-	VkResult result;
-	VkShaderModule vertShaderModule = nullptr;
-	VkShaderModule fragShaderModule = nullptr;
-	VkShaderModule geomShaderModule = nullptr;
-	VkShaderModule tessCShaderModule = nullptr;
-	VkShaderModule tessEShaderModule = nullptr;
-
-	/*  */
-	VkPipelineShaderStageCreateInfo vertShaderStageInfo = {};
-	VkPipelineShaderStageCreateInfo fragShaderStageInfo = {};
-	VkPipelineShaderStageCreateInfo geomShaderStageInfo = {};
-	VkPipelineShaderStageCreateInfo tessEShaderStageInfo = {};
-	VkPipelineShaderStageCreateInfo tessChaderStageInfo = {};
-
-	/*  */
-	std::vector<VkPipelineShaderStageCreateInfo> shaderStages;
-
-	// Validate the shader language.
-	ShaderLanguage supportedLanguage = (ShaderLanguage)(~this->getShaderLanguage());
-	if (desc->vertex.language & supportedLanguage) {
-		throw RuntimeException("Vertex shader language is not supported");
-}
-	if (desc->fragment.language & supportedLanguage) {
-		throw RuntimeException("Fragment shader language is not supported");
-}
-	if (desc->geometry.language & supportedLanguage) {
-		throw RuntimeException("Geometry shader language is not supported");
-}
-	if (desc->tessellationControl.language & supportedLanguage) {
-		throw RuntimeException("Tessellation Control shader language is not supported");
-}
-	if (desc->tessellationEvolution.language & supportedLanguage) {
-		throw RuntimeException("Tessellation Evolution shader language is not supported");
-}
-	if (desc->Compute.language & supportedLanguage) {
-		throw RuntimeException("Compute shader language is not supported");
-}
-
-	/*  Create shader module code containers.   */
-	// TODO fix the code for the shader desc.
-	//	if(desc->vertex.vertexBinary && desc->vertex.language == SPIRV){
-	if (true) {
-		// vertShaderModule = createShaderModule(device->getHandle(), (const char*)desc->vertex.vertexBinary,
-		// desc->vertex.size);
-		// vertShaderModule = createShaderModule(device->getHandle(), (const char *)nullptr, 0); // FIXME
-
-		/*  */
-		vertShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-		vertShaderStageInfo.stage = VK_SHADER_STAGE_VERTEX_BIT;
-		vertShaderStageInfo.module = vertShaderModule;
-		vertShaderStageInfo.pName = "main";
-
-		shaderStages.push_back(vertShaderStageInfo);
-	}
-	//	if(desc->fragment.fragmentBinary && desc->fragment.language == SPIRV){
-	if (true) {
-		// fragShaderModule = createShaderModule(device->getHandle(),  (const char*)desc->fragment.fragmentBinary,
-		// desc->fragment.size);
-		// fragShaderModule = createShaderModule(device->getHandle(), (const char *)nullptr, 0); // FIXME
-
-		fragShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-		fragShaderStageInfo.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
-		fragShaderStageInfo.module = fragShaderModule;
-		fragShaderStageInfo.pName = "main";
-
-		shaderStages.push_back(fragShaderStageInfo);
-	}
-	//	if(desc->geometry.geometryBinary && desc->geometry.language == SPIRV){
-	//		geomShaderModule = createShaderModule(device->getHandle(), desc->vertexsource[0],
-	// strlen(desc->vertexsource[0]));
-	//
-	//		geomShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-	//		geomShaderStageInfo.stage = VK_SHADER_STAGE_GEOMETRY_BIT;
-	//		geomShaderStageInfo.module = geomShaderModule;
-	//		geomShaderStageInfo.pName = "main";
-	//
-	//		shaderStages.push_back(geomShaderStageInfo);
-	//	}
-	//	if(desc->numtesco > 0){
-	//		tessCShaderModule = createShaderModule(device->getHandle(), desc->vertexsource[0],
-	// strlen(desc->vertexsource[0]));
-	//
-	//		tessChaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-	//		tessChaderStageInfo.stage = VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT;
-	//		tessChaderStageInfo.module = tessCShaderModule;
-	//		tessChaderStageInfo.pName = "main";
-	//
-	//		shaderStages.push_back(tessChaderStageInfo);
-	//	}
-	//	if(desc->numtesev> 0){
-	//		tessEShaderModule = createShaderModule(device->getHandle(), desc->vertexsource[0],
-	// strlen(desc->vertexsource[0]));
-	//
-	//		tessEShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-	//		tessEShaderStageInfo.stage = VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT;
-	//		tessEShaderStageInfo.module = tessEShaderModule;
-	//		tessEShaderStageInfo.pName = "main";
-	//
-	//		shaderStages.push_back(tessEShaderStageInfo);
-	//	}
-
-	// If using compute shader.
-	if (desc->Compute.language == SPIRV) {
-
-		VkDescriptorSetLayoutBinding bindings[2] = {{0}};
-		bindings[0].binding = 0;
-		bindings[0].descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
-		bindings[0].descriptorCount = 1;
-		bindings[0].stageFlags = VK_SHADER_STAGE_COMPUTE_BIT;
-		bindings[1].binding = 1;
-		bindings[1].descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
-		bindings[1].descriptorCount = 1;
-		bindings[1].stageFlags = VK_SHADER_STAGE_COMPUTE_BIT;
-
-		//        VkComputePipelineCreateInfo info = { VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO };
-		//        info.stage.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-		//        info.stage.stage = VK_SHADER_STAGE_COMPUTE_BIT;
-		//        info.stage.module = loadShaderModule(device->getHandle(), "shaders/particle.comp.spv");
-		//        info.stage.pName = "main";
-		//        info.layout = computePipeline.pipelineLayout;
-
-		VkComputePipelineCreateInfo computePipelineCreateInfo = {};
-		// result = vkCreateComputePipelines(gpu, nullptr, 1, &computePipelineCreateInfo, nullptr,
-		// &shaobj->graphicsPipeline);
-	}
-
-	/*  */
-	VkDescriptorSetLayoutBinding samplerLayoutBinding = {};
-	samplerLayoutBinding.binding = 1;
-	samplerLayoutBinding.descriptorCount = 1;
-	samplerLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-	samplerLayoutBinding.pImmutableSamplers = nullptr;
-	samplerLayoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
-
-	VkDescriptorSetLayoutCreateInfo layoutInfo = {};
-	layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-	layoutInfo.bindingCount = 1;
-	layoutInfo.pBindings = &samplerLayoutBinding;
-
-	VkDescriptorSetLayout setLayout;
-	result = vkCreateDescriptorSetLayout(device->getHandle(), &layoutInfo, nullptr, &setLayout);
-	if (result != VK_SUCCESS) {
-		throw RuntimeException("Failed to create descriptor set layout - {}", static_cast<int>(result));
-	}
-
-	/*  */
-	VkPipelineLayoutCreateInfo pipelineLayoutInfo = {};
-	pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-	pipelineLayoutInfo.setLayoutCount = 1;			  // Optional
-	pipelineLayoutInfo.pSetLayouts = &setLayout;	  // Optional
-	pipelineLayoutInfo.pushConstantRangeCount = 0;	  // Optional
-	pipelineLayoutInfo.pPushConstantRanges = nullptr; // Optional
-
-	// result = vkCreatePipelineLayout(device->getHandle(), &pipelineLayoutInfo, nullptr, &shaobj->pipelineLayout);
-	// if (result != VK_SUCCESS)
-	// 	throw RuntimeException(fmt::format("failed to create pipeline layout - %d!", result));
-
-	VkAttachmentDescription colorAttachment = {};
-	// colorAttachment.format = swapChain->swapChainImageFormat;
-	colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
-
-	colorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-	colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
-
-	colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-	colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-
-	/*  */
-	VkAttachmentReference colorAttachmentRef = {};
-	colorAttachmentRef.attachment = 0;
-	colorAttachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-	/*  */
-	VkSubpassDescription subpass = {};
-	subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
-	subpass.colorAttachmentCount = 1;
-	subpass.pColorAttachments = &colorAttachmentRef;
-
-	VkRenderPass renderPass;
-	VkRenderPassCreateInfo renderPassInfo = {};
-	renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
-	renderPassInfo.attachmentCount = 1;
-	renderPassInfo.pAttachments = &colorAttachment;
-	renderPassInfo.subpassCount = 1;
-	renderPassInfo.pSubpasses = &subpass;
-
-	if (vkCreateRenderPass(device->getHandle(), &renderPassInfo, nullptr, &renderPass) != VK_SUCCESS) {
-		throw RuntimeException("failed to create render pass - {}", static_cast<int>(result));
-	}
-
-	/*  */
-	VkVertexInputBindingDescription bindingDescription = {};
-	bindingDescription.binding = 0;
-	bindingDescription.stride = sizeof(float) * 3;
-	bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
-
-	/**/
-	VkVertexInputAttributeDescription attributeDescriptions = {0};
-	attributeDescriptions.binding = 0;
-	attributeDescriptions.location = 0;
-	attributeDescriptions.format = VK_FORMAT_R32G32_SFLOAT;
-	attributeDescriptions.offset = 0;
-
-	/*  */
-	VkPipelineVertexInputStateCreateInfo vertexInputInfo = {};
-	vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-	vertexInputInfo.vertexBindingDescriptionCount = 1;
-	vertexInputInfo.pVertexBindingDescriptions = &bindingDescription; // Optional
-	vertexInputInfo.vertexAttributeDescriptionCount = 1;
-	vertexInputInfo.pVertexAttributeDescriptions = &attributeDescriptions; // Optional
-
-	/*  */
-	VkPipelineInputAssemblyStateCreateInfo inputAssembly = {};
-	inputAssembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
-	inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
-	inputAssembly.primitiveRestartEnable = VK_FALSE;
-
-	/*  */
-	VkPipelineColorBlendAttachmentState colorBlendAttachment = {};
-	colorBlendAttachment.colorWriteMask =
-		VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
-	colorBlendAttachment.blendEnable = VK_FALSE;
-	colorBlendAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_ONE;	 // Optional
-	colorBlendAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ZERO; // Optional
-	colorBlendAttachment.colorBlendOp = VK_BLEND_OP_ADD;			 // Optional
-	colorBlendAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;	 // Optional
-	colorBlendAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO; // Optional
-	colorBlendAttachment.alphaBlendOp = VK_BLEND_OP_ADD;			 // Optional
-
-	/*  */
-	VkPipelineRasterizationStateCreateInfo rasterizer = {};
-	rasterizer.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
-	rasterizer.polygonMode = VK_POLYGON_MODE_FILL;
-	rasterizer.cullMode = VK_CULL_MODE_BACK_BIT;
-	rasterizer.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
-	rasterizer.lineWidth = 1.0f;
-
-	/*  */
-	VkPipelineMultisampleStateCreateInfo multisampling = {};
-	multisampling.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
-	multisampling.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
-
-	/*  */
-	VkPipelineColorBlendStateCreateInfo colorBlending = {};
-	colorBlending.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
-	colorBlending.logicOpEnable = VK_FALSE;
-	colorBlending.logicOp = VK_LOGIC_OP_COPY; // Optional
-	colorBlending.attachmentCount = 1;
-	colorBlending.pAttachments = &colorBlendAttachment;
-	colorBlending.blendConstants[0] = 0.0f; // Optional
-	colorBlending.blendConstants[1] = 0.0f; // Optional
-	colorBlending.blendConstants[2] = 0.0f; // Optional
-	colorBlending.blendConstants[3] = 0.0f; // Optional
-
-	/*  Enable dynamic variables in shader configuration.   */
-	VkDynamicState dynamicStates[] = {
-		VK_DYNAMIC_STATE_VIEWPORT,		  VK_DYNAMIC_STATE_LINE_WIDTH,	 VK_DYNAMIC_STATE_STENCIL_COMPARE_MASK,
-		VK_DYNAMIC_STATE_BLEND_CONSTANTS, VK_DYNAMIC_STATE_DEPTH_BOUNDS,
-	};
-
-	/*  */
-	VkPipelineDynamicStateCreateInfo dynamicState = {};
-	dynamicState.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
-	dynamicState.dynamicStateCount = sizeof(dynamicStates) / sizeof(dynamicStates[0]);
-	dynamicState.pDynamicStates = dynamicStates;
-
-	/*  */
-	VkViewport viewport = {};
-	// viewport.x = 0.0f;
-	// viewport.y = 0.0f;
-	// viewport.width = (float) swapChain->chainExtend.width;
-	// viewport.height = (float) swapChain->chainExtend.height;
-	// viewport.minDepth = 0.0f;
-	// viewport.maxDepth = 1.0f;
-
-	/*  */
-	VkRect2D scissor = {};
-	// scissor.offset = {0, 0};
-	// scissor.extent = swapChain->chainExtend;
-
-	/*  */
-	VkPipelineViewportStateCreateInfo viewportState = {};
-	viewportState.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
-	viewportState.viewportCount = 1;
-	viewportState.pViewports = &viewport;
-	viewportState.scissorCount = 1;
-	viewportState.pScissors = &scissor;
-
-	/*  Graphic pipeline descriptor.    */
-	VkGraphicsPipelineCreateInfo pipelineInfo = {};
-	pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-	pipelineInfo.stageCount = shaderStages.size();
-	pipelineInfo.pStages = shaderStages.data();
-	pipelineInfo.pVertexInputState = &vertexInputInfo;
-	pipelineInfo.pInputAssemblyState = &inputAssembly;
-	pipelineInfo.pViewportState = &viewportState;
-	pipelineInfo.pRasterizationState = &rasterizer;
-	pipelineInfo.pMultisampleState = &multisampling;
-	pipelineInfo.pDepthStencilState = nullptr; // Optional
-	pipelineInfo.pColorBlendState = &colorBlending;
-	pipelineInfo.pDynamicState = &dynamicState; // Optional
-	// pipelineInfo.layout = shaobj->pipelineLayout;
-	pipelineInfo.renderPass = renderPass;
-	pipelineInfo.subpass = 0;
-	pipelineInfo.basePipelineHandle = VK_NULL_HANDLE; // Optional
-	pipelineInfo.basePipelineIndex = -1;			  // Optional
-
-	/*  Create graphic pipeline.    */
-	// result = vkCreateGraphicsPipelines(device->getHandle(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr,
-	// 								   &shaobj->graphicsPipeline);
-	if (result != VK_SUCCESS) {
-		throw RuntimeException("vkCreateGraphicsPipelines failed - {}", static_cast<int>(result));
-	}
-
-	/*  Release shader moudles once used.  */
-	if (vertShaderModule) {
-		vkDestroyShaderModule(device->getHandle(), vertShaderModule, nullptr);
-}
-	if (fragShaderModule) {
-		vkDestroyShaderModule(device->getHandle(), fragShaderModule, nullptr);
-}
-	if (geomShaderModule) {
-		vkDestroyShaderModule(device->getHandle(), geomShaderModule, nullptr);
-}
-	if (tessCShaderModule) {
-		vkDestroyShaderModule(device->getHandle(), tessCShaderModule, nullptr);
-}
-	if (tessEShaderModule) {
-		vkDestroyShaderModule(device->getHandle(), tessEShaderModule, nullptr);
-}
-
-	return shader;
-}
-
-void VKRenderInterface::deleteShader(Shader *shader) {
-
-	// VKShaderObject *shaobj = (VKShaderObject *)shader->pdata;
-
-	// /*  validate object.   */
-	// if (shader->getRenderer() != this)
-	// 	throw InvalidArgumentException("");
-
-	// if (shaobj->graphicsPipeline) {
-	// 	// vkDestroyPipelineLayout(device->getHandle(), pipelineLayout, nullptr);
-	// 	/*  Release all resources.  */
-	// 	vkDestroyPipeline(device->getHandle(), shaobj->graphicsPipeline, nullptr);
-	// } else
-	// 	throw RuntimeException("");
-
-	// //delete shader->pdata;
-	// delete shader;
-}
-
-Buffer *VKRenderInterface::createBuffer(BufferDesc *desc) {
-
-	VkResult result;
-	VKBuffer *vkBufferObject = new VKBuffer();
-
-	// VKHelper::createBuffer(device->getHandle(), desc->size, device->getPhysicalDevice(0)->getMemoryProperties(),
-	// 					   (VkBufferUsageFlags)getBufferType((unsigned int)desc->type),
-	// 					   VK_MEMORY_PROPERTY_HOST_CACHED_BIT, vkBufferObject->buffer,
-	// 					   vkBufferObject->vertexBufferMemory);
-
-	// /*  Buffer description. */
-	// VkBufferCreateInfo bufferInfo = {};
-	// bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-	// bufferInfo.size = desc->size;
-	// // bufferInfo.usage = (VkBufferUsageFlags)getBufferType((BufferDesc::BufferType)desc->type);
-	// bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-
-	// /*  Create buffer.  */
-	// result = vkCreateBuffer(device->getHandle(), &bufferInfo, nullptr, &vkBufferObject->buffer);
-	// if (result != VK_SUCCESS) {
-	// 	throw RuntimeException(fmt::format("failed to create vertex buffer %d", result));
-	// }
-
-	// /*  */
-	// VkMemoryRequirements memRequirements;
-	// vkGetBufferMemoryRequirements(device->getHandle(), vkBufferObject->buffer, &memRequirements);
-
-	// /*  */
-	// VkPhysicalDeviceMemoryProperties memProperties;
-	// vkGetPhysicalDeviceMemoryProperties(gpu, &memProperties);
-
-	// /*  Allocate memory.    */
-	// VkMemoryAllocateInfo allocInfo = {};
-	// allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-	// allocInfo.allocationSize = memRequirements.size;
-	// // allocInfo.memoryTypeIndex =
-	// // 	findMemoryType(physical_devices[0], memRequirements.memoryTypeBits,
-	// // 				   VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-
-	// /*  */
-	// if (vkAllocateMemory(device->getHandle(), &allocInfo, nullptr, &vkBufferObject->vertexBufferMemory) !=
-	// VK_SUCCESS) { 	throw RuntimeException(fmt::format("failed to allocate vertex buffer memory!"));
-	// }
-
-	// /*  */
-	// result = vkBindBufferMemory(device->getHandle(), vkBufferObject->buffer, vkBufferObject->vertexBufferMemory, 0);
-	// if (result != VK_SUCCESS)
-	// 	throw RuntimeException(fmt::format("failed to allocate vertex buffer memory!"));
-
-	return vkBufferObject;
-}
-
-void VKRenderInterface::deleteBuffer(Buffer *object) {
-
-	// VKBufferObject *bufferObject = (VKBufferObject *)object->pdata;
-
-	// // vkFreeMemory(device->getHandle(), vertexBufferMemory, nullptr);
-	// if (bufferObject->buffer)
-	// 	vkDestroyBuffer(device->getHandle(), bufferObject->buffer, nullptr);
-
-	// /*  Release objects.    */
-	// //delete object->pdata;
-	// delete object;
-}
-
-ViewPort *VKRenderInterface::getView(unsigned int i) {
-
-	/*  Validate the index. */
-	if (i >= capability.sMaxViewPorts) {
-		throw InvalidArgumentException(
-			fmt::format("Does not support viewport index {}, max index {}.", i, capability.sMaxViewPorts));
-	}
-
-	//	// If the view does not exits. Create it.
-	//	if(i == 0)
-	//		return glcore->defaultViewport;
-	//	return glcore->viewports[i - 1];
-	return nullptr;
-}
-
-FrameBuffer *VKRenderInterface::createFrameBuffer(FrameBufferDesc *desc) { return nullptr; }
-
-void VKRenderInterface::deleteFrameBuffer(FrameBuffer *obj) {}
-
-QueryObject *VKRenderInterface::createQuery(QueryDesc *desc) { return nullptr; }
-void VKRenderInterface::deleteQuery(QueryObject *query) {}
+void VKRenderInterface::onDestruction() {}
 
 RendererWindow *VKRenderInterface::createWindow(int x, int y, int width, int height) {
 
@@ -634,22 +97,7 @@ RendererWindow *VKRenderInterface::createWindow(int x, int y, int width, int hei
 	return window;
 }
 
-void VKRenderInterface::setCurrentWindow(RendererWindow *window) { /*  */
-}
-
-FrameBuffer *VKRenderInterface::getDefaultFramebuffer(void *window) {
-	static FrameBuffer *defaultFrambuffer = nullptr;
-	/*  TODO add support.   */
-	if (defaultFrambuffer == nullptr) {
-		// defaultFrambuffer = new
-		// FrameBuffer *frameBuffer = new FrameBuffer();
-	}
-
-	return defaultFrambuffer;
-}
-
-Sync *VKRenderInterface::createSync(SyncDesc *desc) { return nullptr; }
-void VKRenderInterface::deleteSync(Sync *sync) {}
+void VKRenderInterface::setCurrentWindow(RendererWindow *window) { /*  */ }
 
 static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
 													VkDebugUtilsMessageTypeFlagsEXT messageType,
@@ -691,15 +139,14 @@ void VKRenderInterface::setDebug(bool enable) {
 
 		if (CreateDebugUtilsMessengerEXT(core->getHandle(), &createInfo, nullptr, &debugMessenger) != VK_SUCCESS) {
 			throw std::runtime_error("failed to set up debug messenger!");
-		}  			// return VK_ERROR_EXTENSION_NOT_PRESENT;
-	
+		} // return VK_ERROR_EXTENSION_NOT_PRESENT;
 	}
 }
 
 void VKRenderInterface::getSupportedTextureCompression(TextureDesc::Compression *pCompressions) {
 	if (pCompressions == nullptr) {
 		throw InvalidArgumentException("pCompressions may not be a null pointer.");
-}
+	}
 
 	unsigned int compressions = 0;
 	VkPhysicalDeviceFeatures deviceFeatures;
@@ -708,18 +155,18 @@ void VKRenderInterface::getSupportedTextureCompression(TextureDesc::Compression 
 
 	if (deviceFeatures.textureCompressionBC) {
 		compressions |= (unsigned int)TextureDesc::Compression::NoCompression;
-}
+	}
 	if (deviceFeatures.textureCompressionETC2) {
 		compressions |= (unsigned int)TextureDesc::Compression::ETC2;
-}
+	}
 	if (deviceFeatures.textureCompressionASTC_LDR) {
 		compressions |= (unsigned int)TextureDesc::Compression::ASTC_LDR;
-}
+	}
 
 	// Add support for default compression format.
 	if (compressions != 0) {
 		compressions |= (unsigned int)TextureDesc::Compression::Compression;
-}
+	}
 
 	*pCompressions = (TextureDesc::Compression)compressions;
 }
@@ -730,7 +177,7 @@ void VKRenderInterface::getCapability(Capability *capability) {
 
 	if (capability == nullptr) {
 		throw InvalidArgumentException("Must not be a null pointer.");
-}
+	}
 
 	/*  */
 	VkPhysicalDeviceProperties properties;
@@ -874,7 +321,7 @@ void VKRenderInterface::getFeatures(Features *features) {
 
 	if (features == nullptr) {
 		throw InvalidArgumentException("Must not be a null pointer.");
-}
+	}
 }
 
 const char *VKRenderInterface::getShaderVersion(ShaderLanguage language) const {
@@ -899,26 +346,6 @@ const char *VKRenderInterface::getVersion() const {
 }
 
 void VKRenderInterface::getStatus(MemoryInfo *memoryInfo) {}
-
-CommandList *VKRenderInterface::createCommandBuffer() {
-	Ref<VKRenderInterface> ref = Ref<VKRenderInterface>(this);
-
-	return new VKCommandList(ref);
-}
-
-void VKRenderInterface::submittCommand(Ref<CommandList> &list) {
-
-	VKCommandList *commandBuffer = static_cast<VKCommandList *>(*list);
-
-	VkSubmitInfo submitInfo = {};
-	submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-	submitInfo.commandBufferCount = 1;
-	submitInfo.pCommandBuffers = &commandBuffer->cmdBuffer;
-
-	VKS_VALIDATE(vkQueueSubmit(this->queue, 1, &submitInfo, VK_NULL_HANDLE));
-}
-
-void VKRenderInterface::execute(CommandList *list) {}
 
 void *VKRenderInterface::getData() const { return nullptr; }
 

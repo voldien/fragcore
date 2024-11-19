@@ -57,8 +57,6 @@ Image::~Image() {
 	this->bufferSize = 0;
 }
 
-Color Image::operator[](unsigned int index) const { return Color::black(); }
-
 Color Image::getColor(unsigned int x_offset, unsigned int y_offset, unsigned int z_offset) const {
 
 	const size_t pixel_index = getPixelMemoryOffset(x_offset, y_offset, z_offset);

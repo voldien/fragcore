@@ -6,12 +6,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
@@ -79,18 +79,6 @@ namespace fragcore {
 		 */
 		inline const Vector3 &getSize() const { return this->size; }
 
-		/**
-		 *
-		 * @param size
-		 */
-		inline void setCenter(const Vector3 &size) {}
-
-		/**
-		 *
-		 * @return
-		 */
-		inline Vector3 getCenter() const { return Vector3(this->halfu, this->halfv, this->halfw); }
-
 		OBB &operator=(const OBB &obb) {
 			this->onb = obb.onb;
 			this->setSize(obb.getSize());
@@ -100,9 +88,6 @@ namespace fragcore {
 	  private:		  /*	Attributes.	*/
 		ONB onb;	  /*	*/
 		Vector3 size; /*	*/
-		float halfu;  /*	*/
-		float halfv;  /*	*/
-		float halfw;  /*	*/
 	};
 } // namespace fragcore
 

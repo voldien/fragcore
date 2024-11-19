@@ -102,11 +102,11 @@ namespace fragcore {
 		 * @param parent
 		 */
 		IConfig(IConfig *parent = nullptr) { this->setParent(parent); }
-		IConfig(const IConfig &other) : ValueType(other) {
+		IConfig(const IConfig &other) : ITree(other), ValueType(other) {
 			this->va_va = other.va_va;
 			this->_mapSubConfig = other._mapSubConfig;
 		}
-		IConfig(IConfig &&other) : ValueType(other) {
+		IConfig(IConfig &&other) {
 			this->_mapSubConfig = std::move(other._mapSubConfig);
 			this->va_va = std::move(other.va_va);
 		}
@@ -118,11 +118,15 @@ namespace fragcore {
 		}
 
 		IConfig &operator=(const IConfig &other) {
+			ValueType<IConfigBase>::operator=(other);
+
 			this->va_va = other.va_va;
 			this->_mapSubConfig = other._mapSubConfig;
 			return *this;
 		}
 		IConfig &operator=(IConfig &&other) {
+			ValueType<IConfigBase>::operator=(other);
+
 			this->_mapSubConfig = std::move(other._mapSubConfig);
 			this->va_va = std::move(other.va_va);
 			return *this;
@@ -146,6 +150,8 @@ namespace fragcore {
 			return this->va_va.at(key)->as<T *>().getValue();
 		}
 
+		bool has_ref(const std::string &key) const { return this->va_va.find(key) != this->va_va.end(); }
+
 		template <class T> void set(const std::string &key, const T &value) /*noexcept(noexcept(isSet(key)))*/ {
 			static_assert(std::is_class<ValueType<T>>::value || std::is_floating_point<T>::value ||
 							  std::is_integral<T>::value,
@@ -164,6 +170,10 @@ namespace fragcore {
 			if (this->getNumChildren() <= 0) {
 				return false;
 			}
+			if (!this->has_ref(key)) {
+				return false;
+			}
+			config = getSubConfig(key);
 			return true;
 		}
 

@@ -35,8 +35,8 @@ namespace fragcore {
 		BulletPhysicInterface(IConfig *config);
 		~BulletPhysicInterface() override;
 
-		void OnInitialization() override;
-		void OnDestruction() override;
+		void onInitialization() override;
+		void onDestruction() override;
 
 		/**
 		 * Start simulate.

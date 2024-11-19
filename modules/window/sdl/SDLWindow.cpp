@@ -59,15 +59,18 @@ void SDLWindow::setFullScreen(bool fullscreen) {
 	}
 }
 void SDLWindow::setFullScreen(fragcore::Display &display) {
+	this->setPosition(display.x(), display.y());
+	this->setSize(display.width(), display.height());
 	SDL_SetWindowFullscreen(this->window, SDL_WINDOW_FULLSCREEN_DESKTOP);
 }
 
 bool SDLWindow::isFullScreen() const {
 	int x, y;
-	getPosition(&x, &y);
-	return this->getCurrentDisplay()->width() == this->width() &&
-		   this->getCurrentDisplay()->height() == this->height() && this->getCurrentDisplay()->x() == x &&
-		   this->getCurrentDisplay()->y() == y;
+	this->getPosition(&x, &y);
+
+	return (int)this->getCurrentDisplay()->width() == this->width() &&
+		   (int)this->getCurrentDisplay()->height() == this->height() && (int)this->getCurrentDisplay()->x() == x &&
+		   (int)this->getCurrentDisplay()->y() == y;
 }
 
 void SDLWindow::setBordered(bool bordered) { SDL_SetWindowBordered(this->window, (SDL_bool)bordered); }
@@ -110,7 +113,12 @@ void SDLWindow::getMinimumSize(int *width, int *height) { SDL_GetWindowMinimumSi
 void SDLWindow::setMaximumSize(int width, int height) { SDL_SetWindowMaximumSize(this->window, width, height); }
 void SDLWindow::getMaximumSize(int *width, int *height) { SDL_GetWindowMaximumSize(this->window, width, height); }
 
-void SDLWindow::focus() { int error_code = SDL_SetWindowInputFocus(this->window); }
+void SDLWindow::focus() {
+	int error_code = SDL_SetWindowInputFocus(this->window);
+	if (error_code != 0) {
+		
+	}
+}
 
 void SDLWindow::restore() { SDL_RestoreWindow(this->window); }
 

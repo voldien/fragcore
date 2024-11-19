@@ -28,8 +28,8 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC ICompute : public Module {
 	  public:
-		void OnInitialization() override;
-		void OnDestruction() override;
+		void onInitialization() override;
+		void onDestruction() override;
 
 		/**
 		 * @brief
