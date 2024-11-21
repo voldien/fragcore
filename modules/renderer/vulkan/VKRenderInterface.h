@@ -43,11 +43,11 @@ namespace fragcore {
 		void onInitialization() override;
 		void onDestruction() override;
 
+		bool supportCompute() noexcept override;
 
 		RendererWindow *createWindow(int x, int y, int width, int height) override;
 
 		void setCurrentWindow(RendererWindow *window) override;
-
 
 		void setDebug(bool enable) override;
 
@@ -65,7 +65,6 @@ namespace fragcore {
 		void getFeatures(Features *features) override;
 
 		void getStatus(MemoryInfo *memoryInfo) override;
-
 
 	  public:
 		void *getData() const override;

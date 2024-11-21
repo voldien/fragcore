@@ -17,7 +17,6 @@
  */
 #ifndef _FRAGCORE_ICOMPUTE_H_
 #define _FRAGCORE_ICOMPUTE_H_ 1
-#include "RenderPrerequisites.h"
 #include <Core/Module.h>
 #include <Core/SmartReference.h>
 #include <FragDef.h>
@@ -28,8 +27,8 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC ICompute : public Module {
 	  public:
-		void onInitialization() override;
-		void onDestruction() override;
+		void onInitialization() override = 0;
+		void onDestruction() override = 0;
 
 		/**
 		 * @brief
@@ -37,30 +36,9 @@ namespace fragcore {
 		 * @return true
 		 * @return false
 		 */
-		virtual bool supportCompute() noexcept;
+		virtual bool supportCompute() noexcept = 0;
 
 		virtual const char *getVersion() const = 0;
-
-		/**
-		 * @brief Create a Command Buffer object
-		 *
-		 * @return CommandList*
-		 */
-		virtual CommandList *createCommandBuffer();
-
-		/**
-		 * @brief
-		 *
-		 * @param list
-		 */
-		virtual void submittCommand(Ref<CommandList> &list);
-
-		/**
-		 * @brief
-		 *
-		 * @param list
-		 */
-		virtual void execute(CommandList *list);
 
 		ICompute() = default;
 		ICompute(const ICompute &other) = delete;

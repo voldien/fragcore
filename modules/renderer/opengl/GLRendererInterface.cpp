@@ -36,6 +36,8 @@ const unsigned int numReqConfigKeys = sizeof(reqConfigKey) / sizeof(reqConfigKey
 void GLRendererInterface::onInitialization() {}
 void GLRendererInterface::onDestruction() {}
 
+bool GLRendererInterface::supportCompute() noexcept { return this->capability.sComputeShader; }
+
 IConfig GLRendererInterface::getDefaultConfig() const noexcept {
 	IConfig defaultConfig;
 	defaultConfig.set("core", true);

@@ -86,6 +86,8 @@ void VKRenderInterface::onInitialization() {}
 
 void VKRenderInterface::onDestruction() {}
 
+bool VKRenderInterface::supportCompute() noexcept { return true; }
+
 RendererWindow *VKRenderInterface::createWindow(int x, int y, int width, int height) {
 
 	/*	*/

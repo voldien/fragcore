@@ -36,6 +36,7 @@ namespace fragcore {
 
 				
 		ITree(const ITree &other) {
+			//TODO: impl
 			//this->child = std::exchange(other.child, nullptr);
 			//this->parent = std::exchange(other.parent, nullptr);
 			//this->sibling = std::exchange(other.sibling, nullptr);

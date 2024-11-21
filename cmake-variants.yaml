@@ -1,0 +1,67 @@
+buildType:
+  default: debug
+  choices:
+    debug:
+      short: Debug
+      long: Emit debug information
+      buildType: Debug
+      settings: 
+        BUILD_WITH_ASAN: OFF
+        BUILD_WITH_UBSAN: OFF
+        BUILD_WITH_TSAN: OFF
+        BUILD_WITH_PEDANTIC: OFF
+    release:
+      short: Release
+      long: Optimize generated code
+      buildType: Release
+      settings: 
+        BUILD_WITH_ASAN: OFF
+        BUILD_WITH_UBSAN: OFF
+        BUILD_WITH_TSAN: OFF
+        BUILD_WITH_PEDANTIC: OFF
+    asan:
+      short: Asan
+      long: Instrument with Address Sanitizer
+      buildType: Debug
+      settings: 
+        BUILD_WITH_ASAN: ON
+        BUILD_WITH_UBSAN: ON
+        BUILD_WITH_PEDANTIC: OFF
+    tsan:
+      short: Tsan
+      long: Instrument with Thread Sanitizer
+      buildType: Debug
+      settings: 
+        BUILD_WITH_ASAN: ON
+        BUILD_WITH_UBSAN: ON
+        BUILD_WITH_TSAN: ON
+        BUILD_WITH_PEDANTIC: OFF
+    gprof:
+      short: GNU Profiler
+      long: Profiler
+      buildType: Debug
+      settings: 
+        BUILD_WITH_COVERAGE: ON
+        BUILD_WITH_PROFILER: ON
+        BUILD_WITH_PEDANTIC: OFF
+    pedantic:
+      short: Pedantic
+      long: Pedantic Building
+      buildType: Debug
+      settings: 
+        BUILD_WITH_ASAN: OFF
+        BUILD_WITH_UBSAN: OFF
+        BUILD_WITH_TSAN: OFF
+        BUILD_WITH_PEDANTIC: ON
+
+linkage:
+  default: static
+  choices:
+    static:
+      short: Static
+      long: Create static libraries
+      linkage: static
+    shared:
+      short: Shared
+      long: Create shared libraries/DLLs
+      linkage: shared

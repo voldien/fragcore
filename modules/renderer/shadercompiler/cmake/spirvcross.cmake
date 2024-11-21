@@ -2,7 +2,7 @@ INCLUDE(FetchContent)
 
 FetchContent_Declare(spirv_cross_source
 	GIT_REPOSITORY https://github.com/KhronosGroup/SPIRV-Cross
-	GIT_TAG "vulkan-sdk-1.3.268.0"
+	GIT_TAG "vulkan-sdk-1.3.296.0"
 )
 
 FetchContent_GetProperties(spirv_cross_source)

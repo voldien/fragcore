@@ -19,6 +19,7 @@
 #define _FRAGCORE_CONFIG_H_ 1
 #include "Core/Object.h"
 #include "DataStructure/ITree.h"
+#include "FragDef.h"
 #include <cctype>
 #include <cstring>
 #include <fmt/format.h>
@@ -40,10 +41,10 @@ namespace fragcore {
 
 	class AbstractValue {
 	  public:
+		virtual ~AbstractValue() = default;
+
 		template <class T> const ValueType<T> &as() const { return reinterpret_cast<const ValueType<T> &>(*this); }
 		template <class T> ValueType<T> &as() { return reinterpret_cast<ValueType<T> &>(*this); }
-		/*	*/
-		// template <class T> const ValueType<T> &as_ptr() const { return reinterpret_cast<const ValueType<T>>(this); }
 	};
 
 	template <typename T> class ValueType : public AbstractValue {
@@ -51,11 +52,7 @@ namespace fragcore {
 		using ObjecType = T;
 		ValueType() = default;
 		ValueType(const T &val) : value(val) {}
-
-		ValueType &operator=(const ValueType &other) {
-			this->value = other.value;
-			return *this;
-		}
+		~ValueType() override = default;
 
 		const T &getValue() const noexcept {
 #ifdef CXXCONF_NO_RTTI
@@ -84,7 +81,6 @@ namespace fragcore {
 	class IConfigBase : Object {
 	  public:
 		IConfigBase() = default;
-		IConfigBase(const IConfigBase &other) = default;
 
 	  private:
 		std::string name;
@@ -110,7 +106,7 @@ namespace fragcore {
 			this->_mapSubConfig = std::move(other._mapSubConfig);
 			this->va_va = std::move(other.va_va);
 		}
-		virtual ~IConfig() {
+		~IConfig() override {
 			/*	Delete attributes.	*/
 			for (auto it = this->va_va.begin(); it != this->va_va.end(); it++) {
 				delete (*it).second;
@@ -139,15 +135,24 @@ namespace fragcore {
 			static_assert(std::is_class<ValueType<T>>::value || std::is_floating_point<T>::value ||
 							  std::is_integral<T>::value,
 						  "Invalid Data Type");
-			return this->va_va.at(key)->as<T>().getValue();
+			if (this->has_ref(key)) {
+				return this->va_va.at(key)->as<T>().getValue();
+			}
+			throw InvalidArgumentException("Element with key {} not found", key);
 		}
 
 		template <class T> T &get_ref(const std::string &key) const {
-			return this->va_va.at(key)->as<T &>().getValue();
+			if (this->has_ref(key)) {
+				return this->va_va.at(key)->as<T &>().getValue();
+			}
+			throw InvalidArgumentException("Element with key {} not found", key);
 		}
 
 		template <class T> T *get_ref(const std::string &key) const {
-			return this->va_va.at(key)->as<T *>().getValue();
+			if (this->has_ref(key)) {
+				return this->va_va.at(key)->as<T *>().getValue();
+			}
+			throw InvalidArgumentException("Element with key {} not found", key);
 		}
 
 		bool has_ref(const std::string &key) const { return this->va_va.find(key) != this->va_va.end(); }
@@ -162,7 +167,9 @@ namespace fragcore {
 
 		virtual IConfig &getSubConfig(const std::string &key) {
 			IConfig config(this);
+
 			this->set(key, config);
+
 			return this->get<IConfig &>(key);
 		}
 

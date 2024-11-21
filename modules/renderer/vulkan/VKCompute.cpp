@@ -10,7 +10,3 @@ void VKCompute::onInitialization() {}
 void VKCompute::onDestruction() {}
 
 const char *VKCompute::getVersion() const { return ""; }
-
-CommandList *VKCompute::createCommandBuffer() { return nullptr; }
-void VKCompute::submittCommand(Ref<CommandList> &list) {}
-void VKCompute::execute(CommandList *list) {}

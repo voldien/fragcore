@@ -39,51 +39,8 @@ namespace fragcore {
 		 * @return false
 		 */
 		bool supportCompute() noexcept override;
-		/**
-		 * Dispatch compute program.
-		 * @param global global workgroup.
-		 * @param local local workgroup
-		 * @param offset offset in indirect buffer in number of bytes.
-		 */
-		// virtual void dispatchCompute(Shaer* shader, unsigned int* global);
-		// TODO remove and let command list!
-		virtual void dispatchCompute(unsigned int *global, unsigned int *local, unsigned int offset = 0) = 0;
-		// TODO remove and let command list!
-		// TODO add memory barrier.
-		// TODO add enumerator as argumment for all types of barries.
-		virtual void memoryBarrier() = 0;
-
-		// virtual Sync *createSync(SyncDesc *desc);
-
-		// virtual void deleteSync(Sync *sync);
 
 		const char *getVersion() const override;
-
-		// virtual Shader* createComputeProgram();
-		// virtual Shader* deleteComputeProgram();
-		// virtual void getComputeCapabilties();
-		// virtual void getDeviceInfo(std::vector<DeviceInfo> &devices);
-
-		/**
-		 * @brief Create a Command Buffer object
-		 *
-		 * @return CommandList*
-		 */
-		CommandList *createCommandBuffer() override;
-
-		/**
-		 * @brief
-		 *
-		 * @param list
-		 */
-		void submittCommand(Ref<CommandList> &list) override;
-
-		/**
-		 * @brief
-		 *
-		 * @param list
-		 */
-		void execute(CommandList *list) override;
 
 		VKCompute() = default;
 		VKCompute(const VKCompute &other) = delete;

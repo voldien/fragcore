@@ -7,7 +7,7 @@ using namespace fragcore;
 ASyncHandle ASyncIO::asyncOpen(Ref<IO> &ioRef) {
 
 	/*	Check if scheduler is initialized.	*/
-	if (scheduler == nullptr) {
+	if (this->scheduler == nullptr) {
 		throw RuntimeException("Async not initialized with a scheduler object");
 	}
 	/*  Check parameters.   */

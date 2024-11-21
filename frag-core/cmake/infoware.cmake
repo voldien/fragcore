@@ -8,7 +8,7 @@ FetchContent_GetProperties(infoware)
 
 IF(NOT infoware)
 	FetchContent_Populate(infoware)
-	OPTION(INFOWARE_USE_PCIIDS OFF)
+	SET(INFOWARE_USE_PCIIDS OFF CACHE BOOL "Disable PCI IDS")
 	ADD_SUBDIRECTORY(${infoware_SOURCE_DIR} ${infoware_BINARY_DIR} EXCLUDE_FROM_ALL)
 ENDIF()
 

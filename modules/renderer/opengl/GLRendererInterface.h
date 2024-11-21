@@ -26,11 +26,13 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC GLRendererInterface : public IRenderer {
 	  public:
-		// TODO make it less state machine and allow it to become more modern.
+		GLRendererInterface(const IConfig *config);
 		~GLRendererInterface() override;
 
 		void onInitialization() override;
 		void onDestruction() override;
+
+		bool supportCompute() noexcept override;
 
 		/**
 		 *
@@ -134,12 +136,6 @@ namespace fragcore {
 		 */
 		// TODO imporove later
 		void getStatus(MemoryInfo *memoryInfo) override;
-
-		CommandList *createCommandBuffer() override;
-		void submittCommand(Ref<CommandList> &list) override;
-		void execute(CommandList *list) override;
-
-		GLRendererInterface(const IConfig *config);
 
 		void *getData() const override;
 

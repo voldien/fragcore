@@ -76,7 +76,7 @@ namespace fragcore {
 		 * @return long int
 		 */
 		template <typename... Args>
-		static inline long int format(Ref<IO> &io, const std::string &format, Args &&... args) {
+		static inline long int format(Ref<IO> &io, const std::string &format, Args &&...args) {
 			std::string formatted = fmt::format(format, args...);
 			// TODO allow to perform chunk if needed
 			return io->write(formatted.length(), formatted.data());
@@ -91,7 +91,7 @@ namespace fragcore {
 		 */
 		template <typename T> static std::vector<T> readFileData(Ref<IO> &io) {
 
-			size_t fileSize = (size_t)io->length();
+			const size_t fileSize = static_cast<size_t>(io->length());
 			std::vector<T> buffer(fileSize / sizeof(T));
 
 			io->read(fileSize, buffer.data());
@@ -108,7 +108,7 @@ namespace fragcore {
 		 */
 		template <typename T> static std::vector<T> readString(Ref<IO> &io) {
 
-			size_t fileSize = (size_t)io->length();
+			const size_t fileSize = static_cast<size_t>(io->length());
 			std::vector<T> buffer(fileSize / sizeof(T) + 1);
 
 			io->read(fileSize, buffer.data());

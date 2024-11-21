@@ -439,7 +439,7 @@ namespace fragcore {
 		template <typename T> static std::vector<T> &jitter(std::vector<T> &samples) {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
 
-			size_t sqrt_samples = (size_t)(std::sqrt(samples.size()));
+			const size_t sqrt_samples = static_cast<size_t>(std::sqrt(samples.size()));
 			for (size_t i = 0; i < sqrt_samples; i++) {
 				for (size_t j = 0; j < sqrt_samples; j++) {
 					const T x = (static_cast<T>(i) + Random::rand<T>()) / static_cast<T>(sqrt_samples);
