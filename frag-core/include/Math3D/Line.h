@@ -128,7 +128,7 @@ namespace fragcore {
 
 	  protected:		/*	Attributes.	*/
 		Vector2 normal; /*	*/
-		float d;		/*	*/
+		float d{};		/*	*/
 
 	  public: /*	Static methods.	*/
 		/**

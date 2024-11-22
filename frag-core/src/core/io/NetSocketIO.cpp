@@ -12,19 +12,19 @@ void SocketIO::open([[maybe_unused]] const char *path, [[maybe_unused]] IOMode m
 void SocketIO::close() {}
 
 long SocketIO::read(long int nbytes, void *pbuffer) {
-	int nWriten;
+	int nWriten = 0;
 	this->netSocket->recv(pbuffer, nbytes, nWriten);
 	return nWriten;
 }
 
 long SocketIO::write(long int nbytes, const void *pbuffer) {
-	int nWriten;
+	int nWriten = 0;
 	this->netSocket->send(pbuffer, nbytes, nWriten);
 	return nWriten;
 }
 
 long int SocketIO::peek(long int nbytes, void *pbuffer) {
-	int nWriten;
+	int nWriten = 0;
 	this->netSocket->recv(pbuffer, nbytes, nWriten, true);
 	return nWriten;
 }

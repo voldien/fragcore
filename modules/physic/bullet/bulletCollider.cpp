@@ -2,8 +2,8 @@
 
 using namespace fragcore;
 
-BulletCollider::BulletCollider() {}
+BulletCollider::BulletCollider() = default;
 
-BulletCollider::~BulletCollider() {}
+BulletCollider::~BulletCollider() = default;
 
 Vector3 BulletCollider::getCenter() { return Vector3(); }

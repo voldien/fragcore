@@ -20,8 +20,8 @@
 
 using namespace fragcore;
 
-ModbusNetSocket::ModbusNetSocket() : ctx(nullptr) {}
-ModbusNetSocket::ModbusNetSocket(int socket) : TCPNetSocket(socket), ctx(nullptr) {
+ModbusNetSocket::ModbusNetSocket() = default;
+ModbusNetSocket::ModbusNetSocket(int socket) : TCPNetSocket(socket) {
 
 	if (this->ctx == nullptr) {
 		this->ctx = modbus_new_tcp(nullptr, getPort());
@@ -71,7 +71,7 @@ int ModbusNetSocket::close() {
 int ModbusNetSocket::bind(const INetAddress &p_addr) {
 
 	/*	*/
-	const TCPUDPAddress &tcpAddress = static_cast<const TCPUDPAddress &>(p_addr);
+	const TCPUDPAddress &tcpAddress = dynamic_cast<const TCPUDPAddress &>(p_addr);
 
 	if (this->ctx == nullptr) {
 
@@ -112,10 +112,10 @@ int ModbusNetSocket::listen(unsigned int maxListen) {
 }
 
 int ModbusNetSocket::connect(const INetAddress &addr) {
-	uint32_t old_response_to_sec;
-	uint32_t old_response_to_usec;
+	uint32_t old_response_to_sec = 0;
+	uint32_t old_response_to_usec = 0;
 
-	const TCPUDPAddress &tcpAddress = static_cast<const TCPUDPAddress &>(addr);
+	const TCPUDPAddress &tcpAddress = dynamic_cast<const TCPUDPAddress &>(addr);
 
 	/*	*/
 	if (this->ctx == nullptr) {
@@ -194,7 +194,7 @@ long int ModbusNetSocket::send(const void *pbuffer, int p_len, int &sent) {
 }
 
 Ref<NetSocket> ModbusNetSocket::accept(INetAddress &r_ip) {
-	int accept_socket;
+	int accept_socket = 0;
 	modbus_tcp_accept(static_cast<modbus_t *>(this->ctx), &accept_socket);
 	if (accept_socket < 0) {
 		throw RuntimeException(" Failed to Accept modbus {}", modbus_strerror(errno));
@@ -208,13 +208,9 @@ Ref<NetSocket> ModbusNetSocket::accept(INetAddress &r_ip) {
 ModbusNetSocket::NetStatus ModbusNetSocket::accept(NetSocket &socket) { return TCPNetSocket::accept(socket); }
 int ModbusNetSocket::read() { return 0; }
 int ModbusNetSocket::write() { return 0; }
-bool ModbusNetSocket::isBlocking() { /*	*/
-	return TCPNetSocket::isBlocking();
-}
+bool ModbusNetSocket::isBlocking() { /*	*/ return TCPNetSocket::isBlocking(); }
 
-void ModbusNetSocket::setBlocking(bool blocking) { /*	*/
-	TCPNetSocket::setBlocking(blocking);
-}
+void ModbusNetSocket::setBlocking(bool blocking) { /*	*/ TCPNetSocket::setBlocking(blocking); }
 
 void ModbusNetSocket::setTimeout(long int microsec) {
 

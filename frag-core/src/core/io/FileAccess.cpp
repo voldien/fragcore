@@ -1,9 +1,9 @@
 #include "IO/FileAccess.h"
 using namespace fragcore;
 
-FileAccess::FileAccess() {}
+FileAccess::FileAccess() = default;
 
-FileAccess::~FileAccess() {}
+FileAccess::~FileAccess() = default;
 
 bool FileAccess::readable() const { return false; }
 bool FileAccess::writeable() const { return false; }

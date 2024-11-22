@@ -23,9 +23,9 @@ using namespace fragcore;
 
 size_t TCPNetSocket::setupIPAddress(struct sockaddr *addr, const INetAddress &p_addr, uint16_t p_port) {
 
-	size_t addrlen;
+	size_t addrlen = 0;
 
-	const TCPUDPAddress &tcpAddress = static_cast<const TCPUDPAddress &>(p_addr);
+	const TCPUDPAddress &tcpAddress = dynamic_cast<const TCPUDPAddress &>(p_addr);
 
 	int domain = TCPNetSocket::getDomain(tcpAddress);
 	/*	*/
@@ -90,11 +90,11 @@ int TCPNetSocket::close() {
 }
 
 int TCPNetSocket::bind(const INetAddress &p_addr) {
-	socklen_t addrlen; /*	*/
+	socklen_t addrlen = 0; /*	*/
 	union {
 		struct sockaddr_in addr4;  /*	*/
 		struct sockaddr_in6 addr6; /*	*/
-	} addrU;
+	} addrU{};
 
 	int flags = SOCK_STREAM;
 
@@ -144,11 +144,11 @@ int TCPNetSocket::listen(unsigned int maxListen) {
 // }
 
 int TCPNetSocket::connect(const INetAddress &p_addr) {
-	socklen_t addrlen; /*	*/
+	socklen_t addrlen = 0; /*	*/
 	union {
 		struct sockaddr_in addr4;  /*	*/
 		struct sockaddr_in6 addr6; /*	*/
-	} addrU;
+	} addrU{};
 
 	int flags = SOCK_STREAM;
 	// #ifdef SOCK_CLOEXEC
@@ -194,17 +194,15 @@ int TCPNetSocket::connect(const INetAddress &p_addr) {
 	return 0;
 }
 
-int TCPNetSocket::poll(int p_type, int timeout) const { /*	select or poll.	*/
-	return 0;
-}
+int TCPNetSocket::poll(int p_type, int timeout) const { /*	select or poll.	*/ return 0; }
 
 int TCPNetSocket::recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddress &r_ip, bool p_peek) {
 	int flag = 0;
-	socklen_t addrlen; /*	*/
+	socklen_t addrlen = 0; /*	*/
 	union {
 		struct sockaddr_in addr4;  /*	*/
 		struct sockaddr_in6 addr6; /*	*/
-	} addrU;
+	} addrU{};
 	if (p_peek) {
 		flag |= MSG_PEEK;
 	}
@@ -242,12 +240,12 @@ int TCPNetSocket::send(const uint8_t *p_buffer, int p_len, int &r_sent) {
 }
 
 int TCPNetSocket::sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const INetAddress &p_addr) {
-	socklen_t addrlen; /*	*/
+	socklen_t addrlen = 0; /*	*/
 	union {
 		struct sockaddr_in addr4;  /*	*/
 		struct sockaddr_in6 addr6; /*	*/
-	} addrU;
-	const TCPUDPAddress &tcpAddress = static_cast<const TCPUDPAddress &>(p_addr);
+	} addrU{};
+	const TCPUDPAddress &tcpAddress = dynamic_cast<const TCPUDPAddress &>(p_addr);
 	addrlen = setupIPAddress(reinterpret_cast<sockaddr *>(&addrU), tcpAddress.getIPAddress(), tcpAddress.getPort());
 	unsigned int flag = 0;
 
@@ -268,8 +266,8 @@ long int TCPNetSocket::send(const void *pbuffer, int p_len, int &sent) {
 }
 
 Ref<NetSocket> TCPNetSocket::accept(INetAddress &r_ip) {
-	struct sockaddr_storage addr;
-	socklen_t addrlen;
+	struct sockaddr_storage addr {};
+	socklen_t addrlen = 0;
 
 	addrlen = sizeof(addr);
 	int aaccept_socket = ::accept(this->socket, (struct sockaddr *)&addr, &addrlen);
@@ -333,7 +331,7 @@ bool TCPNetSocket::isValidNetworkAddress(const INetAddress &address) noexcept {
 }
 
 void TCPNetSocket::setTimeout(long int microsec) {
-	struct timeval timeout;
+	struct timeval timeout {};
 
 	/*	Set timeout for client.	*/
 	timeout.tv_sec = microsec / 1000000;
@@ -351,8 +349,8 @@ void TCPNetSocket::setTimeout(long int microsec) {
 }
 
 long int TCPNetSocket::getTimeout() {
-	struct timeval timeout;
-	socklen_t len;
+	struct timeval timeout {};
+	socklen_t len = 0;
 
 	int rcode = getsockopt(this->socket, SOL_SOCKET, SO_RCVTIMEO, &timeout, &len);
 
@@ -366,7 +364,7 @@ long int TCPNetSocket::getTimeout() {
 int TCPNetSocket::getSocket() const noexcept { return this->socket; }
 
 int TCPNetSocket::getPort() const noexcept {
-	struct sockaddr_in sin;
+	struct sockaddr_in sin {};
 	socklen_t addrlen = sizeof(sin);
 	getsockname(this->getSocket(), (struct sockaddr *)&sin, &addrlen); // read binding
 

@@ -6,21 +6,16 @@
 
 using namespace fragcore;
 
-FileIO::FileIO() {
-	this->mode = (IOMode)0;
-	this->file = nullptr;
-}
+FileIO::FileIO() : mode((IOMode)0) { this->file = nullptr; }
 
 FileIO::FileIO(const char *path, IOMode mode) { FileIO::open(path, mode); }
 
 FileIO::FileIO(const std::string &path, IOMode mode) { FileIO::open(path.c_str(), mode); }
 
-FileIO::FileIO(FILE *file) {
-	this->file = file;
-	this->mode = (IOMode)0;
+FileIO::FileIO(FILE *file) : file(file), mode((IOMode)0) {
 
 	/*	Extract stat of the file.	*/
-	struct stat stat;
+	struct stat stat {};
 	const int rcode = fstat(fileno(this->file), &stat);
 
 	/*	Check file mode.	*/
@@ -34,10 +29,7 @@ FileIO::FileIO(FILE *file) {
 	}
 }
 
-FileIO::FileIO(FileIO &&other) {
-	this->file = std::exchange(other.file, nullptr);
-	this->mode = other.mode;
-}
+FileIO::FileIO(FileIO &&other) : mode(other.mode) { this->file = std::exchange(other.file, nullptr); }
 
 FileIO::~FileIO() { FileIO::close(); }
 
@@ -146,7 +138,7 @@ void FileIO::close() {
 }
 
 long FileIO::read(long int nbytes, void *pbuffer) {
-	long int nreadBytes;
+	long int nreadBytes = 0;
 	nreadBytes = fread(pbuffer, 1, nbytes, this->file);
 	if (nreadBytes < 0) {
 		throw RuntimeException("Failed to read to file, {}.", strerror(errno));
@@ -155,7 +147,7 @@ long FileIO::read(long int nbytes, void *pbuffer) {
 }
 
 long FileIO::write(long int nbytes, const void *pbuffer) {
-	long int nreadBytes;
+	long int nreadBytes = 0;
 
 	nreadBytes = fwrite(pbuffer, 1, nbytes, this->file);
 	if (nreadBytes != nbytes) {
@@ -182,7 +174,7 @@ long int FileIO::peek(long int nBytes, void *pbuffer) {
 }
 
 long FileIO::length() {
-	struct stat stat;
+	struct stat stat {};
 	fstat(fileno(this->file), &stat);
 	return stat.st_size;
 }
@@ -190,7 +182,7 @@ long FileIO::length() {
 bool FileIO::eof() const { return feof(this->file) != 0; }
 
 void FileIO::seek(long int nbytes, const Seek seek) {
-	int whence;
+	int whence = 0;
 	switch (seek) {
 	case SET:
 		whence = SEEK_SET;
@@ -233,5 +225,5 @@ bool FileIO::flush() {
 
 void FileIO::setBlocking(bool blocking) {
 	int saved_flags = fcntl(this->getFileDescriptor(), F_GETFL);
-	fcntl(this->getFileDescriptor(), F_SETFL, saved_flags & (blocking ? O_NONBLOCK : 0));
+	int status = fcntl(this->getFileDescriptor(), F_SETFL, saved_flags & (blocking ? O_NONBLOCK : 0));
 }

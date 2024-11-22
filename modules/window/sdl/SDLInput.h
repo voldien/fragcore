@@ -49,7 +49,7 @@ namespace fragcore {
 		std::bitset<3> mousePressed = {0};
 		std::bitset<3> mouseDown = {0};
 		std::bitset<3> mouseReleased = {0};
-		int x, y;
+		int x{}, y{};
 	};
 } // namespace fragcore
 

@@ -113,7 +113,7 @@ SerialIO::BaudRate SerialIO::getBaudRate() const {
 		throw RuntimeException("Failed to get config: {} ({})", sp_last_error_message(), (int)res);
 	}
 
-	int baudRate;
+	int baudRate = 0;
 	res = sp_get_config_baudrate(config, &baudRate);
 	if (res != SP_OK) {
 		throw RuntimeException("Failed to get baudrate {} - {}", "path", sp_last_error_message());
@@ -142,7 +142,7 @@ void SerialIO::setStopBits(StopBits stopBits) {
 
 SerialIO::StopBits SerialIO::getStopBits() const {
 	struct sp_port *serialPort = static_cast<struct sp_port *>(this->port);
-	int stopBit;
+	int stopBit = 0;
 
 	sp_return res = sp_get_config(serialPort, this->config);
 	if (res != SP_OK) {
@@ -339,7 +339,7 @@ int SerialIO::getPayloadBits() const {
 	if (res != SP_OK) {
 		throw RuntimeException("Failed to get config: {} ({})", sp_last_error_message(), (int)res);
 	}
-	int nrBits;
+	int nrBits = 0;
 	res = sp_get_config_bits(config, &nrBits);
 	if (res != SP_OK) {
 		throw RuntimeException("Failed to get config payload bits: {}", sp_last_error_message());
@@ -424,7 +424,7 @@ SerialIO ::~SerialIO() {
 
 std::optional<std::vector<std::string>> SerialIO::getSerialPorts() {
 
-	struct sp_port **ports;
+	struct sp_port **ports = nullptr;
 	std::vector<std::string> list;
 	sp_return error = sp_list_ports(&ports);
 

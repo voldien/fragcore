@@ -68,7 +68,7 @@ void FileSystemNotify::addFilePath(const char *filepath, FileWatchEvent event, v
 	int uid = 0;
 
 	/*  Add watch.  */
-	FSW_STATUS ret;
+	FSW_STATUS ret = 0;
 	ret = fsw_add_path(static_cast<FSW_HANDLE>(this->session), filepath);
 	if (ret != FSW_OK) {
 		throw RuntimeException("Failed to initialize the Filesystem watch: {}.", ret);
@@ -188,7 +188,7 @@ void FileSystemNotify::start() {
 }
 
 void FileSystemNotify::stop() {
-	FSW_STATUS ret;
+	FSW_STATUS ret = 0;
 	if (fsw_is_running(static_cast<FSW_HANDLE>(this->session))) {
 		ret = fsw_stop_monitor(static_cast<FSW_HANDLE>(this->session));
 		if (ret != FSW_OK) {

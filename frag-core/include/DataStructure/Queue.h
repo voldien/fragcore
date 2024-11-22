@@ -168,12 +168,12 @@ namespace fragcore {
 			return *this;
 		}
 
-	  private:			   /*  */
-		size_t reserved;   /*	*/
-		size_t nrElements; /*	*/
-		size_t tail;	   /*	*/
-		size_t head;	   /*	*/
-		T *mdata;		   /*	*/
+	  private:				 /*  */
+		size_t reserved{};	 /*	*/
+		size_t nrElements{}; /*	*/
+		size_t tail{};		 /*	*/
+		size_t head{};		 /*	*/
+		T *mdata;			 /*	*/
 	};
 } // namespace fragcore
 

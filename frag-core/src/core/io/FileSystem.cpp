@@ -261,7 +261,7 @@ FileSystem::FileSystem(Ref<IScheduler> &schRef) : IFileSystem() {
 	this->setScheduleReference(schRef);
 }
 
-FileSystem::FileSystem() {}
+FileSystem::FileSystem() = default;
 
 FileSystem::~FileSystem() { /*  Release all resources.  */
 }

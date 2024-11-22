@@ -27,7 +27,7 @@ IPAddress::IPAddress(const std::string &hostname) : type(IPAddressType::IPAddres
 	hosten = gethostbyname(hostname.c_str());
 	/*	*/
 	if (hosten != nullptr) {
-		struct in_addr **addr_list;
+		struct in_addr **addr_list = nullptr;
 		addr_list = (struct in_addr **)hosten->h_addr_list;
 
 		for (int i = 0; addr_list[i] != nullptr; i++) {

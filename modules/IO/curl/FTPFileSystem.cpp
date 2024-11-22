@@ -179,7 +179,7 @@ FTPFileSystem::FTPFileSystem(const char *hostname, int port, const char *usernam
 
 	result_code = curl_easy_setopt(handle, CURLOPT_URL, fmt::format("ftp://{}/", hostname).c_str());
 
-	char *url;
+	char *url = nullptr;
 	result_code = curl_easy_getinfo(handle, CURLINFO_EFFECTIVE_URL, &url);
 	this->URL = url;
 

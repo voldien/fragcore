@@ -27,7 +27,7 @@ void GZFileIO::open(const char *path, IOMode mode) {
 	/*  */
 	this->gzFi = gzdopen(fileno(this->file), gz_mode);
 	if (this->gzFi == nullptr) {
-		int error;
+		int error = 0;
 		const char *errMsg = gzerror(this->gzFi, &error);
 		throw RuntimeException("Failed to open {} - error: {} | {}", path, error, errMsg);
 	}
@@ -40,7 +40,7 @@ void GZFileIO::open(const char *path, IOMode mode) {
 }
 
 void GZFileIO::close() {
-	int error;
+	int error = 0;
 	error = gzclose(this->gzFi);
 	if (error != Z_OK) {
 		FileIO::close();
@@ -89,7 +89,7 @@ bool GZFileIO::isReadable() const { return FileIO::isReadable(); }
 bool GZFileIO::flush() {
 
 	if (this->mode & WRITE) {
-		int error;
+		int error = 0;
 		error = gzflush(this->gzFi, Z_FINISH);
 		if (error != Z_OK) {
 			throw RuntimeException(zError(error));

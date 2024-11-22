@@ -104,10 +104,10 @@ namespace fragcore {
 		~FTPFileSystem() override;
 
 	  private:
-		CURL *handle;
-		CURL *multi;
+		CURL *handle{};
+		CURL *multi{};
 		std::string URL;
-		int port;
+		int port{};
 	};
 } // namespace fragcore
 

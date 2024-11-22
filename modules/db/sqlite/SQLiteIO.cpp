@@ -11,7 +11,7 @@ namespace fragcore {
 	const char *fragcore_sqlite_vfs_name = "iovfs";
 
 	int fragcore_sqlite3_open(Ref<IO> &io, sqlite3 **db) {
-		int result_code;
+		int result_code = 0;
 		sqlite3_vfs vfs;
 		fragcore::getIOVFS(&vfs);
 
@@ -122,9 +122,9 @@ namespace fragcore {
 		1,						  /* iVersion */
 		0,						  /* szOsFile (set when registered) */
 		1024,					  /* mxPathname */
-		0,						  /* pNext */
+		nullptr,						  /* pNext */
 		fragcore_sqlite_vfs_name, /* zName */
-		0,						  /* pAppData (set when registered) */
+		nullptr,						  /* pAppData (set when registered) */
 		memOpen,				  /* xOpen */
 		memDelete,				  /* xDelete */
 		memAccess,				  /* xAccess */

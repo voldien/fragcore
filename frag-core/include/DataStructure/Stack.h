@@ -114,8 +114,8 @@ namespace fragcore {
 		StackIterator end() {}
 
 	  private:			   /*	Attributes.	*/
-		size_t nrElements; /*	Number of elements in the stack.	*/
-		size_t mreserved;  /*	Number of reserved elements in the stack.	*/
+		size_t nrElements{}; /*	Number of elements in the stack.	*/
+		size_t mreserved{};  /*	Number of reserved elements in the stack.	*/
 		T *data;		   /*	*/
 	};
 

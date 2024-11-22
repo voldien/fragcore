@@ -26,7 +26,8 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC ModBusAddress : public INetAddress {
 	  public:
-		ModBusAddress() {}
+		virtual ~ModBusAddress() = default;
+		ModBusAddress() = default;
 	};
 } // namespace fragcore
 

@@ -7,17 +7,13 @@
 
 using namespace fragcore;
 
-Hash::Hash(Hash::ALGORITHM algorithm) {
+Hash::Hash(Hash::ALGORITHM algorithm) : nbytes(0) {
 
 	this->initHash(algorithm);
 	/*      */
-	this->nbytes = 0;
 }
 
-Hash::Hash(Hash &&other) {
-	std::swap(other.context, this->context);
-	this->algorithm = other.algorithm;
-}
+Hash::Hash(Hash &&other) : algorithm(other.algorithm) { std::swap(other.context, this->context); }
 
 Hash::~Hash() { free(this->context); }
 
@@ -51,7 +47,7 @@ void Hash::update(const void *pdata, size_t nbytes) {
 void Hash::update(Ref<IO> &io_in) {
 	char buffer[4096];
 	long int prev_pos = io_in->getPos();
-	long int len;
+	long int len = 0;
 
 	/*	*/
 	while ((len = io_in->read(sizeof(buffer), buffer)) > 0) {

@@ -18,7 +18,7 @@ IRenderer *RenderingFactory::createRendering(const char *cpathlib, IConfig *conf
 	Library library;
 	IRenderer *interface = nullptr;
 	const char *funcsymbol = "createInternalRenderer";
-	pcreateinternalrendering pfunc;
+	pcreateinternalrendering pfunc = nullptr;
 
 	/*	Validate parameters.	*/
 	if (cpathlib == nullptr) {
@@ -30,7 +30,7 @@ IRenderer *RenderingFactory::createRendering(const char *cpathlib, IConfig *conf
 	if (library.isValid()) {
 
 		/*	Get factory function for creating rendering instance.	*/
-		pfunc = (pcreateinternalrendering)library.getfunc(funcsymbol);
+		pfunc = reinterpret_cast<pcreateinternalrendering>(library.getfunc(funcsymbol));
 		interface = pfunc(config);
 
 	} else {

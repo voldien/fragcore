@@ -59,9 +59,9 @@ namespace fragcore {
 	  public:
 		Ref() : reference(nullptr) {}
 
-		Ref(T *p_reference) {
+		Ref(T *p_reference) : reference(nullptr) {
 
-			reference = nullptr;
+			
 			if (p_reference) {
 				this->ref_pointer(p_reference);
 			}

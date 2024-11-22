@@ -19,7 +19,7 @@
 
 using namespace fragcore;
 
-UDPNetSocket::UDPNetSocket() : socket(0), netStatus(NetStatus::Status_Disconnected) { this->UDPaddr = nullptr; }
+UDPNetSocket::UDPNetSocket() : socket(0), netStatus(NetStatus::Status_Disconnected) {}
 
 UDPNetSocket::UDPNetSocket(int socket) : UDPNetSocket() {
 	this->socket = socket;
@@ -57,7 +57,7 @@ int UDPNetSocket::bind(const INetAddress &p_addr) {
 	union {
 		struct sockaddr_in addr4;  /*	*/
 		struct sockaddr_in6 addr6; /*	*/
-	} addrU;
+	} addrU{};
 
 	int flags = SOCK_DGRAM;
 
@@ -105,8 +105,8 @@ int UDPNetSocket::connect(const INetAddress &p_addr) {
 	union {
 		struct sockaddr_in addr4;  /*	*/
 		struct sockaddr_in6 addr6; /*	*/
-	} addrU;
-	int domain;
+	} addrU{};
+	int domain = 0;
 	int flags = SOCK_DGRAM;
 
 	// if (!isValidNetworkAddress(p_addr)) {
@@ -143,8 +143,8 @@ int UDPNetSocket::connect(const INetAddress &p_addr) {
 int UDPNetSocket::poll(int p_type, int timeout) const { return 0; }
 int UDPNetSocket::recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddress &r_ip, bool p_peek) { return 0; }
 int UDPNetSocket::recv(void *pbuffer, int p_len, int &sent, bool peek) {
-	struct sockaddr_in servaddr;
-	socklen_t len;
+	struct sockaddr_in servaddr {};
+	socklen_t len = 0;
 	int flag = 0;
 	return ::recvfrom(this->socket, pbuffer, p_len, flag, (struct sockaddr *)&servaddr, &len);
 }
@@ -159,8 +159,8 @@ long int UDPNetSocket::send(const void *pbuffer, int p_len, int &sent) {
 	return ::sendto(this->socket, pbuffer, p_len, flag, (const struct sockaddr *)this->UDPaddr, this->addrSize);
 }
 Ref<NetSocket> UDPNetSocket::accept(INetAddress &r_ip) {
-	struct sockaddr tobuffer; /*	*/
-	socklen_t aclen = 0;	  /*	*/
+	struct sockaddr tobuffer {}; /*	*/
+	socklen_t aclen = 0;		 /*	*/
 	int aaccept_socket = ::accept(this->socket, &tobuffer, &aclen);
 	if (aaccept_socket < 0) {
 		throw SystemException(errno, std::system_category(), "Failed to accept TCP connection");
@@ -201,7 +201,7 @@ void UDPNetSocket::setBlocking(bool blocking) {
 UDPNetSocket::NetStatus UDPNetSocket::getStatus() const noexcept { return this->netStatus; }
 
 void UDPNetSocket::setTimeout(long int microsec) {
-	struct timeval timeout;
+	struct timeval timeout {};
 
 	/*	Set timeout for client.	*/
 	timeout.tv_sec = microsec / 1000000;
@@ -219,8 +219,8 @@ void UDPNetSocket::setTimeout(long int microsec) {
 }
 
 long int UDPNetSocket::getTimeout() {
-	struct timeval timeout;
-	socklen_t len;
+	struct timeval timeout {};
+	socklen_t len = 0;
 	int rcode = getsockopt(this->socket, SOL_SOCKET, SO_RCVTIMEO, &timeout, &len);
 	if (rcode != 0) {
 		throw SystemException(errno, std::system_category(), "Failed to set recv timeout");
@@ -231,9 +231,9 @@ long int UDPNetSocket::getTimeout() {
 
 size_t UDPNetSocket::setupIPAddress(struct sockaddr *addr, const INetAddress &p_addr, uint16_t p_port) {
 
-	size_t addrlen;
+	size_t addrlen = 0;
 
-	const TCPUDPAddress &tcpAddress = static_cast<const TCPUDPAddress &>(p_addr);
+	const TCPUDPAddress &tcpAddress = dynamic_cast<const TCPUDPAddress &>(p_addr);
 
 	int domain = UDPNetSocket::getDomain(tcpAddress);
 

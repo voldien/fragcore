@@ -120,18 +120,18 @@ void VKRenderWindow::getPosition(int *x, int *y) const { SDL_GetWindowPosition(t
 void VKRenderWindow::getSize(int *width, int *height) const { SDL_GetWindowSize(this->window, width, height); }
 
 int VKRenderWindow::width() const {
-	int width, height;
+	int width = 0, height = 0;
 	getSize(&width, &height);
 	return width;
 }
 int VKRenderWindow::height() const {
-	int width, height;
+	int width = 0, height = 0;
 	getSize(&width, &height);
 	return height;
 }
 
 fragcore::Display *VKRenderWindow::getCurrentDisplay() const {
-	int index;
+	int index = 0;
 	index = SDL_GetWindowDisplayIndex(this->window);
 	// return WindowManager::getInstance()->getDisplay(index);
 	return nullptr;
@@ -227,6 +227,10 @@ intptr_t VKRenderWindow::getNativePtr() const {
 		case SDL_SYSWM_VIVANTE:
 			break;
 #endif
+		case SDL_SYSWM_HAIKU:
+		case SDL_SYSWM_KMSDRM:
+		case SDL_SYSWM_RISCOS:
+			break;
 		}
 	} else {
 		throw RuntimeException(fmt::format("{}", SDL_GetError()));
@@ -239,7 +243,7 @@ void VKRenderWindow::swapBuffer() {
 
 	vkWaitForFences(this->getDevice(), 1, &this->inFlightFences[this->swapChain.currentFrame], VK_TRUE, UINT64_MAX);
 
-	int width, height;
+	int width = 0, height = 0;
 	this->getSize(&width, &height);
 	// Check if the size is correct.
 	if (this->getSwapChain().width != width || this->getSwapChain().height != height) {
@@ -248,7 +252,7 @@ void VKRenderWindow::swapBuffer() {
 	}
 
 	/*  */
-	uint32_t imageIndex;
+	uint32_t imageIndex = 0;
 	result = vkAcquireNextImageKHR(getDevice(), this->swapChain.swapchain, UINT64_MAX,
 								   this->imageAvailableSemaphores[this->swapChain.currentFrame], VK_NULL_HANDLE,
 								   &imageIndex);
@@ -317,7 +321,7 @@ void VKRenderWindow::createSwapChain() {
 	std::vector<VkPresentModeKHR> requestedPresentModes = {VK_PRESENT_MODE_IMMEDIATE_KHR, VK_PRESENT_MODE_MAILBOX_KHR,
 														   VK_PRESENT_MODE_FIFO_KHR};
 	this->presentMode = VKHelper::chooseSwapPresentMode(swapChainSupport.presentModes, requestedPresentModes);
-	int width, height;
+	int width = 0, height = 0;
 	this->getSize(&width, &height);
 	const VkExtent2D extent =
 		VKHelper::chooseSwapExtent(swapChainSupport.capabilities, {(uint32_t)width, (uint32_t)height});
@@ -553,7 +557,7 @@ VkFormat VKRenderWindow::findDepthFormat() {
 }
 
 VkSurfaceKHR VKRenderWindow::createSurface() {
-	VkSurfaceKHR surface;
+	VkSurfaceKHR surface = nullptr;
 	bool surfaceResult = SDL_Vulkan_CreateSurface(this->window, this->renderer->getInstance()->getHandle(), &surface);
 	if (surfaceResult == SDL_FALSE) {
 		throw cxxexcept::RuntimeException("failed create vulkan surface - {}", SDL_GetError());

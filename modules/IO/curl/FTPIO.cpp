@@ -12,9 +12,9 @@ using namespace fragcore;
 // TODO move to the network impl later.
 /* Auxiliary function that waits on the socket. */
 static int wait_on_socket(curl_socket_t sockfd, int for_recv, long timeout_ms) {
-	struct timeval tv;
+	struct timeval tv{};
 	fd_set infd, outfd, errfd;
-	int res;
+	int res = 0;
 
 	tv.tv_sec = timeout_ms / 1000;
 	tv.tv_usec = (timeout_ms % 1000) * 1000;
@@ -41,7 +41,7 @@ void FTPFileIO::open(const char *path, IOMode mode) {}
 void FTPFileIO::close() { curl_easy_cleanup(this->handle); }
 
 long FTPFileIO::read(long int nbytes, void *pbuffer) {
-	size_t nRecv;
+	size_t nRecv = 0;
 	CURLcode result_code;
 	do {
 		result_code = curl_easy_recv(this->handle, pbuffer, nbytes, &nRecv);
@@ -58,7 +58,7 @@ long FTPFileIO::read(long int nbytes, void *pbuffer) {
 }
 
 long FTPFileIO::write(long int nbytes, const void *pbuffer) {
-	size_t nRecv;
+	size_t nRecv = 0;
 	CURLcode result_code;
 	do {
 		result_code = curl_easy_send(this->handle, pbuffer, nbytes, &nRecv);
@@ -144,7 +144,7 @@ FTPFileIO::FTPFileIO(const char *path, IOMode mode) {
 	//   curl_easy_setopt(CURL *handle, CURLOPT_SEEKFUNCTION, seek_cb);
 	//   curl_easy_setopt(CURL *handle, CURLOPT_SEEKDATA, &seek_data);
 
-	CURL *curl;
+	CURL *curl = nullptr;
 	curl = curl_easy_init();
 	if (curl) {
 		curl_easy_setopt(curl, CURLOPT_URL,

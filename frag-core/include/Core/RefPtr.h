@@ -47,7 +47,7 @@ namespace fragcore {
 
 		FV_ALWAYS_INLINE RefPtr(T *ref) { this->ref = ref; }
 
-		FV_ALWAYS_INLINE ~RefPtr() {}
+		FV_ALWAYS_INLINE ~RefPtr() = default;
 
 	  private:
 		T *ref;

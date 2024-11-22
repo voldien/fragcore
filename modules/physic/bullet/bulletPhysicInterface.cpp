@@ -56,12 +56,12 @@ class FragBulletTaskSchedulear : public btITaskScheduler {
 	}
 };
 
-BulletPhysicInterface::BulletPhysicInterface(IConfig *config) {
+BulletPhysicInterface::BulletPhysicInterface(IConfig *config) : broadphase(new btDbvtBroadphase()) {
 	this->setName("BulletPhysic");
 
 	/*	*/
 	btGhostPairCallback *m_pGHostPairCallback = new btGhostPairCallback();
-	this->broadphase = new btDbvtBroadphase();
+
 	// this->broadphase->getOverlappingPairCache()->setInternalGhostPairCallback(m_pGHostPairCallback);
 	assert(this->broadphase);
 
@@ -159,7 +159,7 @@ Vector3 BulletPhysicInterface::getGravity() const {
 
 void BulletPhysicInterface::addRigidBody(RigidBody *body) {
 
-	BulletRigidBody *bullet_rigidbody = static_cast<BulletRigidBody *>(body);
+	BulletRigidBody *bullet_rigidbody = dynamic_cast<BulletRigidBody *>(body);
 	btRigidBody *rigid = static_cast<btRigidBody *>(bullet_rigidbody->getObject());
 	/*	*/
 	this->dynamicsWorld->addRigidBody(rigid);

@@ -35,7 +35,7 @@ namespace fragcore {
 		using DType = T;
 		const size_t DTypeSize = sizeof(DType);
 
-		IRandom() {}
+		IRandom() = default;
 		virtual ~IRandom() = default;
 
 		virtual DType rand() noexcept = 0;

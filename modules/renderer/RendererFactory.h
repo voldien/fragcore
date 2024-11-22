@@ -54,7 +54,11 @@ namespace fragcore {
 
 	  public: /*	Prevent one from creating an instance of this class.	*/
 		RenderingFactory() = delete;
+		RenderingFactory(RenderingFactory &&) = delete;
+		RenderingFactory &operator=(const RenderingFactory &) = default;
+		RenderingFactory &operator=(RenderingFactory &&) = delete;
 		RenderingFactory(const RenderingFactory &other) = delete;
+		~RenderingFactory();
 	};
 } // namespace fragcore
 

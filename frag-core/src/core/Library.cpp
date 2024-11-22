@@ -7,8 +7,8 @@ using namespace fragcore;
 
 Library::Library() : mlib(nullptr) {}
 
-Library::Library(const char *clibrary) {
-	this->mlib = nullptr;
+Library::Library(const char *clibrary) : mlib(nullptr) {
+
 	this->open(clibrary);
 	if (clibrary) {
 		this->path = clibrary;
@@ -23,10 +23,9 @@ Library::Library(const std::string &clibrary) : Library(clibrary.c_str()) {}
 
 Library::Library(const Library &other) : Library(other.path.c_str()) {}
 
-Library::Library(Library &&other) { this->mlib = other.mlib; }
+Library::Library(Library &&other) : mlib(other.mlib) {}
 
-Library::~Library() { /*	Nothing to release. Done by the kernel itself.	*/
-}
+Library::~Library() { /*	Nothing to release. Done by the kernel itself.	*/ }
 
 Library &Library::operator=(Library &&other) {
 	Object::operator=(other);

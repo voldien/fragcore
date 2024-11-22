@@ -39,7 +39,7 @@ namespace fragcore {
 
 		bool deincreemnt() noexcept;
 
-		int getIndexCount() const noexcept;
+		uint32_t getIndexCount() const noexcept;
 
 		// TODO determine if shall add a force delete support.
 

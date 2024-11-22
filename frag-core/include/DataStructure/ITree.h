@@ -66,7 +66,7 @@ namespace fragcore {
 		virtual unsigned int getNumChildren() const noexcept { return this->numChildren; }
 
 		virtual void addChild(ITree<T> *pchild) noexcept {
-			ITree<T> *find;
+			ITree<T> *find = nullptr;
 			assert(pchild);
 
 			this->numChildren++;
@@ -141,7 +141,7 @@ namespace fragcore {
 		ITree<T> *parent;		  /*	parent node.	*/
 		ITree<T> *sibling;		  /*	sibling node.	*/
 		ITree<T> *child;		  /*	child node.	*/
-		unsigned int numChildren; /*	number of children node attached.	*/
+		unsigned int numChildren{}; /*	number of children node attached.	*/
 	};
 } // namespace fragcore
 #endif

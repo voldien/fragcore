@@ -3,7 +3,7 @@
 
 using namespace fragcore;
 
-StdMutex::StdMutex() {}
+StdMutex::StdMutex() = default;
 
 void StdMutex::lock() { this->m.lock(); }
 void StdMutex::unlock() { this->m.unlock(); }

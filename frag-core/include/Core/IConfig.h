@@ -98,14 +98,8 @@ namespace fragcore {
 		 * @param parent
 		 */
 		IConfig(IConfig *parent = nullptr) { this->setParent(parent); }
-		IConfig(const IConfig &other) : ITree(other), ValueType(other) {
-			this->va_va = other.va_va;
-			this->_mapSubConfig = other._mapSubConfig;
-		}
-		IConfig(IConfig &&other) {
-			this->_mapSubConfig = std::move(other._mapSubConfig);
-			this->va_va = std::move(other.va_va);
-		}
+		IConfig(const IConfig &other) = default;
+		IConfig(IConfig &&other) : _mapSubConfig(std::move(other._mapSubConfig)), va_va(std::move(other.va_va)) {}
 		~IConfig() override {
 			/*	Delete attributes.	*/
 			for (auto it = this->va_va.begin(); it != this->va_va.end(); it++) {

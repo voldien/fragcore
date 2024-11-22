@@ -10,7 +10,7 @@
 
 using namespace fragcore;
 
-static iware::system::OS_info_t info;
+static iware::system::OS_info_t info = iware::system::OS_info();
 
 SystemInfo::KernelSystem SystemInfo::getSystemKernel() noexcept {
 	switch (iware::system::kernel_info().variant) {

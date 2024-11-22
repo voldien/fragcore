@@ -10,7 +10,7 @@ IPInterface::IPInterface(const std::string &ipAddress, Type type) {}
 std::vector<IPInterface> IPInterface::getLocalAddresses() { return {}; }
 std::vector<IPInterface> IPInterface::getLocalInterface() {
 
-	struct ifaddrs *addrs, *tmp;
+	struct ifaddrs *addrs = nullptr, *tmp = nullptr;
 
 	getifaddrs(&addrs);
 	tmp = addrs;

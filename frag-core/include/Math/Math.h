@@ -111,7 +111,7 @@ namespace fragcore {
 						  "Type Must Support addition operation.");
 			T sum = 0;
 			T value;
-			size_t index;
+			size_t index = 0;
 			// #pragma omp simd reduction(+ : sum) private(value) simdlen(4) linear(index : 1)
 			for (index = 0; index < nrElements; index++) {
 				value = list[index];
@@ -130,7 +130,7 @@ namespace fragcore {
 			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
 						  "Type Must Support addition operation.");
 			T product_combined = 1;
-			size_t index;
+			size_t index = 0;
 #ifdef _OPENMP
 #pragma omp simd reduction(* : product_combined) simdlen(4) linear(index : 1)
 #endif
@@ -144,7 +144,7 @@ namespace fragcore {
 			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
 						  "Type Must Support addition operation.");
 			T sum = 0;
-			size_t index;
+			size_t index = 0;
 #ifdef _OPENMP
 #pragma omp simd reduction(+ : sum) simdlen(4) linear(index : 1)
 #endif
@@ -158,7 +158,7 @@ namespace fragcore {
 			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
 						  "Type Must Support addition operation.");
 			/*	*/
-			size_t index;
+			size_t index = 0;
 #ifdef _OPENMP
 #pragma omp simd simdlen(4) linear(index : 1)
 #endif
@@ -188,7 +188,7 @@ namespace fragcore {
 			static_assert(std::is_floating_point<T>::value || std::is_integral<T>::value,
 						  "Type Must Support addition operation.");
 			T sum = 0;
-			size_t index;
+			size_t index = 0;
 #ifdef _OPENMP
 #pragma omp simd reduction(+ : sum) simdlen(4) linear(index : 1)
 #endif

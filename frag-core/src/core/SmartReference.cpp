@@ -11,4 +11,4 @@ bool SmartReference::deincreemnt() noexcept {
 	return status;
 }
 
-int SmartReference::getIndexCount() const noexcept { return this->counter.get(); }
+uint32_t SmartReference::getIndexCount() const noexcept { return this->counter.get(); }

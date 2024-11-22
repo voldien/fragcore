@@ -4,8 +4,7 @@ using namespace fragcore;
 
 void BufferIO::open([[maybe_unused]] const char *path, [[maybe_unused]] IOMode mode) {}
 
-void BufferIO::close() { /*	TOOD reset values.	*/
-}
+void BufferIO::close() { /*	TOOD reset values.	*/ }
 
 long BufferIO::read(long int requestedBytes, void *pbuffer) {
 	long int nBytesLeft = (this->nbytes - this->marker);
@@ -80,29 +79,16 @@ bool BufferIO::isReadable() const { return (this->ioMode & IOMode::READ) != 0; }
 
 bool BufferIO::flush() { return true; }
 
-BufferIO::BufferIO(const void *pBuffer, unsigned long size) {
-	this->marker = 0;
-	this->nbytes = size;
-	this->buffer = (uint8_t *)pBuffer;
-	this->ioMode = IOMode::READ;
-	this->expandable = false;
-}
+BufferIO::BufferIO(const void *pBuffer, unsigned long size)
+	: buffer((uint8_t *)pBuffer), nbytes(size), marker(0), expandable(false), ioMode(IOMode::READ) {}
 
-BufferIO::BufferIO(void *pBuffer, unsigned long size) {
-	this->marker = 0;
-	this->nbytes = size;
-	this->buffer = (uint8_t *)pBuffer;
-	this->ioMode = static_cast<IOMode>(IOMode::READ | IOMode::WRITE);
-	this->expandable = false;
-}
+BufferIO::BufferIO(void *pBuffer, unsigned long size)
+	: buffer((uint8_t *)pBuffer), nbytes(size), marker(0), expandable(false),
+	  ioMode(static_cast<IOMode>(IOMode::READ | IOMode::WRITE)) {}
 
-BufferIO::BufferIO(unsigned long size, bool expandable) {
-	this->marker = 0;
-	this->nbytes = size;
-	this->buffer = static_cast<uint8_t *>(malloc(size));
-	this->ioMode = static_cast<IOMode>(IOMode::READ | IOMode::WRITE);
-	this->expandable = expandable;
-}
+BufferIO::BufferIO(unsigned long size, bool expandable)
+	: buffer(static_cast<uint8_t *>(malloc(size))), nbytes(size), marker(0), expandable(expandable),
+	  ioMode(static_cast<IOMode>(IOMode::READ | IOMode::WRITE)) {}
 
 BufferIO::~BufferIO() {
 	if (this->expandable) {

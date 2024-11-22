@@ -36,9 +36,9 @@ namespace fragcore {
 		virtual void onDestruction() = 0;
 
 	  public: /*	*/
-		template <typename T> static T *loadModule(const std::string &path, const std::string &moduleEntryPoint = "") {
+		template <typename T> static T *loadModule(const std::string &filepath, const std::string &moduleEntryPoint = "") {
 			static_assert(std::is_convertible<T *, Module *>::value, "Derived must inherit Module as public");
-			Library lib(path.c_str());
+			Library lib(filepath.c_str());
 			return Module::loadModule<T>(lib, moduleEntryPoint);
 		}
 
@@ -63,7 +63,7 @@ namespace fragcore {
 			}
 			module = dynamic_cast<T *>(createModuleFunc(nullptr));
 
-			module->OnInitialization();
+			module->onInitialization();
 
 			return module;
 		}

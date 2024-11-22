@@ -157,7 +157,7 @@ namespace fragcore {
 		SDL_Window *window;
 		Ref<VKRenderInterface> renderer;
 
-		using SwapchainBuffers = struct _SwapchainBuffers {
+		using SwapchainBuffers = struct SwapchainBuffers {
 			struct SwapChainSupportDetails {
 				VkSurfaceCapabilitiesKHR capabilities;
 				std::vector<VkSurfaceFormatKHR> formats;

@@ -76,7 +76,7 @@ namespace fragcore {
 	  private: /*  */
 		steady_clock::time_point start_timestamp;
 		steady_clock::time_point ticks;
-		duration<float> delta_data;
+		duration<float> delta_data{};
 	};
 } // namespace fragcore
 

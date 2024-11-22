@@ -106,7 +106,7 @@ namespace fragcore {
 		 *	@return None nullptr pointer if successful.
 		 */
 		T *obtain() {
-			T *alloc;
+			T *alloc = nullptr;
 
 			/*	if last, resize.    */
 			if (this->isFull()) {
@@ -195,7 +195,7 @@ namespace fragcore {
 		 */
 		/*	TODO Fix, still some bugs!	*/
 		void resize(int size) {
-			int index;
+			int index = 0;
 			const unsigned int itemSize = this->getItemSize();
 
 			assert(size >= 0);
@@ -261,11 +261,11 @@ namespace fragcore {
 		 */
 		unsigned int getItemSize() const noexcept { return sizeof(PoolAllactorItem); }
 
-	  private:					   /*	attributes.	*/
-		PoolAllactorItem *item;	   /*	Pool data.	*/
-		unsigned int nrOfElements; /*	number of elements used.	*/
-		unsigned int mReserved;	   /*	number of allocated elements.	*/
-		unsigned int typeSize;	   /*	size of the data type.	*/
+	  private:						 /*	attributes.	*/
+		PoolAllactorItem *item;		 /*	Pool data.	*/
+		unsigned int nrOfElements{}; /*	number of elements used.	*/
+		unsigned int mReserved{};	 /*	number of allocated elements.	*/
+		unsigned int typeSize{};	 /*	size of the data type.	*/
 	};
 } // namespace fragcore
 

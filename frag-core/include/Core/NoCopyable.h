@@ -29,6 +29,8 @@ namespace fragcore {
 		NoCopyable(const NoCopyable &) = delete;			// non construction-copyable
 		NoCopyable &operator=(const NoCopyable &) = delete; // non copyable
 		NoCopyable() = default;
+		NoCopyable(NoCopyable &&) = delete;
+		NoCopyable &operator=(NoCopyable &&) = delete;
 	};
 } // namespace fragcore
 

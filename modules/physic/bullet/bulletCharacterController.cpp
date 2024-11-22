@@ -1,8 +1,8 @@
 #include "bulletCharacterController.h"
 using namespace fragcore;
 
-BulletCharacterController::BulletCharacterController() {}
-BulletCharacterController::~BulletCharacterController() {}
+BulletCharacterController::BulletCharacterController() = default;
+BulletCharacterController::~BulletCharacterController() = default;
 
 Vector3 BulletCharacterController::getCenter() { return Vector3(); }
 

@@ -17,8 +17,7 @@
  */
 #ifndef _FRAGCORE_DISJOINT_SET_H_
 #define _FRAGCORE_DISJOINT_SET_H_ 1
-#include "../../FragDef.h"
-#include "Iterator.h"
+#include "FragDef.h"
 
 namespace fragcore {
 
@@ -41,8 +40,9 @@ namespace fragcore {
 		int getNumberSets() const noexcept {
 			int index = 0;
 			for (index = 0; index < getSize(); index++) {
-				if (this->set[index] == -1)
+				if (this->set[index] == -1) {
 					index++;
+				}
 			}
 			return index;
 		}
@@ -63,7 +63,7 @@ namespace fragcore {
 		 */
 		int maxHeight() const noexcept {
 			int max = 0;
-			int m;
+			int m = 0;
 			for (int i = 0; i < this->getSize(); i++) {
 				m = this->height(i);
 				if (m > max) {
@@ -93,7 +93,7 @@ namespace fragcore {
 		 *
 		 */
 		int find(const int x) const noexcept {
-			int i;
+			int i = 0;
 			for (i = x; i > -1; i = this->set[i].parent) {
 			}
 			return i;
@@ -163,7 +163,7 @@ namespace fragcore {
 		 *
 		 */
 		void clear(const int x = 0) noexcept {
-			int i;
+			int i = 0;
 			for (i = x; i < this->getSize(); i++) {
 				this->set[i].parent = -1;
 			}
@@ -181,16 +181,17 @@ namespace fragcore {
 		 *
 		 */
 		DisjointSet &operator=(const DisjointSet &disjointSet) {
+			
 			this->resize(disjointSet.getSize());
 			memcpy(this->set, disjointSet.getData(), disjointSet.getSize() * sizeof(Partition));
 
 			return *this;
 		}
 
-	  private:				   /*	Attributes.	*/
-		Partition *set;		   /*	*/
-		unsigned int size;	   /*	*/
-		unsigned int reserved; /*	*/
+	  private:					 /*	Attributes.	*/
+		Partition *set;			 /*	*/
+		unsigned int size{};	 /*	*/
+		unsigned int reserved{}; /*	*/
 	};
 } // namespace fragcore
 

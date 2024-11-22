@@ -29,9 +29,9 @@ namespace fragcore {
 	class FVDECLSPEC Object : public UIDObject {
 	  public:
 		Object() = default;
-		Object(const std::string &_name) { this->name = _name; }
+		Object(const std::string &_name) : name(_name) {}
 		Object(Object &&other) { this->name = std::exchange(other.name, nullptr); }
-		Object(const Object &other) : UIDObject(other) { this->name = other.name; }
+		Object(const Object &other) = default;
 		Object &operator=(Object &&other) {
 			this->name = std::exchange(other.name, nullptr);
 			return *this;

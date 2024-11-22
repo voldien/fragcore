@@ -209,7 +209,7 @@ void ASyncIO::async_open(Task *task) {
 }
 
 void ASyncIO::async_read(Task *task) {
-	AsyncTask *asynctask = static_cast<AsyncTask *>(task);
+	AsyncTask *asynctask = dynamic_cast<AsyncTask *>(task);
 	AsyncObject *async_obj = &asynctask->asyncObject;
 	const size_t block_size = 512;
 
@@ -344,13 +344,13 @@ ASyncIO::ASyncIO(const Ref<IScheduler> &scheduler) {
 	this->uidGenerator.getNextUID();
 }
 
-ASyncIO::ASyncIO(ASyncIO &&other) {
+ASyncIO::ASyncIO(ASyncIO &&other) : uidGenerator(other.uidGenerator) {
 	// Move over the things!
 	this->scheduler = std::exchange(other.scheduler, nullptr);
-	this->uidGenerator = other.uidGenerator;
+	
 }
 
-ASyncIO::ASyncIO(const ASyncIO &other) {
-	this->scheduler = other.scheduler;
-	this->uidGenerator = other.uidGenerator;
+ASyncIO::ASyncIO(const ASyncIO &other) : uidGenerator(other.uidGenerator), scheduler(other.scheduler) {
+	
+	
 }

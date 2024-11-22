@@ -18,15 +18,11 @@ Image::Image(const Image &other) : Object(other) {
 	this->allocateMemory(other.width(), other.height(), other.layers(), other.getFormat());
 	std::memcpy(this->pixelData, other.pixelData, this->bufferSize);
 }
-Image::Image(Image &&other) {
+Image::Image(Image &&other)
+	: m_width(other.m_width), m_height(other.m_height), depth(other.depth), format(other.format),
+	  bufferSize(other.bufferSize) {
 	Object::operator=(other);
 	this->pixelData = std::exchange(other.pixelData, nullptr);
-
-	this->bufferSize = other.bufferSize;
-	this->m_width = other.m_width;
-	this->m_height = other.m_height;
-	this->depth = other.depth;
-	this->format = other.format;
 }
 
 Image &Image::operator=(const Image &other) {

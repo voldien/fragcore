@@ -6,7 +6,7 @@
 
 using namespace fragcore;
 
-ImageLoader::ImageLoader(const ImageLoader &other) : Object(other) {}
+ImageLoader::ImageLoader(const ImageLoader &other) = default;
 ImageLoader::ImageLoader(ImageLoader &&other) : Object(other) {}
 ImageLoader &ImageLoader::operator=(const ImageLoader &other) { return *this; }
 ImageLoader &ImageLoader::operator=(ImageLoader &&other) { return *this; }
@@ -14,14 +14,14 @@ ImageLoader &ImageLoader::operator=(ImageLoader &&other) { return *this; }
 Image ImageLoader::loadImage(Ref<IO> &io_in, const FileFormat fileformat) {
 
 	/*	Free image.	*/
-	FREE_IMAGE_FORMAT imgtype; /**/
-	FIMEMORY *stream;		   /**/
-	FIBITMAP *firsbitmap;	   /**/
-	void *pixelData;		   /**/
-	size_t bitsPerPixel;	   /*	*/
+	FREE_IMAGE_FORMAT imgtype;		/**/
+	FIMEMORY *stream = nullptr;		/**/
+	FIBITMAP *firsbitmap = nullptr; /**/
+	void *pixelData = nullptr;		/**/
+	size_t bitsPerPixel = 0;		/*	*/
 	ImageFormat imageFormat = ImageFormat::Alpha8;
-	size_t pixelSize = 0;		 /*	*/
-	size_t width, height, depth; /*	*/
+	size_t pixelSize = 0;					 /*	*/
+	size_t width = 0, height = 0, depth = 0; /*	*/
 
 	char *imageData = nullptr;
 
@@ -218,8 +218,8 @@ void ImageLoader::saveImage(Ref<IO> &io_in, const Image &Image, const FileFormat
 	FIMEMORY *mem = FreeImage_OpenMemory(nullptr, FreeImage_GetMemorySize(image));
 	if (FreeImage_SaveToMemory(image_format, image, mem, JPEG_QUALITYSUPERB)) {
 
-		BYTE *save_pixel_data;
-		DWORD save_size;
+		BYTE *save_pixel_data = nullptr;
+		DWORD save_size = 0;
 		if (FreeImage_AcquireMemory(mem, &save_pixel_data, &save_size)) {
 			IOUtil::saveFileMem(io_in, (char *)save_pixel_data, save_size);
 		}

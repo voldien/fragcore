@@ -5,7 +5,7 @@
 using namespace fragcore;
 
 long BZFileIO::read(long int nbytes, void *pbuffer) {
-	int bzerror;
+	int bzerror = 0;
 	int len = BZ2_bzRead(&bzerror, this->bzFile, pbuffer, nbytes);
 	if (bzerror != BZ_OK) {
 		throw RuntimeException("Failed to read {}", BZ2_bzerror(this->bzFile, &bzerror));
@@ -14,7 +14,7 @@ long BZFileIO::read(long int nbytes, void *pbuffer) {
 }
 
 long BZFileIO::write(long int nbytes, const void *pbuffer) {
-	int bzerror;
+	int bzerror = 0;
 	int len = nbytes;
 	BZ2_bzWrite(&bzerror, this->bzFile, (void *)pbuffer, static_cast<int>(nbytes));
 	if (bzerror != BZ_OK) {
@@ -38,10 +38,10 @@ bool BZFileIO::isReadable() const { return FileIO::isReadable(); }
 bool BZFileIO::flush() { return BZ2_bzflush(this->bzFile); }
 
 void BZFileIO::close() {
-	int bzerror;
+	int bzerror = 0;
 	BZ2_bzReadClose(&bzerror, this->bzFile);
 
-	unsigned int nbyte_in, nbytes_out;
+	unsigned int nbyte_in = 0, nbytes_out = 0;
 	BZ2_bzWriteClose(&bzerror, this->bzFile, 0, &nbyte_in, &nbytes_out);
 
 	FileIO::close();
@@ -50,7 +50,7 @@ void BZFileIO::close() {
 void BZFileIO::open([[maybe_unused]] const char *path, IO::IOMode mode) {
 
 	/*  */
-	int bzerror;
+	int bzerror = 0;
 	switch (mode & IO::IOMode::ACCESS) {
 	case IO::IOMode::READ:
 		this->bzFile = BZ2_bzReadOpen(&bzerror, this->file, 0, 0, nullptr, 0);

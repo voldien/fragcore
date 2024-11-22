@@ -25,20 +25,20 @@ namespace fragcore {
 	}
 
 	bool validateExistingProgram() {
-		int program;
+		int program = 0;
 		glGetIntegerv(GL_CURRENT_PROGRAM, &program);
 		glValidateProgram(program);
 		fragcore::checkError();
-		int status;
+		int status = 0;
 		glGetProgramiv(program, GL_VALIDATE_STATUS, &status);
 		return status == GL_TRUE;
 	}
 
 	std::string getProgramValidateString() {
-		int program;
+		int program = 0;
 		glGetIntegerv(GL_CURRENT_PROGRAM, &program);
 
-		int status;
+		int status = 0;
 		glGetProgramiv(program, GL_VALIDATE_STATUS, &status);
 		if (!status) {
 			GLchar errorLog[1024] = {0};

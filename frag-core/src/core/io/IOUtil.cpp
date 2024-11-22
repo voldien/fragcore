@@ -46,7 +46,7 @@ long int IOUtil::loadFile(Ref<IO> &inRef, Ref<IO> &outRef) {
 	}
 
 	char buf[1024 * 4];
-	long nbytes;
+	long nbytes = 0;
 	long dataSize = 0;
 	while ((nbytes = inRef->read(sizeof(buf), buf)) > 0) {
 		int outbytes = outRef->write(nbytes, buf);
@@ -62,7 +62,7 @@ long int IOUtil::loadFile(Ref<IO> &inRef, Ref<IO> &outRef) {
 }
 
 long int IOUtil::loadStringMem(Ref<IO> &in_io, char **data) {
-	long int nbytes;
+	long int nbytes = 0;
 
 	nbytes = IOUtil::loadFileMem(in_io, data);
 	*data = static_cast<char *>(realloc(*data, nbytes + 1));
@@ -80,7 +80,7 @@ long int IOUtil::loadString(Ref<IO> &in, Ref<IO> &out) {
 		throw InvalidArgumentException("Failed to write to IO: {}", out->getName());
 	}
 
-	long int nbytes;
+	long int nbytes = 0;
 
 	nbytes = IOUtil::loadFile(in, out);
 	char term = '\n';
@@ -95,7 +95,7 @@ long int IOUtil::saveFileMem(Ref<IO> &io, char *data, size_t size) {
 		throw InvalidArgumentException("Failed to write to IO: {}", io->getName());
 	}
 
-	long dataSize;
+	long dataSize = 0;
 	dataSize = io->write(size, data);
 
 	// char buf[1024 * 4];

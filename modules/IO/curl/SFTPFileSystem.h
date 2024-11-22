@@ -68,10 +68,10 @@ namespace fragcore {
 		~SFTPFileSystem() override;
 
 	  private:
-		CURL *handle;
-		CURL *multi;
-		char *URL;
-		int port;
+		CURL *handle{};
+		CURL *multi{};
+		char *URL{};
+		int port{};
 	};
 } // namespace fragcore
 

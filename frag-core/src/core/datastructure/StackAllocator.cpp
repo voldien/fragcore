@@ -11,10 +11,7 @@ StackAllocator::StackAllocator() {
 	this->mSize = 0;
 }
 
-StackAllocator::StackAllocator(const StackAllocator &stack) : UIDObject(stack) {
-	this->mSize = 0;
-	*this = stack;
-}
+StackAllocator::StackAllocator(const StackAllocator &stack) : UIDObject(stack), mSize(0) { *this = stack; }
 StackAllocator::StackAllocator(StackAllocator &&other) {
 	this->mData = std::exchange(other.mData, nullptr);
 	this->mMarker = std::exchange(other.mMarker, 0);

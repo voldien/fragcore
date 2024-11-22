@@ -84,7 +84,7 @@ SDLDisplay::DisplayFormat SDLDisplay::getFormat() {
 	return static_cast<DisplayFormat>(translateFormat(mode.format));
 }
 
-SDLDisplay::SDLDisplay(int index) { this->index = index; }
+SDLDisplay::SDLDisplay(int index) : index(index) {}
 
 SDLDisplay::DisplayFormat SDLDisplay::translateFormat(unsigned int format) {
 	switch (format) {
