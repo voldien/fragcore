@@ -2,14 +2,13 @@
 #define FRAG_CORE_INTERNAL_IMP 1
 #endif
 
-#include "IO/GZFileIO.h"
+#include "GZFileIO.h"
 #include <fmt/core.h>
 #include <zlib.h>
 using namespace fragcore;
 
 void GZFileIO::open(const char *path, IOMode mode) {
-	// TODO change.
-	FileIO::open(path, mode);
+	assert(this->file);
 
 	// TODO add other access modes.
 	const char *gz_mode = nullptr;
@@ -25,7 +24,7 @@ void GZFileIO::open(const char *path, IOMode mode) {
 	}
 
 	/*  */
-	this->gzFi = gzdopen(fileno(this->file), gz_mode);
+	this->gzFi = gzdopen(::fileno(this->file), gz_mode);
 	if (this->gzFi == nullptr) {
 		int error = 0;
 		const char *errMsg = gzerror(this->gzFi, &error);
@@ -33,7 +32,7 @@ void GZFileIO::open(const char *path, IOMode mode) {
 	}
 
 	/*  Set buffer size.    */
-	gzbuffer(this->gzFi, 8192);
+	gzbuffer(this->gzFi, 1024 * 8);
 	if (mode & WRITE) {
 		// gzsetparams
 	}
@@ -42,20 +41,19 @@ void GZFileIO::open(const char *path, IOMode mode) {
 void GZFileIO::close() {
 	int error = 0;
 	error = gzclose(this->gzFi);
+	FileIO::close();
 	if (error != Z_OK) {
-		FileIO::close();
 		throw RuntimeException("Failed to close gzfile {}", zError(error));
 	}
-	FileIO::close();
 }
 
 long GZFileIO::read(long int nbytes, void *pbuffer) {
-	long int nreadBytes = gzfread(pbuffer, 1, nbytes, this->gzFi);
+	z_size_t nreadBytes = gzfread(pbuffer, 1, nbytes, this->gzFi);
 	return nreadBytes;
 }
 
 long GZFileIO::write(long int nbytes, const void *pbuffer) {
-	long int nWrittenBytes = gzfwrite(pbuffer, 1, nbytes, this->gzFi);
+	z_size_t nWrittenBytes = gzfwrite(pbuffer, 1, nbytes, this->gzFi);
 	if (nWrittenBytes == 0) {
 		throw RuntimeException("Failed to write to  gz file {}", gzerror(this->gzFi, nullptr));
 	}
@@ -71,23 +69,15 @@ long GZFileIO::length() {
 
 bool GZFileIO::eof() const { return FileIO::eof(); }
 
-void GZFileIO::seek(long int nbytes, const Seek seek) {
-	// gzrewind
-	FileIO::seek(nbytes, seek);
-}
+void GZFileIO::seek(long int nbytes, const Seek seek) { FileIO::seek(nbytes, seek); }
 
-unsigned long GZFileIO::getPos() {
-	// gzeof
-	// gztell
-	return FileIO::getPos();
-}
+unsigned long GZFileIO::getPos() { return FileIO::getPos(); }
 
 bool GZFileIO::isWriteable() const { return FileIO::isWriteable(); }
 
 bool GZFileIO::isReadable() const { return FileIO::isReadable(); }
 
 bool GZFileIO::flush() {
-
 	if (this->mode & WRITE) {
 		int error = 0;
 		error = gzflush(this->gzFi, Z_FINISH);
@@ -99,8 +89,4 @@ bool GZFileIO::flush() {
 	return false;
 }
 
-GZFileIO::GZFileIO(const char *path, IOMode mode) { this->open(path, mode); }
-
-// GZFileIO::GZFileIO(Ref<IO> &io){
-
-// }
+GZFileIO::GZFileIO(const char *path, IOMode mode) : FileIO(path, mode) { this->open(path, mode); }

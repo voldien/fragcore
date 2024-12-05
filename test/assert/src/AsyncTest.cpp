@@ -4,7 +4,6 @@
 #include <IO/BufferIO.h>
 #include <IO/FileIO.h>
 #include <IO/FileSystem.h>
-#include <IO/GZFileIO.h>
 #include <IO/ZipFileIO.h>
 #include <IO/ZipFileSystem.h>
 #include <TaskScheduler/IScheduler.h>

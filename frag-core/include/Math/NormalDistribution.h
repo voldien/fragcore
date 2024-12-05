@@ -18,6 +18,7 @@
 #ifndef _FRAGCORE_NORMAL_DISTRIBUTION_H_
 #define _FRAGCORE_NORMAL_DISTRIBUTION_H_ 1
 #include "../FragDef.h"
+#include <cstdlib>
 #include <random>
 
 namespace fragcore {
@@ -41,6 +42,18 @@ namespace fragcore {
 		virtual DType rand() noexcept = 0;
 
 		virtual void reset() noexcept = 0;
+
+		std::vector<T> &random(std::vector<T> &samples) noexcept {
+			this->random(samples.data(), samples.size());
+			return samples;
+		}
+
+		T *random(T *samples, const size_t nrElements) noexcept {
+			for (size_t i = 0; i < nrElements; i++) {
+				samples[i] = this->rand();
+			}
+			return samples;
+		}
 
 	  protected:
 		std::random_device random_device; // Will be used to obtain a seed for the random number engine

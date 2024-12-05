@@ -1,7 +1,6 @@
 #include "IO/FileSystem.h"
-
-#include <Core/SystemInfo.h>
-#include <IO/GZFileIO.h>
+#include "Core/SystemInfo.h"
+#include "IO/FileIO.h"
 
 #include <cassert>
 #include <cerrno>
@@ -16,11 +15,6 @@ using namespace fragcore;
 
 IO *FileSystem::openFile(const char *path, IO::IOMode mode) {
 	std::string extension = FileSystem::getFileExtension(path);
-
-	// Parse if possible IO type exists.
-	if (strcmp(extension.c_str(), "gz") == 0) {
-		return new GZFileIO(path, mode);
-	}
 
 	// Open default as IO file.
 	return new FileIO(path, mode);
@@ -263,5 +257,4 @@ FileSystem::FileSystem(Ref<IScheduler> &schRef) : IFileSystem() {
 
 FileSystem::FileSystem() = default;
 
-FileSystem::~FileSystem() { /*  Release all resources.  */
-}
+FileSystem::~FileSystem() { /*  Release all resources.  */ }

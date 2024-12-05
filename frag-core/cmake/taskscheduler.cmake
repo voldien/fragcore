@@ -3,7 +3,7 @@ INCLUDE(FetchContent)
 IF(NOT taskscheduler)
 	FetchContent_Declare(taskscheduler
 		GIT_REPOSITORY https://github.com/voldien/task-scheduler.git
-		GIT_TAG develop) # or whatever tag you want
+		GIT_TAG 347e85411b76660528c5d7de1f7453e95a8625bb) # or whatever tag you want
 
 	FetchContent_GetProperties(taskscheduler)
 

@@ -22,11 +22,16 @@
 namespace fragcore {
 	class FVDECLSPEC LZ4Compression : public ICompression {
 	  public:
-		 void inflate(Ref<IO> io_in, Ref<IO> out) override;
-		 void inflate(const void *data_in, size_t inSize, void *out, size_t size) override;
+		LZ4Compression(const size_t block_size = 4096);
 
-		 void deflate(Ref<IO> io_in, Ref<IO> out) override;
-		 void deflate(const void *data_in, size_t inSize, void *out, size_t size) override;
+		ssize_t inflate(const void *data_in, size_t inSize, void *out, size_t size) override;
+
+		ssize_t deflate(const void *data_in, size_t inSize, void *out, size_t size) override;
+
+		void set_block_size(const size_t block_size);
+
+	  private:
+		size_t block_size;
 	};
 } // namespace fragcore
 

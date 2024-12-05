@@ -1,4 +1,4 @@
-#include "IO/BZFileIO.h"
+#include "BZFileIO.h"
 #include <bzlib.h>
 #include <fmt/core.h>
 
@@ -48,6 +48,7 @@ void BZFileIO::close() {
 }
 
 void BZFileIO::open([[maybe_unused]] const char *path, IO::IOMode mode) {
+	assert(this->file);
 
 	/*  */
 	int bzerror = 0;
@@ -59,14 +60,13 @@ void BZFileIO::open([[maybe_unused]] const char *path, IO::IOMode mode) {
 		this->bzFile = BZ2_bzWriteOpen(&bzerror, this->file, 0, 0, 0);
 		break;
 	case IO::IOMode::ACCESS:
-		break;
 	default:
 		break;
 	}
 
 	/*  */
 	if (this->bzFile == nullptr) {
-		throw RuntimeException("Failed to open {}", BZ2_bzerror(this->bzFile, &bzerror));
+		throw RuntimeException("Failed to open {} ({})", path, bzerror);
 	}
 }
 

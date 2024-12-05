@@ -42,7 +42,6 @@
 /*  IO. */
 #include "IO/BufferIO.h"
 #include "IO/FileSystem.h"
-#include "IO/GZFileIO.h"
 #include "IO/ZipFileSystem.h"
 
 /*  Data Structure. */
@@ -68,9 +67,5 @@
 #include "Math3D/Plane.h"
 #include "Math3D/Transform.h"
 #include "Math3D/Triangle.h"
-
-/*  Compression.    */
-#include "Compression/GZIPCompression.h"
-#include "Compression/LZ4Compression.h"
 
 #endif

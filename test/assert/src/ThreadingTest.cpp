@@ -8,6 +8,4 @@
 #include <IO/ZipFileSystem.h>
 #include <gtest/gtest.h>
 
-#include "IO/GZFileIO.h"
-
 using namespace fragcore;

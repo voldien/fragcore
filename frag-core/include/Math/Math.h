@@ -430,7 +430,13 @@ namespace fragcore {
 
 		template <typename T> static std::vector<T> &random(std::vector<T> &samples) {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
-			for (size_t i = 0; i < samples.size(); i++) {
+			Math::random<T>(samples.data(), samples.size());
+			return samples;
+		}
+
+		template <typename T> static T *random(T *samples, const size_t nrElements) {
+			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
+			for (size_t i = 0; i < nrElements; i++) {
 				samples[i] = Random::rand<T>();
 			}
 			return samples;

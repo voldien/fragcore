@@ -15,25 +15,25 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _FRAGCORE_ICOMPRESSION_H_
-#define _FRAGCORE_ICOMPRESSION_H_ 1
-#include "../Core/Ref.h"
-#include "../FragDef.h"
-#include "../IO/IO.h"
+#ifndef _FRAGCORE_BZ2_COMPRESSION_H_
+#define _FRAGCORE_BZ2_COMPRESSION_H_ 1
+#include "ICompression.h"
+#include <bzlib.h>
 
 namespace fragcore {
 
-	/**
-	 * @brief
-	 *
-	 */
-	class FVDECLSPEC ICompression : public Object {
+	class FVDECLSPEC BZ2Compression : public ICompression {
 	  public:
-		virtual void inflate(Ref<IO> io_in, Ref<IO> out) = 0;
-		virtual void inflate(const void *data_in, size_t inSize, void *out, size_t size) = 0;
+		BZ2Compression(const size_t compressionFactor = 9);
+		~BZ2Compression() override;
 
-		virtual void deflate(Ref<IO> io_in, Ref<IO> out) = 0;
-		virtual void deflate(const void *data_in, size_t inSize, void *out, size_t size) = 0;
+		ssize_t inflate(const void *data_in, size_t inSize, void *out, size_t size) override;
+
+		ssize_t deflate(const void *data_in, size_t inSize, void *out, size_t size) override;
+
+	  private:
+		bz_stream *bzip2com = nullptr;
+		bz_stream *bzip2uncom = nullptr;
 	};
 } // namespace fragcore
 

@@ -69,6 +69,7 @@ void FileIO::open(const char *path, IOMode mode) {
 	const char *f_io_mode = open_mode(mode);
 
 	this->file = fopen(path, f_io_mode);
+	
 	/*	Check if open was successful.	*/
 	if (this->file == nullptr) {
 		// TODO check the error

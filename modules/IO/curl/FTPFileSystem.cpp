@@ -4,7 +4,6 @@
 #include "FTPFileSystem.h"
 #include "FTPIO.h"
 #include <Core/SystemInfo.h>
-#include <IO/GZFileIO.h>
 
 #include <cassert>
 #include <cerrno>

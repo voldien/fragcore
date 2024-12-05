@@ -3,7 +3,7 @@ INCLUDE(FetchContent)
 IF(NOT fmt)
 	FetchContent_Declare(fmt
 		GIT_REPOSITORY https://github.com/fmtlib/fmt.git
-		GIT_TAG "9.1.0") 
+		GIT_TAG "10.2.1") 
 
 	FetchContent_GetProperties(fmt)
 
@@ -22,7 +22,7 @@ ENDIF()
 IF(NOT spdlog)
 	FetchContent_Declare(spdlog
 		GIT_REPOSITORY https://github.com/gabime/spdlog.git
-		GIT_TAG "v1.11.0") 
+		GIT_TAG "v1.14.1") 
 
 	FetchContent_GetProperties(spdlog)
 

@@ -125,7 +125,7 @@ ENDIF()
 TARGET_COMPILE_FEATURES(fragcore PUBLIC cxx_std_17 cxx_constexpr)
 
 #
-TARGET_LINK_LIBRARIES(fragcore PUBLIC Eigen3::Eigen taskSch cxxexcept spdlog_header_only fmt  magic_enum PRIVATE stdc++ atomic dl ${ZLIB_LIBRARIES} 
+TARGET_LINK_LIBRARIES(fragcore PUBLIC Eigen3::Eigen taskSch cxxexcept spdlog_header_only fmt magic_enum PRIVATE stdc++ atomic dl ${ZLIB_LIBRARIES} 
 													${ZIP_LIBRARIES} m ${OPENSSL_CRYPTO_LIBRARY} infoware )
 
 #

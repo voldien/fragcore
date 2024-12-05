@@ -20,13 +20,11 @@
 #include "ICompression.h"
 
 namespace fragcore {
-	class FVDECLSPEC GZIPCompression : public ICompression {
+	class FVDECLSPEC GZCompression : public ICompression {
 	  public:
-		void inflate(Ref<IO> io_in, Ref<IO> out) override;
-		void inflate(const void *data_in, size_t inSize, void *out, size_t size) override;
+		ssize_t inflate(const void *data_in, size_t inSize, void *out, size_t size) override;
 
-		void deflate(Ref<IO> io_in, Ref<IO> out) override;
-		void deflate(const void *data_in, size_t inSize, void *out, size_t size) override;
+		ssize_t deflate(const void *data_in, size_t inSize, void *out, size_t size) override;
 	};
 } // namespace fragcore
 
