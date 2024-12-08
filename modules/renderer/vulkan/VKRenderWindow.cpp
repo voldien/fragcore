@@ -227,9 +227,7 @@ intptr_t VKRenderWindow::getNativePtr() const {
 		case SDL_SYSWM_VIVANTE:
 			break;
 #endif
-		case SDL_SYSWM_HAIKU:
-		case SDL_SYSWM_KMSDRM:
-		case SDL_SYSWM_RISCOS:
+		default:
 			break;
 		}
 	} else {

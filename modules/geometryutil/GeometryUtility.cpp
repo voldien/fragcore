@@ -88,9 +88,32 @@ AABB GeometryUtility::computeBoundingBox(const Vector3 *vertices, const size_t n
 	return AABB::createMinMax(min, max);
 }
 
+AABB GeometryUtility::computeBoundingBox(const AABB &aabbs, const Matrix4x4 &matrix) noexcept {
+
+	const Vector3 globalCenter =
+		(matrix * Vector4(aabbs.getCenter().x(), aabbs.getCenter().y(), aabbs.getCenter().z(), 1)).head(3);
+
+	const Vector3 right = (matrix * Vector4(1, 0, 0, 0)).head(3).normalized() * aabbs.getSize().x();
+	const Vector3 up = (matrix * Vector4(0, 1, 0, 0)).head(3).normalized() * aabbs.getSize().y();
+	const Vector3 forward = (matrix * Vector4(0, 0, 1, 0)).head(3).normalized() * aabbs.getSize().z();
+
+	const float newIi = std::abs(Vector3{1.f, 0.f, 0.f}.dot(right)) + std::abs(Vector3{1.f, 0.f, 0.f}.dot(up)) +
+						std::abs(Vector3{1.f, 0.f, 0.f}.dot(forward));
+
+	const float newIj = std::abs(Vector3{0.f, 1.f, 0.f}.dot(right)) + std::abs(Vector3{0.f, 1.f, 0.f}.dot(up)) +
+						std::abs(Vector3{0.f, 1.f, 0.f}.dot(forward));
+
+	const float newIk = std::abs(Vector3{0.f, 0.f, 1.f}.dot(right)) + std::abs(Vector3{0.f, 0.f, 1.f}.dot(up)) +
+						std::abs(Vector3{0.f, 0.f, 1.f}.dot(forward));
+
+	return AABB(Vector3(newIi, newIj, newIk), globalCenter);
+}
+
 BoundingSphere GeometryUtility::computeBoundingSphere(float *vertices, const size_t nrVertices, const size_t stride) {
-	Vector3 center;
-	float radius = 0;
+
+	const AABB aabb = GeometryUtility::computeBoundingBox((Vector3 *)vertices, nrVertices, stride);
+	const Vector3 center = aabb.getCenter();
+	const float radius = aabb.getSize().norm();
 	return BoundingSphere(center, radius);
 }
 

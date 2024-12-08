@@ -31,20 +31,17 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC GeometryUtility {
 	  public:
-		template <typename T> static bool TestPlanesAABB(const Plane<T> &plane, const AABB &bound) {
-
-			const float r = bound.getSize().dot(plane.getNormal().cwiseAbs());
-
-			return -r <= plane.distanceSigned(bound.getCenter());
+		template <typename T> static bool testPlanesAABB(const Plane<T> &plane, const AABB &bound) {
+			const float rad = bound.getSize().dot(Vector3(
+				std::abs(plane.getNormal().x()), std::abs(plane.getNormal().y()), std::abs(plane.getNormal().z())));
+			return -rad <= plane.distanceSigned(bound.getCenter());
 		}
 
 		/**
 		 * @brief
 		 */
-		template <typename T> static bool TestPlanesSphere(const Plane<T> &plane, const BoundingSphere &bound) {
-
-			const T distance = plane.distance(bound.getCenter());
-
+		template <typename T> static bool testPlanesSphere(const Plane<T> &plane, const BoundingSphere &bound) {
+			const T distance = plane.distanceSigned(bound.getCenter());
 			return distance > -bound.getRadius();
 		}
 
@@ -53,8 +50,8 @@ namespace fragcore {
 		/**
 		 * @brief Positive
 		 */
-		template <typename T> static inline bool TestPlanesPoint(const Plane<T> &plane, const Vector3 &point) {
-			return plane.distance(point) > 0;
+		template <typename T> static inline bool testPlanesPoint(const Plane<T> &plane, const Vector3 &point) {
+			return plane.distanceSigned(point) > 0;
 		}
 
 		//
@@ -72,9 +69,7 @@ namespace fragcore {
 		 */
 		static AABB computeBoundingBox(const Vector3 *vertices, const size_t nrVertices,
 									   const size_t stride = sizeof(float) * 3);
-
 		static AABB computeBoundingBox(const std::vector<AABB &> &aabbs) noexcept;
-
 		static AABB computeBoundingBox(const AABB &aabbs, const Matrix4x4 &matrix) noexcept;
 
 		/**
@@ -100,7 +95,8 @@ namespace fragcore {
 			uint Indices[3];
 		};
 
-		void convert2Adjcent(float *vertices, const size_t nrVertices, std::vector<unsigned int> &Indices, const size_t stride = sizeof(float) * 3);
+		void convert2Adjcent(float *vertices, const size_t nrVertices, std::vector<unsigned int> &Indices,
+							 const size_t stride = sizeof(float) * 3);
 
 	  public:
 		GeometryUtility() = delete;

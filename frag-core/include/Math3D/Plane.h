@@ -31,7 +31,7 @@ namespace fragcore {
 	  public:
 		Plane() = default;
 		Plane(const Vector3 &normal, T distance = 0) noexcept {
-			this->normal = normal;
+			this->normal = normal.normalized();
 			this->d = distance;
 		}
 		Plane(const Vector3 &point, const Vector3 &normal) noexcept { this->setNormalAndPoint(normal, point); }
@@ -90,7 +90,7 @@ namespace fragcore {
 		 */
 		void setNormalAndPoint(const Vector3 &normal, const Vector3 &point) noexcept {
 			this->normal = normal.normalized();
-			this->d = std::abs(point.dot(this->normal));
+			this->d = point.dot(this->normal);
 		}
 
 		/**

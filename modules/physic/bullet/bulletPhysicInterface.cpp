@@ -27,7 +27,7 @@ class FragBulletTaskSchedulear : public btITaskScheduler {
 		const btIParallelForBody *m_pBody;
 	};
 
-  public:
+  
 	FragBulletTaskSchedulear() : btITaskScheduler("fragcore - threading") {}
 
 	int getMaxNumThreads() const override { return std::thread::hardware_concurrency(); }

@@ -18,6 +18,7 @@
 #ifndef _FRAGCORE_TRANSFORM_H_
 #define _FRAGCORE_TRANSFORM_H_ 1
 #include "LinAlg.h"
+#include "Math3D/Math3D.h"
 
 namespace fragcore {
 
@@ -30,6 +31,8 @@ namespace fragcore {
 		Transform() = default;
 		Transform(const Vector3 &position, const Quaternion &rotation, const Vector3 &scale)
 			: position(position), quaternion(rotation), scale(scale) {}
+		Transform(const Matrix4x4 &transform) {}
+		Transform(const Matrix3x3 &transform) {}
 
 		// explicit Transform(const Matrix3x3 &basis, const Vector3 &c = Vector3::Zero()) {}
 

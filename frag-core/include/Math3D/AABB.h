@@ -236,9 +236,9 @@ namespace fragcore {
 		}
 
 		static AABB createMinMax(const Vector3 &min, const Vector3 &max) noexcept {
-			const Vector3 size = (max - min);
-			const Vector3 center = (min - max) / 2.0f;
-			return {size, center};
+			const Vector3 size = (max - min) * 0.5f;
+			const Vector3 center = min + size;
+			return AABB(size, center);
 		}
 
 	  private:			   /*	Attributes.	*/
