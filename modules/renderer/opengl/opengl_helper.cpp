@@ -475,19 +475,19 @@ unsigned int GLHelper::getTextureType(TextureDesc::Type type) {
 	}
 }
 
-unsigned int GLHelper::getTextureSwizzle(TextureDesc::Swizzle swizzle) {
+unsigned int GLHelper::getTextureSwizzle(fragcore::Swizzle swizzle) {
 	switch (swizzle) {
-	case TextureDesc::Swizzle::Zero:
+	case Swizzle::Zero:
 		return GL_ZERO;
-	case TextureDesc::Swizzle::One:
+	case Swizzle::One:
 		return GL_ONE;
-	case TextureDesc::Swizzle::Red:
+	case Swizzle::Red:
 		return GL_RED;
-	case TextureDesc::Swizzle::Green:
+	case Swizzle::Green:
 		return GL_GREEN;
-	case TextureDesc::Swizzle::Blue:
+	case Swizzle::Blue:
 		return GL_BLUE;
-	case TextureDesc::Swizzle::eAlpha:
+	case Swizzle::eAlpha:
 		return GL_ALPHA;
 	default:
 		throw InvalidArgumentException("");

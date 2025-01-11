@@ -1,4 +1,3 @@
-#include "../AudioDesc.h"
 #include "internal_object_type.h"
 
 namespace fragcore {

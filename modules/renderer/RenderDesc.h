@@ -24,14 +24,28 @@
 
 namespace fragcore {
 
-	using MarkerDebug = struct marker_debug_t { const char *markerName; };
+	enum class Swizzle {
+		NoSwizzle = 0x0, /*  */
+		Zero = 0x1,		 /*  */
+		One = 0x2,		 /*  */
+		Red = 0x3,		 /*  */
+		Green = 0x4,	 /*  */
+		Blue = 0x5,		 /*  */
+		eAlpha = 0x6,	 /*  */
+	};
+
+	using MarkerDebug = struct marker_debug_t {
+		const char *markerName;
+	};
 
 	using MemoryInfo = struct memory_info_t {
 		long int totalVRam;
 		long int currentVRam;
 	};
 
-	using RendererInfo = struct renderer_info_t { MemoryInfo memoryInfo; };
+	using RendererInfo = struct renderer_info_t {
+		MemoryInfo memoryInfo;
+	};
 
 	using SamplerDesc = struct sampler_desc_t {
 		/**
@@ -74,6 +88,11 @@ namespace fragcore {
 		AddressMode AddressV;	 /*  */
 		AddressMode AddressW;	 /*  */
 		FilterMode mipmapFilter; /*  */
+		/*  Set swizzle.    */
+		Swizzle Swizzler;		 /*  */
+		Swizzle Swizzleg;		 /*  */
+		Swizzle Swizzleb;		 /*  */
+		Swizzle Swizzlea;		 /*  */
 		int maxLOD;				 /*  */
 		int minLOD;				 /*  */
 		int biasLOD;			 /*  */
@@ -95,7 +114,7 @@ namespace fragcore {
 			Texture3D = 0x4,	   /*	3D texture.	*/
 			CubeMap = 0x8,		   /*	Cubemap texture.	*/
 			CubeMapArray = 0x10,   /*	Cubemap array texture.	*/
-			Texture2DArray = 0x20, /*  */
+			Texture2DArray = 0x20, /*	2D Texture Array.*/
 		};
 
 		/**
@@ -156,44 +175,22 @@ namespace fragcore {
 
 		/*  Target. */
 		Target target; /*	Texture target.	*/
-		int width;	   /*	Texture width in pixels.	*/
-		int height;	   /*	Texture height in pixels.	*/
-		int depth;	   /*	Texture depth in pixels.	*/
+		/*	*/
+		int width = 1;	/*	Texture width in pixels.	*/
+		int height = 1; /*	Texture height in pixels.	*/
+		int depth = 1;	/*	Texture depth in pixels.	*/
 
-		/*  */
-		// Input format.
-		// TODO add support for loading compressed data.
-		// TODO add support for texture internal data type.
-		Type type; /*	Texture data type.	*/
+		/*	Input format.	*/
+		ImageFormat pixelFormat; /*  */
 
-		// TODO REMOVE
-		Format format; /*	Texture input data type.	*/
-
-		// TODO Remove
-		Format internalformat;		 /*	Texture internal data type.	*/
-		ImageFormat pixelFormat;	 /*  */
+		/*	Internal format.	*/
 		GraphicFormat graphicFormat; /*  */
-
-		bool immutable; /**/
+		bool immutable;				 /*	*/
 
 		/*  */
-		unsigned int numlevel;	 /*	Number of mipmaps.	*/
-		unsigned int usemipmaps; /*	Using mipmaps?	*/
-		unsigned int nrSamples;	 /*  Enable Multisampling.   */
-		// TODO decouple to the graphic fvformatf.
-		unsigned int compression; /*	What Compression to use.	*/
-		// TODO decouple to the graphic fvformatf.
-		unsigned int srgb; /*  Enable gamma correction.    */
-
-		enum class Swizzle {
-			NoSwizzle = 0x0, /*  */
-			Zero = 0x1,		 /*  */
-			One = 0x2,		 /*  */
-			Red = 0x3,		 /*  */
-			Green = 0x4,	 /*  */
-			Blue = 0x5,		 /*  */
-			eAlpha = 0x6,	 /*  */
-		};
+		unsigned int numlevel = 0;	 /*	Number of mipmaps.	*/
+		unsigned int usemipmaps = 0; /*	Using mipmaps	*/
+		unsigned int nrSamples = 0;	 /*	Enable Multisampling.   */
 
 		/*  Set swizzle.    */
 		Swizzle Swizzler; /*  */

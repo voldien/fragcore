@@ -29,7 +29,7 @@ namespace fragcore {
 	class FVDECLSPEC ProceduralGeometry {
 	  public:
 		// TODO align package
-		using Vertex = struct _vertex_t {
+		using Vertex = struct alignas(4) _vertex_t {
 			float vertex[3];
 			float uv[2];
 			float normal[3];

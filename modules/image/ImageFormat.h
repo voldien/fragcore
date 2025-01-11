@@ -58,7 +58,7 @@ namespace fragcore {
 		BC7,				//	High quality compressed color texture format.
 		DXT1Crunched,		//	Compressed color texture format with Crunch compression for smaller storage sizes.
 		DXT5Crunched,		//	Compressed color with alpha channel texture format with Crunch compression for smaller
-							//storage sizes.
+							// storage sizes.
 		PVRTC_RGB2,			//	PowerVR (iOS) 2 bits/pixel compressed color texture format.
 		PVRTC_RGBA2,		//	width	PowerVR (iOS) 2 bits/pixel compressed with alpha channel texture format.
 		PVRTC_RGB4,			//	PowerVR (iOS) 4 bits/pixel compressed color texture format.
@@ -79,7 +79,7 @@ namespace fragcore {
 		ASTC_12x12,			//	ASTC (12x12 pixel block in 128 bits) compressed RGB(A) texture format.
 		ETC_RGB4Crunched,	//	Compressed color texture format with Crunch compression for smaller storage sizes.
 		ETC2_RGBA8Crunched, //	Compressed color with alpha channel texture format using Crunch compression for smaller,
-							//storage sizes.
+							// storage sizes.
 
 		ASTC_HDR_4x4,	 //	ASTC (4x4 pixel block in 128 bits) compressed RGB(A) HDR texture format.
 		ASTC_HDR_5x5,	 //	ASTC (5x5 pixel block in 128 bits) compressed RGB(A) HDR texture format.

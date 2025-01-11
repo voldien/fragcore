@@ -71,7 +71,7 @@ namespace fragcore {
 
 		static unsigned int getTextureType(fragcore::TextureDesc::Type type);
 
-		static unsigned int getTextureSwizzle(fragcore::TextureDesc::Swizzle swizzle);
+		static unsigned int getTextureSwizzle(fragcore::Swizzle swizzle);
 
 		static unsigned int getBufferType(fragcore::BufferDesc::BufferType type);
 
