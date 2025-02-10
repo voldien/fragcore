@@ -36,16 +36,10 @@ void BulletRigidBody::setMass(float mass) {
 Vector3 BulletRigidBody::getPosition() {
 
 	btRigidBody *body;
-	btTransform trans;
-	btMotionState *mot;
 
 	body = (btRigidBody *)this->getObject();
 
-	/**/
-	mot = body->getMotionState();
-	mot->getWorldTransform(trans);
-
-	return *(Vector3 *)&trans.getOrigin();
+	return *(Vector3 *)&body->getCenterOfMassPosition();
 }
 void BulletRigidBody::setPosition(const Vector3 &position) {
 	btRigidBody *body;

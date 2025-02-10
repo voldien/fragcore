@@ -18,12 +18,15 @@ SDLWindowManager::~SDLWindowManager() {
 
 Display *SDLWindowManager::getDisplay(unsigned int index) { return new SDLDisplay(index); }
 unsigned int SDLWindowManager::getNumDisplays() const noexcept { return SDLDisplay::getNumDisplays(); }
-Display *SDLWindowManager::getAssociatedDisplay(Ref<Window> &window) { return nullptr; }
+Display *SDLWindowManager::getAssociatedDisplay(Ref<Window> &window) {
+	intptr_t p = window->getNativePtr();
+	return nullptr;
+}
 Window *SDLWindowManager::createWindow(const std::string &title) {
 	Window *window = new SDLWindow();
 	window->setTitle(title);
 	return window;
 }
-Display *SDLWindowManager::primaryDisplay() const noexcept { return nullptr; }
+Display *SDLWindowManager::primaryDisplay() const noexcept { return new SDLDisplay(0); }
 
 const std::vector<Display *> &SDLWindowManager::getDisplays() const { return {}; }

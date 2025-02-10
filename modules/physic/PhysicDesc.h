@@ -17,7 +17,6 @@
  */
 #ifndef _FV_PHYSIC_DESC_H_
 #define _FV_PHYSIC_DESC_H_ 1
-#include "Collider.h"
 #include "Math3D/Math3D.h"
 #include "RigidBody.h"
 

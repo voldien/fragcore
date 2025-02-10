@@ -19,7 +19,6 @@
 #define _FRAGCORE_SOFTBODY_H_ 1
 #include "FragDef.h"
 #include "PhysicObject.h"
-#include "Prerequisites.h"
 
 namespace fragcore {
 	/**
@@ -28,7 +27,7 @@ namespace fragcore {
 	class FVDECLSPEC SoftBody : public PhysicObject {
 	  private:
 		inline SoftBody() = default;
-		 ~SoftBody() override = 0;
+		~SoftBody() override = 0;
 
 	  public:	 /*	Public methods.	*/
 	  protected: /*	Protected virtual methods.	*/

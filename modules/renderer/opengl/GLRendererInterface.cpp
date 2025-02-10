@@ -311,7 +311,7 @@ RendererWindow *GLRendererInterface::createWindow(int x, int y, int width, int h
 	Ref<GLRendererInterface> rendRef(this);
 
 	GLRenderWindow *renderWindow = new GLRenderWindow(rendRef);
-	renderWindow->show();
+
 	renderWindow->setPosition(x, y);
 	renderWindow->setSize(width, height);
 

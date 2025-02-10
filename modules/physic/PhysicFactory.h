@@ -20,6 +20,7 @@
 #include "PhysicInterface.h"
 
 namespace fragcore {
+	
 	/**
 	 *	Responsible for creating the physic interface.
 	 */
@@ -57,7 +58,7 @@ namespace fragcore {
 		/**
 		 * @return
 		 */
-		static const char *getInterfaceLibraryPath(PhysicAPI api);
+		static const char *getInterfaceLibraryPath(const PhysicAPI api);
 
 	  public: /*	Prevent one from creating an instance of this class.	*/
 		PhysicFactory() = delete;

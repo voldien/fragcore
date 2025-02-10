@@ -20,7 +20,7 @@
 #include <FragCore.h>
 
 namespace fragcore {
-	
+
 	template <class T> class Octree {
 		using Node = struct node {
 			Octree *m[8];

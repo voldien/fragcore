@@ -17,24 +17,22 @@
  */
 #ifndef _FRAGCORE_CHARACTERCONTROLLER_H_
 #define _FRAGCORE_CHARACTERCONTROLLER_H_ 1
-#include "PhysicObject.h"
+#include "Collider.h"
 #include <FragCore.h>
 
 namespace fragcore {
 	/**
 	 *
 	 */
-	class FVDECLSPEC CharacterController : public PhysicObject {
-		// friend class DynamicInterface;
+	class FVDECLSPEC CharacterController : public Collider {
 	  public:
 		CharacterController() = default;
 
 		~CharacterController() override = default;
 
 	  public: /*	Public methods.	*/
-		virtual Vector3 getCenter() = 0;
-		// virtual const Vector3 &getConter() const;
-		virtual void setCenter(const Vector3 &center) = 0;
+		Vector3 getCenter() override = 0;
+		void setCenter(const Vector3 &center) override = 0;
 	};
 } // namespace fragcore
 

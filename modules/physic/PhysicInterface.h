@@ -17,6 +17,7 @@
  */
 #ifndef _FRAGCORE_PHYSIC_INTERFACE_H_
 #define _FRAGCORE_PHYSIC_INTERFACE_H_ 1
+#include "Math3D/Ray.h"
 #include "PhysicDesc.h"
 #include <Core/IConfig.h>
 #include <Core/Module.h>
@@ -36,8 +37,8 @@ namespace fragcore {
 		PhysicInterface(const PhysicInterface &other) = delete;
 		~PhysicInterface() override = default;
 
-		void onInitialization() override{};
-		void onDestruction() override{};
+		void onInitialization() override {};
+		void onDestruction() override {};
 
 		/**
 		 * Start simulate.

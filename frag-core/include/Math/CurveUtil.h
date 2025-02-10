@@ -25,7 +25,7 @@ namespace fragcore {
 	  public:
 		/*	*/
 		template <typename T, class U>
-		std::vector<U> BezierCurve(std::vector<U> &points, int start, const float t, const int degree) {
+		std::vector<U> BezierCurve(std::vector<U> &points, const int start, const float t, const int degree) {
 			if (points.size() < degree) {
 				return points[0];
 			}
@@ -33,6 +33,10 @@ namespace fragcore {
 				std::pow(1.0f - t, i) * pow(t, i) * points[(i + start)];
 			}
 			return {};
+		}
+		template <typename T, typename U> static T interpolateBezierCurve(const Vector4 &pointA, const Vector4 &pointB, const U interpolate) { 
+			/*	*/ 
+
 		}
 	};
 } // namespace fragcore

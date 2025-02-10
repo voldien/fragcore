@@ -27,7 +27,6 @@ class FragBulletTaskSchedulear : public btITaskScheduler {
 		const btIParallelForBody *m_pBody;
 	};
 
-  
 	FragBulletTaskSchedulear() : btITaskScheduler("fragcore - threading") {}
 
 	int getMaxNumThreads() const override { return std::thread::hardware_concurrency(); }
@@ -69,10 +68,15 @@ BulletPhysicInterface::BulletPhysicInterface(IConfig *config) : broadphase(new b
 
 	/*	*/
 	this->collisionConfiguration = new btDefaultCollisionConfiguration();
+	btITaskScheduler *scheduler = nullptr;
+#ifdef _OPENMP
+	scheduler = btGetOpenMPTaskScheduler();
+#else
+	scheduler = new FragBulletTaskSchedulear();
+#endif
 
-	btITaskScheduler *scheduler = btGetOpenMPTaskScheduler();
 	if (scheduler) {
-		scheduler->setNumThreads(Math::max<size_t>(1, SystemInfo::getCPUCoreCount() / 3));
+		scheduler->setNumThreads(Math::max<size_t>(1, SystemInfo::getCPUCoreCount() / 2));
 		btSetTaskScheduler(scheduler);
 	} else {
 		multi_threading = false;
@@ -80,12 +84,10 @@ BulletPhysicInterface::BulletPhysicInterface(IConfig *config) : broadphase(new b
 
 	if (multi_threading) {
 
-		FragBulletTaskSchedulear *taskScheduler = new FragBulletTaskSchedulear();
-
 		this->dispatcher = new btCollisionDispatcherMt(this->collisionConfiguration);
 		this->solver = new btSequentialImpulseConstraintSolverMt();
 
-		int maxThreadCount = 1;
+		const int maxThreadCount = scheduler->getMaxNumThreads();
 		btConstraintSolverPoolMt *pSolverPool = new btConstraintSolverPoolMt(maxThreadCount);
 
 		this->dynamicsWorld = new btDiscreteDynamicsWorldMt(this->dispatcher, this->broadphase, pSolverPool,
@@ -126,8 +128,6 @@ BulletPhysicInterface::~BulletPhysicInterface() {
 	delete this->dispatcher;
 	delete this->collisionConfiguration;
 	delete this->broadphase;
-
-	/**/
 }
 
 void BulletPhysicInterface::onInitialization() {}

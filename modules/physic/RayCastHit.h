@@ -17,6 +17,7 @@
  */
 #ifndef _FRAGCORE_RAY_CAST_HIT_H_
 #define _FRAGCORE_RAY_CAST_HIT_H_ 1
+#include "Math3D/Math3D.h"
 #include "PhysicObject.h"
 
 namespace fragcore {
@@ -30,21 +31,17 @@ namespace fragcore {
 		RayCastHit() = default;
 		~RayCastHit() override = default;
 
-		// Collider*  collider() const;
+		Collider *getCollider() const;
 
-		// RigidBody*  rigidBody() const;
+		RigidBody *getRigidBody() const;
 
-		//	VDGameObject*  gameObject() const;
+		Vector3 &point() const;
 
-		// VDTransform*  transform() const;
+		Vector3 &normal() const;
 
-		// Vector3& point() const;
+		float distance() const;
 
-		// Vector3 &normal() const;
-
-		// float distance() const;
-
-		// PVVector2& barycentric() const;
+		Vector2 &barycentric() const;
 	};
 } // namespace fragcore
 

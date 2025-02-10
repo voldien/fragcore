@@ -333,32 +333,41 @@ namespace fragcore {
 		 *	Generate 1D guassian.
 		 */
 		template <typename T>
-		static inline void guassian(std::vector<T> &guassian, const unsigned int height, const T theta,
+		static inline void guassian(std::vector<T> &guassian, const unsigned int height, const T mean,
 									const T standard_deviation) {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
-			guassian.reserve(height);
-			Math::guassian<T>(guassian.data(), height, theta, standard_deviation);
+			guassian.resize(height);
+			Math::guassian<T>(guassian.data(), height, mean, standard_deviation);
 		}
 
+#ifdef _OPENMP
+#pragma omp declare simd uniform(standard_deviation, mean) simdlen(4)
+#endif
 		template <typename T>
-		static void guassian(T *guassian, const unsigned int height, const T theta, const T standard_deviation) {
+		static void guassian(T *guassian, const unsigned int nr_samples, const T mean, const T standard_deviation) {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
 
 			const T exp_inverse =
 				(static_cast<T>(1.0) / (static_cast<T>(2.0) * standard_deviation * standard_deviation));
+
 			const T sqr_2_pi_inverse = 1.0 / (standard_deviation * static_cast<T>(std::sqrt(2 * Math::PI)));
 
-			const T offset = static_cast<T>(height) / -2;
+			const T offset_half = -(static_cast<T>(nr_samples) * 0.5);
 
-			// #pragma omp simd
-			for (unsigned int i = 0; i < height; i++) {
+			float totalWeight = 0;
+			for (unsigned int index = 0; index < nr_samples; index++) {
 
-				const T exp_num_sqrt = (i - theta + offset);
+				const T exp_num_sqrt = (index + offset_half) - mean;
 
 				const T exponent = exp_inverse * -(exp_num_sqrt * exp_num_sqrt);
 				const T value = sqr_2_pi_inverse * std::exp(exponent);
 
-				guassian[i] = value;
+				guassian[index] = value;
+				totalWeight += value;
+			}
+
+			for (unsigned int index = 0; index < nr_samples; index++) {
+				guassian[index] *= (1 / totalWeight);
 			}
 		}
 
@@ -367,32 +376,33 @@ namespace fragcore {
 		 */
 		template <typename T>
 		static inline void guassian(std::vector<T> &guassian, const unsigned int width, const unsigned int height,
-									const T theta, const T standard_deviation) {
+									const T mean, const T standard_deviation) {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
 			guassian.reserve(width * height);
-			Math::guassian<T>(static_cast<T &>(*guassian.data()), width, height, theta, standard_deviation);
+			Math::guassian<T>(static_cast<T &>(*guassian.data()), width, height, mean, standard_deviation);
 		}
 
 		template <typename T>
-		static inline void guassian(const T &guassian, const unsigned int width, const unsigned int height,
+		static inline void guassian(const T &guassian, const unsigned int x_nr_samples, const unsigned int y_nr_samples,
 									const T standard_deviation) noexcept {
 			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
 
 			const T exp_inverse =
 				(static_cast<T>(1.0) / (static_cast<T>(2.0) * standard_deviation * standard_deviation));
+
 			const T sqr_2_pi_inverse = 1.0 / (standard_deviation * static_cast<T>(std::sqrt(2 * Math::PI)));
 
-			const T offset = static_cast<T>(height) / -2;
+			const T offset = static_cast<T>(y_nr_samples) / -2;
 
-			for (unsigned int y = 0; y < height; y++) {
-				for (unsigned int x = 0; x < width; x++) {
+			for (unsigned int y = 0; y < y_nr_samples; y++) {
+				for (unsigned int x = 0; x < x_nr_samples; x++) {
 
 					// TODO: add offset
 					// const T exp_num_sqrt = (i - theta + offset);
 
 					const T exponent = exp_inverse * -(x * x + y * y);
 
-					guassian[y * width + x] = sqr_2_pi_inverse * std::exp(exponent);
+					guassian[y * x_nr_samples + x] = sqr_2_pi_inverse * std::exp(exponent);
 				}
 			}
 		}

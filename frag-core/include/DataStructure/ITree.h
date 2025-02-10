@@ -34,12 +34,11 @@ namespace fragcore {
 			this->parent = nullptr;
 		}
 
-				
 		ITree(const ITree &other) {
-			//TODO: impl
-			//this->child = std::exchange(other.child, nullptr);
-			//this->parent = std::exchange(other.parent, nullptr);
-			//this->sibling = std::exchange(other.sibling, nullptr);
+			// TODO: impl
+			// this->child = std::exchange(other.child, nullptr);
+			// this->parent = std::exchange(other.parent, nullptr);
+			// this->sibling = std::exchange(other.sibling, nullptr);
 			this->numChildren = other.numChildren;
 		}
 
@@ -137,11 +136,11 @@ namespace fragcore {
 
 		void setChild(ITree<T> *child) noexcept { this->child = child; }
 
-	  private:					  /*  */
-		ITree<T> *parent;		  /*	parent node.	*/
-		ITree<T> *sibling;		  /*	sibling node.	*/
-		ITree<T> *child;		  /*	child node.	*/
-		unsigned int numChildren{}; /*	number of children node attached.	*/
+	  private:						  /*  */
+		ITree<T> *parent = nullptr;	  /*	parent node.	*/
+		ITree<T> *sibling = nullptr;  /*	sibling node.	*/
+		ITree<T> *child = nullptr;	  /*	child node.	*/
+		unsigned int numChildren = 0; /*	number of children node attached.	*/
 	};
 } // namespace fragcore
 #endif

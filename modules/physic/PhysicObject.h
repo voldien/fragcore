@@ -29,9 +29,9 @@ namespace fragcore {
 	  public:
 		inline PhysicInterface *getPhysicInterface() const { return this->iRenderer; }
 
-		inline void *getObject() { return this->pdata; }
+		inline void *getObject() noexcept { return this->pdata; }
 
-		inline void *getObject() const { return this->pdata; }
+		inline void *getObject() const noexcept { return this->pdata; }
 
 		virtual intptr_t getNativePtr() const = 0;
 
