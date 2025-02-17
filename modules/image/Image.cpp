@@ -12,12 +12,15 @@ Image::Image(const unsigned int width, const unsigned int height, const unsigned
 	this->allocateMemory(width, height, depth, format);
 }
 
-Image::Image(const Image &other) : Object(other) {
+Image::Image(const Image &other)
+	: m_width(other.m_width), m_height(other.m_height), depth(other.depth), format(other.format),
+	  bufferSize(other.bufferSize) {
 	Object::operator=(other);
 
 	this->allocateMemory(other.width(), other.height(), other.layers(), other.getFormat());
 	std::memcpy(this->pixelData, other.pixelData, this->bufferSize);
 }
+
 Image::Image(Image &&other)
 	: m_width(other.m_width), m_height(other.m_height), depth(other.depth), format(other.format),
 	  bufferSize(other.bufferSize) {
@@ -27,8 +30,16 @@ Image::Image(Image &&other)
 
 Image &Image::operator=(const Image &other) {
 	Object::operator=(other);
+
+	this->bufferSize = other.bufferSize;
+	this->m_width = other.m_width;
+	this->m_height = other.m_height;
+	this->depth = other.depth;
+	this->format = other.format;
+
 	this->allocateMemory(other.width(), other.height(), other.layers(), other.getFormat());
 	std::memcpy(this->pixelData, other.pixelData, this->bufferSize);
+
 	return *this;
 }
 
@@ -138,7 +149,7 @@ void Image::setColor(unsigned int x_offset, unsigned int y_offset, unsigned int 
 }
 
 void *Image::getPixelData() const noexcept { return this->pixelData; }
-void Image::setPixelData(void *srcPixelData, const size_t size) {
+void Image::setPixelData(const void *srcPixelData, const size_t size) {
 
 	if (size > this->getSize()) {
 		throw InvalidArgumentException("Source data size is greater than destination data: {} > {}", size, bufferSize);

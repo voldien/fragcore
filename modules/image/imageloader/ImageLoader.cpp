@@ -176,12 +176,14 @@ void ImageLoader::saveImage(Ref<IO> &io_in, const Image &Image, const FileFormat
 	FreeImage_Initialise(FALSE);
 
 	/*  Get file format.    */
+	unsigned int save_flag = 0;
 	switch (fileformat) {
 	case FileFormat::Png:
 		image_format = FIF_PNG;
 		break;
 	case FileFormat::Jpeg:
 		image_format = FIF_JPEG;
+		save_flag = JPEG_QUALITYSUPERB;
 		break;
 	case FileFormat::Exr:
 		image_format = FIF_EXR;
@@ -195,9 +197,6 @@ void ImageLoader::saveImage(Ref<IO> &io_in, const Image &Image, const FileFormat
 		throw InvalidArgumentException("filepath file format is not supported : {}", filepath);
 	}
 
-	// TODO resolve color swizzle issue.
-	Image.getFormat();
-
 	/*  Allocate image buffer.  */
 	image = FreeImage_ConvertFromRawBits((BYTE *)pixels, Image.width(), Image.height(),
 										 (Image::getFormatPixelBitSize(Image.getFormat()) * Image.width()) / 8,
@@ -209,14 +208,18 @@ void ImageLoader::saveImage(Ref<IO> &io_in, const Image &Image, const FileFormat
 	}
 
 	/*  */
-	finalImage = FreeImage_ConvertTo32Bits(image);
-	if (finalImage == nullptr) {
-		throw RuntimeException("Failed convert image: {}", filepath);
+	if (fileformat != FileFormat::Exr) {
+		finalImage = FreeImage_ConvertTo32Bits(image);
+		if (finalImage == nullptr) {
+			throw RuntimeException("Failed convert image: {}", filepath);
+		}
+	}else{
+		
 	}
 
 	/*  Save to file.   */
 	FIMEMORY *mem = FreeImage_OpenMemory(nullptr, FreeImage_GetMemorySize(image));
-	if (FreeImage_SaveToMemory(image_format, image, mem, JPEG_QUALITYSUPERB)) {
+	if (FreeImage_SaveToMemory(image_format, image, mem, save_flag)) {
 
 		BYTE *save_pixel_data = nullptr;
 		DWORD save_size = 0;

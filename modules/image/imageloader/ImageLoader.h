@@ -56,7 +56,7 @@ namespace fragcore {
 			ImageLoader::saveImage(io_out, image, fileformat);
 			io_out->close();
 		}
-		void saveImage(Ref<IO> &in_out, const Image &image, const FileFormat fileformat);
+		void saveImage(Ref<IO> &in_out, const Image &image, const FileFormat fileformat = FileFormat::Default);
 	};
 } // namespace fragcore
 

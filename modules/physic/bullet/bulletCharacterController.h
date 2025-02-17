@@ -31,7 +31,6 @@ namespace fragcore {
 
 	  public: /*	Public methods.	*/
 		Vector3 getCenter() override;
-		// virtual const Vector3 &getConter() const;
 		void setCenter(const Vector3 &center) override;
 	};
 } // namespace fragcore

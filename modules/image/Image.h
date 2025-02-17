@@ -51,7 +51,7 @@ namespace fragcore {
 		virtual size_t getSize() const noexcept { return this->bufferSize; }
 
 		virtual void *getPixelData() const noexcept;
-		virtual void setPixelData(void *srcPixelData, const size_t size); // TODO add offset
+		virtual void setPixelData(const void *srcPixelData, const size_t size); // TODO add offset
 
 	  protected:
 		void allocateMemory(unsigned int width, unsigned int height, unsigned depth, ImageFormat format);
@@ -67,10 +67,10 @@ namespace fragcore {
 		static Image &convertImage(Image &image, ImageFormat textureFormat);
 
 	  private:
-		unsigned int m_width;
-		unsigned int m_height;
-		unsigned int depth{1};
-		ImageFormat format;
+		unsigned int m_width = 0;
+		unsigned int m_height = 0;
+		unsigned int depth = 1;
+		ImageFormat format = ImageFormat::RGBA32;
 
 		// TODO encpsulate object.
 		void *pixelData = nullptr;
