@@ -64,8 +64,9 @@ namespace fragcore {
 
 	  public:
 		using CompilerConvertOption = struct compiler_convert_option_t {
-			ShaderLanguage target;
-			unsigned int glslVersion;
+			ShaderLanguage target = ShaderLanguage::GLSL;
+			unsigned int glslVersion = 150;
+			bool es = false;
 		};
 
 		/**
