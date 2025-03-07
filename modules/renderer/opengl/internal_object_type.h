@@ -52,14 +52,13 @@ namespace fragcore {
 		 */
 		static void addMarkerLabel(unsigned int identifier, unsigned int object, const fragcore::MarkerDebug *debug);
 
-		static unsigned int getWrapMode(fragcore::SamplerDesc::AddressMode mode);
+		static unsigned int getWrapMode(fragcore::TextureWrappingMode mode);
 
-		static unsigned int getFilterMode(fragcore::SamplerDesc::FilterMode mode,
-										  fragcore::SamplerDesc::FilterMode mips);
+		static unsigned int getFilterMode(fragcore::FilterMode mode, fragcore::FilterMode mips);
 
 		static unsigned int getCompareMode(fragcore::SamplerDesc::CompareFunc mode);
 
-		static unsigned int getGraphicFormat(fragcore::GraphicFormat graphicFormat);
+		static unsigned int getGraphicFormat(const fragcore::GraphicFormat graphicFormat);
 		static unsigned int getTextureFormat(fragcore::ImageFormat textureFormat, unsigned int *pixelType);
 
 		static unsigned int getTextureFormat(fragcore::TextureDesc::Format format);

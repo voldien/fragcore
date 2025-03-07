@@ -1,5 +1,6 @@
 #include "../IRenderer.h"
 #include "GLHelper.h"
+#include "RenderDesc.h"
 #include "internal_object_type.h"
 #include <GL/glew.h>
 #include <fmt/core.h>
@@ -21,57 +22,57 @@ void GLHelper::addMarkerLabel(unsigned int identifier, unsigned int object, cons
 	}
 }
 
-unsigned int GLHelper::getWrapMode(SamplerDesc::AddressMode mode) {
+unsigned int GLHelper::getWrapMode(TextureWrappingMode mode) {
 	switch (mode) {
-	case SamplerDesc::AddressMode::Repeat:
+	case TextureWrappingMode::Repeat:
 		return GL_REPEAT;
-	case SamplerDesc::AddressMode::RepeatMirror:
+	case TextureWrappingMode::RepeatMirror:
 		return GL_MIRRORED_REPEAT;
-	case SamplerDesc::AddressMode::Clamp:
+	case TextureWrappingMode::Clamp:
 		return GL_CLAMP_TO_EDGE;
-	case SamplerDesc::AddressMode::ClampBorder:
+	case TextureWrappingMode::ClampBorder:
 		return GL_CLAMP_TO_BORDER;
-	case SamplerDesc::AddressMode::NoAddressMode:
+	case TextureWrappingMode::NoAddressMode:
 	default:
 		throw InvalidArgumentException("Invalid address mode - {}", magic_enum::enum_name(mode));
 	}
 }
 
-unsigned int GLHelper::getFilterMode(SamplerDesc::FilterMode mode, SamplerDesc::FilterMode mips) {
-	if (mips == SamplerDesc::FilterMode::NoFilterMode) {
+unsigned int GLHelper::getFilterMode(fragcore::FilterMode mode, fragcore::FilterMode mips) {
+	if (mips == FilterMode::NoFilterMode) {
 		switch (mode) {
-		case SamplerDesc::FilterMode::Linear:
+		case FilterMode::Linear:
 			return GL_LINEAR;
-		case SamplerDesc::FilterMode::Nearset:
+		case FilterMode::Nearset:
 			return GL_NEAREST;
 		default:
 			break;
 		}
 	} else {
 		switch (mode) {
-		case SamplerDesc::FilterMode::Linear:
+		case FilterMode::Linear:
 			switch (mips) {
-			case SamplerDesc::FilterMode::Linear:
+			case FilterMode::Linear:
 				return GL_LINEAR_MIPMAP_LINEAR;
-			case SamplerDesc::FilterMode::Nearset:
+			case FilterMode::Nearset:
 				return GL_LINEAR_MIPMAP_NEAREST;
-			case SamplerDesc::FilterMode::NoFilterMode:
+			case FilterMode::NoFilterMode:
 			default:
 				break;
 			}
 			break;
-		case SamplerDesc::FilterMode::Nearset:
+		case FilterMode::Nearset:
 			switch (mips) {
-			case SamplerDesc::FilterMode::Linear:
+			case FilterMode::Linear:
 				return GL_NEAREST_MIPMAP_LINEAR;
-			case SamplerDesc::FilterMode::Nearset:
+			case FilterMode::Nearset:
 				return GL_NEAREST_MIPMAP_NEAREST;
-			case SamplerDesc::FilterMode::NoFilterMode:
+			case FilterMode::NoFilterMode:
 			default:
 				break;
 			}
 			break;
-		case sampler_desc_t::FilterMode::NoFilterMode:
+		case FilterMode::NoFilterMode:
 		default:
 			break;
 		}
@@ -102,7 +103,7 @@ unsigned int GLHelper::getCompareMode(SamplerDesc::CompareFunc mode) {
 	}
 }
 
-unsigned int GLHelper::getGraphicFormat(GraphicFormat graphicFormat) {
+unsigned int GLHelper::getGraphicFormat(const GraphicFormat graphicFormat) {
 	switch (graphicFormat) {
 	case GraphicFormat::R8_SRGB:
 		return GL_SLUMINANCE8;
@@ -115,36 +116,36 @@ unsigned int GLHelper::getGraphicFormat(GraphicFormat graphicFormat) {
 	case GraphicFormat::R8_UNorm:
 		return GL_RED_INTEGER;
 	case GraphicFormat::R8G8_UNorm:
-
+		return GL_RG8;
 	case GraphicFormat::R8G8B8_UNorm:
-
+		return GL_RGB8;
 	case GraphicFormat::R8G8B8A8_UNorm:
-
+		return GL_RGBA8;
 	case GraphicFormat::R8_SNorm:
-
+		return GL_R8_SNORM;
 	case GraphicFormat::R8G8_SNorm:
-
+		return GL_RG8_SNORM;
 	case GraphicFormat::R8G8B8_SNorm:
-
+		return GL_RGB8_SNORM;
 	case GraphicFormat::R8G8B8A8_SNorm:
-
+		return GL_RGBA8_SNORM;
 	case GraphicFormat::R8_UInt:
-
+		return GL_R8UI;
 	case GraphicFormat::R8G8_UInt:
-
+		return GL_RG8UI;
 	case GraphicFormat::R8G8B8_UInt:
-
+		return GL_RGB8UI;
 	case GraphicFormat::R8G8B8A8_UInt:
-
+		return GL_RGBA8UI;
 	case GraphicFormat::R8_SInt:
+		return GL_R8I;
 	case GraphicFormat::R8G8_SInt:
-
+		return GL_RG8I;
 	case GraphicFormat::R8G8B8_SInt:
-
+		return GL_RGB8I;
 	case GraphicFormat::R8G8B8A8_SInt:
-
+		return GL_RGB8I;
 	case GraphicFormat::R16_UNorm:
-
 	case GraphicFormat::R16G16_UNorm:
 
 	case GraphicFormat::R16G16B16_UNorm:
@@ -184,7 +185,6 @@ unsigned int GLHelper::getGraphicFormat(GraphicFormat graphicFormat) {
 	case GraphicFormat::R32G32B32A32_UInt:
 
 	case GraphicFormat::R32_SInt:
-
 	case GraphicFormat::R32G32_SInt:
 
 	case GraphicFormat::R32G32B32_SInt:
@@ -192,29 +192,27 @@ unsigned int GLHelper::getGraphicFormat(GraphicFormat graphicFormat) {
 	case GraphicFormat::R32G32B32A32_SInt:
 
 	case GraphicFormat::R16_SFloat:
-
+		return GL_R16F;
 	case GraphicFormat::R16G16_SFloat:
-
+		return GL_RG16F;
 	case GraphicFormat::R16G16B16_SFloat:
-
+		return GL_RGB16F;
 	case GraphicFormat::R16G16B16A16_SFloat:
-
+		return GL_RGBA16F;
 	case GraphicFormat::R32_SFloat:
-
+		return GL_R32F;
 	case GraphicFormat::R32G32_SFloat:
-
+		return GL_RG32F;
 	case GraphicFormat::R32G32B32_SFloat:
-
+		return GL_RGB32F;
 	case GraphicFormat::R32G32B32A32_SFloat:
-
+		return GL_RGBA32F;
 	case GraphicFormat::B8G8R8_SRGB:
-
 	case GraphicFormat::B8G8R8A8_SRGB:
 
 	case GraphicFormat::B8G8R8_UNorm:
 
 	case GraphicFormat::B8G8R8A8_UNorm:
-
 	case GraphicFormat::B8G8R8_SNorm:
 
 	case GraphicFormat::B8G8R8A8_SNorm:

@@ -47,26 +47,27 @@ namespace fragcore {
 		MemoryInfo memoryInfo;
 	};
 
-	using SamplerDesc = struct sampler_desc_t {
-		/**
-		 *
-		 */
-		enum class FilterMode : uint32_t {
-			NoFilterMode, /*  */
-			Linear,		  /*  */
-			Nearset,	  /*  */
-		};
+	/**
+	 *
+	 */
+	enum class FilterMode : uint32_t {
+		NoFilterMode, /*  */
+		Linear,		  /*  */
+		Nearset,	  /*  */
+	};
 
-		/**
-		 *
-		 */
-		enum class AddressMode : uint32_t {
-			NoAddressMode,
-			Repeat,		  /*  */
-			RepeatMirror, /*  */
-			Clamp,		  /*  */
-			ClampBorder,  /*  */
-		};
+	/**
+	 *
+	 */
+	enum class TextureWrappingMode : uint32_t {
+		NoAddressMode,
+		Repeat,		  /*  */
+		RepeatMirror, /*  */
+		Clamp,		  /*  */
+		ClampBorder,  /*  */
+	};
+
+	using SamplerDesc = struct sampler_desc_t {
 
 		enum class CompareFunc : uint32_t {
 			eNoCompare, /*  */
@@ -81,13 +82,13 @@ namespace fragcore {
 		};
 
 		/*  Sampler.    */
-		float anisotropy;		 /*  */
-		FilterMode minFilter;	 /*  */
-		FilterMode magFilter;	 /*  */
-		AddressMode AddressU;	 /*  */
-		AddressMode AddressV;	 /*  */
-		AddressMode AddressW;	 /*  */
-		FilterMode mipmapFilter; /*  */
+		float anisotropy;			  /*  */
+		FilterMode minFilter;		  /*  */
+		FilterMode magFilter;		  /*  */
+		TextureWrappingMode AddressU; /*  */
+		TextureWrappingMode AddressV; /*  */
+		TextureWrappingMode AddressW; /*  */
+		FilterMode mipmapFilter;	  /*  */
 		/*  Set swizzle.    */
 		Swizzle Swizzler;		 /*  */
 		Swizzle Swizzleg;		 /*  */

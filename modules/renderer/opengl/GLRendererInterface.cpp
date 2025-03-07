@@ -345,106 +345,99 @@ bool GLRendererInterface::isStateEnabled(GLRendererInterface::State state) {
 static void default_callback_debug_gl(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length,
 									  const GLchar *message, GLvoid *userParam) {
 
-	const char *sourceString;
-	const char *typeString;
-	const char *severityString;
+	const char *_source;
+	const char *_type;
+	const char *_severity;
 
 	switch (source) {
-	case GL_DEBUG_CATEGORY_API_ERROR_AMD:
-	case GL_DEBUG_SOURCE_API: {
-		sourceString = "API";
+	case GL_DEBUG_SOURCE_API:
+		_source = "API";
+		break;
+
+	case GL_DEBUG_SOURCE_WINDOW_SYSTEM:
+		_source = "WINDOW SYSTEM";
+		break;
+
+	case GL_DEBUG_SOURCE_SHADER_COMPILER:
+		_source = "SHADER COMPILER";
+		break;
+
+	case GL_DEBUG_SOURCE_THIRD_PARTY:
+		_source = "THIRD PARTY";
+		break;
+
+	case GL_DEBUG_SOURCE_APPLICATION:
+		_source = "APPLICATION";
+		return;
+
+	case GL_DEBUG_SOURCE_OTHER:
+		_source = "UNKNOWN";
+		break;
+
+	default:
+		_source = "UNKNOWN";
 		break;
 	}
-	case GL_DEBUG_CATEGORY_APPLICATION_AMD:
-	case GL_DEBUG_SOURCE_APPLICATION: {
-		sourceString = "Application";
-		break;
-	}
-	case GL_DEBUG_CATEGORY_WINDOW_SYSTEM_AMD:
-	case GL_DEBUG_SOURCE_WINDOW_SYSTEM: {
-		sourceString = "Window System";
-		break;
-	}
-	case GL_DEBUG_CATEGORY_SHADER_COMPILER_AMD:
-	case GL_DEBUG_SOURCE_SHADER_COMPILER: {
-		sourceString = "Shader Compiler";
-		break;
-	}
-	case GL_DEBUG_SOURCE_THIRD_PARTY: {
-		sourceString = "Third Party";
-		break;
-	}
-	case GL_DEBUG_CATEGORY_OTHER_AMD:
-	case GL_DEBUG_SOURCE_OTHER: {
-		sourceString = "Other";
-		break;
-	}
-	default: {
-		sourceString = "Unknown";
-		break;
-	}
-	} /**/
-	// Log::
-	printf("%s", sourceString);
 
 	switch (type) {
-	case GL_DEBUG_TYPE_ERROR: {
-		typeString = "Error";
+	case GL_DEBUG_TYPE_ERROR:
+		_type = "ERROR";
+		break;
+
+	case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
+		_type = "DEPRECATED BEHAVIOR";
+		break;
+
+	case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
+		_type = "UDEFINED BEHAVIOR";
+		break;
+
+	case GL_DEBUG_TYPE_PORTABILITY:
+		_type = "PORTABILITY";
+		break;
+
+	case GL_DEBUG_TYPE_PERFORMANCE:
+		_type = "PERFORMANCE";
+		break;
+
+	case GL_DEBUG_TYPE_OTHER:
+		_type = "OTHER";
+		break;
+
+	case GL_DEBUG_TYPE_MARKER:
+		_type = "MARKER";
+		break;
+
+	default:
+		_type = "UNKNOWN";
 		break;
 	}
-	case GL_DEBUG_CATEGORY_DEPRECATION_AMD:
-	case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR: {
-		typeString = "Deprecated Behavior";
-		break;
-	}
-	case GL_DEBUG_CATEGORY_UNDEFINED_BEHAVIOR_AMD:
-	case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR: {
-		typeString = "Undefined Behavior";
-		break;
-	}
-	case GL_DEBUG_TYPE_PORTABILITY_ARB: {
-		typeString = "Portability";
-		break;
-	}
-	case GL_DEBUG_CATEGORY_PERFORMANCE_AMD:
-	case GL_DEBUG_TYPE_PERFORMANCE: {
-		typeString = "Performance";
-		break;
-	}
-	case GL_DEBUG_CATEGORY_OTHER_AMD:
-	case GL_DEBUG_TYPE_OTHER: {
-		typeString = "Other";
-		break;
-	}
-	default: {
-		typeString = "Unknown";
-		break;
-	}
-	} /**/
-	printf("%s", typeString);
 
 	switch (severity) {
-	case GL_DEBUG_SEVERITY_HIGH: {
-		severityString = "High";
+	case GL_DEBUG_SEVERITY_HIGH:
+		_severity = "HIGH";
 		break;
-	}
-	case GL_DEBUG_SEVERITY_MEDIUM: {
-		severityString = "Medium";
-		break;
-	}
-	case GL_DEBUG_SEVERITY_LOW: {
-		severityString = "Low";
-		break;
-	}
-	default: {
-		severityString = "Unknown";
-		break;
-	}
-	} /**/
-	printf("%s", severityString);
 
-	printf("%s", message);
-	printf("\n");
+	case GL_DEBUG_SEVERITY_MEDIUM:
+		_severity = "MEDIUM";
+		break;
+
+	case GL_DEBUG_SEVERITY_LOW:
+		_severity = "LOW";
+		break;
+
+	case GL_DEBUG_SEVERITY_NOTIFICATION:
+		_severity = "NOTIFICATION";
+		break;
+
+	default:
+		_severity = "UNKNOWN";
+		break;
+	}
+
+	if (std::string(_severity) != "NOTIFICATION") {
+		printf("OpenGL error [%d]: %s of %s severity, raised from %s: %s\n", id, _type, _severity, _source, message);
+	}
 }
 
 void GLRendererInterface::setDebug(bool enable) {
