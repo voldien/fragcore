@@ -9,9 +9,9 @@ long LZ4IO::read(long int nbytes, void *pbuffer) {
 
 	uint8_t buffer[4096];
 
-	size_t len = FileIO::read(nbytes, pbuffer);
+	const size_t len = FileIO::read(nbytes, pbuffer);
 
-	size_t uncompressed_len = this->compressor.inflate(pbuffer, len, buffer, sizeof(buffer));
+	const size_t uncompressed_len = this->compressor.inflate(pbuffer, len, buffer, sizeof(buffer));
 	return len;
 }
 

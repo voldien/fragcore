@@ -5,7 +5,7 @@
 
 using namespace fragcore;
 
-static const char *get_flow_control_symbol(SerialIO::FlowControl flowControl) {
+static const char *get_flow_control_symbol(const SerialIO::FlowControl flowControl) {
 	switch (flowControl) {
 	case SerialIO::FlowControl::FlowControlNone:
 		return "None";
@@ -20,7 +20,7 @@ static const char *get_flow_control_symbol(SerialIO::FlowControl flowControl) {
 	}
 }
 
-static const char *get_parity_symbol(SerialIO::Parity parity) {
+static const char *get_parity_symbol(const SerialIO::Parity parity) {
 	switch (parity) {
 	case SerialIO::Parity::ParityNone:
 		return "None";
@@ -37,7 +37,7 @@ static const char *get_parity_symbol(SerialIO::Parity parity) {
 	}
 }
 
-static const char *get_xonxoff_symbol(SerialIO::XonXoff XonXoff) {
+static const char *get_xonxoff_symbol(const SerialIO::XonXoff XonXoff) {
 	switch (XonXoff) {
 	case SerialIO::XonXoff::XonXoffDisable:
 		return "Disable";
@@ -80,14 +80,14 @@ bool SerialIO::eof() const { return false; }
 long int SerialIO::length() { return 0; }
 void SerialIO::seek([[maybe_unused]] long int nbytes, [[maybe_unused]] const Seek seek) {}
 unsigned long SerialIO::getPos() { return 0; }
-bool SerialIO::isWriteable() const { return mode & IO::WRITE; }
-bool SerialIO::isReadable() const { return mode & IO::READ; }
+bool SerialIO::isWriteable() const { return this->mode & IO::WRITE; }
+bool SerialIO::isReadable() const { return this->mode & IO::READ; }
 bool SerialIO::flush() {
 	struct sp_port *serialPort = static_cast<struct sp_port *>(this->port);
 	return sp_flush(serialPort, SP_BUF_BOTH) == SP_OK;
 }
 
-void SerialIO::setBaudRate(unsigned int baudRate) {
+void SerialIO::setBaudRate(const int baudRate) {
 	struct sp_port *serialPort = static_cast<struct sp_port *>(this->port);
 
 	sp_return res = sp_get_config(serialPort, this->config);
@@ -122,7 +122,7 @@ SerialIO::BaudRate SerialIO::getBaudRate() const {
 	return static_cast<SerialIO::BaudRate>(baudRate);
 }
 
-void SerialIO::setStopBits(StopBits stopBits) {
+void SerialIO::setStopBits(const StopBits stopBits) {
 	struct sp_port *serialPort = static_cast<struct sp_port *>(this->port);
 
 	sp_return res = sp_get_config(serialPort, this->config);
@@ -157,7 +157,7 @@ SerialIO::StopBits SerialIO::getStopBits() const {
 	return static_cast<SerialIO::StopBits>(stopBit);
 }
 
-void SerialIO::setFlowControl(FlowControl flowControl) {
+void SerialIO::setFlowControl(const FlowControl flowControl) {
 	struct sp_port *serialPort = static_cast<struct sp_port *>(this->port);
 
 	/*	Convert SerialIO enum to SP enum.	*/
@@ -204,7 +204,7 @@ SerialIO::FlowControl SerialIO::getFlowControl() const {
 	throw NotImplementedException();
 }
 
-void SerialIO::setParity(Parity parity) {
+void SerialIO::setParity(const Parity parity) {
 	struct sp_port *serialPort = static_cast<struct sp_port *>(this->port);
 
 	enum sp_parity sp_parity = SP_PARITY_NONE;
@@ -260,7 +260,7 @@ SerialIO::Parity SerialIO::getParity() const {
 	return static_cast<SerialIO::Parity>(parity);
 }
 
-void SerialIO::setXonXoff(XonXoff XonXoff) {
+void SerialIO::setXonXoff(const XonXoff XonXoff) {
 	struct sp_port *serialPort = static_cast<struct sp_port *>(this->port);
 
 	enum sp_xonxoff sp_xonoxoff;
@@ -314,7 +314,7 @@ SerialIO::XonXoff SerialIO::getXonXoff() {
 	return static_cast<SerialIO::XonXoff>(xonxoff);
 }
 
-void SerialIO::setPayloadBits(unsigned int nrBits) {
+void SerialIO::setPayloadBits(const unsigned int nrBits) {
 	struct sp_port *serialPort = static_cast<struct sp_port *>(this->port);
 
 	sp_return res = sp_get_config(serialPort, this->config);
@@ -363,7 +363,6 @@ SerialIO::SerialIO(const std::string &path, IOMode mode) : port(nullptr) {
 		serial_mode = SP_MODE_READ_WRITE;
 		break;
 	default:
-		assert(0);
 		throw InvalidArgumentException("Invalid IO Mode: {} - {}", path, (int)mode);
 	}
 
@@ -413,6 +412,7 @@ SerialIO ::~SerialIO() {
 	try {
 		this->close();
 	} catch (const std::exception &ex) {
+		/*	*/
 	}
 
 	sp_free_config(this->config);

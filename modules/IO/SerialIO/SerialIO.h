@@ -64,7 +64,7 @@ namespace fragcore {
 		 * @brief
 		 *
 		 */
-		enum class FlowControl {
+		enum class FlowControl : unsigned int {
 			FlowControlNone = 0,
 			FlowControlXonXoff = 1,
 			FlowControlRtsCts = 2,
@@ -75,26 +75,27 @@ namespace fragcore {
 		 * @brief
 		 *
 		 */
-		enum class Parity { ParityNone, ParityOdd, ParityEven, ParityMark, ParitySpace };
+		enum class Parity : unsigned int { ParityNone, ParityOdd, ParityEven, ParityMark, ParitySpace };
 
 		/**
 		 * @brief
 		 *
 		 */
-		enum class StopBits { ONEBIT = 1, TWOBIT = 2 };
+		enum class StopBits : unsigned int { ONEBIT = 1, TWOBIT = 2 };
 
 		/**
 		 * @brief
 		 *
 		 */
-		enum class XonXoff {
+		enum class XonXoff : unsigned int {
 			XonXoffDisable,
 			XonXoffIn,
 			XonXoffOut,
 			XonXoffInOut,
 		};
 
-		enum class BaudRate {
+		/*	Common Baud Rates.	*/
+		enum class BaudRate : int {
 			BAUDRATE_110 = 110,
 			BAUDRATE_300 = 300,
 			BAUDRATE_600 = 600,
@@ -110,19 +111,19 @@ namespace fragcore {
 		};
 
 	  public:
-		void setBaudRate(unsigned int baudRate);
+		void setBaudRate(const int baudRate);
 		BaudRate getBaudRate() const;
 
-		void setStopBits(StopBits stopBits);
+		void setStopBits(const StopBits stopBits);
 		StopBits getStopBits() const;
 
-		void setFlowControl(FlowControl flowControl);
+		void setFlowControl(const FlowControl flowControl);
 		FlowControl getFlowControl() const;
 
-		void setParity(Parity parity);
+		void setParity(const Parity parity);
 		Parity getParity() const;
 
-		void setXonXoff(XonXoff XonXoff);
+		void setXonXoff(const XonXoff XonXoff);
 		XonXoff getXonXoff();
 
 		/**
@@ -130,7 +131,7 @@ namespace fragcore {
 		 *
 		 * @param nrBits
 		 */
-		void setPayloadBits(unsigned int nrBits);
+		void setPayloadBits(const unsigned int nrBits);
 
 		/**
 		 * @brief Get the number of bits for each payload.
