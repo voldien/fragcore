@@ -23,7 +23,8 @@ namespace fragcore {
 
 	class FVDECLSPEC ImageUtil {
 	  public:
-		static Image convert2NormalMap(const Image &image);
+		static Image convert2NormalMap(const Image &image, const float strength = 2.0f);
+		static Image convert2GrayScale(const Image &image);
 	};
 
 } // namespace fragcore

@@ -105,7 +105,7 @@ Color Image::getColor(unsigned int x_offset, unsigned int y_offset, unsigned int
 
 void Image::setColor(unsigned int x_offset, unsigned int y_offset, unsigned int z_offset, const Color &color) {
 
-	const size_t pixel_index = getPixelMemoryOffset(x_offset, y_offset, z_offset);
+	const size_t pixel_index = this->getPixelMemoryOffset(x_offset, y_offset, z_offset);
 
 	switch (this->getFormat()) {
 	case ImageFormat::Alpha8:
@@ -225,10 +225,9 @@ unsigned int Image::getFormatPixelBitSize(const ImageFormat format) {
 
 size_t Image::getTextureByteSize(const unsigned int width, const unsigned int height, const unsigned int depth,
 								 const ImageFormat format) {
+	const size_t imageRes = static_cast<size_t>(width) * static_cast<size_t>(height) * static_cast<size_t>(depth);
 
-	size_t imageRes = static_cast<size_t>(width) * static_cast<size_t>(height) * static_cast<size_t>(depth);
+	const size_t imageInBytes = std::ceil((imageRes * Image::getFormatPixelBitSize(format)) / 8.0f);
 
-	imageRes = (imageRes * Image::getFormatPixelBitSize(format)) / 8;
-
-	return imageRes;
+	return imageInBytes;
 }

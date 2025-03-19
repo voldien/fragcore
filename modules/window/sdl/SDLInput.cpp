@@ -1,4 +1,5 @@
 #include "SDLInput.h"
+#include <SDL2/SDL_hints.h>
 #include <SDL2/SDL_keyboard.h>
 #include <SDL2/SDL_mouse.h>
 #include <cstdint>
@@ -65,4 +66,8 @@ bool SDLInput::getMouseDown(const MouseButton button) noexcept { return this->mo
 
 bool SDLInput::getMouseReleased(const MouseButton button) noexcept {
 	return this->mouseReleased[static_cast<size_t>(button)];
+}
+
+void SDLInput::setMouseWrapAround(bool status) {
+	SDL_bool confirmation = SDL_SetHint(SDL_HINT_MOUSE_RELATIVE_WARP_MOTION, status ? "1" : "0");
 }

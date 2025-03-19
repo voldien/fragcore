@@ -45,6 +45,8 @@ namespace fragcore {
 		bool getMouseDown(const MouseButton button) noexcept override;
 		bool getMouseReleased(const MouseButton button) noexcept override;
 
+		void setMouseWrapAround(bool status);
+
 	  private:
 		std::bitset<3> mousePressed = {0};
 		std::bitset<3> mouseDown = {0};

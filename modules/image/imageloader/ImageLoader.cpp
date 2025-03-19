@@ -55,6 +55,15 @@ Image ImageLoader::loadImage(Ref<IO> &io_in, const FileFormat fileformat) {
 	FREE_IMAGE_TYPE imageType = FreeImage_GetImageType(firsbitmap);
 	FREE_IMAGE_COLOR_TYPE colortype = FreeImage_GetColorType(firsbitmap);
 
+	/*	*///TODO: fix, 
+	if (colortype == FIC_PALETTE || colortype == FIC_MINISWHITE || colortype == FIC_MINISBLACK) {
+		FIBITMAP *oldImage = firsbitmap;
+		firsbitmap = FreeImage_ConvertToGreyscale(firsbitmap);
+		imageType = FreeImage_GetImageType(firsbitmap);
+		colortype = FreeImage_GetColorType(firsbitmap);
+		FreeImage_Unload(oldImage);
+	}
+
 	/*	Get attributes from the image.	*/
 	pixelData = FreeImage_GetBits(firsbitmap);
 
@@ -77,7 +86,11 @@ Image ImageLoader::loadImage(Ref<IO> &io_in, const FileFormat fileformat) {
 	case FIC_RGB:
 		switch (imageType) {
 		case FREE_IMAGE_TYPE::FIT_BITMAP:
-			imageFormat = ImageFormat::BGR24;
+			if (bitsPerPixel == 8) {
+				imageFormat = ImageFormat::Alpha8;
+			} else {
+				imageFormat = ImageFormat::BGR24;
+			}
 			break;
 		case FREE_IMAGE_TYPE::FIT_RGB16:
 			imageFormat = ImageFormat::RGB24;
@@ -213,8 +226,7 @@ void ImageLoader::saveImage(Ref<IO> &io_in, const Image &Image, const FileFormat
 		if (finalImage == nullptr) {
 			throw RuntimeException("Failed convert image: {}", filepath);
 		}
-	}else{
-		
+	} else {
 	}
 
 	/*  Save to file.   */

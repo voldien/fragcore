@@ -114,6 +114,9 @@ SET(FRAG_CORE_INCLUDE_SUB_DIR
 ADD_LIBRARY(fragcore ${SOURCE_FILES} ${HEADER_FILES}
  							${OPEN_SIMPLEX_NOISE_SOURCE} ${PCG_C_BASIC_SOURCE}
 							${MISC_SOURCE})
+TARGET_COMPILE_FEATURES(fragcore PUBLIC cxx_constexpr cxx_alias_templates cxx_raw_string_literals
+cxx_variadic_templates cxx_uniform_initialization cxx_right_angle_brackets cxx_nullptr
+cxx_generic_lambdas cxx_override cxx_noexcept cxx_aggregate_default_initializers)
 ADD_DEPENDENCIES(fragcore taskSch infoware cxxexcept )
 
 #
@@ -138,6 +141,13 @@ TARGET_INCLUDE_DIRECTORIES(fragcore PRIVATE ${ZIP_INCLUDE_DIRS}
 											$<BUILD_INTERFACE:${FRAG_CORE_INCLUDE}>
 											$<INSTALL_INTERFACE:${FRAG_CORE_INCLUDE}>
 )
+
+#
+IF(OpenMP_FOUND AND OpenMP_CXX_FOUND AND BUILD_WITH_OPENMP)
+	TARGET_LINK_LIBRARIES(fragcore PRIVATE m pthread PUBLIC OpenMP::OpenMP_CXX)
+	TARGET_COMPILE_OPTIONS(fragcore PUBLIC ${OpenMP_CXX_FLAGS})
+ENDIF()
+
 
 # Enable FPIC if shared library.
 IF (BUILD_SHARED_LIBS AND CMAKE_SIZEOF_VOID_P EQUAL 8)
