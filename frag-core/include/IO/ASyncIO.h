@@ -6,20 +6,20 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
 #ifndef _FRAGCORE_ASYNC_H_
 #define _FRAGCORE_ASYNC_H_ 1
-#include "../Core/Ref.h"
 #include "../TaskScheduler/IScheduler.h"
 #include "../Threading/ISemaphore.h"
+#include "FragDef.h"
 #include "IO.h"
 #include <map>
 
@@ -29,7 +29,7 @@
  */
 namespace fragcore {
 
-	using ASyncHandle = long;										   /*  */
+	using ASyncHandle = long;								/*  */
 	using AsyncComplete = void (*)(ASyncIO *, ASyncHandle); /*  */
 
 	/**
@@ -42,7 +42,7 @@ namespace fragcore {
 	class FVDECLSPEC ASyncIO : public SmartReference {
 	  public:
 		ASyncIO(const Ref<IScheduler> &scheduler);
-		ASyncIO(ASyncIO &&other); // Move semantics
+		ASyncIO(ASyncIO &&other);
 		~ASyncIO() override;
 
 		/**

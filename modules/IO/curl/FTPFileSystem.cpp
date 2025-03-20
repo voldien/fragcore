@@ -54,7 +54,7 @@ void FTPFileSystem::createFile(const char *path) { throw NotImplementedException
 
 void FTPFileSystem::createDirectory(const char *path) { throw NotImplementedException(); }
 
-bool FTPFileSystem::isASyncSupported() const { return *this->getScheduler() != nullptr; }
+bool FTPFileSystem::isASyncSupported() const { return this->getScheduler() != nullptr; }
 
 bool FTPFileSystem::isDirectory(const char *path) const { throw NotImplementedException(); }
 bool FTPFileSystem::isFile(const char *path) const { throw NotImplementedException(); }

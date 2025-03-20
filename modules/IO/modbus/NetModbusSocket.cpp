@@ -200,7 +200,7 @@ Ref<NetSocket> ModbusNetSocket::accept(INetAddress &r_ip) {
 		throw RuntimeException(" Failed to Accept modbus {}", modbus_strerror(errno));
 	}
 
-	ModbusNetSocket *_newsocket = new ModbusNetSocket(accept_socket);
+	Ref<ModbusNetSocket> _newsocket = Ref<ModbusNetSocket>(new ModbusNetSocket(accept_socket));
 	/*	*/
 	return {_newsocket};
 }
@@ -208,9 +208,13 @@ Ref<NetSocket> ModbusNetSocket::accept(INetAddress &r_ip) {
 ModbusNetSocket::NetStatus ModbusNetSocket::accept(NetSocket &socket) { return TCPNetSocket::accept(socket); }
 int ModbusNetSocket::read() { return 0; }
 int ModbusNetSocket::write() { return 0; }
-bool ModbusNetSocket::isBlocking() { /*	*/ return TCPNetSocket::isBlocking(); }
+bool ModbusNetSocket::isBlocking() { /*	*/
+	return TCPNetSocket::isBlocking();
+}
 
-void ModbusNetSocket::setBlocking(bool blocking) { /*	*/ TCPNetSocket::setBlocking(blocking); }
+void ModbusNetSocket::setBlocking(bool blocking) { /*	*/
+	TCPNetSocket::setBlocking(blocking);
+}
 
 void ModbusNetSocket::setTimeout(long int microsec) {
 

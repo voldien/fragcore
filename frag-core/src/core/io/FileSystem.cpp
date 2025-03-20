@@ -135,7 +135,7 @@ void FileSystem::createDirectory(const char *path) {
 #endif
 }
 
-bool FileSystem::isASyncSupported() const { return *this->getScheduler() != nullptr; }
+bool FileSystem::isASyncSupported() const { return this->getScheduler() != nullptr; }
 
 bool FileSystem::isDirectory(const char *path) const {
 #if __cplusplus >= 201703L

@@ -79,7 +79,7 @@ IO *ZipFileSystem::openFile(unsigned int index) {
 	return new ZipFileIO(zfile, index, Ref<ZipFileSystem>(this));
 }
 
-bool ZipFileSystem::isASyncSupported() const { return *this->getScheduler() != nullptr; }
+bool ZipFileSystem::isASyncSupported() const { return this->getScheduler() != nullptr; }
 
 bool ZipFileSystem::isDirectory([[maybe_unused]] const char *path) const { return false; }
 bool ZipFileSystem::isFile([[maybe_unused]] const char *path) const { return false; }

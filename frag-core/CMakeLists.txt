@@ -120,7 +120,7 @@ cxx_generic_lambdas cxx_override cxx_noexcept cxx_aggregate_default_initializers
 ADD_DEPENDENCIES(fragcore taskSch infoware cxxexcept )
 
 #
-TARGET_COMPILE_DEFINITIONS(fragcore PRIVATE FRAG_CORE_INTERNAL_IMP=1)
+TARGET_COMPILE_DEFINITIONS(fragcore PRIVATE FRAG_CORE_INTERNAL_IMP=1 PUBLIC FV_USE_SHARED_POINTER=1)
 
 IF(EIGEN3_FOUND)
 	TARGET_COMPILE_DEFINITIONS(fragcore PUBLIC FRAGCORE_USE_EIGEN=1)

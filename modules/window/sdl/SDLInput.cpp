@@ -69,5 +69,7 @@ bool SDLInput::getMouseReleased(const MouseButton button) noexcept {
 }
 
 void SDLInput::setMouseWrapAround(bool status) {
+#ifdef SDL_HINT_MOUSE_RELATIVE_WARP_MOTION
 	SDL_bool confirmation = SDL_SetHint(SDL_HINT_MOUSE_RELATIVE_WARP_MOTION, status ? "1" : "0");
+#endif
 }

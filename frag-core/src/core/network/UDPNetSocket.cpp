@@ -166,7 +166,7 @@ Ref<NetSocket> UDPNetSocket::accept(INetAddress &r_ip) {
 		throw SystemException(errno, std::system_category(), "Failed to accept TCP connection");
 	}
 
-	UDPNetSocket *_newsocket = new UDPNetSocket(aaccept_socket);
+	Ref<UDPNetSocket> _newsocket = Ref<UDPNetSocket>(new UDPNetSocket(aaccept_socket));
 	return {_newsocket};
 }
 UDPNetSocket::NetStatus UDPNetSocket::accept(NetSocket &socket) { return UDPNetSocket::NetStatus::Status_Disconnected; }

@@ -196,8 +196,8 @@ void ASyncIO::asyncClose(ASyncHandle handle) {
 
 void ASyncIO::async_open(Task *task) {
 
-	//ASyncHandle handle = (ASyncHandle)task->userData;
-	//AsyncObject *ao = static_cast<AsyncObject *>(task->userData);
+	// ASyncHandle handle = (ASyncHandle)task->userData;
+	// AsyncObject *ao = static_cast<AsyncObject *>(task->userData);
 
 	// const char *path = (const char *)ao->begin;
 	// ASync *async = (ASync *) package->puser;
@@ -347,10 +347,6 @@ ASyncIO::ASyncIO(const Ref<IScheduler> &scheduler) {
 ASyncIO::ASyncIO(ASyncIO &&other) : uidGenerator(other.uidGenerator) {
 	// Move over the things!
 	this->scheduler = std::exchange(other.scheduler, nullptr);
-	
 }
 
-ASyncIO::ASyncIO(const ASyncIO &other) : uidGenerator(other.uidGenerator), scheduler(other.scheduler) {
-	
-	
-}
+ASyncIO::ASyncIO(const ASyncIO &other) : uidGenerator(other.uidGenerator), scheduler(other.scheduler) {}

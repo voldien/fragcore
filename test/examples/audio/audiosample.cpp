@@ -57,7 +57,7 @@ class AudioPlaybackExample {
 		printf("Created the audio clip.\n");
 
 		/*	*/
-		audioSource->setClip(*clip);
+		audioSource->setClip(clip.get());
 		printf("Playing the sound.\n");
 		audioSource->play();
 
@@ -70,7 +70,6 @@ class AudioPlaybackExample {
 		}
 
 		sleep(10);
-		delete *iaudio;
 	}
 	~AudioPlaybackExample() {}
 };

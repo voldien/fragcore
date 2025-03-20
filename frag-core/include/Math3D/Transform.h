@@ -92,13 +92,11 @@ namespace fragcore {
 			return this->getRotation() * quat;
 		}
 
-	  protected:
-	  
 	  private:				   /*	Attributes.	*/
 		Vector3 position;	   /*	Position in world space.	*/
 		Quaternion quaternion; /*	Rotation in world space.	*/
 		Vector3 scale;		   /*	Scale.	*/
-		Matrix3x3 basis;
+		Matrix3x3 basis;	   /*	*/
 	};
 
 } // namespace fragcore

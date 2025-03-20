@@ -11,29 +11,17 @@ TEST(Ref, Added_First_Object_Increment2_1) {
 
 TEST(Ref, _On_No_Reference) {
 	Ref<SmartReference> ref = Ref<SmartReference>(new SmartReference());
-	ref->increment();
-	ref->deincreemnt();
-	ASSERT_NO_THROW(ref->deincreemnt());
+	ASSERT_EQ(ref, nullptr);
+	ref = nullptr;
+	ASSERT_EQ(ref, nullptr);
 }
 
 TEST(Ref, Ref_Operator_Pointer) {
 	SmartReference *obj = new SmartReference();
 	Ref<SmartReference> ref = Ref<SmartReference>(obj);
-	ASSERT_EQ(ref.ptr(), obj);
+	ASSERT_EQ(ref.get(), obj);
 }
 
-TEST(Ref, Ref_OnAllReferenceRemoved_ReleaseResources_No_Throw) {}
-
-TEST(Ref, RefCounter) {
-
-	//	Ref<Object> ref;
-
-	/*  */
-	//	ASSERT_EQ(ref.ptr(), NULL);
-	//	ASSERT_EQ(ref.operator->(), NULL);
-	//	Shader* = new Object();
-	//	Ref<Object> ref(obj);
-
-	//	ASSERT_EQ(ref.ptr(), obj);
-	//	ASSERT_EQ(ref->)
+TEST(Ref, Ref_OnAllReferenceRemoved_ReleaseResources_No_Throw) {
+	Ref<SmartReference> ref = Ref<SmartReference>(new SmartReference());
 }

@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _FRAGCORE_REF_H_
+#if !defined(_FRAGCORE_REF_H_) && !defined(FV_USE_SHARED_POINTER)
 #define _FRAGCORE_REF_H_ 1
 #include <cassert>
 #include <utility>
@@ -60,8 +60,6 @@ namespace fragcore {
 		Ref() : reference(nullptr) {}
 
 		Ref(T *p_reference) : reference(nullptr) {
-
-			
 			if (p_reference) {
 				this->ref_pointer(p_reference);
 			}
@@ -86,6 +84,7 @@ namespace fragcore {
 		}
 
 		Ref &operator=(const Ref &other) {
+			/*	*/
 			if (other.reference) {
 				this->ref_pointer(other.reference);
 			}
@@ -120,4 +119,6 @@ namespace fragcore {
 		}
 	};
 } // namespace fragcore
+#else
+#include "../FragDef.h"
 #endif

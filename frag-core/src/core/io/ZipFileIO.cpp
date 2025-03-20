@@ -33,7 +33,7 @@ void ZipFileIO::close() {
 
 	if (this->zipfile->deincreemnt()) {
 		this->zipfile->release();
-		delete this->zipfile.ptr();
+		//delete this->zipfile.ptr();
 	}
 }
 

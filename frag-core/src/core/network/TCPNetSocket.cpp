@@ -194,7 +194,9 @@ int TCPNetSocket::connect(const INetAddress &p_addr) {
 	return 0;
 }
 
-int TCPNetSocket::poll(int p_type, int timeout) const { /*	select or poll.	*/ return 0; }
+int TCPNetSocket::poll(int p_type, int timeout) const { /*	select or poll.	*/
+	return 0;
+}
 
 int TCPNetSocket::recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddress &r_ip, bool p_peek) {
 	int flag = 0;
@@ -282,7 +284,7 @@ Ref<NetSocket> TCPNetSocket::accept(INetAddress &r_ip) {
 		*ipAddress = IPAddress(&address->sin_addr, IPAddress::IPAddressType::IPAddress_Type_IPV4);
 	}
 
-	TCPNetSocket *_newsocket = new TCPNetSocket(aaccept_socket);
+	Ref<TCPNetSocket> _newsocket = Ref<TCPNetSocket>(new TCPNetSocket(aaccept_socket));
 	return {_newsocket};
 }
 

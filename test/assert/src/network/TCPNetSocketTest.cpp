@@ -77,7 +77,7 @@ TEST_F(TCPSocketNetworkTest, CreateLocal_Bind_And_Connect_No_Throw_Exception) {
 TEST_F(TCPSocketServerClientTest, Bind_IO_To_NetSocket_No_Throw_Exception) {
 
 	/*	*/
-	Ref<NetSocket> netSocket = Ref<NetSocket>(this->tcpNetServerSocket);
+	//Ref<NetSocket> netSocket = Ref<NetSocket>(this->tcpNetServerSocket);
 
 	//	ASSERT_NO_THROW(SocketIO io(netSocket));
 }
