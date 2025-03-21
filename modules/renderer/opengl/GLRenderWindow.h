@@ -31,7 +31,7 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC GLRenderWindow : public RendererWindow {
 	  public:
-		GLRenderWindow(Ref<GLRendererInterface> &renderer);
+		GLRenderWindow(const Ref<GLRendererInterface> &renderer);
 		~GLRenderWindow() override;
 
 		void swapBuffer() override;

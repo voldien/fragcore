@@ -6,12 +6,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
@@ -19,7 +19,6 @@
 #define _FRAGCORE_SMART_REFERENCE_H_ 1
 #include "../FragDef.h"
 #include "AtomicRefCount.h"
-#include "NoCopyable.h"
 #include "Object.h"
 
 namespace fragcore {
@@ -29,7 +28,7 @@ namespace fragcore {
 	 *	to the block of data still exists.
 	 *
 	 */
-	class FVDECLSPEC SmartReference : public Object, public NoCopyable {
+	class FVDECLSPEC SmartReference : public Object {
 	  public:
 		~SmartReference() override = default;
 

@@ -29,7 +29,7 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC SDLInput : public Input {
 	  public:
-		SDLInput() = default;
+		SDLInput();
 
 		void update() noexcept override;
 
@@ -52,6 +52,7 @@ namespace fragcore {
 		std::bitset<3> mouseDown = {0};
 		std::bitset<3> mouseReleased = {0};
 		int x{}, y{};
+		std::vector<bool> keyStates;
 	};
 } // namespace fragcore
 

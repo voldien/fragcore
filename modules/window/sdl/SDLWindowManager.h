@@ -18,6 +18,7 @@
 #ifndef _FRAGCORE_SDL2_WINDOW_MANAGER_H_
 #define _FRAGCORE_SDL2_WINDOW_MANAGER_H_ 1
 #include "../WindowManager.h"
+#include "SDLDisplay.h"
 
 namespace fragcore {
 
@@ -35,6 +36,9 @@ namespace fragcore {
 
 		SDLWindowManager();
 		~SDLWindowManager() override;
+
+	  private:
+		std::vector<SDLDisplay> displays;
 	};
 } // namespace fragcore
 

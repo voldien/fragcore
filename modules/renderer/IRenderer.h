@@ -17,14 +17,9 @@
  */
 #ifndef _FRAGCORE_IRENDERER_H_
 #define _FRAGCORE_IRENDERER_H_ 1
-#include "Buffer.h"
-#include "FrameBuffer.h"
 #include "ICompute.h"
-#include "Query.h"
 #include "RenderDesc.h"
 #include "RenderPrerequisites.h"
-#include "Shader.h"
-#include "Texture.h"
 #include <Core/IConfig.h>
 
 namespace fragcore {
@@ -66,7 +61,7 @@ namespace fragcore {
 		IRenderer() = default;
 		IRenderer(const IRenderer &other) = delete;
 		IRenderer(IRenderer &&other) = delete;
-		~IRenderer() override = default;
+		 ~IRenderer() override = default;
 
 		/**
 		 *

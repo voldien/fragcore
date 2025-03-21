@@ -9,7 +9,7 @@
 
 using namespace fragcore;
 
-GLRenderWindow::GLRenderWindow(Ref<GLRendererInterface> &renderer) : renderer(renderer) {
+GLRenderWindow::GLRenderWindow(const Ref<GLRendererInterface> &renderer) : renderer(renderer) {
 
 	SDL_WindowFlags window_flags =
 		(SDL_WindowFlags)(SDL_WINDOW_HIDDEN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_OPENGL);

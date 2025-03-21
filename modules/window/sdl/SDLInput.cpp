@@ -6,32 +6,45 @@
 
 using namespace fragcore;
 
+SDLInput::SDLInput() { /*	*/
+
+	int numKeys;
+	const Uint8 *state = SDL_GetKeyboardState(&numKeys);
+
+	keyStates.resize(numKeys * 2);
+}
+
 void SDLInput::update() noexcept {
+	/*	Extract mouse position.	*/
 	const uint32_t mask = SDL_GetMouseState(&this->x, &this->y);
 
-	this->mouseDown.set(static_cast<size_t>(MouseButton::LEFT_BUTTON),
-						(SDL_BUTTON_LMASK & mask) != 0 &&
-							!this->mousePressed[static_cast<size_t>(MouseButton::LEFT_BUTTON)]);
-	this->mouseDown.set(static_cast<size_t>(MouseButton::RIGHT_BUTTON),
-						(SDL_BUTTON_RMASK & mask) != 0 &&
-							!this->mousePressed[static_cast<size_t>(MouseButton::RIGHT_BUTTON)]);
-	this->mouseDown.set(static_cast<size_t>(MouseButton::MIDDLE_BUTTON),
-						(SDL_BUTTON_MMASK & mask) != 0 &&
-							!this->mousePressed[static_cast<size_t>(MouseButton::MIDDLE_BUTTON)]);
+	/*	Update mouse input state.	*/
+	{
+		this->mouseDown.set(static_cast<size_t>(MouseButton::LEFT_BUTTON),
+							(SDL_BUTTON_LMASK & mask) != 0 &&
+								!this->mousePressed[static_cast<size_t>(MouseButton::LEFT_BUTTON)]);
+		this->mouseDown.set(static_cast<size_t>(MouseButton::RIGHT_BUTTON),
+							(SDL_BUTTON_RMASK & mask) != 0 &&
+								!this->mousePressed[static_cast<size_t>(MouseButton::RIGHT_BUTTON)]);
+		this->mouseDown.set(static_cast<size_t>(MouseButton::MIDDLE_BUTTON),
+							(SDL_BUTTON_MMASK & mask) != 0 &&
+								!this->mousePressed[static_cast<size_t>(MouseButton::MIDDLE_BUTTON)]);
 
-	this->mouseReleased.set(static_cast<size_t>(MouseButton::LEFT_BUTTON),
-							(SDL_BUTTON_LMASK & mask) == 0 &&
-								this->mousePressed[static_cast<size_t>(MouseButton::LEFT_BUTTON)]);
-	this->mouseReleased.set(static_cast<size_t>(MouseButton::RIGHT_BUTTON),
-							(SDL_BUTTON_RMASK & mask) == 0 &&
-								this->mousePressed[static_cast<size_t>(MouseButton::RIGHT_BUTTON)]);
-	this->mouseReleased.set(static_cast<size_t>(MouseButton::MIDDLE_BUTTON),
-							(SDL_BUTTON_MMASK & mask) == 0 &&
-								this->mousePressed[static_cast<size_t>(MouseButton::MIDDLE_BUTTON)]);
+		this->mouseReleased.set(static_cast<size_t>(MouseButton::LEFT_BUTTON),
+								(SDL_BUTTON_LMASK & mask) == 0 &&
+									this->mousePressed[static_cast<size_t>(MouseButton::LEFT_BUTTON)]);
+		this->mouseReleased.set(static_cast<size_t>(MouseButton::RIGHT_BUTTON),
+								(SDL_BUTTON_RMASK & mask) == 0 &&
+									this->mousePressed[static_cast<size_t>(MouseButton::RIGHT_BUTTON)]);
+		this->mouseReleased.set(static_cast<size_t>(MouseButton::MIDDLE_BUTTON),
+								(SDL_BUTTON_MMASK & mask) == 0 &&
+									this->mousePressed[static_cast<size_t>(MouseButton::MIDDLE_BUTTON)]);
 
-	this->mousePressed.set(static_cast<size_t>(MouseButton::LEFT_BUTTON), (SDL_BUTTON_LMASK & mask) != 0);
-	this->mousePressed.set(static_cast<size_t>(MouseButton::RIGHT_BUTTON), (SDL_BUTTON_RMASK & mask) != 0);
-	this->mousePressed.set(static_cast<size_t>(MouseButton::MIDDLE_BUTTON), (SDL_BUTTON_MMASK & mask) != 0);
+		/*	*/
+		this->mousePressed.set(static_cast<size_t>(MouseButton::LEFT_BUTTON), (SDL_BUTTON_LMASK & mask) != 0);
+		this->mousePressed.set(static_cast<size_t>(MouseButton::RIGHT_BUTTON), (SDL_BUTTON_RMASK & mask) != 0);
+		this->mousePressed.set(static_cast<size_t>(MouseButton::MIDDLE_BUTTON), (SDL_BUTTON_MMASK & mask) != 0);
+	}
 }
 
 bool SDLInput::anyKey() noexcept { return false; }
@@ -41,11 +54,13 @@ bool SDLInput::getKey(const unsigned int key) {
 
 	return state[key];
 }
+
 bool SDLInput::getKeyPressed(const unsigned int key_down) {
 	const Uint8 *state = SDL_GetKeyboardState(nullptr);
 
 	return state[key_down];
 }
+
 bool SDLInput::getKeyReleased(const unsigned int key_released) {
 	const Uint8 *state = SDL_GetKeyboardState(nullptr);
 
@@ -62,6 +77,7 @@ Vector2 SDLInput::getMouseScroll() const noexcept { return {}; }
 bool SDLInput::getMousePressed(const MouseButton button) noexcept {
 	return this->mousePressed[static_cast<size_t>(button)];
 }
+
 bool SDLInput::getMouseDown(const MouseButton button) noexcept { return this->mouseDown[static_cast<size_t>(button)]; }
 
 bool SDLInput::getMouseReleased(const MouseButton button) noexcept {

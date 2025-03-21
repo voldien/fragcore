@@ -20,6 +20,8 @@
 #include "../Buffer.h"
 #include "../IRenderer.h"
 #include "../RenderDesc.h"
+#include "FrameBuffer.h"
+#include "Texture.h"
 #include <../RendererWindow.h>
 #include <GL/glew.h>
 
