@@ -22,7 +22,7 @@ void GLHelper::addMarkerLabel(unsigned int identifier, unsigned int object, cons
 	}
 }
 
-unsigned int GLHelper::getWrapMode(TextureWrappingMode mode) {
+unsigned int GLHelper::getWrapMode(const TextureWrappingMode mode) {
 	switch (mode) {
 	case TextureWrappingMode::Repeat:
 		return GL_REPEAT;
@@ -38,7 +38,7 @@ unsigned int GLHelper::getWrapMode(TextureWrappingMode mode) {
 	}
 }
 
-unsigned int GLHelper::getFilterMode(fragcore::FilterMode mode, fragcore::FilterMode mips) {
+unsigned int GLHelper::getFilterMode(const fragcore::FilterMode mode, const fragcore::FilterMode mips) {
 	if (mips == FilterMode::NoFilterMode) {
 		switch (mode) {
 		case FilterMode::Linear:
@@ -80,23 +80,23 @@ unsigned int GLHelper::getFilterMode(fragcore::FilterMode mode, fragcore::Filter
 	throw InvalidArgumentException("Invalid filter mode : {}", magic_enum::enum_name(mode));
 }
 
-unsigned int GLHelper::getCompareMode(SamplerDesc::CompareFunc mode) {
+unsigned int GLHelper::getCompareMode(const TextureCompareFunc mode) {
 	switch (mode) {
-	case SamplerDesc::CompareFunc::lessEqual:
+	case TextureCompareFunc::lessEqual:
 		return GL_LEQUAL;
-	case SamplerDesc::CompareFunc::greaterEqual:
+	case TextureCompareFunc::greaterEqual:
 		return GL_GEQUAL;
-	case SamplerDesc::CompareFunc::less:
+	case TextureCompareFunc::less:
 		return GL_LESS;
-	case SamplerDesc::CompareFunc::greater:
+	case TextureCompareFunc::greater:
 		return GL_GREATER;
-	case SamplerDesc::CompareFunc::equal:
+	case TextureCompareFunc::equal:
 		return GL_EQUAL;
-	case SamplerDesc::CompareFunc::notequal:
+	case TextureCompareFunc::notequal:
 		return GL_NOTEQUAL;
-	case SamplerDesc::CompareFunc::always:
+	case TextureCompareFunc::always:
 		return GL_ALWAYS;
-	case SamplerDesc::CompareFunc::never:
+	case TextureCompareFunc::never:
 		return GL_NEVER;
 	default:
 		throw InvalidArgumentException("Invalid address mode : {}", magic_enum::enum_name(mode));
@@ -245,7 +245,7 @@ unsigned int GLHelper::getGraphicFormat(const GraphicFormat graphicFormat) {
 	throw InvalidArgumentException("Invalid texture format : {}", magic_enum::enum_name(graphicFormat));
 }
 
-unsigned int GLHelper::getTextureFormat(ImageFormat textureFormat, unsigned int *pixelType) {
+unsigned int GLHelper::getTextureFormat(const ImageFormat textureFormat, unsigned int *pixelType) {
 	switch (textureFormat) {
 	case ImageFormat::Alpha8:
 		*pixelType = GL_UNSIGNED_BYTE;
@@ -308,62 +308,62 @@ unsigned int GLHelper::getTextureFormat(ImageFormat textureFormat, unsigned int 
 	throw InvalidArgumentException("Invalid texture format : {}", magic_enum::enum_name(textureFormat));
 }
 
-unsigned int GLHelper::getTextureFormat(TextureDesc::Format format) {
+unsigned int GLHelper::getTextureFormat(const TextureDesc::DataPixelFormat format) {
 	switch (format) {
-	case TextureDesc::Format::SingleColor:
+	case TextureDesc::DataPixelFormat::SingleColor:
 		return GL_RED;
-	case TextureDesc::Format::RGB:
+	case TextureDesc::DataPixelFormat::RGB:
 		return GL_RGB;
-	case TextureDesc::Format::RGBA:
+	case TextureDesc::DataPixelFormat::RGBA:
 		return GL_RGBA;
-	case TextureDesc::Format::BGR:
+	case TextureDesc::DataPixelFormat::BGR:
 		return GL_BGR;
-	case TextureDesc::Format::BGRA:
+	case TextureDesc::DataPixelFormat::BGRA:
 		return GL_BGRA;
-	case TextureDesc::Format::RG:
+	case TextureDesc::DataPixelFormat::RG:
 		return GL_RG;
 	default:
 		throw InvalidArgumentException("Invalid texture format : {}", magic_enum::enum_name(format));
 	}
 }
 
-unsigned int GLHelper::getInternalTextureFormat(TextureDesc::Format format, bool sRGB,
-												TextureDesc::Compression compression, TextureDesc::Type type) {
+unsigned int GLHelper::getInternalTextureFormat(TextureDesc::DataPixelFormat format, bool sRGB,
+												TextureDesc::Compression compression, TextureDesc::PixelDataType type) {
 
 	// No
 	if (!sRGB && compression == TextureDesc::Compression::NoCompression) {
 		switch (format) {
-		case TextureDesc::Format::RGB:
-			if (type == TextureDesc::Type::UnsignedByte) {
+		case TextureDesc::DataPixelFormat::RGB:
+			if (type == TextureDesc::PixelDataType::UnsignedByte) {
 				return GL_RGB8;
 			}
-			if (type == TextureDesc::Type::Float) {
+			if (type == TextureDesc::PixelDataType::Float) {
 				return GL_RGB32F;
 			}
 			break;
-		case TextureDesc::Format::RGBA:
-			if (type == TextureDesc::Type::UnsignedByte) {
+		case TextureDesc::DataPixelFormat::RGBA:
+			if (type == TextureDesc::PixelDataType::UnsignedByte) {
 				return GL_RGBA8;
 			}
-			if (type == TextureDesc::Type::Float) {
+			if (type == TextureDesc::PixelDataType::Float) {
 				return GL_RGBA32F;
 			}
 			break;
-		case TextureDesc::Format::BGR:
+		case TextureDesc::DataPixelFormat::BGR:
 			return GL_BGR;
-		case TextureDesc::Format::BGRA:
+		case TextureDesc::DataPixelFormat::BGRA:
 			return GL_BGRA;
-		case TextureDesc::Format::SRGB:
+		case TextureDesc::DataPixelFormat::SRGB:
 			return GL_SRGB;
-		case TextureDesc::Format::SRGBA:
+		case TextureDesc::DataPixelFormat::SRGBA:
 			return GL_SRGB_ALPHA;
-		case TextureDesc::Format::SingleColor:
+		case TextureDesc::DataPixelFormat::SingleColor:
 			return GL_R8;
-		case TextureDesc::Format::Depth:
+		case TextureDesc::DataPixelFormat::Depth:
 			return GL_DEPTH;
-		case TextureDesc::Format::Stencil:
+		case TextureDesc::DataPixelFormat::Stencil:
 			return GL_STENCIL;
-		case TextureDesc::Format::DepthStencil:
+		case TextureDesc::DataPixelFormat::DepthStencil:
 			return GL_DEPTH_STENCIL;
 		default:
 			break;
@@ -372,7 +372,7 @@ unsigned int GLHelper::getInternalTextureFormat(TextureDesc::Format format, bool
 		/*  Gamma correction and */
 		if (sRGB && compression != TextureDesc::Compression::NoCompression) {
 			switch (format) {
-			case TextureDesc::Format::RGB:
+			case TextureDesc::DataPixelFormat::RGB:
 				switch (compression) {
 				case TextureDesc::Compression::Compression:
 					return GL_COMPRESSED_SRGB;
@@ -381,7 +381,7 @@ unsigned int GLHelper::getInternalTextureFormat(TextureDesc::Format format, bool
 				default:
 					return 0;
 				}
-			case TextureDesc::Format::RGBA:
+			case TextureDesc::DataPixelFormat::RGBA:
 				switch (compression) {
 				case TextureDesc::Compression::Compression:
 					return GL_COMPRESSED_SRGB_ALPHA;
@@ -398,7 +398,7 @@ unsigned int GLHelper::getInternalTextureFormat(TextureDesc::Format format, bool
 		/*  Only compression.   */
 		if ((unsigned int)compression) {
 			switch (format) {
-			case TextureDesc::Format::RGB:
+			case TextureDesc::DataPixelFormat::RGB:
 				switch (compression) {
 				case TextureDesc::Compression::Compression:
 					return GL_COMPRESSED_RGB;
@@ -415,11 +415,11 @@ unsigned int GLHelper::getInternalTextureFormat(TextureDesc::Format format, bool
 		/*  Only gamma correction.  */
 		if (sRGB) {
 			switch (format) {
-			case TextureDesc::Format::RGB:
+			case TextureDesc::DataPixelFormat::RGB:
 				return GL_SRGB8;
-			case TextureDesc::Format::RGBA:
+			case TextureDesc::DataPixelFormat::RGBA:
 				return GL_SRGB8_ALPHA8;
-			case TextureDesc::Format::SingleColor:
+			case TextureDesc::DataPixelFormat::SingleColor:
 				return GL_SLUMINANCE8;
 			default:
 				break;
@@ -456,17 +456,17 @@ unsigned int GLHelper::getTextureTarget(TextureDesc::Target target, int nrSample
 	}
 }
 
-unsigned int GLHelper::getTextureType(TextureDesc::Type type) {
+unsigned int GLHelper::getTextureType(TextureDesc::PixelDataType type) {
 	switch (type) {
-	case TextureDesc::Type::UnsignedByte:
+	case TextureDesc::PixelDataType::UnsignedByte:
 		return GL_UNSIGNED_BYTE;
-	case TextureDesc::Type::Float:
+	case TextureDesc::PixelDataType::Float:
 		return GL_FLOAT;
-	case TextureDesc::Type::HalfFloat:
+	case TextureDesc::PixelDataType::HalfFloat:
 		return GL_HALF_FLOAT_ARB;
-	case TextureDesc::Type::SignedByte:
+	case TextureDesc::PixelDataType::SignedByte:
 		return GL_BYTE;
-	case TextureDesc::Type::Unsigned24_8:
+	case TextureDesc::PixelDataType::Unsigned24_8:
 		return GL_UNSIGNED_INT_24_8;
 	default:
 		throw InvalidArgumentException("Invalid texture type {}.", magic_enum::enum_name(type));

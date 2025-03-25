@@ -289,6 +289,23 @@ namespace fragcore {
 			return (value0 + (value1 - value0) * Math::clamp<U>(interp, static_cast<U>(0.0), static_cast<U>(1.0)));
 		}
 
+		template <typename T, typename U>
+		inline constexpr static T slerp(const T value0, const T value1, const U interp, const U arc_rad) noexcept {
+			static_assert(std::is_floating_point<U>::value, "Must be a decimal type(float/double/half).");
+			const U inplArc = std::sin((static_cast<U>(1) - interp) * arc_rad);
+			const U arcA = std::sin(interp * arc_rad);
+			const U arc_sin_inverse = static_cast<U>(1.0) / std::sin(arc_rad);
+
+			return (inplArc * std::sin(arc_rad)) * value0 + (arcA * std::sin(arc_rad)) * value1;
+		}
+
+		template <typename T, typename U>
+		inline constexpr static T slerpClamped(const T value0, const T value1, const U interp,
+											   const U arc_rad) noexcept {
+			static_assert(std::is_floating_point<U>::value, "Must be a decimal type(float/double/half).");
+			return slerp(value0, value1, Math::clamp<U>(interp, static_cast<U>(0.0), static_cast<U>(1.0)), arc_rad);
+		}
+
 		template <typename T> inline constexpr static T mod(const T value, const T mod) noexcept {
 			static_assert(std::is_integral<T>::value, "Must be a integer type.");
 			return (value % mod + mod) % mod;
@@ -354,7 +371,7 @@ namespace fragcore {
 
 			const T offset_half = -(static_cast<T>(nr_samples) * 0.5);
 
-			float totalWeight = 0;
+			T totalWeight = 0;
 			for (unsigned int index = 0; index < nr_samples; index++) {
 
 				const T exp_num_sqrt = (index + offset_half) - mean;
@@ -365,9 +382,11 @@ namespace fragcore {
 				guassian[index] = value;
 				totalWeight += value;
 			}
+			const T inverse_total_weight = (1 / totalWeight);
 
+			/*	*/
 			for (unsigned int index = 0; index < nr_samples; index++) {
-				guassian[index] *= (1 / totalWeight);
+				guassian[index] *= inverse_total_weight;
 			}
 		}
 

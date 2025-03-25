@@ -52,7 +52,7 @@ namespace fragcore {
 		 */
 		static const char *getInterfaceLibraryPath(RenderingAPI api);
 
-	  public: /*	Prevent one from creating an instance of this class.	*/
+		/*	Prevent one from creating an instance of this class.	*/
 		RenderingFactory() = delete;
 		RenderingFactory(RenderingFactory &&) = delete;
 		RenderingFactory &operator=(const RenderingFactory &) = default;

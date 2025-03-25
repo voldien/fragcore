@@ -167,7 +167,7 @@ namespace fragcore {
 		 *
 		 */
 		using AsyncObject = struct async_object {
-			// TOOD be replace with an encapsulated class version.
+			// TODO be replace with an encapsulated class version.
 			ISemaphore *sem;
 			Ref<IO> ref;			/*  */
 			AsyncComplete callback; /*  */

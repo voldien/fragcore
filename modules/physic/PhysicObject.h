@@ -37,7 +37,7 @@ namespace fragcore {
 
 	  protected: /*  */
 		void *pdata;
-		PhysicInterface *iRenderer; // TOOD change to ref.
+		PhysicInterface *iRenderer; // TODO change to ref.
 	};
 } // namespace fragcore
 

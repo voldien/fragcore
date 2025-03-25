@@ -20,7 +20,7 @@
 #include "RenderObject.h"
 
 namespace fragcore {
-	
+
 	/**
 	 * Shader.
 	 */
@@ -48,35 +48,6 @@ namespace fragcore {
 		virtual void setMatrix4f(int location, const float *pvalue) = 0;
 
 		virtual void setMatrix4fv(int location, int n, const float *pvalue) = 0;
-
-		// virtual int getNumberUniform();
-		// virtual void getUniform(int location);
-
-		//	virtual void getAttributeLocatoin(const char* cparamname);
-		//	virtual void getFragmentLocation(const char* cparamname);
-
-		//	virtual void setMatrix3f(int location, const float *pvalue);
-		//
-		//	virtual void setMatrix3fv(int location, int n, const float *pvalue);
-
-		//	enum ShaderPrecision{
-		//	    eUnknown,
-		//	    eLow,
-		//	    eMedium,
-		//	    eFull,
-		//	};
-		//	virtual ShaderPrecision getShaderPrecision();
-
-		// virtual void bindBuffer(const char*  name,
-		//                       Buffer * buffer);
-
-		// virtual void bindUniformBuffer(const char* name, Buffer* buffer);
-
-		// virtual void* mapBindingUniform(int location);
-		// virtual void unMapBindingUniform(int location);
-
-		//	virtual void setFragLocation(const char* name, int index);
-		//	virtual void setAttributeLocation(const char* name, int index);
 
 		virtual void getLocalGroupSize(int *sizes) = 0;
 

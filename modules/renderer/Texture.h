@@ -68,8 +68,8 @@ namespace fragcore {
 			PVRTC_RGBA4,  //	PowerVR (iOS) 4 bits/pixel compressed with alpha channel texture fvformatf.
 			ETC_RGB4,	  //	ETC (GLES2.0) 4 bits/pixel compressed RGB texture fvformatf.
 			EAC_R,		  //	ETC2 / EAC (GL ES 3.0) 4 bits/pixel compressed unsigned single-channel texture fvformatf.
-			EAC_R_SIGNED, //	ETC2 / EAC (GL ES 3.0) 4 bits/pixel compressed signed single-channel texture fvformatf.
-			EAC_RG, //	ETC2 / EAC (GL ES 3.0) 8 bits/pixel compressed unsigned dual-channel (RG) texture fvformatf.
+			EAC_R_SIGNED, 	//	ETC2 / EAC (GL ES 3.0) 4 bits/pixel compressed signed single-channel texture fvformatf.
+			EAC_RG, 		//	ETC2 / EAC (GL ES 3.0) 8 bits/pixel compressed unsigned dual-channel (RG) texture fvformatf.
 			EAC_RG_SIGNED,		//	ETC2 / EAC (GL ES 3.0) 8 bits/pixel compressed signed dual-channel (RG) texture
 								// fvformatf.
 			ETC2_RGB,			//	ETC2 (GL ES 3.0) 4 bits/pixel compressed RGB texture fvformatf.
@@ -218,7 +218,6 @@ namespace fragcore {
 
 		virtual Format getFormat() const = 0;
 
-		// TODO set const for the width and height
 		virtual unsigned int width() = 0;
 
 		virtual unsigned int height() = 0;
@@ -234,14 +233,12 @@ namespace fragcore {
 		 * @param size
 		 * @return
 		 */
-		virtual void *mapTexture(Format format, unsigned int level) = 0; // TODO add map target.
+		virtual void *mapTexture(Format format, unsigned int level) = 0;
 
 		/**
 		 *
 		 */
 		virtual void unMapTexture() = 0;
-
-		// TOOD determine of range mapping is possible with flushing and etc.
 
 		/**
 		 *

@@ -27,7 +27,6 @@ namespace fragcore {
 	  public:
 		~QueryObject() override = default;
 
-	  public:
 		/**
 		 *
 		 */

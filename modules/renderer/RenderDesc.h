@@ -24,7 +24,34 @@
 
 namespace fragcore {
 
-	enum class Swizzle {
+	/**
+	 *
+	 */
+	using IndirectDrawArray = struct indirect_draw_array_t {
+		unsigned int count;			/*  */
+		unsigned int instanceCount; /*  */
+		unsigned int first;			/*  */
+		unsigned int baseInstance;	/*  */
+	};
+
+	/**
+	 *
+	 */
+	using IndirectDrawElement = struct indirect_draw_element_t {
+		unsigned int count;			/*  */
+		unsigned int instanceCount; /*  */
+		unsigned int firstIndex;	/*  */
+		int baseVertex;				/*  */
+		unsigned int baseInstance;	/*  */
+	};
+
+	using IndirectDispatch = struct indirect_dispatch_t {
+		unsigned int num_groups_x;
+		unsigned int num_groups_y;
+		unsigned int num_groups_z;
+	};
+
+	enum class Swizzle : uint32_t {
 		NoSwizzle = 0x0, /*  */
 		Zero = 0x1,		 /*  */
 		One = 0x2,		 /*  */
@@ -52,8 +79,22 @@ namespace fragcore {
 	 */
 	enum class FilterMode : uint32_t {
 		NoFilterMode, /*  */
+		Trilinear,	  /*	*/
 		Linear,		  /*  */
 		Nearset,	  /*  */
+	};
+
+	/**
+	 *
+	 */
+	// TODO: refractor name
+	enum class UVMappingMode : uint32_t {
+		UV,		/*  */
+		Sphere, /*  */
+		Box,	/*  */
+		Cylinder,
+		Plane,
+		Other
 	};
 
 	/**
@@ -67,19 +108,19 @@ namespace fragcore {
 		ClampBorder,  /*  */
 	};
 
-	using SamplerDesc = struct sampler_desc_t {
+	enum class TextureCompareFunc : uint32_t {
+		eNoCompare, /*  */
+		lessEqual,
+		greaterEqual,
+		less,
+		greater,
+		equal,
+		notequal,
+		always,
+		never,
+	};
 
-		enum class CompareFunc : uint32_t {
-			eNoCompare, /*  */
-			lessEqual,
-			greaterEqual,
-			less,
-			greater,
-			equal,
-			notequal,
-			always,
-			never,
-		};
+	using SamplerDesc = struct sampler_desc_t {
 
 		/*  Sampler.    */
 		float anisotropy;			  /*  */
@@ -90,19 +131,18 @@ namespace fragcore {
 		TextureWrappingMode AddressW; /*  */
 		FilterMode mipmapFilter;	  /*  */
 		/*  Set swizzle.    */
-		Swizzle Swizzler;		 /*  */
-		Swizzle Swizzleg;		 /*  */
-		Swizzle Swizzleb;		 /*  */
-		Swizzle Swizzlea;		 /*  */
-		int maxLOD;				 /*  */
-		int minLOD;				 /*  */
-		int biasLOD;			 /*  */
-		float borderColor[4];	 /*  */
-		int compareMode;		 /*  */
-		CompareFunc compareFunc; /*  */
-
+		Swizzle Swizzler;				/*  */
+		Swizzle Swizzleg;				/*  */
+		Swizzle Swizzleb;				/*  */
+		Swizzle Swizzlea;				/*  */
+		int maxLOD;						/*  */
+		int minLOD;						/*  */
+		int biasLOD;					/*  */
+		float borderColor[4];			/*  */
+		int compareMode;				/*  */
+		TextureCompareFunc compareFunc; /*  */
 		/*  Debug attributes.   */
-		MarkerDebug *marker; // TODo add support for adding after creating the object.
+		MarkerDebug *marker; // TODO: add support for adding after creating the object.
 	};
 
 	/**
@@ -121,7 +161,7 @@ namespace fragcore {
 		/**
 		 *	Texture format.
 		 */
-		enum class Format : uint32_t { // GraphicsFormat
+		enum class DataPixelFormat : uint32_t {
 			NoFormat,
 			RGB = 0x1,	/*	RGB components.	*/
 			RGBA = 0x2, /*	RGBA components.	*/
@@ -140,7 +180,7 @@ namespace fragcore {
 		/**
 		 *	Texture pixel type data.
 		 */
-		enum class Type : uint32_t {
+		enum class PixelDataType : uint32_t {
 			NoType,
 			UnsignedByte = 0x1, /*	Each color component encoded in a single byte.	*/
 			SignedByte = 0x2,	/*	Each color component encoded in a single signed byte.	*/
@@ -235,12 +275,16 @@ namespace fragcore {
 		TesseC,	 /*  */
 		TesseE,	 /*  */
 		Compute, /*  */
+		Mesh,
+		Task,
+		RayHit,
+		RayMiss
 	};
 
 	enum class ShaderCodeType {
-		NoShaderType, /*  Undefined.	*/
-		SourceCode,	  /*  Source code.    */
-		Binary,		  /*  Binary code.    */
+		ShaderTypeUndefined, /*  Undefined.	*/
+		SourceCode,			 /*  Source code.    */
+		Binary,				 /*  Binary code.    */
 	};
 
 	/**
@@ -350,7 +394,7 @@ namespace fragcore {
 		/**
 		 *
 		 */
-		// TOOD change to class
+		// TODO: change to class
 		enum BufferType : uint32_t {
 			eArray,				/*	*/
 			eElementArray,		/*	*/
@@ -403,32 +447,6 @@ namespace fragcore {
 	};
 
 	// TODO determine if packing compiler qualifier needed.
-	/**
-	 *
-	 */
-	using IndirectDrawArray = struct indirect_draw_array_t {
-		unsigned int count;			/*  */
-		unsigned int instanceCount; /*  */
-		unsigned int first;			/*  */
-		unsigned int baseInstance;	/*  */
-	};
-
-	/**
-	 *
-	 */
-	using IndirectDrawElement = struct indirect_draw_element_t {
-		unsigned int count;			/*  */
-		unsigned int instanceCount; /*  */
-		unsigned int firstIndex;	/*  */
-		int baseVertex;				/*  */
-		unsigned int baseInstance;	/*  */
-	};
-
-	using IndirectDispatch = struct indirect_dispatch_t {
-		unsigned int num_groups_x;
-		unsigned int num_groups_y;
-		unsigned int num_groups_z;
-	};
 
 	/**
 	 *	Geometry description.

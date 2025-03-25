@@ -54,23 +54,23 @@ namespace fragcore {
 		 */
 		static void addMarkerLabel(unsigned int identifier, unsigned int object, const fragcore::MarkerDebug *debug);
 
-		static unsigned int getWrapMode(fragcore::TextureWrappingMode mode);
+		static unsigned int getWrapMode(const fragcore::TextureWrappingMode mode);
 
-		static unsigned int getFilterMode(fragcore::FilterMode mode, fragcore::FilterMode mips);
+		static unsigned int getFilterMode(const fragcore::FilterMode mode,const  fragcore::FilterMode mips);
 
-		static unsigned int getCompareMode(fragcore::SamplerDesc::CompareFunc mode);
+		static unsigned int getCompareMode(const fragcore::TextureCompareFunc mode);
 
 		static unsigned int getGraphicFormat(const fragcore::GraphicFormat graphicFormat);
-		static unsigned int getTextureFormat(fragcore::ImageFormat textureFormat, unsigned int *pixelType);
+		static unsigned int getTextureFormat(const fragcore::ImageFormat textureFormat, unsigned int *pixelType);
 
-		static unsigned int getTextureFormat(fragcore::TextureDesc::Format format);
-		static unsigned int getInternalTextureFormat(fragcore::TextureDesc::Format format, bool sRGB,
+		static unsigned int getTextureFormat(const fragcore::TextureDesc::DataPixelFormat format);
+		static unsigned int getInternalTextureFormat(fragcore::TextureDesc::DataPixelFormat format, bool sRGB,
 													 fragcore::TextureDesc::Compression compression,
-													 fragcore::TextureDesc::Type type);
+													 fragcore::TextureDesc::PixelDataType type);
 
 		static unsigned int getTextureTarget(fragcore::TextureDesc::Target target, int nrSamples);
 
-		static unsigned int getTextureType(fragcore::TextureDesc::Type type);
+		static unsigned int getTextureType(fragcore::TextureDesc::PixelDataType type);
 
 		static unsigned int getTextureSwizzle(fragcore::Swizzle swizzle);
 

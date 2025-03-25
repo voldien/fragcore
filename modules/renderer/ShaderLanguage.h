@@ -23,7 +23,7 @@ namespace fragcore {
 	/**
 	 *  Support languages.
 	 */
-	enum ShaderLanguage {
+	enum ShaderLanguage : uint32_t {
 		GLSL = 0x1,			   /*  OpenGL GLSL.    */
 		SPIRV = 0x2,		   /*  SPIRV.  */
 		HLSL = 0x4,			   /*  High Level Shading Language.    */

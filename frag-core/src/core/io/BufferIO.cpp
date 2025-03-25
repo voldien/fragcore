@@ -4,7 +4,7 @@ using namespace fragcore;
 
 void BufferIO::open([[maybe_unused]] const char *path, [[maybe_unused]] IOMode mode) {}
 
-void BufferIO::close() { /*	TOOD reset values.	*/ }
+void BufferIO::close() { /*	TODO reset values.	*/ }
 
 long BufferIO::read(long int requestedBytes, void *pbuffer) {
 	long int nBytesLeft = (this->nbytes - this->marker);

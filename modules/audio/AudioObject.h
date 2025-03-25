@@ -40,7 +40,7 @@ namespace fragcore {
 
 	  protected: /*  */
 		void *pdata;
-		AudioInterface *audioInterface; // TOOD change to ref.
+		AudioInterface *audioInterface; // TODO change to ref.
 	};
 } // namespace fragcore
 

@@ -102,7 +102,7 @@ namespace fragcore {
 		virtual bool isOperationSupported(const IOOperation operationFlags) const noexcept = 0;
 
 	  protected: /*  Internal methods.   */
-				 // TOOD determine how it should be used?
+				 // TODO determine how it should be used?
 				 // TODO change
 		virtual void open(const char *path, IOMode mode) = 0;
 		virtual void open(std::string &path, IOMode mode) { this->open(path.c_str(), mode); }

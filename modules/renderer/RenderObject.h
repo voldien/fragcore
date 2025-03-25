@@ -73,7 +73,7 @@ namespace fragcore {
 	  protected: /*  */
 		void *pdata;
 		// Ref<IRenderer> irenderer;
-		IRenderer *iRenderer; // TOOD change to ref.
+		IRenderer *iRenderer; // TODO change to ref.
 	};
 } // namespace fragcore
 
