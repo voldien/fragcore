@@ -23,6 +23,7 @@
 #include <IO/FileIO.h>
 #include <IO/FileSystem.h>
 #include <IO/IO.h>
+#include <cstdint>
 
 namespace fragcore {
 
@@ -32,8 +33,8 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC ImageLoader : public Object {
 	  public:
-		enum class FileFormat { Default, Png, Jpeg, Exr };
-		enum class Compression { None, Default };
+		enum class FileFormat : uint32_t { Default, Png, Jpeg, Exr };
+		enum class Compression : uint32_t { None, Default };
 
 	  public:
 		ImageLoader() = default;

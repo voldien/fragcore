@@ -45,7 +45,10 @@ Image ImageUtil::convert2GrayScale(const Image &image) {
 #endif
 	for (unsigned int index_x = 0; index_x < image.width(); index_x++) {
 		for (unsigned int index_y = 0; index_y < image.height(); index_y++) {
-			
+			Color color = image.getColor(index_x, index_y, 0);
+			const float lumen = 0.299 * color.r() + 0.587 * color.g() + 0.114 * color.b();
+			Color grayScaleColor = Color(lumen, lumen, lumen, 1);
+			grayScale.setColor(index_x, index_y, 0, grayScaleColor);
 		}
 	}
 

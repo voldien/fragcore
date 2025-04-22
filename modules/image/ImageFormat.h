@@ -42,7 +42,7 @@ namespace fragcore {
 		DXT5,				//	Compressed color with alpha channel texture format.
 		RGBA4444,			//	Color and alpha texture format, 4 bit per channel.
 		BGRA32,				//	Color with alpha texture format, 8-bits per channel.
-		BGR24,				//
+		BGR24,				//  Color without alpha texture format, 8-bits per channel.
 		RHalf,				//	Scalar (R) texture format, 16 bit floating point.
 		RGHalf,				//	Two color (RG) texture format, 16 bit floating point per channel.
 		RGBAHalf,			//	RGB color texture format, 16 bit floating point per channel.
