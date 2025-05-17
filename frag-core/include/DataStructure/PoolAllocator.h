@@ -261,11 +261,11 @@ namespace fragcore {
 		 */
 		unsigned int getItemSize() const noexcept { return sizeof(PoolAllactorItem); }
 
-	  private:						 /*	attributes.	*/
-		PoolAllactorItem *item;		 /*	Pool data.	*/
-		unsigned int nrOfElements{}; /*	number of elements used.	*/
-		unsigned int mReserved{};	 /*	number of allocated elements.	*/
-		unsigned int typeSize{};	 /*	size of the data type.	*/
+	  private:							  /*	attributes.	*/
+		PoolAllactorItem *item = nullptr; /*	Pool data.	*/
+		unsigned int nrOfElements = 0;	  /*	number of elements used.	*/
+		unsigned int mReserved = 0;		  /*	number of allocated elements.	*/
+		unsigned int typeSize = 0;		  /*	size of the data type.	*/
 	};
 } // namespace fragcore
 

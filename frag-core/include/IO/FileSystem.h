@@ -83,11 +83,12 @@ namespace fragcore {
 		static FileSystem *createFileSystem(); /*	Filesystem without async support.	*/
 
 		FileSystem(const FileSystem &&other);
+		~FileSystem() override;
+
 		// TODO add remove function.
 	  protected:
 		FileSystem(Ref<IScheduler> &schRef);
 		FileSystem();
-		~FileSystem() override;
 	};
 } // namespace fragcore
 
