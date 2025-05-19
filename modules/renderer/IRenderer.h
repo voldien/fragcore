@@ -61,7 +61,7 @@ namespace fragcore {
 		IRenderer() = default;
 		IRenderer(const IRenderer &other) = delete;
 		IRenderer(IRenderer &&other) = delete;
-		 ~IRenderer() override = default;
+		~IRenderer() override = default;
 
 		/**
 		 *

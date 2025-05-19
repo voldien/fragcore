@@ -71,8 +71,7 @@ namespace fragcore {
 		/**
 		 *	Swap buffers.
 		 */
-		// TODO perhaps change to next.
-		void swap();
+		void next();
 
 		/**
 		 *	Get current stack buffer.

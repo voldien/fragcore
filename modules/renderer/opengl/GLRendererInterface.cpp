@@ -143,7 +143,7 @@ GLRendererInterface::GLRendererInterface(const IConfig *config) {
 		throw RuntimeException("Could not create an OpenGL window - {}.", SDL_GetError());
 	}
 
-	/*	Create OpenGL context.	*/ // TODO add config attribute for auto or force the version.
+	/*	Create OpenGL context.	*/
 	this->openglcontext = SDL_GL_CreateContext(window);
 	if (this->openglcontext == nullptr) {
 		const unsigned int validGLVersion[][2] = {
@@ -204,7 +204,7 @@ GLRendererInterface::GLRendererInterface(const IConfig *config) {
 	}
 
 	// TODO improve.
-	int profile, cflag;
+	int profile = 0, cflag = 0;
 	glGetIntegerv(GL_CONTEXT_PROFILE_MASK, &profile);
 	glGetIntegerv(GL_CONTEXT_FLAGS, &cflag);
 	this->profile = profile;
@@ -229,7 +229,8 @@ GLRendererInterface::GLRendererInterface(const IConfig *config) {
 
 	/*  Set for core support or not for GLEW.   */
 	// TODO resolve.
-	if (true) {
+	const bool UseGLExperiments = false;
+	if (UseGLExperiments) {
 		glewExperimental = GL_TRUE;
 	} else {
 		glewExperimental = GL_FALSE;
@@ -244,7 +245,7 @@ GLRendererInterface::GLRendererInterface(const IConfig *config) {
 	}
 
 	/*  TODO add function for checking if context is supported. */
-	for (int i = 0; i < numMinReqExtensions; i++) {
+	for (unsigned int i = 0; i < numMinReqExtensions; i++) {
 		const char *extension = minRequiredExtensions[i];
 		if (!glewIsExtensionSupported(extension)) {
 			throw RuntimeException("Non supported GPU - {} using OpenGL version: {}\nGLSL: {}", extension, getVersion(),
@@ -693,7 +694,7 @@ void GLRendererInterface::getCapability(Capability *capability) {
 						glewIsExtensionSupported("GL_EXT_texture_sRGB");
 	capability->sConditionalRendering =
 		glewIsExtensionSupported("GL_NV_conditional_render") || glewIsExtensionSupported("GL_NVX_conditional_render");
-	// GL_ARB_conditional_render_inverted
+
 
 	GLint nShaderBinary;
 	glGetIntegerv(GL_NUM_SHADER_BINARY_FORMATS, &nShaderBinary);
@@ -704,7 +705,7 @@ void GLRendererInterface::getStatus(MemoryInfo *memoryInfo) {
 
 	GLint dedicatedVRMem;
 
-	/* GL_ATI_meminfo	*/
+	/*	GL_ATI_meminfo	*/
 	glGetIntegerv(GL_VBO_FREE_MEMORY_ATI,
 				  &dedicatedVRMem); // dedicated video memory, total size (in kb) of the GPU memory
 	glGetIntegerv(GL_TEXTURE_FREE_MEMORY_ATI,

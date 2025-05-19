@@ -85,7 +85,8 @@ namespace fragcore {
 				this->nrElements--;
 				return this->data[this->nrElements + 1];
 			}
-			throw RuntimeException();
+
+			throw RuntimeException("Stack Is Empty");
 		}
 
 		T &operator[](const size_t index) { return this->data[index]; }

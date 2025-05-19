@@ -125,17 +125,17 @@ namespace fragcore {
 			return *this;
 		}
 
-		friend bool operator==(const BoundingSphere &o1, const BoundingSphere &o2) noexcept {
-			if (&o1 == &o2) {
+		friend bool operator==(const BoundingSphere &Sphere0, const BoundingSphere &Sphere1) noexcept {
+			if (&Sphere0 == &Sphere1) {
 				return true;
 			}
-			if (o1.center == o2.center && o1.radius == o2.radius) {
+			if (Sphere0.center == Sphere1.center && Sphere0.radius == Sphere1.radius) {
 				return true;
 			}
 			return false;
 		}
 
-		friend bool operator!=(const BoundingSphere &o1, const BoundingSphere &o2) noexcept { return !(o1 == o2); }
+		friend bool operator!=(const BoundingSphere &Sphere0, const BoundingSphere &Sphere1) noexcept { return !(Sphere0 == Sphere1); }
 
 	  private:			/*	Private member attributes.	*/
 		float radius;	/*	Radius size.	*/

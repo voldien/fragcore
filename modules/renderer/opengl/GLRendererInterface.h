@@ -116,8 +116,6 @@ namespace fragcore {
 		// virtual void getSupportedTextureFormat(TextureFormat* textureFormat);
 		// virtual void getSupportedGraphicTextureFormat(TextureFormat* textureFormat);
 
-		// TODO add debug callback support
-
 		/**
 		 * Get capability of the rendering API.
 		 * @param capability non-null object.
@@ -159,11 +157,6 @@ namespace fragcore {
 		bool useCoreProfile;
 		bool useCompatibility;
 
-		/*  */
-		// TODO determine if to use pool or something .
-		Buffer *pboUnPack;
-		Buffer *pboPack;
-
 		/*  Cached internal capabilities.   */
 		Capability capability;
 		TextureDesc::Compression compression;
@@ -178,8 +171,6 @@ namespace fragcore {
 		bool debug;
 		bool alpha;
 
-		ViewPort *defaultViewport = nullptr;
-		std::vector<ViewPort *> viewports; // TODO remove pointer.
 		FrameBuffer *defaultFrameBuffer = nullptr;
 		/*  Texture gamma corrections.  */
 		bool gamma;

@@ -28,7 +28,7 @@ namespace fragcore {
 	class FVDECLSPEC FileSystem : public IFileSystem {
 	  public:
 		IO *openFile(const char *path, IO::IOMode mode) override; /*  Open based on the filename extension.*/
-		void closeFile(IO *io) override;
+		void closeFile(IO *ioFile) override;
 
 		void remove(const char *path) override;
 
@@ -85,7 +85,6 @@ namespace fragcore {
 		FileSystem(const FileSystem &&other);
 		~FileSystem() override;
 
-		// TODO add remove function.
 	  protected:
 		FileSystem(Ref<IScheduler> &schRef);
 		FileSystem();

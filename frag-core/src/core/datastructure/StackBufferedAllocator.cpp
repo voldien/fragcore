@@ -43,7 +43,7 @@ void StackBufferedAllocator::freeToMarker(unsigned int marker) {
 	return this->m_stack[this->m_curStack].freeToMarker(marker);
 }
 
-void StackBufferedAllocator::swap() { this->m_curStack = ~this->m_curStack & 0x1; }
+void StackBufferedAllocator::next() { this->m_curStack = ~this->m_curStack & 0x1; }
 
 StackAllocator *StackBufferedAllocator::getCurrentStack() { return &this->m_stack[this->m_curStack]; }
 

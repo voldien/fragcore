@@ -32,10 +32,9 @@ namespace fragcore {
 	 */
 	template <typename T> class PoolAllocator {
 	  public:
-		/*	TODO add align and pack .	*/
 		using PoolAllactorItem = struct poolallactoritem {
 			T data;
-			poolallactoritem *next;
+			poolallactoritem *next; // TODO: perhaps index based.
 		};
 
 		PoolAllocator() {
@@ -168,6 +167,7 @@ namespace fragcore {
 		 */
 		void clean() noexcept {
 			free(this->item);
+			this->item = nullptr;
 			this->mReserved = 0;
 			this->nrOfElements = 0;
 		}

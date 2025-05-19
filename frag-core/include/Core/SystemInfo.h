@@ -93,7 +93,6 @@ namespace fragcore {
 		static bool isSupportedInstruction(SIMD instruction) noexcept;
 		static std::vector<SIMD> getSupportedSIMD();
 
-		// TODO add package and physical cores.
 		using CPUPackage = struct cpu_package_t {
 			uint32_t physical_cores;
 			uint32_t logical_cores;
@@ -173,7 +172,6 @@ namespace fragcore {
 		 */
 		static std::string getCurrentDirectory();
 
-		// TODO relocate
 		static Ref<IO> &getStdOut();
 		static Ref<IO> &getStdIn();
 		static Ref<IO> &getStdErr();

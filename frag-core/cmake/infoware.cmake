@@ -2,7 +2,7 @@ INCLUDE(FetchContent)
 
 FetchContent_Declare(infoware
         GIT_REPOSITORY https://github.com/ThePhD/infoware.git
-		GIT_TAG 2a56cb1c6eb48ef36566f587e207c27af641f0a6) 
+		GIT_TAG bc54e8dcfb6387193289c702e5be18aae73f3084) 
 
 FetchContent_GetProperties(infoware)
 
