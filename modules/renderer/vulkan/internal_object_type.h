@@ -6,12 +6,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
@@ -30,12 +30,8 @@
 // #define VK_USE_PLATFORM_MACOS_MVK
 // #endif
 
-#include "../Buffer.h"
-#include "../RenderDesc.h"
-#include "../Sampler.h"
 #include <SDL2/SDL.h>
 #include <VKDevice.h>
-#include <vector>
 #include <vulkan/vulkan.h>
 
 namespace fragcore {
@@ -54,144 +50,22 @@ namespace fragcore {
 #define ArraySize(a) (sizeof(a) / sizeof(*a))
 namespace fragcore {
 
-	// typedef struct _SwapchainBuffers {
-	// 	struct SwapChainSupportDetails {
-	// 		VkSurfaceCapabilitiesKHR capabilities;
-	// 		std::vector<VkSurfaceFormatKHR> formats;
-	// 		std::vector<VkPresentModeKHR> presentModes;
-	// 	};
+	// extern FVDECLSPEC unsigned int getTextureFormat(fragcore::TextureDesc::Format format);
 
-	// 	SwapChainSupportDetails details;    /*  */
+	// extern FVDECLSPEC unsigned int getTextureTarget(fragcore::TextureDesc::Target target);
 
-	// 	std::vector<VkImage> swapChainImages;
-	// 	std::vector<VkImageView> swapChainImageViews;
-	// 	std::vector<VkFramebuffer> swapChainFramebuffers;
-	// 	std::vector<VkCommandBuffer> commandBuffers;
-	// 	VkFormat swapChainImageFormat;
-	// 	VkRenderPass renderPass;
-	// 	VkCommandBuffer *currentBuffer;
-	// 	VkSwapchainKHR swapchain;           /*  */
-	// 	VkExtent2D chainExtend;             /*  */
-	// } SwapchainBuffers;
+	// extern FVDECLSPEC unsigned int getTextureType(fragcore::TextureDesc::Type type);
 
-	// typedef struct vulkan_core_t {
-	// 	/*	*/
-	// 	std::vector<RendererWindow*> windows;
-	// 	SDL_Window *window;	//TODO remove
-	// 	Capability capabilityCached;
-	// 	/*	*/
-	// 	VkInstance inst;
-	// 	VkDebugUtilsMessengerEXT debugMessenger;
-	// 	VkDebugReportCallbackEXT debugReport;
-	// 	/*  Physical device.    */
-	// 	VkPhysicalDevice gpu;
-	// 	std::vector<VkPhysicalDevice> GPUs;
+	// extern FVDECLSPEC unsigned int getBufferType(fragcore::BufferDesc::BufferType type);
 
-	// 	/*  */
-	// 	VkDevice device;
-	// 	VkQueue queue;	//TODO rename graphicsQueue
-	// 	VkQueue presentQueue;
+	// extern FVDECLSPEC unsigned int getBufferHint(fragcore::BufferDesc::BufferHint hint);
 
-	// 	/*  */
-	// 	VkPhysicalDeviceProperties gpu_props;
-	// 	VkQueueFamilyProperties *queue_props;
-	// 	uint32_t graphics_queue_node_index;
+	// extern FVDECLSPEC unsigned int getPrimitive(fragcore::GeometryDesc::Primitive primitive);
 
-	// 	VkSurfaceKHR surface;
+	// extern FVDECLSPEC unsigned int getAttributeDataType(fragcore::GeometryDesc::AttributeType type);
 
-	// 	/*  Collection of swap chain variables. */
-	// 	//SwapchainBuffers *swapChain;
-
-	// 	VkCommandPool cmd_pool;
-	// 	VkCommandPool compute_pool;
-	// 	VkCommandPool transfer_pool;
-
-	// 	VkCommandBuffer setup_cmd;            /* Command Buffer for initialization commands	*/
-	// 	VkCommandBuffer draw_cmd;            /* Command Buffer for drawing commands			*/
-
-	// 	VkPipelineLayout pipeline_layout;
-	// 	VkDescriptorSetLayout desc_layout;
-
-	// 	VkPipelineCache pipelineCache;
-	// 	VkRenderPass render_pass;
-
-	// 	/*  */
-	// 	VkPipeline current_pipeline;
-
-	// 	/*  */
-	// 	//VkSemaphore imageAvailableSemaphore;
-	// 	//VkSemaphore renderFinishedSemaphore;
-	// 	std::vector<VkSemaphore> imageAvailableSemaphores;
-	// 	std::vector<VkSemaphore> renderFinishedSemaphores;
-	// 	std::vector<VkFence> inFlightFences;
-	// 	std::vector<VkFence> imagesInFlight;
-	// 	//VkQueueFamilyIndices indices
-
-	// 	/*  */
-	// 	uint32_t num_physical_devices;
-	// 	VkPhysicalDevice *physical_devices;
-	// 	uint32_t queue_count;
-	// 	uint32_t enabled_extension_count;
-	// 	uint32_t enabled_layer_count;
-	// 	VkExtensionProperties *extension_names;
-	// 	bool validate;
-	// 	void *device_validation_layers;
-	// 	bool enableValidationLayers;
-	// 	bool enableDebugTracer;
-	// 	uint32_t currentFrame;
-	// 	uint32_t numBackBufferFrames;
-	// 	float color[4];             /*  Clear color.    */
-	// 	bool useGamma;
-	// 	VkPhysicalDeviceMemoryProperties memProperties;
-	// 	ShaderLanguage languageSupport;
-	// 	Capability capability;
-	// } VulkanCore;
-
-	// typedef struct vulkan_viewport_t {
-	// 	unsigned int viewport;
-	// } VKViewPort;
-
-
-	// /**
-	//  *
-	//  */
-	// typedef struct vulkan_shader_object_t {
-	// 	std::shared_ptr<fvkcore::VKDevice> device;
-	// 	// VulkanCore *vulkanCore;
-	// 	VkPipeline graphicsPipeline;
-	// 	VkPipelineLayout pipelineLayout;
-	// 	unsigned int ver;
-	// 	unsigned int fra;
-	// 	unsigned int geo;
-	// 	unsigned int tesse;
-	// 	unsigned int tessc;
-	// } VKShaderObject;
-
-	// typedef struct vulkan_pipeline_object_t {
-	// 	std::shared_ptr<fvkcore::VKDevice> device;
-	// 	// VulkanCore *vulkanCore;
-	// 	VkPipeline graphicsPipeline;
-	// 	VkPipelineLayout pipelineLayout;
-	// 	VkDescriptorSet descriptorSet;
-	// } VKPipelineObject;
-
-	extern FVDECLSPEC unsigned int getTextureFormat(fragcore::TextureDesc::Format format);
-
-	extern FVDECLSPEC unsigned int getTextureTarget(fragcore::TextureDesc::Target target);
-
-	extern FVDECLSPEC unsigned int getTextureType(fragcore::TextureDesc::Type type);
-
-	extern FVDECLSPEC unsigned int getBufferType(fragcore::BufferDesc::BufferType type);
-
-	extern FVDECLSPEC unsigned int getBufferHint(fragcore::BufferDesc::BufferHint hint);
-
-	extern FVDECLSPEC unsigned int getPrimitive(fragcore::GeometryDesc::Primitive primitive);
-
-	extern FVDECLSPEC unsigned int getAttributeDataType(fragcore::GeometryDesc::AttributeType type);
-
-	extern FVDECLSPEC unsigned int getState(unsigned int state);
+	// extern FVDECLSPEC unsigned int getState(unsigned int state);
 
 } // namespace fragcore
-
 
 #endif

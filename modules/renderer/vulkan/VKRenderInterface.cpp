@@ -25,10 +25,7 @@ using namespace fvkcore;
 #define RENDER_VULKAN_MINOR 1
 #define RENDER_VULKAN_PATCH 0
 
-static bool validate_object_memeber(VKRenderInterface *renderer, RenderObject *object) {
-	return renderer == object->getRenderer();
-}
-
+ 
 VKRenderInterface::VKRenderInterface(IConfig *config) {
 
 	/*	Minimun requirements.	*/

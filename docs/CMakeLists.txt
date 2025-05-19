@@ -24,8 +24,6 @@ IF(DOXYGEN_FOUND)
 					COMMENT "Generating TaskScheduler Doxygen documentation"
 					VERBATIM)
 
-	)
-
 	# Create CMake Target for generating doc.
 	ADD_CUSTOM_TARGET(Doxygen ALL DEPENDS ${DOXYGEN_INDEX_FILE})
 
