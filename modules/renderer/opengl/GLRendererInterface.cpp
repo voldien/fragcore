@@ -65,7 +65,7 @@ GLRendererInterface::GLRendererInterface(const IConfig *config) {
 	}
 
 	// Check all required config variables.
-	for (int i = 0; i < numReqConfigKeys; i++) {
+	for (unsigned int i = 0; i < numReqConfigKeys; i++) {
 		if (!setupConfig.isSet(reqConfigKey[i])) {
 			throw RuntimeException("None valid configuration node - missing attribute {}", reqConfigKey[i]);
 		}
@@ -169,7 +169,7 @@ GLRendererInterface::GLRendererInterface(const IConfig *config) {
 		/*  Using a top down approach   .    */
 		if (!this->openglcontext) {
 			/*	*/
-			for (int i = 0; i < nValidVersions; i++) {
+			for (unsigned int i = 0; i < nValidVersions; i++) {
 				const unsigned int *nthValidGLVersion = &validGLVersion[i][0];
 				SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, nthValidGLVersion[0]);
 				SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, nthValidGLVersion[1]);
@@ -444,9 +444,8 @@ static void default_callback_debug_gl(GLenum source, GLenum type, GLuint id, GLe
 void GLRendererInterface::setDebug(bool enable) {
 
 	/*	TODO CLEAN.	*/
-	typedef void (*glDebugMessageCallback)(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length,
-										   const GLchar *message, GLvoid *userParam);
-	typedef void (*PROC)(glDebugMessageCallback, void *);
+	using __glewDebugMessageCallback = void (*)(GLenum, GLenum, GLuint, GLenum, GLsizei, const GLchar *, GLvoid *);
+	using PROC = void (*)(__glewDebugMessageCallback, void *);
 	PROC callback;
 
 	/*	Load function pointer by their symbol name.	*/

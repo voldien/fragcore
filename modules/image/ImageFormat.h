@@ -17,7 +17,6 @@
  */
 #ifndef _FRAGCORE_IMAGE_FORMAT_H_
 #define _FRAGCORE_IMAGE_FORMAT_H_ 1
-#include <FragCore.h>
 
 namespace fragcore {
 

@@ -40,7 +40,7 @@ size_t StackBufferedAllocator::getMarker() const noexcept { return this->m_stack
 void *StackBufferedAllocator::fetch(size_t sizeBytes) { return this->m_stack[this->m_curStack].fetch(sizeBytes); }
 
 void StackBufferedAllocator::freeToMarker(unsigned int marker) {
-	return this->m_stack[this->m_curStack].freeToMarker(marker);
+	 this->m_stack[this->m_curStack].freeToMarker(marker);
 }
 
 void StackBufferedAllocator::next() { this->m_curStack = ~this->m_curStack & 0x1; }
@@ -48,11 +48,11 @@ void StackBufferedAllocator::next() { this->m_curStack = ~this->m_curStack & 0x1
 StackAllocator *StackBufferedAllocator::getCurrentStack() { return &this->m_stack[this->m_curStack]; }
 
 const StackAllocator *StackBufferedAllocator::getStack(int index) const {
-	return static_cast<const StackAllocator *>(&this->m_stack[index]);
+	return (&this->m_stack[index]);
 }
 
 StackAllocator *StackBufferedAllocator::getStack(int index) {
-	return static_cast<StackAllocator *>(&this->m_stack[index]);
+	return (&this->m_stack[index]);
 }
 
 StackBufferedAllocator &StackBufferedAllocator::operator=(const StackBufferedAllocator &alloc) {

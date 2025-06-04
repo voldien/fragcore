@@ -4,6 +4,7 @@
 #include "Math3D/OBB.h"
 #include <Math/Math.h>
 #include <Math3D/LinAlg.h>
+#include <algorithm>
 #include <cstdint>
 #include <generator/SubdivideMesh.hpp>
 
@@ -29,19 +30,23 @@ bool GeometryUtility::isConvex(const std::vector<Vector3> &points) {
 	Vector3 u;
 
 	int res = 0;
-	for (size_t i = 0; i < points.size(); i++) {
+	const size_t nrPoints = points.size();
+	for (size_t i = 0; i < nrPoints; i++) {
+
 		p = points[i];
-		Vector3 tmp = points[(i + 1) % points.size()];
+		Vector3 tmp = points[(i + 1) % nrPoints];
 		v = Vector3::Zero();
 		v.x() = tmp.x() - p.x();
 		v.y() = tmp.y() - p.y();
-		u = points[(i + 2) % points.size()];
+		u = points[(i + 2) % nrPoints];
 
 		if (i == 0) { // in first loop direction is unknown, so save it in res
 			res = u.x() * v.y() - u.y() * v.x() + v.x() * p.y() - v.y() * p.x();
 		} else {
+
 			/*	*/
-			int newres = u.x() * v.y() - u.y() * v.x() + v.x() * p.y() - v.y() * p.x();
+			const int newres = (u.x() * v.y()) - (u.y() * v.x()) + (v.x() * p.y()) - (v.y() * p.x());
+
 			if ((newres > 0 && res < 0) || (newres < 0 && res > 0)) {
 				return false;
 			}
@@ -61,28 +66,20 @@ AABB GeometryUtility::computeBoundingBox(const Vector3 *vertices, const size_t n
 	const uint8_t *dataPointer = reinterpret_cast<const uint8_t *>(vertices);
 
 	for (size_t i = 0; i < nrVertices; i++) {
-		const Vector3 &vertex = *reinterpret_cast<const Vector3 *>(&dataPointer[i * stride]);
+		const size_t vertexOffset =  i * stride;
+		const Vector3 &vertex = *reinterpret_cast<const Vector3 *>(&dataPointer[vertexOffset]);
 
-		/*	Max point.	*/
-		if (vertex.x() > max.x()) {
-			max.x() = vertex.x();
-		}
-		if (vertex.y() > max.y()) {
-			max.y() = vertex.y();
-		}
-		if (vertex.z() > max.z()) {
-			max.z() = vertex.z();
-		}
-		/*	Min Point.	*/
-		if (vertex.x() < min.x()) {
-			min.x() = vertex.x();
-		}
-		if (vertex.y() < min.y()) {
-			min.y() = vertex.y();
-		}
-		if (vertex.z() < min.z()) {
-			min.z() = vertex.z();
-		}
+		max = max.cwiseMax(vertex);
+		min = min.cwiseMax(vertex);
+		// /*	Max point.	*/
+		// max.x() = std::max(vertex.x(), max.x());
+		// max.y() = std::max(vertex.y(), max.y());
+		// max.z() = std::max(vertex.z(), max.z());
+
+		// /*	Min Point.	*/
+		// min.x() = std::min(vertex.x(), min.x());
+		// min.y() = std::min(vertex.y(), min.y());
+		// min.z() = std::min(vertex.z(), min.z());
 	}
 
 	return AABB::createMinMax(min, max);

@@ -37,13 +37,13 @@ namespace fragcore {
 
 	  public: /*	*/
 		template <typename T> static T *loadModule(const std::string &filepath, const std::string &moduleEntryPoint = "") {
-			static_assert(std::is_convertible<T *, Module *>::value, "Derived must inherit Module as public");
+			static_assert(std::is_convertible_v<T *, Module *>, "Derived must inherit Module as public");
 			Library lib(filepath.c_str());
 			return Module::loadModule<T>(lib, moduleEntryPoint);
 		}
 
 		template <typename T> static T *loadModule(Library &library, const std::string &moduleEntryPoint) {
-			static_assert(std::is_convertible<T *, Module *>::value, "Derived must inherit Module as public");
+			static_assert(std::is_convertible_v<T *, Module *>, "Derived must inherit Module as public");
 			T *module = nullptr;
 			/*	*/
 			std::string moduleEntry = moduleEntryPoint;

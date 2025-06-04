@@ -8,7 +8,6 @@
 #include <cstdlib>
 #include <cstring>
 #include <ctime>
-#include <exception>
 #include <net/if.h>
 #include <netdb.h>
 #include <netinet/in.h>
@@ -68,7 +67,7 @@ TCPNetSocket::~TCPNetSocket() {
 	// TODO: improve, to remove try catch.
 	try {
 		this->close();
-	} catch (std::exception &other) {
+	} catch (...) {
 	}
 }
 
@@ -194,9 +193,7 @@ int TCPNetSocket::connect(const INetAddress &p_addr) {
 	return 0;
 }
 
-int TCPNetSocket::poll(int p_type, int timeout) const { /*	select or poll.	*/
-	return 0;
-}
+int TCPNetSocket::poll(int p_type, int timeout) const { /*	select or poll.	*/ return 0; }
 
 int TCPNetSocket::recvfrom(uint8_t *p_buffer, int p_len, int &r_read, INetAddress &r_ip, bool p_peek) {
 	int flag = 0;
@@ -225,7 +222,7 @@ int TCPNetSocket::recv(void *pbuffer, int p_len, int &sent, bool peek) {
 	if (peek) {
 		flag |= MSG_PEEK;
 	}
-	int res = ::recv(this->socket, (void *)pbuffer, p_len, flag);
+	int res = ::recv(this->socket, pbuffer, p_len, flag);
 	sent = res;
 	return res;
 }
@@ -360,7 +357,7 @@ long int TCPNetSocket::getTimeout() {
 		throw SystemException(errno, std::system_category(), "Failed to set recv timeout");
 	}
 
-	return timeout.tv_sec * 1E6L + timeout.tv_usec;
+	return (timeout.tv_sec * 1E6L) + timeout.tv_usec;
 }
 
 int TCPNetSocket::getSocket() const noexcept { return this->socket; }

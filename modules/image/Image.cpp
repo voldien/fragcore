@@ -24,6 +24,7 @@ Image::Image(const Image &other)
 Image::Image(Image &&other)
 	: m_width(other.m_width), m_height(other.m_height), depth(other.depth), format(other.format),
 	  bufferSize(other.bufferSize) {
+
 	Object::operator=(other);
 	this->pixelData = std::exchange(other.pixelData, nullptr);
 }
@@ -60,17 +61,19 @@ Image::~Image() {
 	if (this->pixelData != nullptr) {
 		free(this->pixelData);
 	}
+
 	this->pixelData = nullptr;
 	this->bufferSize = 0;
 }
 
-Color Image::getColor(unsigned int x_offset, unsigned int y_offset, unsigned int z_offset) const {
+Color Image::getColor(const unsigned int x_offset, const unsigned int y_offset, const unsigned int z_offset) const {
 
 	const size_t pixel_index = getPixelMemoryOffset(x_offset, y_offset, z_offset);
 
 	switch (this->getFormat()) {
 	case ImageFormat::Alpha8:
 	case ImageFormat::R8: {
+
 		const size_t index = pixel_index * (Image::getFormatPixelBitSize(this->getFormat()) / 8);
 		uint8_t color = reinterpret_cast<const uint8_t *>(this->pixelData)[index];
 		return {static_cast<float>(color / 255.0f), static_cast<float>(color / 255.0f),
@@ -81,6 +84,7 @@ Color Image::getColor(unsigned int x_offset, unsigned int y_offset, unsigned int
 		return Color::black();
 	case ImageFormat::R32:
 	case ImageFormat::R32U: {
+
 		const size_t index = pixel_index * (Image::getFormatPixelBitSize(this->getFormat()) / 8);
 		uint32_t color = reinterpret_cast<const uint32_t *>(this->pixelData)[index];
 		return {static_cast<float>(color), static_cast<float>(color), static_cast<float>(color),
@@ -169,11 +173,11 @@ void Image::allocateMemory(const unsigned int width, const unsigned int height, 
 
 unsigned int Image::getPixelMemoryOffset(const unsigned int x_offset, const unsigned int y_offset,
 										 const unsigned int z_offset) const noexcept {
-	const unsigned int pixel_index = this->width() * y_offset + x_offset;
+	const unsigned int pixel_index = (this->width() * y_offset) + x_offset;
 	return pixel_index;
 }
 
-unsigned int Image::getFormatPixelBitSize(const ImageFormat format) {
+inline unsigned int Image::getFormatPixelBitSize(const ImageFormat format) {
 
 	switch (format) {
 	case ImageFormat::Alpha8:

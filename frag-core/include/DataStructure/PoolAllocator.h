@@ -107,7 +107,7 @@ namespace fragcore {
 		T *obtain() {
 			T *alloc = nullptr;
 
-			/*	if last, resize.    */
+			/*	if last, resize.    */ //TODO: one without
 			if (this->isFull()) {
 				this->resize(nrOfElements + 256);
 				return this->obtain();
@@ -172,30 +172,30 @@ namespace fragcore {
 			this->nrOfElements = 0;
 		}
 
-		bool isFull() const noexcept { return this->nrOfElements >= (this->reserved() - 1); }
+		 bool isFull() const noexcept { return this->nrOfElements >= (unsigned int)std::max<int>(0, this->reserved() - 1); }
 
-		inline int size() const noexcept { return this->nrOfElements; }
+		 unsigned int size() const noexcept { return this->nrOfElements; }
 
-		inline int reserved() const noexcept { return this->mReserved; }
+		 unsigned int reserved() const noexcept { return this->mReserved; }
 
 		/**
 		 * Get datatype size.
 		 * @param size
 		 */
-		inline void setTypeSize(const unsigned int size) noexcept { this->typeSize = size; }
+		 void setTypeSize(const unsigned int size) noexcept { this->typeSize = size; }
 
 		/**
 		 *
 		 * @return
 		 */
-		inline unsigned int getTypeSize() const noexcept { return this->typeSize; }
+		 unsigned int getTypeSize() const noexcept { return this->typeSize; }
 
 		/**
 		 *
 		 */
 		/*	TODO Fix, still some bugs!	*/
-		void resize(int size) {
-			int index = 0;
+		void resize(const unsigned int size) {
+			unsigned int index = 0;
 			const unsigned int itemSize = this->getItemSize();
 
 			assert(size >= 0);
@@ -204,6 +204,7 @@ namespace fragcore {
 			if (this->reserved() == 0) {
 				this->item = static_cast<PoolAllactorItem *>(realloc(this->item, itemSize * size));
 
+				/*	*/
 				for (index = 0; index < size - 1; index++) {
 					item[index].next = &item[index + 1];
 				}
@@ -239,20 +240,20 @@ namespace fragcore {
 		 *
 		 * @return
 		 */
-		inline T *getLast() noexcept { return &this->item[this->mReserved - 1].data; }
+		 T *getLast() noexcept { return &this->item[this->mReserved - 1].data; }
 
 		/**
 		 *
 		 *	@return
 		 */
-		inline T &operator[](int index) { return this->item[index].data; }
+		 T &operator[](int index) { return this->item[index].data; }
 
 		/**
 		 *
 		 * @param index
 		 * @return
 		 */
-		inline T operator[](int index) const { return item[index].data; }
+		 T operator[](int index) const { return item[index].data; }
 
 	  protected:
 		/**

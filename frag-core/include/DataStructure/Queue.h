@@ -81,7 +81,7 @@ namespace fragcore {
 		/**
 		 *
 		 */
-		inline void clear() noexcept {
+		 void clear() noexcept {
 			this->head = 0;
 			this->tail = 0;
 		}
@@ -89,12 +89,12 @@ namespace fragcore {
 		/**
 		 *	@return true if queue empty.
 		 */
-		inline bool isEmpty() const noexcept { return (this->getSize() == 0); }
+		 bool isEmpty() const noexcept { return (this->getSize() == 0); }
 
 		/**
 		 *	@return true if full, false otherwise.
 		 */
-		inline bool isFull() const noexcept { return (this->getSize() == this->getReserved()); }
+		 bool isFull() const noexcept { return (this->getSize() == this->getReserved()); }
 
 		/**
 		 *	Resize queue.
@@ -134,14 +134,14 @@ namespace fragcore {
 
 			Iterator<T> &operator--() override { return *this; }
 
-			Iterator<T> &operator+=(int n) override { return *this; }
+			Iterator<T> &operator+=([[maybe_unused]] int n) override { return *this; }
 
-			Iterator<T> &operator-=(int n) override { return *this; }
+			Iterator<T> &operator-=([[maybe_unused]]int n) override { return *this; }
 
-			Iterator<T> &operator+(int n) override { return *this; }
+			Iterator<T> &operator+([[maybe_unused]]int n) override { return *this; }
 
-			Iterator<T> &operator-(int n) override { return *this; }
-			Iterator<T> &operator[](int index) const override { return *this; }
+			Iterator<T> &operator-([[maybe_unused]]int n) override { return *this; }
+			Iterator<T> &operator[]([[maybe_unused]]int index) const override { return *this; }
 
 		  private:
 			int index;
@@ -153,9 +153,9 @@ namespace fragcore {
 		QueueIterator end() const noexcept { return QueueIterator(this, this->head); }
 
 	  private:
-		inline int getTypeSize() const noexcept { return sizeof(T); }
+		 int getTypeSize() const noexcept { return sizeof(T); }
 
-		inline T *getData() const noexcept { return this->mdata; }
+		 T *getData() const noexcept { return this->mdata; }
 
 	  public: /*  */
 		Queue &operator=(const Queue &que) {

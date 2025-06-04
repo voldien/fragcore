@@ -29,6 +29,7 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC Image : public Object {
 	  public:
+		Image() = default;
 		Image(const unsigned int width, const unsigned int height, const ImageFormat format);
 		Image(const unsigned int width, const unsigned int height, const unsigned int layer, const ImageFormat format);
 
@@ -45,7 +46,8 @@ namespace fragcore {
 		virtual unsigned int layers() const noexcept { return this->depth; }
 		virtual ImageFormat getFormat() const noexcept { return this->format; }
 
-		virtual Color getColor(unsigned int x_offset, unsigned int y_offset, unsigned int z_offset) const;
+		virtual Color getColor(const unsigned int x_offset, const unsigned int y_offset,
+							   const unsigned int z_offset) const;
 		virtual void setColor(unsigned int x_offset, unsigned int y_offset, unsigned int z_offset, const Color &color);
 
 		virtual size_t getSize() const noexcept { return this->bufferSize; }
@@ -62,7 +64,7 @@ namespace fragcore {
 		static size_t getTextureByteSize(const unsigned int width, const unsigned int height, const unsigned int depth,
 										 const ImageFormat format);
 
-		static unsigned int getFormatPixelBitSize(const ImageFormat format);
+		static inline unsigned int getFormatPixelBitSize(const ImageFormat format);
 
 		static Image &convertImage(Image &image, ImageFormat textureFormat);
 

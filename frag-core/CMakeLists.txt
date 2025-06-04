@@ -117,7 +117,7 @@ ADD_LIBRARY(fragcore ${SOURCE_FILES} ${HEADER_FILES}
 TARGET_COMPILE_FEATURES(fragcore PUBLIC cxx_constexpr cxx_alias_templates cxx_raw_string_literals
 cxx_variadic_templates cxx_uniform_initialization cxx_right_angle_brackets cxx_nullptr
 cxx_generic_lambdas cxx_override cxx_noexcept cxx_aggregate_default_initializers)
-ADD_DEPENDENCIES(fragcore taskSch infoware cxxexcept )
+ADD_DEPENDENCIES(fragcore taskSch infoware cxxexcept)
 
 #
 TARGET_COMPILE_DEFINITIONS(fragcore PRIVATE FRAG_CORE_INTERNAL_IMP=1 PUBLIC FV_USE_SHARED_POINTER=1)
@@ -147,6 +147,8 @@ IF(OpenMP_FOUND AND OpenMP_CXX_FOUND AND BUILD_WITH_OPENMP)
 	TARGET_LINK_LIBRARIES(fragcore PRIVATE m pthread PUBLIC OpenMP::OpenMP_CXX)
 	TARGET_COMPILE_OPTIONS(fragcore PUBLIC ${OpenMP_CXX_FLAGS})
 ENDIF()
+
+# 
 
 
 # Enable FPIC if shared library.

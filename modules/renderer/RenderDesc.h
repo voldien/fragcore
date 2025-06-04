@@ -17,6 +17,8 @@
  */
 #ifndef _FRAGCORE_RENDER_DESC_H_
 #define _FRAGCORE_RENDER_DESC_H_ 1
+#include <cstdint>
+#include <cstddef>
 #include "GraphicFormat.h"
 #include "RenderPrerequisites.h"
 #include "ShaderLanguage.h"
@@ -286,7 +288,6 @@ namespace fragcore {
 		SourceCode,			 /*  Source code.    */
 		Binary,				 /*  Binary code.    */
 	};
-
 	/**
 	 *	Shader descriptor.
 	 */

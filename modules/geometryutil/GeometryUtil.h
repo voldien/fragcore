@@ -45,12 +45,12 @@ namespace fragcore {
 			return distance > -bound.getRadius();
 		}
 
-		template <typename T> static inline bool TestPlanesOBB(const Plane<T> &plane, const OBB &bound) { return true; }
+		template <typename T> static  bool TestPlanesOBB(const Plane<T> &plane, const OBB &bound) { return true; }
 
 		/**
 		 * @brief Positive
 		 */
-		template <typename T> static inline bool testPlanesPoint(const Plane<T> &plane, const Vector3 &point) {
+		template <typename T> static  bool testPlanesPoint(const Plane<T> &plane, const Vector3 &point) {
 			return plane.distanceSigned(point) > 0;
 		}
 
@@ -98,7 +98,7 @@ namespace fragcore {
 		void convert2Adjcent(float *vertices, const size_t nrVertices, std::vector<unsigned int> &Indices,
 							 const size_t stride = sizeof(float) * 3);
 
-	  public:
+	  
 		GeometryUtility() = delete;
 		GeometryUtility(const GeometryUtility &other) = delete;
 		GeometryUtility(GeometryUtility &&other) = delete;

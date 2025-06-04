@@ -19,7 +19,6 @@
 #define _FRAGCORE_OBJECT_H_ 1
 #include "../FragDef.h"
 #include "UIDObject.h"
-#include <string>
 
 namespace fragcore {
 	/**
@@ -47,8 +46,8 @@ namespace fragcore {
 
 		virtual const std::string &getName() const noexcept { return this->name; }
 
-		template <typename T> inline T &as() noexcept { return static_cast<T &>(*this); }
-		template <typename T> inline const T &as() const noexcept { return static_cast<const T &>(*this); }
+		template <typename T>  T &as() noexcept { return static_cast<T &>(*this); }
+		template <typename T>  const T &as() const noexcept { return static_cast<const T &>(*this); }
 
 	  protected: /*	*/
 		Object &operator=(const Object &object) {

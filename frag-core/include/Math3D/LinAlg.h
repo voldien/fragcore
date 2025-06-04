@@ -41,16 +41,16 @@ namespace fragcore {
 	typedef double fvvec2d FV_VECTORALIGN(16);
 	typedef double fvvec4d FV_VECTORALIGN(32);
 
-	using Bound = union bound_t {
-		struct aabb {
+	using Bound = union alignas(16) bound_t {
+		struct alignas(16) aabb {
 			fvvec4f min;
 			fvvec4f max;
 		} aabb;
-		struct sphere_t {
+		struct alignas(16) sphere_t {
 			fvvec4f center;
 			float radius;
 		} sphere;
-		struct obb_t {
+		struct alignas(16) obb_t {
 			fvvec4f u;
 			fvvec4f v;
 			fvvec4f w;

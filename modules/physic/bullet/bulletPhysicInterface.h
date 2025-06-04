@@ -6,12 +6,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
@@ -19,7 +19,12 @@
 #define _FRAGCORE_BULLET_PHYSIC_INTERFACE_H_ 1
 #include "../PhysicDesc.h"
 #include "../PhysicInterface.h"
-#include "internal_object_type.h"
+#include "BulletCollision/BroadphaseCollision/btBroadphaseInterface.h"
+#include "BulletCollision/CollisionDispatch/btCollisionDispatcher.h"
+#include "BulletCollision/CollisionDispatch/btDefaultCollisionConfiguration.h"
+#include "BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolver.h"
+#include "BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h"
+#include "BulletSoftBody/btSoftBody.h"
 #include <Core/IConfig.h>
 #include <Core/Module.h>
 #include <Core/SmartReference.h>
@@ -44,7 +49,8 @@ namespace fragcore {
 		 * @param maxSubSteps
 		 * @param fixedTimeStep
 		 */
-		void simulate(const float timeStep, const int maxSubSteps = 1, const float fixedTimeStep = 1.0f / 60.0f) override;
+		void simulate(const float timeStep, const int maxSubSteps = 1,
+					  const float fixedTimeStep = 1.0f / 60.0f) override;
 
 		/**
 		 * synchronize.

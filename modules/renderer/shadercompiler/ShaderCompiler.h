@@ -67,6 +67,8 @@ namespace fragcore {
 			ShaderLanguage target = ShaderLanguage::GLSL;
 			unsigned int glslVersion = 150;
 			bool es = false;
+			bool auto_storage_qualifier = false;
+			unsigned int precision = 0;
 		};
 
 		/**

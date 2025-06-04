@@ -8,6 +8,7 @@
 #include <generator/SphereMesh.hpp>
 #include <generator/TeapotMesh.hpp>
 #include <generator/TorusMesh.hpp>
+#include <glm/geometric.hpp>
 
 using namespace fragcore;
 using namespace generator;
@@ -16,7 +17,7 @@ static inline glm::vec3 tangent(const glm::vec3 &normal) noexcept {
 
 	glm::vec3 tangent = glm::cross(normal, glm::vec3(0.0f, 1.0f, 0.0f));
 
-	if (tangent.length() <= Math::Epsilon) {
+	if (glm::length(tangent) <= Math::Epsilon) {
 		tangent = glm::cross(normal, glm::vec3(0.0f, 0.0f, 1.0f));
 	}
 	return tangent;
@@ -42,7 +43,7 @@ void ProceduralGeometry::generatePlan(float scale, std::vector<Vertex> &vertices
 		v.normal[1] = vertex.normal.y;
 		v.normal[2] = vertex.normal.z;
 
-		glm::vec3 tangent = ::tangent(vertex.normal);
+		const glm::vec3 tangent = ::tangent(vertex.normal);
 
 		v.tangent[0] = tangent.x;
 		v.tangent[1] = tangent.y;
@@ -108,7 +109,7 @@ void ProceduralGeometry::createFrustum(std::vector<Vertex> &vertices, const floa
 	projectMatrix(2, 3) = -2 * near * far / range;
 	projectMatrix(3, 3) = 0;
 
-	return ProceduralGeometry::createFrustum(vertices, projectMatrix);
+	ProceduralGeometry::createFrustum(vertices, projectMatrix);
 }
 
 void ProceduralGeometry::generateSphere(float radius, std::vector<Vertex> &vertices, std::vector<unsigned int> &indices,

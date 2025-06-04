@@ -117,7 +117,7 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID 
       SET(AVX_FLAGS "${AVX_FLAGS} -mavx")
   endif()
   # TODO: Check for AVX512 support
-  SET(AVX_FLAGS "${AVX_FLAGS} -mno-avx512f -mno-avx512pf -mno-avx512er -mno-avx512cd")
+  SET(AVX_FLAGS "${AVX_FLAGS} -mno-avx512f -mno-avx512cd")
 elseif(CMAKE_CXX_COMPILER_ID MATCHES "Intel")
   set(AVX_FLAGS "-xHost")
 elseif(MSVC)

@@ -226,7 +226,7 @@ long int UDPNetSocket::getTimeout() {
 		throw SystemException(errno, std::system_category(), "Failed to set recv timeout");
 	}
 
-	return timeout.tv_sec * 1E6L + timeout.tv_usec;
+	return (timeout.tv_sec * 1E6L) + timeout.tv_usec;
 }
 
 size_t UDPNetSocket::setupIPAddress(struct sockaddr *addr, const INetAddress &p_addr, uint16_t p_port) {

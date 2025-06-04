@@ -270,6 +270,7 @@ void ASyncIO::async_write(Task *task) {
 
 	Ref<IO> &io = ao->ref;
 	ao->status.offset = io->getPos();
+	/*	*/
 	while (ao->status.nbytes < ao->size) {
 		long int nwritten = io->write(block_size, &ao->buffer[ao->status.nbytes]);
 		if (nwritten <= 0) {

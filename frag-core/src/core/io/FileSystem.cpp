@@ -43,7 +43,7 @@ void FileSystem::remove(const char *path) {
 
 void FileSystem::rename(const char *oldPath, const char *newPath) {
 #if __cplusplus >= 201703L
-	return fs::rename(oldPath, newPath);
+	fs::rename(oldPath, newPath);
 #else
 	throw NotImplementedException();
 // if (::rename(oldPath, newPath) != 0)
@@ -156,6 +156,7 @@ std::vector<std::string> FileSystem::listFiles(const char *directory) const {
 #if __cplusplus >= 201703L
 	if (isDirectory(directory)) {
 		std::vector<std::string> files;
+
 		for (const auto &entry : fs::directory_iterator(directory)) {
 			if (entry.is_regular_file()) {
 				files.push_back(entry.path());
