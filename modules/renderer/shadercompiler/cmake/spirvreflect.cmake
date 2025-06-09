@@ -2,7 +2,7 @@ INCLUDE(FetchContent)
 
 FetchContent_Declare(spirv_reflect_source
 	GIT_REPOSITORY https://github.com/KhronosGroup/SPIRV-Reflect.git
-	GIT_TAG "vulkan-sdk-1.4.304.1"
+	GIT_TAG "vulkan-sdk-1.4.313.0"
 )
 
 FetchContent_GetProperties(spirv_reflect_source)

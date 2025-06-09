@@ -38,41 +38,41 @@ unsigned int GLHelper::getWrapMode(const TextureWrappingMode mode) {
 	}
 }
 
-unsigned int GLHelper::getFilterMode(const fragcore::FilterMode mode, const fragcore::FilterMode mips) {
-	if (mips == FilterMode::NoFilterMode) {
+unsigned int GLHelper::getFilterMode(const fragcore::TextureFilterMode mode, const fragcore::TextureFilterMode mips) {
+	if (mips == TextureFilterMode::NoFilterMode) {
 		switch (mode) {
-		case FilterMode::Linear:
+		case TextureFilterMode::Linear:
 			return GL_LINEAR;
-		case FilterMode::Nearset:
+		case TextureFilterMode::Nearset:
 			return GL_NEAREST;
 		default:
 			break;
 		}
 	} else {
 		switch (mode) {
-		case FilterMode::Linear:
+		case TextureFilterMode::Linear:
 			switch (mips) {
-			case FilterMode::Linear:
+			case TextureFilterMode::Linear:
 				return GL_LINEAR_MIPMAP_LINEAR;
-			case FilterMode::Nearset:
+			case TextureFilterMode::Nearset:
 				return GL_LINEAR_MIPMAP_NEAREST;
-			case FilterMode::NoFilterMode:
+			case TextureFilterMode::NoFilterMode:
 			default:
 				break;
 			}
 			break;
-		case FilterMode::Nearset:
+		case TextureFilterMode::Nearset:
 			switch (mips) {
-			case FilterMode::Linear:
+			case TextureFilterMode::Linear:
 				return GL_NEAREST_MIPMAP_LINEAR;
-			case FilterMode::Nearset:
+			case TextureFilterMode::Nearset:
 				return GL_NEAREST_MIPMAP_NEAREST;
-			case FilterMode::NoFilterMode:
+			case TextureFilterMode::NoFilterMode:
 			default:
 				break;
 			}
 			break;
-		case FilterMode::NoFilterMode:
+		case TextureFilterMode::NoFilterMode:
 		default:
 			break;
 		}
@@ -473,19 +473,19 @@ unsigned int GLHelper::getTextureType(TextureDesc::PixelDataType type) {
 	}
 }
 
-unsigned int GLHelper::getTextureSwizzle(fragcore::Swizzle swizzle) {
+unsigned int GLHelper::getTextureSwizzle(fragcore::TextureSwizzle swizzle) {
 	switch (swizzle) {
-	case Swizzle::Zero:
+	case TextureSwizzle::Zero:
 		return GL_ZERO;
-	case Swizzle::One:
+	case TextureSwizzle::One:
 		return GL_ONE;
-	case Swizzle::Red:
+	case TextureSwizzle::Red:
 		return GL_RED;
-	case Swizzle::Green:
+	case TextureSwizzle::Green:
 		return GL_GREEN;
-	case Swizzle::Blue:
+	case TextureSwizzle::Blue:
 		return GL_BLUE;
-	case Swizzle::eAlpha:
+	case TextureSwizzle::eAlpha:
 		return GL_ALPHA;
 	default:
 		throw InvalidArgumentException("");

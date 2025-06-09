@@ -17,12 +17,12 @@
  */
 #ifndef _FRAGCORE_RENDER_DESC_H_
 #define _FRAGCORE_RENDER_DESC_H_ 1
-#include <cstdint>
-#include <cstddef>
 #include "GraphicFormat.h"
 #include "RenderPrerequisites.h"
 #include "ShaderLanguage.h"
 #include <ImageFormat.h>
+#include <cstddef>
+#include <cstdint>
 
 namespace fragcore {
 
@@ -47,13 +47,19 @@ namespace fragcore {
 		unsigned int baseInstance;	/*  */
 	};
 
+	/**
+	 *
+	 */
 	using IndirectDispatch = struct indirect_dispatch_t {
 		unsigned int num_groups_x;
 		unsigned int num_groups_y;
 		unsigned int num_groups_z;
 	};
 
-	enum class Swizzle : uint32_t {
+	/**
+	 *
+	 */
+	enum class TextureSwizzle : uint32_t {
 		NoSwizzle = 0x0, /*  */
 		Zero = 0x1,		 /*  */
 		One = 0x2,		 /*  */
@@ -63,34 +69,21 @@ namespace fragcore {
 		eAlpha = 0x6,	 /*  */
 	};
 
-	using MarkerDebug = struct marker_debug_t {
-		const char *markerName;
-	};
-
-	using MemoryInfo = struct memory_info_t {
-		long int totalVRam;
-		long int currentVRam;
-	};
-
-	using RendererInfo = struct renderer_info_t {
-		MemoryInfo memoryInfo;
-	};
-
 	/**
 	 *
 	 */
-	enum class FilterMode : uint32_t {
+	enum class TextureFilterMode : uint32_t {
 		NoFilterMode, /*  */
-		Trilinear,	  /*	*/
-		Linear,		  /*  */
 		Nearset,	  /*  */
+		Linear,		  /*  */
+		Trilinear,	  /*	*/
 	};
 
 	/**
 	 *
 	 */
 	// TODO: refractor name
-	enum class UVMappingMode : uint32_t {
+	enum class TextureUVMappingMode : uint32_t {
 		UV,		/*  */
 		Sphere, /*  */
 		Box,	/*  */
@@ -122,21 +115,25 @@ namespace fragcore {
 		never,
 	};
 
+	using MarkerDebug = struct marker_debug_t {
+		const char *markerName;
+	};
+
 	using SamplerDesc = struct sampler_desc_t {
 
 		/*  Sampler.    */
-		float anisotropy;			  /*  */
-		FilterMode minFilter;		  /*  */
-		FilterMode magFilter;		  /*  */
-		TextureWrappingMode AddressU; /*  */
-		TextureWrappingMode AddressV; /*  */
-		TextureWrappingMode AddressW; /*  */
-		FilterMode mipmapFilter;	  /*  */
+		float anisotropy;				/*  */
+		TextureFilterMode minFilter;	/*  */
+		TextureFilterMode magFilter;	/*  */
+		TextureWrappingMode AddressU;	/*  */
+		TextureWrappingMode AddressV;	/*  */
+		TextureWrappingMode AddressW;	/*  */
+		TextureFilterMode mipmapFilter; /*  */
 		/*  Set swizzle.    */
-		Swizzle Swizzler;				/*  */
-		Swizzle Swizzleg;				/*  */
-		Swizzle Swizzleb;				/*  */
-		Swizzle Swizzlea;				/*  */
+		TextureSwizzle Swizzler;		/*  */
+		TextureSwizzle Swizzleg;		/*  */
+		TextureSwizzle Swizzleb;		/*  */
+		TextureSwizzle Swizzlea;		/*  */
 		int maxLOD;						/*  */
 		int minLOD;						/*  */
 		int biasLOD;					/*  */
@@ -236,10 +233,10 @@ namespace fragcore {
 		unsigned int nrSamples = 0;	 /*	Enable Multisampling.   */
 
 		/*  Set swizzle.    */
-		Swizzle Swizzler; /*  */
-		Swizzle Swizzleg; /*  */
-		Swizzle Swizzleb; /*  */
-		Swizzle Swizzlea; /*  */
+		TextureSwizzle Swizzler; /*  */
+		TextureSwizzle Swizzleg; /*  */
+		TextureSwizzle Swizzleb; /*  */
+		TextureSwizzle Swizzlea; /*  */
 
 		/*	Texture pixel data.	*/
 		union {
@@ -288,6 +285,7 @@ namespace fragcore {
 		SourceCode,			 /*  Source code.    */
 		Binary,				 /*  Binary code.    */
 	};
+
 	/**
 	 *	Shader descriptor.
 	 */
@@ -395,7 +393,6 @@ namespace fragcore {
 		/**
 		 *
 		 */
-		// TODO: change to class
 		enum BufferType : uint32_t {
 			eArray,				/*	*/
 			eElementArray,		/*	*/
@@ -446,8 +443,6 @@ namespace fragcore {
 		/*  Debug attributes.   */
 		MarkerDebug *marker; // TODO add as pointer.
 	};
-
-	// TODO determine if packing compiler qualifier needed.
 
 	/**
 	 *	Geometry description.
@@ -508,6 +503,15 @@ namespace fragcore {
 		MarkerDebug *marker;
 	};
 
+	using MemoryInfo = struct memory_info_t {
+		long int totalVRam;
+		long int currentVRam;
+	};
+
+	using RendererInfo = struct renderer_info_t {
+		MemoryInfo memoryInfo;
+	};
+
 	/**
 	 *
 	 */
@@ -528,6 +532,8 @@ namespace fragcore {
 		bool variableRateShading;
 		bool shaderFloat64;
 		bool ansi;
+		bool floatVertex;
+		bool halfpixel;
 	};
 
 	/**
@@ -634,7 +640,6 @@ namespace fragcore {
 	/**
 	 *
 	 */
-	// TODO improve.
 	using DeviceInfo = struct device_info_t {
 		const char *name;
 		const int deviceType;

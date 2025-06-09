@@ -56,7 +56,7 @@ namespace fragcore {
 
 		static unsigned int getWrapMode(const fragcore::TextureWrappingMode mode);
 
-		static unsigned int getFilterMode(const fragcore::FilterMode mode,const  fragcore::FilterMode mips);
+		static unsigned int getFilterMode(const fragcore::TextureFilterMode mode,const  fragcore::TextureFilterMode mips);
 
 		static unsigned int getCompareMode(const fragcore::TextureCompareFunc mode);
 
@@ -72,7 +72,7 @@ namespace fragcore {
 
 		static unsigned int getTextureType(fragcore::TextureDesc::PixelDataType type);
 
-		static unsigned int getTextureSwizzle(fragcore::Swizzle swizzle);
+		static unsigned int getTextureSwizzle(fragcore::TextureSwizzle swizzle);
 
 		static unsigned int getBufferType(fragcore::BufferDesc::BufferType type);
 

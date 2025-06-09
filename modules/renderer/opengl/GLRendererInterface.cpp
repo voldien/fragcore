@@ -41,7 +41,11 @@ bool GLRendererInterface::supportCompute() noexcept { return this->capability.sC
 IConfig GLRendererInterface::getDefaultConfig() const noexcept {
 	IConfig defaultConfig;
 	defaultConfig.set("core", true);
+#if NDEBUG
 	defaultConfig.set("debug", false);
+#else
+	defaultConfig.set("debug", true);
+#endif
 	defaultConfig.set("alpha", true);
 	defaultConfig.set("opengl", -1);
 	defaultConfig.set("anti-aliasing-samples", 0);
@@ -590,6 +594,8 @@ void GLRendererInterface::getCapability(Capability *capability) {
 		glGetIntegerv(GL_MAX_ELEMENTS_INDICES, (GLint *)&capability->sMaxElementIndices);
 	}
 
+
+
 	/*	TODO resolve*/
 	glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &capability->sMaxTextureUnitActive);		/*	GL_MAX_TEXTURE_IMAGE_UNITS	*/
 	glGetIntegerv(GL_MAX_SUBROUTINE_UNIFORM_LOCATIONS, &capability->numMaxSubRoutines); /*	*/
@@ -694,7 +700,6 @@ void GLRendererInterface::getCapability(Capability *capability) {
 	capability->sConditionalRendering =
 		glewIsExtensionSupported("GL_NV_conditional_render") || glewIsExtensionSupported("GL_NVX_conditional_render");
 
-
 	GLint nShaderBinary;
 	glGetIntegerv(GL_NUM_SHADER_BINARY_FORMATS, &nShaderBinary);
 	capability->sShaderBinary = nShaderBinary > 0 && glewIsExtensionSupported("GL_ARB_get_program_binary");
@@ -734,6 +739,8 @@ void GLRendererInterface::getFeatures(Features *features) {
 
 	features->raytracing = false;
 	features->variableRateShading = glewIsExtensionSupported("GL_NV_shading_rate_image");
+	features->floatVertex = glewIsExtensionSupported("GL_ARB_half_float_vertex");
+	features->halfpixel = glewIsExtensionSupported("GL_ARB_half_float_pixel");
 }
 
 const char *GLRendererInterface::getExtensions() const noexcept { return (const char *)glGetString(GL_EXTENSIONS); }
