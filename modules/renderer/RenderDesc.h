@@ -161,7 +161,7 @@ namespace fragcore {
 		 *	Texture format.
 		 */
 		enum class DataPixelFormat : uint32_t {
-			NoFormat,
+			NoFormat = 0,
 			RGB = 0x1,	/*	RGB components.	*/
 			RGBA = 0x2, /*	RGBA components.	*/
 			BGR = 0x3,	/*	BGR components.	*/
@@ -180,7 +180,7 @@ namespace fragcore {
 		 *	Texture pixel type data.
 		 */
 		enum class PixelDataType : uint32_t {
-			NoType,
+			NoType = 0,
 			UnsignedByte = 0x1, /*	Each color component encoded in a single byte.	*/
 			SignedByte = 0x2,	/*	Each color component encoded in a single signed byte.	*/
 			UnsignedShort = 0x3,
@@ -220,9 +220,6 @@ namespace fragcore {
 		int height = 1; /*	Texture height in pixels.	*/
 		int depth = 1;	/*	Texture depth in pixels.	*/
 
-		/*	Input format.	*/
-		ImageFormat pixelFormat; /*  */
-
 		/*	Internal format.	*/
 		GraphicFormat graphicFormat; /*  */
 		bool immutable;				 /*	*/
@@ -237,6 +234,9 @@ namespace fragcore {
 		TextureSwizzle Swizzleg; /*  */
 		TextureSwizzle Swizzleb; /*  */
 		TextureSwizzle Swizzlea; /*  */
+
+		/*	Input format.	*/
+		ImageFormat pixelFormat; /*  */
 
 		/*	Texture pixel data.	*/
 		union {

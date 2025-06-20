@@ -1,5 +1,6 @@
 #include "../IRenderer.h"
 #include "GLHelper.h"
+#include "GraphicFormat.h"
 #include "RenderDesc.h"
 #include "internal_object_type.h"
 #include <GL/glew.h>
@@ -238,7 +239,15 @@ unsigned int GLHelper::getGraphicFormat(const GraphicFormat graphicFormat) {
 	case GraphicFormat::B5G5R5A1_UNormPack16:
 
 	case GraphicFormat::A1R5G5B5_UNormPack16:
-
+		break;
+	case GraphicFormat::Depth_32Bit:
+		return GL_DEPTH_COMPONENT32;
+	case GraphicFormat::Depth_24Bit:
+		return GL_DEPTH_COMPONENT24;
+	case GraphicFormat::Depth_16Bit:
+		return GL_DEPTH_COMPONENT16;
+	case GraphicFormat::Depth_24Bit_8Stencil:
+		return GL_DEPTH24_STENCIL8;
 	default:
 		break;
 	}

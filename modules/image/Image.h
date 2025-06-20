@@ -64,7 +64,7 @@ namespace fragcore {
 		static size_t getTextureByteSize(const unsigned int width, const unsigned int height, const unsigned int depth,
 										 const ImageFormat format);
 
-		static inline unsigned int getFormatPixelBitSize(const ImageFormat format);
+		static unsigned int getFormatPixelBitSize(const ImageFormat format);
 
 		static Image &convertImage(Image &image, ImageFormat textureFormat);
 

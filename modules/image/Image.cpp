@@ -177,7 +177,7 @@ unsigned int Image::getPixelMemoryOffset(const unsigned int x_offset, const unsi
 	return pixel_index;
 }
 
-inline unsigned int Image::getFormatPixelBitSize(const ImageFormat format) {
+unsigned int Image::getFormatPixelBitSize(const ImageFormat format) {
 
 	switch (format) {
 	case ImageFormat::Alpha8:
