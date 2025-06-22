@@ -1,16 +1,15 @@
 #include "TaskScheduler.h"
 #include "marl/defer.h"
-#include "marl/event.h"
 #include "marl/scheduler.h"
 #include "marl/task.h"
 #include "marl/thread.h"
-#include "marl/waitgroup.h"
 #include <exception>
 
 using namespace fragcore;
 TaskScheduler::TaskScheduler() : TaskScheduler(-1) {}
 
 TaskScheduler::TaskScheduler(int cores) : sch(nullptr) {
+
 	marl::Scheduler::Config config;
 	if (cores == -1) {
 		config.setWorkerThreadCount(marl::Thread::numLogicalCPUs());
@@ -19,8 +18,6 @@ TaskScheduler::TaskScheduler(int cores) : sch(nullptr) {
 	}
 
 	marl::Scheduler *scheduler = new marl::Scheduler(config);
-	scheduler->bind();
-
 	this->sch = scheduler;
 }
 
