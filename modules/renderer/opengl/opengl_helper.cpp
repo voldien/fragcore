@@ -147,20 +147,21 @@ unsigned int GLHelper::getGraphicFormat(const GraphicFormat graphicFormat) {
 	case GraphicFormat::R8G8B8A8_SInt:
 		return GL_RGB8I;
 	case GraphicFormat::R16_UNorm:
+		return GL_R16_EXT;
 	case GraphicFormat::R16G16_UNorm:
-
+		return GL_RG16_EXT;
 	case GraphicFormat::R16G16B16_UNorm:
-
+		return GL_RGB16_EXT;
 	case GraphicFormat::R16G16B16A16_UNorm:
-
+		return GL_RGBA16_EXT;
 	case GraphicFormat::R16_SNorm:
-
+		return GL_R16_SNORM;
 	case GraphicFormat::R16G16_SNorm:
-
+		return GL_RG16_SNORM;
 	case GraphicFormat::R16G16B16_SNorm:
-
+		return GL_RGB16_SNORM;
 	case GraphicFormat::R16G16B16A16_SNorm:
-
+		return GL_RGBA16_SNORM;
 	case GraphicFormat::R16_UInt:
 
 	case GraphicFormat::R16G16_UInt:
@@ -210,7 +211,6 @@ unsigned int GLHelper::getGraphicFormat(const GraphicFormat graphicFormat) {
 		return GL_RGBA32F;
 	case GraphicFormat::B8G8R8_SRGB:
 	case GraphicFormat::B8G8R8A8_SRGB:
-
 	case GraphicFormat::B8G8R8_UNorm:
 
 	case GraphicFormat::B8G8R8A8_UNorm:
@@ -497,7 +497,7 @@ unsigned int GLHelper::getTextureSwizzle(fragcore::TextureSwizzle swizzle) {
 	case TextureSwizzle::eAlpha:
 		return GL_ALPHA;
 	default:
-		throw InvalidArgumentException("");
+		throw InvalidArgumentException("None Supported Swizzled");
 	}
 }
 
