@@ -29,9 +29,9 @@ namespace fragcore {
 	struct FVDECLSPEC AABB {
 	  public:
 		AABB() = default;
-		AABB(const Vector3 &size, const Vector3 &center) {
+		AABB(const Vector3 &halfSize, const Vector3 &center) {
 			this->setCenter(center);
-			this->setSize(size);
+			this->setHalfSize(halfSize);
 		}
 		AABB(const AABB &bounds) { *this = bounds; }
 
@@ -67,24 +67,24 @@ namespace fragcore {
 		 * Compute minimum position.
 		 * @return vector position.
 		 */
-		Vector3 min() const noexcept { return this->getCenter() - this->getSize(); }
+		Vector3 min() const noexcept { return this->getCenter() - this->getHalfSize(); }
 
 		/**
 		 * Compute max position.
 		 * @return vector position.
 		 */
-		Vector3 max() const noexcept { return this->getCenter() + this->getSize(); }
+		Vector3 max() const noexcept { return this->getCenter() + this->getHalfSize(); }
 
 		/**
 		 * Get half size.
 		 * @return half size vector.
 		 */
-		inline const Vector3 &getSize() const noexcept { return this->mhalfsize; }
+		inline const Vector3 &getHalfSize() const noexcept { return this->mhalfsize; }
 
 		/**
 		 * Set half size.
 		 */
-		inline void setSize(const Vector3 &size) noexcept { this->mhalfsize = size; }
+		inline void setHalfSize(const Vector3 &size) noexcept { this->mhalfsize = size; }
 
 		/**
 		 * Get center position.
@@ -184,7 +184,7 @@ namespace fragcore {
 		 * @return reference of object.
 		 */
 		friend AABB operator*(const AABB &bound, const float scalar) noexcept {
-			return {bound.getCenter(), bound.getSize() * scalar};
+			return {bound.getCenter(), bound.getHalfSize() * scalar};
 		}
 
 		/**
@@ -194,7 +194,7 @@ namespace fragcore {
 		 * @return reference of object.
 		 */
 		friend AABB operator/(const AABB &bound, const float divisor) noexcept(noexcept(divisor == 0)) {
-			return {bound.getCenter(), bound.getSize() / divisor};
+			return {bound.getCenter(), bound.getHalfSize() / divisor};
 		}
 
 		/**
@@ -203,7 +203,7 @@ namespace fragcore {
 		 * @return reference of object.
 		 */
 		AABB &operator*=(const float scalar) noexcept {
-			this->setSize(this->getSize() * scalar);
+			this->setHalfSize(this->getHalfSize() * scalar);
 			return *this;
 		}
 
@@ -213,7 +213,7 @@ namespace fragcore {
 		 * @return reference of object.
 		 */
 		AABB &operator/=(const float divisor) noexcept {
-			this->setSize(this->getSize() / divisor);
+			this->setHalfSize(this->getHalfSize() / divisor);
 			return *this;
 		}
 
@@ -223,7 +223,7 @@ namespace fragcore {
 		 * @return true if object are equal, false otherwise.
 		 */
 		bool operator==(const AABB &bound) const noexcept {
-			return (this->getCenter() == bound.getCenter()) && (this->getSize() == bound.getSize());
+			return (this->getCenter() == bound.getCenter()) && (this->getHalfSize() == bound.getHalfSize());
 		}
 
 		/**
@@ -232,13 +232,13 @@ namespace fragcore {
 		 * @return false if object are equal, true otherwise.
 		 */
 		bool operator!=(const AABB &bound) const noexcept {
-			return (this->getCenter() != bound.getCenter()) || (this->getSize() != bound.getSize());
+			return (this->getCenter() != bound.getCenter()) || (this->getHalfSize() != bound.getHalfSize());
 		}
 
 		static AABB createMinMax(const Vector3 &min, const Vector3 &max) noexcept {
-			const Vector3 size = (max - min) * 0.5f;
-			const Vector3 center = min + size;
-			return AABB(size, center);
+			const Vector3 halfSize = (max - min) * 0.5f;
+			const Vector3 center = min + halfSize;
+			return AABB(halfSize, center);
 		}
 
 	  private:			   /*	Attributes.	*/

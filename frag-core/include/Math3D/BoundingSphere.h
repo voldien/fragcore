@@ -102,12 +102,12 @@ namespace fragcore {
 			Vector3 tmp = ray.getOrigin() - getCenter();
 			T t;
 			/*	*/
-			T a = ray.getDirection().dot(ray.getDirection());
-			T b = static_cast<T>(2.0) * ray.getDirection().dot(tmp);
-			T c = tmp.dot(tmp) - (radius * radius);
+			const T a = ray.getDirection().dot(ray.getDirection());
+			const T b = static_cast<T>(2.0) * ray.getDirection().dot(tmp);
+			const T c = tmp.dot(tmp) - (radius * radius);
 
 			/*	*/
-			T discriminant = b * b - (static_cast<T>(4) * c * a);
+			const T discriminant = b * b - (static_cast<T>(4) * c * a);
 			if (discriminant >= 0) {
 				t = (-b - std::sqrt(discriminant)) / (a * static_cast<T>(2));
 				if (t < static_cast<T>(0)) {

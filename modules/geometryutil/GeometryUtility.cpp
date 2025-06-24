@@ -4,7 +4,6 @@
 #include "Math3D/OBB.h"
 #include <Math/Math.h>
 #include <Math3D/LinAlg.h>
-#include <algorithm>
 #include <cstdint>
 #include <generator/SubdivideMesh.hpp>
 
@@ -66,7 +65,7 @@ AABB GeometryUtility::computeBoundingBox(const Vector3 *vertices, const size_t n
 	const uint8_t *dataPointer = reinterpret_cast<const uint8_t *>(vertices);
 
 	for (size_t i = 0; i < nrVertices; i++) {
-		const size_t vertexOffset =  i * stride;
+		const size_t vertexOffset = i * stride;
 		const Vector3 &vertex = *reinterpret_cast<const Vector3 *>(&dataPointer[vertexOffset]);
 
 		max = max.cwiseMax(vertex);
@@ -90,10 +89,12 @@ AABB GeometryUtility::computeBoundingBox(const AABB &aabbs, const Matrix4x4 &mat
 	const Vector3 globalCenter =
 		(matrix * Vector4(aabbs.getCenter().x(), aabbs.getCenter().y(), aabbs.getCenter().z(), 1)).head(3);
 
-	const Vector3 right = (matrix * Vector4(1, 0, 0, 0)).head(3).normalized() * aabbs.getSize().x();
-	const Vector3 up = (matrix * Vector4(0, 1, 0, 0)).head(3).normalized() * aabbs.getSize().y();
-	const Vector3 forward = (matrix * Vector4(0, 0, 1, 0)).head(3).normalized() * aabbs.getSize().z();
+	/*	*/
+	const Vector3 right = (matrix * Vector4(1, 0, 0, 0)).head(3).normalized() * aabbs.getHalfSize().x();
+	const Vector3 up = (matrix * Vector4(0, 1, 0, 0)).head(3).normalized() * aabbs.getHalfSize().y();
+	const Vector3 forward = (matrix * Vector4(0, 0, 1, 0)).head(3).normalized() * aabbs.getHalfSize().z();
 
+	/*	*/
 	const float newIi = std::abs(Vector3{1.f, 0.f, 0.f}.dot(right)) + std::abs(Vector3{1.f, 0.f, 0.f}.dot(up)) +
 						std::abs(Vector3{1.f, 0.f, 0.f}.dot(forward));
 
@@ -110,7 +111,7 @@ BoundingSphere GeometryUtility::computeBoundingSphere(float *vertices, const siz
 
 	const AABB aabb = GeometryUtility::computeBoundingBox((Vector3 *)vertices, nrVertices, stride);
 	const Vector3 center = aabb.getCenter();
-	const float radius = aabb.getSize().norm();
+	const float radius = aabb.getHalfSize().norm();
 	return BoundingSphere(center, radius);
 }
 

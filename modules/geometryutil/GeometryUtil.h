@@ -32,7 +32,7 @@ namespace fragcore {
 	class FVDECLSPEC GeometryUtility {
 	  public:
 		template <typename T> static bool testPlanesAABB(const Plane<T> &plane, const AABB &bound) {
-			const float rad = bound.getSize().dot(Vector3(
+			const float rad = bound.getHalfSize().dot(Vector3(
 				std::abs(plane.getNormal().x()), std::abs(plane.getNormal().y()), std::abs(plane.getNormal().z())));
 			return -rad <= plane.distanceSigned(bound.getCenter());
 		}
