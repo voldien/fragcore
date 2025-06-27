@@ -52,7 +52,9 @@ void TaskScheduler::run() {}
 
 void TaskScheduler::terminate() {
 	marl::Scheduler *scheduler = static_cast<marl::Scheduler *>(this->sch);
-	defer(scheduler->unbind());
+	if (scheduler->get()) {
+		defer(scheduler->unbind());
+	}
 }
 
 void TaskScheduler::wait() { marl::Scheduler *scheduler = static_cast<marl::Scheduler *>(this->sch); }

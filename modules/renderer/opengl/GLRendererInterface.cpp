@@ -308,6 +308,7 @@ GLRendererInterface::~GLRendererInterface() {
 		SDL_GL_DeleteContext(this->openglcontext);
 	}
 
+	/*	*/
 	SDL_QuitSubSystem(SDL_INIT_VIDEO);
 }
 
@@ -593,8 +594,6 @@ void GLRendererInterface::getCapability(Capability *capability) {
 		glGetIntegerv(GL_MAX_ELEMENTS_VERTICES, (GLint *)&capability->sMaxElementVertices);
 		glGetIntegerv(GL_MAX_ELEMENTS_INDICES, (GLint *)&capability->sMaxElementIndices);
 	}
-
-
 
 	/*	TODO resolve*/
 	glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &capability->sMaxTextureUnitActive);		/*	GL_MAX_TEXTURE_IMAGE_UNITS	*/

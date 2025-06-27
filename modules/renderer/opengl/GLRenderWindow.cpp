@@ -1,4 +1,5 @@
 #include "GLRenderWindow.h"
+#include "SDL_video.h"
 
 #include <SDL2/SDL_egl.h>
 #include <SDL2/SDL_opengl.h>
@@ -25,7 +26,11 @@ GLRenderWindow::GLRenderWindow(const Ref<GLRendererInterface> &renderer) : rende
 	}
 }
 
-GLRenderWindow::~GLRenderWindow() = default;
+GLRenderWindow::~GLRenderWindow() {
+	SDL_DestroyWindow(this->window);
+	SDL_GL_MakeCurrent(nullptr, renderer->getOpenGLContext());
+	this->window = nullptr;
+}
 
 void GLRenderWindow::swapBuffer() { SDL_GL_SwapWindow(this->window); }
 
