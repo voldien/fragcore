@@ -49,7 +49,7 @@ namespace fragcore {
 		};
 
 		enum class SIMD : unsigned int {
-			NONE, /*	No SIMD exention flag.	*/
+			NONE, /*	No SIMD extention flag.	*/
 			/*	X86/AMD64	*/
 			MMX,	/*	MMX. (Yet not supported)	*/
 			S3DNOW, /*	3DNOW. (Yet not supported)	*/
@@ -90,7 +90,7 @@ namespace fragcore {
 		static CPUArchicture getCPUArchitecture2() noexcept;
 		static const char *getCPUArchitecture() noexcept;
 		static unsigned long getCPUFrequency() noexcept;
-		static bool isSupportedInstruction(SIMD instruction) noexcept;
+		static bool isSupportedInstruction(const SIMD instruction) noexcept;
 		static std::vector<SIMD> getSupportedSIMD();
 
 		using CPUPackage = struct cpu_package_t {

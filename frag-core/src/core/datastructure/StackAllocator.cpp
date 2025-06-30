@@ -20,7 +20,18 @@ StackAllocator::StackAllocator(StackAllocator &&other) {
 
 StackAllocator::StackAllocator(const size_t stackSizeBytes) : StackAllocator() { this->alloc(stackSizeBytes); }
 
-StackAllocator::~StackAllocator() { free(this->mData); }
+StackAllocator::StackAllocator(void *buffer, size_t sizeBytes) : fragcore::StackAllocator() {
+	this->mSize = sizeBytes;
+	this->mData = buffer;
+	this->ownData = false;
+}
+
+StackAllocator::~StackAllocator() {
+	if (this->ownData) {
+		free(this->mData);
+	}
+	this->mData = nullptr;
+}
 
 void *StackAllocator::alloc(const size_t sizeBytes) {
 

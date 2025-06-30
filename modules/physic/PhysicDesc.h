@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _FV_PHYSIC_DESC_H_
-#define _FV_PHYSIC_DESC_H_ 1
+#ifndef _FRAGCORE_PHYSIC_DESC_H_
+#define _FRAGCORE_PHYSIC_DESC_H_ 1
 #include "Math3D/Math3D.h"
 #include "RigidBody.h"
 

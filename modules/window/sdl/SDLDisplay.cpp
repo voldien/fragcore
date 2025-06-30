@@ -81,7 +81,7 @@ SDLDisplay::DisplayFormat SDLDisplay::getFormat() {
 	if (err != 0) {
 		throw RuntimeException("Failed to get display {} Mode, {}", this->index, SDL_GetError());
 	}
-	return static_cast<DisplayFormat>(translateFormat(mode.format));
+	return translateFormat(mode.format);
 }
 
 SDLDisplay::SDLDisplay(int index) : index(index) {}

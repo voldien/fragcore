@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _FV_NO_COPYABLE_H_
-#define _FV_NO_COPYABLE_H_ 1
+#ifndef _FRAGCORE_NO_COPYABLE_H_
+#define _FRAGCORE_NO_COPYABLE_H_ 1
 #include "../FragDef.h"
 
 namespace fragcore {

@@ -32,7 +32,7 @@ Window *SDLWindowManager::createWindow(const std::string &title) {
 	window->setTitle(title);
 	return window;
 }
-Display *SDLWindowManager::primaryDisplay() const noexcept { return (Display*)&this->displays[0]; }
+Display *SDLWindowManager::primaryDisplay() const noexcept { return (Display *)this->displays.data(); }
 
 const std::vector<Display *> &SDLWindowManager::getDisplays() const {
 	// std::vector<Display *> reference_display;

@@ -8,6 +8,8 @@
 #include <pwd.h>
 #endif
 
+using iware::cpu::instruction_set_t;
+
 using namespace fragcore;
 
 static iware::system::OS_info_t info = iware::system::OS_info();
@@ -85,7 +87,7 @@ const char *SystemInfo::getCPUArchitecture() noexcept {
 
 unsigned long SystemInfo::getCPUFrequency() noexcept { return iware::cpu::frequency(); }
 
-bool SystemInfo::isSupportedInstruction(SIMD instruction) noexcept {
+bool SystemInfo::isSupportedInstruction(const SIMD instruction) noexcept {
 	iware::cpu::instruction_set_t _instruction = iware::cpu::instruction_set_t::mmx;
 
 	switch (instruction) {
@@ -137,7 +139,7 @@ std::vector<SystemInfo::SIMD> SystemInfo::getSupportedSIMD() {
 	std::vector<iware::cpu::instruction_set_t> supported = iware::cpu::supported_instruction_sets();
 
 	for (size_t i = 0; i < supported.size(); i++) {
-		switch (supported[i]) {
+		switch ((instruction_set_t)supported[i]) {
 		case iware::cpu::instruction_set_t::s3d_now:
 			supportedSIMDS.push_back(SystemInfo::SIMD::S3DNOW);
 			break;
@@ -170,6 +172,68 @@ std::vector<SystemInfo::SIMD> SystemInfo::getSupportedSIMD() {
 			break;
 		case iware::cpu::instruction_set_t::avx_512:
 			supportedSIMDS.push_back(SystemInfo::SIMD::AVX512);
+			break;
+		case iware::cpu::instruction_set_t::avx_512_f:
+		case iware::cpu::instruction_set_t::avx_512_cd:
+		case iware::cpu::instruction_set_t::avx_512_pf:
+		case iware::cpu::instruction_set_t::avx_512_er:
+		case iware::cpu::instruction_set_t::avx_512_vl:
+		case iware::cpu::instruction_set_t::avx_512_bw:
+		case iware::cpu::instruction_set_t::avx_512_bq:
+		case iware::cpu::instruction_set_t::avx_512_dq:
+		case iware::cpu::instruction_set_t::avx_512_ifma:
+		case iware::cpu::instruction_set_t::avx_512_vbmi:
+		case iware::cpu::instruction_set_t::hle:
+		case iware::cpu::instruction_set_t::bmi1:
+		case iware::cpu::instruction_set_t::bmi2:
+		case iware::cpu::instruction_set_t::adx:
+		case iware::cpu::instruction_set_t::mpx:
+		case iware::cpu::instruction_set_t::sha:
+		case iware::cpu::instruction_set_t::prefetch_wt1:
+		case iware::cpu::instruction_set_t::fma3:
+		case iware::cpu::instruction_set_t::fma4:
+		case iware::cpu::instruction_set_t::xop:
+		case iware::cpu::instruction_set_t::rd_rand:
+		case iware::cpu::instruction_set_t::x64:
+		case iware::cpu::instruction_set_t::x87_fpu:
+		case iware::cpu::instruction_set_t::fhm:
+		case iware::cpu::instruction_set_t::dotprod:
+		case iware::cpu::instruction_set_t::rdm:
+		case iware::cpu::instruction_set_t::lse:
+		case iware::cpu::instruction_set_t::pmull:
+		case iware::cpu::instruction_set_t::specres:
+		case iware::cpu::instruction_set_t::sb:
+		case iware::cpu::instruction_set_t::frintts:
+		case iware::cpu::instruction_set_t::lrcpc:
+		case iware::cpu::instruction_set_t::lrcpc2:
+		case iware::cpu::instruction_set_t::fcma:
+		case iware::cpu::instruction_set_t::jscvt:
+		case iware::cpu::instruction_set_t::pauth:
+		case iware::cpu::instruction_set_t::pauth2:
+		case iware::cpu::instruction_set_t::fpac:
+		case iware::cpu::instruction_set_t::dpb:
+		case iware::cpu::instruction_set_t::dpb2:
+		case iware::cpu::instruction_set_t::bf16:
+		case iware::cpu::instruction_set_t::i8mm:
+		case iware::cpu::instruction_set_t::ecv:
+		case iware::cpu::instruction_set_t::les2:
+		case iware::cpu::instruction_set_t::csv2:
+		case iware::cpu::instruction_set_t::csv3:
+		case iware::cpu::instruction_set_t::dit:
+		case iware::cpu::instruction_set_t::fp16:
+		case iware::cpu::instruction_set_t::ssbs:
+		case iware::cpu::instruction_set_t::bti:
+		case iware::cpu::instruction_set_t::fp_sync_exception:
+		case iware::cpu::instruction_set_t::armv8_1_atomics:
+		case iware::cpu::instruction_set_t::armv8_2_fhm:
+		case iware::cpu::instruction_set_t::armv8_2_compnum:
+		case iware::cpu::instruction_set_t::watchpoint:
+		case iware::cpu::instruction_set_t::breakpoint:
+		case iware::cpu::instruction_set_t::armv8_crc32:
+		case iware::cpu::instruction_set_t::armv8_gpi:
+		case iware::cpu::instruction_set_t::adv_simd:
+		case iware::cpu::instruction_set_t::adv_simd_hpfp_cvt:
+		case iware::cpu::instruction_set_t::ucnormal_mem:
 			break;
 		case iware::cpu::instruction_set_t::neon:
 			supportedSIMDS.push_back(SystemInfo::SIMD::NEON);

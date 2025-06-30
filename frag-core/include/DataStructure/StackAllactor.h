@@ -32,6 +32,7 @@ namespace fragcore {
 		StackAllocator(const StackAllocator &stack);
 		StackAllocator(StackAllocator &&other);
 		explicit StackAllocator(const size_t stackSizeBytes);
+		StackAllocator(void *buffer, size_t sizeBytes);
 		virtual ~StackAllocator();
 
 		/**
@@ -93,6 +94,7 @@ namespace fragcore {
 		void *mData;	/*	*/
 		size_t mSize;	/*	*/
 		size_t mMarker; /*	*/
+		bool ownData = true;
 	};
 } // namespace fragcore
 

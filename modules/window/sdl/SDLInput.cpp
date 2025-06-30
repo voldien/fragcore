@@ -2,6 +2,7 @@
 #include <SDL2/SDL_hints.h>
 #include <SDL2/SDL_keyboard.h>
 #include <SDL2/SDL_mouse.h>
+#include <cstddef>
 #include <cstdint>
 
 using namespace fragcore;
@@ -11,7 +12,7 @@ SDLInput::SDLInput() { /*	*/
 	int numKeys;
 	const Uint8 *state = SDL_GetKeyboardState(&numKeys);
 
-	keyStates.resize(numKeys * 2);
+	keyStates.resize(static_cast<size_t>(numKeys * 2));
 }
 
 void SDLInput::update() noexcept {
