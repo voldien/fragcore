@@ -66,16 +66,16 @@ namespace fragcore {
 
 		virtual float getGamma() const = 0;
 
-		virtual void setGamma(float gamma) = 0;
+		virtual void setGamma(const float gamma) = 0;
 
-		virtual void resizable(bool resizable) = 0;
+		virtual void resizable(const bool resizable) = 0;
 
-		virtual void setFullScreen(bool fullscreen) = 0;
-		virtual void setFullScreen(Display &display) = 0;
+		virtual void setFullScreen(const bool fullscreen) = 0;
+		virtual void setFullScreen(const Display &display) = 0;
 
 		virtual bool isFullScreen() const = 0;
 
-		virtual void setBordered(bool borded) = 0;
+		virtual void setBordered(const bool borded) = 0;
 
 		virtual void setMinimumSize(int width, int height) = 0;
 		virtual void getMinimumSize(int *width, int *height) = 0;

@@ -38,7 +38,8 @@ namespace fragcore {
 		~SDLWindowManager() override;
 
 	  private:
-		std::vector<SDLDisplay> displays;
+		std::vector<SDLDisplay> displayPool;
+		std::vector<SDLDisplay *> activeDisplays;
 	};
 } // namespace fragcore
 

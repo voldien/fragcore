@@ -61,18 +61,18 @@ namespace fragcore {
 
 		void getSize(int *width, int *height) const override;
 
-		void resizable(bool resizable) override;
+		void resizable(const bool resizable) override;
 
-		void setFullScreen(bool fullscreen) override;
-		void setFullScreen(fragcore::Display &display) override;
+		void setFullScreen(const bool fullscreen) override;
+		void setFullScreen(const fragcore::Display &display) override;
 
 		bool isFullScreen() const override;
 
-		void setBordered(bool bordered) override;
+		void setBordered(const bool bordered) override;
 
 		float getGamma() const override;
 
-		void setGamma(float gamma) override;
+		void setGamma(const float gamma) override;
 
 		void setMinimumSize(int width, int height) override;
 		void getMinimumSize(int *width, int *height) override;

@@ -7,20 +7,25 @@
 using namespace fragcore;
 
 SDLWindowManager::SDLWindowManager() {
-	int err = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER);
+
+	int err = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_GAMECONTROLLER);
 	if (err != 0) {
 		throw RuntimeException("Failed to init SDL Window Manager: {}", SDL_GetError());
 	}
 
-	this->displays.resize(16, SDLDisplay(0));
+	this->displayPool.resize(16, SDLDisplay(0));
+
+	/*	Populate Displays.	*/
+	this->activeDisplays.clear();
+	for (size_t i = 0; i < this->getNumDisplays(); i++) {
+		this->activeDisplays.push_back((SDLDisplay *)this->getDisplay(i));
+	}
 }
-SDLWindowManager::~SDLWindowManager() {
-	SDL_QuitSubSystem(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER);
-}
+SDLWindowManager::~SDLWindowManager() { SDL_QuitSubSystem(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_GAMECONTROLLER); }
 
 Display *SDLWindowManager::getDisplay(unsigned int index) {
-	this->displays[index] = SDLDisplay(index);
-	return &this->displays[index];
+	this->displayPool[index] = SDLDisplay(index);
+	return &this->displayPool[index];
 }
 unsigned int SDLWindowManager::getNumDisplays() const noexcept { return SDLDisplay::getNumDisplays(); }
 Display *SDLWindowManager::getAssociatedDisplay(Ref<Window> &window) {
@@ -32,14 +37,9 @@ Window *SDLWindowManager::createWindow(const std::string &title) {
 	window->setTitle(title);
 	return window;
 }
-Display *SDLWindowManager::primaryDisplay() const noexcept { return (Display *)this->displays.data(); }
+Display *SDLWindowManager::primaryDisplay() const noexcept { return (Display *)&this->displayPool[0]; }
 
 const std::vector<Display *> &SDLWindowManager::getDisplays() const {
-	// std::vector<Display *> reference_display;
-	// reference_display.resize(this->getNumDisplays());
-	// for (size_t i = 0; i < this->getNumDisplays(); i++) {
-	// 	reference_display[i] = (Display*)this->getDisplay(i);
-	// }
 
-	return {}; // TODO: fix
+	return (const std::vector<Display *> &)activeDisplays;
 }

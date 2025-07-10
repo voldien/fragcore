@@ -46,16 +46,16 @@ void SDLWindow::getPosition(int *x, int *y) const { SDL_GetWindowPosition(this->
 
 void SDLWindow::getSize(int *width, int *height) const { SDL_GetWindowSize(this->window, width, height); }
 
-void SDLWindow::resizable(bool resizable) { SDL_SetWindowResizable(this->window, (SDL_bool)resizable); }
+void SDLWindow::resizable(const bool resizable) { SDL_SetWindowResizable(this->window, (SDL_bool)resizable); }
 
-void SDLWindow::setFullScreen(bool fullscreen) {
+void SDLWindow::setFullScreen(const bool fullscreen) {
 	if (fullscreen) {
 		SDL_SetWindowFullscreen(this->window, SDL_WINDOW_FULLSCREEN_DESKTOP);
 	} else {
 		SDL_SetWindowFullscreen(this->window, 0);
 	}
 }
-void SDLWindow::setFullScreen(fragcore::Display &display) {
+void SDLWindow::setFullScreen(const fragcore::Display &display) {
 	this->setPosition(display.x(), display.y());
 	this->setSize(display.width(), display.height());
 	SDL_SetWindowFullscreen(this->window, SDL_WINDOW_FULLSCREEN_DESKTOP);
@@ -70,7 +70,7 @@ bool SDLWindow::isFullScreen() const {
 		   (int)this->getCurrentDisplay()->y() == y;
 }
 
-void SDLWindow::setBordered(bool bordered) { SDL_SetWindowBordered(this->window, (SDL_bool)bordered); }
+void SDLWindow::setBordered(const bool bordered) { SDL_SetWindowBordered(this->window, (SDL_bool)bordered); }
 
 int SDLWindow::width() const {
 	int width = 0, height = 0;
@@ -93,7 +93,7 @@ float SDLWindow::getGamma() const {
 	return this->computeGammaExponent<float, uint16_t>(ramp);
 }
 
-void SDLWindow::setGamma(float gamma) {
+void SDLWindow::setGamma(const float gamma) {
 	uint16_t ramp[256 * 3] = {0};
 
 	this->calculateGammaLookupTable<float, uint16_t>(gamma, ramp);
