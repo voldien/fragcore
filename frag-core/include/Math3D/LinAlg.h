@@ -1,6 +1,6 @@
 
 /*
- *	FragCore - Fragment Core - Engine Core
+ *	FragCore - Fragment Core
  *	Copyright (C) 2018 Valdemar Lindberg
  *
  * This program is free software; you can redistribute it and/or

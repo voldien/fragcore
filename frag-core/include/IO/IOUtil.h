@@ -1,5 +1,5 @@
 /*
- *	FragCore - Fragment Core - Engine Core
+ *	FragCore - Fragment Core
  *	Copyright (C) 2018 Valdemar Lindberg
  *
  * This program is free software; you can redistribute it and/or
@@ -19,6 +19,7 @@
 #define _FRAGCORE_IOUTIL_H_ 1
 #include "../Core/Ref.h"
 #include "IO.h"
+#include "IO/IFileSystem.h"
 #include <fmt/format.h>
 #include <string>
 
@@ -29,65 +30,21 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC IOUtil {
 	  public:
-		/**
-		 * @brief
-		 *
-		 * @param io
-		 * @param data
-		 * @return long int
-		 */
 		static long int loadFileMem(Ref<IO> &ioRef, char **data);
 
-		/**
-		 * @brief
-		 *
-		 * @param in
-		 * @param out
-		 * @return long int
-		 */
 		static long int loadFile(Ref<IO> &in_io, Ref<IO> &out);
 
-		/**
-		 * @brief
-		 *
-		 * @param io
-		 * @param data
-		 * @return long int
-		 */
 		static long int loadStringMem(Ref<IO> &in_io, char **data);
 
-		/**
-		 * @brief
-		 *
-		 * @param in
-		 * @param out
-		 * @return long int
-		 */
 		static long int loadString(Ref<IO> &in, Ref<IO> &out);
 
 		static long int saveFileMem(Ref<IO> &io, char *data, size_t size);
 
-		/**
-		 * @brief
-		 *
-		 * @param io
-		 * @param vformat
-		 * @param ...
-		 * @return long int
-		 */
-		template <typename... Args>
-		static inline long int format(Ref<IO> &io, const std::string &format, Args &&...args) {
+		template <typename... Args> static long int format(Ref<IO> &io, const std::string &format, Args &&...args) {
 			std::string formatted = fmt::format(format, args...);
 			return io->write(formatted.length(), formatted.data());
 		}
 
-		/**
-		 * @brief
-		 *
-		 * @tparam T
-		 * @param io
-		 * @return std::vector<T>
-		 */
 		template <typename T> static std::vector<T> readFileData(Ref<IO> &io) {
 
 			const size_t fileSize = static_cast<size_t>(io->length());
@@ -98,21 +55,35 @@ namespace fragcore {
 			return buffer;
 		}
 
-		/**
-		 * @brief
-		 *
-		 * @tparam T
-		 * @param io
-		 * @return std::vector<T>
-		 */
 		template <typename T> static std::vector<T> readString(Ref<IO> &io) {
 
 			const size_t fileSize = static_cast<size_t>(io->length());
-			std::vector<T> buffer(fileSize / sizeof(T) + 1);
+			std::vector<T> buffer((fileSize / sizeof(T)) + sizeof(T));
 
 			io->read(fileSize, buffer.data());
 			buffer.data()[fileSize] = '\0';
 
+			return buffer;
+		}
+
+		template <typename T>
+		static std::vector<T> readFileString(const std::string &filename, IFileSystem *filesystem) {
+
+			assert(filesystem);
+
+			Ref<IO> ref = Ref<IO>(filesystem->openFile(filename.c_str(), IO::IOMode::READ));
+			std::vector<char> string = fragcore::IOUtil::readString<T>(ref);
+			ref->close();
+			return string;
+		}
+
+		template <typename T> static std::vector<T> readFileData(const std::string &filename, IFileSystem *filesystem) {
+
+			assert(filesystem);
+
+			Ref<IO> ref = Ref<IO>(filesystem->openFile(filename.c_str(), IO::IOMode::READ));
+			std::vector<T> buffer = fragcore::IOUtil::readFileData<T>(ref);
+			ref->close();
 			return buffer;
 		}
 	};

@@ -1,5 +1,5 @@
 /*
- *	FragCore - Fragment Core - Engine Core
+ *	FragCore - Fragment Core
  *	Copyright (C) 2018 Valdemar Lindberg
  *
  * This program is free software; you can redistribute it and/or
@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _FRAGCORE_DOUBLE_BUFFERED_ALLACATOR_H_
-#define _FRAGCORE_DOUBLE_BUFFERED_ALLACATOR_H_ 1
+#ifndef _FRAGCORE_DOUBLE_BUFFERED_ALLOCATOR_H_
+#define _FRAGCORE_DOUBLE_BUFFERED_ALLOCATOR_H_ 1
 #include "Core/UIDObject.h"
 #include "Queue.h"
 #include "StackAllactor.h"
