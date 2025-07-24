@@ -263,7 +263,7 @@ std::vector<SystemInfo::GPUInformation> SystemInfo::getGPUDevices() noexcept {
 
 	for (size_t i = 0; i < devices.size(); i++) {
 		gpuDevices[i].name = devices[i].name;
-		gpuDevices[i].memorySize = devices[i].memory_size;
+		gpuDevices[i].memorySize = devices[i].memory_size * 1024;
 		gpuDevices[i].max_frequency = devices[i].max_frequency;
 	}
 

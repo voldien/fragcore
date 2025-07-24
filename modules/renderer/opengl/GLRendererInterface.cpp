@@ -46,7 +46,7 @@ IConfig GLRendererInterface::getDefaultConfig() const noexcept {
 #else
 	defaultConfig.set("debug", true);
 #endif
-	defaultConfig.set("alpha", true);
+	defaultConfig.set("alpha", false);
 	defaultConfig.set("opengl", -1);
 	defaultConfig.set("anti-aliasing-samples", 0);
 	defaultConfig.set("anti-aliasing", false);
@@ -93,7 +93,7 @@ GLRendererInterface::GLRendererInterface(const IConfig *config) {
 	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 0);
 	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, this->alpha ? 8 : 0);
-	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
+	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, SDL_TRUE);
 	SDL_GL_SetAttribute(SDL_GL_FRAMEBUFFER_SRGB_CAPABLE, this->gamma ? SDL_TRUE : SDL_FALSE);
 
@@ -108,7 +108,7 @@ GLRendererInterface::GLRendererInterface(const IConfig *config) {
 
 	/*  Context profile type.   */
 	int contextProfileMask;
-	if (useCoreProfile) {
+	if (useCoreProfile && !debug) {
 		contextProfileMask = SDL_GL_CONTEXT_PROFILE_CORE;
 	} else {
 		contextProfileMask = SDL_GL_CONTEXT_PROFILE_COMPATIBILITY;
@@ -232,8 +232,7 @@ GLRendererInterface::GLRendererInterface(const IConfig *config) {
 	}
 
 	/*  Set for core support or not for GLEW.   */
-	// TODO resolve.
-	const bool UseGLExperiments = false;
+	const bool UseGLExperiments = debug;
 	if (UseGLExperiments) {
 		glewExperimental = GL_TRUE;
 	} else {
