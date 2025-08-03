@@ -23,13 +23,20 @@ SDLWindow::SDLWindow() {
 	}
 }
 
-SDLWindow::SDLWindow(intptr_t reference) : window(reinterpret_cast<SDL_Window *>(reference)) { /*	*/ }
+SDLWindow::SDLWindow(const intptr_t reference) : window(reinterpret_cast<SDL_Window *>(reference)) {
+	/*	*/
+#ifdef SDL_HINT_IME_SHOW_UI
+	SDL_SetHint(SDL_HINT_IME_SHOW_UI, "1");
+#endif
+}
 
 SDLWindow::~SDLWindow() {
 
 	/*	*/
+	if (this->window) {
 	SDL_DestroyWindow(this->window);
 	this->window = nullptr;
+	}
 }
 
 void SDLWindow::show() { SDL_ShowWindow(this->window); }
@@ -53,15 +60,17 @@ void SDLWindow::getSize(int *width, int *height) const { SDL_GetWindowSize(this-
 void SDLWindow::resizable(const bool resizable) { SDL_SetWindowResizable(this->window, (SDL_bool)resizable); }
 
 void SDLWindow::setFullScreen(const bool fullscreen) {
+	int err = 0;
 	if (fullscreen) {
-		SDL_SetWindowFullscreen(this->window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+		err = SDL_SetWindowFullscreen(this->window, SDL_WINDOW_FULLSCREEN_DESKTOP);
 	} else {
-		SDL_SetWindowFullscreen(this->window, 0);
+		err = SDL_SetWindowFullscreen(this->window, 0);
 	}
 }
 void SDLWindow::setFullScreen(const fragcore::Display &display) {
 	this->setPosition(display.x(), display.y());
 	this->setSize(display.width(), display.height());
+
 	SDL_SetWindowFullscreen(this->window, SDL_WINDOW_FULLSCREEN_DESKTOP);
 }
 
@@ -88,23 +97,25 @@ int SDLWindow::height() const {
 }
 
 float SDLWindow::getGamma() const {
+	const size_t colorDepth = 256;
 	uint16_t ramp[256 * 3];
-	int err = SDL_GetWindowGammaRamp(this->window, &ramp[256l * 0], &ramp[256l * 1], &ramp[256l * 2]);
+	const int err = SDL_GetWindowGammaRamp(this->window, &ramp[256l * 0], &ramp[256l * 1], &ramp[256l * 2]);
 	if (err == -1) {
-		throw NotSupportedException(SDL_GetError());
+		throw NotSupportedException("Failed to getWindow Gamma Curve: {}", SDL_GetError());
 	}
 
 	return this->computeGammaExponent<float, uint16_t>(ramp);
 }
 
 void SDLWindow::setGamma(const float gamma) {
+	const size_t colorDepth = 256;
 	uint16_t ramp[256 * 3] = {0};
 
 	this->calculateGammaLookupTable<float, uint16_t>(gamma, ramp);
 	int err = SDL_SetWindowGammaRamp(this->window, &ramp[256l * 0], &ramp[256l * 1], &ramp[256l * 2]);
 
 	if (err == -1) {
-		throw NotSupportedException("Failed to set window gamma {}: {}", gamma, SDL_GetError());
+		throw NotSupportedException("Failed to set window Gamma Curve {}: {}", gamma, SDL_GetError());
 	}
 }
 
@@ -129,6 +140,7 @@ void SDLWindow::minimize() { SDL_MinimizeWindow(this->window); }
 fragcore::Display *SDLWindow::getCurrentDisplay() const {
 	int index = 0;
 	index = SDL_GetWindowDisplayIndex(this->window);
+	// TODO: get from window manager.
 	return new SDLDisplay(index);
 }
 
@@ -179,6 +191,8 @@ intptr_t SDLWindow::getNativePtr() const {
 			break;
 		}
 	} else {
-		throw RuntimeException(fmt::format("%s", SDL_GetError()));
+		throw RuntimeException("Failed to Get Native Enviroment Window Handler: {}", SDL_GetError());
 	}
 }
+
+intptr_t SDLWindow::getNativeInternalPtr() const { return (intptr_t)this->window; }

@@ -69,7 +69,7 @@ namespace fragcore {
 		Display *getCurrentDisplay() const override;
 
 		void setFullScreen(bool fullscreen) override;
-		void setFullScreen(Display &display) override;
+		void setFullScreen(const Display &display) override;
 
 		bool isFullScreen() const override;
 

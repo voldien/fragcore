@@ -22,11 +22,11 @@
 #include "Object.h"
 
 namespace fragcore {
+
 	/**
 	 * @brief Responsible for preventing
 	 *	data be freed when references
 	 *	to the block of data still exists.
-	 *
 	 */
 	class FVDECLSPEC SmartReference : public Object {
 	  public:

@@ -28,7 +28,7 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC Display : public Object {
 	  public:
-		enum class DisplayFormat {
+		enum class DisplayFormat : unsigned int {
 			PIXELFORMAT_UNKNOWN,
 			PIXELFORMAT_INDEX1LSB,
 			PIXELFORMAT_INDEX1MSB,
@@ -75,36 +75,26 @@ namespace fragcore {
 
 		/**
 		 * @brief Get display position
-		 *
-		 * @return unsigned int
 		 */
 		virtual unsigned int x() const = 0;
 
 		/**
 		 * @brief
-		 *
-		 * @return unsigned int
 		 */
 		virtual unsigned int y() const = 0;
 
 		/**
 		 * @brief
-		 *
-		 * @return unsigned int
 		 */
 		virtual unsigned int width() const = 0;
 
 		/**
 		 * @brief
-		 *
-		 * @return unsigned int
 		 */
 		virtual unsigned int height() const = 0;
 
 		/**
 		 * @brief
-		 *
-		 * @return unsigned int
 		 */
 		virtual unsigned int refreshRate() const = 0;
 
@@ -132,14 +122,18 @@ namespace fragcore {
 
 		/**
 		 * @brief Get the Modes object
-		 *
-		 * @return std::vector<Mode>
 		 */
 		virtual std::vector<Mode> getModes() const = 0;
 		virtual void setMode(const Mode &mode) = 0;
 
+		/**
+		 * @brief
+		 */
 		virtual void getDPI(DPI *dpi) = 0;
 
+		/**
+		 * @brief
+		 */
 		virtual DisplayFormat getFormat() = 0;
 
 		~Display() override = default;

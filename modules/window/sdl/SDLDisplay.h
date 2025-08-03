@@ -26,7 +26,7 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC SDLDisplay : public Display {
 	  public:
-		SDLDisplay(int index);
+		SDLDisplay(const int index);
 		~SDLDisplay() override = default;
 
 		unsigned int x() const override;

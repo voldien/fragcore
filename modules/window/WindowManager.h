@@ -30,42 +30,32 @@ namespace fragcore {
 	  public:
 		/**
 		 * @brief Get the Display object
-		 *
-		 * @param index
-		 * @return Display*
 		 */
 		virtual Display *getDisplay(unsigned int index) = 0;
 
 		/**
 		 * @brief Get the Num Displays object
-		 *
-		 * @return unsigned int
 		 */
 		virtual unsigned int getNumDisplays() const noexcept = 0;
 
 		/**
 		 * @brief Get the Associated Display object
-		 *
-		 * @param window
-		 * @return Display*
 		 */
 		virtual Display *getAssociatedDisplay(Ref<Window> &window) = 0;
 
 		/**
 		 * @brief Create a Window object
-		 *
-		 * @param title
-		 * @return Window*
 		 */
 		virtual Window *createWindow(const std::string &title) = 0;
 
 		/**
 		 * @brief
-		 *
-		 * @return Display*
 		 */
 		virtual Display *primaryDisplay() const noexcept = 0;
 
+		/**
+		 * @brief
+		 */
 		virtual const std::vector<Display *> &getDisplays() const = 0;
 
 		/*	TODO get the event.	*/

@@ -13,12 +13,16 @@ SDLWindowManager::SDLWindowManager() {
 		throw RuntimeException("Failed to init SDL Window Manager: {}", SDL_GetError());
 	}
 
-	this->displayPool.resize(16, SDLDisplay(0));
+	const size_t dispay_pool_size = 16;
+	this->displayPool.resize(dispay_pool_size, SDLDisplay(0));
+	for (size_t display_index = 0; display_index < this->displayPool.size(); display_index++) {
+		this->displayPool[display_index] = SDLDisplay(display_index);
+	}
 
 	/*	Populate Displays.	*/
 	this->activeDisplays.clear();
-	for (size_t i = 0; i < this->getNumDisplays(); i++) {
-		this->activeDisplays.push_back((SDLDisplay *)this->getDisplay(i));
+	for (size_t display_index = 0; display_index < this->getNumDisplays(); display_index++) {
+		this->activeDisplays.push_back((SDLDisplay *)this->getDisplay(display_index));
 	}
 }
 SDLWindowManager::~SDLWindowManager() { SDL_QuitSubSystem(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_GAMECONTROLLER); }

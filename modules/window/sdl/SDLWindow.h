@@ -29,7 +29,7 @@ namespace fragcore {
 	class FVDECLSPEC SDLWindow : public Window {
 	  public:
 		SDLWindow();
-		SDLWindow(intptr_t reference);
+		SDLWindow(const intptr_t reference);
 		~SDLWindow() override;
 
 		void show() override;
@@ -82,6 +82,7 @@ namespace fragcore {
 		fragcore::Display *getCurrentDisplay() const override;
 
 		intptr_t getNativePtr() const override; /*  Get native window reference object. */
+		intptr_t getNativeInternalPtr() const override;
 
 	  protected:
 		SDL_Window *window;

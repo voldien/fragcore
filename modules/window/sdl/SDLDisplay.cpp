@@ -4,9 +4,11 @@
 
 using namespace fragcore;
 
+SDLDisplay::SDLDisplay(const int index) : index(index) {}
+
 unsigned int SDLDisplay::x() const {
 	SDL_Rect bound;
-	int err = SDL_GetDisplayBounds(this->index, &bound);
+	const int err = SDL_GetDisplayBounds(this->index, &bound);
 	if (err != 0) {
 		throw RuntimeException("Failed getting display {} x, {}.", this->index, SDL_GetError());
 	}
@@ -15,7 +17,7 @@ unsigned int SDLDisplay::x() const {
 
 unsigned int SDLDisplay::y() const {
 	SDL_Rect bound;
-	int err = SDL_GetDisplayBounds(this->index, &bound);
+	const int err = SDL_GetDisplayBounds(this->index, &bound);
 	if (err != 0) {
 		throw RuntimeException("Failed getting display {} y, {}.", this->index, SDL_GetError());
 	}
@@ -24,7 +26,7 @@ unsigned int SDLDisplay::y() const {
 
 unsigned int SDLDisplay::width() const {
 	SDL_Rect bound;
-	int err = SDL_GetDisplayBounds(this->index, &bound);
+	const int err = SDL_GetDisplayBounds(this->index, &bound);
 	if (err != 0) {
 		throw RuntimeException("Failed getting display {} width, {}.", this->index, SDL_GetError());
 	}
@@ -33,7 +35,7 @@ unsigned int SDLDisplay::width() const {
 
 unsigned int SDLDisplay::height() const {
 	SDL_Rect bound;
-	int err = SDL_GetDisplayBounds(this->index, &bound);
+	const int err = SDL_GetDisplayBounds(this->index, &bound);
 	if (err != 0) {
 		throw RuntimeException("Failed getting display {} height, {}.", this->index, SDL_GetError());
 	}
@@ -42,7 +44,7 @@ unsigned int SDLDisplay::height() const {
 
 unsigned int SDLDisplay::refreshRate() const {
 	SDL_DisplayMode mode;
-	int err = SDL_GetCurrentDisplayMode(this->index, &mode);
+	const int err = SDL_GetCurrentDisplayMode(this->index, &mode);
 	if (err != 0) {
 		throw RuntimeException("Failed getting display {} refresh rate, {}.", this->index, SDL_GetError());
 	}
@@ -56,18 +58,18 @@ std::vector<Display::Mode> SDLDisplay::getModes() const {
 	std::vector<Display::Mode> modes;
 	modes.resize(n_display_modes);
 
-	for (int i = 0; i < n_display_modes; i++) {
-		SDL_GetDisplayMode(this->index, i, &mode);
-		modes[i].width = mode.w;
-		modes[i].height = mode.h;
-		modes[i].refreshRate = mode.refresh_rate;
+	for (int display_index = 0; display_index < n_display_modes; display_index++) {
+		SDL_GetDisplayMode(this->index, display_index, &mode);
+		modes[display_index].width = mode.w;
+		modes[display_index].height = mode.h;
+		modes[display_index].refreshRate = mode.refresh_rate;
 	}
 
 	return modes;
 }
 
 void SDLDisplay::getDPI(Display::DPI *dpi) {
-	int err = SDL_GetDisplayDPI(this->index, &dpi->ddpi, &dpi->hdpi, &dpi->vdpi);
+	const int err = SDL_GetDisplayDPI(this->index, &dpi->ddpi, &dpi->hdpi, &dpi->vdpi);
 	if (err != 0) {
 		throw RuntimeException("Failed to retrieve display {} DPI, {}", this->index, SDL_GetError());
 	}
@@ -77,14 +79,12 @@ void SDLDisplay::setMode([[maybe_unused]] const Mode &mode) {}
 
 SDLDisplay::DisplayFormat SDLDisplay::getFormat() {
 	SDL_DisplayMode mode;
-	int err = SDL_GetCurrentDisplayMode(this->index, &mode);
+	const int err = SDL_GetCurrentDisplayMode(this->index, &mode);
 	if (err != 0) {
 		throw RuntimeException("Failed to get display {} Mode, {}", this->index, SDL_GetError());
 	}
 	return translateFormat(mode.format);
 }
-
-SDLDisplay::SDLDisplay(int index) : index(index) {}
 
 SDLDisplay::DisplayFormat SDLDisplay::translateFormat(unsigned int format) {
 	switch (format) {

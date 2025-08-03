@@ -26,13 +26,11 @@ namespace fragcore {
 
 	/**
 	 * @brief
-	 *
 	 */
 	class FVDECLSPEC Window : public SmartReference {
 	  public:
 		~Window() override = default;
 
-	  public:
 		virtual void show() = 0;
 
 		virtual void hide() = 0;
@@ -88,18 +86,11 @@ namespace fragcore {
 
 		virtual intptr_t getNativePtr() const = 0; /*  Get native window reference object. */
 												   // virtual intptr_t getWindowNativePtr() const  = 0;
+		virtual intptr_t getNativeInternalPtr() const = 0;
 
 		// TODO add getWindowManager()
 
 	  protected: /*  Internal utility methods.   */
-				 /**
-				  * @brief
-				  *
-				  * @tparam T
-				  * @tparam U
-				  * @param gamma
-				  * @param rgbRamp
-				  */
 		template <typename T, typename U> void calculateGammaLookupTable(float gamma, U *rgbRamp) const {
 
 			// TODO that or just clamp it.
@@ -108,6 +99,7 @@ namespace fragcore {
 			}
 			gamma = Math::min(0.0f, gamma);
 
+			const size_t colorDepth = 256;
 			T exponent = 1.0f / gamma;
 
 			/*  Create lookup table.    */
@@ -121,21 +113,13 @@ namespace fragcore {
 			}
 		}
 
-		/**
-		 * @brief
-		 *
-		 * @tparam T
-		 * @tparam U
-		 * @param rgbRamp
-		 * @return T
-		 */
 		template <typename T, typename U> T computeGammaExponent(const U *rgbRamp) const {
 			T gamma = static_cast<T>(0.0);
 
 			// TODO improve
 			for (size_t i = 64; i < 256; ++i) {
-				T corrected = (T)rgbRamp[i] / 65535.0;
-				T linear = T(i) * 1.0 / 255u;
+				const T corrected = (T)rgbRamp[i] / 65535.0;
+				const T linear = T(i) * 1.0 / 255u;
 				gamma += std::log(linear) / std::log(corrected);
 			}
 			return gamma;

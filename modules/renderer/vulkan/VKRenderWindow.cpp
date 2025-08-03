@@ -164,7 +164,7 @@ void VKRenderWindow::setFullScreen(bool fullscreen) {
 	}
 }
 
-void VKRenderWindow::setFullScreen(Display &display) {}
+void VKRenderWindow::setFullScreen(const Display &display) {}
 
 bool VKRenderWindow::isFullScreen() const { return false; }
 

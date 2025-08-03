@@ -30,18 +30,18 @@ namespace fragcore {
 	 */
 	template <typename T> class FVDECLSPEC Singleton : public SmartReference {
 	  public:
-		static T *_instance = nullptr;
-
 		/**
 		 * @brief Get the Instance object
 		 *
 		 * @return Ref<T>
 		 */
 		static Ref<T> getInstance() {
+			static Ref<T> _instance = nullptr;
+
 			if (_instance == nullptr) {
 				T *instance = new T();
-				Ref<T> ref = Ref<T>(instance);
-				instance->onCreation(ref);
+				_instance = Ref<T>(instance);
+				instance->onCreation(_instance);
 			}
 			return Ref<T>(_instance);
 		}
