@@ -25,9 +25,7 @@ namespace fragcore {
 	class Object;
 	class UIDObject;
 
-	/*	Compression.	*/
-
-	/*	*/
+	/*	Schedular/Concurrent.	*/
 	class IScheduler;
 	class ISpinLock;
 	class IMutex;
@@ -44,8 +42,8 @@ namespace fragcore {
 	class ZipFileSystem;
 	class IFileSystem;
 	class FileSystem;
-	
-	/*	*/
+
+	/*	Random and Encoding.	*/
 	class Hash;
 	class Random;
 	class Base64;

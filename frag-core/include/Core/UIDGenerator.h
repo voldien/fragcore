@@ -30,7 +30,7 @@ namespace fragcore {
 	  public:
 		using UIDType = T;
 	  public:
-		static_assert(std::is_arithmetic<UIDType>::value, "Must support artithmetic operations");
+		static_assert(std::is_arithmetic_v<UIDType>, "Must support artithmetic operations");
 		UIDGenerator() noexcept { this->nextUID = 0; }
 		UIDGenerator(UIDGenerator &&other) {
 			this->nextUID.store(other.nextUID);

@@ -1,8 +1,7 @@
 #include "Network/NetSocket.h"
 using namespace fragcore;
 
-NetSocket::~NetSocket() { /*Make sure it gets disconnected.   */
-}
+NetSocket::~NetSocket() { /*Make sure it gets disconnected.   */ }
 
 constexpr const char *NetSocket::getTransportProtocolSymbol(const TransportProtocol transportProtocol) noexcept {
 	switch (transportProtocol) {

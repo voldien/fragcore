@@ -1,4 +1,4 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 3.9..3.20)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.9..3.222)
 PROJECT(FragCore CXX C)
 
 # -----------------------------------------------------------------------------
@@ -32,7 +32,7 @@ ENDIF()
 # Use GNUInstallDirs for Unix predefined directories
 INCLUDE(GNUInstallDirs)
 
-
+#
 SET(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin CACHE INTERNAL "" FORCE)
 SET(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib CACHE INTERNAL "" FORCE)
 
@@ -365,7 +365,7 @@ IF(BUILD_MODULES)
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/audio)
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/audio/openal/)
 
-	# 
+	#
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/geometryutil/)
 
 	# Build FragCore Physic modules

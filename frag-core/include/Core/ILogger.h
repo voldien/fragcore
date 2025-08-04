@@ -20,11 +20,10 @@
 #include "Object.h"
 
 namespace fragcore {
+
 	/**
-	 * @brief
 	 *
 	 */
-
 	class FVDECLSPEC ILogger : public Object {
 	  public:
 		/**

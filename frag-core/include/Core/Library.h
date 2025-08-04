@@ -22,6 +22,7 @@
 #include <string>
 
 namespace fragcore {
+
 	/**
 	 *	Load dynamic library in runtime.
 	 */
@@ -63,8 +64,6 @@ namespace fragcore {
 
 		/**
 		 * @brief Get the Path object
-		 *
-		 * @return std::string
 		 */
 		std::string getPath() const noexcept { return this->path; }
 
@@ -75,6 +74,11 @@ namespace fragcore {
 		 */
 		void *getfunc(const char *cfunctionName);
 
+		/**
+		 *	Get function pointer.
+		 *
+		 *	@return function pointer if successfully.
+		 */
 		template <typename T> T getfunc(const char *cfunctionName) {
 			return reinterpret_cast<T>(this->getfunc(cfunctionName));
 		}

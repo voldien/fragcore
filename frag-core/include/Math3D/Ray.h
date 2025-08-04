@@ -46,32 +46,32 @@ namespace fragcore {
 		/**
 		 * @return get origin position.
 		 */
-		inline const Vector3 &getOrigin() const noexcept { return this->m[0]; }
+		 const Vector3 &getOrigin() const noexcept { return this->m[0]; }
 
 		/**
 		 * Set origin position.
 		 */
-		inline void setOrigin(const Vector3 &origin) noexcept { this->m[0] = origin; }
+		 void setOrigin(const Vector3 &origin) noexcept { this->m[0] = origin; }
 
 		/**
 		 * Get direction.
 		 * @return normalized direction.
 		 */
-		inline const Vector3 &getDirection() const noexcept { return this->m[1]; }
+		 const Vector3 &getDirection() const noexcept { return this->m[1]; }
 
 		/**
 		 * Set direction vector.
 		 * @param direction has to be a normalized vector.
 		 */
-		inline void setDirection(const Vector3 &direction) noexcept { this->m[1] = direction; }
+		 void setDirection(const Vector3 &direction) noexcept { this->m[1] = direction; }
 
 		/**
 		 * Get position from distance from point
 		 * in respect to direction.
 		 * @return point on the ray.
 		 */
-		inline Vector3 pointAtParameter(const float t) const noexcept {
-			return this->getOrigin() + t * this->getDirection();
+		 Vector3 pointAtParameter(const float t) const noexcept {
+			return this->getOrigin() + (t * this->getDirection());
 		}
 
 	  private: /*	Attributes.	*/

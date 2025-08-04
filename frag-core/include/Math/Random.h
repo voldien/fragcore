@@ -28,18 +28,18 @@ namespace fragcore {
 	class FVDECLSPEC Random {
 	  public:
 		template <typename U> static U rand() {
-			static_assert(std::is_floating_point<U>::value || std::is_integral<U>::value,
+			static_assert(std::is_floating_point_v<U> || std::is_integral_v<U>,
 						  "Must be a decimal type(float/double/half) or integer.");
 			return static_cast<U>(rand_internal());
 		}
 
 		template <typename U> static constexpr U normalizeRand() noexcept {
-			static_assert(std::is_floating_point<U>::value || std::is_integral<U>::value,
+			static_assert(std::is_floating_point_v<U> || std::is_integral_v<U>,
 						  "Must be a decimal type(float/double/half) or integer.");
 			return rand<U>() / static_cast<U>(RAND_MAX);
 		}
 		template <typename U> static constexpr U range(const U start, const U end) noexcept {
-			static_assert(std::is_floating_point<U>::value || std::is_integral<U>::value,
+			static_assert(std::is_floating_point_v<U> || std::is_integral_v<U>,
 						  "Must be a decimal type(float/double/half) or integer.");
 			return start + (Random::rand<U>() % (start - end));
 		}

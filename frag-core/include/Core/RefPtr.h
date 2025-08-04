@@ -42,7 +42,6 @@ namespace fragcore {
 
 		FV_ALWAYS_INLINE const T *operator*() const noexcept { return ref; }
 
-	  public:
 		FV_ALWAYS_INLINE RefPtr() { this->ref = nullptr; }
 
 		FV_ALWAYS_INLINE RefPtr(T *ref) { this->ref = ref; }

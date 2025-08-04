@@ -38,8 +38,8 @@ namespace fragcore {
 		virtual void Execute() noexcept = 0;
 		virtual void Complete() noexcept = 0;
 
-		template <typename... Args> void succeed(Args &&... args) {}
-		template <typename... Args> void precede(Args &&... args) {}
+		template <typename... Args> void succeed(Args &&...args) {}
+		template <typename... Args> void precede(Args &&...args) {}
 
 	  private:
 		Ref<IScheduler> scheduler;
@@ -54,14 +54,13 @@ namespace fragcore {
 		// TODO determine where it shall be located within the project.
 		class FVDECLSPEC TaskFunc : public Task {
 		  public:
-			template <class Function, class... Args> explicit TaskFunc(Function &&function, Args &&... args) {}
+			template <class Function, class... Args> explicit TaskFunc(Function &&function, Args &&...args) {}
 			void Execute() noexcept override {}
 			void Complete() noexcept override {}
 
 		  private:
 		};
 
-	  public:
 		~IScheduler() override = default;
 
 		/**
@@ -71,9 +70,9 @@ namespace fragcore {
 		 */
 		virtual void addTask(Task *task) = 0;
 
-		template <class Function, class... Args> void addTask(Function &&func, Args &&... args) {
+		template <class Function, class... Args> void addTask(Function &&func, Args &&...args) {
 			TaskFunc task(func, args...);
-			//this->addTask(&task);
+			// this->addTask(&task);
 		}
 
 		/**

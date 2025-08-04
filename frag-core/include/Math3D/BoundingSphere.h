@@ -18,6 +18,7 @@
 #ifndef _FRAGCORE_BOUNDING_SPHERE_H_
 #define _FRAGCORE_BOUNDING_SPHERE_H_ 1
 #include "Ray.h"
+#include <cmath>
 
 namespace fragcore {
 	/**
@@ -39,25 +40,25 @@ namespace fragcore {
 		 * Get radius size.
 		 * @return non-negative size.
 		 */
-		inline constexpr float getRadius() const noexcept { return this->radius; }
+		constexpr float getRadius() const noexcept { return this->radius; }
 
 		/**
 		 * set radius size of the sphere.
 		 * @param radius non-negative radius size.
 		 */
-		inline void setRadius(float radius) noexcept { this->radius = radius; }
+		void setRadius(float radius) noexcept { this->radius = radius; }
 
 		/**
 		 * Get center position.
 		 * @return world position.
 		 */
-		inline const Vector3 &getCenter() const noexcept { return this->center; }
+		const Vector3 &getCenter() const noexcept { return this->center; }
 
 		/**
 		 * Set center position.
 		 * @param center in world position.
 		 */
-		inline void setCenter(const Vector3 &center) { this->center = center; }
+		void setCenter(const Vector3 &center) { this->center = center; }
 
 		/**
 		 * Check if object intersects with another sphere.
@@ -68,9 +69,9 @@ namespace fragcore {
 		intersect(const BoundingSphere &sphere) const noexcept { // get box closest point to sphere center by clamping
 			// we are using multiplications because it's faster than calling Math.pow
 			float distance = std::sqrt(
-				(this->getCenter().x() - sphere.getCenter().x()) * (this->getCenter().x() - sphere.getCenter().x()) +
-				(this->getCenter().y() - sphere.getCenter().y()) * (this->getCenter().y() - sphere.getCenter().y()) +
-				(this->getCenter().z() - sphere.getCenter().z()) * (this->getCenter().z() - sphere.getCenter().z()));
+				((this->getCenter().x() - sphere.getCenter().x()) * (this->getCenter().x() - sphere.getCenter().x())) +
+				((this->getCenter().y() - sphere.getCenter().y()) * (this->getCenter().y() - sphere.getCenter().y())) +
+				((this->getCenter().z() - sphere.getCenter().z()) * (this->getCenter().z() - sphere.getCenter().z())));
 			return distance < (this->getRadius() + sphere.getRadius());
 		}
 
@@ -107,7 +108,7 @@ namespace fragcore {
 			const T c = tmp.dot(tmp) - (radius * radius);
 
 			/*	*/
-			const T discriminant = b * b - (static_cast<T>(4) * c * a);
+			const T discriminant = (b * b) - (static_cast<T>(4) * c * a);
 			if (discriminant >= 0) {
 				t = (-b - std::sqrt(discriminant)) / (a * static_cast<T>(2));
 				if (t < static_cast<T>(0)) {
@@ -135,7 +136,9 @@ namespace fragcore {
 			return false;
 		}
 
-		friend bool operator!=(const BoundingSphere &Sphere0, const BoundingSphere &Sphere1) noexcept { return !(Sphere0 == Sphere1); }
+		friend bool operator!=(const BoundingSphere &Sphere0, const BoundingSphere &Sphere1) noexcept {
+			return !(Sphere0 == Sphere1);
+		}
 
 	  private:			/*	Private member attributes.	*/
 		float radius;	/*	Radius size.	*/

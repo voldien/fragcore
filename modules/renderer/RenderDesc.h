@@ -27,7 +27,7 @@
 namespace fragcore {
 
 	/**
-	 *
+	 * Indirect Data Structure
 	 */
 	using IndirectDrawArray = struct indirect_draw_array_t {
 		unsigned int count;			/*  */
@@ -37,7 +37,7 @@ namespace fragcore {
 	};
 
 	/**
-	 *
+	 * Indirect Data Structure
 	 */
 	using IndirectDrawElement = struct indirect_draw_element_t {
 		unsigned int count;			/*  */
@@ -48,7 +48,7 @@ namespace fragcore {
 	};
 
 	/**
-	 *
+	 * Indirect Data Structure
 	 */
 	using IndirectDispatch = struct indirect_dispatch_t {
 		unsigned int num_groups_x;
@@ -84,35 +84,35 @@ namespace fragcore {
 	 */
 	// TODO: refractor name
 	enum class TextureUVMappingMode : uint32_t {
-		UV,		/*  */
-		Sphere, /*  */
-		Box,	/*  */
-		Cylinder,
-		Plane,
-		Other
+		UV,		  /*  */
+		Sphere,	  /*  */
+		Box,	  /*  */
+		Cylinder, /*	*/
+		Plane,	  /*	*/
+		Other	  /*	*/
 	};
 
 	/**
 	 *
 	 */
 	enum class TextureWrappingMode : uint32_t {
-		NoAddressMode,
-		Repeat,		  /*  */
-		RepeatMirror, /*  */
-		Clamp,		  /*  */
-		ClampBorder,  /*  */
+		NoAddressMode, /*	*/
+		Repeat,		   /*  */
+		RepeatMirror,  /*  */
+		Clamp,		   /*  */
+		ClampBorder,   /*  */
 	};
 
 	enum class TextureCompareFunc : uint32_t {
-		eNoCompare, /*  */
-		lessEqual,
-		greaterEqual,
-		less,
-		greater,
-		equal,
-		notequal,
-		always,
-		never,
+		eNoCompare,	  /*  */
+		lessEqual,	  /*  */
+		greaterEqual, /*  */
+		less,		  /*  */
+		greater,	  /*  */
+		equal,		  /*  */
+		notequal,	  /*  */
+		always,		  /*  */
+		never,		  /*  */
 	};
 
 	using MarkerDebug = struct marker_debug_t {
@@ -129,17 +129,21 @@ namespace fragcore {
 		TextureWrappingMode AddressV;	/*  */
 		TextureWrappingMode AddressW;	/*  */
 		TextureFilterMode mipmapFilter; /*  */
+
 		/*  Set swizzle.    */
-		TextureSwizzle Swizzler;		/*  */
-		TextureSwizzle Swizzleg;		/*  */
-		TextureSwizzle Swizzleb;		/*  */
-		TextureSwizzle Swizzlea;		/*  */
-		int maxLOD;						/*  */
-		int minLOD;						/*  */
-		int biasLOD;					/*  */
+		TextureSwizzle Swizzler; /*  */
+		TextureSwizzle Swizzleg; /*  */
+		TextureSwizzle Swizzleb; /*  */
+		TextureSwizzle Swizzlea; /*  */
+
+		int maxLOD;	 /*  */
+		int minLOD;	 /*  */
+		int biasLOD; /*  */
+
 		float borderColor[4];			/*  */
 		int compareMode;				/*  */
 		TextureCompareFunc compareFunc; /*  */
+
 		/*  Debug attributes.   */
 		MarkerDebug *marker; // TODO: add support for adding after creating the object.
 	};
@@ -148,7 +152,7 @@ namespace fragcore {
 	 *	Texture descriptor.
 	 */
 	using TextureDesc = struct texture_desc_t {
-		enum class Target : uint32_t {
+		enum class TextureTarget : uint32_t {
 			Texture1D = 0x1,	   /*	1D texture.	*/
 			Texture2D = 0x2,	   /*	2D texture.	*/
 			Texture3D = 0x4,	   /*	3D texture.	*/
@@ -162,13 +166,13 @@ namespace fragcore {
 		 */
 		enum class DataPixelFormat : uint32_t {
 			NoFormat = 0,
-			RGB = 0x1,	/*	RGB components.	*/
-			RGBA = 0x2, /*	RGBA components.	*/
-			BGR = 0x3,	/*	BGR components.	*/
-			BGRA = 0x4, /*	BGRA components.	*/
-			SRGB = 0x5, /*	SRGB components.	*/
-			RG = 0x6,
-			A = 0x8,
+			RGB = 0x1,			/*	RGB components.	*/
+			RGBA = 0x2,			/*	RGBA components.	*/
+			BGR = 0x3,			/*	BGR components.	*/
+			BGRA = 0x4,			/*	BGRA components.	*/
+			SRGB = 0x5,			/*	SRGB components.	*/
+			RG = 0x6,			/*	*/
+			A = 0x8,			/*	*/
 			SRGBA = 0x7,		/*	SRGBA components.	*/
 			SingleColor = 0x9,	/*	Single color component.	*/
 			Depth = 0xA,		/*	Depth component.	*/
@@ -214,8 +218,9 @@ namespace fragcore {
 		Texture *originalTexture; /*  Use viewport.   */
 
 		/*  Target. */
-		Target target; /*	Texture target.	*/
-		/*	*/
+		TextureTarget target; /*	Texture target.	*/
+
+		/*	Dimensions.	*/
 		int width = 1;	/*	Texture width in pixels.	*/
 		int height = 1; /*	Texture height in pixels.	*/
 		int depth = 1;	/*	Texture depth in pixels.	*/

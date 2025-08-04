@@ -9,6 +9,7 @@ IPAddress::IPAddress(const std::string &ipAddress, const IPAddressType type) : i
 
 	/*	*/
 	const int domain = getDomain(type);
+	
 	if (inet_pton(domain, ipAddress.c_str(), &field8[0]) < 0) {
 		throw RuntimeException("Failed to convert {} to IP Address", ipAddress);
 	}

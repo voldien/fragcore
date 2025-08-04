@@ -1,21 +1,20 @@
-/**
-	FragEngine, A Two layer Game Engine.
-	Copyright (C) 2018  Valdemar Lindberg
-
-	This program is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-*/
+/*
+ *	FragCore - Fragment Core
+ *	Copyright (C) 2018 Valdemar Lindberg
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program;
+ */
 #ifndef _FRAGCORE_GRAPHIC_FORMAT_H_
 #define _FRAGCORE_GRAPHIC_FORMAT_H_ 1
 
@@ -39,8 +38,8 @@ namespace fragcore {
 		R8G8_UNorm,	   // A two-component, 16-bit unsigned normalized format that has an 8-bit R component stored with
 					// sRGB nonlinear encoding in byte 0, and an 8-bit G component stored with sRGB nonlinear encoding
 					// in byte 1.
-		R8G8B8_UNorm, // A three-component, 24-bit unsigned normalized format that has an 8-bit R component in byte
-					  // 0, an 8-bit G component in byte 1, and an 8-bit B component in byte 2.
+		R8G8B8_UNorm,	// A three-component, 24-bit unsigned normalized format that has an 8-bit R component in byte
+						// 0, an 8-bit G component in byte 1, and an 8-bit B component in byte 2.
 		R8G8B8A8_UNorm, //	A four-component, 32-bit unsigned normalized format that has an 8-bit R component in byte
 						// 0, an 8-bit G component in byte 1, an 8-bit B component in byte 2, and an 8-bit A component
 						// in byte 3.
@@ -53,9 +52,9 @@ namespace fragcore {
 		R8G8B8A8_SNorm, //	A four-component, 32-bit signed normalized format that has an 8-bit R component in byte
 						// 0, an 8-bit G component in byte 1, an 8-bit B component in byte 2, and an 8-bit A component
 						// in byte 3.
-		R8_UInt,	 //	A one-component, 8-bit unsigned integer format that has a single 8-bit R component.
-		R8G8_UInt,	 //	A two-component, 16-bit unsigned integer format that has an 8-bit R component in byte 0, and
-					 // an 8-bit G component in byte 1.
+		R8_UInt,   //	A one-component, 8-bit unsigned integer format that has a single 8-bit R component.
+		R8G8_UInt, //	A two-component, 16-bit unsigned integer format that has an 8-bit R component in byte 0, and
+				   // an 8-bit G component in byte 1.
 		R8G8B8_UInt, //	A three-component, 24-bit unsigned integer format that has an 8-bit R component in byte 0, an
 					 // 8-bit G component in byte 1, and an 8-bit B component in byte 2.
 		R8G8B8A8_UInt, //	A four-component, 32-bit unsigned integer format that has an 8-bit R component in byte 0,
@@ -145,8 +144,8 @@ namespace fragcore {
 		B8G8R8A8_UNorm, //	A four-component, 32-bit unsigned normalized format that has an 8-bit B component in byte
 						// 0, an 8-bit G component in byte 1, an 8-bit R component in byte 2, and an 8-bit A component
 						// in byte 3.
-		B8G8R8_SNorm,	//	A three-component, 24-bit signed normalized format that has an 8-bit B component in byte
-						// 0, an 8-bit G component in byte 1, and an 8-bit R component in byte 2.
+		B8G8R8_SNorm, //	A three-component, 24-bit signed normalized format that has an 8-bit B component in byte
+					  // 0, an 8-bit G component in byte 1, and an 8-bit R component in byte 2.
 		B8G8R8A8_SNorm, //	A four-component, 32-bit signed normalized format that has an 8-bit B component in byte
 						// 0, an 8-bit G component in byte 1, an 8-bit R component in byte 2, and an 8-bit A component
 						// in byte 3.
@@ -205,10 +204,10 @@ namespace fragcore {
 		A2R10G10B10_SIntPack32,	 //	A four-component, 32-bit packed signed integer format that has a 2-bit A
 								 // component in bits 30..31, a 10-bit R component in bits 20..29, a 10-bit G component
 								 // in bits 10..19, and a 10-bit B component in bits 0..9.
-		Depth_32Bit,
-		Depth_24Bit,
-		Depth_16Bit,
-		Depth_24Bit_8Stencil,
+		Depth_32Bit,			 /*	*/
+		Depth_24Bit,			 /*	*/
+		Depth_16Bit,			 /*	*/
+		Depth_24Bit_8Stencil,	 /*	*/
 	};
 }
 

@@ -23,7 +23,6 @@
  * @file FragCore.h
  * @
  * @brief
- * @version 0.1
  *
  */
 

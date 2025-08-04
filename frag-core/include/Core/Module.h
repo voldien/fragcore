@@ -30,13 +30,14 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC Module : public SmartReference {
 	  public:
-		Module();
+		Module() = default;
 		~Module() override = default;
 		virtual void onInitialization() = 0;
 		virtual void onDestruction() = 0;
 
 	  public: /*	*/
-		template <typename T> static T *loadModule(const std::string &filepath, const std::string &moduleEntryPoint = "") {
+		template <typename T>
+		static T *loadModule(const std::string &filepath, const std::string &moduleEntryPoint = "") {
 			static_assert(std::is_convertible_v<T *, Module *>, "Derived must inherit Module as public");
 			Library lib(filepath.c_str());
 			return Module::loadModule<T>(lib, moduleEntryPoint);

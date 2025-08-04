@@ -163,13 +163,13 @@ unsigned int GLHelper::getGraphicFormat(const GraphicFormat graphicFormat) {
 	case GraphicFormat::R16G16B16A16_SNorm:
 		return GL_RGBA16_SNORM;
 	case GraphicFormat::R16_UInt:
-
+		return GL_R16;
 	case GraphicFormat::R16G16_UInt:
-
+		return GL_RG16;
 	case GraphicFormat::R16G16B16_UInt:
-
+		return GL_RGB16;
 	case GraphicFormat::R16G16B16A16_UInt:
-
+		return GL_RGBA16;
 	case GraphicFormat::R16_SInt:
 
 	case GraphicFormat::R16G16_SInt:
@@ -179,7 +179,6 @@ unsigned int GLHelper::getGraphicFormat(const GraphicFormat graphicFormat) {
 	case GraphicFormat::R16G16B16A16_SInt:
 
 	case GraphicFormat::R32_UInt:
-
 	case GraphicFormat::R32G32_UInt:
 
 	case GraphicFormat::R32G32B32_UInt:
@@ -438,34 +437,34 @@ unsigned int GLHelper::getInternalTextureFormat(TextureDesc::DataPixelFormat for
 	throw InvalidArgumentException("Invalid texture format {}.", magic_enum::enum_name(format));
 }
 
-unsigned int GLHelper::getTextureTarget(TextureDesc::Target target, int nrSamples) {
+unsigned int GLHelper::getTextureTarget(const TextureDesc::TextureTarget target, const int nrSamples) {
 	switch (target) {
-	case TextureDesc::Target::Texture1D:
+	case TextureDesc::TextureTarget::Texture1D:
 		return GL_TEXTURE_1D;
-	case TextureDesc::Target::Texture2D:
-		if (nrSamples > 0) {
+	case TextureDesc::TextureTarget::Texture2D:
+		if (nrSamples > 1) {
 			return GL_TEXTURE_2D_MULTISAMPLE;
 		} else {
 			return GL_TEXTURE_2D;
 		}
-	case TextureDesc::Target::Texture3D:
+	case TextureDesc::TextureTarget::Texture3D:
 		return GL_TEXTURE_3D;
-	case TextureDesc::Target::CubeMap:
+	case TextureDesc::TextureTarget::CubeMap:
 		return GL_TEXTURE_CUBE_MAP;
-	case TextureDesc::Target::Texture2DArray:
-		if (nrSamples > 0) {
+	case TextureDesc::TextureTarget::Texture2DArray:
+		if (nrSamples > 1) {
 			return GL_TEXTURE_2D_MULTISAMPLE_ARRAY;
 		} else {
 			return GL_TEXTURE_2D_ARRAY;
 		}
-	case TextureDesc::Target::CubeMapArray:
+	case TextureDesc::TextureTarget::CubeMapArray:
 		return GL_TEXTURE_CUBE_MAP_ARRAY;
 	default:
 		throw InvalidArgumentException("Invalid texture target {}.", magic_enum::enum_name(target));
 	}
 }
 
-unsigned int GLHelper::getTextureType(TextureDesc::PixelDataType type) {
+unsigned int GLHelper::getTextureType(const TextureDesc::PixelDataType type) {
 	switch (type) {
 	case TextureDesc::PixelDataType::UnsignedByte:
 		return GL_UNSIGNED_BYTE;
@@ -482,7 +481,7 @@ unsigned int GLHelper::getTextureType(TextureDesc::PixelDataType type) {
 	}
 }
 
-unsigned int GLHelper::getTextureSwizzle(fragcore::TextureSwizzle swizzle) {
+unsigned int GLHelper::getTextureSwizzle(const fragcore::TextureSwizzle swizzle) {
 	switch (swizzle) {
 	case TextureSwizzle::Zero:
 		return GL_ZERO;
@@ -497,11 +496,11 @@ unsigned int GLHelper::getTextureSwizzle(fragcore::TextureSwizzle swizzle) {
 	case TextureSwizzle::eAlpha:
 		return GL_ALPHA;
 	default:
-		throw InvalidArgumentException("None Supported Swizzled");
+		throw InvalidArgumentException("None Supported Swizzled {}", magic_enum::enum_name(swizzle));
 	}
 }
 
-unsigned int GLHelper::getBufferType(BufferDesc::BufferType type) {
+unsigned int GLHelper::getBufferType(const BufferDesc::BufferType type) {
 	switch (type) {
 	case BufferDesc::eArray:
 		return GL_ARRAY_BUFFER_ARB;
@@ -528,7 +527,7 @@ unsigned int GLHelper::getBufferType(BufferDesc::BufferType type) {
 	}
 }
 
-unsigned int GLHelper::getBufferHint(BufferDesc::BufferHint hint) {
+unsigned int GLHelper::getBufferHint(const BufferDesc::BufferHint hint) {
 
 	const unsigned int subhint = (hint & ~(BufferDesc::eWrite | BufferDesc::eRead));
 
@@ -557,11 +556,12 @@ unsigned int GLHelper::getBufferHint(BufferDesc::BufferHint hint) {
 			throw InvalidArgumentException("None matching read buffer hint");
 		}
 	}
+
 	assert(0);
 	throw InvalidArgumentException("None matching buffer hint : {}", magic_enum::enum_name(hint));
 }
 
-unsigned int GLHelper::getPrimitive(GeometryDesc::Primitive primitive) {
+unsigned int GLHelper::getPrimitive(const GeometryDesc::Primitive primitive) {
 
 	switch (primitive) {
 	case GeometryDesc::Primitive::Point:
@@ -579,7 +579,7 @@ unsigned int GLHelper::getPrimitive(GeometryDesc::Primitive primitive) {
 	}
 }
 
-unsigned int GLHelper::getAttributeDataType(GeometryDesc::AttributeType type) {
+unsigned int GLHelper::getAttributeDataType(const GeometryDesc::AttributeType type) {
 	switch (type) {
 	case GeometryDesc::AttributeType::eInt:
 		return GL_INT;
@@ -594,7 +594,7 @@ unsigned int GLHelper::getAttributeDataType(GeometryDesc::AttributeType type) {
 	}
 }
 
-unsigned int GLHelper::getState(IRenderer::State state) {
+unsigned int GLHelper::getState(const IRenderer::State state) {
 	switch (state) {
 	case IRenderer::State::DepthTest:
 		return GL_DEPTH_TEST;
@@ -673,7 +673,7 @@ unsigned int GLHelper::getClearBitMask(CLEARBITMASK clearbitmask) {
 }
 
 /*  Texture.    */
-unsigned int GLHelper::getTextureWrapMode(Texture::WrapMode mode) {
+unsigned int GLHelper::getTextureWrapMode(const Texture::WrapMode mode) {
 	switch (mode) {
 	case Texture::WrapMode::eClamp:
 		return GL_CLAMP_TO_EDGE;

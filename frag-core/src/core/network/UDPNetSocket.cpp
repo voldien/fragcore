@@ -28,10 +28,11 @@ UDPNetSocket::UDPNetSocket(int socket) : UDPNetSocket() {
 	this->netStatus = NetStatus::Status_Done;
 }
 UDPNetSocket::~UDPNetSocket() {
-	// TODO: improve, to remove try catch.
+
 	try {
 		this->close();
 	} catch (std::exception &other) {
+		/*	Failed to close Socket.	*/
 	}
 }
 

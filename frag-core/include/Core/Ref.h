@@ -27,8 +27,7 @@ namespace fragcore {
 	 * @tparam T
 	 */
 	template <class T> class Ref {
-		static_assert(std::is_object<T>::value, "Must be a Object");
-		// static_assert(std::has_virtual_destructor<T>::value, "Must have a virtual deconstructor");
+		static_assert(std::is_object_v<T>, "Must be a Object");
 
 	  private:
 		T *reference;
@@ -56,7 +55,6 @@ namespace fragcore {
 
 		const T *operator*() const { return this->reference; }
 
-	  public:
 		Ref() : reference(nullptr) {}
 
 		Ref(T *p_reference) : reference(nullptr) {

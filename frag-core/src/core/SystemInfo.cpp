@@ -1,6 +1,7 @@
 #include "Core/SystemInfo.h"
 #include "IO/FileIO.h"
 #include <cstdlib>
+
 #include <filesystem>
 #include <infoware.hpp>
 #include <magic_enum.hpp>
@@ -301,7 +302,7 @@ const char *SystemInfo::getUserName() {
 	return "";
 }
 
-unsigned int SystemInfo::getPageSize() {
+unsigned int SystemInfo::getPageSize() noexcept {
 #if defined(PLATFORM_POSIX) || defined(__linux__) // check defines for your setup
 	long int pagesize = sysconf(_SC_PAGE_SIZE);
 	return pagesize;

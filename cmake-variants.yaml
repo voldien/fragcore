@@ -55,7 +55,7 @@ buildType:
         BUILD_WITH_PEDANTIC: ON
 
 linkage:
-  default: static
+  default: shared
   choices:
     static:
       short: Static

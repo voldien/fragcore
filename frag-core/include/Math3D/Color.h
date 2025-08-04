@@ -18,6 +18,7 @@
 #ifndef _FRAGCORE_COLOR_H_
 #define _FRAGCORE_COLOR_H_ 1
 #include "../Math/Math.h"
+#include <cstdint>
 
 namespace fragcore {
 
@@ -35,22 +36,22 @@ namespace fragcore {
 			Precision red = ((hex >> 24) & 0xFF) / 255.0f;	 // Extract the RR byte
 			Precision green = ((hex >> 16) & 0xFF) / 255.0f; // Extract the GG byte
 			Precision blue = ((hex >> 8) & 0xFF) / 255.0f;	 // Extract the GG byte
-			Precision alpha = ((hex)&0xFF) / 255.0f;		 // Extract the BB byte
+			Precision alpha = ((hex) & 0xFF) / 255.0f;		 // Extract the BB byte
 			this->r(red);
 			this->g(green);
 			this->b(blue);
 			this->a(alpha);
 		}
 
-		inline float r() const noexcept { return this->x(); }
-		inline float g() const noexcept { return this->y(); }
-		inline float b() const noexcept { return this->z(); }
-		inline float a() const noexcept { return this->w(); }
+		 float r() const noexcept { return this->x(); }
+		 float g() const noexcept { return this->y(); }
+		 float b() const noexcept { return this->z(); }
+		 float a() const noexcept { return this->w(); }
 
-		inline void r(const Precision red) noexcept { *this = {red, g(), b(), a()}; }
-		inline void g(const Precision green) noexcept { *this = {r(), green, b(), a()}; }
-		inline void b(const Precision blue) noexcept { *this = {r(), g(), blue, a()}; }
-		inline void a(const Precision alpha) noexcept { *this = {r(), g(), b(), alpha}; }
+		 void r(const Precision red) noexcept { *this = {red, g(), b(), a()}; }
+		 void g(const Precision green) noexcept { *this = {r(), green, b(), a()}; }
+		 void b(const Precision blue) noexcept { *this = {r(), g(), blue, a()}; }
+		 void a(const Precision alpha) noexcept { *this = {r(), g(), b(), alpha}; }
 
 		/**
 		 * @brief
@@ -73,7 +74,7 @@ namespace fragcore {
 		 * @return Color
 		 */
 		template <typename T> static Color correlatedColorTemperatureToRGB(const T kelvin) noexcept {
-			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
+			static_assert(std::is_floating_point_v<T>, "Must be a decimal type(float/double/half).");
 			const T temp = kelvin / static_cast<T>(100.0);
 
 			T red, green, blue;

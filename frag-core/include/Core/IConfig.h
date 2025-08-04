@@ -17,9 +17,9 @@
  */
 #ifndef _FRAGCORE_CONFIG_H_
 #define _FRAGCORE_CONFIG_H_ 1
-#include "Core/Object.h"
 #include "DataStructure/ITree.h"
 #include "FragDef.h"
+#include "Object.h"
 #include <cctype>
 #include <cstring>
 #include <fmt/format.h>
@@ -58,7 +58,7 @@ namespace fragcore {
 #ifdef CXXCONF_NO_RTTI
 			return static_cast<const T &>(this->value);
 #else
-			return reinterpret_cast<const T &>(this->value);
+			return this->value;
 #endif
 		}
 		virtual unsigned int getHashCode() { return typeid(T).hash_code(); }
@@ -100,7 +100,7 @@ namespace fragcore {
 		IConfig(IConfig *parent = nullptr) { this->setParent(parent); }
 		IConfig(const IConfig &other) = default;
 		IConfig(IConfig &&other) : _mapSubConfig(std::move(other._mapSubConfig)), va_va(std::move(other.va_va)) {}
-		~IConfig() override {
+		~IConfig()  {
 			/*	Delete attributes.	*/
 			for (auto it = this->va_va.begin(); it != this->va_va.end(); it++) {
 				delete (*it).second;
@@ -126,8 +126,8 @@ namespace fragcore {
 		const AbstractValue &operator[](const std::string &key) { return *this->va_va[key]; }
 
 		template <class T> T get(const std::string &key) const {
-			static_assert(std::is_class<ValueType<T>>::value || std::is_floating_point<T>::value ||
-							  std::is_integral<T>::value,
+			static_assert(std::is_class_v<ValueType<T>> || std::is_floating_point_v<T> ||
+							  std::is_integral_v<T>,
 						  "Invalid Data Type");
 			if (this->has_ref(key)) {
 				return this->va_va.at(key)->as<T>().getValue();
@@ -152,8 +152,8 @@ namespace fragcore {
 		bool has_ref(const std::string &key) const { return this->va_va.find(key) != this->va_va.end(); }
 
 		template <class T> void set(const std::string &key, const T &value) /*noexcept(noexcept(isSet(key)))*/ {
-			static_assert(std::is_class<ValueType<T>>::value || std::is_floating_point<T>::value ||
-							  std::is_integral<T>::value,
+			static_assert(std::is_class_v<ValueType<T>> || std::is_floating_point_v<T> ||
+							  std::is_integral_v<T>,
 						  "Must be a supported type");
 			auto val = new ValueType<T>(value);
 			this->va_va[key] = static_cast<AbstractValue *>(val);

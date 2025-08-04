@@ -42,10 +42,10 @@ namespace fragcore {
 
 		enum class CPUArchicture {
 			UnKnown,
-			x86,   /**/
-			AMD64, /**/
-			Arm32, /**/
-			Arm64  /**/
+			x86,   /*	X86*/
+			AMD64, /*	X64*/
+			Arm32, /*	Arm 32 Bit.	*/
+			Arm64  /*	Arm 64 Bit.	*/
 		};
 
 		enum class SIMD : unsigned int {
@@ -148,7 +148,7 @@ namespace fragcore {
 		 *
 		 * @return unsigned int
 		 */
-		static unsigned int getPageSize();
+		static unsigned int getPageSize() noexcept;
 
 	  public: /*	User Space Information.	*/
 		/**
