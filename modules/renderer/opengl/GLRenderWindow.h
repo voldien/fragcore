@@ -19,11 +19,6 @@
 #define _FRAGCORE_OPENGL_WINDOW_H_ 1
 #include "../RendererWindow.h"
 #include "GLRendererInterface.h"
-#if defined(FRAG_CORE_INTERNAL_IMP) // TODO resolve to a single file or
-									// something later
-#include <SDL2/SDL_syswm.h>
-#include <SDL2/SDL_video.h>
-#endif
 
 namespace fragcore {
 	/**
@@ -34,9 +29,11 @@ namespace fragcore {
 		GLRenderWindow(const Ref<GLRendererInterface> &renderer);
 		~GLRenderWindow() override;
 
+		/*	*/
 		void swapBuffer() override;
 		void vsync(bool state) override;
 
+		/*	*/
 		void createWindow(int x, int y, int width, int height, const char *api) override;
 		bool assertConfigAttributes(const IConfig *iConfig) override;
 		void useWindow(void *pdata) override;
@@ -45,7 +42,6 @@ namespace fragcore {
 		virtual void createSwapChain();
 
 	  private: /*	*/
-		// TODO add proxy window.
 		Ref<GLRendererInterface> renderer = {nullptr};
 	};
 } // namespace fragcore

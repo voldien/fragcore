@@ -81,7 +81,13 @@ namespace fragcore {
 
 		fragcore::Display *getCurrentDisplay() const override;
 
-		intptr_t getNativePtr() const override; /*  Get native window reference object. */
+		/**
+		 * @brief Get the native window reference.
+		 */
+		intptr_t getNativePtr() const override;
+		/**
+		 * @brief Get the framework window reference.
+		 */
 		intptr_t getNativeInternalPtr() const override;
 
 	  protected:

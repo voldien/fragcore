@@ -1,10 +1,16 @@
 #include "GLRenderWindow.h"
-#include "SDL_video.h"
+#include <SDLWindowManager.h>
 
+#include "SDL_video.h"
 #include <SDL2/SDL_egl.h>
 #include <SDL2/SDL_opengl.h>
 #include <SDL2/SDL_syswm.h>
-#include <SDLWindowManager.h>
+
+#if defined(FRAG_CORE_INTERNAL_IMP) // TODO resolve to a single file or
+									// something later
+#include <SDL2/SDL_syswm.h>
+#include <SDL2/SDL_video.h>
+#endif
 
 #include <fmt/core.h>
 
@@ -12,7 +18,7 @@ using namespace fragcore;
 
 GLRenderWindow::GLRenderWindow(const Ref<GLRendererInterface> &renderer) : renderer(renderer) {
 
-	SDL_WindowFlags window_flags =
+	const SDL_WindowFlags window_flags =
 		(SDL_WindowFlags)(SDL_WINDOW_HIDDEN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_OPENGL);
 	this->window = SDL_CreateWindow("", 0, 0, 800, 600, window_flags);
 
@@ -39,8 +45,10 @@ void GLRenderWindow::vsync(bool state) { int errcode = SDL_GL_SetSwapInterval(st
 bool GLRenderWindow::assertConfigAttributes(const fragcore::IConfig *iConfig) { return false; }
 
 void GLRenderWindow::createWindow(int x, int y, int width, int height, const char *api) {
+	const SDL_WindowFlags window_flags =
+		(SDL_WindowFlags)(SDL_WINDOW_HIDDEN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_OPENGL);
 	this->window = SDL_CreateWindow(
-		"", x, y, width, height, SDL_WINDOW_HIDDEN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_OPENGL);
+		"", x, y, width, height, window_flags);
 
 	/*  */
 	if (window == nullptr) {

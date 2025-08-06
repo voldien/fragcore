@@ -7,24 +7,34 @@ using namespace fragcore;
 
 SDLWindow::SDLWindow() {
 
-	int width = 800;
-	int height = 600;
+	/*	Default Window Size.	*/
+	const int width = 800;
+	const int height = 600;
+
+	/*	Default position	*/
+	const int window_position_x = SDL_WINDOWPOS_CENTERED;
+	const int window_position_y = SDL_WINDOWPOS_CENTERED;
 
 #ifdef SDL_HINT_IME_SHOW_UI
-    SDL_SetHint(SDL_HINT_IME_SHOW_UI, "1");
+	SDL_SetHint(SDL_HINT_IME_SHOW_UI, "1");
 #endif
 
 	SDL_WindowFlags window_flags =
 		(SDL_WindowFlags)(SDL_WINDOW_HIDDEN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_INPUT_FOCUS);
-	this->window = SDL_CreateWindow("", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, window_flags);
+
+	/*	*/
+	this->window = SDL_CreateWindow("", window_position_x, window_position_y, width, height, window_flags);
 
 	if (window == nullptr) {
 		throw RuntimeException("Failed to create window {}", SDL_GetError());
 	}
 }
 
-SDLWindow::SDLWindow(const intptr_t reference) : window(reinterpret_cast<SDL_Window *>(reference)) {
+SDLWindow::SDLWindow(const intptr_t reference) {
 	/*	*/
+	if (reference != 0) {
+		this->window = SDL_CreateWindowFrom(reinterpret_cast<void *>(reference));
+	}
 #ifdef SDL_HINT_IME_SHOW_UI
 	SDL_SetHint(SDL_HINT_IME_SHOW_UI, "1");
 #endif
@@ -34,8 +44,8 @@ SDLWindow::~SDLWindow() {
 
 	/*	*/
 	if (this->window) {
-	SDL_DestroyWindow(this->window);
-	this->window = nullptr;
+		SDL_DestroyWindow(this->window);
+		this->window = nullptr;
 	}
 }
 

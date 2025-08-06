@@ -43,7 +43,7 @@ namespace fragcore {
 		ImageLoader &operator=(ImageLoader &&other);
 		~ImageLoader() override = default;
 
-		Image loadImage(const std::string &path, FileSystem *filesystem = FileSystem::getFileSystem(),
+		Image loadImage(const std::string &path, IFileSystem *filesystem = FileSystem::getFileSystem(),
 						const FileFormat fileformat = FileFormat::Default) {
 			Ref<IO> io_ref = Ref<IO>(filesystem->openFile(path.c_str(), IO::IOMode::READ));
 			return ImageLoader::loadImage(io_ref, fileformat);
@@ -53,7 +53,7 @@ namespace fragcore {
 		void loadImageData(const std::string &path, unsigned int *width, unsigned int *height);
 
 		void saveImage(const std::string &path, const Image &image,
-					   FileSystem *filesystem = FileSystem::getFileSystem(),
+					   IFileSystem *filesystem = FileSystem::getFileSystem(),
 					   const FileFormat fileformat = FileFormat::Default) {
 			Ref<IO> io_out = Ref<IO>(filesystem->openFile(path.c_str(), IO::IOMode::WRITE));
 			ImageLoader::saveImage(io_out, image, fileformat);
