@@ -26,12 +26,13 @@
  *
  */
 
- #include"FragDef.h"
+#include "FragDef.h"
 
 /*  Core.   */
 #include "Core/Environment.h"
 #include "Core/IConfig.h"
 #include "Core/Library.h"
+#include "Core/Property.h"
 #include "Core/SystemInfo.h"
 
 /*  Memory Management.  */
