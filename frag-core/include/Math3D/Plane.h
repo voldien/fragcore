@@ -49,40 +49,35 @@ namespace fragcore {
 		 * Get normal of plane.
 		 * @return normalized normal vector.
 		 */
-		inline Vector3 getNormal() noexcept { return this->normal; }
+		 Vector3 getNormal() noexcept { return this->normal; }
 
 		/**
 		 * Get normal of plane.
 		 * @return normalized normal vector.
 		 */
-		inline const Vector3 &getNormal() const noexcept { return this->normal; }
+		 const Vector3 &getNormal() const noexcept { return this->normal; }
 
 		/**
 		 * Set plane normal.
 		 * @param normal
 		 */
-		inline void setNormal(const Vector3 &normal) noexcept { this->normal = normal; }
+		 void setNormal(const Vector3 &normal) noexcept { this->normal = normal; }
 
 		/**
 		 * Compute distance.
-		 * @param point
-		 * @return
 		 */
-		inline T distance(const Vector3 &point) const noexcept { return normal.dot(point) + d; }
-
-		inline T distanceSigned(const Vector3 &point) const noexcept { return normal.dot(point) - d; }
+		 T distance(const Vector3 &point) const noexcept { return normal.dot(point) + d; }
+		 T distanceSigned(const Vector3 &point) const noexcept { return normal.dot(point) - d; }
 
 		/**
 		 * Get distance.
-		 * @return
 		 */
-		inline T distance() const noexcept { return this->d; }
+		 T distance() const noexcept { return this->d; }
 
 		/**
 		 * Get point.
-		 * @return
 		 */
-		inline Vector3 getPoint() const noexcept { return this->distance() * this->getNormal(); }
+		 Vector3 getPoint() const noexcept { return this->distance() * this->getNormal(); }
 
 		/**
 		 * Set normal and point and

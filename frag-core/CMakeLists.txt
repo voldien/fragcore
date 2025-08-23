@@ -81,6 +81,7 @@ FILE(GLOB SOURCE_FILES  ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/src/core/*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/src/core/threading/*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/src/core/math/*.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/src/core/math3d/*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/src/core/datastructure/*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/src/core/io/*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/src/core/network/*.cpp
@@ -128,12 +129,12 @@ ENDIF()
 TARGET_COMPILE_FEATURES(fragcore PUBLIC cxx_std_17 cxx_constexpr)
 
 #
-TARGET_LINK_LIBRARIES(fragcore PUBLIC Eigen3::Eigen taskSch cxxexcept spdlog_header_only fmt magic_enum PRIVATE stdc++ atomic dl ${ZLIB_LIBRARIES} 
+TARGET_LINK_LIBRARIES(fragcore PUBLIC Eigen3::Eigen taskSch cxxexcept spdlog_header_only fmt magic_enum PRIVATE stdc++ atomic dl ${ZLIB_LIBRARIES}
 													${ZIP_LIBRARIES} m ${OPENSSL_CRYPTO_LIBRARY} infoware )
 
 #
 TARGET_INCLUDE_DIRECTORIES(fragcore PRIVATE ${ZIP_INCLUDE_DIRS}
-													 ${OPEN_SIMPLEX_NOISE_INCLUDE_DIRS} ${PCG_C_BASIC_INCLUDE_DIRS} 
+													 ${OPEN_SIMPLEX_NOISE_INCLUDE_DIRS} ${PCG_C_BASIC_INCLUDE_DIRS}
 													 ${ZLIB_INCLUDE_DIRS} ${ZSTD_INCLUDE_DIRS}
 													 ${Backtrace_HEADER}
 													 ${infoware_SOURCE_DIR}/include/infoware
@@ -148,7 +149,7 @@ IF(OpenMP_FOUND AND OpenMP_CXX_FOUND AND BUILD_WITH_OPENMP)
 	TARGET_COMPILE_OPTIONS(fragcore PUBLIC ${OpenMP_CXX_FLAGS})
 ENDIF()
 
-# 
+#
 
 
 # Enable FPIC if shared library.

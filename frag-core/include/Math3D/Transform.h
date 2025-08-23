@@ -24,80 +24,60 @@ namespace fragcore {
 
 	/**
 	 * @brief Construct a new fv align object
-	 *
 	 */
+	template <typename Vec3T, typename Mat3x3, typename Mat4x4, typename QuatT>
 	class FV_ALIGN(16) FVDECLSPEC Transform {
 	  public:
 		Transform() = default;
-		Transform(const Vector3 &position, const Quaternion &rotation, const Vector3 &scale)
-			: position(position), quaternion(rotation), scale(scale) {}
-		Transform(const Matrix4x4 &transform) {}
-		Transform(const Matrix3x3 &transform) {}
+		Transform(const Vec3T &position, const QuatT &rotation, const Vec3T &scale);
+		Transform(const Mat4x4 &transform);
+		Transform(const Mat3x3 &transform);
 
-		// explicit Transform(const Matrix3x3 &basis, const Vector3 &c = Vector3::Zero()) {}
+		explicit Transform(const Mat3x3 &basis, const Vec3T &c);
 
-		Transform(const Transform &other) {
-			this->position = other.position;
-			this->quaternion = other.quaternion;
-			this->scale = other.scale;
-		}
+		// Transform(const Transform &other);
 
-		Transform &operator=(const Transform &other) {
-			this->position = other.position;
-			this->quaternion = other.quaternion;
-			this->scale = other.scale;
-			return *this;
-		}
+		Transform &operator=(const Transform &other);
 
-		FV_ALWAYS_INLINE void rotate([[maybe_unused]] const Vector3 &eular) noexcept {
-			this->quaternion = Quaternion();
-		}
+		void rotate(const Vec3T &eular) noexcept;
+		void rotateTowards(const Vec3T &direction) noexcept;
 
-		FV_ALWAYS_INLINE void setPosition(const Vector3 &position) noexcept { this->position = position; }
+		void setPosition(const Vec3T &position) noexcept;
 
-		FV_ALWAYS_INLINE Vector3 getPosition() noexcept { return this->position; }
+		Vec3T getPosition() noexcept;
+		const Vec3T &getPosition() const noexcept;
 
-		FV_ALWAYS_INLINE const Vector3 &getPosition() const noexcept { return this->position; }
+		void setScale(const Vec3T &scale) noexcept;
+		Vec3T getScale() const noexcept;
 
-		FV_ALWAYS_INLINE void setScale(const Vector3 &scale) noexcept { this->scale = scale; }
+		const QuatT &getRotation() const noexcept;
+		Vec3T getRotationEular() const noexcept;
 
-		FV_ALWAYS_INLINE Vector3 getScale() const noexcept { return this->scale; }
+		void setRotation(const QuatT &quat) noexcept;
+		void setRotationEular(const Vec3T& eular) noexcept;
 
-		FV_ALWAYS_INLINE void setRotation(const Quaternion &quat) noexcept { this->quaternion = quat; }
+		Transform inverse() const noexcept;
 
-		FV_ALWAYS_INLINE Transform inverse() const noexcept {
-			Transform transform;
-			// Matrix3x3 inv = this->getBasis().transpose();
-			return transform;
-		}
+		Mat3x3 getBasis() const noexcept;
 
-		FV_ALWAYS_INLINE const Quaternion &getRotation() const noexcept { return this->quaternion; }
+		Transform &operator*=([[maybe_unused]] const Transform &t) noexcept;
 
-		FV_ALWAYS_INLINE const Matrix3x3 getBasis() const noexcept { return this->quaternion.matrix(); }
+		Transform operator*([[maybe_unused]] const Transform &t) const noexcept;
+		Vec3T operator*(const Vec3T &vector) const noexcept;
+		QuatT operator*(const QuatT &quat) const noexcept;
 
-		FV_ALWAYS_INLINE Transform &operator*=([[maybe_unused]] const Transform &t) noexcept {
-			// Matrix3x3 basis = this->getBasis() * t.getBasis();
-			return *this;
-		}
+		Vec3T up() const noexcept;
+		Vec3T right() const noexcept;
+		Vec3T forward() const noexcept;
 
-		FV_ALWAYS_INLINE Transform operator*([[maybe_unused]] const Transform &t) const noexcept {
-			// Matrix3x3 basis = this->getBasis() * t.getBasis();
-
-			return *this;
-		}
-
-		FV_ALWAYS_INLINE Vector3 operator*(const Vector3 &vector) const noexcept { return this->getBasis() * vector; }
-
-		FV_ALWAYS_INLINE Quaternion operator*(const Quaternion &quat) const noexcept {
-			return this->getRotation() * quat;
-		}
-
-	  private:				   /*	Attributes.	*/
-		Vector3 position;	   /*	Position in world space.	*/
-		Quaternion quaternion; /*	Rotation in world space.	*/
-		Vector3 scale;		   /*	Scale.	*/
-		Matrix3x3 basis;	   /*	*/
+	  private:					  /*	Attributes.	*/
+		Vec3T position = Vec3T(); /*	Position in world space.	*/
+		QuatT quat = QuatT();	  /*	Rotation in world space.	*/
+		Vec3T scale;			  /*	Scale.	*/
+		Mat3x3 basis;			  /*	*/
 	};
+
+	using TransformEigen = Transform<Vector3, Matrix3x3, Matrix4x4, Quaternion>;
 
 } // namespace fragcore
 #endif
