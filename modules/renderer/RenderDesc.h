@@ -218,7 +218,7 @@ namespace fragcore {
 		Texture *originalTexture; /*  Use viewport.   */
 
 		/*  Target. */
-		TextureTarget target; /*	Texture target.	*/
+		TextureTarget target = TextureTarget::Texture2D; /*	Texture target.	*/
 
 		/*	Dimensions.	*/
 		int width = 1;	/*	Texture width in pixels.	*/

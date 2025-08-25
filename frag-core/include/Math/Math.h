@@ -31,13 +31,26 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC Math {
 	  public:
+		template <typename T> constexpr static T removeFlag(const T value, const T flag) noexcept {
+			static_assert(std::is_integral_v<T>, "Must be a integer type.");
+			return value & ~flag;
+		}
+		template <typename T> constexpr static T addFlag(const T value, const T flag) noexcept {
+			static_assert(std::is_integral_v<T>, "Must be a integer type.");
+			return value | flag;
+		}
+		template <typename T> constexpr static bool isFlagSet(const T value, const T flag) noexcept {
+			static_assert(std::is_integral_v<T>, "Must be a integer type.");
+			return (value & flag) == flag;
+		}
+
 		/**
 		 *
 		 */
 #ifdef _OPENMP
 #pragma omp declare simd uniform(value) notinbranch
 #endif
-		template <typename T>  constexpr static T abs(const T value) noexcept {
+		template <typename T> constexpr static T abs(const T value) noexcept {
 			static_assert(std::is_floating_point_v<T> || std::is_integral_v<T>,
 						  "Must be a decimal type(float/double/half) or integer.");
 
@@ -50,7 +63,7 @@ namespace fragcore {
 			}
 		}
 
-		template <class T>  constexpr static T clamp(const T value, const T min, const T max) noexcept {
+		template <class T> constexpr static T clamp(const T value, const T min, const T max) noexcept {
 			static_assert(std::is_floating_point_v<T> || std::is_integral_v<T> || std::is_enum_v<T>,
 						  "Must be a decimal type(float/double/half) or integer.");
 			return Math::max<T>(min, Math::min<T>(max, value));
@@ -75,7 +88,7 @@ namespace fragcore {
 #ifdef _OPENMP
 #pragma omp declare simd uniform(value0, value1) notinbranch
 #endif
-		template <typename T>  constexpr static T max(const T value0, const T value1) noexcept {
+		template <typename T> constexpr static T max(const T value0, const T value1) noexcept {
 			static_assert(std::is_floating_point_v<T> || std::is_integral_v<T> || std::is_enum_v<T>,
 						  "Must be a decimal type(float/double/half) or integer.");
 			return (static_cast<T>(value0) < static_cast<T>(value1)) ? static_cast<T>(value1) : static_cast<T>(value0);
@@ -87,13 +100,13 @@ namespace fragcore {
 #ifdef _OPENMP
 #pragma omp declare simd uniform(value0, value1) notinbranch
 #endif
-		template <typename T>  constexpr static T min(const T value0, const T value1) noexcept {
+		template <typename T> constexpr static T min(const T value0, const T value1) noexcept {
 			static_assert(std::is_floating_point_v<T> || std::is_integral_v<T> || std::is_enum_v<T>,
 						  "Must be a decimal type(float/double/half) or integer.");
 			return (static_cast<T>(value1) < static_cast<T>(value0)) ? static_cast<T>(value1) : static_cast<T>(value0);
 		}
 
-		template <typename T>  constexpr static T frac(const T value) noexcept {
+		template <typename T> constexpr static T frac(const T value) noexcept {
 			static_assert(std::is_floating_point_v<T>, "Must be a decimal type(float/double/half).");
 			T part;
 			std::modf(value, &part);
@@ -109,7 +122,7 @@ namespace fragcore {
 			return list;
 		}
 
-		template <typename T> static  T sum(const std::vector<T> &list) noexcept {
+		template <typename T> static T sum(const std::vector<T> &list) noexcept {
 			static_assert(std::is_floating_point_v<T> || std::is_integral_v<T> || std::is_enum_v<T>,
 						  "Type Must Support addition operation.");
 			return Math::sum<T>(list.data(), list.size());
@@ -131,7 +144,7 @@ namespace fragcore {
 			return sum;
 		}
 
-		template <typename T> static  T product(const std::vector<T> &list) noexcept {
+		template <typename T> static T product(const std::vector<T> &list) noexcept {
 			static_assert(std::is_floating_point_v<T> || std::is_integral_v<T>,
 						  "Type Must Support addition operation.");
 			return Math::product<T>(list.data(), list.size());
@@ -210,13 +223,13 @@ namespace fragcore {
 			return (static_cast<T>(1) / static_cast<T>((nrElements - 1))) * sum;
 		}
 
-		template <typename T> static  T variance(const std::vector<T> &list, const T mean) {
+		template <typename T> static T variance(const std::vector<T> &list, const T mean) {
 			static_assert(std::is_floating_point_v<T> || std::is_integral_v<T>,
 						  "Type Must Support addition operation.");
 			return Math::variance<T>(list.data(), list.size(), mean);
 		}
 
-		template <typename T> constexpr static  T standardDeviation(const std::vector<T> &list, const T mean) {
+		template <typename T> constexpr static T standardDeviation(const std::vector<T> &list, const T mean) {
 			static_assert(std::is_floating_point_v<T> || std::is_integral_v<T>,
 						  "Type Must Support addition operation.");
 			return static_cast<T>(std::sqrt(Math::variance<T>(list, mean)));
@@ -251,7 +264,7 @@ namespace fragcore {
 		/**
 		 *	Convert degree to radian.
 		 */
-		template <typename T>  constexpr static T degToRad(const T deg) noexcept {
+		template <typename T> constexpr static T degToRad(const T deg) noexcept {
 			static_assert(std::is_floating_point_v<T>, "Must be a decimal type(float/double/half).");
 			return deg * static_cast<T>(Deg2Rad);
 		}
@@ -259,7 +272,7 @@ namespace fragcore {
 		/**
 		 *	Convert radian to degree.
 		 */
-		template <typename T>  constexpr static T radToDeg(const T rad) noexcept {
+		template <typename T> constexpr static T radToDeg(const T rad) noexcept {
 			static_assert(std::is_floating_point_v<T>, "Must be a decimal type(float/double/half).");
 			return rad * static_cast<T>(Rad2Deg);
 		}
@@ -289,19 +302,19 @@ namespace fragcore {
 		 * @return constexpr T
 		 */
 		template <typename T, typename U>
-		 constexpr static T lerp(const T value0, const T value1, const U interp) noexcept {
+		constexpr static T lerp(const T value0, const T value1, const U interp) noexcept {
 			static_assert(std::is_floating_point_v<U>, "Must be a decimal type(float/double/half).");
 			return (value0 + ((value1 - value0) * interp));
 		}
 
 		template <typename T, typename U>
-		 constexpr static T lerpClamped(const T value0, const T value1, const U interp) noexcept {
+		constexpr static T lerpClamped(const T value0, const T value1, const U interp) noexcept {
 			static_assert(std::is_floating_point_v<U>, "Must be a decimal type(float/double/half).");
 			return (value0 + ((value1 - value0) * Math::clamp<U>(interp, static_cast<U>(0.0), static_cast<U>(1.0))));
 		}
 
 		template <typename T, typename U>
-		 constexpr static T slerp(const T value0, const T value1, const U interp, const U arc_rad) noexcept {
+		constexpr static T slerp(const T value0, const T value1, const U interp, const U arc_rad) noexcept {
 			static_assert(std::is_floating_point_v<U>, "Must be a decimal type(float/double/half).");
 			const U inplArc = std::sin((static_cast<U>(1) - interp) * arc_rad);
 			const U arcA = std::sin(interp * arc_rad);
@@ -311,13 +324,12 @@ namespace fragcore {
 		}
 
 		template <typename T, typename U>
-		 constexpr static T slerpClamped(const T value0, const T value1, const U interp,
-											   const U arc_rad) noexcept {
+		constexpr static T slerpClamped(const T value0, const T value1, const U interp, const U arc_rad) noexcept {
 			static_assert(std::is_floating_point_v<U>, "Must be a decimal type(float/double/half).");
 			return slerp(value0, value1, Math::clamp<U>(interp, static_cast<U>(0.0), static_cast<U>(1.0)), arc_rad);
 		}
 
-		template <typename T>  constexpr static T mod(const T value, const T mod) noexcept {
+		template <typename T> constexpr static T mod(const T value, const T mod) noexcept {
 			static_assert(std::is_integral_v<T>, "Must be a integer type.");
 			return (value % mod + mod) % mod;
 		}
@@ -325,16 +337,16 @@ namespace fragcore {
 		/**
 		 *
 		 */
-		 static constexpr double E = 2.718281828459045235;
-		 static constexpr double PI = 3.141592653589793238462643383279502884;
-		 static constexpr double PI_half = Math::PI / 2.0;
-		 static constexpr double PI_2 = Math::PI * 2.0;
-		 static constexpr double Epsilon = FLT_EPSILON;
-		 static constexpr double Deg2Rad = Math::PI / 180.0;
-		 static constexpr double Rad2Deg = 180 / Math::PI;
-		 static constexpr double NegativeInfinity = 0;
+		static constexpr double E = 2.718281828459045235;
+		static constexpr double PI = 3.141592653589793238462643383279502884;
+		static constexpr double PI_half = Math::PI / 2.0;
+		static constexpr double PI_2 = Math::PI * 2.0;
+		static constexpr double Epsilon = FLT_EPSILON;
+		static constexpr double Deg2Rad = Math::PI / 180.0;
+		static constexpr double Rad2Deg = 180 / Math::PI;
+		static constexpr double NegativeInfinity = 0;
 
-		template <typename T> static  constexpr T NextPowerOfTwo(const T value) noexcept {
+		template <typename T> static constexpr T NextPowerOfTwo(const T value) noexcept {
 			static_assert(std::is_integral_v<T>, "Must be a integer type.");
 			T res = 1;
 			while (res < value) {
@@ -346,13 +358,13 @@ namespace fragcore {
 		/**
 		 *
 		 */
-		template <typename T> static  constexpr T ClosestPowerOfTwo(const T value) {
+		template <typename T> static constexpr T ClosestPowerOfTwo(const T value) {
 			T n = NextPowerOfTwo(value);
 			T p = 0;
 			return 0;
 		}
 
-		template <typename T> static  constexpr bool IsPowerOfTwo(const T value) noexcept {
+		template <typename T> static constexpr bool IsPowerOfTwo(const T value) noexcept {
 			static_assert(std::is_integral_v<T>, "Must be a integer type.");
 			return !(value == 0) && !((value - 1) & value);
 		}
@@ -361,8 +373,8 @@ namespace fragcore {
 		 *	Generate 1D guassian.
 		 */
 		template <typename T>
-		static  void guassian(std::vector<T> &guassian, const unsigned int height, const T mean,
-									const T standard_deviation) {
+		static void guassian(std::vector<T> &guassian, const unsigned int height, const T mean,
+							 const T standard_deviation) {
 			static_assert(std::is_floating_point_v<T>, "Must be a decimal type(float/double/half).");
 			guassian.resize(height);
 			Math::guassian<T>(guassian.data(), height, mean, standard_deviation);
@@ -405,16 +417,16 @@ namespace fragcore {
 		 *	Generate 2D guassian.
 		 */
 		template <typename T>
-		static  void guassian(std::vector<T> &guassian, const unsigned int width, const unsigned int height,
-									const T mean, const T standard_deviation) {
+		static void guassian(std::vector<T> &guassian, const unsigned int width, const unsigned int height,
+							 const T mean, const T standard_deviation) {
 			static_assert(std::is_floating_point_v<T>, "Must be a decimal type(float/double/half).");
 			guassian.reserve(width * height);
 			Math::guassian<T>(static_cast<T &>(*guassian.data()), width, height, mean, standard_deviation);
 		}
 
 		template <typename T>
-		static  void guassian(const T &guassian, const unsigned int x_nr_samples, const unsigned int y_nr_samples,
-									const T standard_deviation) noexcept {
+		static void guassian(const T &guassian, const unsigned int x_nr_samples, const unsigned int y_nr_samples,
+							 const T standard_deviation) noexcept {
 			static_assert(std::is_floating_point_v<T>, "Must be a decimal type(float/double/half).");
 
 			const T exp_inverse =
@@ -437,8 +449,7 @@ namespace fragcore {
 			}
 		}
 
-		template <typename T, typename U>
-		static constexpr  T gammaCorrection(const T value, const U gamma) noexcept {
+		template <typename T, typename U> static constexpr T gammaCorrection(const T value, const U gamma) noexcept {
 			static_assert(std::is_floating_point_v<T>, "Must be a decimal type(float/double/half).");
 
 			T exponent = static_cast<T>(1.0) / gamma;
@@ -463,7 +474,7 @@ namespace fragcore {
 		 * @tparam T
 		 * @return T
 		 */
-		template <typename T> static  T random() {
+		template <typename T> static T random() {
 			static_assert(std::is_floating_point_v<T>, "Must be a decimal type(float/double/half).");
 			return static_cast<T>(drand48());
 		}
@@ -520,7 +531,7 @@ namespace fragcore {
 			return {};
 		}
 
-		template <typename T> static  constexpr T align(const T size, const T alignment) noexcept {
+		template <typename T> static constexpr T align(const T size, const T alignment) noexcept {
 			static_assert(std::is_integral_v<T>, "Must be an integral type.");
 			return size + (alignment - (size % alignment));
 		}
@@ -529,7 +540,7 @@ namespace fragcore {
 #ifdef _OPENMP
 #pragma omp declare simd uniform(value) simdlen(4)
 #endif
-		template <typename T>  static T computeSigmoid(const T value) noexcept {
+		template <typename T> static T computeSigmoid(const T value) noexcept {
 			static_assert(std::is_floating_point_v<T> || std::is_integral_v<T>,
 						  "Must be a decimal type(float/double/half) or integer.");
 			return Math::clamp<T>(static_cast<T>(1) / (std::exp(-value) + static_cast<T>(1)), static_cast<T>(0),
@@ -538,7 +549,7 @@ namespace fragcore {
 #ifdef _OPENMP
 #pragma omp declare simd uniform(value) simdlen(4)
 #endif
-		template <typename T>  static T computeSigmoidDerivate(const T value) noexcept {
+		template <typename T> static T computeSigmoidDerivate(const T value) noexcept {
 			static_assert(std::is_floating_point_v<T> || std::is_integral_v<T>,
 						  "Must be a decimal type(float/double/half) or integer.");
 			const T sig = computeSigmoid(value);
@@ -548,7 +559,7 @@ namespace fragcore {
 #ifdef _OPENMP
 #pragma omp declare simd uniform(value) simdlen(4)
 #endif
-		template <typename T>  static constexpr T relu(const T value) noexcept {
+		template <typename T> static constexpr T relu(const T value) noexcept {
 			static_assert(std::is_floating_point_v<T> || std::is_integral_v<T>,
 						  "Must be a decimal type(float/double/half) or integer.");
 			return Math::max<T>(0, value);
@@ -557,7 +568,7 @@ namespace fragcore {
 #ifdef _OPENMP
 #pragma omp declare simd uniform(value) simdlen(4)
 #endif
-		template <typename T>  static constexpr T reluDeriviate(const T value) noexcept {
+		template <typename T> static constexpr T reluDeriviate(const T value) noexcept {
 			static_assert(std::is_floating_point_v<T> || std::is_integral_v<T>,
 						  "Must be a decimal type(float/double/half) or integer.");
 			if (value >= 0) {
@@ -568,7 +579,7 @@ namespace fragcore {
 #ifdef _OPENMP
 #pragma omp declare simd uniform(value, alpha) simdlen(4)
 #endif
-		template <typename T>  static constexpr T leakyRelu(const T alpha, const T value) noexcept {
+		template <typename T> static constexpr T leakyRelu(const T alpha, const T value) noexcept {
 			static_assert(std::is_floating_point_v<T> || std::is_integral_v<T>,
 						  "Must be a decimal type(float/double/half) or integer.");
 			if (value < 0) {
@@ -579,7 +590,7 @@ namespace fragcore {
 #ifdef _OPENMP
 #pragma omp declare simd uniform(value, alpha) simdlen(4)
 #endif
-		template <typename T>  static constexpr T leakyReluDerivative(const T alpha, const T value) noexcept {
+		template <typename T> static constexpr T leakyReluDerivative(const T alpha, const T value) noexcept {
 			static_assert(std::is_floating_point_v<T> || std::is_integral_v<T>,
 						  "Must be a decimal type(float/double/half) or integer.");
 			if (value >= 0) {
@@ -590,7 +601,7 @@ namespace fragcore {
 #ifdef _OPENMP
 #pragma omp declare simd uniform(value) simdlen(4)
 #endif
-		template <typename T>  static constexpr T computeTanh(const T value) noexcept {
+		template <typename T> static constexpr T computeTanh(const T value) noexcept {
 			static_assert(std::is_floating_point_v<T> || std::is_integral_v<T>,
 						  "Must be a decimal type(float/double/half) or integer.");
 			return std::tanh(value);
@@ -598,7 +609,7 @@ namespace fragcore {
 #ifdef _OPENMP
 #pragma omp declare simd uniform(value) simdlen(4)
 #endif
-		template <typename T>  static constexpr T computeTanhDerivate(const T value) noexcept {
+		template <typename T> static constexpr T computeTanhDerivate(const T value) noexcept {
 			static_assert(std::is_floating_point_v<T> || std::is_integral_v<T>,
 						  "Must be a decimal type(float/double/half) or integer.");
 			return 1.0 - (computeTanh<T>(value) * computeTanh<T>(value));
@@ -606,7 +617,7 @@ namespace fragcore {
 #ifdef _OPENMP
 #pragma omp declare simd uniform(coeff, value) simdlen(4)
 #endif
-		template <typename T>  static constexpr T computeLinear(const T coeff, const T value) noexcept {
+		template <typename T> static constexpr T computeLinear(const T coeff, const T value) noexcept {
 			static_assert(std::is_floating_point_v<T> || std::is_integral_v<T>,
 						  "Must be a decimal type(float/double/half) or integer.");
 			return coeff * value;
@@ -614,7 +625,7 @@ namespace fragcore {
 #ifdef _OPENMP
 #pragma omp declare simd uniform(coeff) simdlen(4)
 #endif
-		template <typename T>  static constexpr T computeLinearDerivative(const T coeff) noexcept {
+		template <typename T> static constexpr T computeLinearDerivative(const T coeff) noexcept {
 			static_assert(std::is_floating_point_v<T> || std::is_integral_v<T>,
 						  "Must be a decimal type(float/double/half) or integer.");
 			return coeff;
@@ -622,7 +633,7 @@ namespace fragcore {
 #ifdef _OPENMP
 #pragma omp declare simd uniform(coeff, value) simdlen(4)
 #endif
-		template <typename T>  static constexpr T computeExpLinear(const T coeff, const T value) noexcept {
+		template <typename T> static constexpr T computeExpLinear(const T coeff, const T value) noexcept {
 			static_assert(std::is_floating_point_v<T> || std::is_integral_v<T>,
 						  "Must be a decimal type(float/double/half) or integer.");
 			if (value >= 0) {
@@ -633,8 +644,7 @@ namespace fragcore {
 #ifdef _OPENMP
 #pragma omp declare simd uniform(coeff, value) simdlen(4)
 #endif
-		template <typename T>
-		 static constexpr T computeExpLinearDerivative(const T coeff, const T value) noexcept {
+		template <typename T> static constexpr T computeExpLinearDerivative(const T coeff, const T value) noexcept {
 			static_assert(std::is_floating_point_v<T> || std::is_integral_v<T>,
 						  "Must be a decimal type(float/double/half) or integer.");
 			if (value >= 0) {
@@ -645,7 +655,7 @@ namespace fragcore {
 #ifdef _OPENMP
 #pragma omp declare simd uniform(value, beta) simdlen(4)
 #endif
-		template <typename T>  static constexpr T computeSwish(const T value, const T beta) noexcept {
+		template <typename T> static constexpr T computeSwish(const T value, const T beta) noexcept {
 			static_assert(std::is_floating_point_v<T> || std::is_integral_v<T>,
 						  "Must be a decimal type(float/double/half) or integer.");
 			return value * computeSigmoid<T>(beta * value);
@@ -653,7 +663,7 @@ namespace fragcore {
 #ifdef _OPENMP
 #pragma omp declare simd uniform(value, beta) simdlen(4)
 #endif
-		template <typename T>  static constexpr T computeSwishDerivative(const T value, const T beta) noexcept {
+		template <typename T> static constexpr T computeSwishDerivative(const T value, const T beta) noexcept {
 			static_assert(std::is_floating_point_v<T> || std::is_integral_v<T>,
 						  "Must be a decimal type(float/double/half) or integer.");
 			const T fvalue = computeSwish(value, beta);
