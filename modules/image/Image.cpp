@@ -100,6 +100,8 @@ Color Image::getColor(const unsigned int x_offset, const unsigned int y_offset, 
 		return {static_cast<float>(color[0] / 255.0f), static_cast<float>(color[1] / 255.0f),
 				static_cast<float>(color[2] / 255.0f), 1};
 	}
+	case ImageFormat::RFloat:
+	case ImageFormat::RGFloat:
 	case ImageFormat::RGBAFloat:
 	case ImageFormat::RGBFloat:
 	default:
@@ -145,6 +147,8 @@ void Image::setColor(unsigned int x_offset, unsigned int y_offset, unsigned int 
 		rgb24[2] = (255 * color.r());
 		break;
 	}
+	case ImageFormat::RFloat:
+	case ImageFormat::RGFloat:
 	case ImageFormat::RGBAFloat:
 	case ImageFormat::RGBFloat:
 	default:

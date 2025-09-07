@@ -101,23 +101,23 @@ namespace fragcore {
 			this->mreserved = nrOfElement;
 		}
 
-		inline void clear() noexcept { this->nrElements = 0; }
+		void clear() noexcept { this->nrElements = 0; }
 
-		inline bool isEmpty() const noexcept { return this->nrElements != 0; }
+		bool isEmpty() const noexcept { return this->nrElements != 0; }
 
-		inline size_t getSize() const noexcept { return this->nrElements; }
+		size_t getSize() const noexcept { return this->nrElements; }
 
-		inline size_t getReserved() const noexcept { return this->mreserved; }
+		size_t getReserved() const noexcept { return this->mreserved; }
 
 		class StackIterator : public Iterator<T> {};
 
 		StackIterator begin() {}
 		StackIterator end() {}
 
-	  private:			   /*	Attributes.	*/
+	  private:				 /*	Attributes.	*/
 		size_t nrElements{}; /*	Number of elements in the stack.	*/
-		size_t mreserved{};  /*	Number of reserved elements in the stack.	*/
-		T *data;		   /*	*/
+		size_t mreserved{};	 /*	Number of reserved elements in the stack.	*/
+		T *data;			 /*	*/
 	};
 
 } // namespace fragcore

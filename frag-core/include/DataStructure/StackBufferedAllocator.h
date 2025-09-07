@@ -18,7 +18,6 @@
 #ifndef _FRAGCORE_DOUBLE_BUFFERED_ALLOCATOR_H_
 #define _FRAGCORE_DOUBLE_BUFFERED_ALLOCATOR_H_ 1
 #include "Core/UIDObject.h"
-#include "Queue.h"
 #include "StackAllactor.h"
 
 namespace fragcore {
@@ -91,17 +90,12 @@ namespace fragcore {
 		 */
 		StackAllocator *getStack(int index);
 
-		/**
-		 *	@return
-		 */
 		StackBufferedAllocator &operator=(const StackBufferedAllocator &alloc);
 		StackBufferedAllocator &operator=(StackBufferedAllocator &&alloc);
 
 	  private: /*	Attributes.	*/
 		unsigned int m_curStack;
 		StackAllocator m_stack[2];
-		std::vector<StackAllocator> stacks;
-		Queue<StackAllocator> stackQ;
 	};
 
 } // namespace fragcore

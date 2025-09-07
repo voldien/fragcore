@@ -115,6 +115,41 @@ namespace fragcore {
 		never,		  /*  */
 	};
 
+	/**
+	 * @brief
+	 *
+	 */
+	enum class BlendFunc {
+		Zero = 0, /*  */
+		eOne = 1, /*  */
+		eSrcColor = 2,
+		eOneMinusSrcColor = 3,
+		eSrcAlpha = 4,
+		eOneMinusSrcAlpha = 5,
+		eConstantAlpha = 6,
+	};
+
+	/**
+	 * @brief
+	 *
+	 */
+	enum class BlendEqu {
+		eNoEqu,
+		Addition,
+		Subtract,
+		ReverseSubtract,
+		Min,
+		Max,
+	};
+
+	enum class StencilFunc {
+
+	};
+
+	enum class DepthFunc {
+
+	};
+
 	using MarkerDebug = struct marker_debug_t {
 		const char *markerName;
 	};
@@ -294,7 +329,7 @@ namespace fragcore {
 	/**
 	 *	Shader descriptor.
 	 */
-	using ShaderDesc = struct shader_desc_t {
+	using ShaderSourceDesc = struct shader_desc_t {
 
 		struct {
 			const void *pdata;	 /*	*/
@@ -389,6 +424,12 @@ namespace fragcore {
 
 		/*  Debug attributes.   */
 		MarkerDebug *marker;
+	};
+
+	using ShaderConfigDesc = struct shader_config_desc_t {
+		ShaderSourceDesc shaderSource;
+
+		unsigned int blend;
 	};
 
 	/**

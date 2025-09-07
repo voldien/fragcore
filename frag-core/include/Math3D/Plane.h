@@ -49,35 +49,36 @@ namespace fragcore {
 		 * Get normal of plane.
 		 * @return normalized normal vector.
 		 */
-		 Vector3 getNormal() noexcept { return this->normal; }
+		Vector3 getNormal() noexcept { return this->normal; }
 
 		/**
 		 * Get normal of plane.
 		 * @return normalized normal vector.
 		 */
-		 const Vector3 &getNormal() const noexcept { return this->normal; }
+		const Vector3 &getNormal() const noexcept { return this->normal; }
 
 		/**
 		 * Set plane normal.
 		 * @param normal
 		 */
-		 void setNormal(const Vector3 &normal) noexcept { this->normal = normal; }
+		void setNormal(const Vector3 &normal) noexcept { this->normal = normal; }
 
 		/**
 		 * Compute distance.
 		 */
-		 T distance(const Vector3 &point) const noexcept { return normal.dot(point) + d; }
-		 T distanceSigned(const Vector3 &point) const noexcept { return normal.dot(point) - d; }
+		T distance(const Vector3 &point) const noexcept { return normal.dot(point) + d; }
+		T distanceSigned(const Vector3 &point) const noexcept { return normal.dot(point) - d; }
 
 		/**
 		 * Get distance.
 		 */
-		 T distance() const noexcept { return this->d; }
+		T distance() const noexcept { return this->d; }
+		T distanceSigned() const noexcept { return -this->d; }
 
 		/**
 		 * Get point.
 		 */
-		 Vector3 getPoint() const noexcept { return this->distance() * this->getNormal(); }
+		Vector3 getPoint() const noexcept { return this->distance() * this->getNormal(); }
 
 		/**
 		 * Set normal and point and
@@ -96,10 +97,6 @@ namespace fragcore {
 			this->d = -this->normal.dot(v2);
 		}
 
-		/**
-		 * Compare if plane equal each other.
-		 * @return true if equal.
-		 */
 		friend bool operator==(const Plane &o1, const Plane &o2) noexcept {
 			if (&o1 == &o2) {
 				return true;
@@ -109,11 +106,6 @@ namespace fragcore {
 			}
 			return false;
 		}
-
-		/**
-		 * Compare if plane not equal each other.
-		 * @return true if equal.
-		 */
 		friend bool operator!=(const Plane &o1, const Plane &o2) noexcept { return !(o1 == o2); }
 
 	  protected:					/*	Attributes.	*/
@@ -123,10 +115,6 @@ namespace fragcore {
 	  public: /*	Static methods.	*/
 		/**
 		 * Create plane from points.
-		 * @param v1
-		 * @param v2
-		 * @param v3
-		 * @return
 		 */
 		static Plane fromPoints(const Vector3 &v1, const Vector3 &v2, const Vector3 &v3) noexcept {
 			Plane tmp;

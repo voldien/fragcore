@@ -14,8 +14,9 @@ Image ImageUtil::convert2NormalMap(const Image &image, const float strength) {
 	const unsigned int Height = image.height();
 
 	unsigned int index_x, index_y;
+
 #ifdef _OPENMP
-#pragma omp parallel for collapse(2)
+#pragma omp parallel for simd collapse(2) shared(image)
 #endif
 	for (index_x = 0; index_x < Width; index_x++) {
 		for (index_y = 0; index_y < Height; index_y++) {

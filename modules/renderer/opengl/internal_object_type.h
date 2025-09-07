@@ -87,11 +87,11 @@ namespace fragcore {
 		/*	*/
 		static unsigned int getTextureFilterModeNoMip(fragcore::Texture::FilterMode format);
 
-		// TODO:  Seperate from framebuffer.
-		static unsigned int getBlendEqu(fragcore::FrameBuffer::BlendEqu equ);
+		/*	*/
+		static unsigned int getBlendEqu(fragcore::BlendEqu equ);
 
 		/*	*/
-		static unsigned int getBlendFunc(fragcore::FrameBuffer::BlendFunc func);
+		static unsigned int getBlendFunc(fragcore::BlendFunc func);
 
 		/*	*/
 		static unsigned int getClearBitMask(fragcore::CLEARBITMASK clearbitmask);

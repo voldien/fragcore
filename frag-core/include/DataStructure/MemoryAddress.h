@@ -19,10 +19,10 @@
 #define _FRAGCORE_MEMORY_ADDRESS_H_ 1
 #include "../FragDef.h"
 #include "../Math/Math.h"
-#include "Core/UIDObject.h"
 
 namespace fragcore {
 
+	/*	*/
 	class FVDECLSPEC MemoryAddress {
 	  public:
 		MemoryAddress() = default;
@@ -37,6 +37,7 @@ namespace fragcore {
 			this->mMarker += sizeBytes;
 			return current_marker;
 		}
+
 		size_t allocateAligned(const size_t sizeBytes, const unsigned int alignment) {
 
 			const size_t requested_byte_size = fragcore::Math::align<size_t>(sizeBytes, alignment);

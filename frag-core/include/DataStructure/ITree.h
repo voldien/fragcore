@@ -35,10 +35,9 @@ namespace fragcore {
 		}
 
 		ITree(const ITree &other) {
-			// TODO: impl
-			// this->child = std::exchange(other.child, nullptr);
-			// this->parent = std::exchange(other.parent, nullptr);
-			// this->sibling = std::exchange(other.sibling, nullptr);
+			this->child = other.child;
+			this->parent = other.parent;
+			this->sibling = other.sibling;
 			this->numChildren = other.numChildren;
 		}
 
@@ -47,6 +46,22 @@ namespace fragcore {
 			this->parent = std::exchange(other.parent, nullptr);
 			this->sibling = std::exchange(other.sibling, nullptr);
 			this->numChildren = other.numChildren;
+		}
+
+		ITree &operator=(const ITree &other) {
+			this->child = other.child;
+			this->parent = other.parent;
+			this->sibling = other.sibling;
+			this->numChildren = other.numChildren;
+			return *this;
+		}
+
+		ITree &operator=(ITree &&other) {
+			this->child = std::exchange(other.child, nullptr);
+			this->parent = std::exchange(other.parent, nullptr);
+			this->sibling = std::exchange(other.sibling, nullptr);
+			this->numChildren = other.numChildren;
+			return *this;
 		}
 
 		virtual ITree<T> *root() const noexcept {
@@ -60,7 +75,11 @@ namespace fragcore {
 
 		virtual ITree<T> *getParent() const noexcept { return this->parent; }
 
-		virtual void setParent(ITree<T> *parent) noexcept { this->parent = parent; }
+		virtual void setParent(ITree<T> *parent) noexcept {
+			if (getParent() != parent) {
+				parent->addChild(this);
+			}
+		}
 
 		virtual unsigned int getNumChildren() const noexcept { return this->numChildren; }
 
@@ -71,7 +90,7 @@ namespace fragcore {
 			this->numChildren++;
 			if (!this->child) {
 				this->setChild(pchild);
-				child->setParent(this);
+				child->parent = this;
 			} else {
 
 				find = this->child;
@@ -83,7 +102,7 @@ namespace fragcore {
 					}
 				}
 				find->sibling = pchild;
-				find->sibling->setParent(this);
+				find->sibling->parent = this;
 			}
 		}
 
@@ -130,6 +149,11 @@ namespace fragcore {
 
 		virtual const T *ptr() const noexcept { return (T *)this; }
 		virtual T *ptr() noexcept { return (T *)this; }
+
+		T *operator->() { return (T *)this; }
+		T *operator*() { return (T *)this; }
+
+		const T *operator->() const { return (T *)this; }
 
 	  protected: /*  */
 		void setSibling(ITree<T> *sibling) noexcept { this->sibling = sibling; }

@@ -635,29 +635,29 @@ unsigned int GLHelper::getTextureFilterModeNoMip(Texture::FilterMode format) {
 	}
 }
 
-unsigned int GLHelper::getBlendEqu(FrameBuffer::BlendEqu equ) {
+unsigned int GLHelper::getBlendEqu(BlendEqu equ) {
 	switch (equ) {
-	case FrameBuffer::BlendEqu::Addition:
+	case BlendEqu::Addition:
 		return GL_FUNC_ADD;
-	case FrameBuffer::BlendEqu ::Subtract:
+	case BlendEqu ::Subtract:
 		return GL_FUNC_SUBTRACT;
 	default:
 		throw InvalidArgumentException("");
 	}
 }
-unsigned int GLHelper::getBlendFunc(FrameBuffer::BlendFunc func) {
+unsigned int GLHelper::getBlendFunc(BlendFunc func) {
 	switch (func) {
-	case FrameBuffer::BlendFunc::Zero:
+	case BlendFunc::Zero:
 		return GL_ZERO;
-	case FrameBuffer::BlendFunc ::eOne:
+	case BlendFunc ::eOne:
 		return GL_ONE;
-	case FrameBuffer::BlendFunc::eSrcColor:
+	case BlendFunc::eSrcColor:
 		return GL_SRC_COLOR;
-	case FrameBuffer::BlendFunc::eOneMinusSrcColor:
+	case BlendFunc::eOneMinusSrcColor:
 		return GL_ONE_MINUS_SRC_COLOR;
-	case FrameBuffer::BlendFunc::eSrcAlpha:
+	case BlendFunc::eSrcAlpha:
 		return GL_SRC_ALPHA;
-	case FrameBuffer::BlendFunc::eOneMinusSrcAlpha:
+	case BlendFunc::eOneMinusSrcAlpha:
 		return GL_ONE_MINUS_SRC_ALPHA;
 	default:
 		throw InvalidArgumentException("");
@@ -696,7 +696,7 @@ unsigned int GLHelper::getTextureFilterMode(Texture::FilterMode mode) {
 	case Texture::FilterMode::eTrilinear:
 		return GL_LINEAR_MIPMAP_LINEAR;
 	default:
-		throw InvalidArgumentException("");
+		throw InvalidArgumentException("Invalid Filter Mode.");
 	}
 }
 

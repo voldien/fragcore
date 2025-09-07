@@ -7,6 +7,7 @@
 A Core library framework library developed for both, but not exclusivly for Game Engines.
 
 ## Architecture
+
 The architecture of this library consist of a core library and modules. The core contains all the basic low level system logic. This core component are used for all the modules. These modules are dedicated library that extend the feature set of the fragcore.
 
 ## Features
@@ -51,6 +52,7 @@ ADD_SUBDIRECTORY(fragcore EXCLUDE_FROM_ALL)
 ```
 
 Assgin the library target to the your target, and all the depedencies of fragcore will be configured and built.
+
 ```cmake
 TARGET_LINK_LIBRARIES(myTarget PUBLIC fragcore)
 ```
@@ -101,14 +103,14 @@ ctest
 
 The project is design that modules can be use to reduce both dependices and code depdending on what the library is integrate with. Currently, this can be done with CMake. The modules can be located in the [modules](modules) directory.
 
-- **Audio** - Currently it supports OpenAL.
-- **Geometry Util** - 
-- **Image Loader** - Load/Save Image.
-- **IO** - File, Memory, Modbus, Serial, TCP/UDP
-- **Physic** - BulletPhysic
-- **Renderer** - Vulkan/OpenGL
-- **Window** - SDL/GLFW
-- **TaskScheduler** - Task scheduler for distrubte tasks on CPU.
+* **Audio** - Currently it supports OpenAL.
+* **Geometry Util** -
+* **Image Loader** - Load/Save Image.
+* **IO** - File, Memory, Modbus, Serial, TCP/UDP
+* **Physic** - BulletPhysic
+* **Renderer** - Vulkan/OpenGL
+* **Window** - SDL/GLFW
+* **TaskScheduler** - Task scheduler for distrubte tasks on CPU.
 
 ## License
 

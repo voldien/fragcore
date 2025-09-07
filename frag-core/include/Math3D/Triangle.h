@@ -17,7 +17,7 @@
  */
 #ifndef _FRAGCORE_TRIANGLE_H_
 #define _FRAGCORE_TRIANGLE_H_ 1
-#include "Plane.h"
+#include "Math3D/Math3D.h"
 
 namespace fragcore {
 
@@ -59,13 +59,13 @@ namespace fragcore {
 		Vector3 getEdge3() const noexcept;
 
 		/**/
-		inline void setPos0(const Vector3 &pos) noexcept { p0 = pos; }
+		void setPos0(const Vector3 &pos) noexcept { p0 = pos; }
 
 		/**/
-		inline void setPos1(const Vector3 &pos) noexcept { p1 = pos; }
+		void setPos1(const Vector3 &pos) noexcept { p1 = pos; }
 
 		/**/
-		inline void setPos2(const Vector3 &pos) noexcept { p2 = pos; }
+		void setPos2(const Vector3 &pos) noexcept { p2 = pos; }
 
 	  private:		/*	Attributes.	*/
 		Vector3 p0; /**/

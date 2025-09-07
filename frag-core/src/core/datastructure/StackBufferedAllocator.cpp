@@ -1,5 +1,6 @@
 #include "DataStructure/StackBufferedAllocator.h"
 #include "Math/Math.h"
+#include <utility>
 using namespace fragcore;
 
 StackBufferedAllocator::StackBufferedAllocator(const StackBufferedAllocator &doublebuffer) : UIDObject(doublebuffer) {
@@ -39,21 +40,15 @@ size_t StackBufferedAllocator::getMarker() const noexcept { return this->m_stack
 
 void *StackBufferedAllocator::fetch(size_t sizeBytes) { return this->m_stack[this->m_curStack].fetch(sizeBytes); }
 
-void StackBufferedAllocator::freeToMarker(unsigned int marker) {
-	 this->m_stack[this->m_curStack].freeToMarker(marker);
-}
+void StackBufferedAllocator::freeToMarker(unsigned int marker) { this->m_stack[this->m_curStack].freeToMarker(marker); }
 
 void StackBufferedAllocator::next() { this->m_curStack = ~this->m_curStack & 0x1; }
 
 StackAllocator *StackBufferedAllocator::getCurrentStack() { return &this->m_stack[this->m_curStack]; }
 
-const StackAllocator *StackBufferedAllocator::getStack(int index) const {
-	return (&this->m_stack[index]);
-}
+const StackAllocator *StackBufferedAllocator::getStack(int index) const { return (&this->m_stack[index]); }
 
-StackAllocator *StackBufferedAllocator::getStack(int index) {
-	return (&this->m_stack[index]);
-}
+StackAllocator *StackBufferedAllocator::getStack(int index) { return (&this->m_stack[index]); }
 
 StackBufferedAllocator &StackBufferedAllocator::operator=(const StackBufferedAllocator &alloc) {
 	*this->getStack(0) = *alloc.getStack(0);
@@ -65,6 +60,6 @@ StackBufferedAllocator &StackBufferedAllocator::operator=(const StackBufferedAll
 StackBufferedAllocator &StackBufferedAllocator::operator=(StackBufferedAllocator &&alloc) {
 	this->m_stack[0] = std::move(alloc.m_stack[0]);
 	this->m_stack[1] = std::move(alloc.m_stack[1]);
-	this->m_curStack = alloc.m_curStack;
+	this->m_curStack = std::exchange(alloc.m_curStack, 0);
 	return *this;
 }

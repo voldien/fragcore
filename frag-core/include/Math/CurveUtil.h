@@ -18,8 +18,20 @@
 #ifndef _FRAGCORE_CURVE_UTIL_H_
 #define _FRAGCORE_CURVE_UTIL_H_ 1
 #include "../FragDef.h"
+#include "Math3D/Math3D.h"
 
 namespace fragcore {
+
+	using KeyFrame = struct alignas(16) key_frame_t {
+		float time;		  /*	*/
+		float value;	  /*	*/
+		float tangentIn;  /*	*/
+		float tangentOut; /*	*/
+	};
+
+	class Curve {
+		std::vector<KeyFrame> keyframes;
+	};
 
 	class FVDECLSPEC CurveUtil {
 	  public:
@@ -34,9 +46,9 @@ namespace fragcore {
 			}
 			return {};
 		}
-		template <typename T, typename U> static T interpolateBezierCurve(const Vector4 &pointA, const Vector4 &pointB, const U interpolate) { 
-			/*	*/ 
-
+		template <typename T, typename U>
+		static T interpolateBezierCurve(const Vector4 &pointA, const Vector4 &pointB, const U interpolate) {
+			/*	*/
 		}
 	};
 } // namespace fragcore

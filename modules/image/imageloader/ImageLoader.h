@@ -28,7 +28,6 @@ namespace fragcore {
 
 	/**
 	 * @brief
-	 *
 	 */
 	class FVDECLSPEC ImageLoader : public Object {
 	  public:

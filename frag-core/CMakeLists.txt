@@ -134,11 +134,12 @@ TARGET_LINK_LIBRARIES(fragcore PUBLIC Eigen3::Eigen taskSch cxxexcept spdlog_hea
 
 #
 TARGET_INCLUDE_DIRECTORIES(fragcore PRIVATE ${ZIP_INCLUDE_DIRS}
-													 ${OPEN_SIMPLEX_NOISE_INCLUDE_DIRS} ${PCG_C_BASIC_INCLUDE_DIRS}
-													 ${ZLIB_INCLUDE_DIRS} ${ZSTD_INCLUDE_DIRS}
-													 ${Backtrace_HEADER}
-													 ${infoware_SOURCE_DIR}/include/infoware
+											${OPEN_SIMPLEX_NOISE_INCLUDE_DIRS} ${PCG_C_BASIC_INCLUDE_DIRS}
+											${ZLIB_INCLUDE_DIRS} ${ZSTD_INCLUDE_DIRS}
+											${Backtrace_HEADER}
+											${infoware_SOURCE_DIR}/include/infoware
 										PUBLIC
+											${CMAKE_SOURCE_DIR}/extern/
 											$<BUILD_INTERFACE:${FRAG_CORE_INCLUDE}>
 											$<INSTALL_INTERFACE:${FRAG_CORE_INCLUDE}>
 )

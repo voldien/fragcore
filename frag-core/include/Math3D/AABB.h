@@ -40,13 +40,13 @@ namespace fragcore {
 		 * @param i
 		 * @return
 		 */
-		inline Vector3 operator[](const int index) const { return ((Vector3 *)this)[index]; }
+		Vector3 operator[](const int index) const { return ((Vector3 *)this)[index]; }
 
 		/**
 		 *
 		 * @return
 		 */
-		inline Vector3 &operator[](const int index) { return ((Vector3 *)this)[index]; }
+		Vector3 &operator[](const int index) { return ((Vector3 *)this)[index]; }
 
 		/**
 		 * Check if object is valid.
@@ -56,12 +56,12 @@ namespace fragcore {
 			return !(this->mhalfsize.x() != 0.0f || this->mhalfsize.y() != 0.0f || this->mhalfsize.z() != 0.0f);
 		}
 
-		inline float maxX() const noexcept { return (this->mcenter.x() + this->mhalfsize.x()); }
-		inline float minX() const noexcept { return (this->mcenter.x() - this->mhalfsize.x()); }
-		inline float maxY() const noexcept { return (this->mcenter.y() + this->mhalfsize.y()); }
-		inline float minY() const noexcept { return (this->mcenter.y() - this->mhalfsize.y()); }
-		inline float maxZ() const noexcept { return (this->mcenter.z() + this->mhalfsize.z()); }
-		inline float minZ() const noexcept { return (this->mcenter.z() - this->mhalfsize.z()); }
+		float maxX() const noexcept { return (this->mcenter.x() + this->mhalfsize.x()); }
+		float minX() const noexcept { return (this->mcenter.x() - this->mhalfsize.x()); }
+		float maxY() const noexcept { return (this->mcenter.y() + this->mhalfsize.y()); }
+		float minY() const noexcept { return (this->mcenter.y() - this->mhalfsize.y()); }
+		float maxZ() const noexcept { return (this->mcenter.z() + this->mhalfsize.z()); }
+		float minZ() const noexcept { return (this->mcenter.z() - this->mhalfsize.z()); }
 
 		/**
 		 * Compute minimum position.
@@ -79,23 +79,23 @@ namespace fragcore {
 		 * Get half size.
 		 * @return half size vector.
 		 */
-		inline const Vector3 &getHalfSize() const noexcept { return this->mhalfsize; }
+		const Vector3 &getHalfSize() const noexcept { return this->mhalfsize; }
 
 		/**
 		 * Set half size.
 		 */
-		inline void setHalfSize(const Vector3 &size) noexcept { this->mhalfsize = size; }
+		void setHalfSize(const Vector3 &size) noexcept { this->mhalfsize = size; }
 
 		/**
 		 * Get center position.
 		 * @return
 		 */
-		inline const Vector3 &getCenter() const noexcept { return this->mcenter; }
+		const Vector3 &getCenter() const noexcept { return this->mcenter; }
 
 		/**
 		 * Set center position.
 		 */
-		inline void setCenter(const Vector3 &center) noexcept { this->mcenter = center; }
+		void setCenter(const Vector3 &center) noexcept { this->mcenter = center; }
 
 		/**
 		 * Check if object intersect.

@@ -43,7 +43,6 @@ namespace fragcore {
 		void rotateTowards(const Vec3T &direction) noexcept;
 
 		void setPosition(const Vec3T &position) noexcept;
-
 		Vec3T getPosition() noexcept;
 		const Vec3T &getPosition() const noexcept;
 

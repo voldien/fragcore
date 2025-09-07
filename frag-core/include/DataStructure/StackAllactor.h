@@ -71,24 +71,13 @@ namespace fragcore {
 		/**
 		 *	Release everything to marker.
 		 */
-		void freeToMarker(const size_t marker);
+		void freeToMarker(const size_t marker) noexcept;
 
-		/**
-		 *	@return
-		 */
-		StackAllocator &operator=(const StackAllocator &alloc);
+		StackAllocator &operator=(const StackAllocator &other);
+		StackAllocator &operator=(StackAllocator &&other);
 
-		/**
-		 *
-		 *	@return
-		 */
-		bool operator==(const StackAllocator &alloc);
-
-		/**
-		 *
-		 *	@return
-		 */
-		bool operator!=(const StackAllocator &alloc);
+		bool operator==(const StackAllocator &other);
+		bool operator!=(const StackAllocator &other);
 
 	  private:			/*	Attributes.	*/
 		void *mData;	/*	*/

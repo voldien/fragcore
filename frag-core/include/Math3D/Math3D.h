@@ -18,9 +18,11 @@
 #ifndef _FRAGCORE_MATH_3D_H_
 #define _FRAGCORE_MATH_3D_H_ 1
 
-//#define FRAGCORE_USE_HPMCPP
-//#define FRAGCORE_USE_EIGEN
-//#define FRAGCORE_USE_GLM
+/*
+ * #define FRAGCORE_USE_HPMCPP
+ * #define FRAGCORE_USE_EIGEN
+ * #define FRAGCORE_USE_GLM
+ */
 
 #if defined(FRAGCORE_USE_HPMCPP)
 #include <Ext/HCPlane.hpp>

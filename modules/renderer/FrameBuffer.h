@@ -30,40 +30,6 @@ namespace fragcore {
 		FrameBuffer() = default;
 		~FrameBuffer() override = default;
 
-		/**
-		 * @brief
-		 *
-		 */
-		enum class BlendFunc {
-			Zero = 0, /*  */
-			eOne = 1, /*  */
-			eSrcColor = 2,
-			eOneMinusSrcColor = 3,
-			eSrcAlpha = 4,
-			eOneMinusSrcAlpha = 5,
-			eConstantAlpha = 6,
-		};
-
-		/**
-		 * @brief
-		 *
-		 */
-		enum class BlendEqu {
-			eNoEqu,
-			Addition,
-			Subtract,
-			ReverseSubtract,
-			Min,
-			Max,
-		};
-
-		enum class StencilFunc {
-
-		};
-
-		enum class DepthFunc {
-
-		};
 
 		enum class BufferAttachment {
 			NoAttachment,

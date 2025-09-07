@@ -17,6 +17,7 @@
  */
 #ifndef _FRAGCORE_DISJOINT_SET_H_
 #define _FRAGCORE_DISJOINT_SET_H_ 1
+#include <algorithm>
 #include "FragDef.h"
 
 namespace fragcore {
@@ -66,9 +67,7 @@ namespace fragcore {
 			int m = 0;
 			for (int i = 0; i < this->getSize(); i++) {
 				m = this->height(i);
-				if (m > max) {
-					max = m;
-				}
+				max = std::max(m, max);
 			}
 			return max;
 		}
@@ -138,12 +137,12 @@ namespace fragcore {
 		/**
 		 *
 		 */
-		inline T &operator[](int index) { return this->set[index].data; }
+		 T &operator[](int index) { return this->set[index].data; }
 
 		/**
 		 *
 		 */
-		inline T &operator[](int index) const { return this->set[index].data; }
+		 T &operator[](int index) const { return this->set[index].data; }
 
 		/**
 		 *
@@ -169,19 +168,19 @@ namespace fragcore {
 			}
 		}
 
-		inline int getSize() const noexcept { return this->size; }
+		 int getSize() const noexcept { return this->size; }
 
-		inline int getReserved() const noexcept { return this->reserved; }
+		 int getReserved() const noexcept { return this->reserved; }
 
-		inline int getTypeSize() const noexcept { return sizeof(Partition); }
+		 int getTypeSize() const noexcept { return sizeof(Partition); }
 
-		inline void *getData() const noexcept { return this->set; }
+		 void *getData() const noexcept { return this->set; }
 
 		/**
 		 *
 		 */
 		DisjointSet &operator=(const DisjointSet &disjointSet) {
-			
+
 			this->resize(disjointSet.getSize());
 			memcpy(this->set, disjointSet.getData(), disjointSet.getSize() * sizeof(Partition));
 

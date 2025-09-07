@@ -44,10 +44,7 @@ namespace fragcore {
 		 */
 		const Vector3 &getU() const { return onb.u(); }
 
-		/**
-		 *	Get V axis.
-		 * @return normalized axis.
-		 */
+
 
 		/**
 		 *

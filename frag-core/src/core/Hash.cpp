@@ -19,6 +19,8 @@ Hash::~Hash() { free(this->context); }
 
 void Hash::update(const void *pdata, size_t nbytes) {
 	size_t status = 0;
+
+	/*	*/
 	switch (this->getAlgorithm()) {
 	case Hash::ALGORITHM::MD5:
 		status = MD5_Update(static_cast<MD5_CTX *>(this->context), pdata, nbytes);
@@ -38,6 +40,7 @@ void Hash::update(const void *pdata, size_t nbytes) {
 	default:
 		assert(0);
 	}
+
 	if (status != 1) {
 		throw RuntimeException("Error");
 	}

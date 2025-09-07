@@ -26,26 +26,27 @@ Image ImageLoader::loadImage(Ref<IO> &io_in, const FileFormat fileformat) {
 	char *imageData = nullptr;
 
 	/*	Load image data.	*/
-	size_t imageSize = IOUtil::loadFileMem(io_in, &imageData);
+	const size_t imageFileSize = IOUtil::loadFileMem(io_in, &imageData);
 
 	/*	Create memory object.*/
-	stream = FreeImage_OpenMemory((BYTE *)imageData, imageSize);
+	stream = FreeImage_OpenMemory((BYTE *)imageData, imageFileSize);
 	if (stream == nullptr) {
-		throw RuntimeException("Failed to open freeimage memory stream {0}", imageSize);
+		throw RuntimeException("Failed to open freeimage memory stream {0}", imageFileSize);
 	}
 
 	/*	Seek to beginning of the memory stream.	*/
 	FreeImage_SeekMemory(stream, 0, SEEK_SET);
 
 	/*	Load image from */
-	imgtype = FreeImage_GetFileTypeFromMemory(stream, imageSize);
+	imgtype = FreeImage_GetFileTypeFromMemory(stream, imageFileSize);
 	FreeImage_SeekMemory(stream, 0, SEEK_SET);
 	firsbitmap = FreeImage_LoadFromMemory(imgtype, stream, 0);
 
 	/*	*/
 	if (firsbitmap == nullptr) {
 		FreeImage_CloseMemory(stream);
-		throw RuntimeException("Failed load image memory: {0} : size {1}", magic_enum::enum_name(imgtype), imageSize);
+		throw RuntimeException("Failed load image memory: {0} : size {1}", magic_enum::enum_name(imgtype),
+							   imageFileSize);
 	}
 
 	/*	Reset to beginning of stream.	*/
@@ -54,11 +55,18 @@ Image ImageLoader::loadImage(Ref<IO> &io_in, const FileFormat fileformat) {
 	/*	*/
 	FREE_IMAGE_TYPE imageType = FreeImage_GetImageType(firsbitmap);
 	FREE_IMAGE_COLOR_TYPE colortype = FreeImage_GetColorType(firsbitmap);
+	bitsPerPixel = FreeImage_GetBPP(firsbitmap);
 
-	/*	*///TODO: fix, 
+	/*	*/ // TODO: fix,
 	if (colortype == FIC_PALETTE || colortype == FIC_MINISWHITE || colortype == FIC_MINISBLACK) {
 		FIBITMAP *oldImage = firsbitmap;
 		firsbitmap = FreeImage_ConvertToGreyscale(firsbitmap);
+		imageType = FreeImage_GetImageType(firsbitmap);
+		colortype = FreeImage_GetColorType(firsbitmap);
+		FreeImage_Unload(oldImage);
+	} else if (imageType == FREE_IMAGE_TYPE::FIT_BITMAP && colortype == FIC_RGB && bitsPerPixel == 24) {
+		FIBITMAP *oldImage = firsbitmap;
+		firsbitmap = FreeImage_ConvertTo32Bits(firsbitmap);
 		imageType = FreeImage_GetImageType(firsbitmap);
 		colortype = FreeImage_GetColorType(firsbitmap);
 		FreeImage_Unload(oldImage);
@@ -70,11 +78,12 @@ Image ImageLoader::loadImage(Ref<IO> &io_in, const FileFormat fileformat) {
 	/*	*/
 	width = FreeImage_GetWidth(firsbitmap);
 	height = FreeImage_GetHeight(firsbitmap);
-	depth = 1;
+	unsigned int internal_image_size = FreeImage_GetMemorySize(firsbitmap);
 	bitsPerPixel = FreeImage_GetBPP(firsbitmap);
+	depth = 1;
 
 	/*	*/
-	pixelSize = (width * height * depth * bitsPerPixel) / 8;
+	pixelSize = (size_t)std::ceil((width * height * depth * bitsPerPixel) / 8.0f);
 
 	// TODO fix, seems to be a bug with freeiamge.
 	if (bitsPerPixel == 32 && colortype == FIC_RGB) {

@@ -36,84 +36,87 @@ namespace fragcore {
 		 */
 		// TODO remove and replace with the main TextureFormat enum.
 		enum Format {
-			Alpha8,		  // Alpha-only texture fvformatf.
-			ARGB4444,	  // A 16 bits/pixel texture fvformatf. Texture stores color with an alpha channel.
-			RGB24,		  // Color texture fvformatf, 8-bits per channel.
-			RGBA32,		  // Color with alpha texture fvformatf, 8-bits per channel.
-			ARGB32,		  // Color with alpha texture fvformatf, 8-bits per channel.
-			RGB565,		  // A 16 bit color texture fvformatf.
-			R16,		  // Single channel (R) texture fvformatf, 16 bit integer.
-			DXT1,		  //	Compressed color texture fvformatf.
-			DXT5,		  //	Compressed color with alpha channel texture fvformatf.
-			RGBA4444,	  //	Color and alpha texture fvformatf, 4 bit per channel.
-			BGRA32,		  //	Color with alpha texture fvformatf, 8-bits per channel.
-			RHalf,		  //	Scalar (R) texture fvformatf, 16 bit floating point.
-			RGHalf,		  //	Two color (RG) texture fvformatf, 16 bit floating point per channel.
-			RGBAHalf,	  //	RGB color and alpha texture fvformatf, 16 bit floating point per channel.
-			RFloat,		  //	Scalar (R) texture fvformatf, 32 bit floating point.
-			RGFloat,	  //	Two color (RG) texture fvformatf, 32 bit floating point per channel.
-			RGBAFloat,	  //	RGB color and alpha texture fvformatf, 32-bit floats per channel.
-			YUY2,		  //	A fvformatf that uses the YUV color space and is often used for video encoding or playback.
-			RGB9e5Float,  //	RGB HDR fvformatf, with 9 bit mantissa per channel and a 5 bit shared exponent.
-			BC4,		  //	Compressed one channel (R) texture fvformatf.
-			BC5,		  //	Compressed two-channel (RG) texture fvformatf.
-			BC6H,		  //	HDR compressed color texture fvformatf.
-			BC7,		  //	High quality compressed color texture fvformatf.
-			DXT1Crunched, //	Compressed color texture fvformatf with Crunch compression for smaller storage sizes.
-			DXT5Crunched, //	Compressed color with alpha channel texture fvformatf with Crunch compression for
-						  // smaller storage sizes.
-			PVRTC_RGB2,	  //	PowerVR (iOS) 2 bits/pixel compressed color texture fvformatf.
-			PVRTC_RGBA2,  //	PowerVR (iOS) 2 bits/pixel compressed with alpha channel texture fvformatf.
-			PVRTC_RGB4,	  //	PowerVR (iOS) 4 bits/pixel compressed color texture fvformatf.
-			PVRTC_RGBA4,  //	PowerVR (iOS) 4 bits/pixel compressed with alpha channel texture fvformatf.
-			ETC_RGB4,	  //	ETC (GLES2.0) 4 bits/pixel compressed RGB texture fvformatf.
-			EAC_R,		  //	ETC2 / EAC (GL ES 3.0) 4 bits/pixel compressed unsigned single-channel texture fvformatf.
-			EAC_R_SIGNED, 	//	ETC2 / EAC (GL ES 3.0) 4 bits/pixel compressed signed single-channel texture fvformatf.
-			EAC_RG, 		//	ETC2 / EAC (GL ES 3.0) 8 bits/pixel compressed unsigned dual-channel (RG) texture fvformatf.
-			EAC_RG_SIGNED,		//	ETC2 / EAC (GL ES 3.0) 8 bits/pixel compressed signed dual-channel (RG) texture
-								// fvformatf.
-			ETC2_RGB,			//	ETC2 (GL ES 3.0) 4 bits/pixel compressed RGB texture fvformatf.
-			ETC2_RGBA1,			//	ETC2 (GL ES 3.0) 4 bits/pixel RGB+1-bit alpha texture fvformatf.
-			ETC2_RGBA8,			//	ETC2 (GL ES 3.0) 8 bits/pixel compressed RGBA texture fvformatf.
-			ASTC_4x4,			//	ASTC (4x4 pixel block in 128 bits) compressed RGB(A) texture fvformatf.
-			ASTC_5x5,			//	ASTC (5x5 pixel block in 128 bits) compressed RGB(A) texture fvformatf.
-			ASTC_6x6,			//	ASTC (6x6 pixel block in 128 bits) compressed RGB(A) texture fvformatf.
-			ASTC_8x8,			//	ASTC (8x8 pixel block in 128 bits) compressed RGB(A) texture fvformatf.
-			ASTC_10x10,			//	ASTC (10x10 pixel block in 128 bits) compressed RGB(A) texture fvformatf.
-			ASTC_12x12,			//	ASTC (12x12 pixel block in 128 bits) compressed RGB(A) texture fvformatf.
-			RG16,				//	Two color (RG) texture fvformatf, 8-bits per channel.
-			R8,					//	Single channel (R) texture fvformatf, 8 bit integer.
-			ETC_RGB4Crunched,	//	Compressed color texture fvformatf with Crunch compression for smaller storage
-								// sizes.
-			ETC2_RGBA8Crunched, //	Compressed color with alpha channel texture fvformatf using Crunch compression for
-								// smaller storage sizes.
-			ASTC_HDR_4x4,		//	ASTC (4x4 pixel block in 128 bits) compressed RGB(A) HDR texture fvformatf.
-			ASTC_HDR_5x5,		//	ASTC (5x5 pixel block in 128 bits) compressed RGB(A) HDR texture fvformatf.
-			ASTC_HDR_6x6,		//	ASTC (6x6 pixel block in 128 bits) compressed RGB(A) HDR texture fvformatf.
-			ASTC_HDR_8x8,		//	ASTC (8x8 pixel block in 128 bits) compressed RGB(A) texture fvformatf.
-			ASTC_HDR_10x10,		//	ASTC (10x10 pixel block in 128 bits) compressed RGB(A) HDR texture fvformatf.
-			ASTC_HDR_12x12,		//	ASTC (12x12 pixel block in 128 bits) compressed RGB(A) HDR texture fvformatf.
-			ASTC_RGB_4x4,		//	ASTC (4x4 pixel block in 128 bits) compressed RGB texture fvformatf.
-			ASTC_RGB_5x5,		//	ASTC (5x5 pixel block in 128 bits) compressed RGB texture fvformatf.
-			ASTC_RGB_6x6,		//	ASTC (6x6 pixel block in 128 bits) compressed RGB texture fvformatf.
-			ASTC_RGB_8x8,		//	ASTC (8x8 pixel block in 128 bits) compressed RGB texture fvformatf.
-			ASTC_RGB_10x10,		//	ASTC (10x10 pixel block in 128 bits) compressed RGB texture fvformatf.
-			ASTC_RGB_12x12,		//	ASTC (12x12 pixel block in 128 bits) compressed RGB texture fvformatf.
-			ASTC_RGBA_4x4,		//	ASTC (4x4 pixel block in 128 bits) compressed RGBA texture fvformatf.
-			ASTC_RGBA_5x5,		//	ASTC (5x5 pixel block in 128 bits) compressed RGBA texture fvformatf.
-			ASTC_RGBA_6x6,		//	ASTC (6x6 pixel block in 128 bits) compressed RGBA texture fvformatf.
-			ASTC_RGBA_8x8,		//	ASTC (8x8 pixel block in 128 bits) compressed RGBA texture fvformatf.
-			ASTC_RGBA_10x10,	//	ASTC (10x10 pixel block in 128 bits) compressed RGBA texture fvformatf.
-			ASTC_RGBA_12x12,	//	ASTC (12x12 pixel block in 128 bits) compressed RGBA texture fvformatf.
+			Alpha8 = 0,		// Alpha-only texture fvformatf.
+			ARGB4444 = 1,	// A 16 bits/pixel texture fvformatf. Texture stores color with an alpha channel.
+			RGB24 = 2,		// Color texture fvformatf, 8-bits per channel.
+			RGBA32 = 3,		// Color with alpha texture fvformatf, 8-bits per channel.
+			ARGB32 = 4,		// Color with alpha texture fvformatf, 8-bits per channel.
+			RGB565 = 5,		// A 16 bit color texture fvformatf.
+			R16 = 6,		// Single channel (R) texture fvformatf, 16 bit integer.
+			DXT1 = 7,		//	Compressed color texture fvformatf.
+			DXT5 = 8,		//	Compressed color with alpha channel texture fvformatf.
+			RGBA4444 = 9,	//	Color and alpha texture fvformatf, 4 bit per channel.
+			BGRA32 = 10,	//	Color with alpha texture fvformatf, 8-bits per channel.
+			RHalf = 11,		//	Scalar (R) texture fvformatf, 16 bit floating point.
+			RGHalf = 12,	//	Two color (RG) texture fvformatf, 16 bit floating point per channel.
+			RGBAHalf = 13,	//	RGB color and alpha texture fvformatf, 16 bit floating point per channel.
+			RFloat = 14,	//	Scalar (R) texture fvformatf, 32 bit floating point.
+			RGFloat = 15,	//	Two color (RG) texture fvformatf, 32 bit floating point per channel.
+			RGBAFloat = 16, //	RGB color and alpha texture fvformatf, 32-bit floats per channel.
+			YUY2 = 17, //	A fvformatf that uses the YUV color space and is often used for video encoding or playback.
+			RGB9e5Float = 18, //	RGB HDR fvformatf, with 9 bit mantissa per channel and a 5 bit shared exponent.
+			BC4 = 19,		  //	Compressed one channel (R) texture fvformatf.
+			BC5 = 20,		  //	Compressed two-channel (RG) texture fvformatf.
+			BC6H = 21,		  //	HDR compressed color texture fvformatf.
+			BC7 = 22,		  //	High quality compressed color texture fvformatf.
+			DXT1Crunched =
+				23,			   //	Compressed color texture fvformatf with Crunch compression for smaller storage sizes.
+			DXT5Crunched = 24, //	Compressed color with alpha channel texture fvformatf with Crunch compression for
+							   // smaller storage sizes.
+			PVRTC_RGB2 = 25,   //	PowerVR (iOS) 2 bits/pixel compressed color texture fvformatf.
+			PVRTC_RGBA2 = 26,  //	PowerVR (iOS) 2 bits/pixel compressed with alpha channel texture fvformatf.
+			PVRTC_RGB4 = 27,   //	PowerVR (iOS) 4 bits/pixel compressed color texture fvformatf.
+			PVRTC_RGBA4 = 28,  //	PowerVR (iOS) 4 bits/pixel compressed with alpha channel texture fvformatf.
+			ETC_RGB4 = 29,	   //	ETC (GLES2.0) 4 bits/pixel compressed RGB texture fvformatf.
+			EAC_R = 30, //	ETC2 / EAC (GL ES 3.0) 4 bits/pixel compressed unsigned single-channel texture fvformatf.
+			EAC_R_SIGNED =
+				31,		 //	ETC2 / EAC (GL ES 3.0) 4 bits/pixel compressed signed single-channel texture fvformatf.
+			EAC_RG = 32, //	ETC2 / EAC (GL ES 3.0) 8 bits/pixel compressed unsigned dual-channel (RG) texture fvformatf.
+			EAC_RG_SIGNED = 33,	   //	ETC2 / EAC (GL ES 3.0) 8 bits/pixel compressed signed dual-channel (RG) texture
+								   // fvformatf.
+			ETC2_RGB = 34,		   //	ETC2 (GL ES 3.0) 4 bits/pixel compressed RGB texture fvformatf.
+			ETC2_RGBA1 = 35,	   //	ETC2 (GL ES 3.0) 4 bits/pixel RGB+1-bit alpha texture fvformatf.
+			ETC2_RGBA8 = 36,	   //	ETC2 (GL ES 3.0) 8 bits/pixel compressed RGBA texture fvformatf.
+			ASTC_4x4 = 37,		   //	ASTC (4x4 pixel block in 128 bits) compressed RGB(A) texture fvformatf.
+			ASTC_5x5 = 38,		   //	ASTC (5x5 pixel block in 128 bits) compressed RGB(A) texture fvformatf.
+			ASTC_6x6 = 39,		   //	ASTC (6x6 pixel block in 128 bits) compressed RGB(A) texture fvformatf.
+			ASTC_8x8 = 40,		   //	ASTC (8x8 pixel block in 128 bits) compressed RGB(A) texture fvformatf.
+			ASTC_10x10 = 41,	   //	ASTC (10x10 pixel block in 128 bits) compressed RGB(A) texture fvformatf.
+			ASTC_12x12 = 42,	   //	ASTC (12x12 pixel block in 128 bits) compressed RGB(A) texture fvformatf.
+			RG16 = 43,			   //	Two color (RG) texture fvformatf, 8-bits per channel.
+			R8 = 44,			   //	Single channel (R) texture fvformatf, 8 bit integer.
+			ETC_RGB4Crunched = 45, //	Compressed color texture fvformatf with Crunch compression for smaller storage
+								   // sizes.
+			ETC2_RGBA8Crunched =
+				46,				  //	Compressed color with alpha channel texture fvformatf using Crunch compression for
+								  // smaller storage sizes.
+			ASTC_HDR_4x4 = 47,	  //	ASTC (4x4 pixel block in 128 bits) compressed RGB(A) HDR texture fvformatf.
+			ASTC_HDR_5x5 = 48,	  //	ASTC (5x5 pixel block in 128 bits) compressed RGB(A) HDR texture fvformatf.
+			ASTC_HDR_6x6 = 49,	  //	ASTC (6x6 pixel block in 128 bits) compressed RGB(A) HDR texture fvformatf.
+			ASTC_HDR_8x8 = 50,	  //	ASTC (8x8 pixel block in 128 bits) compressed RGB(A) texture fvformatf.
+			ASTC_HDR_10x10 = 51,  //	ASTC (10x10 pixel block in 128 bits) compressed RGB(A) HDR texture fvformatf.
+			ASTC_HDR_12x12 = 52,  //	ASTC (12x12 pixel block in 128 bits) compressed RGB(A) HDR texture fvformatf.
+			ASTC_RGB_4x4 = 53,	  //	ASTC (4x4 pixel block in 128 bits) compressed RGB texture fvformatf.
+			ASTC_RGB_5x5 = 54,	  //	ASTC (5x5 pixel block in 128 bits) compressed RGB texture fvformatf.
+			ASTC_RGB_6x6 = 55,	  //	ASTC (6x6 pixel block in 128 bits) compressed RGB texture fvformatf.
+			ASTC_RGB_8x8 = 56,	  //	ASTC (8x8 pixel block in 128 bits) compressed RGB texture fvformatf.
+			ASTC_RGB_10x10 = 57,  //	ASTC (10x10 pixel block in 128 bits) compressed RGB texture fvformatf.
+			ASTC_RGB_12x12 = 58,  //	ASTC (12x12 pixel block in 128 bits) compressed RGB texture fvformatf.
+			ASTC_RGBA_4x4 = 59,	  //	ASTC (4x4 pixel block in 128 bits) compressed RGBA texture fvformatf.
+			ASTC_RGBA_5x5 = 60,	  //	ASTC (5x5 pixel block in 128 bits) compressed RGBA texture fvformatf.
+			ASTC_RGBA_6x6 = 61,	  //	ASTC (6x6 pixel block in 128 bits) compressed RGBA texture fvformatf.
+			ASTC_RGBA_8x8 = 62,	  //	ASTC (8x8 pixel block in 128 bits) compressed RGBA texture fvformatf.
+			ASTC_RGBA_10x10 = 63, //	ASTC (10x10 pixel block in 128 bits) compressed RGBA texture fvformatf.
+			ASTC_RGBA_12x12 = 64, //	ASTC (12x12 pixel block in 128 bits) compressed RGBA texture fvformatf.
 
 			eR8G8B8 = 0x1,	 /*  */
 			eR8G8B8A8 = 0x2, /*  */
 			eRGB32F = 0x3,	 /*  */
 			eRGBA32F = 0x4,	 /*  */
 			eR8_SRGB = 0x5,
-			eR8G8_SRGB,
-			eR8G8B8_SRGB,
-			R8G8B8A8_SRGB,
+			eR8G8_SRGB = 6,
+			eR8G8B8_SRGB = 7,
+			R8G8B8A8_SRGB = 8,
 		};
 
 		enum MapTarget {

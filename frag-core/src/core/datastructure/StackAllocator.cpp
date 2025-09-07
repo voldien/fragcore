@@ -61,11 +61,18 @@ void *StackAllocator::fetch(const size_t sizeBytes) {
 	return pdata;
 }
 
-void StackAllocator::freeToMarker(const size_t marker) { this->mMarker = marker; }
+void StackAllocator::freeToMarker(const size_t marker) noexcept { this->mMarker = marker; }
 
-StackAllocator &StackAllocator::operator=(const StackAllocator &alloc) {
-	this->alloc(alloc.getSize());
-	memcpy(this->mData, alloc.mData, alloc.getMarker());
-	this->mMarker = alloc.mMarker;
+StackAllocator &StackAllocator::operator=(const StackAllocator &other) {
+	this->alloc(other.getSize());
+	memcpy(this->mData, other.mData, other.getMarker());
+	this->mMarker = other.mMarker;
+	return *this;
+}
+StackAllocator &StackAllocator::operator=(StackAllocator &&other) {
+	this->mData = std::exchange(other.mData, nullptr);
+	this->mMarker = std::exchange(other.mMarker, 0);
+	this->ownData = std::exchange(other.ownData, false);
+	this->mSize = std::exchange(other.mMarker, 0);
 	return *this;
 }

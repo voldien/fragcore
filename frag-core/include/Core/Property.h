@@ -37,15 +37,66 @@ namespace fragcore {
 	  public:
 		using DType = T;
 
-		Property() noexcept : UIDStruct<U>(reinterpret_cast<U>(this)) {
+		Property() noexcept : UIDStruct<U>(reinterpret_cast<U>(this)) { this->value = T(); }
+
+		Property(const std::string &name, const T value) noexcept
+			: UIDStruct<U>(reinterpret_cast<U>(this)), name(name), value(value) { /*	*/ }
+		Property(const std::string &name, const T value, U uid) noexcept
+			: UIDStruct<U>(uid), name(name), value(value) { /**/ }
+
+		constexpr const DType *operator->() const { return std::__addressof(this->get_current_value()); }
+		constexpr DType *operator->() { return std::__addressof(this->get_current_value()); }
+
+		operator DType() const noexcept { return this->get_current_value(); }
+		// explicit conversion
+		explicit operator const DType() const noexcept { return this->value; }
+
+		operator DType &() noexcept { return this->get_current_value(); }
+		// explicit conversion
+		explicit operator const DType &() const noexcept { return this->get_current_value(); }
+
+		constexpr const DType &operator*() const & { return this->get_current_value(); }
+
+		constexpr DType &operator*() & { return this->get_current_value(); }
+
+		constexpr DType &&operator*() && { return std::move(this->get_current_value()); }
+
+		constexpr const DType &&operator*() const && { return std::move(this->get_current_value()); }
+
+		auto &operator=(const DType &other) noexcept {
+			this->value = other;
+			return *this;
+		}
+
+		const std::string &get_name() const noexcept { return this->name; }
+
+		constexpr const DType &get_value() const noexcept { return this->get_current_value(); }
+		constexpr DType &get_value() noexcept { return this->get_current_value(); }
+		void set_value(const DType newValue) { this->value = newValue; }
+
+		const std::type_info &getDType() const noexcept { return typeid(T); }
+
+	  protected:
+		const DType &get_current_value() const { return this->value; }
+		DType &get_current_value() { return this->value; }
+
+		std::string name;
+		DType value;
+	};
+
+	template <typename T, typename U = size_t> struct PropertyOverridable : public Property<T, U> {
+	  public:
+		using DType = T;
+
+		PropertyOverridable() noexcept : UIDStruct<U>(reinterpret_cast<U>(this)) {
 			this->value = T();
 			this->overrideValue = T();
 			this->override_status = false;
 		}
 
-		Property(const std::string &name, const T value) noexcept
+		PropertyOverridable(const std::string &name, const T value) noexcept
 			: UIDStruct<U>(reinterpret_cast<U>(this)), name(name), value(value), overrideValue(value) { /*	*/ }
-		Property(const std::string &name, const T value, U uid) noexcept
+		PropertyOverridable(const std::string &name, const T value, U uid) noexcept
 			: UIDStruct<U>(uid), name(name), value(value), overrideValue(value) { /**/ }
 
 		constexpr const DType *operator->() const { return std::__addressof(this->get_current_value()); }
