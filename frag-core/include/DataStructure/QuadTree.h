@@ -27,6 +27,7 @@ namespace fragcore {
 	 * @tparam T
 	 */
 	template <typename T> class FVDECLSPEC QuadTree {
+
 		using Node = struct node {
 			struct node *lt;
 			struct node *rt;

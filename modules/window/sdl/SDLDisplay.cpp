@@ -77,7 +77,7 @@ void SDLDisplay::getDPI(Display::DPI *dpi) {
 
 void SDLDisplay::setMode([[maybe_unused]] const Mode &mode) {}
 
-SDLDisplay::DisplayFormat SDLDisplay::getFormat() {
+DisplayFormat SDLDisplay::getFormat() {
 	SDL_DisplayMode mode;
 	const int err = SDL_GetCurrentDisplayMode(this->index, &mode);
 	if (err != 0) {
@@ -86,30 +86,30 @@ SDLDisplay::DisplayFormat SDLDisplay::getFormat() {
 	return translateFormat(mode.format);
 }
 
-SDLDisplay::DisplayFormat SDLDisplay::translateFormat(unsigned int format) {
+DisplayFormat SDLDisplay::translateFormat(unsigned int format) {
 	switch (format) {
 	case SDL_PIXELFORMAT_INDEX1LSB:
-		return Display::DisplayFormat::PIXELFORMAT_INDEX1LSB;
+		return DisplayFormat::PIXELFORMAT_INDEX1LSB;
 	case SDL_PIXELFORMAT_RGB332:
-		return Display::DisplayFormat::PIXELFORMAT_RGB332;
+		return DisplayFormat::PIXELFORMAT_RGB332;
 	case SDL_PIXELFORMAT_RGB24:
-		return Display::DisplayFormat::PIXELFORMAT_RGB24;
+		return DisplayFormat::PIXELFORMAT_RGB24;
 	case SDL_PIXELFORMAT_ARGB2101010:
-		return Display::DisplayFormat::PIXELFORMAT_ARGB2101010;
+		return DisplayFormat::PIXELFORMAT_ARGB2101010;
 	case SDL_PIXELFORMAT_BGR24:
-		return Display::DisplayFormat::PIXELFORMAT_BGR24;
+		return DisplayFormat::PIXELFORMAT_BGR24;
 	case SDL_PIXELFORMAT_RGB888:
-		return Display::DisplayFormat::PIXELFORMAT_RGB888;
+		return DisplayFormat::PIXELFORMAT_RGB888;
 	case SDL_PIXELFORMAT_RGBA32:
-		return Display::DisplayFormat::PIXELFORMAT_RGBA32;
+		return DisplayFormat::PIXELFORMAT_RGBA32;
 	default:
-		return Display::DisplayFormat::PIXELFORMAT_UNKNOWN;
+		return DisplayFormat::PIXELFORMAT_UNKNOWN;
 	}
-	return Display::DisplayFormat::PIXELFORMAT_UNKNOWN;
+	return DisplayFormat::PIXELFORMAT_UNKNOWN;
 }
 
-int SDLDisplay::getNumDisplays() { return SDL_GetNumVideoDisplays(); }
+int SDLDisplay::getNumDisplays() noexcept { return SDL_GetNumVideoDisplays(); }
 
-SDLDisplay SDLDisplay::getPrimaryDisplay() { return {0}; }
+SDLDisplay SDLDisplay::getPrimaryDisplay() noexcept { return {0}; }
 
 SDLDisplay SDLDisplay::getDisplay(const int index) { return {index}; }

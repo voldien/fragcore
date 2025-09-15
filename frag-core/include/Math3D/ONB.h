@@ -145,17 +145,17 @@ namespace fragcore {
 		/**
 		 * @return
 		 */
-		 const Vector3 &u() const noexcept { return this->m[0]; }
+		const Vector3 &u() const noexcept { return this->m[0]; }
 
 		/**
 		 * @return
 		 */
-		 const Vector3 &v() const noexcept { return this->m[1]; }
+		const Vector3 &v() const noexcept { return this->m[1]; }
 
 		/**
 		 * @return
 		 */
-		 const Vector3 &w() const noexcept { return this->m[2]; }
+		const Vector3 &w() const noexcept { return this->m[2]; }
 
 	  private:		  /*	Attributes.	*/
 		Vector3 m[3]; /*	*/

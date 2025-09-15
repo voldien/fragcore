@@ -15,24 +15,23 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#ifndef _FRAGCORE_SHADER_LANGUAGE_H_
-#define _FRAGCORE_SHADER_LANGUAGE_H_ 1
-#include <ImageFormat.h>
-#include <cstdint>
+#ifndef _FRAGCORE_IMEMORY_POOL_H_
+#define _FRAGCORE_IMEMORY_POOL_H_ 1
+#include "FragDef.h"
+#include <cstddef>
 
 namespace fragcore {
 	/**
-	 *  Support languages.
+	 * @brief
 	 */
-	enum ShaderLanguage : uint32_t {
-		NONE = 0,
-		GLSL = 0x1,			   /*  OpenGL GLSL.    */
-		SPIRV = 0x2,		   /*  SPIRV.  */
-		HLSL = 0x4,			   /*  High Level Shading Language.    */
-		CLC = 0x8,			   /*  OpenCL C language.  */
-		CG = 0x10,			   /*  Legacy. */
-		unKnownLanguage = 0x0, /*	*/
-	};
+	class FVDECLSPEC IMemoryPool { //TODO: refractor name
+	  public:
+		size_t alloc(const size_t sizeBytes) noexcept;
+		size_t allocateAligned(const size_t sizeBytes, const unsigned int alignment) noexcept;
 
+		void clear() noexcept;
+		void freeToMarker(const size_t marker);
+	};
 } // namespace fragcore
+
 #endif

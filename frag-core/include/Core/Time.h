@@ -37,23 +37,24 @@ namespace fragcore {
 		}
 
 		template <typename T> T getElapsed() const noexcept {
-			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
-
-			duration<T> time_span = duration_cast<duration<T>>(steady_clock::now() - start_timestamp);
-
+			static_assert(std::is_floating_point_v<T>, "Must be a decimal type(float/double/half).");
+			const duration<T> time_span = duration_cast<duration<T>>(steady_clock::now() - start_timestamp);
 			return time_span.count();
 		}
 
 		template <typename T> T deltaTime() const noexcept {
-			static_assert(std::is_floating_point<T>::value, "Must be a decimal type(float/double/half).");
-
+			static_assert(std::is_floating_point_v<T>, "Must be a decimal type(float/double/half).");
 			return static_cast<T>(delta_data.count());
 		}
 
 		void update() noexcept {
-
 			this->delta_data = duration_cast<duration<float>>(steady_clock::now() - this->ticks);
 			this->ticks = steady_clock::now();
+		}
+
+		template <typename T> void update(const T &additional_time) {
+			static_assert(std::is_floating_point_v<T>, "Must be a decimal type(float/double/half).");
+			duration_cast<duration<T>>(additional_time);
 		}
 
 		size_t getTimeResolution() const noexcept {
@@ -62,13 +63,11 @@ namespace fragcore {
 		}
 
 		template <typename T> T now() const noexcept {
-
 			const auto t0 = steady_clock::now();
 			return static_cast<T>(t0.time_since_epoch().count());
 		}
 
 		template <typename T> T nowHighRes() const noexcept {
-
 			const auto t0 = std::chrono::high_resolution_clock::now();
 			return static_cast<T>(t0.time_since_epoch().count());
 		}

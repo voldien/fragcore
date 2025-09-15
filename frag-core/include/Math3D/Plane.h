@@ -30,7 +30,7 @@ namespace fragcore {
 	template <typename T = float> struct FVDECLSPEC Plane {
 	  public:
 		Plane() = default;
-		Plane(const Vector3 &normal, T distance = 0) noexcept {
+		Plane(const Vector3 &normal, const T distance = 0) noexcept {
 			this->normal = normal.normalized();
 			this->d = distance;
 		}

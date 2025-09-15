@@ -76,7 +76,19 @@ namespace fragcore {
 		virtual ITree<T> *getParent() const noexcept { return this->parent; }
 
 		virtual void setParent(ITree<T> *parent) noexcept {
-			if (getParent() != parent) {
+			/*	Add Child if not exists.	*/
+			ITree<T> *myParent = getParent();
+
+			/*	If new parent is not the same as current parent.	*/
+			if (myParent != parent) {
+
+				/*	Remove if existing parent.	*/
+				if (myParent) {
+					myParent->removeChild(this);
+					myParent = nullptr;
+				}
+
+				/*	*/
 				parent->addChild(this);
 			}
 		}
@@ -89,8 +101,8 @@ namespace fragcore {
 
 			this->numChildren++;
 			if (!this->child) {
-				this->setChild(pchild);
-				child->parent = this;
+				this->setChild(pchild);	/*	Assign Child.	*/
+				child->parent = this;	/*	Assign parent*/
 			} else {
 
 				find = this->child;
@@ -114,12 +126,19 @@ namespace fragcore {
 			sib->parent = nullptr;
 		}
 
-		virtual ITree<T> *getChild(unsigned int index) const {
+		virtual void removeChild(ITree<T> *child) {
+			const int child_index = getNodeChildIndex(child);
+			if (child_index >= 0) {
+				removeChild(getNodeChildIndex(child));
+			}
+		}
+
+		virtual ITree<T> *getChild(const unsigned int index) const {
 			if (index >= this->getNumChildren()) {
 				throw InvalidArgumentException("Exceeded {} has {}", index, this->getNumChildren());
 			}
 			ITree<T> *chi = this->child;
-			for (unsigned int nth_child = 0; nth_child <= index; nth_child++) {
+			for (unsigned int nth_child = 1; nth_child <= index; nth_child++) {
 				chi = chi->sibling;
 			}
 			return chi;
@@ -144,7 +163,8 @@ namespace fragcore {
 				index++;
 				child_node = child_node->child;
 			}
-			return -1;
+
+			return -1; /*	No Child Found.	*/
 		}
 
 		virtual const T *ptr() const noexcept { return (T *)this; }

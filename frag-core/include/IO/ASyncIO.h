@@ -29,7 +29,7 @@
  */
 namespace fragcore {
 
-	using ASyncHandle = long;								/*  */
+	using ASyncHandle = ssize_t;							/*  */
 	using AsyncComplete = void (*)(ASyncIO *, ASyncHandle); /*  */
 
 	/**
@@ -87,6 +87,7 @@ namespace fragcore {
 		 * @param complete
 		 */
 		virtual void asyncWriteFile(ASyncHandle handle, char *buffer, unsigned int size, AsyncComplete complete);
+
 		// TODO add C++ Bind function and lamba support
 		/**
 		 * @brief

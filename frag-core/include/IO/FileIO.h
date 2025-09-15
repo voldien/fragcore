@@ -56,7 +56,7 @@ namespace fragcore {
 			return (operations & OP_ALL) == operations;
 		};
 
-	  public: /*	object specific methods.	*/
+	   /*	object specific methods.	*/
 		int getFileDescriptor() { return fileno(this->file); }
 
 		void setBlocking(bool blocking);

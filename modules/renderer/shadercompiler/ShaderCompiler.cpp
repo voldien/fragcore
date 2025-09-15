@@ -3,16 +3,15 @@
 #include <spirv_glsl.hpp>
 #include <spirv_hlsl.hpp>
 #include <vector>
-//#include <spirv_cross/spirv_msl.hpp>
+// #include <spirv_cross/spirv_msl.hpp>
 
 #include <fmt/core.h>
 using namespace fragcore;
 
-std::vector<char> ShaderCompiler::convert(const std::vector<char> &sourceCode, ShaderLanguage source,
-										  ShaderLanguage target) {
-	spirv_cross::Compiler *compiler = nullptr;
+std::vector<char> ShaderCompiler::convertSPIRV(const std::vector<uint32_t> &sourceBinary,
+											   const CompilerConvertOption &targetOptions) {
 
-	switch (source) {
+	switch (targetOptions.target) {
 	case ShaderLanguage::GLSL:
 		break;
 	case ShaderLanguage::HLSL:
@@ -28,20 +27,16 @@ std::vector<char> ShaderCompiler::convert(const std::vector<char> &sourceCode, S
 		break;
 	}
 
-	return {};
-}
-
-std::vector<char> ShaderCompiler::convertSPIRV(const std::vector<uint32_t> &source,
-											   const CompilerConvertOption &target) {
-	if (target.target == ShaderLanguage::GLSL) {
-		spirv_cross::CompilerGLSL glsl(source);
+	/*	*/
+	if (targetOptions.target == ShaderLanguage::GLSL) {
+		spirv_cross::CompilerGLSL glsl(sourceBinary);
 
 		// Set some options.
 		spirv_cross::CompilerGLSL::Options options; // = glsl.get_common_options();
-		options.version = target.glslVersion;
+		options.version = targetOptions.glslVersion;
 		options.es = false;
 		options.enable_storage_image_qualifier_deduction = false;
-		options.fragment.default_float_precision = spirv_cross::CompilerGLSL::Options::Precision::Mediump;
+		options.fragment.default_float_precision = spirv_cross::CompilerGLSL::Options::Precision::DontCare;
 
 		glsl.set_common_options(options);
 

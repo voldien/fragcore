@@ -26,7 +26,7 @@ namespace fragcore {
 	 * @brief Stack of buffer allocator.
 	 *
 	 */
-	class FVDECLSPEC StackBufferedAllocator : public UIDObject {
+	class FVDECLSPEC StackBufferedAllocator : public UIDObject, public IMemoryPool {
 	  public:
 		// StackBufferedAllocator(size_t nrStack = 0);
 		StackBufferedAllocator(const StackBufferedAllocator &doublebuffer);

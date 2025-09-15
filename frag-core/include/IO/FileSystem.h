@@ -56,7 +56,7 @@ namespace fragcore {
 
 		std::vector<std::string> list(const char *directory) const override;
 
-	  public:
+	  public:	/*	*/
 		std::string getBaseName(const char *path) override;
 
 		std::string getAbsolutePath(const char *path) override;

@@ -131,15 +131,30 @@ namespace fragcore {
 
 	/**
 	 * @brief
-	 *
 	 */
 	enum class BlendEqu {
-		eNoEqu,
-		Addition,
-		Subtract,
-		ReverseSubtract,
-		Min,
-		Max,
+		eNoEqu,			 /*	*/
+		Addition,		 /*	*/
+		Subtract,		 /*	*/
+		ReverseSubtract, /*	*/
+		Min,			 /*	*/
+		Max,			 /*	*/
+	};
+
+	/*
+	 *
+	 */
+	enum class Primitive : uint32_t {
+		Point = 0x1,			/*	*/
+		Lines = 0x2,			/*	*/
+		LineLoop = 0x3,			/*	*/
+		LinesAdjacant = 0x4,	/*	*/
+		Triangles = 0x5,		/*	*/
+		TriangleStrip = 0x6,	/*	*/
+		TriangleFan = 0x7,		/*	*/
+		TriangleAdjacant = 0x8, /*	*/
+		Patchs = 0x9,			/*	*/
+		LineStrip = 0xA
 	};
 
 	enum class StencilFunc {
@@ -494,13 +509,6 @@ namespace fragcore {
 	 *	Geometry description.
 	 */
 	using GeometryDesc = struct geometry_desc_t {
-		enum class Primitive : uint32_t {
-			Point = 0x1,			/**/
-			Lines = 0x2,			/**/
-			Triangles = 0x3,		/**/
-			TriangleStrips = 0x4,	/**/
-			TriangleAdjacant = 0x5, /**/
-		};
 
 		enum class AttributeType {
 			eFloat = 0x1,  /*	*/

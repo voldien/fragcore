@@ -561,18 +561,22 @@ unsigned int GLHelper::getBufferHint(const BufferDesc::BufferHint hint) {
 	throw InvalidArgumentException("None matching buffer hint : {}", magic_enum::enum_name(hint));
 }
 
-unsigned int GLHelper::getPrimitive(const GeometryDesc::Primitive primitive) {
+unsigned int GLHelper::getPrimitive(const Primitive primitive) {
 
 	switch (primitive) {
-	case GeometryDesc::Primitive::Point:
+	case Primitive::Point:
 		return GL_POINTS;
-	case GeometryDesc::Primitive::Lines:
+	case Primitive::Lines:
 		return GL_LINES;
-	case GeometryDesc::Primitive::Triangles:
+	case Primitive::LineLoop:
+		return GL_LINE_LOOP;
+	case Primitive::LineStrip:
+		return GL_LINE_STRIP;
+	case Primitive::Triangles:
 		return GL_TRIANGLES;
-	case GeometryDesc::Primitive::TriangleStrips:
+	case Primitive::TriangleStrip:
 		return GL_TRIANGLE_STRIP;
-	case GeometryDesc::Primitive::TriangleAdjacant:
+	case Primitive::TriangleAdjacant:
 		return GL_TRIANGLES_ADJACENCY;
 	default:
 		throw InvalidArgumentException("None matching primitive type : {}.", magic_enum::enum_name(primitive));

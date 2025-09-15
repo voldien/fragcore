@@ -17,6 +17,7 @@
  */
 #ifndef _FRAGCORE_FRAMEBUFFER_H_
 #define _FRAGCORE_FRAMEBUFFER_H_ 1
+#include "RenderDesc.h"
 #include "RenderObject.h"
 #include <vector>
 
@@ -29,7 +30,6 @@ namespace fragcore {
 	  public:
 		FrameBuffer() = default;
 		~FrameBuffer() override = default;
-
 
 		enum class BufferAttachment {
 			NoAttachment,

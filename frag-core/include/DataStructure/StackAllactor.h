@@ -19,6 +19,7 @@
 #define _FRAGCORE_STACK_ALLOCATOR_H_ 1
 #include "../FragDef.h"
 #include "Core/UIDObject.h"
+#include "DataStructure/IMemoryPool.h"
 
 namespace fragcore {
 
@@ -26,7 +27,7 @@ namespace fragcore {
 	 * @brief Single stack buffer.
 	 *
 	 */
-	class FVDECLSPEC StackAllocator : public UIDObject {
+	class FVDECLSPEC StackAllocator : public UIDObject, public IMemoryPool {
 	  public:
 		StackAllocator();
 		StackAllocator(const StackAllocator &stack);

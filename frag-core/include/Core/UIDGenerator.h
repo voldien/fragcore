@@ -21,6 +21,7 @@
 #include <atomic>
 
 namespace fragcore {
+
 	/**
 	 *	@brief Unique Identifier generator.
 	 *	This is a simple UID generator.
@@ -29,7 +30,7 @@ namespace fragcore {
 	template <typename T = uint32_t> class FVDECLSPEC UIDGenerator {
 	  public:
 		using UIDType = T;
-	  public:
+
 		static_assert(std::is_arithmetic_v<UIDType>, "Must support artithmetic operations");
 		UIDGenerator() noexcept { this->nextUID = 0; }
 		UIDGenerator(UIDGenerator &&other) {

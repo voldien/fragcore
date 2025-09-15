@@ -53,8 +53,8 @@ namespace fragcore {
 		unsigned int index;
 
 	  public:
-		static int getNumDisplays();
-		static SDLDisplay getPrimaryDisplay();
+		static int getNumDisplays() noexcept;
+		static SDLDisplay getPrimaryDisplay() noexcept;
 		static SDLDisplay getDisplay(const int index);
 	};
 } // namespace fragcore

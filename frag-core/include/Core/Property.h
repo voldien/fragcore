@@ -29,9 +29,6 @@ namespace fragcore {
 
 	/**
 	 * @brief
-	 *
-	 * @tparam T
-	 * @tparam U
 	 */
 	template <typename T, typename U = size_t> struct Property : public UIDStruct<U> {
 	  public:
@@ -84,6 +81,9 @@ namespace fragcore {
 		DType value;
 	};
 
+	/**
+	 * @brief
+	 */
 	template <typename T, typename U = size_t> struct PropertyOverridable : public Property<T, U> {
 	  public:
 		using DType = T;
@@ -154,8 +154,6 @@ namespace fragcore {
 
 	/**
 	 * @brief
-	 *
-	 * @tparam T
 	 */
 	template <typename T> struct PropertyMinMaxDefault : public Property<T> {
 	  public:

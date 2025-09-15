@@ -31,9 +31,17 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC ShaderCompiler {
 	  public:
+		enum class CompilerAttributeOptionType {
+			Undefined,
+			Macro,
+			Constant,
+			MaxOptionAttributeTypes,
+		};
+
+
 		class CompilerOption : UIDObject {
 		  public:
-			unsigned int type;
+			CompilerAttributeOptionType type;
 			const char *name;
 			const char *value;
 		};
@@ -56,7 +64,7 @@ namespace fragcore {
 
 		class CompilerOptionSet {
 		  public:
-			std::vector<CompilerOption> option;
+			std::vector<CompilerOption> options;
 		};
 
 		static std::map<long int, ShaderResult>
@@ -68,28 +76,14 @@ namespace fragcore {
 			unsigned int glslVersion = 150;
 			bool es = false;
 			bool auto_storage_qualifier = false;
-			unsigned int precision = 0;
+			unsigned int precision = 0;	/*	*/
 		};
 
 		/**
-		 * @brief
-		 *
-		 * @param sourceCode
-		 * @param source
-		 * @param target
-		 * @return std::vector<char>
+		 * Convert spirv binary to source code. (decompilition)
 		 */
-		static std::vector<char> convert(const std::vector<char> &sourceCode, ShaderLanguage source,
-										 ShaderLanguage target);
-
-		/**
-		 * @brief
-		 *
-		 * @param source
-		 * @param shaderLanguage
-		 * @return std::vector<char>
-		 */
-		static std::vector<char> convertSPIRV(const std::vector<uint32_t> &source, const CompilerConvertOption &target);
+		static std::vector<char> convertSPIRV(const std::vector<uint32_t> &sourceBinary,
+											  const CompilerConvertOption &targetOptions);
 	};
 } // namespace fragcore
 #endif

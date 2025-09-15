@@ -44,8 +44,6 @@ namespace fragcore {
 		 */
 		const Vector3 &getU() const { return onb.u(); }
 
-
-
 		/**
 		 *
 		 * @return
@@ -68,13 +66,13 @@ namespace fragcore {
 		 * Get half size.
 		 * @return non-negative vector of the size.
 		 */
-		 Vector3 getSize() { return size; }
+		Vector3 getSize() { return size; }
 
 		/**
 		 *
 		 * @return
 		 */
-		 const Vector3 &getSize() const { return this->size; }
+		const Vector3 &getSize() const { return this->size; }
 
 		OBB &operator=(const OBB &obb) {
 			this->onb = obb.onb;

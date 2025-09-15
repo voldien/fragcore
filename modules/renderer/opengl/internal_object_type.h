@@ -76,7 +76,7 @@ namespace fragcore {
 		static unsigned int getBufferHint(const fragcore::BufferDesc::BufferHint hint);
 
 		/*	*/
-		static unsigned int getPrimitive(const fragcore::GeometryDesc::Primitive primitive);
+		static unsigned int getPrimitive(const Primitive primitive);
 
 		/*	*/
 		static unsigned int getAttributeDataType(const fragcore::GeometryDesc::AttributeType type);

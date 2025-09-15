@@ -22,7 +22,7 @@
 
 namespace fragcore {
 
-	using KeyFrame = struct alignas(16) key_frame_t {
+	using KeyFrame = struct key_frame_t {
 		float time;		  /*	*/
 		float value;	  /*	*/
 		float tangentIn;  /*	*/

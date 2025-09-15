@@ -15,40 +15,25 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
+
 #ifndef _FRAGCORE_MEMORY_ADDRESS_H_
 #define _FRAGCORE_MEMORY_ADDRESS_H_ 1
 #include "../FragDef.h"
-#include "../Math/Math.h"
+#include "DataStructure/IMemoryPool.h"
 
 namespace fragcore {
 
 	/*	*/
-	class FVDECLSPEC MemoryAddress {
+	class FVDECLSPEC MemoryAddress : public IMemoryPool {
 	  public:
 		MemoryAddress() = default;
-		MemoryAddress(const size_t size, const size_t offset = 0) {
-			this->mSize = size;
-			this->baseOffset = offset;
-			this->clear();
-		}
+		MemoryAddress(const size_t size, const size_t offset = 0);
 
-		size_t alloc(const size_t sizeBytes) {
-			size_t current_marker = this->mMarker;
-			this->mMarker += sizeBytes;
-			return current_marker;
-		}
+		size_t alloc(const size_t sizeBytes) noexcept;
+		size_t allocateAligned(const size_t sizeBytes, const unsigned int alignment) noexcept;
 
-		size_t allocateAligned(const size_t sizeBytes, const unsigned int alignment) {
-
-			const size_t requested_byte_size = fragcore::Math::align<size_t>(sizeBytes, alignment);
-			size_t current_marker = this->mMarker;
-			this->mMarker += requested_byte_size;
-
-			return current_marker;
-		}
-
-		void clear() noexcept { this->mMarker = 0; }
-		void freeToMarker(const size_t marker) { this->mMarker = marker; }
+		void clear() noexcept;
+		void freeToMarker(const size_t marker);
 
 	  private:
 		size_t mSize = 0;	   /*	*/
