@@ -104,15 +104,21 @@ namespace fragcore {
 	};
 
 	enum class TextureCompareFunc : uint32_t {
-		eNoCompare,	  /*  */
-		lessEqual,	  /*  */
-		greaterEqual, /*  */
-		less,		  /*  */
-		greater,	  /*  */
-		equal,		  /*  */
-		notequal,	  /*  */
-		always,		  /*  */
-		never,		  /*  */
+		NoCompare,	  /*  */
+		LessEqual,	  /*  */
+		GreaterEqual, /*  */
+		Less,		  /*  */
+		Greater,	  /*  */
+		Equal,		  /*  */
+		NotEqual,	  /*  */
+		Always,		  /*  */
+		Never,		  /*  */
+	};
+
+	enum class CullingMode {
+		Front,
+		Back,
+		FrontAndBack,
 	};
 
 	/**
@@ -161,9 +167,7 @@ namespace fragcore {
 
 	};
 
-	enum class DepthFunc {
-
-	};
+	using DepthFunc = TextureCompareFunc;
 
 	using MarkerDebug = struct marker_debug_t {
 		const char *markerName;
@@ -321,18 +325,19 @@ namespace fragcore {
 		MarkerDebug marker;
 	};
 
-	enum class ShaderType {
-		Unknown,
-		Vertex,	 /*  */
-		Frag,	 /*  */
-		Geom,	 /*  */
-		TesseC,	 /*  */
-		TesseE,	 /*  */
-		Compute, /*  */
-		Mesh,
-		Task,
-		RayHit,
-		RayMiss
+	enum class ShaderPipelineStaqe {
+		Unknown,	 /*	*/
+		Vertex,		 /*  */
+		Fragment,	 /*  */
+		Geometry,	 /*  */
+		TesseC,		 /*  */
+		TesseE,		 /*  */
+		Compute,	 /*  */
+		Mesh,		 /*	*/
+		Task,		 /*	*/
+		RayGenerate, /*	*/
+		RayHit,		 /*	*/
+		RayMiss		 /*	*/
 	};
 
 	enum class ShaderCodeType {
@@ -441,10 +446,38 @@ namespace fragcore {
 		MarkerDebug *marker;
 	};
 
+	using ShaderSource = struct {
+		/*	*/
+		union {
+			const char **sourceList;	   /*	Vertex shader sources.	*/
+			const uint32_t **sourceBinary; /*	Vertex shader sources.	*/
+		};
+		/*	*/
+		union {
+			unsigned int numtesev; /*	Number of vertex shader string sources.	*/
+			size_t size;
+		};
+
+		unsigned int binaryFormat;
+		ShaderCodeType dataSourceType;
+		ShaderLanguage language;
+		ShaderPipelineStaqe stage;
+	};
+
+	/*	*/
 	using ShaderConfigDesc = struct shader_config_desc_t {
 		ShaderSourceDesc shaderSource;
 
 		unsigned int blend;
+		unsigned int cullface;
+		TextureCompareFunc depthFunc;
+		unsigned int depthTesting;
+		unsigned int depthWrite;
+		unsigned int multisampling_count;
+
+		unsigned int stencilTesting;
+
+		unsigned int subpass;
 	};
 
 	/**
@@ -454,7 +487,7 @@ namespace fragcore {
 		/**
 		 *
 		 */
-		enum BufferType : uint32_t {
+		enum class BufferType : uint32_t {
 			eArray,				/*	*/
 			eElementArray,		/*	*/
 			eUniform,			/*	*/

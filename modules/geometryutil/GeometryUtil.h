@@ -63,6 +63,8 @@ namespace fragcore {
 
 		static std::vector<Triangle> generateSmoothNormals(const std::vector<Triangle> &triangle, const float angle);
 
+		static void optimizeGeometry();
+
 		/**
 		 * @brief
 		 *
@@ -96,7 +98,7 @@ namespace fragcore {
 			uint Indices[3];
 		};
 
-		void convert2Adjcent(float *vertices, const size_t nrVertices, std::vector<unsigned int> &Indices,
+		void convert2Adjacent(float *vertices, const size_t nrVertices, std::vector<unsigned int> &Indices,
 							 const size_t stride = sizeof(float) * 3);
 
 		GeometryUtility() = delete;

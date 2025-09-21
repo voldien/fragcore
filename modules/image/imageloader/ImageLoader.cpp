@@ -6,7 +6,11 @@
 
 using namespace fragcore;
 
-ImageLoader::ImageLoader(const ImageLoader &other) = default;
+ImageLoader::ImageLoader() {
+	// FreeImage_SetOutputMessage([](FREE_IMAGE_FORMAT fif, const char *msg) { std::cout << msg << std::endl; });
+	// FreeImage_SetOutputMessage([](FREE_IMAGE_FORMAT fif, const char *msg) { std::cout << msg << std::endl; });
+}
+ImageLoader::ImageLoader(const ImageLoader &other) {}
 ImageLoader::ImageLoader(ImageLoader &&other) : Object(other) {}
 ImageLoader &ImageLoader::operator=(const ImageLoader &other) { return *this; }
 ImageLoader &ImageLoader::operator=(ImageLoader &&other) { return *this; }
@@ -14,11 +18,11 @@ ImageLoader &ImageLoader::operator=(ImageLoader &&other) { return *this; }
 Image ImageLoader::loadImage(Ref<IO> &io_in, const FileFormat fileformat) {
 
 	/*	Free image.	*/
-	FREE_IMAGE_FORMAT imgtype;		/**/
-	FIMEMORY *stream = nullptr;		/**/
-	FIBITMAP *firsbitmap = nullptr; /**/
-	void *pixelData = nullptr;		/**/
-	size_t bitsPerPixel = 0;		/*	*/
+	FREE_IMAGE_FORMAT imgFormatType; /**/
+	FIMEMORY *stream = nullptr;		 /**/
+	FIBITMAP *firsbitmap = nullptr;	 /**/
+	void *pixelData = nullptr;		 /**/
+	size_t bitsPerPixel = 0;		 /*	*/
 	ImageFormat imageFormat = ImageFormat::Alpha8;
 	size_t pixelSize = 0;					 /*	*/
 	size_t width = 0, height = 0, depth = 0; /*	*/
@@ -38,14 +42,24 @@ Image ImageLoader::loadImage(Ref<IO> &io_in, const FileFormat fileformat) {
 	FreeImage_SeekMemory(stream, 0, SEEK_SET);
 
 	/*	Load image from */
-	imgtype = FreeImage_GetFileTypeFromMemory(stream, imageFileSize);
+	imgFormatType = FreeImage_GetFileTypeFromMemory(stream, 0);
 	FreeImage_SeekMemory(stream, 0, SEEK_SET);
-	firsbitmap = FreeImage_LoadFromMemory(imgtype, stream, 0);
+
+	unsigned int loadFlag = 0;
+	switch (imgFormatType) {
+	case FIF_JPEG:
+		loadFlag = JPEG_ACCURATE;
+		break;
+	default:
+		break;
+	}
+
+	firsbitmap = FreeImage_LoadFromMemory(imgFormatType, stream, loadFlag);
 
 	/*	*/
 	if (firsbitmap == nullptr) {
 		FreeImage_CloseMemory(stream);
-		throw RuntimeException("Failed load image memory: {0} : size {1}", magic_enum::enum_name(imgtype),
+		throw RuntimeException("Failed load image memory: {0} : size {1}", magic_enum::enum_name(imgFormatType),
 							   imageFileSize);
 	}
 

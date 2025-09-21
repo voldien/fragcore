@@ -35,7 +35,7 @@ namespace fragcore {
 		enum class Compression : uint32_t { None, Default };
 
 	  public:
-		ImageLoader() = default;
+		ImageLoader();
 		ImageLoader(const ImageLoader &other);
 		ImageLoader(ImageLoader &&other);
 		ImageLoader &operator=(const ImageLoader &other);
@@ -48,8 +48,6 @@ namespace fragcore {
 			return ImageLoader::loadImage(io_ref, fileformat);
 		}
 		Image loadImage(Ref<IO> &io_in, const FileFormat fileformat = FileFormat::Default);
-
-		void loadImageData(const std::string &path, unsigned int *width, unsigned int *height);
 
 		void saveImage(const std::string &path, const Image &image,
 					   IFileSystem *filesystem = FileSystem::getFileSystem(),

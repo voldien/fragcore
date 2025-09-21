@@ -83,21 +83,21 @@ unsigned int GLHelper::getFilterMode(const fragcore::TextureFilterMode mode, con
 
 unsigned int GLHelper::getCompareMode(const TextureCompareFunc mode) {
 	switch (mode) {
-	case TextureCompareFunc::lessEqual:
+	case TextureCompareFunc::LessEqual:
 		return GL_LEQUAL;
-	case TextureCompareFunc::greaterEqual:
+	case TextureCompareFunc::GreaterEqual:
 		return GL_GEQUAL;
-	case TextureCompareFunc::less:
+	case TextureCompareFunc::Less:
 		return GL_LESS;
-	case TextureCompareFunc::greater:
+	case TextureCompareFunc::Greater:
 		return GL_GREATER;
-	case TextureCompareFunc::equal:
+	case TextureCompareFunc::Equal:
 		return GL_EQUAL;
-	case TextureCompareFunc::notequal:
+	case TextureCompareFunc::NotEqual:
 		return GL_NOTEQUAL;
-	case TextureCompareFunc::always:
+	case TextureCompareFunc::Always:
 		return GL_ALWAYS;
-	case TextureCompareFunc::never:
+	case TextureCompareFunc::Never:
 		return GL_NEVER;
 	default:
 		throw InvalidArgumentException("Invalid address mode : {}", magic_enum::enum_name(mode));
@@ -238,7 +238,11 @@ unsigned int GLHelper::getGraphicFormat(const GraphicFormat graphicFormat) {
 	case GraphicFormat::B5G5R5A1_UNormPack16:
 
 	case GraphicFormat::A1R5G5B5_UNormPack16:
-		break;
+		return GL_RGB5_A1;
+	case GraphicFormat::E5B9G9R9_UFloatPack32:
+		return GL_RGB9_E5;
+	case GraphicFormat::B10G11R11_UFloatPack32:
+		return GL_R11F_G11F_B10F;
 	case GraphicFormat::Depth_32Bit:
 		return GL_DEPTH_COMPONENT32;
 	case GraphicFormat::Depth_24Bit:
@@ -502,25 +506,25 @@ unsigned int GLHelper::getTextureSwizzle(const fragcore::TextureSwizzle swizzle)
 
 unsigned int GLHelper::getBufferType(const BufferDesc::BufferType type) {
 	switch (type) {
-	case BufferDesc::eArray:
+	case BufferDesc::BufferType::eArray:
 		return GL_ARRAY_BUFFER_ARB;
-	case BufferDesc::eElementArray:
+	case BufferDesc::BufferType::eElementArray:
 		return GL_ELEMENT_ARRAY_BUFFER_ARB;
-	case BufferDesc::eUniform:
+	case BufferDesc::BufferType::eUniform:
 		return GL_UNIFORM_BUFFER;
-	case BufferDesc::eTexture:
+	case BufferDesc::BufferType::eTexture:
 		return GL_TEXTURE_BUFFER;
-	case BufferDesc::eShaderStorage:
+	case BufferDesc::BufferType::eShaderStorage:
 		return GL_SHADER_STORAGE_BUFFER;
-	case BufferDesc::eTransformFeedback:
+	case BufferDesc::BufferType::eTransformFeedback:
 		return GL_TRANSFORM_FEEDBACK_BUFFER;
-	case BufferDesc::ePixelPack:
+	case BufferDesc::BufferType::ePixelPack:
 		return GL_PIXEL_PACK_BUFFER;
-	case BufferDesc::ePixelUnpack:
+	case BufferDesc::BufferType::ePixelUnpack:
 		return GL_PIXEL_UNPACK_BUFFER;
-	case BufferDesc::eIndirectDraw:
+	case BufferDesc::BufferType::eIndirectDraw:
 		return GL_DRAW_INDIRECT_BUFFER;
-	case BufferDesc::eIndirectDispatch:
+	case BufferDesc::BufferType::eIndirectDispatch:
 		return GL_DISPATCH_INDIRECT_BUFFER;
 	default:
 		throw InvalidArgumentException("Invalid buffer type {}.", magic_enum::enum_name(type));
@@ -578,6 +582,8 @@ unsigned int GLHelper::getPrimitive(const Primitive primitive) {
 		return GL_TRIANGLE_STRIP;
 	case Primitive::TriangleAdjacant:
 		return GL_TRIANGLES_ADJACENCY;
+	case fragcore::Primitive::Patchs:
+		return GL_PATCHES;
 	default:
 		throw InvalidArgumentException("None matching primitive type : {}.", magic_enum::enum_name(primitive));
 	}

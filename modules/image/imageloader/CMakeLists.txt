@@ -9,7 +9,7 @@ INCLUDE(freeimage)
 
 # Library target.
 ADD_LIBRARY(fragcore-imageloader SHARED ${IMAGE_LOADER_SOURCE_FILES} ${IMAGE_LOADER_HEADER_FILES})
-TARGET_LINK_LIBRARIES(fragcore-imageloader PUBLIC fragcore fragcore-image freeimage)
+TARGET_LINK_LIBRARIES(fragcore-imageloader PUBLIC fragcore fragcore-image FreeImage)
 TARGET_COMPILE_DEFINITIONS(fragcore-imageloader PRIVATE FRAG_CORE_INTERNAL_IMP=1)
 
 #

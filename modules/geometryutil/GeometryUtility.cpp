@@ -122,7 +122,7 @@ OBB GeometryUtility::computeBoundingOBB(float *vertices, const size_t nrVertices
 	return {};
 }
 
-void GeometryUtility::convert2Adjcent(float *vertices, const size_t nrVertices, std::vector<unsigned int> &Indices,
+void GeometryUtility::convert2Adjacent(float *vertices, const size_t nrVertices, std::vector<unsigned int> &Indices,
 									  const size_t stride) {
 
 	// Step 1 - find the two triangles that share every edge

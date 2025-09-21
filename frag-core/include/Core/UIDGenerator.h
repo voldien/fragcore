@@ -69,6 +69,9 @@ namespace fragcore {
 		}
 		bool operator!=(const UIDGenerator &other) noexcept { return !(*this == other); }
 
+		/*	*/
+		template <typename U, typename X> static U getHash(const X &text) noexcept { return std::hash<X>{}(text); }
+
 	  private:						  /*	Attributes.	*/
 		std::atomic<UIDType> nextUID; /*	*/
 		std::atomic<UIDType> uid;	  // TODO resolve.

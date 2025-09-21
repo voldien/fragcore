@@ -69,7 +69,7 @@ namespace fragcore {
 		Vec3T right() const noexcept;
 		Vec3T forward() const noexcept;
 
-	  private:					  /*	Attributes.	*/
+	  protected:					  /*	Attributes.	*/
 		Vec3T position = Vec3T(); /*	Position in world space.	*/
 		QuatT quat = QuatT();	  /*	Rotation in world space.	*/
 		Vec3T scale;			  /*	Scale.	*/
