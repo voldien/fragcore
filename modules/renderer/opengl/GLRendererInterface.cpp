@@ -2,7 +2,6 @@
 #include "Core/IConfig.h"
 #include "FragDef.h"
 #include "GLRenderWindow.h"
-#include "internal_object_type.h"
 #include <../RenderDesc.h>
 #include <../RendererWindow.h>
 #include <../Sampler.h>
@@ -297,7 +296,7 @@ GLRendererInterface::~GLRendererInterface() {
 	/*  Release PBO.    */
 
 	/*  Release default framebuffer.    */
-	delete this->defaultFrameBuffer;
+	// delete this->defaultFrameBuffer;
 	//	this->deleteFrameBuffer(this->defaultFrameBuffer);
 
 	/*  Unbind opengl context.  */
@@ -339,12 +338,17 @@ void GLRendererInterface::createSwapChain() {}
 
 void GLRendererInterface::setDepthMask(bool flag) { glDepthMask(flag ? GL_TRUE : GL_FALSE); }
 
-void GLRendererInterface::enableState(GLRendererInterface::State state) { glEnable(GLHelper::getState(state)); }
+void GLRendererInterface::enableState(GLRendererInterface::State state) {
+	// glEnable(GLHelper::getState(state));
+}
 
-void GLRendererInterface::disableState(GLRendererInterface::State state) { glDisable(GLHelper::getState(state)); }
+void GLRendererInterface::disableState(GLRendererInterface::State state) {
+	// glDisable(GLHelper::getState(state));
+}
 
 bool GLRendererInterface::isStateEnabled(GLRendererInterface::State state) {
-	return glIsEnabled(GLHelper::getState(state));
+	// return glIsEnabled(GLHelper::getState(state));
+	return false;
 }
 
 static void default_callback_debug_gl(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length,

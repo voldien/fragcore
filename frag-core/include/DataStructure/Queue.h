@@ -78,10 +78,14 @@ namespace fragcore {
 			return *obj;
 		}
 
+		T &operator[](const size_t index) { return this->getData()[index]; }
+
+		const T &operator[](const size_t index) const { return this->getData()[index]; }
+
 		/**
 		 *
 		 */
-		 void clear() noexcept {
+		void clear() noexcept {
 			this->head = 0;
 			this->tail = 0;
 		}
@@ -89,12 +93,12 @@ namespace fragcore {
 		/**
 		 *	@return true if queue empty.
 		 */
-		 bool isEmpty() const noexcept { return (this->getSize() == 0); }
+		bool isEmpty() const noexcept { return (this->getSize() == 0); }
 
 		/**
 		 *	@return true if full, false otherwise.
 		 */
-		 bool isFull() const noexcept { return (this->getSize() == this->getReserved()); }
+		bool isFull() const noexcept { return (this->getSize() == this->getReserved()); }
 
 		/**
 		 *	Resize queue.
@@ -136,12 +140,12 @@ namespace fragcore {
 
 			Iterator<T> &operator+=([[maybe_unused]] int n) override { return *this; }
 
-			Iterator<T> &operator-=([[maybe_unused]]int n) override { return *this; }
+			Iterator<T> &operator-=([[maybe_unused]] int n) override { return *this; }
 
-			Iterator<T> &operator+([[maybe_unused]]int n) override { return *this; }
+			Iterator<T> &operator+([[maybe_unused]] int n) override { return *this; }
 
-			Iterator<T> &operator-([[maybe_unused]]int n) override { return *this; }
-			Iterator<T> &operator[]([[maybe_unused]]int index) const override { return *this; }
+			Iterator<T> &operator-([[maybe_unused]] int n) override { return *this; }
+			Iterator<T> &operator[]([[maybe_unused]] int index) const override { return *this; }
 
 		  private:
 			int index;
@@ -153,9 +157,9 @@ namespace fragcore {
 		QueueIterator end() const noexcept { return QueueIterator(this, this->head); }
 
 	  private:
-		 int getTypeSize() const noexcept { return sizeof(T); }
+		int getTypeSize() const noexcept { return sizeof(T); }
 
-		 T *getData() const noexcept { return this->mdata; }
+		T *getData() const noexcept { return this->mdata; }
 
 	  public: /*  */
 		Queue &operator=(const Queue &que) {

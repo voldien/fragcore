@@ -2,7 +2,6 @@
 #include "GLHelper.h"
 #include "GraphicFormat.h"
 #include "RenderDesc.h"
-#include "internal_object_type.h"
 #include <GL/glew.h>
 #include <fmt/core.h>
 #include <magic_enum.hpp>
@@ -604,36 +603,37 @@ unsigned int GLHelper::getAttributeDataType(const GeometryDesc::AttributeType ty
 	}
 }
 
-unsigned int GLHelper::getState(const IRenderer::State state) {
-	switch (state) {
-	case IRenderer::State::DepthTest:
-		return GL_DEPTH_TEST;
-	case IRenderer::State::StencilTest:
-		return GL_STENCIL_TEST;
-	case IRenderer::State::ScissorTest:
-		return GL_SCISSOR_TEST;
-	case IRenderer::State::AlphaTest:
-		return GL_ALPHA_TEST;
-	case IRenderer::State::Blend:
-		return GL_BLEND;
-	case IRenderer::State::Cullface:
-		return GL_CULL_FACE;
-	case IRenderer::State::Dither:
-		return GL_DITHER;
-	case IRenderer::State::SRGB:
-		return GL_FRAMEBUFFER_SRGB;
-	case IRenderer::State::MultiSampling:
-		return GL_MULTISAMPLE;
-	case IRenderer::State::DiscardRasterization:
-		return GL_RASTERIZER_DISCARD;
-	case IRenderer::State::SampleShading:
-		return GL_SAMPLE_SHADING;
-	case IRenderer::State::SampleAlphaCoverage:
-		return GL_SAMPLE_ALPHA_TO_COVERAGE;
-	default:
-		throw InvalidArgumentException("Invalid state - {}.", magic_enum::enum_name(state));
-	}
-}
+// unsigned int GLHelper::getState(const IRenderer::State state) {
+// 	switch (state) {
+// 	case IRenderer::State::DepthTest:
+// 		return GL_DEPTH_TEST;
+// 	case IRenderer::State::StencilTest:
+// 		return GL_STENCIL_TEST;
+// 	case IRenderer::State::ScissorTest:
+// 		return GL_SCISSOR_TEST;
+// 	case IRenderer::State::AlphaTest:
+// 		return GL_ALPHA_TEST;
+// 	case IRenderer::State::Blend:
+// 		return GL_BLEND;
+// 	case IRenderer::State::Cullface:
+// 		return GL_CULL_FACE;
+// 	case IRenderer::State::Dither:
+// 		return GL_DITHER;
+// 	case IRenderer::State::SRGB:
+// 		return GL_FRAMEBUFFER_SRGB;
+// 	case IRenderer::State::MultiSampling:
+// 		return GL_MULTISAMPLE;
+// 	case IRenderer::State::DiscardRasterization:
+// 		return GL_RASTERIZER_DISCARD;
+// 	case IRenderer::State::SampleShading:
+// 		return GL_SAMPLE_SHADING;
+// 	case IRenderer::State::SampleAlphaCoverage:
+// 		return GL_SAMPLE_ALPHA_TO_COVERAGE;
+// 	default:
+// 		throw InvalidArgumentException("Invalid state - {}.", magic_enum::enum_name(state));
+// 	}
+// }
+
 unsigned int GLHelper::getTextureFilterModeNoMip(Texture::FilterMode format) {
 	switch (format) {
 	case Texture::FilterMode::eNearest:
@@ -659,15 +659,15 @@ unsigned int GLHelper::getBlendFunc(BlendFunc func) {
 	switch (func) {
 	case BlendFunc::Zero:
 		return GL_ZERO;
-	case BlendFunc ::eOne:
+	case BlendFunc ::One:
 		return GL_ONE;
-	case BlendFunc::eSrcColor:
+	case BlendFunc::SrcColor:
 		return GL_SRC_COLOR;
-	case BlendFunc::eOneMinusSrcColor:
+	case BlendFunc::OneMinusSrcColor:
 		return GL_ONE_MINUS_SRC_COLOR;
-	case BlendFunc::eSrcAlpha:
+	case BlendFunc::SrcAlpha:
 		return GL_SRC_ALPHA;
-	case BlendFunc::eOneMinusSrcAlpha:
+	case BlendFunc::OneMinusSrcAlpha:
 		return GL_ONE_MINUS_SRC_ALPHA;
 	default:
 		throw InvalidArgumentException("");

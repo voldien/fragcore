@@ -116,6 +116,7 @@ namespace fragcore {
 	};
 
 	enum class CullingMode {
+		None,
 		Front,
 		Back,
 		FrontAndBack,
@@ -127,19 +128,19 @@ namespace fragcore {
 	 */
 	enum class BlendFunc {
 		Zero = 0, /*  */
-		eOne = 1, /*  */
-		eSrcColor = 2,
-		eOneMinusSrcColor = 3,
-		eSrcAlpha = 4,
-		eOneMinusSrcAlpha = 5,
-		eConstantAlpha = 6,
+		One = 1,  /*  */
+		SrcColor = 2,
+		OneMinusSrcColor = 3,
+		SrcAlpha = 4,
+		OneMinusSrcAlpha = 5,
+		ConstantAlpha = 6,
 	};
 
 	/**
 	 * @brief
 	 */
 	enum class BlendEqu {
-		eNoEqu,			 /*	*/
+		NoEqu,			 /*	*/
 		Addition,		 /*	*/
 		Subtract,		 /*	*/
 		ReverseSubtract, /*	*/

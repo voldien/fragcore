@@ -101,7 +101,7 @@ namespace fragcore {
 
 			this->numChildren++;
 			if (!this->child) {
-				this->setChild(pchild);	/*	Assign Child.	*/
+				this->setChild(pchild); /*	Assign Child.	*/
 				child->parent = this;	/*	Assign parent*/
 			} else {
 

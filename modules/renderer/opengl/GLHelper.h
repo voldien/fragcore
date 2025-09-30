@@ -17,6 +17,9 @@
  */
 #ifndef _FRAGCORE_GL_HELPER_H_
 #define _FRAGCORE_GL_HELPER_H_ 1
+#include "IRenderer.h"
+#include "RenderDesc.h"
+#include "Texture.h"
 #include <FragCore.h>
 #include <GL/glew.h>
 
@@ -39,6 +42,99 @@ namespace fragcore {
 	extern FVDECLSPEC void resetErrorFlag();
 	extern FVDECLSPEC bool validateExistingProgram();
 	extern FVDECLSPEC std::string getProgramValidateString();
+
+	/**
+	 *
+	 */
+	class FVDECLSPEC GLHelper {
+	  public:
+		/**
+		 * Helper functions.
+		 */
+		static void addMarkerLabel(unsigned int identifier, unsigned int object, const fragcore::MarkerDebug *debug);
+
+		/*	*/
+		static unsigned int getWrapMode(const fragcore::TextureWrappingMode mode);
+
+		/*	*/
+		static unsigned int getFilterMode(const fragcore::TextureFilterMode mode,
+										  const fragcore::TextureFilterMode mips);
+
+		/*	*/
+		static unsigned int getCompareMode(const fragcore::TextureCompareFunc mode);
+
+		/*	*/
+		static unsigned int getGraphicFormat(const fragcore::GraphicFormat graphicFormat);
+
+		/*	*/
+		static unsigned int getTextureFormat(const fragcore::ImageFormat textureFormat, unsigned int *pixelType);
+
+		/*	*/
+		static unsigned int getTextureFormat(const fragcore::TextureDesc::DataPixelFormat format);
+		static unsigned int getInternalTextureFormat(fragcore::TextureDesc::DataPixelFormat format, bool sRGB,
+													 fragcore::TextureDesc::Compression compression,
+													 fragcore::TextureDesc::PixelDataType type);
+
+		/*	*/
+		static unsigned int getTextureTarget(const fragcore::TextureDesc::TextureTarget target,
+											 const int nrSamples = 1);
+
+		/*	*/
+		static unsigned int getTextureType(const fragcore::TextureDesc::PixelDataType type);
+
+		/*	*/
+		static unsigned int getTextureSwizzle(const fragcore::TextureSwizzle swizzle);
+
+		/*	*/
+		static unsigned int getBufferType(const fragcore::BufferDesc::BufferType type);
+
+		/*	*/
+		static unsigned int getBufferHint(const fragcore::BufferDesc::BufferHint hint);
+
+		/*	*/
+		static unsigned int getPrimitive(const Primitive primitive);
+
+		/*	*/
+		static unsigned int getAttributeDataType(const fragcore::GeometryDesc::AttributeType type);
+
+		/*	*/
+		//static unsigned int getState(const fragcore::State state);
+
+		/*	*/
+		static unsigned int getTextureFilterModeNoMip(fragcore::Texture::FilterMode format);
+
+		/*	*/
+		static unsigned int getBlendEqu(fragcore::BlendEqu equ);
+
+		/*	*/
+		static unsigned int getBlendFunc(fragcore::BlendFunc func);
+
+		/*	*/
+		static unsigned int getClearBitMask(fragcore::CLEARBITMASK clearbitmask);
+
+		// TODO: remove
+		//  Texture.
+		static unsigned int getTextureWrapMode(const fragcore::Texture::WrapMode mode);
+
+		/*	*/
+		static unsigned int getTextureFilterMode(fragcore::Texture::FilterMode mode);
+
+		/*	*/
+		static unsigned int getTextureCompareMode(fragcore::Texture::CompareFunc compareFunc);
+
+		/*	*/
+		static unsigned getImageInternalFormat(fragcore::Texture::Format format);
+
+		/*	*/
+		static unsigned int getAccess(fragcore::Texture::MapTarget target);
+
+		/*	*/
+		static unsigned int getTextureGLFormat(fragcore::Texture::Format format);
+
+		/*	*/
+		static fragcore::Texture::Format getTextureFormatUserSpace(unsigned int format);
+	};
+
 } // namespace fragcore
 
 #endif

@@ -20,8 +20,10 @@
 #include "../FragDef.h"
 #include "../Math/Random.h"
 #include "../Math3D/Math3D.h"
+#include "Bitwise.h"
 #include <cfloat>
 #include <cmath>
+#include <type_traits>
 #include <vector>
 
 namespace fragcore {
@@ -31,19 +33,6 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC Math {
 	  public:
-		template <typename T> constexpr static T removeFlag(const T value, const T flag) noexcept {
-			static_assert(std::is_integral_v<T>, "Must be a integer type.");
-			return value & ~flag;
-		}
-		template <typename T> constexpr static T addFlag(const T value, const T flag) noexcept {
-			static_assert(std::is_integral_v<T>, "Must be a integer type.");
-			return value | flag;
-		}
-		template <typename T> constexpr static bool isFlagSet(const T value, const T flag) noexcept {
-			static_assert(std::is_integral_v<T>, "Must be a integer type.");
-			return (value & flag) == flag;
-		}
-
 		/**
 		 *
 		 */
