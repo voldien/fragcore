@@ -100,29 +100,21 @@ namespace fragcore {
 
 		/**
 		 * @brief
-		 *
-		 * @return std::vector<CPUPackage>
 		 */
 		static std::vector<CPUPackage> getCPUPackages();
 
 		/**
 		 * @brief
-		 *
-		 * @return unsigned int
 		 */
 		static unsigned int getCPUCoreCount();
 
 		/**
 		 * @brief
-		 *
-		 * @return unsigned int
 		 */
 		static unsigned int getCPUCacheLine(const size_t level = 2);
 
 		/**
 		 * @brief Get the Endianness object
-		 *
-		 * @return Endianness
 		 */
 		static Endianness getEndianness() noexcept;
 
@@ -138,37 +130,27 @@ namespace fragcore {
 	  public: /*	System Memory Information.	*/
 		/**
 		 * @brief
-		 *
-		 * @return unsigned long int
 		 */
 		static unsigned long int systemMemorySize() noexcept;
 
 		/**
 		 * @brief Get the Page Size object
-		 *
-		 * @return unsigned int
 		 */
 		static unsigned int getPageSize() noexcept;
 
 	  public: /*	User Space Information.	*/
 		/**
 		 * @brief Get the Appliation Name object
-		 *
-		 * @return const char*
 		 */
 		static std::string getApplicationName();
 
 		/**
 		 * @brief Get the name of the current user.
-		 *
-		 * @return const char*
 		 */
 		static const char *getUserName();
 
 		/**
 		 * @brief Get the Current Directory object
-		 *
-		 * @return const char*
 		 */
 		static std::string getCurrentDirectory();
 

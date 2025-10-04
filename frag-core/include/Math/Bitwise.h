@@ -26,19 +26,19 @@ namespace fragcore {
 	class FVDECLSPEC Bitwise {
 	  public:
 		/*	*/
-		template <typename T> constexpr static T removeFlag(const T value, const T flag) noexcept {
+		template <typename T> static constexpr T removeFlag(const T value, const T flag) noexcept {
 			static_assert(std::is_integral_v<T> || std::is_enum_v<T>, "Must be a integer or enum type.");
 			return static_cast<T>(static_cast<size_t>(value) & static_cast<size_t>(~flag));
 		}
 
 		/*	*/
-		template <typename T> constexpr static T addFlag(const T value, const T flag) noexcept {
+		template <typename T> static constexpr T addFlag(const T value, const T flag) noexcept {
 			static_assert(std::is_integral_v<T> || std::is_enum_v<T>, "Must be a integer or enum type.");
 			return static_cast<T>(static_cast<size_t>(value) | static_cast<size_t>(flag));
 		}
 
 		/*	*/
-		template <typename T> constexpr static bool isFlagSet(const T value, const T flag) noexcept {
+		template <typename T> static constexpr bool isFlagSet(const T value, const T flag) noexcept {
 			static_assert(std::is_integral_v<T> || std::is_enum_v<T>, "Must be a integer or enum type.");
 			return static_cast<T>((static_cast<size_t>(value) & static_cast<size_t>(flag))) == flag;
 		}

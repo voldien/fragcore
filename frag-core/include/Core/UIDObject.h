@@ -26,6 +26,8 @@ namespace fragcore {
 	 * the UID of object.
 	 */
 	class FVDECLSPEC UIDObject {
+		// using
+		// TODO: declare UID generator namespace.
 	  public:
 		UIDObject() : UIDObject(UIDObject::generator) {}
 		UIDObject(UIDGenerator<uint32_t> &uidGenerator) { this->setUID(uidGenerator.getNextUID()); }

@@ -64,6 +64,9 @@ OPTION(BUILD_WITH_SAMPLES "Build sample codes" OFF)
 OPTION(BUILD_MODULES "Build module plugins" OFF)
 OPTION(BUILD_WITH_OPENMP "Enable OpenMP." OFF)
 
+OPTION(FRAGCORE_WITH_MEM_JEMALLOC "Enable malloc replacement (http://www.canonware.com/jemalloc)" OFF)
+MARK_AS_ADVANCED(FRAGCORE_WITH_MEM_JEMALLOC)
+
 # Specific Modules.
 OPTION(BUILD_EXTERNAL_RENDERER "Building external renderer libraries" ON)
 OPTION(BUILD_EXTERNAL_AUDIO "Building external audio libraries" ON)
@@ -165,7 +168,7 @@ SET(CMAKE_CXX_STANDARD_REQUIRED ON)
 SET(CMAKE_CXX_EXTENSIONS OFF)
 
 # ################################
-# Inlucde external resources.
+# Include external resources.
 # ################################
 INCLUDE(magicEnum)
 
@@ -189,6 +192,16 @@ IF(BUILD_WITH_OPENMP)
 	FIND_PACKAGE(OpenMP QUIET)
 ENDIF()
 
+IF(FRAGCORE_WITH_MEM_JEMALLOC)
+	FIND_PACKAGE(JeMalloc)
+	IF(NOT JeMalloc_FOUND)
+		FIND_PACKAGE(PkgConfig REQUIRED)
+		pkg_check_modules (JEMALLOC jemalloc)
+
+		pkg_search_module(JEMALLOC REQUIRED jemalloc)
+	ENDIF()
+ENDIF()
+
 # GCC compiler flag options.
 IF((CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX) AND NOT CMAKE_COMPILER_IS_MINGW)
 
@@ -206,7 +219,6 @@ IF((CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX) AND NOT CMAKE_COMPILER_
 	IF(CMAKE_BUILD_TYPE MATCHES Debug)
 		MESSAGE(STATUS "Compile for debug.")
 		ADD_DEFINITIONS(-g3 -O0)
-		#ADD_DEFINITIONS(-D_GLIBCXX_ASSERTIONS)
 	ENDIF()
 
 	#

@@ -30,7 +30,9 @@ namespace fragcore {
 	 *
 	 * @tparam T
 	 */
-	template <typename T> class PoolAllocator {
+	template <typename T> class FVDECLSPEC PoolAllocator {
+		static constexpr bool isClass = std::is_class_v<T>;
+
 	  public:
 		using PoolAllactorItem = struct poolallactoritem {
 			T data;
@@ -61,7 +63,7 @@ namespace fragcore {
 
 		PoolAllocator(const unsigned int num) : PoolAllocator() { this->resize(num); }
 
-		~PoolAllocator() { delete[] this->item; }
+		~PoolAllocator() { clean(); }
 
 		/**
 		 *
@@ -166,7 +168,12 @@ namespace fragcore {
 		 *
 		 */
 		void clean() noexcept {
-			free(this->item);
+			if (isClass) {
+				delete[] this->item;
+			} else {
+				free(this->item);
+			}
+
 			this->item = nullptr;
 			this->mReserved = 0;
 			this->nrOfElements = 0;
@@ -190,40 +197,48 @@ namespace fragcore {
 		 *
 		 */
 		/*	TODO Fix, still some bugs!	*/
-		void resize(const unsigned int size) {
-			unsigned int index = 0;
+		void resize(const size_t nrRequestedElements) {
+			size_t index = 0;
 			const unsigned int itemSize = this->getItemSize();
 
-			assert(size >= 0);
+			assert(nrRequestedElements >= 0);
 
 			/*  No allocation.  */
 			if (this->reserved() == 0) {
-				this->item = static_cast<PoolAllactorItem *>(realloc(this->item, itemSize * size));
+				this->item = static_cast<PoolAllactorItem *>(realloc(this->item, itemSize * nrRequestedElements));
 
 				/*	*/
-				for (index = 0; index < size - 1; index++) {
+				for (index = 0; index < nrRequestedElements - 1; index++) {
 					item[index].next = &item[index + 1];
-					//item[index].data = T();
-				}
-				item[size - 1].next = nullptr;
 
+					T it;
+					if (isClass) {
+						std::memcpy(&item[index].data, &it, sizeof(T));
+
+						item[index].data = T();
+					}
+				}
+				item[nrRequestedElements - 1].next = nullptr;
 			} else {
 				/*  */
-				if (size < this->reserved()) {
-					throw InvalidArgumentException("Can no be downsized from {} to {}.", this->reserved(), size);
+				if (nrRequestedElements < this->reserved()) {
+					throw InvalidArgumentException("Can not be downsized from {} to {}.", this->reserved(),
+												   nrRequestedElements);
 				}
 
 				/*  Reallocate buffer.  */
 				index = this->reserved();
-				this->item = static_cast<PoolAllactorItem *>(realloc(this->item, itemSize * size));
+				this->item = static_cast<PoolAllactorItem *>(realloc(this->item, itemSize * nrRequestedElements));
 
 				/*	*/
 				PoolAllactorItem *lastItem = &this->item[index];
 				PoolAllactorItem *subpool = lastItem;
-				for (; index < size - 1; index++) {
+				for (; index < nrRequestedElements - 1; index++) {
 					lastItem->next = &item[index + 1];
 					lastItem = lastItem->next;
-					//lastItem->data = T();
+					if (isClass) {
+						lastItem->data = std::move(T());
+					}
 				}
 				lastItem->next = nullptr;
 
@@ -231,7 +246,7 @@ namespace fragcore {
 				this->item->next = subpool;
 			}
 
-			this->mReserved = size;
+			this->mReserved = nrRequestedElements;
 		}
 
 		T *getLast() noexcept { return &this->item[this->mReserved - 1].data; }
@@ -245,7 +260,7 @@ namespace fragcore {
 		 *
 		 * @return
 		 */
-		unsigned int getItemSize() const noexcept { return sizeof(PoolAllactorItem); }
+		constexpr unsigned int getItemSize() const noexcept { return sizeof(PoolAllactorItem); }
 
 	  private:							  /*	attributes.	*/
 		PoolAllactorItem *item = nullptr; /*	Pool data.	*/

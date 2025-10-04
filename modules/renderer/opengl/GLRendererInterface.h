@@ -56,28 +56,6 @@ namespace fragcore {
 		virtual void createSwapChain();
 
 		/**
-		 *	Set depth mask.
-		 */
-		virtual void setDepthMask(bool flag);
-
-		/**
-		 *	Enable state.
-		 */
-		virtual void enableState(IRenderer::State state);
-
-		/**
-		 *	Disable state.
-		 */
-		virtual void disableState(IRenderer::State state);
-
-		/**
-		 *
-		 * @param state
-		 * @return
-		 */
-		virtual bool isStateEnabled(IRenderer::State state);
-
-		/**
 		 * Set debug state.
 		 * @param enable
 		 */

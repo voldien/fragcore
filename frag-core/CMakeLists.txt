@@ -115,9 +115,12 @@ SET(FRAG_CORE_INCLUDE_SUB_DIR
 ADD_LIBRARY(fragcore ${SOURCE_FILES} ${HEADER_FILES}
  							${OPEN_SIMPLEX_NOISE_SOURCE} ${PCG_C_BASIC_SOURCE}
 							${MISC_SOURCE})
-TARGET_COMPILE_FEATURES(fragcore PUBLIC cxx_constexpr cxx_alias_templates cxx_raw_string_literals
+
+TARGET_COMPILE_FEATURES(fragcore PUBLIC cxx_std_17 cxx_constexpr cxx_alias_templates cxx_raw_string_literals
 cxx_variadic_templates cxx_uniform_initialization cxx_right_angle_brackets cxx_nullptr
-cxx_generic_lambdas cxx_override cxx_noexcept cxx_aggregate_default_initializers)
+cxx_generic_lambdas cxx_override cxx_noexcept cxx_aggregate_default_initializers
+cxx_relaxed_constexpr cxx_decltype_auto)
+
 ADD_DEPENDENCIES(fragcore taskSch infoware cxxexcept)
 
 #
@@ -126,7 +129,7 @@ TARGET_COMPILE_DEFINITIONS(fragcore PRIVATE FRAG_CORE_INTERNAL_IMP=1 PUBLIC FV_U
 IF(EIGEN3_FOUND)
 	TARGET_COMPILE_DEFINITIONS(fragcore PUBLIC FRAGCORE_USE_EIGEN=1)
 ENDIF()
-TARGET_COMPILE_FEATURES(fragcore PUBLIC cxx_std_17 cxx_constexpr)
+
 
 #
 TARGET_LINK_LIBRARIES(fragcore PUBLIC Eigen3::Eigen taskSch cxxexcept spdlog_header_only fmt magic_enum PRIVATE stdc++ atomic dl ${ZLIB_LIBRARIES}
@@ -144,14 +147,16 @@ TARGET_INCLUDE_DIRECTORIES(fragcore PRIVATE ${ZIP_INCLUDE_DIRS}
 											$<INSTALL_INTERFACE:${FRAG_CORE_INCLUDE}>
 )
 
-#
+# OpenMP Support.
 IF(OpenMP_FOUND AND OpenMP_CXX_FOUND AND BUILD_WITH_OPENMP)
 	TARGET_LINK_LIBRARIES(fragcore PRIVATE m pthread PUBLIC OpenMP::OpenMP_CXX)
 	TARGET_COMPILE_OPTIONS(fragcore PUBLIC ${OpenMP_CXX_FLAGS})
 ENDIF()
 
-#
-
+# Jemalloc allocation support.
+IF(FRAGCORE_WITH_MEM_JEMALLOC)
+	TARGET_LINK_LIBRARIES(fragcore INTERFACE ${JEMALLOC_LIBRARIES})
+ENDIF()
 
 # Enable FPIC if shared library.
 IF (BUILD_SHARED_LIBS AND CMAKE_SIZEOF_VOID_P EQUAL 8)

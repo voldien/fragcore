@@ -18,6 +18,7 @@
 #ifndef _FRAGCORE_UID_STRUCTURE_H_
 #define _FRAGCORE_UID_STRUCTURE_H_ 1
 #include <cstddef>
+#include <type_traits>
 
 namespace fragcore {
 
@@ -25,6 +26,8 @@ namespace fragcore {
 	 * @brief
 	 */
 	template <typename T = size_t> struct UIDStruct {
+		static_assert(std::is_integral_v<T> || std::is_enum_v<T>, "Must be a integer type.");
+
 	  public:
 		/*	*/
 		using UIDType = T;

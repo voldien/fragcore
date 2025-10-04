@@ -46,6 +46,7 @@ namespace fragcore {
 #include <memory>
 namespace fragcore {
 	template <typename T> using Ref = std::shared_ptr<T>;
+	template<typename T> using Pointer = std::unique_ptr<T>;
 }
 #else
 #include "Core/Ref.h"

@@ -46,8 +46,6 @@ apt install libbullet-dev
 
 Nvidia PhysX
 
-
-
 ## Communication Protocols
 
 There are couple communication protocol supported. Modbus,CAN, Serial, CURL (FTP)
@@ -69,4 +67,3 @@ apt install libserialport-dev
 ```bash
 apt install 
 ```
-

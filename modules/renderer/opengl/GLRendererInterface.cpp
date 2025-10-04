@@ -266,25 +266,11 @@ GLRendererInterface::GLRendererInterface(const IConfig *config) {
 		this->supportedLanguages = GLSL;
 	}
 
-	/*	Set default state.	*/
-	this->enableState(State::DepthTest);
-	this->disableState(State::StencilTest);
-	this->disableState(State::Blend);
-	this->enableState(State::Dither);
-	this->enableState(State::Cullface);
-	this->setDepthMask(true);
-
-	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_FALSE);
+	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 	glDepthFunc(GL_LESS);
-	glCullFace(GL_FRONT_AND_BACK);
+	glCullFace(GL_BACK);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	if (this->alpha) {
-		glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-	}
 	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
-	if (this->gamma) {
-		this->enableState(GLRendererInterface::State::SRGB);
-	}
 
 	this->setDebug(this->debug);
 
@@ -335,21 +321,6 @@ void GLRendererInterface::setCurrentWindow(RendererWindow *window) {
 }
 
 void GLRendererInterface::createSwapChain() {}
-
-void GLRendererInterface::setDepthMask(bool flag) { glDepthMask(flag ? GL_TRUE : GL_FALSE); }
-
-void GLRendererInterface::enableState(GLRendererInterface::State state) {
-	// glEnable(GLHelper::getState(state));
-}
-
-void GLRendererInterface::disableState(GLRendererInterface::State state) {
-	// glDisable(GLHelper::getState(state));
-}
-
-bool GLRendererInterface::isStateEnabled(GLRendererInterface::State state) {
-	// return glIsEnabled(GLHelper::getState(state));
-	return false;
-}
 
 static void default_callback_debug_gl(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length,
 									  const GLchar *message, GLvoid *userParam) {

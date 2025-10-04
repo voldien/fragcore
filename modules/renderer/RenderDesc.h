@@ -103,23 +103,36 @@ namespace fragcore {
 		ClampBorder,   /*  */
 	};
 
+	/*	*/
 	enum class TextureCompareFunc : uint32_t {
 		NoCompare,	  /*  */
-		LessEqual,	  /*  */
-		GreaterEqual, /*  */
 		Less,		  /*  */
+		LessEqual,	  /*  */
 		Greater,	  /*  */
+		GreaterEqual, /*  */
 		Equal,		  /*  */
 		NotEqual,	  /*  */
 		Always,		  /*  */
 		Never,		  /*  */
 	};
 
+	/**
+	 *
+	 */
 	enum class CullingMode {
-		None,
-		Front,
-		Back,
-		FrontAndBack,
+		None,		  /*	*/
+		Front,		  /*	*/
+		Back,		  /*	*/
+		FrontAndBack, /*	*/
+	};
+
+	/**
+	 *
+	 */
+	enum class FillMode {
+		Fill,  /*	*/
+		Line,  /*	*/
+		Point, /*	*/
 	};
 
 	/**
@@ -288,6 +301,7 @@ namespace fragcore {
 		unsigned int numlevel = 0;	 /*	Number of mipmaps.	*/
 		unsigned int usemipmaps = 0; /*	Using mipmaps	*/
 		unsigned int nrSamples = 0;	 /*	Enable Multisampling.   */
+		bool fixedSamples = true;
 
 		/*  Set swizzle.    */
 		TextureSwizzle Swizzler; /*  */

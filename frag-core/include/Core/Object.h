@@ -21,33 +21,35 @@
 #include "UIDObject.h"
 
 namespace fragcore {
+
 	/**
 	 * @brief Base abstract object for scene
 	 * objects.
 	 */
 	class FVDECLSPEC Object : public UIDObject {
+		// using
+		// TODO: declare UID generator namespace.
 	  public:
 		Object() = default;
 		Object(const std::string &_name) : name(_name) {}
 		Object(Object &&other) { this->name = std::exchange(other.name, nullptr); }
 		Object(const Object &other) = default;
 		Object &operator=(Object &&other) {
+			UIDObject::operator=(other);
 			this->name = std::exchange(other.name, nullptr);
 			return *this;
 		}
 		virtual ~Object() = default;
 
 		virtual void setName(const std::string &name) { this->name.assign(name); }
-
 		virtual void setName(std::string &&name) { this->name = std::move(name); }
 		virtual void setName(const char *c_name) { this->name = c_name; }
 
 		virtual std::string getName() noexcept { return this->name; }
-
 		virtual const std::string &getName() const noexcept { return this->name; }
 
-		template <typename T>  T &as() noexcept { return static_cast<T &>(*this); }
-		template <typename T>  const T &as() const noexcept { return static_cast<const T &>(*this); }
+		template <typename T> T &as() noexcept { return static_cast<T &>(*this); }
+		template <typename T> const T &as() const noexcept { return static_cast<const T &>(*this); }
 
 	  protected: /*	*/
 		Object &operator=(const Object &object) {

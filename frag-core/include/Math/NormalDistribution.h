@@ -61,8 +61,6 @@ namespace fragcore {
 
 	/**
 	 * @brief
-	 *
-	 * @tparam U
 	 */
 	template <typename U> class FVDECLSPEC RandomUniform : public IRandom<U> {
 	  public:
@@ -81,8 +79,6 @@ namespace fragcore {
 
 	/**
 	 * @brief
-	 *
-	 * @tparam U
 	 */
 	template <typename U> class FVDECLSPEC RandomNormal : public IRandom<U> {
 	  public:
@@ -103,8 +99,6 @@ namespace fragcore {
 
 	/**
 	 * @brief
-	 *
-	 * @tparam U
 	 */
 	template <typename U> class FVDECLSPEC RandomBernoulli : public IRandom<U> {
 	  public:
