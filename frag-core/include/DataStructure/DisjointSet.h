@@ -72,7 +72,7 @@ namespace fragcore {
 			return max;
 		}
 
-	  public:
+
 		DisjointSet() {
 			this->set = nullptr;
 			this->reserved = 0;

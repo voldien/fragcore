@@ -66,7 +66,7 @@ namespace fragcore {
 		/**
 		 *	@return
 		 */
-		virtual T &operator->() const { return reinterpret_cast<T &>(*this->iterator); }
+		virtual T &operator->() const { return (*this->iterator); }
 
 		/**
 		 *	@return
@@ -81,14 +81,14 @@ namespace fragcore {
 		/**
 		 *	@return
 		 */
-		virtual inline bool operator==(const Iterator &iterator) noexcept {
+		virtual  bool operator==(const Iterator &iterator) noexcept {
 			return this->iterator == iterator.iterator;
 		}
 
 		/**
 		 *	@return
 		 */
-		virtual inline bool operator!=(const Iterator &iterator) noexcept {
+		virtual  bool operator!=(const Iterator &iterator) noexcept {
 			return this->iterator != iterator.iterator;
 		}
 

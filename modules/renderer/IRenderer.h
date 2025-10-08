@@ -23,40 +23,12 @@
 #include <Core/IConfig.h>
 
 namespace fragcore {
-	/**
-	 *
-	 */
-	enum class CLEARBITMASK : uint32_t { // TODO rename
-		Color = 0x1,					 /*	Clear color.    */
-		Depth = 0x2,					 /*	Clear depth.    */
-		Stencil = 0x4,					 /*	Clear stencil.  */
-	};
 
 	/**
 	 *
 	 */
 	class FVDECLSPEC IRenderer : public ICompute {
 	  public:
-		/*	TODO rename and fix enum names.	*/
-		enum class State {
-			DepthTest = 0x1, /*	Perform depth test on pixels.   */
-			StencilTest,	 /*	Perform stencil test.   */
-			ScissorTest,	 /*  */
-			AlphaTest,		 /*  */
-			DepthMask,
-			/*	Perform .	*/ // TODO determine how to deal with depth, stencil and etc.
-			Blend,			   /*	Set Color Blend. */
-			Cullface,		   /*	Set Culling face. */
-			Dither,			   /*	Set Color dithering.    */
-			SRGB,
-			MultiSampling,
-			SampleShading, /*   */
-			// GL_SAMPLE_COVERAGE
-			SampleAlphaCoverage,  /*    */
-			DiscardRasterization, /*  */
-
-		};
-
 		// TODO make it less state machine and allow it to become more modern.
 		IRenderer() = default;
 		IRenderer(const IRenderer &other) = delete;
@@ -64,18 +36,12 @@ namespace fragcore {
 		~IRenderer() override = default;
 
 		/**
-		 *
-		 * @param x
-		 * @param y
-		 * @param width
-		 * @param height
-		 * @return
+		 * @brief
 		 */
 		virtual RendererWindow *createWindow(int x, int y, int width, int height) = 0;
 
 		/**
-		 *
-		 * @param window
+		 * @brief
 		 */
 		virtual void setCurrentWindow(RendererWindow *window) = 0;
 
@@ -119,7 +85,7 @@ namespace fragcore {
 		virtual void getCapability(Capability *capability) = 0;
 
 		/**
-		 *
+		 * @brief
 		 */
 		virtual void getFeatures(Features *features) = 0;
 

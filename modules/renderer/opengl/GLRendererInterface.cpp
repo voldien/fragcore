@@ -296,13 +296,13 @@ GLRendererInterface::~GLRendererInterface() {
 	SDL_QuitSubSystem(SDL_INIT_VIDEO);
 }
 
-RendererWindow *GLRendererInterface::createWindow(int x, int y, int width, int height) {
+RendererWindow *GLRendererInterface::createWindow(int window_x, int window_y, int width, int height) {
 
 	Ref<GLRendererInterface> rendRef(this);
 
 	GLRenderWindow *renderWindow = new GLRenderWindow(rendRef);
 
-	renderWindow->setPosition(x, y);
+	renderWindow->setPosition(window_x, window_y);
 	renderWindow->setSize(width, height);
 
 	/*	Cleanup.	*/
@@ -431,8 +431,6 @@ void GLRendererInterface::setDebug(bool enable) {
 	callback = (PROC)SDL_GL_GetProcAddress("glDebugMessageCallback");
 
 	if (enable) {
-		PROC callbackARB;
-		PROC callbackAMD;
 
 		/*	Set Debug message callback.	*/
 		if (callback) {
@@ -454,8 +452,6 @@ void GLRendererInterface::setDebug(bool enable) {
 }
 
 const char *GLRendererInterface::getShaderVersion(ShaderLanguage language) const {
-	const char *strcore;
-	bool profile;
 
 	if (language == GLSL) {
 		/*  Lookup table.   */
@@ -491,12 +487,9 @@ const char *GLRendererInterface::getShaderVersion(ShaderLanguage language) const
 		default:
 			throw RuntimeException("OpenGL version {} is not supported", glVersion);
 		}
-		// TODO add core and compatibility on the name.
-		profile = this->useCoreProfile;
-		strcore = profile ? "core" : "";
 	}
 	if (language == SPIRV) {
-		return "100";
+		return "460";
 	}
 	throw InvalidArgumentException("Invalid shader language");
 }
@@ -510,7 +503,7 @@ const char *GLRendererInterface::getVersion() const { return FV_STR_VERSION(1, 0
 void GLRendererInterface::getSupportedTextureCompression(TextureDesc::Compression *pCompressions) {
 
 	if (pCompressions == nullptr) {
-		throw InvalidArgumentException("pCompressions may not be a null pointer.");
+		throw InvalidArgumentException("Compressions may not be a null pointer.");
 	}
 
 	unsigned int compressions = 0;

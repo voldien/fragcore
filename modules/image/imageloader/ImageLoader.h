@@ -34,7 +34,6 @@ namespace fragcore {
 		enum class FileFormat : uint32_t { Default, Png, Jpeg, Exr };
 		enum class Compression : uint32_t { None, Default };
 
-	  public:
 		ImageLoader();
 		ImageLoader(const ImageLoader &other);
 		ImageLoader(ImageLoader &&other);
@@ -56,7 +55,7 @@ namespace fragcore {
 			ImageLoader::saveImage(io_out, image, fileformat);
 			io_out->close();
 		}
-		void saveImage(Ref<IO> &in_out, const Image &image, const FileFormat fileformat = FileFormat::Default);
+		void saveImage(Ref<IO> &IO_out, const Image &image, const FileFormat fileformat = FileFormat::Default);
 	};
 } // namespace fragcore
 

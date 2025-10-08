@@ -53,6 +53,7 @@ FileSystemNotify::~FileSystemNotify() {
 	try {
 		this->stop();
 	} catch (const std::exception &other) {
+		/*	*/
 	}
 	fsw_destroy_session(static_cast<FSW_HANDLE>(this->session));
 	schDeleteThread(this->pthread);

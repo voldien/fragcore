@@ -30,12 +30,12 @@ Image ImageUtil::convert2NormalMap(const Image &image, const float strength) {
 			const float bump_strength = 2.0f;
 
 			/*	*/
-			Vector3 va = Vector3(size.x(), size.y(), strength * bump_strength * (s21 - s10));
-			Vector3 vb = Vector3(size.y(), size.x(), strength * bump_strength * (s12 - s01));
+			Vector3 normal_x = Vector3(size.x(), size.y(), strength * bump_strength * (s21 - s10));
+			Vector3 normal_y = Vector3(size.y(), size.x(), strength * bump_strength * (s12 - s01));
+			normal_x.normalize();
+			normal_y.normalize();
 
-			va.normalize();
-			vb.normalize();
-			Vector3 normal = va.cross(vb) * 0.5f + Vector3(0.5f, 0.5f, 0.5f);
+			Vector3 normal = normal_x.cross(normal_y) * 0.5f + Vector3(0.5f, 0.5f, 0.5f);
 
 			/*	*/
 			Color normalColor = Color(normal.x(), normal.y(), normal.z(), 1.0);

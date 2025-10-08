@@ -13,9 +13,8 @@ Image::Image(const unsigned int width, const unsigned int height, const unsigned
 }
 
 Image::Image(const Image &other)
-	: m_width(other.m_width), m_height(other.m_height), depth(other.depth), format(other.format),
-	  bufferSize(other.bufferSize) {
-	Object::operator=(other);
+	: Object(other), m_width(other.m_width), m_height(other.m_height), depth(other.depth),
+	  format(other.format), bufferSize(other.bufferSize) {
 
 	this->allocateMemory(other.width(), other.height(), other.layers(), other.getFormat());
 	std::memcpy(this->pixelData, other.pixelData, this->bufferSize);

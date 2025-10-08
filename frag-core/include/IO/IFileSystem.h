@@ -6,12 +6,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
@@ -35,10 +35,10 @@ namespace fragcore {
 			}
 
 			/*	*/
-			Ref<IO> io = Ref<IO>(this->openFile(path, mode));
-			return this->asyncOpen(io);
+			Ref<IO> ioFile = Ref<IO>(this->openFile(path, mode));
+			return this->asyncOpen(ioFile);
 		}
-		virtual void closeFile(IO *io) = 0;
+		virtual void closeFile(IO *ioRef) = 0;
 
 		/**
 		 * @brief
@@ -144,7 +144,7 @@ namespace fragcore {
 		 * @return std::vector<std::string>
 		 */
 		virtual std::vector<std::string> list(const char *directory) const = 0; /*  Display everything in directory. */
-		
+
 	  public:
 		virtual std::string getBaseName(const char *path) { return path; }
 

@@ -162,10 +162,8 @@ namespace fragcore {
 		ASyncIO(const ASyncIO &other);
 		virtual void setScheduleReference(const Ref<IScheduler> &sch);
 
-	  protected:
 		/**
 		 * @brief
-		 *
 		 */
 		using AsyncObject = struct async_object {
 			// TODO be replace with an encapsulated class version.

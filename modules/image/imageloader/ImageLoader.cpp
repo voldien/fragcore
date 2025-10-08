@@ -10,7 +10,7 @@ ImageLoader::ImageLoader() {
 	// FreeImage_SetOutputMessage([](FREE_IMAGE_FORMAT fif, const char *msg) { std::cout << msg << std::endl; });
 	// FreeImage_SetOutputMessage([](FREE_IMAGE_FORMAT fif, const char *msg) { std::cout << msg << std::endl; });
 }
-ImageLoader::ImageLoader(const ImageLoader &other) {}
+ImageLoader::ImageLoader(const ImageLoader &other)  : Object(other) {}
 ImageLoader::ImageLoader(ImageLoader &&other) : Object(other) {}
 ImageLoader &ImageLoader::operator=(const ImageLoader &other) { return *this; }
 ImageLoader &ImageLoader::operator=(ImageLoader &&other) { return *this; }
@@ -92,7 +92,7 @@ Image ImageLoader::loadImage(Ref<IO> &io_in, const FileFormat fileformat) {
 	/*	*/
 	width = FreeImage_GetWidth(firsbitmap);
 	height = FreeImage_GetHeight(firsbitmap);
-	unsigned int internal_image_size = FreeImage_GetMemorySize(firsbitmap);
+	const size_t internal_image_size = FreeImage_GetMemorySize(firsbitmap);
 	bitsPerPixel = FreeImage_GetBPP(firsbitmap);
 	depth = 1;
 
@@ -187,7 +187,7 @@ Image ImageLoader::loadImage(Ref<IO> &io_in, const FileFormat fileformat) {
 	return image;
 }
 
-void ImageLoader::saveImage(Ref<IO> &io_in, const Image &Image, const FileFormat fileformat) {
+void ImageLoader::saveImage(Ref<IO> &IO_out, const Image &Image, const FileFormat fileformat) {
 
 	void *pixels = nullptr;
 	FIMEMORY *fimemory = nullptr;
@@ -259,7 +259,7 @@ void ImageLoader::saveImage(Ref<IO> &io_in, const Image &Image, const FileFormat
 		BYTE *save_pixel_data = nullptr;
 		DWORD save_size = 0;
 		if (FreeImage_AcquireMemory(mem, &save_pixel_data, &save_size)) {
-			IOUtil::saveFileMem(io_in, (char *)save_pixel_data, save_size);
+			IOUtil::saveFileMem(IO_out, (char *)save_pixel_data, save_size);
 		}
 	}
 

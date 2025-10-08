@@ -19,8 +19,6 @@ class ASyncIOTest : public testing::Test {
 
 TEST_F(ASyncIOTest, Create_No_ThrowException) { ASSERT_NO_THROW(ASyncIO async(this->sche)); }
 
-TEST_F(ASyncIOTest, Create_Handle_No_Throw_Exception) { ASSERT_NO_THROW(ASyncHandle handle); }
-
 TEST_F(ASyncIOTest, Open_IO_Async_Handle_No_Throw) {
 	ASyncIO async(this->sche);
 

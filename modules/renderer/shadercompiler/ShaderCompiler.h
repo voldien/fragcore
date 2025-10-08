@@ -70,7 +70,7 @@ namespace fragcore {
 		static std::map<long int, ShaderResult>
 		CompilePermutation(Ref<IRenderer> &renderer, CompilerSources *references, const CompilerOptionSet &optionset);
 
-	  public:
+
 		using CompilerConvertOption = struct compiler_convert_option_t {
 			ShaderLanguage target = ShaderLanguage::GLSL;
 			unsigned int glslVersion = 150;

@@ -17,23 +17,23 @@
  */
 #ifndef _FRAGCORE_GL_HELPER_H_
 #define _FRAGCORE_GL_HELPER_H_ 1
-#include "IRenderer.h"
 #include "RenderDesc.h"
 #include "Texture.h"
 #include <FragCore.h>
 #include <GL/glew.h>
 
+/*	Debug verification if any of the OpenGL calls fails.	*/
 #if _NDEBUG
-#define FVALIDATE_GL_CALL(x)                                                                                           \
+#define FVALIDATE_GL_CALL(callX)                                                                                       \
 	{                                                                                                                  \
-		x;                                                                                                             \
+		callX;                                                                                                         \
 		GLenum gl_error = glGetError();                                                                                \
 		if (gl_error != GL_NO_ERROR) {                                                                                 \
 			throw cxxexcept::RuntimeException("{} {} {} - {}", __FILE__, __LINE__, _err, gluErrorString(gl_error));    \
 		}                                                                                                              \
 	}
 #else
-#define FVALIDATE_GL_CALL(x) x
+#define FVALIDATE_GL_CALL(callX) callX
 #endif
 
 namespace fragcore {
@@ -98,7 +98,7 @@ namespace fragcore {
 		static unsigned int getAttributeDataType(const fragcore::GeometryDesc::AttributeType type);
 
 		/*	*/
-		//static unsigned int getState(const fragcore::State state);
+		// static unsigned int getState(const fragcore::State state);
 
 		/*	*/
 		static unsigned int getTextureFilterModeNoMip(fragcore::Texture::FilterMode format);
@@ -108,9 +108,6 @@ namespace fragcore {
 
 		/*	*/
 		static unsigned int getBlendFunc(fragcore::BlendFunc func);
-
-		/*	*/
-		static unsigned int getClearBitMask(fragcore::CLEARBITMASK clearbitmask);
 
 		// TODO: remove
 		//  Texture.

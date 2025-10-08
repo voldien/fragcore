@@ -1,3 +1,4 @@
+#include <vulkan/vulkan_core.h>
 #ifndef FRAG_CORE_INTERNAL_IMP
 #define FRAG_CORE_INTERNAL_IMP 1
 #endif
@@ -416,10 +417,11 @@ void VKRenderWindow::createSwapChain() {
 
 	const VkPhysicalDeviceMemoryProperties &memProps = getVKDevice()->getPhysicalDevices()[0]->getMemoryProperties();
 
-	VKHelper::createImage(getDevice(), this->swapChain.chainExtend.width, this->swapChain.chainExtend.height, 1,
-						  depthFormat, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
-						  VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, memProps, this->swapChain.depthImage,
-						  this->swapChain.depthImageMemory);
+	VkImageCreateFlags flags = 0;
+	VKHelper::createImage2D(getDevice(), this->swapChain.chainExtend.width, this->swapChain.chainExtend.height, 1,
+							depthFormat, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
+							VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, memProps, flags, this->swapChain.depthImage,
+							this->swapChain.depthImageMemory);
 	this->swapChain.depthImageView = VKHelper::createImageView(
 		getDevice(), this->swapChain.depthImage, VK_IMAGE_VIEW_TYPE_2D, depthFormat, VK_IMAGE_ASPECT_DEPTH_BIT, 1);
 
@@ -613,7 +615,7 @@ const std::vector<VkImageView> &VKRenderWindow::getSwapChainImageViews() const n
 const std::shared_ptr<fvkcore::VKDevice> &VKRenderWindow::getVKDevice() const noexcept {
 	return this->renderer->device;
 }
-const std::shared_ptr<fvkcore::PhysicalDevice> VKRenderWindow::getPhysicalDevice() const noexcept {
+std::shared_ptr<fvkcore::PhysicalDevice> VKRenderWindow::getPhysicalDevice() const noexcept {
 	// return this->renderer->device->getPhysicalDevice();
 	return {};
 }

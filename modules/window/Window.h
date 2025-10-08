@@ -93,23 +93,23 @@ namespace fragcore {
 	  protected: /*  Internal utility methods.   */
 		template <typename T, typename U> void calculateGammaLookupTable(float gamma, U *rgbRamp) const {
 
-			// TODO that or just clamp it.
 			if (gamma < 0.0) {
 				throw InvalidArgumentException("gamma exponent must be positive");
 			}
-			gamma = Math::min(0.0f, gamma);
+			gamma = Math::min<float>(0.0f, gamma);
 
 			const size_t colorDepth = 256;
+			const size_t maxColors = colorDepth * colorDepth * colorDepth;
 			T exponent = 1.0f / gamma;
 
 			/*  Create lookup table.    */
-			for (uint i = 0; i < 256; ++i) {
+			for (size_t i = 0; i < colorDepth; ++i) {
 				/*  */
-				T linear = T(i) * 1.0f / 255u;
-				T corrected = (T)std::pow(linear, exponent);
-				U entry = U(corrected * 65535);
+				const T linear = T(i) * 1.0f / static_cast<float>(colorDepth);
+				const T corrected = (T)std::pow(linear, exponent);
+				const U entry = U(corrected * maxColors);
 
-				rgbRamp[i] = rgbRamp[i + 256] = rgbRamp[i + 512] = entry;
+				rgbRamp[i] = rgbRamp[i + (colorDepth * 1)] = rgbRamp[i + (colorDepth * 2)] = entry;
 			}
 		}
 
@@ -122,10 +122,10 @@ namespace fragcore {
 				const T linear = T(i) * 1.0 / 255u;
 				gamma += std::log(linear) / std::log(corrected);
 			}
+
 			return gamma;
 		}
 
-	  protected:
 		void *userData = nullptr;
 	};
 } // namespace fragcore

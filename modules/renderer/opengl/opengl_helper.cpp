@@ -1,4 +1,3 @@
-#include "../IRenderer.h"
 #include "GLHelper.h"
 #include "GraphicFormat.h"
 #include "RenderDesc.h"
@@ -603,37 +602,6 @@ unsigned int GLHelper::getAttributeDataType(const GeometryDesc::AttributeType ty
 	}
 }
 
-// unsigned int GLHelper::getState(const IRenderer::State state) {
-// 	switch (state) {
-// 	case IRenderer::State::DepthTest:
-// 		return GL_DEPTH_TEST;
-// 	case IRenderer::State::StencilTest:
-// 		return GL_STENCIL_TEST;
-// 	case IRenderer::State::ScissorTest:
-// 		return GL_SCISSOR_TEST;
-// 	case IRenderer::State::AlphaTest:
-// 		return GL_ALPHA_TEST;
-// 	case IRenderer::State::Blend:
-// 		return GL_BLEND;
-// 	case IRenderer::State::Cullface:
-// 		return GL_CULL_FACE;
-// 	case IRenderer::State::Dither:
-// 		return GL_DITHER;
-// 	case IRenderer::State::SRGB:
-// 		return GL_FRAMEBUFFER_SRGB;
-// 	case IRenderer::State::MultiSampling:
-// 		return GL_MULTISAMPLE;
-// 	case IRenderer::State::DiscardRasterization:
-// 		return GL_RASTERIZER_DISCARD;
-// 	case IRenderer::State::SampleShading:
-// 		return GL_SAMPLE_SHADING;
-// 	case IRenderer::State::SampleAlphaCoverage:
-// 		return GL_SAMPLE_ALPHA_TO_COVERAGE;
-// 	default:
-// 		throw InvalidArgumentException("Invalid state - {}.", magic_enum::enum_name(state));
-// 	}
-// }
-
 unsigned int GLHelper::getTextureFilterModeNoMip(Texture::FilterMode format) {
 	switch (format) {
 	case Texture::FilterMode::eNearest:
@@ -672,14 +640,6 @@ unsigned int GLHelper::getBlendFunc(BlendFunc func) {
 	default:
 		throw InvalidArgumentException("");
 	}
-}
-
-unsigned int GLHelper::getClearBitMask(CLEARBITMASK clearbitmask) {
-	GLbitfield mask = 0;
-	mask |= ((unsigned int)clearbitmask & (unsigned int)CLEARBITMASK::Color) != 0 ? GL_COLOR_BUFFER_BIT : 0;
-	mask |= ((unsigned int)clearbitmask & (unsigned int)CLEARBITMASK::Depth) != 0 ? GL_DEPTH_BUFFER_BIT : 0;
-	mask |= ((unsigned int)clearbitmask & (unsigned int)CLEARBITMASK::Stencil) != 0 ? GL_STENCIL_BUFFER_BIT : 0;
-	return mask;
 }
 
 /*  Texture.    */

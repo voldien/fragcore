@@ -42,7 +42,7 @@ namespace fragcore {
 		 * @param height
 		 * @return
 		 */
-		RendererWindow *createWindow(int x, int y, int width, int height) override;
+		RendererWindow *createWindow(int window_x, int window_y, int width, int height) override;
 
 		/**
 		 *
@@ -149,7 +149,6 @@ namespace fragcore {
 		bool debug;
 		bool alpha;
 
-		FrameBuffer *defaultFrameBuffer = nullptr;
 		/*  Texture gamma corrections.  */
 		bool gamma;
 		ShaderLanguage supportedLanguages;

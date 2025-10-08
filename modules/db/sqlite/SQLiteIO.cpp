@@ -29,7 +29,7 @@ namespace fragcore {
 
 		/*	*/
 		char bufURI[1024];
-		//vfs.pAppData.
+		// vfs.pAppData.
 		sprintf(bufURI, "ptr=%llu", (sqlite3_uint64)((void *)&io));
 		result_code = sqlite3_open_v2(bufURI, db,
 									  SQLITE_OPEN_CREATE | SQLITE_OPEN_READWRITE | SQLITE_OPEN_MAIN_DB |
@@ -122,9 +122,9 @@ namespace fragcore {
 		1,						  /* iVersion */
 		0,						  /* szOsFile (set when registered) */
 		1024,					  /* mxPathname */
-		nullptr,						  /* pNext */
+		nullptr,				  /* pNext */
 		fragcore_sqlite_vfs_name, /* zName */
-		nullptr,						  /* pAppData (set when registered) */
+		nullptr,				  /* pAppData (set when registered) */
 		memOpen,				  /* xOpen */
 		memDelete,				  /* xDelete */
 		memAccess,				  /* xAccess */

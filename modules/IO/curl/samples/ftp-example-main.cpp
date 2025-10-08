@@ -6,6 +6,7 @@ using namespace fragcore;
 
 int main(int argc, const char **argv) {
 	try {
+
 		int port = 21;
 		unsigned int dataPayload[10];
 		if (argc < 2) {
