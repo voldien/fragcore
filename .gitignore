@@ -211,3 +211,4 @@ lint/tmp/
 
 fragcore_revision.h
 .cache/
+*.pc

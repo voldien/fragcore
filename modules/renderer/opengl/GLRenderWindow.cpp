@@ -42,8 +42,8 @@ GLRenderWindow::~GLRenderWindow() {
 void GLRenderWindow::swapBuffer() { SDL_GL_SwapWindow(this->window); }
 
 void GLRenderWindow::vsync(bool state) {
-	int errcode = SDL_GL_SetSwapInterval(state);
-	if (!errcode) {
+	const int errcode = SDL_GL_SetSwapInterval(state);
+	if (errcode == -1) {
 		throw RuntimeException("Failed to Set Swap Interval {}", SDL_GetError());
 	}
 }

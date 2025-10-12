@@ -80,20 +80,20 @@ namespace fragcore {
 			ITree<T> *myParent = getParent();
 
 			/*	If new parent is not the same as current parent.	*/
-			if (myParent != parent) {
+			const bool removeExistingParents = myParent != parent;
+			/*	Remove if existing parent.	*/
+			if (removeExistingParents) {
+				myParent->removeChild(this);
+				myParent = nullptr;
+			}
 
-				/*	Remove if existing parent.	*/
-				if (myParent) {
-					myParent->removeChild(this);
-					myParent = nullptr;
-				}
-
+			if (parent) {
 				/*	*/
 				parent->addChild(this);
 			}
 		}
 
-		virtual unsigned int getNumChildren() const noexcept { return this->numChildren; }
+		virtual size_t getNumChildren() const noexcept { return this->numChildren; }
 
 		virtual void addChild(ITree<T> *pchild) noexcept {
 			ITree<T> *find = nullptr;
@@ -118,7 +118,7 @@ namespace fragcore {
 			}
 		}
 
-		virtual void removeChild(unsigned int index) {
+		virtual void removeChild(size_t index) {
 			ITree<T> *node_sibling = getChild(index - 1);
 			ITree<T> *sib = node_sibling->sibling;
 
@@ -133,19 +133,19 @@ namespace fragcore {
 			}
 		}
 
-		virtual ITree<T> *getChild(const unsigned int index) const {
+		virtual ITree<T> *getChild(const size_t index) const {
 			if (index >= this->getNumChildren()) {
 				throw InvalidArgumentException("Exceeded {} has {}", index, this->getNumChildren());
 			}
 			ITree<T> *chi = this->child;
-			for (unsigned int nth_child = 1; nth_child <= index; nth_child++) {
+			for (size_t nth_child = 1; nth_child <= index; nth_child++) {
 				chi = chi->sibling;
 			}
 			return chi;
 		}
 
 		virtual bool isChild(ITree<T> *item) const {
-			for (unsigned int i = 0; i < getNumChildren(); i++) {
+			for (size_t i = 0; i < getNumChildren(); i++) {
 				if (item == getChild(i)) {
 					return true;
 				}
@@ -153,9 +153,9 @@ namespace fragcore {
 			return false;
 		}
 
-		virtual int getNodeChildIndex(ITree<T> *node) noexcept {
+		virtual ssize_t getNodeChildIndex(ITree<T> *node) noexcept {
 			ITree<T> *child_node = this->child;
-			int index = 0;
+			size_t index = 0;
 			while (child_node) {
 				if (child_node == node) {
 					return index;
@@ -184,7 +184,7 @@ namespace fragcore {
 		ITree<T> *parent = nullptr;	  /*	parent node.	*/
 		ITree<T> *sibling = nullptr;  /*	sibling node.	*/
 		ITree<T> *child = nullptr;	  /*	child node.	*/
-		unsigned int numChildren = 0; /*	number of children node attached.	*/
+		size_t numChildren = 0; /*	number of children node attached.	*/
 	};
 } // namespace fragcore
 #endif
