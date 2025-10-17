@@ -1,5 +1,6 @@
 #include "ALAudioListener.h"
 #include "internal_object_type.h"
+#include <glm/gtc/quaternion.hpp>
 
 using namespace fragcore;
 
@@ -41,10 +42,10 @@ const Vector3 OpenALAudioListener::getVelocity() const {
 
 void OpenALAudioListener::setOrientation(const Quaternion &orientation) {
 
-	Vector3 forward = orientation * Vector3::UnitZ();
-	Vector3 up = orientation * Vector3::UnitY();
+	Vector3 forward = orientation * Vector3(0, 0, 1);
+	Vector3 up = orientation * Vector3(0, 1, 0);
 
-	ALfloat listenerOri[] = {forward.x(), forward.y(), forward.z(), up.x(), up.y(), up.z()};
+	ALfloat listenerOri[] = {forward.x, forward.y, forward.z, up.x, up.y, up.z};
 	FAOPAL_VALIDATE(alListenerfv(AL_ORIENTATION, (const ALfloat *)&listenerOri[0]));
 }
 
@@ -52,8 +53,8 @@ const Quaternion OpenALAudioListener::getOrientation() const {
 	Quaternion orientation;
 	ALfloat listenerOri[6];
 	FAOPAL_VALIDATE(alGetListenerfv(AL_ORIENTATION, listenerOri));
-	return Quaternion::FromTwoVectors(Vector3(listenerOri[0], listenerOri[1], listenerOri[2]),
-									  Vector3(listenerOri[3], listenerOri[4], listenerOri[5]));
+	return glm::quatLookAt(Vector3(listenerOri[0], listenerOri[1], listenerOri[2]),
+						   Vector3(listenerOri[3], listenerOri[4], listenerOri[5]));
 }
 
 OpenALAudioListener::OpenALAudioListener() {}

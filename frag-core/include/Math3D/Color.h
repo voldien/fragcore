@@ -43,10 +43,10 @@ namespace fragcore {
 			this->a(alpha);
 		}
 
-		 float r() const noexcept { return this->x(); }
-		 float g() const noexcept { return this->y(); }
-		 float b() const noexcept { return this->z(); }
-		 float a() const noexcept { return this->w(); }
+		 float r() const noexcept { return this->x ; }
+		 float g() const noexcept { return this->y ; }
+		 float b() const noexcept { return this->z ; }
+		 float a() const noexcept { return this->w ; }
 
 		 void r(const Precision red) noexcept { *this = {red, g(), b(), a()}; }
 		 void g(const Precision green) noexcept { *this = {r(), green, b(), a()}; }

@@ -157,14 +157,14 @@ void BulletPhysicInterface::sync() { this->dynamicsWorld->getSynchronizeAllMotio
 
 void BulletPhysicInterface::setGravity(const Vector3 &gravity) {
 
-	btVector3 grav = btVector3(gravity.x(), gravity.y(), gravity.z());
+	btVector3 grav = btVector3(gravity.x, gravity.y, gravity.z);
 	this->dynamicsWorld->setGravity(*(btVector3 *)&gravity);
 }
 
 Vector3 BulletPhysicInterface::getGravity() const {
 
 	btVector3 gr = this->dynamicsWorld->getGravity();
-	return Vector3(gr.x(), gr.y(), gr.z());
+	return {gr.x(), gr.y(), gr.z()};
 }
 
 void BulletPhysicInterface::addRigidBody(RigidBody *body) {
@@ -308,8 +308,8 @@ RigidBody *BulletPhysicInterface::createRigibody(const RigidBodyDesc *desc) {
 	btCollisionShape *shape = reinterpret_cast<btCollisionShape *>(bulletCollision->shape);
 
 	/*	Get world space variables.  */
-	btQuaternion rotation = btQuaternion(desc->quat.x(), desc->quat.y(), desc->quat.z(), desc->quat.w());
-	btVector3 position = btVector3(desc->position.x(), desc->position.y(), desc->position.z());
+	btQuaternion rotation = btQuaternion(desc->quat.x, desc->quat.y, desc->quat.z, desc->quat.w);
+	btVector3 position = btVector3(desc->position.x, desc->position.y, desc->position.z);
 	/*  */
 	btTransform initTransform(rotation, position);
 	btDefaultMotionState *fallMotionState = new btDefaultMotionState(initTransform);

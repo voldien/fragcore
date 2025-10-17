@@ -458,9 +458,6 @@ namespace fragcore {
 
 		/**
 		 * @brief
-		 *
-		 * @tparam T
-		 * @return T
 		 */
 		template <typename T> static T random() {
 			static_assert(std::is_floating_point_v<T>, "Must be a decimal type(float/double/half).");

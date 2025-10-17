@@ -15,6 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
+#include <glm/geometric.hpp>
 #ifndef _FRAGCORE_PLANE_H_
 #define _FRAGCORE_PLANE_H_ 1
 #include "../FragDef.h"
@@ -31,7 +32,7 @@ namespace fragcore {
 	  public:
 		Plane() = default;
 		Plane(const Vector3 &normal, const T distance = 0) noexcept {
-			this->normal = normal.normalized();
+			this->normal = glm::normalize(normal);
 			this->d = distance;
 		}
 		Plane(const Vector3 &point, const Vector3 &normal) noexcept { this->setNormalAndPoint(normal, point); }
@@ -66,8 +67,8 @@ namespace fragcore {
 		/**
 		 * Compute distance.
 		 */
-		T distance(const Vector3 &point) const noexcept { return normal.dot(point) + d; }
-		T distanceSigned(const Vector3 &point) const noexcept { return normal.dot(point) - d; }
+		T distance(const Vector3 &point) const noexcept { return glm::dot(normal, point) + d; }
+		T distanceSigned(const Vector3 &point) const noexcept { return glm::dot(normal, point) - d; }
 
 		/**
 		 * Get distance.
@@ -85,16 +86,16 @@ namespace fragcore {
 		 * compute internal values.
 		 */
 		void setNormalAndPoint(const Vector3 &normal, const Vector3 &point) noexcept {
-			this->normal = normal.normalized();
-			this->d = point.dot(this->normal);
+			this->normal = glm::normalize(normal);
+			this->d = glm::dot(point, this->normal);
 		}
 
 		/**
 		 * Construct plane.
 		 */
 		void set3DPoints(const Vector3 &v1, const Vector3 &v2, const Vector3 &v3) noexcept {
-			this->normal = (v1 - v2).cross(v1 - v3).normalized();
-			this->d = -this->normal.dot(v2);
+			this->normal = glm::normalize(glm::cross((v1 - v2), v1 - v3));
+			this->d = glm::dot(-this->normal, v2);
 		}
 
 		friend bool operator==(const Plane &o1, const Plane &o2) noexcept {
@@ -121,8 +122,8 @@ namespace fragcore {
 			const Vector3 e1 = v2 - v1;
 			const Vector3 e2 = v3 - v1;
 
-			tmp.normal = e1.cross(e2).normalized();
-			tmp.d = -tmp.normal.dot(v2);
+			tmp.normal = glm::normalize(glm::cross(e1, e2));
+			tmp.d = glm::dot(-tmp.normal, v2);
 			return tmp;
 		}
 	};

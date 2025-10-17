@@ -69,18 +69,12 @@ namespace fragcore {
 		/*	*/
 		static unsigned int getTextureFormat(const fragcore::ImageFormat textureFormat, unsigned int *pixelType);
 
-		/*	*/
-		static unsigned int getTextureFormat(const fragcore::TextureDesc::DataPixelFormat format);
-		static unsigned int getInternalTextureFormat(fragcore::TextureDesc::DataPixelFormat format, bool sRGB,
-													 fragcore::TextureDesc::Compression compression,
-													 fragcore::TextureDesc::PixelDataType type);
+
 
 		/*	*/
 		static unsigned int getTextureTarget(const fragcore::TextureDesc::TextureTarget target,
 											 const int nrSamples = 1);
 
-		/*	*/
-		static unsigned int getTextureType(const fragcore::TextureDesc::PixelDataType type);
 
 		/*	*/
 		static unsigned int getTextureSwizzle(const fragcore::TextureSwizzle swizzle);

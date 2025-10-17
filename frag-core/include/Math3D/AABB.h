@@ -53,15 +53,15 @@ namespace fragcore {
 		 * @return true if valid, false otherwise.
 		 */
 		bool isValid() const noexcept {
-			return !(this->mhalfsize.x() != 0.0f || this->mhalfsize.y() != 0.0f || this->mhalfsize.z() != 0.0f);
+			return !(this->mhalfsize.x != 0.0f || this->mhalfsize.y != 0.0f || this->mhalfsize.z != 0.0f);
 		}
 
-		float maxX() const noexcept { return (this->mcenter.x() + this->mhalfsize.x()); }
-		float minX() const noexcept { return (this->mcenter.x() - this->mhalfsize.x()); }
-		float maxY() const noexcept { return (this->mcenter.y() + this->mhalfsize.y()); }
-		float minY() const noexcept { return (this->mcenter.y() - this->mhalfsize.y()); }
-		float maxZ() const noexcept { return (this->mcenter.z() + this->mhalfsize.z()); }
-		float minZ() const noexcept { return (this->mcenter.z() - this->mhalfsize.z()); }
+		float maxX() const noexcept { return (this->mcenter.x + this->mhalfsize.x); }
+		float minX() const noexcept { return (this->mcenter.x - this->mhalfsize.x); }
+		float maxY() const noexcept { return (this->mcenter.y + this->mhalfsize.y); }
+		float minY() const noexcept { return (this->mcenter.y - this->mhalfsize.y); }
+		float maxZ() const noexcept { return (this->mcenter.z + this->mhalfsize.z); }
+		float minZ() const noexcept { return (this->mcenter.z - this->mhalfsize.z); }
 
 		/**
 		 * Compute minimum position.
@@ -112,12 +112,12 @@ namespace fragcore {
 		 *
 		 * @param point
 		 * @param worldPosition
-		 * @return  true if object contains.
+		 * @return true if object contains.
 		 */
-		bool contains(const Vector3 &point, const Vector3 worldPosition = Vector3::Zero()) const noexcept {
-			return (point.x() > minX() + worldPosition.x() && point.x() < maxX() + worldPosition.x() &&
-					point.y() > minY() + worldPosition.y() && point.y() < maxY() + worldPosition.y() &&
-					point.z() > minZ() + worldPosition.z() && point.z() < maxZ() + worldPosition.z());
+		bool contains(const Vector3 &point, const Vector3 worldPosition = Vector3(0)) const noexcept {
+			return (point.x > minX() + worldPosition.x && point.x < maxX() + worldPosition.x &&
+					point.y > minY() + worldPosition.y && point.y < maxY() + worldPosition.y &&
+					point.z > minZ() + worldPosition.z && point.z < maxZ() + worldPosition.z);
 		}
 
 		/**
@@ -138,14 +138,14 @@ namespace fragcore {
 		 */
 		Vector3 getVertexN(const Vector3 &normal) const noexcept {
 			Vector3 res = this->mhalfsize;
-			if (normal.x() < 0.0f) {
-				res[0] = res.x() + this->mcenter.x();
+			if (normal.x < 0.0f) {
+				res[0] = res.x + this->mcenter.x;
 			}
-			if (normal.y() < 0.0f) {
-				res[1] = res.y() + this->mcenter.y();
+			if (normal.y < 0.0f) {
+				res[1] = res.y + this->mcenter.y;
 			}
-			if (normal.z() < 0.0f) {
-				res[2] = res.z() + this->mcenter.z();
+			if (normal.z < 0.0f) {
+				res[2] = res.z + this->mcenter.z;
 			}
 			return res;
 		}
@@ -157,14 +157,14 @@ namespace fragcore {
 		 */
 		Vector3 getVertexP(const Vector3 &normal) const noexcept {
 			Vector3 res = this->mhalfsize;
-			if (normal.x() >= 0.0f) {
-				res[0] = res.x() + this->mcenter.x();
+			if (normal.x >= 0.0f) {
+				res[0] = res.x + this->mcenter.x;
 			}
-			if (normal.y() >= 0.0f) {
-				res[1] = res.y() + this->mcenter.y();
+			if (normal.y >= 0.0f) {
+				res[1] = res.y + this->mcenter.y;
 			}
-			if (normal.z() >= 0.0f) {
-				res[2] = res.z() + this->mcenter.z();
+			if (normal.z >= 0.0f) {
+				res[2] = res.z + this->mcenter.z;
 			}
 			return res;
 		}

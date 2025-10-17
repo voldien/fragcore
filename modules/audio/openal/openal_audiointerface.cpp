@@ -141,7 +141,7 @@ AudioListener *OpenALAudioInterface::createAudioListener(AudioListenerDesc *desc
 
 	/*	Set initial default state of the listener.	*/
 	listener->setPosition(desc->position);
-	listener->setVelocity(Vector3::Zero());
+	listener->setVelocity(Vector3(0));
 	listener->setOrientation(desc->rotation);
 
 	return listener;

@@ -7,7 +7,7 @@ using namespace fragcore;
 
 static struct osn_context *ctx = nullptr;
 
-float Math::PerlinNoise(const Vector2 &point) noexcept { return Math::PerlinNoise(point.x(), point.y()); }
+float Math::PerlinNoise(const Vector2 &point) noexcept { return Math::PerlinNoise(point.x, point.y); }
 
 float Math::PerlinNoise(const float x, const float y) noexcept {
 	if (unlikely(ctx == nullptr)) {
@@ -24,4 +24,4 @@ float Math::PerlinNoise(const float x, const float y, const float z) noexcept {
 	return open_simplex_noise3(ctx, x, y, z);
 }
 
-float Math::PerlinNoise(const Vector3 &point) noexcept { return Math::PerlinNoise(point.x(), point.y(), point.z()); }
+float Math::PerlinNoise(const Vector3 &point) noexcept { return Math::PerlinNoise(point.x, point.y, point.z); }

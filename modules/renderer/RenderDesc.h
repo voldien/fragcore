@@ -229,41 +229,8 @@ namespace fragcore {
 			Texture2DArray = 0x20, /*	2D Texture Array.*/
 		};
 
-		/**
-		 *	Texture format.
-		 */
-		enum class DataPixelFormat : uint32_t {
-			NoFormat = 0,
-			RGB = 0x1,			/*	RGB components.	*/
-			RGBA = 0x2,			/*	RGBA components.	*/
-			BGR = 0x3,			/*	BGR components.	*/
-			BGRA = 0x4,			/*	BGRA components.	*/
-			SRGB = 0x5,			/*	SRGB components.	*/
-			RG = 0x6,			/*	*/
-			A = 0x8,			/*	*/
-			SRGBA = 0x7,		/*	SRGBA components.	*/
-			SingleColor = 0x9,	/*	Single color component.	*/
-			Depth = 0xA,		/*	Depth component.	*/
-			Stencil = 0xB,		/*	Stencil component.	*/
-			DepthStencil = 0xC, /*	Depth and stencil componets.	*/
-		};
 
-		/**
-		 *	Texture pixel type data.
-		 */
-		enum class PixelDataType : uint32_t {
-			NoType = 0,
-			UnsignedByte = 0x1, /*	Each color component encoded in a single byte.	*/
-			SignedByte = 0x2,	/*	Each color component encoded in a single signed byte.	*/
-			UnsignedShort = 0x3,
-			SignedShort = 0x4,
-			UnsignedInt = 0x5,
-			SignedInt = 0x6,
-			Float = 0x7,		/*	Each color component encoded in a single float.	*/
-			HalfFloat = 0x8,	/*  */
-			Double = 0x9,		/*  */
-			Unsigned24_8 = 0xA, /*	Each color component encoded.	*/
-		};
+
 
 		/**
 		 *	Texture compression types.

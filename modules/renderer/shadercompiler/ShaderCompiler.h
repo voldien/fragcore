@@ -18,6 +18,7 @@
 #ifndef _FRAGCORE_SHADER_COMPILER_H_
 #define _FRAGCORE_SHADER_COMPILER_H_ 1
 #include "../Shader.h"
+#include "Core/UIDStruct.h"
 #include "ShaderLanguage.h"
 #include <FragDef.h>
 #include <map>
@@ -38,22 +39,16 @@ namespace fragcore {
 			MaxOptionAttributeTypes,
 		};
 
-
-		class CompilerOption : UIDObject {
+		class CompilerOption {
 		  public:
 			CompilerAttributeOptionType type;
 			const char *name;
-			const char *value;
-		};
-
-		class CompilerSources {
-		  public:
-			// Ref<IO> vertex;
-			// Ref<IO> fragment;
-			// Ref<IO> geometry;
-			// Ref<IO> tessellationControl;
-			// Ref<IO> tessellationEvolution;
-			// Ref<IO> compute;
+			union {
+				const char *value;
+				const int intValue;
+				const float floatValue;
+				const double doubleValue;
+			};
 		};
 
 		class ShaderResult : UIDObject {
@@ -67,16 +62,17 @@ namespace fragcore {
 			std::vector<CompilerOption> options;
 		};
 
-		static std::map<long int, ShaderResult>
-		CompilePermutation(Ref<IRenderer> &renderer, CompilerSources *references, const CompilerOptionSet &optionset);
-
-
 		using CompilerConvertOption = struct compiler_convert_option_t {
 			ShaderLanguage target = ShaderLanguage::GLSL;
 			unsigned int glslVersion = 150;
 			bool es = false;
 			bool auto_storage_qualifier = false;
-			unsigned int precision = 0;	/*	*/
+			unsigned int precision = 0; /*	*/
+		};
+
+		using ConversionResult = struct compilation_result_t {
+			std::vector<char> source;
+			// options
 		};
 
 		/**
@@ -84,6 +80,13 @@ namespace fragcore {
 		 */
 		static std::vector<char> convertSPIRV(const std::vector<uint32_t> &sourceBinary,
 											  const CompilerConvertOption &targetOptions);
+
+		/**
+		 * Convert spirv binary to source code. (decompilition)
+		 */
+		static std::vector<ConversionResult> convertSPIRVPermutation(const std::vector<uint32_t> &sourceBinary,
+																	 const CompilerConvertOption &targetOptions,
+																	 const CompilerOptionSet &set);
 	};
 } // namespace fragcore
 #endif

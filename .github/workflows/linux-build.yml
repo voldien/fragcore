@@ -28,7 +28,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install pkg-config libssl-dev libgtest-dev libsubunit-dev libogg-dev libopus-dev libvorbis-dev \
           libzip-dev  libnoise-dev libvdpau-dev libalut-dev libspdlog-dev libbz2-dev \
-          libcurl4 libcurl4-gnutls-dev libfmt-dev binutils-dev libeigen3-dev libomp-dev \
+          libcurl4 libcurl4-gnutls-dev libfmt-dev binutils-dev libglm-dev libomp-dev \
           zip gzip googletest libglm-dev 
 
       - name: Configure modules dependencies

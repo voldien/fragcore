@@ -18,25 +18,17 @@
 #ifndef _FRAGCORE_SHAPE_H_
 #define _FRAGCORE_SHAPE_H_ 1
 #include "../FragDef.h"
+#include"Math3D.h"
 #include "Ray.h"
 
 namespace fragcore {
 	/**
 	 *
 	 */
-	/// template<typename Dim>
 	class FVDECLSPEC Shape {
 	  public:
-		/**
-		 *
-		 *	@Return
-		 */
 		// bool intersect(const Dim &orig, const Dim dir, RaycastHit &hit) const;
 
-		/**
-		 *
-		 *	@Return
-		 */
 		// bool intersect(const Ray &ray, RaycastHit &hit) const;
 	};
 } // namespace fragcore

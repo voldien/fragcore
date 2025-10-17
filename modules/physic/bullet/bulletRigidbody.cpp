@@ -47,7 +47,7 @@ void BulletRigidBody::setPosition(const Vector3 &position) {
 
 	btTransform initialTransform;
 
-	initialTransform.setOrigin(btVector3(position.x(), position.y(), position.z()));
+	initialTransform.setOrigin(btVector3(position.x, position.y, position.z));
 	initialTransform.setRotation(body->getOrientation());
 
 	body->setWorldTransform(initialTransform);
@@ -62,8 +62,9 @@ Quaternion BulletRigidBody::getOrientation() {
 
 	oritention = body->getOrientation();
 
-	return Quaternion(oritention.getW(), oritention.getX(), oritention.getY(), oritention.getZ());
+	return {oritention.getW(), oritention.getX(), oritention.getY(), oritention.getZ()};
 }
+
 void BulletRigidBody::setOrientation(const Quaternion &quat) {
 	btRigidBody *body;
 	body = (btRigidBody *)this->getObject();
@@ -75,13 +76,13 @@ Vector3 BulletRigidBody::getScale() {
 
 	const btVector3 scale = body->getCollisionShape()->getLocalScaling();
 
-	return Vector3(scale.x(), scale.y(), scale.z());
+	return {scale.x(), scale.y(), scale.z()};
 }
 void BulletRigidBody::setScale(const Vector3 &scale) {
 	btRigidBody *body;
 	body = (btRigidBody *)this->getObject();
 
-	btVector3 sc = btVector3(scale.x(), scale.y(), scale.z());
+	btVector3 sc = btVector3(scale.x, scale.y, scale.z);
 	body->getCollisionShape()->setLocalScaling(sc);
 }
 
@@ -89,7 +90,7 @@ void BulletRigidBody::addForce(const Vector3 &force) {
 	btRigidBody *body;
 	body = (btRigidBody *)this->getObject();
 	body->activate(true);
-	body->applyCentralImpulse(btVector3(force.x(), force.y(), force.z()));
+	body->applyCentralImpulse(btVector3(force.x, force.y, force.z));
 }
 
 float BulletRigidBody::getDrag() {
@@ -123,7 +124,7 @@ Vector3 BulletRigidBody::getVelocity() {
 	body = (btRigidBody *)this->getObject();
 
 	const btVector3 &linear = body->getLinearVelocity();
-	return Vector3(linear.x(), linear.y(), linear.z());
+	return {linear.x(), linear.y(), linear.z()};
 }
 
 intptr_t BulletRigidBody::getNativePtr() const { return 0; }

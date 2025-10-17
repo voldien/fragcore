@@ -15,6 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
+#include <glm/geometric.hpp>
 #ifndef _FRAGCORE_ONB_H_
 #define _FRAGCORE_ONB_H_ 1
 #include "../Math/Math.h"
@@ -37,35 +38,61 @@ namespace fragcore {
 			Vector3 n(1.0f, 0.0f, 0.0f);
 			Vector3 m(0.0f, 1.0f, 0.0f);
 
+#if defined(FRAGCORE_USE_EIGEN)
 			this->setU(u.normalized());
 			this->setV(this->u().cross(n));
 			if (this->v().norm() < Math::Epsilon) {
 				this->setV(this->u().cross(m));
 			}
 			this->setW(this->u().cross(this->v()));
+#elif defined(FRAGCORE_USE_GLM)
+			this->setU(glm::normalize(u));
+			this->setV(glm::cross(this->u(), n));
+			if (glm::length(this->v()) < Math::Epsilon) {
+				this->setV(glm::cross(this->u(), m));
+			}
+			this->setW(glm::cross(this->u(), this->v()));
+#endif
 		}
+
 		void initFromV(const Vector3 &v) noexcept {
 			Vector3 n(1.0f, 0.0f, 0.0f);
 			Vector3 m(0.0f, 1.0f, 0.0f);
-
+#if defined(FRAGCORE_USE_EIGEN)
 			this->setV(v.normalized());
 			this->setU(this->v().cross(n));
 			if (this->u().norm() < Math::Epsilon) {
 				this->setU(this->v().cross(m));
 			}
 			this->setW(this->u().cross(this->v()));
+#elif defined(FRAGCORE_USE_GLM)
+			this->setV(glm::normalize(v));
+			this->setU(glm::cross(this->v(), n));
+			if (glm::length(this->u()) < Math::Epsilon) {
+				this->setU(glm::cross(this->v(), m));
+			}
+			this->setW(glm::cross(this->u(), this->v()));
+#endif
 		}
 
 		void initFromW(const Vector3 &w) noexcept {
 			Vector3 n(1.0f, 0.0f, 0.0f);
 			Vector3 m(0.0f, 1.0f, 0.0f);
-
+#if defined(FRAGCORE_USE_EIGEN)
 			this->setW(w.normalized());
 			this->setU(this->w().cross(n));
 			if (this->u().norm() < Math::Epsilon) {
 				this->setU(this->w().cross(m));
 			}
 			this->setW(this->w().cross(this->v()));
+#elif defined(FRAGCORE_USE_GLM)
+			this->setW(glm::normalize(w));
+			this->setU(glm::cross(this->w(), n));
+			if (glm::length(this->u()) < Math::Epsilon) {
+				this->setU(glm::cross(this->w(), m));
+			}
+			this->setW(glm::cross(this->w(), this->v()));
+#endif
 		}
 
 		/**
@@ -80,23 +107,23 @@ namespace fragcore {
 		void setV(const Vector3 &v) { this->m[1] = v; }
 		void setW(const Vector3 &w) { this->m[2] = w; }
 
-		/**
-		 *
-		 */
-		void initFromUV(const Vector3 &u, const Vector3 &v) noexcept { this->m[2] = u.cross(v); }
-		void initFromVU(const Vector3 &v, const Vector3 &u) noexcept { this->m[2] = v.cross(u); }
+		// /**
+		//  *
+		//  */
+		// void initFromUV(const Vector3 &u, const Vector3 &v) noexcept { this->m[2] = u.cross(v); }
+		// void initFromVU(const Vector3 &v, const Vector3 &u) noexcept { this->m[2] = v.cross(u); }
 
-		/**
-		 *
-		 */
-		void initFromUW(const Vector3 &u, const Vector3 &w) noexcept { this->m[1] = u.cross(w); }
-		void initFromWU(const Vector3 &w, const Vector3 &u) noexcept { this->m[1] = w.cross(u); }
+		// /**
+		//  *
+		//  */
+		// void initFromUW(const Vector3 &u, const Vector3 &w) noexcept { this->m[1] = u.cross(w); }
+		// void initFromWU(const Vector3 &w, const Vector3 &u) noexcept { this->m[1] = w.cross(u); }
 
-		/**
-		 *
-		 */
-		void initFromVW(const Vector3 &v, const Vector3 &w) noexcept { this->m[0] = v.cross(w); }
-		void initFromWV(const Vector3 &w, const Vector3 &v) noexcept { this->m[0] = w.cross(v); }
+		// /**
+		//  *
+		//  */
+		// void initFromVW(const Vector3 &v, const Vector3 &w) noexcept { this->m[0] = v.cross(w); }
+		// void initFromWV(const Vector3 &w, const Vector3 &v) noexcept { this->m[0] = w.cross(v); }
 
 		/**
 		 *
@@ -107,17 +134,6 @@ namespace fragcore {
 		// friend std::istream &operator>>(std::istream &is, ONB &t){
 
 		// }
-
-		/**
-		 *
-		 * @param os
-		 * @param t
-		 * @return
-		 */
-		friend std::ostream &operator<<(std::ostream &os, const ONB &t) {
-			os << t.u() << t.v() << t.w();
-			return os;
-		}
 
 		/**
 		 *	Compare

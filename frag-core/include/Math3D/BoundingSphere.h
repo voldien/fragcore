@@ -69,9 +69,9 @@ namespace fragcore {
 		intersect(const BoundingSphere &sphere) const noexcept { // get box closest point to sphere center by clamping
 			// we are using multiplications because it's faster than calling Math.pow
 			float distance = std::sqrt(
-				((this->getCenter().x() - sphere.getCenter().x()) * (this->getCenter().x() - sphere.getCenter().x())) +
-				((this->getCenter().y() - sphere.getCenter().y()) * (this->getCenter().y() - sphere.getCenter().y())) +
-				((this->getCenter().z() - sphere.getCenter().z()) * (this->getCenter().z() - sphere.getCenter().z())));
+				((this->getCenter().x - sphere.getCenter().x) * (this->getCenter().x - sphere.getCenter().x)) +
+				((this->getCenter().y - sphere.getCenter().y) * (this->getCenter().y - sphere.getCenter().y)) +
+				((this->getCenter().z - sphere.getCenter().z) * (this->getCenter().z - sphere.getCenter().z)));
 			return distance < (this->getRadius() + sphere.getRadius());
 		}
 
@@ -89,23 +89,21 @@ namespace fragcore {
 			return false;
 		}
 
-		bool contains(const Vector3 &point) const noexcept { return (point - getCenter()).norm() < this->getRadius(); }
+		bool contains(const Vector3 &point) const noexcept {
+			return glm::length(point - getCenter()) < this->getRadius();
+		}
 
 		/**
 		 * @brief
-		 *
-		 * @tparam T
-		 * @param ray
-		 * @return true
-		 * @return false
 		 */
 		template <typename T> bool intersect(const Ray &ray) const noexcept {
-			Vector3 tmp = ray.getOrigin() - getCenter();
+			const Vector3 tmp = ray.getOrigin() - getCenter();
 			T t;
+
 			/*	*/
-			const T a = ray.getDirection().dot(ray.getDirection());
-			const T b = static_cast<T>(2.0) * ray.getDirection().dot(tmp);
-			const T c = tmp.dot(tmp) - (radius * radius);
+			const T a = glm::dot(ray.getDirection(), ray.getDirection());
+			const T b = static_cast<T>(2.0) * glm::dot(ray.getDirection(), tmp);
+			const T c = glm::dot(tmp, tmp) - (radius * radius);
 
 			/*	*/
 			const T discriminant = (b * b) - (static_cast<T>(4) * c * a);

@@ -1,5 +1,4 @@
 OPTION(BUILTIN_NANOSVG "Build with nanosvg" ON)
-OPTION(BUILTIN_EIGEN "Build with Eigen" ON)
 OPTION(BUILTIN_OPEN_SIMPLEX_NOISE "Build with open Simple Noise" ON)
 OPTION(BUILTIN_PCG_C_BASIC "Build with PCG-C Basic" ON)
 OPTION(BUILTIN_MISC "" ON)
@@ -69,12 +68,7 @@ IF(LZO_FOUND)
 
 ENDIF()
 
-FIND_PACKAGE(Eigen3 3.3 NO_MODULE QUIET)
-IF(EIGEN3_FOUND)
-	MESSAGE(STATUS "Using eigen3 version.")
-ELSE()
 
-ENDIF()
 
 # Define all file lists.
 FILE(GLOB SOURCE_FILES  ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
@@ -121,18 +115,16 @@ cxx_variadic_templates cxx_uniform_initialization cxx_right_angle_brackets cxx_n
 cxx_generic_lambdas cxx_override cxx_noexcept cxx_aggregate_default_initializers
 cxx_relaxed_constexpr cxx_decltype_auto)
 
-ADD_DEPENDENCIES(fragcore taskSch infoware cxxexcept)
-
 #
 TARGET_COMPILE_DEFINITIONS(fragcore PRIVATE FRAG_CORE_INTERNAL_IMP=1 PUBLIC FV_USE_SHARED_POINTER=1)
 
-IF(EIGEN3_FOUND)
-	TARGET_COMPILE_DEFINITIONS(fragcore PUBLIC FRAGCORE_USE_EIGEN=1)
-ENDIF()
+# Make use of modern features with GLM.
+TARGET_COMPILE_DEFINITIONS(fragcore PUBLIC GLM_FORCE_CXX17 GLM_FORCE_INTRINSICS)
+TARGET_COMPILE_DEFINITIONS(fragcore PUBLIC FRAGCORE_USE_GLM=1)
 
 
 #
-TARGET_LINK_LIBRARIES(fragcore PUBLIC Eigen3::Eigen taskSch cxxexcept spdlog_header_only fmt magic_enum PRIVATE stdc++ atomic dl ${ZLIB_LIBRARIES}
+TARGET_LINK_LIBRARIES(fragcore PUBLIC taskSch cxxexcept spdlog_header_only fmt magic_enum PRIVATE stdc++ atomic dl ${ZLIB_LIBRARIES}
 													${ZIP_LIBRARIES} m ${OPENSSL_CRYPTO_LIBRARY} infoware )
 
 #

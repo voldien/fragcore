@@ -8,6 +8,7 @@
 #include <generator/SphereMesh.hpp>
 #include <generator/TeapotMesh.hpp>
 #include <generator/TorusMesh.hpp>
+#include <glm/ext/matrix_clip_space.hpp>
 #include <glm/geometric.hpp>
 
 using namespace fragcore;
@@ -82,9 +83,9 @@ void ProceduralGeometry::createFrustum(std::vector<Vertex> &vertices, const Matr
 		MeshVertex vertex = mesh_vertices.generate();
 
 		Vector4 projectedVertex =
-			(projection.inverse() * Vector4(vertex.position.x, vertex.position.y, vertex.position.z, 1.0f));
+			(glm::inverse(projection) * Vector4(vertex.position.x, vertex.position.y, vertex.position.z, 1.0f));
 
-		projectedVertex *= (1.0f / projectedVertex.w());
+		projectedVertex *= (1.0f / projectedVertex.w);
 
 		ProceduralGeometry::Vertex frustum_vertex;
 		// frustum_vertex.vertex = projectedVertex.head<3>();
@@ -97,17 +98,8 @@ void ProceduralGeometry::createFrustum(std::vector<Vertex> &vertices, const Matr
 void ProceduralGeometry::createFrustum(std::vector<Vertex> &vertices, const float fov, const float aspect,
 									   const float near, const float far) {
 
-	Matrix4x4 projectMatrix;
-	const float theta = fov * 0.5f;
-	const float range = far - near;
-	const float invtan = 1. / std::tan(theta);
-
-	projectMatrix(0, 0) = invtan / aspect;
-	projectMatrix(1, 1) = invtan;
-	projectMatrix(2, 2) = -(near + far) / range;
-	projectMatrix(3, 2) = -1;
-	projectMatrix(2, 3) = -2 * near * far / range;
-	projectMatrix(3, 3) = 0;
+	Matrix4x4 projectMatrix = glm::perspective(fov, aspect, near ,far); 
+ 
 
 	ProceduralGeometry::createFrustum(vertices, projectMatrix);
 }

@@ -32,8 +32,8 @@ namespace fragcore {
 	class FVDECLSPEC GeometryUtility {
 	  public:
 		template <typename T> static bool testPlanesAABB(const Plane<T> &plane, const AABB &bound) {
-			const float rad = bound.getHalfSize().dot(Vector3(
-				std::abs(plane.getNormal().x()), std::abs(plane.getNormal().y()), std::abs(plane.getNormal().z())));
+
+			const float rad = glm::dot(glm::abs(plane.getNormal()), bound.getHalfSize());
 			return -rad <= plane.distanceSigned(bound.getCenter());
 		}
 
@@ -98,8 +98,12 @@ namespace fragcore {
 			uint Indices[3];
 		};
 
+		// static void optimizeGeometry(float *vertices, const size_t nrVertices,
+		// 							  const size_t stride = sizeof(float) * 3, void* indicies, const size_t nrIndices,
+		// const size_t indicies_stride);
+
 		void convert2Adjacent(float *vertices, const size_t nrVertices, std::vector<unsigned int> &Indices,
-							 const size_t stride = sizeof(float) * 3);
+							  const size_t stride = sizeof(float) * 3);
 
 		GeometryUtility() = delete;
 		GeometryUtility(const GeometryUtility &other) = delete;

@@ -17,7 +17,7 @@
  */
 #ifndef _FRAGCORE_TRANSFORM_H_
 #define _FRAGCORE_TRANSFORM_H_ 1
-#include "LinAlg.h"
+#include "FragDef.h"
 #include "Math3D/Math3D.h"
 
 namespace fragcore {
@@ -35,8 +35,6 @@ namespace fragcore {
 
 		explicit Transform(const Mat3x3 &basis, const Vec3T &c);
 
-		// Transform(const Transform &other);
-
 		Transform &operator=(const Transform &other);
 
 		void rotate(const Vec3T &eular) noexcept;
@@ -53,15 +51,15 @@ namespace fragcore {
 		Vec3T getRotationEular() const noexcept;
 
 		void setRotation(const QuatT &quat) noexcept;
-		void setRotationEular(const Vec3T& eular) noexcept;
+		void setRotationEular(const Vec3T &eular) noexcept;
 
 		Transform inverse() const noexcept;
 
 		Mat3x3 getBasis() const noexcept;
 
-		Transform &operator*=([[maybe_unused]] const Transform &t) noexcept;
+		Transform &operator*=([[maybe_unused]] const Transform &transform) noexcept;
 
-		Transform operator*([[maybe_unused]] const Transform &t) const noexcept;
+		Transform operator*([[maybe_unused]] const Transform &transform) const noexcept;
 		Vec3T operator*(const Vec3T &vector) const noexcept;
 		QuatT operator*(const QuatT &quat) const noexcept;
 
@@ -69,14 +67,14 @@ namespace fragcore {
 		Vec3T right() const noexcept;
 		Vec3T forward() const noexcept;
 
-	  protected:					  /*	Attributes.	*/
+	  protected:				  /*	Attributes.	*/
 		Vec3T position = Vec3T(); /*	Position in world space.	*/
 		QuatT quat = QuatT();	  /*	Rotation in world space.	*/
 		Vec3T scale;			  /*	Scale.	*/
 		Mat3x3 basis;			  /*	*/
 	};
 
-	using TransformEigen = Transform<Vector3, Matrix3x3, Matrix4x4, Quaternion>;
+	// using TransformEigen = Transform<Vector3, Matrix3x3, Matrix4x4, Quaternion>;
 
 } // namespace fragcore
 #endif

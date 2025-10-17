@@ -19,28 +19,10 @@
 #define _FRAGCORE_MATH_3D_H_ 1
 
 /*
- * #define FRAGCORE_USE_HPMCPP
  * #define FRAGCORE_USE_EIGEN
  * #define FRAGCORE_USE_GLM
  */
-
-#if defined(FRAGCORE_USE_HPMCPP)
-#include <Ext/HCPlane.hpp>
-#include <HCQuaternion.hpp>
-#include <HCVector2.hpp>
-#include <HCVector3.hpp>
-#include <HCVector4.hpp>
-#include <Hpm.hpp>
-
-namespace fragcore {
-	using Vector3 = LIBHPM::Vector3;
-	using Vector4 = LIBHPM::Vector4;
-	using Vector2 = LIBHPM::Vector2;
-	using Matrix4x4 = LIBHPM::Matrix4x4;
-	using Matrix3x3 = LIBHPM::Matrix3x3;
-	using Quaternion = LIBHPM::Quaternion;
-} // namespace fragcore
-#elif defined(FRAGCORE_USE_EIGEN)
+#if defined(FRAGCORE_USE_EIGEN)
 #include <Eigen/Dense>
 namespace fragcore {
 	using Vector3 = Eigen::Vector3f;
@@ -50,6 +32,7 @@ namespace fragcore {
 	using Matrix3x3 = Eigen::Matrix3f;
 	using Quaternion = Eigen::Quaternionf;
 } // namespace fragcore
+
 #elif defined(FRAGCORE_USE_GLM)
 #include <glm/fwd.hpp>
 #include <glm/geometric.hpp>
@@ -61,9 +44,10 @@ namespace fragcore {
 	using Vector3 = glm::vec3;
 	using Vector4 = glm::vec4;
 	using Vector2 = glm::vec2;
-	using Matrix4x4 = glm::mat4;
-	using Matrix3x3 = glm::mat4;
+	using Matrix4x4 = glm::mat4x4;
+	using Matrix3x3 = glm::mat3x3;
 	using Quaternion = glm::quat;
+
 } // namespace fragcore
 #endif
 /*	Vector data types for rendering geometries.	*/
