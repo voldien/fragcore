@@ -24,7 +24,6 @@ namespace fragcore {
 
 	/**
 	 * @brief Stack of buffer allocator.
-	 *
 	 */
 	class FVDECLSPEC StackBufferedAllocator : public UIDObject, public IMemoryPool {
 	  public:
@@ -60,12 +59,12 @@ namespace fragcore {
 		/**
 		 *	Fetch block of memory.
 		 */
-		void *fetch(size_t sizeBytes);
+		void *fetch(const size_t sizeBytes);
 
 		/**
 		 *	Release everything to marker.
 		 */
-		void freeToMarker(unsigned int marker);
+		void freeToMarker(const size_t marker);
 
 		/**
 		 *	Swap buffers.

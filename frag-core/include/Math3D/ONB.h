@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#include <glm/geometric.hpp>
 #ifndef _FRAGCORE_ONB_H_
 #define _FRAGCORE_ONB_H_ 1
 #include "../Math/Math.h"
@@ -38,61 +37,36 @@ namespace fragcore {
 			Vector3 n(1.0f, 0.0f, 0.0f);
 			Vector3 m(0.0f, 1.0f, 0.0f);
 
-#if defined(FRAGCORE_USE_EIGEN)
-			this->setU(u.normalized());
-			this->setV(this->u().cross(n));
-			if (this->v().norm() < Math::Epsilon) {
-				this->setV(this->u().cross(m));
-			}
-			this->setW(this->u().cross(this->v()));
-#elif defined(FRAGCORE_USE_GLM)
 			this->setU(glm::normalize(u));
 			this->setV(glm::cross(this->u(), n));
 			if (glm::length(this->v()) < Math::Epsilon) {
 				this->setV(glm::cross(this->u(), m));
 			}
 			this->setW(glm::cross(this->u(), this->v()));
-#endif
 		}
 
 		void initFromV(const Vector3 &v) noexcept {
 			Vector3 n(1.0f, 0.0f, 0.0f);
 			Vector3 m(0.0f, 1.0f, 0.0f);
-#if defined(FRAGCORE_USE_EIGEN)
-			this->setV(v.normalized());
-			this->setU(this->v().cross(n));
-			if (this->u().norm() < Math::Epsilon) {
-				this->setU(this->v().cross(m));
-			}
-			this->setW(this->u().cross(this->v()));
-#elif defined(FRAGCORE_USE_GLM)
+
 			this->setV(glm::normalize(v));
 			this->setU(glm::cross(this->v(), n));
 			if (glm::length(this->u()) < Math::Epsilon) {
 				this->setU(glm::cross(this->v(), m));
 			}
 			this->setW(glm::cross(this->u(), this->v()));
-#endif
 		}
 
 		void initFromW(const Vector3 &w) noexcept {
 			Vector3 n(1.0f, 0.0f, 0.0f);
 			Vector3 m(0.0f, 1.0f, 0.0f);
-#if defined(FRAGCORE_USE_EIGEN)
-			this->setW(w.normalized());
-			this->setU(this->w().cross(n));
-			if (this->u().norm() < Math::Epsilon) {
-				this->setU(this->w().cross(m));
-			}
-			this->setW(this->w().cross(this->v()));
-#elif defined(FRAGCORE_USE_GLM)
+
 			this->setW(glm::normalize(w));
 			this->setU(glm::cross(this->w(), n));
 			if (glm::length(this->u()) < Math::Epsilon) {
 				this->setU(glm::cross(this->w(), m));
 			}
 			this->setW(glm::cross(this->w(), this->v()));
-#endif
 		}
 
 		/**

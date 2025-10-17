@@ -1,4 +1,3 @@
-OPTION(BUILTIN_NANOSVG "Build with nanosvg" ON)
 OPTION(BUILTIN_OPEN_SIMPLEX_NOISE "Build with open Simple Noise" ON)
 OPTION(BUILTIN_PCG_C_BASIC "Build with PCG-C Basic" ON)
 OPTION(BUILTIN_MISC "" ON)
@@ -13,6 +12,7 @@ LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" )
 ########################
 INCLUDE(infoware)
 INCLUDE(taskscheduler)
+INCLUDE(glm)
 IF(NOT TARGET spdlog)
 	INCLUDE(spdlog)
 ENDIF()
@@ -124,7 +124,7 @@ TARGET_COMPILE_DEFINITIONS(fragcore PUBLIC FRAGCORE_USE_GLM=1)
 
 
 #
-TARGET_LINK_LIBRARIES(fragcore PUBLIC taskSch cxxexcept spdlog_header_only fmt magic_enum PRIVATE stdc++ atomic dl ${ZLIB_LIBRARIES}
+TARGET_LINK_LIBRARIES(fragcore PUBLIC taskSch cxxexcept spdlog_header_only fmt magic_enum glm-header-only PRIVATE stdc++ atomic dl ${ZLIB_LIBRARIES}
 													${ZIP_LIBRARIES} m ${OPENSSL_CRYPTO_LIBRARY} infoware )
 
 #

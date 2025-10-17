@@ -90,13 +90,8 @@ namespace fragcore {
 		 * compute internal values.
 		 */
 		void setNormalAndPoint(const Vector2 &normal, const Vector2 &point) noexcept {
-#if defined(FRAGCORE_USE_EIGEN)
-			this->normal = normal.normalized();
-			this->d = -point.dot(this->normal);
-#elif defined(FRAGCORE_USE_GLM)
 			this->normal = glm::normalize(normal);
 			this->d = glm::dot(-point, this->normal);
-#endif
 		}
 
 		/**
@@ -105,15 +100,9 @@ namespace fragcore {
 		void set2DPoints(const Vector2 &p1, const Vector2 &p2) noexcept {
 			Vector2 delta = (p2 - p1);
 
-#if defined(FRAGCORE_USE_EIGEN)
-			Vector2 peru{delta[1], -delta[0]};
-			this->normal = peru.normalized();
-			this->d = this->normal.dot(p2);
-#elif defined(FRAGCORE_USE_GLM)
 			Vector2 peru{delta[1], -delta[0]};
 			this->normal = glm::normalize(peru);
 			this->d = glm::dot(normal, p2);
-#endif
 		}
 
 		/**
@@ -153,11 +142,7 @@ namespace fragcore {
 			/*	Corss product.	*/
 			Vector2 e2{e1[1], -e1[0]};
 
-#if defined(FRAGCORE_USE_EIGEN)
-			tmp.d = -tmp.normal.dot(v1);
-#elif defined(FRAGCORE_USE_GLM)
 			tmp.d = glm::dot(-tmp.normal, v1);
-#endif
 			return tmp;
 		}
 	};

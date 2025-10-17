@@ -38,8 +38,8 @@ namespace fragcore {
 #include <glm/geometric.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
-#include <glm/gtx/quaternion.hpp>
-#include <glm/gtx/rotate_vector.hpp>
+//#include <glm/gtx/rotate_vector.hpp>
+
 namespace fragcore {
 	using Vector3 = glm::vec3;
 	using Vector4 = glm::vec4;
