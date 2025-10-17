@@ -71,7 +71,7 @@ namespace fragcore {
 		 * @param point
 		 * @return
 		 */
-		float distance(const Vector2 &point) const noexcept { return this->normal.dot(point) + d; }
+		float distance(const Vector2 &point) const noexcept { return glm::dot(this->normal, point) + d; }
 
 		/**
 		 * Get distance.
