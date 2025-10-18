@@ -9,6 +9,8 @@ SET(THIRDPARTY_SOURCE "${THIRDPARTY_SOURCE}")
 #
 LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 INCLUDE(generator)
+# Give library reference to GLM, via fragcore
+TARGET_LINK_LIBRARIES(generator fragcore)
 INCLUDE(meshoptimizer)
 
 #

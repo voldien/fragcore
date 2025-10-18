@@ -13,6 +13,4 @@ IF(NOT mesh_generator_POPULATED)
 
 	ADD_SUBDIRECTORY(${mesh_generator_SOURCE_DIR} ${mesh_generator_BINARY_DIR} EXCLUDE_FROM_ALL)
 
-	# Give library reference to GLM, via fragcore
-	TARGET_LINK_LIBRARIES(generator fragcore)
 ENDIF()

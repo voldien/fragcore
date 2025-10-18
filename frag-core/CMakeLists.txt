@@ -36,7 +36,7 @@ ENDIF()
 FIND_PACKAGE(ZLIB QUIET)
 FIND_PACKAGE(Backtrace QUIET)
 FIND_PACKAGE(LZO QUIET)
-FIND_PACKAGE(OpenSSL REQUIRED)
+
 # Find all optional libaries.
 FIND_PACKAGE(JeMalloc QUIET)
 
@@ -60,9 +60,7 @@ ELSE()
 
 ENDIF()
 
-IF(OPENSSL_FOUND)
-	MESSAGE(STATUS "OpenSSL found: ${OPENSSL_LIBRARIES} -- ${OPENSSL_VERSION}")
-ENDIF()
+
 
 IF(LZO_FOUND)
 
@@ -125,7 +123,7 @@ TARGET_COMPILE_DEFINITIONS(fragcore PUBLIC FRAGCORE_USE_GLM=1)
 
 #
 TARGET_LINK_LIBRARIES(fragcore PUBLIC taskSch cxxexcept spdlog_header_only fmt magic_enum glm-header-only PRIVATE stdc++ atomic dl ${ZLIB_LIBRARIES}
-													${ZIP_LIBRARIES} m ${OPENSSL_CRYPTO_LIBRARY} infoware )
+													${ZIP_LIBRARIES} m infoware )
 
 #
 TARGET_INCLUDE_DIRECTORIES(fragcore PRIVATE ${ZIP_INCLUDE_DIRS}
