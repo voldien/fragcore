@@ -23,6 +23,7 @@
 #include "Math3D/OBB.h"
 #include "Math3D/Plane.h"
 #include <Math3D/Triangle.h>
+#include <initializer_list>
 
 namespace fragcore {
 
@@ -31,7 +32,7 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC GeometryUtility {
 	  public:
-		template <typename T> static bool testPlanesAABB(const Plane<T> &plane, const AABB &bound) {
+		template <typename T> static constexpr bool testPlanesAABB(const Plane<T> &plane, const AABB &bound) noexcept {
 
 			const float rad = glm::dot(glm::abs(plane.getNormal()), bound.getHalfSize());
 			return -rad <= plane.distanceSigned(bound.getCenter());
@@ -40,19 +41,94 @@ namespace fragcore {
 		/**
 		 * @brief
 		 */
-		template <typename T> static bool testPlanesSphere(const Plane<T> &plane, const BoundingSphere &bound) {
+		template <typename T>
+		static constexpr bool testPlanesSphere(const Plane<T> &plane, const BoundingSphere &bound) noexcept {
 			const T distance = plane.distanceSigned(bound.getCenter());
 			return distance > -bound.getRadius();
 		}
 
-		template <typename T> static bool TestPlanesOBB(const Plane<T> &plane, const OBB &bound) { return true; }
+		template <typename T> static constexpr bool TestPlanesOBB(const Plane<T> &plane, const OBB &bound) noexcept {
+			return true;
+		}
 
 		/**
 		 * @brief Positive
 		 */
-		template <typename T> static bool testPlanesPoint(const Plane<T> &plane, const Vector3 &point) {
+		template <typename T>
+		static constexpr bool testPlanesPoint(const Plane<T> &plane, const Vector3 &point) noexcept {
 			return plane.distanceSigned(point) > 0;
 		}
+
+		/**
+		 * @brief Positive
+		 */
+		template <typename T>
+		static constexpr bool testPlanesPlane(const Plane<T> &plane0, const Plane<T> &plane1) noexcept {
+			return  true;
+		}
+
+
+	  public:
+		/**
+		 * @brief
+		 */
+		static AABB computeBoundingBox(const Vector3 *vertices, const size_t nrVertices, const size_t stride);
+
+		/**
+		 * @brief
+		 */
+		static AABB computeBoundingBox(const std::initializer_list<AABB &> &aabbs) noexcept;
+
+		/**
+		 * @brief
+		 */
+		static AABB computeBoundingBox(const AABB &aabbs, const Matrix4x4 &matrix) noexcept {
+
+			const Vector4 globalCenter = (matrix * Vector4(aabbs.getCenter(), 1));
+
+			/*	*/
+			const Vector3 right = glm::normalize(Vector3(matrix * Vector4(1, 0, 0, 0))) * aabbs.getHalfSize().x;
+			const Vector3 up = glm::normalize(Vector3(matrix * Vector4(0, 1, 0, 0))) * aabbs.getHalfSize().y;
+			const Vector3 forward = glm::normalize(Vector3(matrix * Vector4(0, 0, 1, 0))) * aabbs.getHalfSize().z;
+
+			/*	*/
+			const float newIi = std::abs(glm::dot(Vector3{1.f, 0.f, 0.f}, right)) +
+								std::abs(glm::dot(Vector3{1.f, 0.f, 0.f}, up)) +
+								std::abs(glm::dot(Vector3{1.f, 0.f, 0.f}, forward));
+
+			const float newIj = std::abs(glm::dot(Vector3{0.f, 1.f, 0.f}, right)) +
+								std::abs(glm::dot(Vector3{0.f, 1.f, 0.f}, up)) +
+								std::abs(glm::dot(Vector3{0.f, 1.f, 0.f}, forward));
+
+			const float newIk = std::abs(glm::dot(Vector3{0.f, 0.f, 1.f}, right)) +
+								std::abs(glm::dot(Vector3{0.f, 0.f, 1.f}, up)) +
+								std::abs(glm::dot(Vector3{0.f, 0.f, 1.f}, forward));
+
+			return AABB(Vector3(newIi, newIj, newIk), Vector3(globalCenter));
+		}
+
+		/**
+		 * @brief
+		 *
+		 */
+		static BoundingSphere computeBoundingSphere(const float *vertices, const size_t nrVertices,
+													const size_t stride = sizeof(float) * 3);
+
+		static BoundingSphere computeBoundingSphere(const std::vector<BoundingSphere &> &spheres) noexcept;
+
+		/**
+		 * @brief
+		 *
+		 */
+		static OBB computeBoundingOBB(const float *vertices, const size_t nrVertices,
+									  const size_t stride = sizeof(float) * 3);
+
+		static bool isConvex(const std::vector<Vector3> &points);
+		static bool isConcave(const std::vector<Vector3> &points);
+
+		struct Face {
+			uint Indices[3];
+		};
 
 		//
 		static std::vector<Triangle> subdivide(const std::vector<Triangle> &triangles);
@@ -64,39 +140,6 @@ namespace fragcore {
 		static std::vector<Triangle> generateSmoothNormals(const std::vector<Triangle> &triangle, const float angle);
 
 		static void optimizeGeometry();
-
-		/**
-		 * @brief
-		 *
-		 */
-		static AABB computeBoundingBox(const Vector3 *vertices, const size_t nrVertices,
-									   const size_t stride = sizeof(float) * 3);
-		static AABB computeBoundingBox(const std::vector<AABB &> &aabbs) noexcept;
-
-		static AABB computeBoundingBox(const AABB &aabbs, const Matrix4x4 &matrix) noexcept;
-
-		/**
-		 * @brief
-		 *
-		 */
-		static BoundingSphere computeBoundingSphere(float *vertices, const size_t nrVertices,
-													const size_t stride = sizeof(float) * 3);
-
-		static BoundingSphere computeBoundingBox(const std::vector<BoundingSphere &> &spheres) noexcept;
-
-		/**
-		 * @brief
-		 *
-		 */
-		static OBB computeBoundingOBB(float *vertices, const size_t nrVertices,
-									  const size_t stride = sizeof(float) * 3);
-
-		static bool isConvex(const std::vector<Vector3> &points);
-		static bool isConcave(const std::vector<Vector3> &points);
-
-		struct Face {
-			uint Indices[3];
-		};
 
 		// static void optimizeGeometry(float *vertices, const size_t nrVertices,
 		// 							  const size_t stride = sizeof(float) * 3, void* indicies, const size_t nrIndices,

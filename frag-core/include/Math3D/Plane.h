@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-#include <glm/geometric.hpp>
 #ifndef _FRAGCORE_PLANE_H_
 #define _FRAGCORE_PLANE_H_ 1
 #include "../FragDef.h"
@@ -67,8 +66,8 @@ namespace fragcore {
 		/**
 		 * Compute distance.
 		 */
-		T distance(const Vector3 &point) const noexcept { return glm::dot(normal, point) + d; }
-		T distanceSigned(const Vector3 &point) const noexcept { return glm::dot(normal, point) - d; }
+		constexpr T distance(const Vector3 &point) const noexcept { return glm::dot(normal, point) + d; }
+		constexpr T distanceSigned(const Vector3 &point) const noexcept { return glm::dot(normal, point) - d; }
 
 		/**
 		 * Get distance.
@@ -79,7 +78,7 @@ namespace fragcore {
 		/**
 		 * Get point.
 		 */
-		Vector3 getPoint() const noexcept { return this->distance() * this->getNormal(); }
+		constexpr Vector3 getPoint() const noexcept { return this->distance() * this->getNormal(); }
 
 		/**
 		 * Set normal and point and

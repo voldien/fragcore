@@ -78,40 +78,16 @@ AABB GeometryUtility::computeBoundingBox(const Vector3 *vertices, const size_t n
 	return AABB::createMinMax(min, max);
 }
 
-AABB GeometryUtility::computeBoundingBox(const AABB &aabbs, const Matrix4x4 &matrix) noexcept {
-
-	const Vector4 globalCenter = (matrix * Vector4(aabbs.getCenter().x, aabbs.getCenter().y, aabbs.getCenter().z, 1));
-
-	/*	*/
-	const Vector3 right = glm::normalize(Vector3(matrix * Vector4(1, 0, 0, 0))) * aabbs.getHalfSize().x;
-	const Vector3 up = glm::normalize(Vector3(matrix * Vector4(0, 1, 0, 0))) * aabbs.getHalfSize().y;
-	const Vector3 forward = glm::normalize(Vector3(matrix * Vector4(0, 0, 1, 0))) * aabbs.getHalfSize().z;
-
-	/*	*/
-	const float newIi = std::abs(glm::dot(Vector3{1.f, 0.f, 0.f}, right)) +
-						std::abs(glm::dot(Vector3{1.f, 0.f, 0.f}, up)) +
-						std::abs(glm::dot(Vector3{1.f, 0.f, 0.f}, forward));
-
-	const float newIj = std::abs(glm::dot(Vector3{0.f, 1.f, 0.f}, right)) +
-						std::abs(glm::dot(Vector3{0.f, 1.f, 0.f}, up)) +
-						std::abs(glm::dot(Vector3{0.f, 1.f, 0.f}, forward));
-
-	const float newIk = std::abs(glm::dot(Vector3{0.f, 0.f, 1.f}, right)) +
-						std::abs(glm::dot(Vector3{0.f, 0.f, 1.f}, up)) +
-						std::abs(glm::dot(Vector3{0.f, 0.f, 1.f}, forward));
-
-	return AABB(Vector3(newIi, newIj, newIk), Vector3(globalCenter));
-}
-
-BoundingSphere GeometryUtility::computeBoundingSphere(float *vertices, const size_t nrVertices, const size_t stride) {
+BoundingSphere GeometryUtility::computeBoundingSphere(const float *vertices, const size_t nrVertices, const size_t stride) {
 
 	const AABB aabb = GeometryUtility::computeBoundingBox((Vector3 *)vertices, nrVertices, stride);
 	const Vector3 center = aabb.getCenter();
 	const float radius = glm::length(aabb.getHalfSize());
+
 	return BoundingSphere(center, radius);
 }
 
-OBB GeometryUtility::computeBoundingOBB(float *vertices, const size_t nrVertices, const size_t stride) {
+OBB GeometryUtility::computeBoundingOBB(const float *vertices, const size_t nrVertices, const size_t stride) {
 	// PCA
 	// LinAlg::PCA();
 

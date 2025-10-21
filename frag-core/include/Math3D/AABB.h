@@ -131,9 +131,13 @@ namespace fragcore {
 			return this->contains(bounds.max(), bounds.getCenter()) && this->contains(bounds.min(), bounds.getCenter());
 		}
 
+		/*	*/
+		AABB encapsulate(const AABB &bounds) const noexcept {
+			Vector3 encapsulateSize = glm::max(bounds.getHalfSize(), this->getHalfSize());
+			return AABB(getCenter(), encapsulateSize);
+		}
+
 		/**
-		 *
-		 * @param normal
 		 * @return
 		 */
 		Vector3 getVertexN(const Vector3 &normal) const noexcept {
