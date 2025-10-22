@@ -358,13 +358,15 @@ ENDIF()
 # Seperate Modules, based on the core library.
 # #########################################################
 IF(BUILD_MODULES)
+
 	# Image Loader
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/image)
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/image/imageloader)
 
-	# Windows
+	# Window backend
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/window)
-	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/window/sdl)
+	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/window/sdl2)
+	# ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/window/sdl3)
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/modules/window/glfw3)
 
 	# Rendering interfaces.

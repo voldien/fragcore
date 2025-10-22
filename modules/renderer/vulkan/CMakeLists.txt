@@ -8,7 +8,7 @@ ENDIF()
 
 
 ADD_LIBRARY(fragcore-rvk-obj OBJECT ${VULKAN_RENDER_SOURCE_FILES} ${VULKAN_RENDER_HEADER_FILES})
-TARGET_LINK_LIBRARIES(fragcore-rvk-obj PUBLIC fragcore-window-sdl fragcore fragcore-render-interface fvkcore) #
+TARGET_LINK_LIBRARIES(fragcore-rvk-obj PUBLIC fragcore-window-sdl2 fragcore fragcore-render-interface fvkcore) #
 TARGET_COMPILE_DEFINITIONS(fragcore-rvk-obj PRIVATE FRAG_CORE_INTERNAL_IMP=1)
 
 IF (BUILD_SHARED_LIBS AND CMAKE_SIZEOF_VOID_P EQUAL 8)
@@ -24,7 +24,7 @@ ENDIF()
 TARGET_INCLUDE_DIRECTORIES(fragcore-rvk-obj PRIVATE ${Vulkan_INCLUDE_DIRS} PUBLIC
 											$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 											$<INSTALL_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
-ADD_DEPENDENCIES(fragcore-rvk-obj fragcore fvkcore fragcore-render-interface fragcore-window-sdl)
+ADD_DEPENDENCIES(fragcore-rvk-obj fragcore fvkcore fragcore-render-interface fragcore-window-sdl2)
 
 
 # Library target.

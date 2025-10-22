@@ -20,10 +20,9 @@ SDLWindow::SDLWindow() {
 #endif
 
 	SDL_WindowFlags window_flags =
-		(SDL_WindowFlags)(SDL_WINDOW_HIDDEN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_INPUT_FOCUS);
-
-	/*	*/
-	this->window = SDL_CreateWindow("", window_position_x, window_position_y, width, height, window_flags);
+		(SDL_WindowFlags)(SDL_WINDOW_HIDDEN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_INPUT_FOCUS |
+						  SDL_WINDOW_VULKAN);
+	this->window = SDL_CreateWindow("", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, window_flags);
 
 	if (window == nullptr) {
 		throw RuntimeException("Failed to create window {}", SDL_GetError());

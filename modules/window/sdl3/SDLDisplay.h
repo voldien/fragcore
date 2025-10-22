@@ -1,0 +1,62 @@
+/*
+ *	FragCore - Fragment Core
+ *	Copyright (C) 2018 Valdemar Lindberg
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program;
+ */
+#ifndef _FRAGCORE_SDLDISPLAY_H_
+#define _FRAGCORE_SDLDISPLAY_H_ 1
+#include "../Display.h"
+
+namespace fragcore {
+
+	/**
+	 *
+	 */
+	class FVDECLSPEC SDLDisplay : public Display {
+	  public:
+		SDLDisplay(const int index);
+		~SDLDisplay() override = default;
+
+		unsigned int x() const override;
+
+		unsigned int y() const override;
+
+		unsigned int width() const override;
+
+		unsigned int height() const override;
+
+		unsigned int refreshRate() const override;
+
+		std::vector<Mode> getModes() const override;
+
+		void getDPI(DPI *dpi) override;
+		void setMode(const Mode &mode) override;
+
+		DisplayFormat getFormat() override;
+
+	  protected:
+		DisplayFormat translateFormat(unsigned int format);
+
+	  private:
+		unsigned int index;
+
+	  public:
+		static int getNumDisplays() noexcept;
+		static SDLDisplay getPrimaryDisplay() noexcept;
+		static SDLDisplay getDisplay(const int index);
+	};
+} // namespace fragcore
+
+#endif

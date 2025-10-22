@@ -26,11 +26,10 @@
 namespace fragcore {
 
 	/**
-	 * @brief Pool allocate
-	 *
-	 * @tparam T
+	 * @brief Pool allocator
 	 */
 	template <typename T> class FVDECLSPEC PoolAllocator {
+	  private:
 		static constexpr bool isClass = std::is_class_v<T>;
 
 	  public:
@@ -61,7 +60,7 @@ namespace fragcore {
 			this->setTypeSize(sizeof(T));
 		}
 
-		PoolAllocator(const unsigned int num) : PoolAllocator() { this->resize(num); }
+		PoolAllocator(const size_t num) : PoolAllocator() { this->resize(num); }
 
 		~PoolAllocator() { clean(); }
 
@@ -122,8 +121,10 @@ namespace fragcore {
 				alloc = &this->item->next->data; /*	changed.	*/
 			}
 
-			this->item->next = this->item->next->next; /*	TODO still some bugs in pool allactor.	*/
+			/*	Update entries.	*/
+			this->item->next = this->item->next->next;
 			this->nrOfElements++;
+
 			return alloc;
 		}
 
@@ -179,19 +180,17 @@ namespace fragcore {
 			this->nrOfElements = 0;
 		}
 
-		bool isFull() const noexcept {
-			return this->nrOfElements >= (unsigned int)std::max<int>(0, this->reserved() - 1);
-		}
+		bool isFull() const noexcept { return this->nrOfElements >= (size_t)std::max<int>(0, this->reserved() - 1); }
 
-		unsigned int size() const noexcept { return this->nrOfElements; }
+		size_t size() const noexcept { return this->nrOfElements; }
 
-		unsigned int reserved() const noexcept { return this->mReserved; }
+		size_t reserved() const noexcept { return this->mReserved; }
 
 		/**
 		 * Get datatype size.
 		 */
-		void setTypeSize(const unsigned int size) noexcept { this->typeSize = size; }
-		unsigned int getTypeSize() const noexcept { return this->typeSize; }
+		void setTypeSize(const size_t size) noexcept { this->typeSize = size; }
+		size_t getTypeSize() const noexcept { return this->typeSize; }
 
 		/**
 		 *
@@ -199,25 +198,29 @@ namespace fragcore {
 		/*	TODO Fix, still some bugs!	*/
 		void resize(const size_t nrRequestedElements) {
 			size_t index = 0;
-			const unsigned int itemSize = this->getItemSize();
+			const size_t itemSize = this->getItemSize();
 
 			assert(nrRequestedElements >= 0);
 
 			/*  No allocation.  */
 			if (this->reserved() == 0) {
-				this->item = static_cast<PoolAllactorItem *>(realloc(this->item, itemSize * nrRequestedElements));
+
+				if constexpr (isClass) {
+					this->item = static_cast<PoolAllactorItem *>(new PoolAllactorItem[nrRequestedElements]);
+				} else {
+					this->item = static_cast<PoolAllactorItem *>(realloc(this->item, itemSize * nrRequestedElements));
+				}
 
 				/*	*/
 				for (index = 0; index < nrRequestedElements - 1; index++) {
 					item[index].next = &item[index + 1];
 
-					T it;
-					if (isClass) {
-						std::memcpy(&item[index].data, &it, sizeof(T));
-
-						item[index].data = T();
+					if constexpr (isClass) {
+						T *ob = new (&item[index].data) T();
+						//item[index].data = *ob;
 					}
 				}
+
 				item[nrRequestedElements - 1].next = nullptr;
 			} else {
 				/*  */
@@ -237,7 +240,7 @@ namespace fragcore {
 					lastItem->next = &item[index + 1];
 					lastItem = lastItem->next;
 					if (isClass) {
-						lastItem->data = std::move(T());
+						// lastItem->data = std::move(T());
 					}
 				}
 				lastItem->next = nullptr;
@@ -260,13 +263,13 @@ namespace fragcore {
 		 *
 		 * @return
 		 */
-		constexpr unsigned int getItemSize() const noexcept { return sizeof(PoolAllactorItem); }
+		constexpr size_t getItemSize() const noexcept { return sizeof(PoolAllactorItem); }
 
 	  private:							  /*	attributes.	*/
 		PoolAllactorItem *item = nullptr; /*	Pool data.	*/
-		unsigned int nrOfElements = 0;	  /*	number of elements used.	*/
-		unsigned int mReserved = 0;		  /*	number of allocated elements.	*/
-		unsigned int typeSize = 0;		  /*	size of the data type.	*/
+		size_t nrOfElements = 0;		  /*	number of elements used.	*/
+		size_t mReserved = 0;			  /*	number of allocated elements.	*/
+		size_t typeSize = 0;			  /*	size of the data type.	*/
 	};
 } // namespace fragcore
 

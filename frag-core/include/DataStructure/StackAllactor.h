@@ -80,6 +80,8 @@ namespace fragcore {
 		bool operator==(const StackAllocator &other);
 		bool operator!=(const StackAllocator &other);
 
+		bool isDataOwned() const noexcept { return this->ownData; }
+
 	  private:			/*	Attributes.	*/
 		void *mData;	/*	*/
 		size_t mSize;	/*	*/

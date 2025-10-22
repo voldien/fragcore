@@ -35,7 +35,6 @@ namespace fragcore {
 		Object(Object &&other) { this->name = std::exchange(other.name, nullptr); }
 		Object(const Object &other) = default;
 		Object &operator=(Object &&other) {
-			UIDObject::operator=(other);
 			this->name = std::exchange(other.name, nullptr);
 			return *this;
 		}

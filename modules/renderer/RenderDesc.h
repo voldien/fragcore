@@ -229,9 +229,6 @@ namespace fragcore {
 			Texture2DArray = 0x20, /*	2D Texture Array.*/
 		};
 
-
-
-
 		/**
 		 *	Texture compression types.
 		 */
@@ -470,16 +467,16 @@ namespace fragcore {
 		 *
 		 */
 		enum class BufferType : uint32_t {
-			eArray,				/*	*/
-			eElementArray,		/*	*/
-			eUniform,			/*	*/
-			eTexture,			/*  */
-			eShaderStorage,		/*  */
-			eTransformFeedback, /*  */
-			ePixelUnpack,		/*  */
-			ePixelPack,			/*  */
-			eIndirectDraw,		/*  */
-			eIndirectDispatch	/*  */
+			Array,			   /*	*/
+			ElementArray,	   /*	*/
+			Uniform,		   /*	*/
+			Texture,		   /*  */
+			ShaderStorage,	   /*  */
+			TransformFeedback, /*  */
+			PixelUnpack,	   /*  */
+			PixelPack,		   /*  */
+			IndirectDraw,	   /*  */
+			IndirectDispatch   /*  */
 		};
 
 		/**
@@ -487,21 +484,18 @@ namespace fragcore {
 		 *	buffer object.
 		 */
 		enum BufferHint : uint32_t {
-			eRead = 0x1,	/*  Reading from the buffer.    */
-			eWrite = 0x2,	/*  Writing to the buffer.  */
-			eStatic = 0x4,	/*  Written once.   */
-			eDynamic = 0x8, /*  Will be updated frequently.    */
-			eStream = 0x10, /*  */
+			Read = 0x1,	   /*  Reading from the buffer.    */
+			Write = 0x2,   /*  Writing to the buffer.  */
+			Static = 0x4,  /*  Written once.   */
+			Dynamic = 0x8, /*  Will be updated frequently.    */
+			Stream = 0x10, /*  */
 		};
 
-		enum BufferLoc {
-
-		};
-
-		unsigned int type; /*	Buffer data type.	*/
-		size_t size;	   /*	Buffer size in bytes.	*/
-		void *data;		   /*	Buffer host data pointer.	*/
-		BufferHint hint;   /*	Buffer hint of usages.	*/
+		BufferType type;	  /*	Buffer data type.	*/
+		size_t size;		  /*	Buffer size in bytes.	*/
+		size_t alignment = 1; /*	*/
+		void *data;			  /*	Buffer host data pointer.	*/
+		BufferHint hint;	  /*	Buffer hint of usages.	*/
 		/*  Debug attributes.   */
 		MarkerDebug *marker;
 	};
@@ -526,10 +520,11 @@ namespace fragcore {
 	using GeometryDesc = struct geometry_desc_t {
 
 		enum class AttributeType {
-			eFloat = 0x1,  /*	*/
-			eInt = 0x2,	   /*	*/
-			eDouble = 0x3, /*  */
-			eHalf = 0x4,   /*  */
+			Float = 0x1,  /*	*/
+			Int32 = 0x2,  /*	*/
+			Int16 = 0x2,  /*	*/
+			Double = 0x3, /*  */
+			Half = 0x4,	  /*  */
 		};
 
 		/*	*/

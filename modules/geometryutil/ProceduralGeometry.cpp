@@ -98,8 +98,7 @@ void ProceduralGeometry::createFrustum(std::vector<Vertex> &vertices, const Matr
 void ProceduralGeometry::createFrustum(std::vector<Vertex> &vertices, const float fov, const float aspect,
 									   const float near, const float far) {
 
-	Matrix4x4 projectMatrix = glm::perspective(fov, aspect, near ,far); 
- 
+	Matrix4x4 projectMatrix = glm::perspective(fov, aspect, near, far);
 
 	ProceduralGeometry::createFrustum(vertices, projectMatrix);
 }
