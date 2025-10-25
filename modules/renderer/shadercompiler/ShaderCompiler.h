@@ -18,10 +18,8 @@
 #ifndef _FRAGCORE_SHADER_COMPILER_H_
 #define _FRAGCORE_SHADER_COMPILER_H_ 1
 #include "../Shader.h"
-#include "Core/UIDStruct.h"
 #include "ShaderLanguage.h"
 #include <FragDef.h>
-#include <map>
 #include <vector>
 
 namespace fragcore {

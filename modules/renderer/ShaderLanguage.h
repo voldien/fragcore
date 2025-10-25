@@ -22,7 +22,7 @@
 
 namespace fragcore {
 	/**
-	 *  Support languages.
+	 *  Supported languages.
 	 */
 	enum ShaderLanguage : uint32_t {
 		NONE = 0,

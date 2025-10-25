@@ -1,11 +1,10 @@
 #include "ShaderCompiler.h"
 #include "ShaderLanguage.h"
+#include <fmt/core.h>
 #include <spirv_glsl.hpp>
 #include <spirv_hlsl.hpp>
 #include <vector>
-// #include <spirv_cross/spirv_msl.hpp>
 
-#include <fmt/core.h>
 using namespace fragcore;
 
 std::vector<char> ShaderCompiler::convertSPIRV(const std::vector<uint32_t> &sourceBinary,

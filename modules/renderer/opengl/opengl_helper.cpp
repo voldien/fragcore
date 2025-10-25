@@ -366,25 +366,25 @@ unsigned int GLHelper::getTextureSwizzle(const fragcore::TextureSwizzle swizzle)
 
 unsigned int GLHelper::getBufferType(const BufferDesc::BufferType type) {
 	switch (type) {
-	case BufferDesc::BufferType::eArray:
+	case BufferDesc::BufferType::Array:
 		return GL_ARRAY_BUFFER_ARB;
-	case BufferDesc::BufferType::eElementArray:
+	case BufferDesc::BufferType::ElementArray:
 		return GL_ELEMENT_ARRAY_BUFFER_ARB;
-	case BufferDesc::BufferType::eUniform:
+	case BufferDesc::BufferType::Uniform:
 		return GL_UNIFORM_BUFFER;
-	case BufferDesc::BufferType::eTexture:
+	case BufferDesc::BufferType::Texture:
 		return GL_TEXTURE_BUFFER;
-	case BufferDesc::BufferType::eShaderStorage:
+	case BufferDesc::BufferType::ShaderStorage:
 		return GL_SHADER_STORAGE_BUFFER;
-	case BufferDesc::BufferType::eTransformFeedback:
+	case BufferDesc::BufferType::TransformFeedback:
 		return GL_TRANSFORM_FEEDBACK_BUFFER;
-	case BufferDesc::BufferType::ePixelPack:
+	case BufferDesc::BufferType::PixelPack:
 		return GL_PIXEL_PACK_BUFFER;
-	case BufferDesc::BufferType::ePixelUnpack:
+	case BufferDesc::BufferType::PixelUnpack:
 		return GL_PIXEL_UNPACK_BUFFER;
-	case BufferDesc::BufferType::eIndirectDraw:
+	case BufferDesc::BufferType::IndirectDraw:
 		return GL_DRAW_INDIRECT_BUFFER;
-	case BufferDesc::BufferType::eIndirectDispatch:
+	case BufferDesc::BufferType::IndirectDispatch:
 		return GL_DISPATCH_INDIRECT_BUFFER;
 	default:
 		throw InvalidArgumentException("Invalid buffer type {}.", magic_enum::enum_name(type));
@@ -393,27 +393,27 @@ unsigned int GLHelper::getBufferType(const BufferDesc::BufferType type) {
 
 unsigned int GLHelper::getBufferHint(const BufferDesc::BufferHint hint) {
 
-	const unsigned int subhint = (hint & ~(BufferDesc::eWrite | BufferDesc::eRead));
+	const unsigned int subhint = (hint & ~(BufferDesc::Write | BufferDesc::Read));
 
-	if (hint & BufferDesc::eWrite) {
+	if (hint & BufferDesc::Write) {
 		switch (subhint) {
-		case BufferDesc::eStatic:
+		case BufferDesc::Static:
 			return GL_STATIC_DRAW_ARB;
-		case BufferDesc::eDynamic:
+		case BufferDesc::Dynamic:
 			return GL_DYNAMIC_DRAW_ARB;
-		case BufferDesc::eStream:
+		case BufferDesc::Stream:
 			return GL_STREAM_DRAW_ARB;
 		default:
 			assert(0);
 			throw InvalidArgumentException("None matching write buffer hint");
 		}
-	} else if (hint & BufferDesc::eRead) {
+	} else if (hint & BufferDesc::Read) {
 		switch (subhint) {
-		case BufferDesc::eStatic:
+		case BufferDesc::Static:
 			return GL_STATIC_READ_ARB;
-		case BufferDesc::eDynamic:
+		case BufferDesc::Dynamic:
 			return GL_DYNAMIC_READ_ARB;
-		case BufferDesc::eStream:
+		case BufferDesc::Stream:
 			return GL_STREAM_READ_ARB;
 		default:
 			assert(0);
@@ -451,13 +451,13 @@ unsigned int GLHelper::getPrimitive(const Primitive primitive) {
 
 unsigned int GLHelper::getAttributeDataType(const GeometryDesc::AttributeType type) {
 	switch (type) {
-	case GeometryDesc::AttributeType::eInt:
+	case GeometryDesc::AttributeType::Int32:
 		return GL_INT;
-	case GeometryDesc::AttributeType::eFloat:
+	case GeometryDesc::AttributeType::Float:
 		return GL_FLOAT;
-	case GeometryDesc::AttributeType::eDouble:
+	case GeometryDesc::AttributeType::Double:
 		return GL_DOUBLE;
-	case GeometryDesc::AttributeType::eHalf:
+	case GeometryDesc::AttributeType::Half:
 		return GL_HALF_FLOAT;
 	default:
 		throw InvalidArgumentException("Invalid attribute type- {}.", magic_enum::enum_name(type));

@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
-
 #ifndef _FRAGCORE_RENDERWINDOW_H_
 #define _FRAGCORE_RENDERWINDOW_H_ 1
 #include "IRenderer.h"
@@ -29,7 +28,6 @@
 namespace fragcore {
 	/**
 	 * @brief
-	 *
 	 */
 	class FVDECLSPEC RendererWindow : public SDLWindow {
 		friend class IRenderer;
@@ -42,7 +40,7 @@ namespace fragcore {
 		virtual void vsync(bool state) = 0;
 
 	  protected: /*  Renderer methods.   */
-		// TODO determine how to resolve and
+
 		virtual bool assertConfigAttributes(const IConfig *iConfig) = 0;
 		virtual void createWindow(int x, int y, int width, int height, const char *api) = 0;
 		virtual void useWindow(void *data) = 0;

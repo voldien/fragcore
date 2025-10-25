@@ -55,9 +55,15 @@ void StackAllocator::clear() noexcept { this->mMarker = 0; }
 size_t StackAllocator::getMarker() const noexcept { return this->mMarker; }
 
 void *StackAllocator::fetch(const size_t sizeBytes) {
-	/*	TODO: validate. request.	*/
+	/*	Return null if run out of memory.	*/
+
+	if (this->getMarker() + sizeBytes > this->getSize()) {
+		return nullptr;
+	}
+
 	uint8_t *pdata = static_cast<uint8_t *>(this->mData) + getMarker();
 	this->mMarker += sizeBytes;
+
 	return pdata;
 }
 
