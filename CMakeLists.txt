@@ -14,6 +14,9 @@ CMAKE_POLICY(SET CMP0010 NEW)
 # Input directories must have CMakeLists.txt
 CMAKE_POLICY(SET CMP0014 NEW)
 
+# Allow GLM to work in the modules.
+CMAKE_POLICY(SET CMP0079 NEW)
+
 # Silence draco warning on macOS, new policy works fine.
 IF(POLICY CMP0068)
 	CMAKE_POLICY(SET CMP0068 NEW)
