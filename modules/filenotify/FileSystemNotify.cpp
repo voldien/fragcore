@@ -1,7 +1,6 @@
 #include "FileSystemNotify.h"
 #include <IO/FileSystem.h>
 #include <exception>
-#include <taskSch.h>
 
 #include <libfswatch/c/cevent.h>
 #include <libfswatch/c/libfswatch.h>
@@ -56,7 +55,7 @@ FileSystemNotify::~FileSystemNotify() {
 		/*	*/
 	}
 	fsw_destroy_session(static_cast<FSW_HANDLE>(this->session));
-	schDeleteThread(this->pthread);
+	//schDeleteThread(this->pthread);
 }
 
 void FileSystemNotify::addFilePath(const char *filepath, FileWatchEvent event, void *object) {
@@ -184,7 +183,7 @@ void FileSystemNotify::start() {
 	/*  Create monitoring thread.   */
 	if (!fsw_is_running(static_cast<FSW_HANDLE>(this->session))) {
 		// TODO make use of the thread wrapper method.
-		this->pthread = schCreateThread(-1, (schFunc)FileSystemNotify::fswatch, this->session);
+		//this->pthread = schCreateThread(-1, (schFunc)FileSystemNotify::fswatch, this->session);
 	}
 }
 

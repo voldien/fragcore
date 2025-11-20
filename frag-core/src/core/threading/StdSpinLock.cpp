@@ -1,30 +1,31 @@
 #include "Threading/StdSpinLock.h"
+#include <cassert>
+#include <cstdlib>
 
 using namespace fragcore;
+using schSpinLock = void; /*	Spinlock sync object.   */
 
-StdSpinLock::StdSpinLock() {
-	int rcode = schCreateSpinLock(&this->spinlock);
-	if (rcode != SCH_OK) {
-		throw RuntimeException("Failed to create spinlock: {}", schErrorMsg(rcode));
-	}
-}
+// int schDeleteSpinLock(schSpinLock *spinlock) {
+// 	int status = pthread_spin_destroy(spinlock);
+// 	free(spinlock);
+// 	return status;
+// }
 
-StdSpinLock::~StdSpinLock() { schDeleteSpinLock(this->spinlock); }
+// int schLockSpinLock(schSpinLock *spinlock) { return pthread_spin_lock(spinlock); }
 
-void StdSpinLock::lock() {
+// int schTryLockSpinLock(schSpinLock *spinLock) { return pthread_spin_trylock(spinLock); }
 
-	int rcode = schLockSpinLock(this->spinlock);
-	if (rcode != SCH_OK) {
-		throw RuntimeException("Failed lock spinlock: {}", schErrorMsg(rcode));
-	}
-}
-void StdSpinLock::unlock() {
+// int schUnlockSpinLock(schSpinLock *spinlock) {
+// 	return pthread_spin_unlock(spinlock); //== 0 ? SCH_OK : SCH_ERROR_UNKNOWN;
+// }
 
-	int rcode = schUnlockSpinLock(this->spinlock);
-	if (rcode != SCH_OK) {
-		throw RuntimeException("Failed to unlock spinlock: {}", schErrorMsg(rcode));
-	}
-}
+StdSpinLock::StdSpinLock() {}
+
+StdSpinLock::~StdSpinLock() {}
+
+void StdSpinLock::lock() {}
+
+void StdSpinLock::unlock() {}
 void StdSpinLock::wait(long int nanoTimeout) {}
 
 intptr_t StdSpinLock::getNativePtr() const { return reinterpret_cast<intptr_t>(this->spinlock); }

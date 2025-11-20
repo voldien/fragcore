@@ -11,7 +11,6 @@ LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" )
 # External libraries.
 ########################
 INCLUDE(infoware)
-INCLUDE(taskscheduler)
 INCLUDE(glm)
 IF(NOT TARGET spdlog)
 	INCLUDE(spdlog)
@@ -121,7 +120,7 @@ TARGET_COMPILE_DEFINITIONS(fragcore PUBLIC GLM_FORCE_CXX17 GLM_FORCE_INTRINSICS)
 TARGET_COMPILE_DEFINITIONS(fragcore PUBLIC FRAGCORE_USE_GLM=1)
 
 #
-TARGET_LINK_LIBRARIES(fragcore PUBLIC taskSch cxxexcept spdlog_header_only fmt magic_enum glm-header-only PRIVATE stdc++ atomic dl ${ZLIB_LIBRARIES}
+TARGET_LINK_LIBRARIES(fragcore PUBLIC cxxexcept spdlog_header_only fmt magic_enum glm-header-only PRIVATE stdc++ atomic dl ${ZLIB_LIBRARIES}
 													${ZIP_LIBRARIES} m infoware )
 #
 TARGET_INCLUDE_DIRECTORIES(fragcore PRIVATE ${ZIP_INCLUDE_DIRS}
@@ -160,7 +159,7 @@ CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/include/fragcore_revision.h.in" "${C
 # Install
 IF(BUILD_WITH_INSTALL)
 	INSTALL(TARGETS fragcore DESTINATION lib COMPONENT ${LIBFRAGCORE_COMPONENT})
-	INSTALL(TARGETS infoware taskSch DESTINATION lib)
+	INSTALL(TARGETS infoware DESTINATION lib)
 
 	INSTALL(DIRECTORY ${FRAG_CORE_INCLUDE_SUB_DIR} # source directory
 			DESTINATION include/fragcore # target directory
