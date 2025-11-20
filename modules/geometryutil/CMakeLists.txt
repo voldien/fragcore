@@ -10,7 +10,7 @@ SET(THIRDPARTY_SOURCE "${THIRDPARTY_SOURCE}")
 LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 INCLUDE(generator)
 # Give library reference to GLM, via fragcore
-TARGET_LINK_LIBRARIES(generator fragcore)
+TARGET_LINK_LIBRARIES(generator glm-header-only)
 INCLUDE(meshoptimizer)
 
 #
@@ -19,7 +19,7 @@ FILE(GLOB GEOMETRY_UTIL_HEADER_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.h)
 
 # Library target.
 ADD_LIBRARY(fragcore-geometry-util SHARED ${GEOMETRY_UTIL_SOURCE_FILES} ${GEOMETRY_UTIL_HEADER_FILES})
-TARGET_LINK_LIBRARIES(fragcore-geometry-util PUBLIC fragcore PRIVATE generator meshoptimizer)
+TARGET_LINK_LIBRARIES(fragcore-geometry-util PUBLIC glm-header-only fragcore PRIVATE generator meshoptimizer)
 TARGET_COMPILE_DEFINITIONS(fragcore-geometry-util PRIVATE FRAG_CORE_INTERNAL_IMP=1)
 
 #
