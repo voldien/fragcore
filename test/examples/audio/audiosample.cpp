@@ -33,12 +33,12 @@ class AudioPlaybackExample {
 			std::cout << fmt::format("{}", (*device_it).getName()) << std::endl;
 		}
 
-		AudioListenerDesc list_desc = {.position = Vector3(0, 0, 0), .rotation = Quaternion::Identity()};
+		AudioListenerDesc list_desc = {.position = Vector3(0, 0, 0), .rotation = Quaternion(1, 0, 0, 0)};
 
 		Ref<AudioListener> listener = Ref<AudioListener>(iaudio->createAudioListener(&list_desc));
 		listener->setVolume(1.0f);
 		AudioSourceDesc source_desc = {};
-		source_desc.position = Vector3::Zero();
+		source_desc.position = Vector3(0, 0, 0);
 		Ref<AudioSource> audioSource = Ref<AudioSource>(iaudio->createAudioSource(&source_desc));
 
 		AudioClipDesc clip_desc = {};

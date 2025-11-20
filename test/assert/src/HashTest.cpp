@@ -1,4 +1,4 @@
-#include <Core/Hash.h>
+#include <Hash.h>
 #include <Core/RefPtr.h>
 #include <FragCore.h>
 #include <IO/BufferIO.h>

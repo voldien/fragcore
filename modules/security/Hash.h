@@ -17,10 +17,9 @@
  */
 #ifndef _FRAGCORE_HASH_H_
 #define _FRAGCORE_HASH_H_ 1
+#include "Core/Object.h"
 #include "FragDef.h"
 #include "IO/IO.h"
-#include "Object.h"
-#include "Ref.h"
 #include <vector>
 
 namespace fragcore {
