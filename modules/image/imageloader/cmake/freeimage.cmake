@@ -15,6 +15,7 @@ IF(NOT TARGET FreeImage::FreeImage)
 		SET(BUILD_OPENEXR OFF)
 
 		ADD_SUBDIRECTORY(${freeimage_source_SOURCE_DIR} ${freeimage_source_BINARY_DIR} EXCLUDE_FROM_ALL)
+		TARGET_INCLUDE_DIRECTORIES(FreeImage PUBLIC ${freeimage_source_SOURCE_DIR}/Source)
 
 	ELSE()
 		MESSAGE( WARNING "Could not find FreeImage source code")
