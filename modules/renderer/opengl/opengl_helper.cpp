@@ -3,7 +3,7 @@
 #include "RenderDesc.h"
 #include <GL/glew.h>
 #include <fmt/core.h>
-#include <magic_enum.hpp>
+#include <magic_enum/magic_enum.hpp>
 using namespace fragcore;
 
 /*  Assign marker for debugging.    */

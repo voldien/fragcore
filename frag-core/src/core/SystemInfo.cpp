@@ -4,7 +4,7 @@
 
 #include <filesystem>
 #include <infoware.hpp>
-#include <magic_enum.hpp>
+#include <magic_enum/magic_enum.hpp>
 #if defined(PLATFORM_POSIX) || defined(__linux__) // check defines for your setup
 #include <pwd.h>
 #endif

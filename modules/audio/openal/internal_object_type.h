@@ -6,12 +6,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
@@ -37,22 +37,22 @@ namespace fragcore {
 	extern FVDECLSPEC ALenum to_al_format(short channels, short samples);
 	extern FVDECLSPEC const char *openAlErrorToString(int err);
 #define FAOPAL_VALIDATE(x)                                                                                             \
-	do {                                                                                                               \
+	{                                                                                                                  \
 		x;                                                                                                             \
 		ALenum _err = alGetError();                                                                                    \
 		if (_err != AL_NO_ERROR) {                                                                                     \
 			throw cxxexcept::RuntimeException("{} {} {} - {}", __FILE__, __LINE__, _err, openAlErrorToString(_err));   \
 		}                                                                                                              \
-	} while (0)
+	}
 
-#define FAOPALC_VALIDATE(x, device)																					  \
-	do {                                                                                                               \
+#define FAOPALC_VALIDATE(x, device)                                                                                    \
+	{                                                                                                                  \
 		x;                                                                                                             \
-		ALenum _err = alcGetError(device);                                                                                   \
+		ALenum _err = alcGetError(device);                                                                             \
 		if (_err != AL_NO_ERROR) {                                                                                     \
 			throw cxxexcept::RuntimeException("{} {} {} - {}", __FILE__, __LINE__, _err, openAlErrorToString(_err));   \
 		}                                                                                                              \
-	} while (0)
+	}
 
 } // namespace fragcore
 

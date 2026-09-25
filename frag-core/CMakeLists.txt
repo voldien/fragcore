@@ -5,30 +5,38 @@ OPTION(BUILTIN_MISC "" ON)
 SET(THIRDPARTY_INCLUDE_DIR "" PARENT_SCOPE)
 SET(THIRDPARTY_SOURCE "" PARENT_SCOPE)
 
-LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" )
+LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 ########################
 # External libraries.
 ########################
 INCLUDE(infoware)
 INCLUDE(glm)
+INCLUDE(libassert)
+INCLUDE(magicEnum)
+INCLUDE(cpp-dump)
+
+INCLUDE(libsigcplusplus)
+
 IF(NOT TARGET spdlog)
-	INCLUDE(spdlog)
+    INCLUDE(spdlog)
 ENDIF()
 
 IF(NOT TARGET cxxexcept)
-	INCLUDE(exceptcxx)
+    INCLUDE(exceptcxx)
 ENDIF()
 
+INCLUDE(libenvpp) #TODO: wait intill fmt dep has been resolved with that code base
+
 IF(BUILTIN_OPEN_SIMPLEX_NOISE)
-	SET(OPEN_SIMPLEX_NOISE_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/extern/open-simplex-noise-in-c)
-	FILE(GLOB OPEN_SIMPLEX_NOISE_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/extern/open-simplex-noise-in-c/*.c )
+    SET(OPEN_SIMPLEX_NOISE_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/extern/open-simplex-noise-in-c)
+    FILE(GLOB OPEN_SIMPLEX_NOISE_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/extern/open-simplex-noise-in-c/*.c)
 ENDIF()
 
 IF(BUILTIN_PCG_C_BASIC)
-	SET(PCG_C_BASIC_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/extern/pcg-c-basic)
-	FILE(GLOB PCG_C_BASIC_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/extern/pcg-c-basic/*.h
-	${CMAKE_CURRENT_SOURCE_DIR}/extern/pcg-c-basic/*.c )
+    SET(PCG_C_BASIC_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/extern/pcg-c-basic)
+    FILE(GLOB PCG_C_BASIC_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/extern/pcg-c-basic/*.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/extern/pcg-c-basic/*.c)
 ENDIF()
 
 # Find all required libaries.
@@ -41,20 +49,20 @@ FIND_PACKAGE(JeMalloc QUIET)
 
 #
 IF(PKG_CONFIG_FOUND)
-	MESSAGE(STATUS "Found pkg-config: ${PKG_CONFIG_EXECUTABLE} -- version ${PKG_CONFIG_VERSION_STRING}.")
-	PKG_CHECK_MODULES(ZIP QUIET libzip)
+    MESSAGE(STATUS "Found pkg-config: ${PKG_CONFIG_EXECUTABLE} -- version ${PKG_CONFIG_VERSION_STRING}.")
+    PKG_CHECK_MODULES(ZIP QUIET libzip)
 ELSE()
-	MESSAGE(ERROR "Could not find PKG COnfig")
+    MESSAGE(ERROR "Could not find PKG COnfig")
 ENDIF()
 
 IF(ZLIB_FOUND)
-	MESSAGE(STATUS "zlib found: ${ZLIB_LIBRARIES} -- ${ZLIB_VERSION_STRING}")
+    MESSAGE(STATUS "zlib found: ${ZLIB_LIBRARIES} -- ${ZLIB_VERSION_STRING}")
 ELSE()
 
 ENDIF()
 
 IF(Backtrace_FOUND)
-	MESSAGE(STATUS "backtrace found: ${Backtrace_LIBRARIES} -- ${Backtrace_HEADER}")
+    MESSAGE(STATUS "backtrace found: ${Backtrace_LIBRARIES} -- ${Backtrace_HEADER}")
 ELSE()
 
 ENDIF()
@@ -68,51 +76,53 @@ ENDIF()
 
 
 # Define all file lists.
-FILE(GLOB SOURCE_FILES  ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/src/core/*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/src/core/threading/*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/src/core/math/*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/src/core/math3d/*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/src/core/datastructure/*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/src/core/io/*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/src/core/network/*.cpp
-		)
+FILE(GLOB SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/core/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/core/threading/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/core/math/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/core/math3d/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/core/datastructure/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/core/io/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/core/network/*.cpp
+)
 
 #
-FILE(GLOB HEADER_FILES  ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h
-						${CMAKE_CURRENT_SOURCE_DIR}/include/Core/*.h
-						${CMAKE_CURRENT_SOURCE_DIR}/include/Compression/*.h
-						${CMAKE_CURRENT_SOURCE_DIR}/include/DataStructure/*.h
-						${CMAKE_CURRENT_SOURCE_DIR}/include/Math/*.h
-						${CMAKE_CURRENT_SOURCE_DIR}/include/Math3D/*.h
-						${CMAKE_CURRENT_SOURCE_DIR}/include/Threading/*.h
-						${CMAKE_CURRENT_SOURCE_DIR}/include/Networking/*.h
-						${CMAKE_CURRENT_SOURCE_DIR}/include/IO/*.h
-						)
+FILE(GLOB HEADER_FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/Core/*.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/Compression/*.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/DataStructure/*.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/Math/*.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/Math3D/*.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/Threading/*.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/Networking/*.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/IO/*.h
+)
 
 # Public headers - subset of header files.
 FILE(GLOB DEVELOPMENT_HEADER_FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h
-									${CMAKE_CURRENT_SOURCE_DIR}/include/Core/*.h
-									${CMAKE_CURRENT_SOURCE_DIR}/include/Core/IO/*.h)
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/Core/*.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/Core/IO/*.h)
 
 SET(FRAG_CORE_INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 SET(FRAG_CORE_INCLUDE_SUB_DIR
-				${CMAKE_CURRENT_SOURCE_DIR}/include
-				${CMAKE_CURRENT_SOURCE_DIR}/include/Core
-				${CMAKE_CURRENT_SOURCE_DIR}/include/Utils)
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/Core
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/Utils)
 
 
 # Core library for adding support for plugin.
 ADD_LIBRARY(fragcore ${SOURCE_FILES} ${HEADER_FILES}
- 							${OPEN_SIMPLEX_NOISE_SOURCE} ${PCG_C_BASIC_SOURCE}
-							${MISC_SOURCE})
+    ${OPEN_SIMPLEX_NOISE_SOURCE} ${PCG_C_BASIC_SOURCE}
+    ${MISC_SOURCE})
+ADD_LIBRARY(fragcore::fragcore ALIAS fragcore)
 
+# C++ Features.							
 TARGET_COMPILE_FEATURES(fragcore PUBLIC cxx_std_17 cxx_constexpr cxx_alias_templates cxx_raw_string_literals
-cxx_variadic_templates cxx_uniform_initialization cxx_right_angle_brackets cxx_nullptr
-cxx_generic_lambdas cxx_override cxx_noexcept cxx_aggregate_default_initializers
-cxx_relaxed_constexpr cxx_decltype_auto)
+    cxx_variadic_templates cxx_uniform_initialization cxx_right_angle_brackets cxx_nullptr
+    cxx_generic_lambdas cxx_override cxx_noexcept cxx_aggregate_default_initializers
+    cxx_relaxed_constexpr cxx_decltype_auto)
 
-#
+# 
 TARGET_COMPILE_DEFINITIONS(fragcore PRIVATE FRAG_CORE_INTERNAL_IMP=1 PUBLIC FV_USE_SHARED_POINTER=1)
 
 # Make use of modern features with GLM.
@@ -120,34 +130,34 @@ TARGET_COMPILE_DEFINITIONS(fragcore PUBLIC GLM_FORCE_CXX17 GLM_FORCE_INTRINSICS)
 TARGET_COMPILE_DEFINITIONS(fragcore PUBLIC FRAGCORE_USE_GLM=1)
 
 #
-TARGET_LINK_LIBRARIES(fragcore PUBLIC cxxexcept spdlog_header_only fmt magic_enum glm-header-only PRIVATE stdc++ atomic dl ${ZLIB_LIBRARIES}
-													${ZIP_LIBRARIES} m infoware )
+TARGET_LINK_LIBRARIES(fragcore PUBLIC cxxexcept spdlog_header_only fmt magic_enum glm-header-only libassert::assert libenvpp::libenvpp cpp-dump PRIVATE stdc++ atomic dl ${ZLIB_LIBRARIES}
+    ${ZIP_LIBRARIES} m infoware)
 #
 TARGET_INCLUDE_DIRECTORIES(fragcore PRIVATE ${ZIP_INCLUDE_DIRS}
-											${OPEN_SIMPLEX_NOISE_INCLUDE_DIRS} ${PCG_C_BASIC_INCLUDE_DIRS}
-											${ZLIB_INCLUDE_DIRS} ${ZSTD_INCLUDE_DIRS}
-											${Backtrace_HEADER}
-											${infoware_SOURCE_DIR}/include/infoware
-										PUBLIC
-											${CMAKE_SOURCE_DIR}/extern/
-											$<BUILD_INTERFACE:${FRAG_CORE_INCLUDE}>
-											$<INSTALL_INTERFACE:${FRAG_CORE_INCLUDE}>
+    ${OPEN_SIMPLEX_NOISE_INCLUDE_DIRS} ${PCG_C_BASIC_INCLUDE_DIRS}
+    ${ZLIB_INCLUDE_DIRS} ${ZSTD_INCLUDE_DIRS}
+    ${Backtrace_HEADER}
+    ${infoware_SOURCE_DIR}/include/infoware
+    ${CMAKE_SOURCE_DIR}/extern/
+    PUBLIC
+    $<BUILD_INTERFACE:${FRAG_CORE_INCLUDE}>
+    $<INSTALL_INTERFACE:${FRAG_CORE_INCLUDE}>
 )
 
 # OpenMP Support.
 IF(OpenMP_FOUND AND OpenMP_CXX_FOUND AND BUILD_WITH_OPENMP)
-	TARGET_LINK_LIBRARIES(fragcore PRIVATE m pthread PUBLIC OpenMP::OpenMP_CXX)
-	TARGET_COMPILE_OPTIONS(fragcore PUBLIC ${OpenMP_CXX_FLAGS})
+    TARGET_LINK_LIBRARIES(fragcore PRIVATE m pthread PUBLIC OpenMP::OpenMP_CXX)
+    TARGET_COMPILE_OPTIONS(fragcore PUBLIC ${OpenMP_CXX_FLAGS})
 ENDIF()
 
 # Jemalloc allocation support.
 IF(FRAGCORE_WITH_MEM_JEMALLOC)
-	TARGET_LINK_LIBRARIES(fragcore INTERFACE ${JEMALLOC_LIBRARIES})
+    TARGET_LINK_LIBRARIES(fragcore PUBLIC ${JEMALLOC_LIBRARIES})
 ENDIF()
 
 # Enable FPIC if shared library.
-IF (BUILD_SHARED_LIBS AND CMAKE_SIZEOF_VOID_P EQUAL 8)
-	SET_PROPERTY(TARGET fragcore PROPERTY POSITION_INDEPENDENT_CODE ON)
+IF(BUILD_SHARED_LIBS AND CMAKE_SIZEOF_VOID_P EQUAL 8)
+    SET_PROPERTY(TARGET fragcore PROPERTY POSITION_INDEPENDENT_CODE ON)
 ENDIF()
 
 # Create package information
@@ -158,12 +168,12 @@ CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/include/fragcore_revision.h.in" "${C
 
 # Install
 IF(BUILD_WITH_INSTALL)
-	INSTALL(TARGETS fragcore DESTINATION lib COMPONENT ${LIBFRAGCORE_COMPONENT})
-	INSTALL(TARGETS infoware DESTINATION lib)
+    INSTALL(TARGETS fragcore DESTINATION lib COMPONENT ${LIBFRAGCORE_COMPONENT})
+    INSTALL(TARGETS infoware DESTINATION lib)
 
-	INSTALL(DIRECTORY ${FRAG_CORE_INCLUDE_SUB_DIR} # source directory
-			DESTINATION include/fragcore # target directory
-			COMPONENT ${LIBFRAGCORE-DEV_COMPONENT}
-			)
-	INSTALL( FILES "${CMAKE_CURRENT_BINARY_DIR}/fragcore.pc" DESTINATION ${FRAGCORE_LIB_INSTALL_DIR}/pkgconfig/ COMPONENT ${LIBFRAGCORE-DEV_COMPONENT})
+    INSTALL(DIRECTORY ${FRAG_CORE_INCLUDE_SUB_DIR} # source directory
+        DESTINATION include/fragcore # target directory
+        COMPONENT ${LIBFRAGCORE-DEV_COMPONENT}
+    )
+    INSTALL(FILES "${CMAKE_CURRENT_BINARY_DIR}/fragcore.pc" DESTINATION ${FRAGCORE_LIB_INSTALL_DIR}/pkgconfig/ COMPONENT ${LIBFRAGCORE-DEV_COMPONENT})
 ENDIF()

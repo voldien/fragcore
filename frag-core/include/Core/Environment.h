@@ -21,10 +21,12 @@
 
 namespace fragcore {
 
+	/*	*/
 	class FVDECLSPEC EnvManager {
 	  public:
-		static bool isEnvDefined(const char *variableName);
-		static const char *getEnValue(const char *variableName);
+		static bool isEnvDefined(const char *variableName) noexcept;
+		static const char *getEnValue(const char *variableName) noexcept;
+		static void setEnvValue(const char *variableName, const char *value) noexcept;
 	};
 
 } // namespace fragcore

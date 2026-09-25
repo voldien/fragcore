@@ -3,7 +3,7 @@ INCLUDE(FetchContent)
 IF(NOT TARGET meshoptimizer)
 	FetchContent_Declare(meshoptimizer_source
 		GIT_REPOSITORY https://github.com/zeux/meshoptimizer
-		GIT_TAG "v0.25"
+		GIT_TAG "v1.2"
 	) # or whatever tag you want
 
 	FetchContent_GetProperties(meshoptimizer_source)

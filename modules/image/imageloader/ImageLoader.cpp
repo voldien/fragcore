@@ -2,7 +2,7 @@
 #include "ImageFormat.h"
 #include <FreeImage.h>
 #include <IO/IOUtil.h>
-#include <magic_enum.hpp>
+#include <magic_enum/magic_enum.hpp>
 
 using namespace fragcore;
 

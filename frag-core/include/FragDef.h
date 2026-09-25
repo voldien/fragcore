@@ -25,7 +25,10 @@
 #include <cstring>
 #include <unistd.h>
 
-/*	*/
+/*	Assert!	*/
+#include <libassert/assert.hpp>
+
+/*	Execption!	*/
 #include <Exception.hpp>
 
 namespace fragcore {

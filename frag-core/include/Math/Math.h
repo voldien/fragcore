@@ -318,7 +318,7 @@ namespace fragcore {
 
 		template <typename T> constexpr static T mod(const T value, const T mod) noexcept {
 			static_assert(std::is_integral_v<T>, "Must be a integer type.");
-			return (value % mod + mod) % mod;
+			return ((value % mod) + mod) % mod;
 		}
 
 		/**

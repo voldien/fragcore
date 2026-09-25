@@ -64,9 +64,8 @@ namespace fragcore {
 		 */
 		template <typename T>
 		static constexpr bool testPlanesPlane(const Plane<T> &plane0, const Plane<T> &plane1) noexcept {
-			return  true;
+			return true;
 		}
-
 
 	  public:
 		/**
@@ -88,20 +87,20 @@ namespace fragcore {
 
 			/*	*/
 			const Vector3 right = glm::normalize(Vector3(matrix * Vector4(1, 0, 0, 0))) * aabbs.getHalfSize().x;
-			const Vector3 up = glm::normalize(Vector3(matrix * Vector4(0, 1, 0, 0))) * aabbs.getHalfSize().y;
+			const Vector3 up_vec = glm::normalize(Vector3(matrix * Vector4(0, 1, 0, 0))) * aabbs.getHalfSize().y;
 			const Vector3 forward = glm::normalize(Vector3(matrix * Vector4(0, 0, 1, 0))) * aabbs.getHalfSize().z;
 
 			/*	*/
 			const float newIi = std::abs(glm::dot(Vector3{1.f, 0.f, 0.f}, right)) +
-								std::abs(glm::dot(Vector3{1.f, 0.f, 0.f}, up)) +
+								std::abs(glm::dot(Vector3{1.f, 0.f, 0.f}, up_vec)) +
 								std::abs(glm::dot(Vector3{1.f, 0.f, 0.f}, forward));
 
 			const float newIj = std::abs(glm::dot(Vector3{0.f, 1.f, 0.f}, right)) +
-								std::abs(glm::dot(Vector3{0.f, 1.f, 0.f}, up)) +
+								std::abs(glm::dot(Vector3{0.f, 1.f, 0.f}, up_vec)) +
 								std::abs(glm::dot(Vector3{0.f, 1.f, 0.f}, forward));
 
 			const float newIk = std::abs(glm::dot(Vector3{0.f, 0.f, 1.f}, right)) +
-								std::abs(glm::dot(Vector3{0.f, 0.f, 1.f}, up)) +
+								std::abs(glm::dot(Vector3{0.f, 0.f, 1.f}, up_vec)) +
 								std::abs(glm::dot(Vector3{0.f, 0.f, 1.f}, forward));
 
 			return AABB(Vector3(newIi, newIj, newIk), Vector3(globalCenter));
@@ -139,14 +138,28 @@ namespace fragcore {
 
 		static std::vector<Triangle> generateSmoothNormals(const std::vector<Triangle> &triangle, const float angle);
 
-		static void optimizeGeometry();
+		template <typename T, typename U>
+		static void optimizeGeometry(T *vertices, const size_t nrVertices, U *indicies, const size_t nrIndices) {
+			const size_t vertexStride = sizeof(T);
+			const size_t indiceStride = sizeof(U);
 
-		// static void optimizeGeometry(float *vertices, const size_t nrVertices,
-		// 							  const size_t stride = sizeof(float) * 3, void* indicies, const size_t nrIndices,
-		// const size_t indicies_stride);
+			optimizeGeometry(vertices, nrVertices, vertexStride, indicies, nrIndices, indiceStride);
+		}
 
-		void convert2Adjacent(float *vertices, const size_t nrVertices, std::vector<unsigned int> &Indices,
-							  const size_t stride = sizeof(float) * 3);
+		static void optimizeGeometry(void *vertices, const size_t nrVertices, const size_t vertices_stride,
+									 void *indices, const size_t nrIndices, const size_t indice_stride);
+
+		template <typename T, typename U>
+		std::vector<unsigned int> convert2Adjacent(const T *vertices, const size_t nrVertices, const U *Indices,
+												   const size_t nrIndices) {
+			const size_t vertexStride = sizeof(T);
+			const size_t indiceStride = sizeof(U);
+			return convert2Adjacent(vertices, nrVertices, vertexStride, Indices, nrIndices, indiceStride);
+		}
+
+		std::vector<unsigned int> convert2Adjacent(const void *vertices, const size_t nrVertices, const size_t vertex_stride,
+												   const void *Indices, const size_t nrIndices,
+												   const size_t Indice_stride);
 
 		GeometryUtility() = delete;
 		GeometryUtility(const GeometryUtility &other) = delete;

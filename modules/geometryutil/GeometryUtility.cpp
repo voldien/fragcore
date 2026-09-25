@@ -78,7 +78,8 @@ AABB GeometryUtility::computeBoundingBox(const Vector3 *vertices, const size_t n
 	return AABB::createMinMax(min, max);
 }
 
-BoundingSphere GeometryUtility::computeBoundingSphere(const float *vertices, const size_t nrVertices, const size_t stride) {
+BoundingSphere GeometryUtility::computeBoundingSphere(const float *vertices, const size_t nrVertices,
+													  const size_t stride) {
 
 	const AABB aabb = GeometryUtility::computeBoundingBox((Vector3 *)vertices, nrVertices, stride);
 	const Vector3 center = aabb.getCenter();
@@ -94,23 +95,21 @@ OBB GeometryUtility::computeBoundingOBB(const float *vertices, const size_t nrVe
 	return {};
 }
 
-void GeometryUtility::convert2Adjacent(float *vertices, const size_t nrVertices, std::vector<unsigned int> &Indices,
-									   const size_t stride) {
+std::vector<unsigned int> GeometryUtility::convert2Adjacent(const void *vertices, const size_t nrVertices,
+															const size_t vertex_stride, const void *Indices,
+															const size_t nrIndices, const size_t Indice_stride) {
 
-	// Step 1 - find the two triangles that share every edge
-	for (uint i = 0; i < Indices.size(); i++) {
-	}
+	std::vector<unsigned int> adjacency(Indice_stride * 3 * 2);
 
-	// Step 2 - build the index buffer with the adjacency info
-	for (uint i = 0; i < Indices.size(); i++) {
-	}
+	meshopt_generateAdjacencyIndexBuffer(adjacency.data(), static_cast<const unsigned int *>(Indices), nrIndices,
+										 static_cast<const float *>(vertices), nrVertices, vertex_stride);
+	return adjacency;
 }
 
-static void optimize_mesh() {
+void GeometryUtility::optimizeGeometry(void *vertices, const size_t nrVertices, const size_t vertices_stride,
+									   void *indices, const size_t nrIndices, const size_t indice_stride) {
 
-	// size_t index_count = face_count * 3;
-	// size_t unindexed_vertex_count = face_count * 3;
-	// std::vector<unsigned int> remap(unindexed_vertex_count); // temporary remap table
-	// size_t vertex_count = meshopt_generateVertexRemap(&remap[0], NULL, index_count, &unindexed_vertices[0],
-	// 												  unindexed_vertex_count, sizeof(Vertex));
+	//meshopt_optimizeVertexCache(static_cast<float *>(vertices), indices, nrIndices, nrVertices);
+	//meshopt_optimizeVertexFetch(static_cast<float *>(vertices), indices, nrIndices, vertices, nrVertices,
+	//							vertices_stride);
 }

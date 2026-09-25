@@ -1,6 +1,6 @@
 #include "Image.h"
 #include <cstring>
-#include <magic_enum.hpp>
+#include <magic_enum/magic_enum.hpp>
 #include <utility>
 
 using namespace fragcore;

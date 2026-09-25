@@ -67,9 +67,6 @@ OPTION(BUILD_WITH_SAMPLES "Build sample codes" OFF)
 OPTION(BUILD_MODULES "Build module plugins" OFF)
 OPTION(BUILD_WITH_OPENMP "Enable OpenMP." OFF)
 
-OPTION(FRAGCORE_WITH_MEM_JEMALLOC "Enable malloc replacement (http://www.canonware.com/jemalloc)" OFF)
-MARK_AS_ADVANCED(FRAGCORE_WITH_MEM_JEMALLOC)
-
 # Specific Modules.
 OPTION(BUILD_EXTERNAL_RENDERER "Building external renderer libraries" ON)
 OPTION(BUILD_EXTERNAL_AUDIO "Building external audio libraries" ON)
@@ -99,12 +96,12 @@ MARK_AS_ADVANCED(WITH_CPU_SSE)
 OPTION(WITH_MEM_JEMALLOC "Enable malloc replacement (http://www.canonware.com/jemalloc)" ON)
 MARK_AS_ADVANCED(WITH_MEM_JEMALLOC)
 
+# Windows (Not Tested)
 IF(MSVC)
 	OPTION(BUILD_INSTALL_PDB
 		"Install MSVC debug files."
 		ON
 	)
-
 	IF(NOT(MSVC_VERSION LESS 1900))
 		# Multibyte character set is deprecated since at least MSVC2015 (possibly earlier)
 		ADD_DEFINITIONS(-DUNICODE -D_UNICODE)
@@ -170,11 +167,6 @@ SET(CMAKE_CXX_STANDARD 17)
 SET(CMAKE_CXX_STANDARD_REQUIRED ON)
 SET(CMAKE_CXX_EXTENSIONS OFF)
 
-# ################################
-# Include external resources.
-# ################################
-INCLUDE(magicEnum)
-
 # Compiler toolchain
 IF(CMAKE_COMPILER_IS_GNUCC)
 	OPTION(WITH_LINKER_GOLD "Use ld.gold linker which is usually faster than ld.bfd" ON)
@@ -187,22 +179,21 @@ FIND_PACKAGE(SSE)
 FIND_PACKAGE(AVX)
 FIND_PACKAGE(NEON)
 
-IF(WITH_MEM_JEMALLOC)
-	FIND_PACKAGE(JeMalloc)
-ENDIF()
+#
+FIND_PACKAGE(PkgConfig QUIET)
 
 IF(BUILD_WITH_OPENMP)
 	FIND_PACKAGE(OpenMP QUIET)
 ENDIF()
 
-IF(FRAGCORE_WITH_MEM_JEMALLOC)
-	FIND_PACKAGE(JeMalloc)
-	IF(NOT JeMalloc_FOUND)
-		FIND_PACKAGE(PkgConfig REQUIRED)
-		pkg_check_modules (JEMALLOC jemalloc)
+IF(WITH_MEM_JEMALLOC)
+	FIND_PACKAGE(JeMalloc QUIET)
 
+	IF(NOT JeMalloc_FOUND)
+		pkg_check_modules (JEMALLOC jemalloc)
 		pkg_search_module(JEMALLOC REQUIRED jemalloc)
 	ENDIF()
+	# TODO: Check the current state if it has been found or not!
 ENDIF()
 
 # GCC compiler flag options.
@@ -302,8 +293,8 @@ IF(WITH_CPU_SSE)
 
 ELSE()
 	MESSAGE(STATUS "SSE and SSE2 optimizations are DISABLED!")
-	SET(COMPILER_SSE_FLAG)
-	SET(COMPILER_SSE2_FLAG)
+	SET(COMPILER_SSE_FLAG "")
+	SET(COMPILER_SSE2_FLAG "")
 ENDIF()
 
 IF(NEON_FOUND)
@@ -345,7 +336,6 @@ ELSE()
 	SET(CMAKE_INSTALL_FULL_BINDIR ${CMAKE_INSTALL_PREFIX}/${FRAGCORE_BIN_INSTALL_DIR})
 ENDIF()
 
-FIND_PACKAGE(PkgConfig QUIET)
 
 # ########################################
 # Main core library.

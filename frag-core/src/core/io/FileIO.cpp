@@ -1,6 +1,6 @@
 #include "IO/FileIO.h"
 #include <fmt/core.h>
-#include <magic_enum.hpp>
+#include <magic_enum/magic_enum.hpp>
 #include <sys/stat.h>
 #include <utility>
 
