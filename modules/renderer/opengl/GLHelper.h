@@ -39,7 +39,7 @@
 namespace fragcore {
 
 	extern FVDECLSPEC void checkError();
-	extern FVDECLSPEC void resetErrorFlag();
+	extern FVDECLSPEC void resetErrorFlag() noexcept;
 	extern FVDECLSPEC bool validateExistingProgram();
 	extern FVDECLSPEC std::string getProgramValidateString();
 
@@ -69,12 +69,9 @@ namespace fragcore {
 		/*	*/
 		static unsigned int getTextureFormat(const fragcore::ImageFormat textureFormat, unsigned int *pixelType);
 
-
-
 		/*	*/
 		static unsigned int getTextureTarget(const fragcore::TextureDesc::TextureTarget target,
 											 const int nrSamples = 1);
-
 
 		/*	*/
 		static unsigned int getTextureSwizzle(const fragcore::TextureSwizzle swizzle);

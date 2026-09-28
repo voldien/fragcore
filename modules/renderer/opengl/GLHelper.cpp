@@ -19,7 +19,7 @@ namespace fragcore {
 	 * @brief Helper function for extracting error from OpenGL.
 	 *
 	 */
-	void resetErrorFlag() {
+	void resetErrorFlag() noexcept {
 		while (glGetError() != GL_NO_ERROR) {
 		}
 	}

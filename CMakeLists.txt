@@ -186,15 +186,6 @@ IF(BUILD_WITH_OPENMP)
 	FIND_PACKAGE(OpenMP QUIET)
 ENDIF()
 
-IF(WITH_MEM_JEMALLOC)
-	FIND_PACKAGE(JeMalloc QUIET)
-
-	IF(NOT JeMalloc_FOUND)
-		pkg_check_modules (JEMALLOC jemalloc)
-		pkg_search_module(JEMALLOC REQUIRED jemalloc)
-	ENDIF()
-	# TODO: Check the current state if it has been found or not!
-ENDIF()
 
 # GCC compiler flag options.
 IF((CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX) AND NOT CMAKE_COMPILER_IS_MINGW)

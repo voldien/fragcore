@@ -45,7 +45,15 @@ FIND_PACKAGE(Backtrace QUIET)
 FIND_PACKAGE(LZO QUIET)
 
 # Find all optional libaries.
-FIND_PACKAGE(JeMalloc QUIET)
+IF(WITH_MEM_JEMALLOC)
+	FIND_PACKAGE(JeMalloc QUIET)
+
+	IF(NOT JeMalloc_FOUND)
+		pkg_check_modules (JEMALLOC jemalloc)
+		pkg_search_module(JEMALLOC REQUIRED jemalloc)
+	ENDIF()
+	# TODO: Check the current state if it has been found or not!
+ENDIF()
 
 #
 IF(PKG_CONFIG_FOUND)
@@ -151,7 +159,7 @@ IF(OpenMP_FOUND AND OpenMP_CXX_FOUND AND BUILD_WITH_OPENMP)
 ENDIF()
 
 # Jemalloc allocation support.
-IF(FRAGCORE_WITH_MEM_JEMALLOC)
+IF(WITH_MEM_JEMALLOC)
     TARGET_LINK_LIBRARIES(fragcore PUBLIC ${JEMALLOC_LIBRARIES})
 ENDIF()
 
