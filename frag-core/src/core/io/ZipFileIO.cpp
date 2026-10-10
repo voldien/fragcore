@@ -60,7 +60,7 @@ long ZipFileIO::length() {
 
 	struct zip_stat state;
 
-	int err = zip_stat_index((zip_t *)this->zipfile->pzip, this->index, 0, &state);
+	int err = zip_stat_index(static_cast<zip_t *>(this->zipfile->pzip), this->index, 0, &state);
 	if (err != ZIP_ER_OK) {
 		char buf[1024];
 		zip_error_to_str(buf, sizeof(buf), err, errno);
@@ -106,7 +106,7 @@ unsigned long ZipFileIO::getPos() {
 
 bool ZipFileIO::isWriteable() const {
 	zip_uint32_t attr;
-	int err = zip_file_get_external_attributes((zip_t *)this->zipfile->getZipObject(), this->index, ZIP_OPSYS_UNIX,
+	int err = zip_file_get_external_attributes(static_cast<zip_t *>(this->zipfile->getZipObject()), this->index, ZIP_OPSYS_UNIX,
 											   nullptr, &attr);
 
 	if (err != ZIP_ER_OK) {
@@ -119,7 +119,7 @@ bool ZipFileIO::isWriteable() const {
 
 bool ZipFileIO::isReadable() const {
 	zip_uint32_t attr;
-	int err = zip_file_get_external_attributes((zip_t *)this->zipfile->getZipObject(), this->index, ZIP_OPSYS_UNIX,
+	int err = zip_file_get_external_attributes(static_cast<zip_t *>(this->zipfile->getZipObject()), this->index, ZIP_OPSYS_UNIX,
 											   nullptr, &attr);
 
 	if (err != ZIP_ER_OK) {

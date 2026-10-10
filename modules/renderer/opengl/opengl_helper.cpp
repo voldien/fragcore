@@ -321,23 +321,31 @@ unsigned int GLHelper::getTextureFormat(const ImageFormat textureFormat, unsigne
 unsigned int GLHelper::getTextureTarget(const TextureDesc::TextureTarget target, const int nrSamples) {
 	switch (target) {
 	case TextureDesc::TextureTarget::Texture1D:
+		if (nrSamples > 1) {
+			return GL_TEXTURE_2D_MULTISAMPLE;
+		}
 		return GL_TEXTURE_1D;
+
 	case TextureDesc::TextureTarget::Texture2D:
 		if (nrSamples > 1) {
 			return GL_TEXTURE_2D_MULTISAMPLE;
-		} else {
-			return GL_TEXTURE_2D;
 		}
+		return GL_TEXTURE_2D;
+
 	case TextureDesc::TextureTarget::Texture3D:
 		return GL_TEXTURE_3D;
 	case TextureDesc::TextureTarget::CubeMap:
-		return GL_TEXTURE_CUBE_MAP;
+		if (nrSamples > 1) {
+			return GL_TEXTURE_CUBE_MAP;
+		}  
+			return GL_TEXTURE_CUBE_MAP;
+		
 	case TextureDesc::TextureTarget::Texture2DArray:
 		if (nrSamples > 1) {
 			return GL_TEXTURE_2D_MULTISAMPLE_ARRAY;
-		} else {
+		}  
 			return GL_TEXTURE_2D_ARRAY;
-		}
+		
 	case TextureDesc::TextureTarget::CubeMapArray:
 		return GL_TEXTURE_CUBE_MAP_ARRAY;
 	default:
@@ -479,7 +487,7 @@ unsigned int GLHelper::getBlendEqu(BlendEqu equ) {
 	switch (equ) {
 	case BlendEqu::Addition:
 		return GL_FUNC_ADD;
-	case BlendEqu ::Subtract:
+	case BlendEqu::Subtract:
 		return GL_FUNC_SUBTRACT;
 	default:
 		throw InvalidArgumentException("");
@@ -489,7 +497,7 @@ unsigned int GLHelper::getBlendFunc(BlendFunc func) {
 	switch (func) {
 	case BlendFunc::Zero:
 		return GL_ZERO;
-	case BlendFunc ::One:
+	case BlendFunc::One:
 		return GL_ONE;
 	case BlendFunc::SrcColor:
 		return GL_SRC_COLOR;

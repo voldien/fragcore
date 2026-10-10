@@ -140,7 +140,7 @@ std::vector<SystemInfo::SIMD> SystemInfo::getSupportedSIMD() {
 	std::vector<iware::cpu::instruction_set_t> supported = iware::cpu::supported_instruction_sets();
 
 	for (size_t i = 0; i < supported.size(); i++) {
-		switch ((instruction_set_t)supported[i]) {
+		switch (static_cast<instruction_set_t>(supported[i])) {
 		case iware::cpu::instruction_set_t::s3d_now:
 			supportedSIMDS.push_back(SystemInfo::SIMD::S3DNOW);
 			break;

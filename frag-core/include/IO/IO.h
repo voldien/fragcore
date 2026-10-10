@@ -36,14 +36,14 @@ namespace fragcore {
 		enum Seek {
 			SET = 0x0, /*  From beginning position.    */
 			CUR = 0x1, /*  Current position.   */
-			END = 0x2  /*  From end position.  */
+			END = 0x2,  /*  From end position.  */
 		};
 
 		enum IOMode {
 			READ = 0x1,				 /*  */
 			WRITE = 0x2,			 /*  */
 			ACCESS = (READ | WRITE), /*  */
-			APPEND = 0x4			 /*  Set mode to append with WRITE.  */
+			APPEND = 0x4,			 /*  Set mode to append with WRITE.  */
 		};
 
 	  public:
@@ -96,7 +96,7 @@ namespace fragcore {
 			OP_GETPOS = 1 << 5,		/*	*/
 			OP_FLUSH = 1 << 6,		/*	*/
 			OP_FILEACCESS = 1 << 7, /*	*/
-			OP_PEEK = 1 << 8		/*	*/
+			OP_PEEK = 1 << 8,		/*	*/
 		};
 
 		virtual bool isOperationSupported(const IOOperation operationFlags) const noexcept = 0;

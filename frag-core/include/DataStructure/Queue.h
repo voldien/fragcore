@@ -19,6 +19,7 @@
 #define _FRAGCORE_QUEUE_H_ 1
 #include "Iterator.h"
 #include <memory>
+#include <utility>
 
 namespace fragcore {
 	/**
@@ -30,11 +31,16 @@ namespace fragcore {
 	// TODO add atomic support
 	template <class T, int U = 0> class Queue : public std::allocator<T> {
 	  public:
+		static constexpr bool isClass = std::is_class_v<T>;
+		using DType = T;
+		static constexpr unsigned int DTypeSize = sizeof(DType);
+
+	  public:
 		Queue() : Queue(16) {}
 
 		Queue(const size_t nrOfElements) {
 			if (nrOfElements <= 0) {
-				throw InvalidArgumentException("");
+				throw InvalidArgumentException("Must have a non negative number of elements");
 			}
 			this->mdata = nullptr;
 			this->reserved = 0;
@@ -55,9 +61,10 @@ namespace fragcore {
 			if (this->isEmpty()) {
 				throw InvalidArgumentException("");
 			}
+
 			/*	*/
-			T *obj = &this->getData()[head];
-			head = (head + 1) % getReserved();
+			T *obj = &this->getData()[this->head];
+			this->head = (this->head + 1) % getReserved();
 			this->nrElements--;
 			return *obj;
 		}
@@ -69,17 +76,24 @@ namespace fragcore {
 				this->resize(this->getReserved() * 2);
 			}
 
-			T *obj = &this->getData()[tail];
+			/*	*/
+			T *obj = &this->getData()[this->tail];
 
+			/*	*/
 			*obj = item;
-			// memcpy(obj, &item, getTypeSize());
-			tail = (tail + 1) % getReserved();
+
+			/*	*/
+			tail = (tail + 1) % this->getReserved();
 			this->nrElements++;
 			return *obj;
 		}
 
-		T &operator[](const size_t index) { return this->getData()[index]; }
+		T &peek(const size_t index) const noexcept {
+			const size_t mem_index = (this->head + index) % this->getReserved();
+			return this->getData()[mem_index];
+		}
 
+		T &operator[](const size_t index) { return this->getData()[index]; }
 		const T &operator[](const size_t index) const { return this->getData()[index]; }
 
 		/**
@@ -88,39 +102,55 @@ namespace fragcore {
 		void clear() noexcept {
 			this->head = 0;
 			this->tail = 0;
+			this->nrElements = 0;
 		}
 
 		/**
 		 *	@return true if queue empty.
 		 */
-		bool isEmpty() const noexcept { return (this->getSize() == 0); }
+		bool isEmpty() const noexcept { return (this->getSize() <= 0); }
 
 		/**
 		 *	@return true if full, false otherwise.
 		 */
-		bool isFull() const noexcept { return (this->getSize() == this->getReserved()); }
+		bool isFull() const noexcept { return (this->getSize() >= this->getReserved()); }
 
 		/**
 		 *	Resize queue.
 		 */
-		void resize(const size_t size) {
-			if (this->mdata == nullptr) {
-				this->mdata = new T[size]();
-			} else {
-				this->mdata = new T[size]();
+		void resize(const size_t newSize) {
+			if (newSize <= 0) {
+				throw InvalidArgumentException("Must have a non negative number of elements");
+			}
 
-				/*	Relocate.	*/
-				for (size_t i = 0; i < getSize(); i++) {
-					this->mdata[i] = this->mdata[(this->head + i) % getReserved()];
+			if (this->mdata == nullptr) {
+				this->mdata = new T[newSize]();
+			} else {
+
+				if constexpr (isClass) {
+					T tmp = new T[newSize]();
+
+					/*	Relocate.	*/
+					for (size_t index = 0; index < getSize(); index++) {
+						this->tmp[index] = peek(index);
+					}
+					/*	set new pointer.	*/
+					delete[] this->mdata;
+					this->mdata = tmp;
+
+				} else {
+					this->mdata = (T *)std::realloc(this->mdata, newSize * getTypeSize());
 				}
+
 				this->head = 0;
 				this->tail = this->getSize() - 1;
 			}
-			this->reserved = size;
+
+			ASSERT(this->mdata, "Must be None Null");
+			this->reserved = newSize;
 		}
 
-		size_t getSize() const noexcept { return nrElements; }
-
+		size_t getSize() const noexcept { return this->nrElements; }
 		size_t getReserved() const noexcept { return this->reserved; }
 
 		/*  */
@@ -157,18 +187,34 @@ namespace fragcore {
 		QueueIterator end() const noexcept { return QueueIterator(this, this->head); }
 
 	  private:
-		int getTypeSize() const noexcept { return sizeof(T); }
-
+		size_t getTypeSize() const noexcept { return DTypeSize; }
 		T *getData() const noexcept { return this->mdata; }
 
 	  public: /*  */
-		Queue &operator=(const Queue &que) {
-			this->mdata = static_cast<T *>(malloc(que.getReserved() * que.getTypeSize()));
-			memcpy(mdata, que.getData(), que.getReserved());
-			this->head = que.head;
-			this->tail = que.tail;
-			this->reserved = que.getReserved();
-			this->nrElements = que.getSize();
+		Queue &operator=(const Queue &queue) {
+
+			/*	*/
+			this->mdata = static_cast<T *>(malloc(queue.getReserved() * queue.getTypeSize()));
+			std::memcpy(mdata, queue.getData(), queue.getReserved());
+
+			/*	*/
+			this->head = queue.head;
+			this->tail = queue.tail;
+			this->reserved = queue.getReserved();
+			this->nrElements = queue.getSize();
+			return *this;
+		}
+
+		Queue &operator=(Queue &&queue) {
+
+			/*	*/
+			this->mdata = std::exchange(this->mdata, queue.mdata);
+
+			/*	*/
+			this->head = queue.head;
+			this->tail = queue.tail;
+			this->reserved = queue.getReserved();
+			this->nrElements = queue.getSize();
 			return *this;
 		}
 

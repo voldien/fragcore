@@ -32,8 +32,8 @@ namespace fragcore {
 		size_t alloc(const size_t sizeBytes) noexcept;
 		size_t allocateAligned(const size_t sizeBytes, const unsigned int alignment) noexcept;
 
-		void clear() noexcept;
-		void freeToMarker(const size_t marker);
+		void clear() noexcept override;
+		void freeToMarker(const size_t marker) override;
 
 	  private:
 		size_t mSize = 0;	   /*	*/

@@ -34,7 +34,7 @@ namespace fragcore {
 			this->setCenter(center);
 			this->setRadius(radius);
 		}
-		BoundingSphere(const BoundingSphere &boundingSphere) noexcept { *this = boundingSphere; }
+		BoundingSphere(const BoundingSphere &boundingSphere) noexcept = default;
 
 		/**
 		 * Get radius size.

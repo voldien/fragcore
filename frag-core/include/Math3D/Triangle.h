@@ -98,7 +98,7 @@ namespace fragcore {
 	inline Vector3 Triangle::getEdge3() const noexcept { return (p2 - p1); }
 
 	inline Vector3 Triangle::getNormal() const noexcept {
-#if defined(FRAGCORE_USE_EIGEN)
+#ifdef FRAGCORE_USE_EIGEN
 		return (p0 - p1).cross(p0 - p2) / (p0 - p1).dot(p0 - p2);
 #elif defined(FRAGCORE_USE_GLM)
 		return glm::cross((p0 - p1), (p0 - p2)) / glm::dot((p0 - p1), (p0 - p2));

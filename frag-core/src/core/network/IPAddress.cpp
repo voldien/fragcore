@@ -29,7 +29,7 @@ IPAddress::IPAddress(const std::string &hostname) : type(IPAddressType::IPAddres
 	/*	*/
 	if (hosten != nullptr) {
 		struct in_addr **addr_list = nullptr;
-		addr_list = (struct in_addr **)hosten->h_addr_list;
+		addr_list = reinterpret_cast<struct in_addr **>(hosten->h_addr_list);
 
 		for (int i = 0; addr_list[i] != nullptr; i++) {
 			// Return the first one;

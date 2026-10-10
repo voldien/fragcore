@@ -50,6 +50,8 @@ namespace fragcore {
 	template <typename T> class ValueType : public AbstractValue {
 	  public:
 		using ObjecType = T;
+		static constexpr unsigned int DTypeSize = sizeof(ObjecType);
+
 		ValueType() = default;
 		ValueType(const T &val) : value(val) {}
 		~ValueType() override = default;
@@ -100,7 +102,7 @@ namespace fragcore {
 		IConfig(IConfig *parent = nullptr) { this->setParent(parent); }
 		IConfig(const IConfig &other) = default;
 		IConfig(IConfig &&other) : _mapSubConfig(std::move(other._mapSubConfig)), va_va(std::move(other.va_va)) {}
-		~IConfig() override  {
+		~IConfig() override {
 			/*	Delete attributes.	*/
 			for (auto it = this->va_va.begin(); it != this->va_va.end(); it++) {
 				delete (*it).second;
@@ -126,8 +128,7 @@ namespace fragcore {
 		const AbstractValue &operator[](const std::string &key) { return *this->va_va[key]; }
 
 		template <class T> T get(const std::string &key) const {
-			static_assert(std::is_class_v<ValueType<T>> || std::is_floating_point_v<T> ||
-							  std::is_integral_v<T>,
+			static_assert(std::is_class_v<ValueType<T>> || std::is_floating_point_v<T> || std::is_integral_v<T>,
 						  "Invalid Data Type");
 			if (this->has_ref(key)) {
 				return this->va_va.at(key)->as<T>().getValue();
@@ -152,8 +153,7 @@ namespace fragcore {
 		bool has_ref(const std::string &key) const { return this->va_va.find(key) != this->va_va.end(); }
 
 		template <class T> void set(const std::string &key, const T &value) /*noexcept(noexcept(isSet(key)))*/ {
-			static_assert(std::is_class_v<ValueType<T>> || std::is_floating_point_v<T> ||
-							  std::is_integral_v<T>,
+			static_assert(std::is_class_v<ValueType<T>> || std::is_floating_point_v<T> || std::is_integral_v<T>,
 						  "Must be a supported type");
 			auto val = new ValueType<T>(value);
 			this->va_va[key] = static_cast<AbstractValue *>(val);
@@ -167,7 +167,7 @@ namespace fragcore {
 			return this->get<IConfig &>(key);
 		}
 
-		virtual bool tryGetSubConfig(const std::string &key, IConfig &config) noexcept {
+		virtual bool tryGetSubConfig(const std::string &key, IConfig &config) {
 			if (this->getNumChildren() <= 0) {
 				return false;
 			}

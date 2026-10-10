@@ -33,6 +33,7 @@ namespace fragcore {
 		using UIDType = T;
 		UIDStruct(const T uid) noexcept : uid(uid) {}
 
+		/*	*/
 		UIDType get_id() const noexcept { return this->uid; }
 
 	  private:

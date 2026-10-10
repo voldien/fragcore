@@ -32,26 +32,26 @@ size_t TCPNetSocket::setupIPAddress(struct sockaddr *addr, const INetAddress &p_
 		const IPAddress &ipAddress = tcpAddress.getIPAddress();
 
 		const uint8_t *_addr = ipAddress.getAddress(IPAddress::IPAddressType::IPAddress_Type_IPV4);
-		sockaddr_in *addr4 = (sockaddr_in *)(addr);
+		sockaddr_in *addr4 = reinterpret_cast<sockaddr_in *>(addr);
 		addrlen = sizeof(*addr4);
 
 		size_t addr_len = sizeof(addr4->sin_addr);
 		memcpy(&addr4->sin_addr, _addr, addr_len);
 
 		addr4->sin_port = htons(p_port);
-		addr4->sin_family = (sa_family_t)domain;
+		addr4->sin_family = static_cast<sa_family_t>(domain);
 
 	} else if (domain == AF_INET6) {
 		const IPAddress &ipAddress = tcpAddress.getIPAddress();
 		const uint8_t *_addr = ipAddress.getAddress(IPAddress::IPAddressType::IPAddress_Type_IPV4);
-		sockaddr_in6 *addr6 = (sockaddr_in6 *)(addr);
+		sockaddr_in6 *addr6 = reinterpret_cast<sockaddr_in6 *>(addr);
 		addrlen = sizeof(*addr6);
 
 		size_t addr_len = sizeof(addr6->sin6_addr);
 		memcpy(&addr6->sin6_addr, _addr, addr_len);
 
 		addr6->sin6_port = htons(p_port);
-		addr6->sin6_family = (sa_family_t)domain;
+		addr6->sin6_family = static_cast<sa_family_t>(domain);
 
 	} else {
 		throw RuntimeException("Not a valid Net Address");
@@ -110,7 +110,7 @@ int TCPNetSocket::bind(const INetAddress &p_addr) {
 
 	/*	*/
 	int domain = getDomain(*tcpAddress);
-	addrlen = setupIPAddress((struct sockaddr *)&addrU, p_addr, tcpAddress->getPort());
+	addrlen = setupIPAddress(reinterpret_cast<struct sockaddr *>(&addrU), p_addr, tcpAddress->getPort());
 
 	/*	*/
 	this->socket = ::socket(domain, flags, 0);
@@ -121,7 +121,7 @@ int TCPNetSocket::bind(const INetAddress &p_addr) {
 	this->setTimeout(0);
 
 	/*	Bind process to socket.	*/
-	if (::bind(socket, (struct sockaddr *)&addrU, addrlen) < 0) {
+	if (::bind(socket, reinterpret_cast<struct sockaddr *>(&addrU), addrlen) < 0) {
 		this->netStatus = NetStatus::Status_Error;
 		throw RuntimeException("Failed to bind TCP socket - {}:{}, {}", tcpAddress->getIPAddress().getIP(),
 							   tcpAddress->getPort(), strerror(errno));
@@ -176,14 +176,15 @@ int TCPNetSocket::connect(const INetAddress &p_addr) {
 	}
 
 	int option = 1;
-	int rcode = setsockopt(this->socket, IPPROTO_TCP, TCP_NODELAY, (const void *)&option, sizeof(int));
+	int rcode =
+		setsockopt(this->socket, IPPROTO_TCP, TCP_NODELAY, reinterpret_cast<const void *>(&option), sizeof(int));
 	if (rcode == -1) {
 		throw RuntimeException("Failed to set Socket Option");
 	}
 
-	addrlen = setupIPAddress((struct sockaddr *)&addrU, *tcpAddress, tcpAddress->getPort());
+	addrlen = setupIPAddress(reinterpret_cast<struct sockaddr *>(&addrU), *tcpAddress, tcpAddress->getPort());
 
-	rcode = ::connect(socket, (struct sockaddr *)&addrU, addrlen);
+	rcode = ::connect(socket, reinterpret_cast<struct sockaddr *>(&addrU), addrlen);
 	if (rcode != 0) {
 		throw RuntimeException("Failed to connect TCP {}:{}, {}", tcpAddress->getIPAddress().getIP(),
 							   tcpAddress->getPort(), strerror(errno));
@@ -265,11 +266,11 @@ long int TCPNetSocket::send(const void *pbuffer, int p_len, int &sent) {
 }
 
 Ref<NetSocket> TCPNetSocket::accept(INetAddress &r_ip) {
-	struct sockaddr_storage addr {};
+	struct sockaddr_storage addr{};
 	socklen_t addrlen = 0;
 
 	addrlen = sizeof(addr);
-	int aaccept_socket = ::accept(this->socket, (struct sockaddr *)&addr, &addrlen);
+	int aaccept_socket = ::accept(this->socket, reinterpret_cast<struct sockaddr *>(&addr), &addrlen);
 	if (aaccept_socket < 0) {
 		throw SystemException(errno, std::system_category(), "Failed to accept TCP connection");
 	}
@@ -330,7 +331,7 @@ bool TCPNetSocket::isValidNetworkAddress(const INetAddress &address) noexcept {
 }
 
 void TCPNetSocket::setTimeout(long int microsec) {
-	struct timeval timeout {};
+	struct timeval timeout{};
 
 	/*	Set timeout for client.	*/
 	timeout.tv_sec = microsec / 1000000;
@@ -348,7 +349,7 @@ void TCPNetSocket::setTimeout(long int microsec) {
 }
 
 long int TCPNetSocket::getTimeout() {
-	struct timeval timeout {};
+	struct timeval timeout{};
 	socklen_t len = 0;
 
 	int rcode = getsockopt(this->socket, SOL_SOCKET, SO_RCVTIMEO, &timeout, &len);
@@ -363,9 +364,9 @@ long int TCPNetSocket::getTimeout() {
 int TCPNetSocket::getSocket() const noexcept { return this->socket; }
 
 int TCPNetSocket::getPort() const noexcept {
-	struct sockaddr_in sin {};
+	struct sockaddr_in sin{};
 	socklen_t addrlen = sizeof(sin);
-	getsockname(this->getSocket(), (struct sockaddr *)&sin, &addrlen); // read binding
+	getsockname(this->getSocket(), reinterpret_cast<struct sockaddr *>(&sin), &addrlen); // read binding
 
 	return ntohs(sin.sin_port); // get the port number
 }
@@ -392,6 +393,7 @@ int TCPNetSocket::getDomain(const INetAddress &address) {
 		return AF_CAN;
 		break;
 	default:
-		throw RuntimeException("Non Supported Network Protocol: {}", (unsigned int)address.getNetworkProtocol());
+		throw RuntimeException("Non Supported Network Protocol: {}",
+							   static_cast<unsigned int>(address.getNetworkProtocol()));
 	}
 }

@@ -48,7 +48,7 @@ namespace fragcore {
 		/**
 		 *	Set marker to zero.
 		 */
-		void clear() noexcept;
+		void clear() noexcept override;
 
 		/**
 		 *	Return marker offset.
@@ -64,7 +64,7 @@ namespace fragcore {
 		/**
 		 *	Release everything to marker.
 		 */
-		void freeToMarker(const size_t marker);
+		void freeToMarker(const size_t marker) override;
 
 		/**
 		 *	Swap buffers.

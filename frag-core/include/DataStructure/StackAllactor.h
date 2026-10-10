@@ -57,7 +57,7 @@ namespace fragcore {
 		/**
 		 *	Set marker to zero.
 		 */
-		void clear() noexcept;
+		void clear() noexcept override;
 
 		/**
 		 *	@return marker offset.
@@ -72,14 +72,17 @@ namespace fragcore {
 		/**
 		 *	Release everything to marker.
 		 */
-		void freeToMarker(const size_t marker) noexcept;
+		void freeToMarker(const size_t marker) noexcept override;
 
+		/*	*/
 		StackAllocator &operator=(const StackAllocator &other);
 		StackAllocator &operator=(StackAllocator &&other);
 
+				/*	*/
 		bool operator==(const StackAllocator &other);
 		bool operator!=(const StackAllocator &other);
 
+				/*	*/
 		bool isDataOwned() const noexcept { return this->ownData; }
 
 	  private:			/*	Attributes.	*/

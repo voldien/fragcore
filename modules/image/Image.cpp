@@ -75,7 +75,7 @@ Color Image::getColor(const unsigned int x_offset, const unsigned int y_offset, 
 
 		const size_t index = pixel_index * (Image::getFormatPixelBitSize(this->getFormat()) / 8);
 		uint8_t color = reinterpret_cast<const uint8_t *>(this->pixelData)[index];
-		return {static_cast<float>(color / 255.0f), static_cast<float>(color / 255.0f),
+		return {(color / 255.0f), static_cast<float>(color / 255.0f),
 				static_cast<float>(color / 255.0f), static_cast<float>(color / 255.0f)};
 	}
 	case ImageFormat::R16:
@@ -116,7 +116,7 @@ void Image::setColor(unsigned int x_offset, unsigned int y_offset, unsigned int 
 	case ImageFormat::Alpha8:
 	case ImageFormat::R8: {
 		const size_t index = pixel_index * (Image::getFormatPixelBitSize(this->getFormat()) / 8);
-		reinterpret_cast<uint8_t *>(this->pixelData)[index] = (uint8_t)color.r() * 255;
+		reinterpret_cast<uint8_t *>(this->pixelData)[index] = static_cast<uint8_t>(color.r()) * 255;
 	}
 	case ImageFormat::R16:
 	case ImageFormat::R16U:
@@ -124,7 +124,7 @@ void Image::setColor(unsigned int x_offset, unsigned int y_offset, unsigned int 
 	case ImageFormat::R32:
 	case ImageFormat::R32U: {
 		const size_t index = pixel_index * (Image::getFormatPixelBitSize(this->getFormat()) / 8);
-		reinterpret_cast<uint32_t *>(this->pixelData)[index] = (uint32_t)color.r();
+		reinterpret_cast<uint32_t *>(this->pixelData)[index] = static_cast<uint32_t>(color.r());
 		break;
 	}
 	case ImageFormat::ARGB4444:

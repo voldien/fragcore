@@ -103,7 +103,7 @@ namespace fragcore {
 								std::abs(glm::dot(Vector3{0.f, 0.f, 1.f}, up_vec)) +
 								std::abs(glm::dot(Vector3{0.f, 0.f, 1.f}, forward));
 
-			return AABB(Vector3(newIi, newIj, newIk), Vector3(globalCenter));
+			return {Vector3(newIi, newIj, newIk), Vector3(globalCenter)};
 		}
 
 		/**

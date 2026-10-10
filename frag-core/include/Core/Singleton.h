@@ -30,6 +30,8 @@ namespace fragcore {
 	 */
 	template <typename T> class FVDECLSPEC Singleton : public SmartReference {
 	  public:
+		using DType = T;
+		
 		/**
 		 * @brief Get the Instance object
 		 *

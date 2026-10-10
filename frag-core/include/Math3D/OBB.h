@@ -26,11 +26,8 @@ namespace fragcore {
 	struct FVDECLSPEC OBB {
 	  public:
 		OBB() = default;
-
-		OBB(const OBB &obb) { *this = obb; }
-
+		OBB(const OBB &obb) = default;
 		OBB(const Vector3 &u, const Vector3 &v, const Vector3 &w) { this->onb.set(u, v, w); }
-
 		OBB(const Vector3 &u, const Vector3 &v, const Vector3 &w, const Vector3 &size) {
 			this->onb.set(u, v, w);
 			this->setSize(size);

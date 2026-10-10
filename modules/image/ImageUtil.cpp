@@ -35,7 +35,8 @@ Image ImageUtil::convert2NormalMap(const Image &image, const float strength) {
 			Vector3 normal_y = Vector3(size.y, size.x, strength * bump_strength * (s12 - s01));
 			normal_x = glm::normalize(normal_x);
 			normal_y = glm::normalize(normal_y);
-
+			
+			/*	*/
 			Vector3 normal = glm::cross(normal_x, normal_y) * 0.5f + Vector3(0.5f, 0.5f, 0.5f);
 
 			/*	*/
@@ -62,7 +63,7 @@ Image ImageUtil::convert2GrayScale(const Image &image) {
 		for (index_y = 0; index_y < Height; index_y++) {
 
 			Color color = image.getColor(index_x, index_y, 0);
-			const float lumen = (0.299 * color.r()) + (0.587 * color.g()) + (0.114 * color.b());
+			const float lumen = (0.299f * color.r()) + (0.587f * color.g()) + (0.114f * color.b());
 			Color grayScaleColor = Color(lumen, lumen, lumen, 1);
 			grayScale.setColor(index_x, index_y, 0, grayScaleColor);
 		}

@@ -89,7 +89,7 @@ namespace fragcore {
 		Box,	  /*  */
 		Cylinder, /*	*/
 		Plane,	  /*	*/
-		Other	  /*	*/
+		Other,	  /*	*/
 	};
 
 	/**
@@ -174,7 +174,7 @@ namespace fragcore {
 		TriangleFan = 0x7,		/*	*/
 		TriangleAdjacant = 0x8, /*	*/
 		Patchs = 0x9,			/*	*/
-		LineStrip = 0xA
+		LineStrip = 0xA,
 	};
 
 	enum class StencilFunc {
@@ -316,7 +316,7 @@ namespace fragcore {
 		Task,		 /*	*/
 		RayGenerate, /*	*/
 		RayHit,		 /*	*/
-		RayMiss		 /*	*/
+		RayMiss,		 /*	*/
 	};
 
 	enum class ShaderCodeType {
@@ -476,7 +476,7 @@ namespace fragcore {
 			PixelUnpack,	   /*  */
 			PixelPack,		   /*  */
 			IndirectDraw,	   /*  */
-			IndirectDispatch   /*  */
+			IndirectDispatch,   /*  */
 		};
 
 		/**

@@ -33,7 +33,7 @@ Image ImageLoader::loadImage(Ref<IO> &io_in, const FileFormat fileformat) {
 	const size_t imageFileSize = IOUtil::loadFileMem(io_in, &imageData);
 
 	/*	Create memory object.*/
-	stream = FreeImage_OpenMemory((BYTE *)imageData, imageFileSize);
+	stream = FreeImage_OpenMemory(reinterpret_cast<BYTE *>(imageData), imageFileSize);
 	if (stream == nullptr) {
 		throw RuntimeException("Failed to open freeimage memory stream {0}", imageFileSize);
 	}
@@ -97,7 +97,7 @@ Image ImageLoader::loadImage(Ref<IO> &io_in, const FileFormat fileformat) {
 	depth = 1;
 
 	/*	*/
-	pixelSize = (size_t)std::ceil((width * height * depth * bitsPerPixel) / 8.0f);
+	pixelSize = static_cast<size_t>(std::ceil((width * height * depth * bitsPerPixel) / 8.0f));
 
 	// TODO fix, seems to be a bug with freeiamge.
 	if (bitsPerPixel == 32 && colortype == FIC_RGB) {
@@ -234,7 +234,7 @@ void ImageLoader::saveImage(Ref<IO> &IO_out, const Image &Image, const FileForma
 	}
 
 	/*  Allocate image buffer.  */
-	image = FreeImage_ConvertFromRawBits((BYTE *)pixels, Image.width(), Image.height(),
+	image = FreeImage_ConvertFromRawBits(static_cast<BYTE *>(pixels), Image.width(), Image.height(),
 										 (Image::getFormatPixelBitSize(Image.getFormat()) * Image.width()) / 8,
 										 Image::getFormatPixelBitSize(Image.getFormat()), 0x000000FF, 0x0000FF00,
 										 0x00FF0000, FALSE);
@@ -259,7 +259,7 @@ void ImageLoader::saveImage(Ref<IO> &IO_out, const Image &Image, const FileForma
 		BYTE *save_pixel_data = nullptr;
 		DWORD save_size = 0;
 		if (FreeImage_AcquireMemory(mem, &save_pixel_data, &save_size)) {
-			IOUtil::saveFileMem(IO_out, (char *)save_pixel_data, save_size);
+			IOUtil::saveFileMem(IO_out, reinterpret_cast<char *>(save_pixel_data), save_size);
 		}
 	}
 

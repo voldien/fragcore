@@ -31,6 +31,8 @@ namespace fragcore {
 	template <typename T> class FVDECLSPEC PoolAllocator {
 	  private:
 		static constexpr bool isClass = std::is_class_v<T>;
+		using DType = T;
+		static constexpr unsigned int DTypeSize = sizeof(DType);
 
 	  public:
 		using PoolAllactorItem = struct poolallactoritem {
@@ -138,7 +140,7 @@ namespace fragcore {
 			}
 
 			/*	*/
-			PoolAllactorItem *alloc = static_cast<PoolAllactorItem *>(element);
+			PoolAllactorItem *alloc = reinterpret_cast<PoolAllactorItem *>(element);
 			alloc->next = item->next;
 			item->next = alloc;
 
@@ -154,11 +156,11 @@ namespace fragcore {
 		bool isValidItem(const T &data) const noexcept {
 			const T *tmp = &data;
 			/*  If pointer is less than the base pointer.*/
-			if (static_cast<void *>(tmp) < static_cast<void *>(this->item)) {
+			if (static_cast<const void *>(tmp) < static_cast<const void *>(this->item)) {
 				return false;
 			}
 			/*  Check if pointer is outside the end point*/
-			if (tmp >= static_cast<void *>(&this->item[this->reserved()])) {
+			if (tmp >= static_cast<const void *>(&this->item[this->reserved()])) {
 				return false;
 			}
 			/*	Check if memory is a multiple of the size from the base pointer.	*/
@@ -189,6 +191,7 @@ namespace fragcore {
 		/**
 		 * Get datatype size.
 		 */
+		 //TODO: move to a base class for reuse and compiler time.
 		void setTypeSize(const size_t size) noexcept { this->typeSize = size; }
 		size_t getTypeSize() const noexcept { return this->typeSize; }
 
@@ -206,7 +209,7 @@ namespace fragcore {
 			if (this->reserved() == 0) {
 
 				if constexpr (isClass) {
-					this->item = static_cast<PoolAllactorItem *>(new PoolAllactorItem[nrRequestedElements]);
+					this->item = new PoolAllactorItem[nrRequestedElements];
 				} else {
 					this->item = static_cast<PoolAllactorItem *>(realloc(this->item, itemSize * nrRequestedElements));
 				}
@@ -217,7 +220,7 @@ namespace fragcore {
 
 					if constexpr (isClass) {
 						T *ob = new (&item[index].data) T();
-						//item[index].data = *ob;
+						// item[index].data = *ob;
 					}
 				}
 

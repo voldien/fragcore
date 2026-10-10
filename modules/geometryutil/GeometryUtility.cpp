@@ -43,7 +43,7 @@ bool GeometryUtility::isConvex(const std::vector<Vector3> &points) {
 		u = points[(i + 2) % nrPoints];
 
 		if (i == 0) { // in first loop direction is unknown, so save it in res
-			res = u.x * v.y - u.y * v.x + v.x * p.y - v.y * p.x;
+			res = (u.x * v.y) - (u.y * v.x) + (v.x * p.y) - (v.y * p.x);
 		} else {
 
 			/*	*/
@@ -85,7 +85,7 @@ BoundingSphere GeometryUtility::computeBoundingSphere(const float *vertices, con
 	const Vector3 center = aabb.getCenter();
 	const float radius = glm::length(aabb.getHalfSize());
 
-	return BoundingSphere(center, radius);
+	return {center, radius};
 }
 
 OBB GeometryUtility::computeBoundingOBB(const float *vertices, const size_t nrVertices, const size_t stride) {
@@ -112,4 +112,5 @@ void GeometryUtility::optimizeGeometry(void *vertices, const size_t nrVertices, 
 	//meshopt_optimizeVertexCache(static_cast<float *>(vertices), indices, nrIndices, nrVertices);
 	//meshopt_optimizeVertexFetch(static_cast<float *>(vertices), indices, nrIndices, vertices, nrVertices,
 	//							vertices_stride);
+	
 }

@@ -24,13 +24,13 @@ namespace fragcore {
 	/**
 	 * @brief
 	 */
-	class FVDECLSPEC IMemoryPool { //TODO: refractor name
+	class FVDECLSPEC IMemoryPool { // TODO: refractor name
 	  public:
 		size_t alloc(const size_t sizeBytes) noexcept;
 		size_t allocateAligned(const size_t sizeBytes, const unsigned int alignment) noexcept;
 
-		void clear() noexcept;
-		void freeToMarker(const size_t marker);
+		virtual void clear() noexcept = 0;
+		virtual void freeToMarker(const size_t marker) = 0;
 	};
 } // namespace fragcore
 

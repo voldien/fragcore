@@ -32,7 +32,7 @@ long int IOUtil::loadFileMem(Ref<IO> &io, char **data) {
 
 	io->seek(current_pos, IO::Seek::SET);
 
-	*data = (char *)populatedMemory;
+	*data = reinterpret_cast<char *>(populatedMemory);
 	return numberByteRead;
 }
 

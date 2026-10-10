@@ -33,7 +33,9 @@ namespace fragcore {
 	template <typename T, typename U = size_t> struct Property : public UIDStruct<U> {
 	  public:
 		using DType = T;
+		static constexpr unsigned int DTypeSize = sizeof(DType);
 
+	  public:
 		Property() noexcept : UIDStruct<U>(reinterpret_cast<U>(this)) { this->value = T(); }
 
 		Property(const std::string &name, const T value) noexcept
@@ -41,6 +43,7 @@ namespace fragcore {
 		Property(const std::string &name, const T value, U uid) noexcept
 			: UIDStruct<U>(uid), name(name), value(value) { /**/ }
 
+		/*	*/
 		constexpr const DType *operator->() const { return std::__addressof(this->get_current_value()); }
 		constexpr DType *operator->() { return std::__addressof(this->get_current_value()); }
 
@@ -74,6 +77,7 @@ namespace fragcore {
 		const std::type_info &getDType() const noexcept { return typeid(T); }
 
 	  protected:
+
 		const DType &get_current_value() const { return this->value; }
 		DType &get_current_value() { return this->value; }
 
@@ -143,8 +147,9 @@ namespace fragcore {
 		bool is_override() const noexcept { return this->override_status; }
 
 	  protected:
-		const DType &get_current_value() const { return this->is_override() ? this->overrideValue : this->value; }
-		DType &get_current_value() { return this->is_override() ? this->overrideValue : this->value; }
+
+		// const DType &get_current_value() const { return this->is_override() ? this->overrideValue : this->value; }
+		// DType &get_current_value() { return this->is_override() ? this->overrideValue : this->value; }
 
 		std::string name;
 		DType value;

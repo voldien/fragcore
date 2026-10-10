@@ -36,7 +36,7 @@ namespace fragcore {
 			Precision red = ((hex >> 24) & 0xFF) / 255.0f;	 // Extract the RR byte
 			Precision green = ((hex >> 16) & 0xFF) / 255.0f; // Extract the GG byte
 			Precision blue = ((hex >> 8) & 0xFF) / 255.0f;	 // Extract the GG byte
-			Precision alpha = ((hex) & 0xFF) / 255.0f;		 // Extract the BB byte
+			Precision alpha = (hex & 0xFF) / 255.0f;		 // Extract the BB byte
 			this->r(red);
 			this->g(green);
 			this->b(blue);
@@ -84,7 +84,7 @@ namespace fragcore {
 				red = 255;
 
 				green = temp;
-				green = 99.4708025861 * std::log(green) - 161.1195681661;
+				green = (99.4708025861 * std::log(green)) - 161.1195681661;
 
 				if (temp <= 19) {
 
@@ -92,7 +92,7 @@ namespace fragcore {
 				} else {
 
 					blue = temp - 10;
-					blue = 138.5177312231 * std::log(blue) - 305.0447927307;
+					blue = (138.5177312231 * std::log(blue)) - 305.0447927307;
 				}
 			} else {
 

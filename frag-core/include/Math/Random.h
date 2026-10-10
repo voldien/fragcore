@@ -48,6 +48,8 @@ namespace fragcore {
 		template <typename U> static U insideUnitSphere() noexcept { return 0; }
 		template <typename U> static void setSet() noexcept {}
 
+		
+
 	  private: /*	Attributes.	*/
 		static unsigned int rand_internal() noexcept;
 

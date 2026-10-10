@@ -33,7 +33,8 @@ namespace fragcore {
 			this->setCenter(center);
 			this->setHalfSize(halfSize);
 		}
-		AABB(const AABB &bounds) { *this = bounds; }
+		AABB(const AABB &bounds) = default;
+		AABB(AABB &&other) = default;
 
 		/**
 		 *
@@ -46,7 +47,7 @@ namespace fragcore {
 		 *
 		 * @return
 		 */
-		Vector3 &operator[](const int index) { return ((Vector3 *)this)[index]; }
+		Vector3 &operator[](const int index) { return (reinterpret_cast<Vector3 *>(this))[index]; }
 
 		/**
 		 * Check if object is valid.
@@ -85,6 +86,9 @@ namespace fragcore {
 		 * Set half size.
 		 */
 		void setHalfSize(const Vector3 &size) noexcept { this->mhalfsize = size; }
+
+		/*	*/
+		Vector3 getSize() const noexcept { return this->getHalfSize() * 2.0f; }
 
 		/**
 		 * Get center position.
@@ -132,9 +136,18 @@ namespace fragcore {
 		}
 
 		/*	*/
-		AABB encapsulate(const AABB &bounds) const noexcept {
-			Vector3 encapsulateSize = glm::max(bounds.getHalfSize(), this->getHalfSize());
-			return AABB(getCenter(), encapsulateSize);
+		AABB &encapsulate(const AABB &bounds) noexcept {
+
+			const Vector3 max = glm::max(bounds.max(), this->max());
+			const Vector3 min = glm::min(bounds.min(), this->min());
+
+			setMinMax(min, max);
+			return *this;
+		}
+
+		void setMinMax(const Vector3 &min, const Vector3 &max) noexcept {
+			this->mhalfsize = (max - min) * 0.5f;
+			this->mcenter = min + mhalfsize;
 		}
 
 		/**
@@ -177,7 +190,7 @@ namespace fragcore {
 		 * Assign bound object.
 		 * @return reference of object.
 		 */
-		AABB &operator=(const AABB &bound) {
+		AABB &operator=(const AABB &bound) noexcept {
 			this->mhalfsize = bound.mhalfsize;
 			this->mcenter = bound.mcenter;
 			return *this;
@@ -240,9 +253,9 @@ namespace fragcore {
 		}
 
 		static AABB createMinMax(const Vector3 &min, const Vector3 &max) noexcept {
-			const Vector3 halfSize = (max - min) * 0.5f;
-			const Vector3 center = min + halfSize;
-			return AABB(halfSize, center);
+			AABB aabb(Vector3(0), Vector3(0));
+			aabb.setMinMax(min, max);
+			return aabb;
 		}
 
 	  private:			   /*	Attributes.	*/

@@ -29,7 +29,7 @@ namespace fragcore {
 	 * @tparam T
 	 */
 	// TODO add atomic support
-	template <class T> class Stack {
+	template <typename T> class Stack {
 	  public:
 		Stack() {
 			this->data = nullptr;

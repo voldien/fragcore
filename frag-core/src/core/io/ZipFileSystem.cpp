@@ -12,7 +12,7 @@ using namespace fragcore;
 IO *ZipFileSystem::openFile(const char *path, [[maybe_unused]] IO::IOMode mode) {
 	struct zip_file *zfile;
 	struct zip_stat stat;
-	struct zip *zip = (struct zip *)this->pzip;
+	struct zip *zip = static_cast<struct zip *>(this->pzip);
 	int err, sys_err;
 	zip_uint32_t attr;
 
@@ -24,7 +24,7 @@ IO *ZipFileSystem::openFile(const char *path, [[maybe_unused]] IO::IOMode mode) 
 	}
 
 	zip_uint8_t osSys = 0;
-	err = zip_file_get_external_attributes((zip_t *)zip, index, 0, &osSys, &attr);
+	err = zip_file_get_external_attributes(static_cast<zip_t *>(zip), index, 0, &osSys, &attr);
 	if (err != 0) {
 		char errorStr[1024];
 		zip_error_get(zip, &err, &sys_err);
@@ -61,17 +61,17 @@ IO *ZipFileSystem::openFile(unsigned int index) {
 	int err;
 
 	/*	*/
-	err = zip_stat_index((struct zip *)this->pzip, index, 0, &stat);
+	err = zip_stat_index(static_cast<struct zip *>(this->pzip), index, 0, &stat);
 	if (err != 0) {
 		char errorStr[1024];
 		zip_error_to_str(errorStr, sizeof(errorStr), err, errno);
 		throw InvalidArgumentException("Failed to get stats from `{}':\n\t{}", index, errorStr);
 	}
 
-	zfile = zip_fopen_index((struct zip *)this->pzip, index, 0);
+	zfile = zip_fopen_index(static_cast<struct zip *>(this->pzip), index, 0);
 	if (!zfile) {
 		char errorStr[1024];
-		err = zip_get_error((struct zip *)this->pzip)->zip_err;
+		err = zip_get_error(static_cast<struct zip *>(this->pzip))->zip_err;
 		zip_error_to_str(errorStr, sizeof(errorStr), err, errno);
 		throw InvalidArgumentException("Failed to open file, via index `{}':\n\t{}", index, errorStr);
 	}
@@ -100,7 +100,7 @@ std::vector<std::string> ZipFileSystem::listFiles(const char *path) const {
 
 	files.resize(num_entries);
 
-	for (zip_uint64_t i = 0; i < (zip_uint64_t)num_entries; i++) {
+	for (zip_uint64_t i = 0; i < static_cast<zip_uint64_t>(num_entries); i++) {
 		const char *name = zip_get_name(zip, i, 0);
 		if (name == nullptr) {
 		}
@@ -128,7 +128,7 @@ std::vector<std::string> ZipFileSystem::listDirectories(const char *path) const 
 
 	files.resize(num_entries);
 
-	for (zip_uint64_t i = 0; i < (zip_uint64_t)num_entries; i++) {
+	for (zip_uint64_t i = 0; i < static_cast<zip_uint64_t>(num_entries); i++) {
 		const char *name = zip_get_name(zip, i, 0);
 
 		if (name == nullptr) {
@@ -157,7 +157,7 @@ std::vector<std::string> ZipFileSystem::list(const char *path) const {
 
 	files.resize(num_entries);
 
-	for (zip_uint64_t i = 0; i < (zip_uint64_t)num_entries; i++) {
+	for (zip_uint64_t i = 0; i < static_cast<zip_uint64_t>(num_entries); i++) {
 		const char *name = zip_get_name(zip, i, 0);
 		if (name == nullptr) {
 		}
@@ -173,7 +173,7 @@ std::vector<std::string> ZipFileSystem::list(const char *path) const {
 void ZipFileSystem::release() {
 	if (this->deincreemnt()) {
 		if (this->pzip) {
-			zip_close((zip_t *)this->pzip);
+			zip_close(static_cast<zip_t *>(this->pzip));
 		}
 	}
 	this->pzip = nullptr;
@@ -185,14 +185,14 @@ void ZipFileSystem::remove(const char *path) {
 	int err;
 
 	// Find the file.
-	zip_int64_t index = zip_name_locate((struct zip *)this->pzip, path, 0);
+	zip_int64_t index = zip_name_locate(static_cast<struct zip *>(this->pzip), path, 0);
 	if (index < 0) {
 		char errorStr[4096];
 		zip_error_to_str(errorStr, sizeof(errorStr), index, errno);
 		throw InvalidArgumentException("Could not find file {}, error: {}", path, errorStr);
 	}
 
-	err = zip_delete((zip_t *)this->pzip, index);
+	err = zip_delete(static_cast<zip_t *>(this->pzip), index);
 	if (err != ZIP_ER_OK) {
 		char errorStr[4096];
 		zip_error_to_str(errorStr, sizeof(errorStr), err, errno);
@@ -202,7 +202,7 @@ void ZipFileSystem::remove(const char *path) {
 
 void ZipFileSystem::rename(const char *oldPath, const char *newPath) {
 
-	zip_int64_t index = zip_name_locate((struct zip *)this->pzip, oldPath, 0);
+	zip_int64_t index = zip_name_locate(static_cast<struct zip *>(this->pzip), oldPath, 0);
 	if (index < 0) {
 		char errorStr[4096];
 		zip_error_to_str(errorStr, sizeof(errorStr), index, errno);
@@ -219,7 +219,7 @@ void ZipFileSystem::rename(const char *oldPath, const char *newPath) {
 
 void ZipFileSystem::createFile(const char *path) {
 
-	zip_int64_t error = zip_add((zip_t *)this->pzip, path, nullptr);
+	zip_int64_t error = zip_add(static_cast<zip_t *>(this->pzip), path, nullptr);
 	if (error != ZIP_ER_OK) {
 		char errorStr[4096];
 		zip_error_to_str(errorStr, sizeof(errorStr), error, errno);
@@ -228,7 +228,7 @@ void ZipFileSystem::createFile(const char *path) {
 }
 
 void ZipFileSystem::createDirectory(const char *path) {
-	zip_int64_t error = zip_dir_add((zip_t *)this->pzip, path, 0);
+	zip_int64_t error = zip_dir_add(static_cast<zip_t *>(this->pzip), path, 0);
 	if (error != ZIP_ER_OK) {
 		char errorStr[4096];
 		zip_error_to_str(errorStr, sizeof(errorStr), error, errno);
@@ -251,7 +251,7 @@ bool ZipFileSystem::exists(const char *path) const {
 	int err;
 
 	/*	*/
-	err = zip_stat((struct zip *)this->pzip, path, 0, &stat);
+	err = zip_stat(static_cast<struct zip *>(this->pzip), path, 0, &stat);
 	if (err != ZIP_ER_OK) {
 		return false;
 	}
@@ -287,7 +287,7 @@ ZipFileSystem *ZipFileSystem::createZipFileObject(const char *cfilename, Ref<ISc
 }
 
 static zip_int64_t io_callback(void *userdata, void *data, zip_uint64_t len, zip_source_cmd_t cmd) {
-	Ref<IO> *ioRef = (Ref<IO> *)userdata;
+	Ref<IO> *ioRef = static_cast<Ref<IO> *>(userdata);
 	switch (cmd) {
 	case ZIP_SOURCE_OPEN:
 		return 0;
@@ -300,7 +300,7 @@ static zip_int64_t io_callback(void *userdata, void *data, zip_uint64_t len, zip
 	case ZIP_SOURCE_TELL:
 		return 0;
 	case ZIP_SOURCE_SEEK: {
-		struct zip_source_args_seek *seek = (struct zip_source_args_seek *)data;
+		struct zip_source_args_seek *seek = static_cast<struct zip_source_args_seek *>(data);
 		if (len < sizeof(*seek)) {
 			// zip_error_set(&ctx->libzip_error_, ZIP_ER_INVAL, 0);
 			return -1;
@@ -308,7 +308,7 @@ static zip_int64_t io_callback(void *userdata, void *data, zip_uint64_t len, zip
 		// ZIP_SOURCE_GET_ARGS
 		// ZIP_SOURCE_GET_ARGS
 		// zip_source_seek_compute_offset
-		(*ioRef)->seek(seek->offset, (IO::Seek)seek->whence);
+		(*ioRef)->seek(seek->offset, static_cast<IO::Seek>(seek->whence));
 		return 0;
 	}
 	case ZIP_SOURCE_STAT: {
@@ -318,7 +318,7 @@ static zip_int64_t io_callback(void *userdata, void *data, zip_uint64_t len, zip
 			return -1;
 		}
 
-		stat = (zip_stat_t *)data;
+		stat = static_cast<zip_stat_t *>(data);
 		zip_stat_init(stat);
 		stat->mtime = time(nullptr);
 		stat->size = (*ioRef)->length();

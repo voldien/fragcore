@@ -85,12 +85,12 @@ int UDPNetSocket::bind(const INetAddress &p_addr) {
 
 	this->UDPaddr = malloc(sizeof(addrU));
 	memset(this->UDPaddr, 0, sizeof(addrU));
-	this->addrSize = setupIPAddress((struct sockaddr *)UDPaddr, p_addr, udpAddress->getPort());
+	this->addrSize = setupIPAddress(static_cast<struct sockaddr *>(UDPaddr), p_addr, udpAddress->getPort());
 
 	// this->setTimeout(0);
 
 	/*	Bind process to socket.	*/
-	if (::bind(socket, (struct sockaddr *)UDPaddr, this->addrSize) < 0) {
+	if (::bind(socket, static_cast<struct sockaddr *>(UDPaddr), this->addrSize) < 0) {
 		this->netStatus = NetStatus::Status_Error;
 		throw RuntimeException("Failed to bind UDP socket - {}:{}, {}", udpAddress->getIPAddress().getIP(),
 							   udpAddress->getPort(), strerror(errno));
@@ -133,7 +133,7 @@ int UDPNetSocket::connect(const INetAddress &p_addr) {
 	//	}
 	this->UDPaddr = malloc(sizeof(addrU));
 	memset(this->UDPaddr, 0, sizeof(addrU));
-	this->addrSize = setupIPAddress((struct sockaddr *)UDPaddr, *udpAddress, udpAddress->getPort());
+	this->addrSize = setupIPAddress(static_cast<struct sockaddr *>(UDPaddr), *udpAddress, udpAddress->getPort());
 
 	// if (::connect(socket, addr, addrlen) < 0) {
 	//	throw RuntimeException("Failed to connect UDP socket - {}", strerror(errno));
@@ -147,17 +147,17 @@ int UDPNetSocket::recv(void *pbuffer, int p_len, int &sent, bool peek) {
 	struct sockaddr_in servaddr {};
 	socklen_t len = 0;
 	int flag = 0;
-	return ::recvfrom(this->socket, pbuffer, p_len, flag, (struct sockaddr *)&servaddr, &len);
+	return ::recvfrom(this->socket, pbuffer, p_len, flag, reinterpret_cast<struct sockaddr *>(&servaddr), &len);
 }
 int UDPNetSocket::send(const uint8_t *p_buffer, int p_len, int &r_sent) {
 	int flag = MSG_CONFIRM;
 
-	return ::sendto(this->socket, p_buffer, p_len, flag, (const struct sockaddr *)this->UDPaddr, this->addrSize);
+	return ::sendto(this->socket, p_buffer, p_len, flag, static_cast<const struct sockaddr *>(this->UDPaddr), this->addrSize);
 }
 int UDPNetSocket::sendto(const uint8_t *p_buffer, int p_len, int &r_sent, const INetAddress &p_ip) { return 0; }
 long int UDPNetSocket::send(const void *pbuffer, int p_len, int &sent) {
 	int flag = MSG_CONFIRM;
-	return ::sendto(this->socket, pbuffer, p_len, flag, (const struct sockaddr *)this->UDPaddr, this->addrSize);
+	return ::sendto(this->socket, pbuffer, p_len, flag, static_cast<const struct sockaddr *>(this->UDPaddr), this->addrSize);
 }
 Ref<NetSocket> UDPNetSocket::accept(INetAddress &r_ip) {
 	struct sockaddr tobuffer {}; /*	*/
@@ -243,26 +243,26 @@ size_t UDPNetSocket::setupIPAddress(struct sockaddr *addr, const INetAddress &p_
 		const IPAddress &ipAddress = tcpAddress.getIPAddress();
 
 		const uint8_t *_addr = ipAddress.getAddress(IPAddress::IPAddressType::IPAddress_Type_IPV4);
-		sockaddr_in *addr4 = (sockaddr_in *)(addr);
+		sockaddr_in *addr4 = reinterpret_cast<sockaddr_in *>(addr);
 		addrlen = sizeof(*addr4);
 
 		size_t addr_len = sizeof(addr4->sin_addr);
 		memcpy(&addr4->sin_addr, _addr, addr_len);
 
 		addr4->sin_port = htons(p_port);
-		addr4->sin_family = (sa_family_t)domain;
+		addr4->sin_family = static_cast<sa_family_t>(domain);
 
 	} else if (domain == AF_INET6) {
 		const IPAddress &ipAddress = tcpAddress.getIPAddress();
 		const uint8_t *_addr = ipAddress.getAddress(IPAddress::IPAddressType::IPAddress_Type_IPV4);
-		sockaddr_in6 *addr6 = (sockaddr_in6 *)(addr);
+		sockaddr_in6 *addr6 = reinterpret_cast<sockaddr_in6 *>(addr);
 		addrlen = sizeof(*addr6);
 
 		size_t addr_len = sizeof(addr6->sin6_addr);
 		memcpy(&addr6->sin6_addr, _addr, addr_len);
 
 		addr6->sin6_port = htons(p_port);
-		addr6->sin6_family = (sa_family_t)domain;
+		addr6->sin6_family = static_cast<sa_family_t>(domain);
 
 	} else {
 		throw RuntimeException("Not a valid Net Address");
@@ -290,6 +290,6 @@ int UDPNetSocket::getDomain(const INetAddress &address) {
 		return AF_CAN;
 		break;
 	default:
-		throw RuntimeException("Non Supported Network Protocol: {}", (unsigned int)address.getNetworkProtocol());
+		throw RuntimeException("Non Supported Network Protocol: {}", static_cast<unsigned int>(address.getNetworkProtocol()));
 	}
 }

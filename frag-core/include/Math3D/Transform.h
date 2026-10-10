@@ -26,6 +26,11 @@ namespace fragcore {
 	 */
 	template <typename Vec3T, typename Mat3x3, typename Mat4x4, typename QuatT>
 	class FV_ALIGN(16) FVDECLSPEC Transform {
+		static constexpr unsigned int Vec3TypeSize = sizeof(Vec3T);
+		static constexpr unsigned int Mat3x3TypeSize = sizeof(Mat3x3);
+		static constexpr unsigned int Mat4x4TypeSize = sizeof(Mat4x4);
+		static constexpr unsigned int QuatTypeSize = sizeof(QuatT);
+
 	  public:
 		Transform() = default;
 		Transform(const Vec3T &position, const QuatT &rotation, const Vec3T &scale);
@@ -69,8 +74,8 @@ namespace fragcore {
 	  protected:				  /*	Attributes.	*/
 		Vec3T position = Vec3T(); /*	Position in world space.	*/
 		QuatT quat = QuatT();	  /*	Rotation in world space.	*/
-		Vec3T scale;			  /*	Scale.	*/
-		Mat3x3 basis;			  /*	*/
+		Vec3T scale = Vec3T();	  /*	Scale.	*/
+		Mat3x3 basis = Mat3x3();  /*	*/
 	};
 
 	// using TransformEigen = Transform<Vector3, Matrix3x3, Matrix4x4, Quaternion>;

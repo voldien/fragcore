@@ -16,6 +16,9 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program;
  */
+#include "Math3D/AABB.h"
+#include "Math3D/BoundingSphere.h"
+#include "Math3D/OBB.h"
 #ifndef _FRAGCORE_LIN_ALG_H_
 #define _FRAGCORE_LIN_ALG_H_ 1
 #include "../Math/Math.h"
@@ -56,6 +59,14 @@ namespace fragcore {
 			fvvec4f w;
 		} obb;
 	};
+
+	using BoundC = std::variant<AABB, BoundingSphere, OBB>;
+	
+	// union boundC_t {
+	// 	AABB aabb;
+	// 	BoundingSphere sphere;
+	// 	OBB obb;
+	// };
 
 	/**
 	 * @brief
