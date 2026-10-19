@@ -72,7 +72,7 @@ namespace fragcore {
 			return static_cast<T>(t0.time_since_epoch().count());
 		}
 
-	  private: /*  */
+	  protected: /*  */
 		steady_clock::time_point start_timestamp;
 		steady_clock::time_point ticks;
 		duration<float> delta_data{};

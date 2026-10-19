@@ -22,6 +22,9 @@
 
 namespace fragcore {
 
+	/**
+	 * @brief
+	 */
 	class FVDECLSPEC BZ2Compression : public ICompression {
 	  public:
 		BZ2Compression(const size_t compressionFactor = 9);

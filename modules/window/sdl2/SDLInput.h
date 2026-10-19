@@ -47,12 +47,21 @@ namespace fragcore {
 
 		void setMouseWrapAround(bool status);
 
+	  protected:
+		const uint8_t *getPrevKeys() const noexcept {
+			return &this->keyStates[Math::mod<int>(keyStackIndex - 1, 2) * prevNumKeys];
+		}
+		const uint8_t *getCurrentKeys() const noexcept { return &this->keyStates[keyStackIndex * prevNumKeys]; }
+
 	  private:
 		std::bitset<3> mousePressed = {0};
 		std::bitset<3> mouseDown = {0};
 		std::bitset<3> mouseReleased = {0};
 		int x{}, y{};
-		std::vector<bool> keyStates;
+
+		std::vector<uint8_t> keyStates;
+		unsigned int keyStackIndex = 0;
+		unsigned int prevNumKeys = 0;
 	};
 } // namespace fragcore
 

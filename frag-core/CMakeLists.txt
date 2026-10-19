@@ -1,6 +1,7 @@
 OPTION(BUILTIN_OPEN_SIMPLEX_NOISE "Build with open Simple Noise" ON)
 OPTION(BUILTIN_PCG_C_BASIC "Build with PCG-C Basic" ON)
 OPTION(BUILTIN_MISC "" ON)
+SET(FRAGCORE_MATH_SYSTEM "glm")
 
 SET(THIRDPARTY_INCLUDE_DIR "" PARENT_SCOPE)
 SET(THIRDPARTY_SOURCE "" PARENT_SCOPE)
@@ -11,12 +12,11 @@ LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 # External libraries.
 ########################
 INCLUDE(infoware)
-INCLUDE(glm)
+INCLUDE(glm) #TODO: conditonal?!
 INCLUDE(libassert)
 INCLUDE(magicEnum)
 INCLUDE(cpp-dump)
 
-INCLUDE(libsigcplusplus)
 
 IF(NOT TARGET spdlog)
     INCLUDE(spdlog)
@@ -26,7 +26,7 @@ IF(NOT TARGET cxxexcept)
     INCLUDE(exceptcxx)
 ENDIF()
 
-INCLUDE(libenvpp) #TODO: wait intill fmt dep has been resolved with that code base
+INCLUDE(libenvpp)
 
 IF(BUILTIN_OPEN_SIMPLEX_NOISE)
     SET(OPEN_SIMPLEX_NOISE_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/extern/open-simplex-noise-in-c)
@@ -46,13 +46,13 @@ FIND_PACKAGE(LZO QUIET)
 
 # Find all optional libaries.
 IF(WITH_MEM_JEMALLOC)
-	FIND_PACKAGE(JeMalloc QUIET)
+    FIND_PACKAGE(JeMalloc QUIET)
 
-	IF(NOT JeMalloc_FOUND)
-		pkg_check_modules (JEMALLOC jemalloc)
-		pkg_search_module(JEMALLOC REQUIRED jemalloc)
-	ENDIF()
-	# TODO: Check the current state if it has been found or not!
+    IF(NOT JeMalloc_FOUND)
+        pkg_check_modules(JEMALLOC jemalloc)
+        pkg_search_module(JEMALLOC REQUIRED jemalloc)
+    ENDIF()
+    # TODO: Check the current state if it has been found or not!
 ENDIF()
 
 #
@@ -75,13 +75,9 @@ ELSE()
 
 ENDIF()
 
-
-
 IF(LZO_FOUND)
 
 ENDIF()
-
-
 
 # Define all file lists.
 FILE(GLOB SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
@@ -124,21 +120,18 @@ ADD_LIBRARY(fragcore ${SOURCE_FILES} ${HEADER_FILES}
     ${MISC_SOURCE})
 ADD_LIBRARY(fragcore::fragcore ALIAS fragcore)
 
-# C++ Features.							
+# C++ Features.
 TARGET_COMPILE_FEATURES(fragcore PUBLIC cxx_std_17 cxx_constexpr cxx_alias_templates cxx_raw_string_literals
     cxx_variadic_templates cxx_uniform_initialization cxx_right_angle_brackets cxx_nullptr
     cxx_generic_lambdas cxx_override cxx_noexcept cxx_aggregate_default_initializers
     cxx_relaxed_constexpr cxx_decltype_auto)
 
-# 
+#
 TARGET_COMPILE_DEFINITIONS(fragcore PRIVATE FRAG_CORE_INTERNAL_IMP=1 PUBLIC FV_USE_SHARED_POINTER=1)
 
-# Make use of modern features with GLM.
-TARGET_COMPILE_DEFINITIONS(fragcore PUBLIC GLM_FORCE_CXX17 GLM_FORCE_INTRINSICS)
-TARGET_COMPILE_DEFINITIONS(fragcore PUBLIC FRAGCORE_USE_GLM=1)
 
 #
-TARGET_LINK_LIBRARIES(fragcore PUBLIC cxxexcept spdlog_header_only fmt magic_enum glm-header-only libassert::assert libenvpp::libenvpp cpp-dump PRIVATE stdc++ atomic dl ${ZLIB_LIBRARIES}
+TARGET_LINK_LIBRARIES(fragcore PUBLIC cxxexcept spdlog_header_only fmt magic_enum libassert::assert libenvpp::libenvpp cpp-dump PRIVATE stdc++ atomic dl ${ZLIB_LIBRARIES}
     ${ZIP_LIBRARIES} m infoware)
 #
 TARGET_INCLUDE_DIRECTORIES(fragcore PRIVATE ${ZIP_INCLUDE_DIRS}
@@ -151,6 +144,18 @@ TARGET_INCLUDE_DIRECTORIES(fragcore PRIVATE ${ZIP_INCLUDE_DIRS}
     $<BUILD_INTERFACE:${FRAG_CORE_INCLUDE}>
     $<INSTALL_INTERFACE:${FRAG_CORE_INCLUDE}>
 )
+
+# Make use of modern features with GLM.
+IF(FRAGCORE_MATH_SYSTEM STREQUAL "glm")
+    TARGET_COMPILE_DEFINITIONS(fragcore PUBLIC GLM_FORCE_CXX17 GLM_FORCE_INTRINSICS)
+    TARGET_COMPILE_DEFINITIONS(fragcore PUBLIC FRAGCORE_USE_GLM=1)
+    TARGET_LINK_LIBRARIES(fragcore PUBLIC glm-header-only)
+ELSEIF(FRAGCORE_MATH_SYSTEM STREQUAL "eigen")
+    MESSAGE(FATAL_ERROR "Not Implemented in CMAKE Yet")
+ELSE()
+    MESSAGE(FATAL_ERROR "No Math System")
+ENDIF()
+
 
 # OpenMP Support.
 IF(OpenMP_FOUND AND OpenMP_CXX_FOUND AND BUILD_WITH_OPENMP)
@@ -176,6 +181,7 @@ CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/include/fragcore_revision.h.in" "${C
 
 # Install
 IF(BUILD_WITH_INSTALL)
+
     INSTALL(TARGETS fragcore DESTINATION lib COMPONENT ${LIBFRAGCORE_COMPONENT})
     INSTALL(TARGETS infoware DESTINATION lib)
 

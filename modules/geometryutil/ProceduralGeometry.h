@@ -36,8 +36,15 @@ namespace fragcore {
 			float tangent[3];
 		};
 
+		template <typename T, typename U>
+		static void generatePlan(const float scale, std::vector<T> &vertices, std::vector<U> &indices,
+								 const int segmentsX = 1, const int segmentsY = 1) {
+			const size_t vertexStride = sizeof(T);
+			const size_t indiceStride = sizeof(U);
+		}
+
 		static void generatePlan(float scale, std::vector<Vertex> &vertices, std::vector<unsigned int> &indices,
-								 int segmentsX = 1, int segmentsY = 1);
+								 const int segmentsX = 1, const int segmentsY = 1);
 
 		static void generateGrid2D();
 

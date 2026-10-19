@@ -20,6 +20,9 @@
 #include "ICompression.h"
 
 namespace fragcore {
+	/**
+	 * @brief 
+	 */
 	class FVDECLSPEC LZ4Compression : public ICompression {
 	  public:
 		LZ4Compression(const size_t block_size = 4096);

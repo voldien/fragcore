@@ -176,7 +176,7 @@ void BulletPhysicInterface::addRigidBody(RigidBody *body) {
 }
 void BulletPhysicInterface::removeRigidBody(RigidBody *body) {
 
-	btRigidBody *rigid = (btRigidBody *)body->getObject();
+	btRigidBody *rigid = static_cast<btRigidBody *>(body->getObject());
 
 	/*	*/
 	// rigid = (btRigidBody*)getPointerByIndex(body);

@@ -25,7 +25,7 @@ static inline glm::vec3 tangent(const glm::vec3 &normal) noexcept {
 }
 
 void ProceduralGeometry::generatePlan(float scale, std::vector<Vertex> &vertices, std::vector<unsigned int> &indices,
-									  int segmentsX, int segmentsY) {
+									  const int segmentsX, const int segmentsY) {
 
 	PlaneMesh mesh({1.0 * scale, 1.0 * scale}, glm::ivec2(segmentsX, segmentsY));
 

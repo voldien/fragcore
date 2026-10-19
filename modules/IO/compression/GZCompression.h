@@ -20,6 +20,10 @@
 #include "ICompression.h"
 
 namespace fragcore {
+
+	/**
+	 * @brief 
+	 */
 	class FVDECLSPEC GZCompression : public ICompression {
 	  public:
 		ssize_t inflate(const void *data_in, size_t inSize, void *out, size_t size) override;

@@ -25,7 +25,6 @@ namespace fragcore {
 
 	/**
 	 * @brief
-	 *
 	 */
 	class FVDECLSPEC ICompression : public Object {
 	  public:

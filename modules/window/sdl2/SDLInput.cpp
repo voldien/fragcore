@@ -11,11 +11,21 @@ SDLInput::SDLInput() { /*	*/
 
 	int numKeys;
 	const Uint8 *state = SDL_GetKeyboardState(&numKeys);
+	this->prevNumKeys = numKeys;
 
 	keyStates.resize(static_cast<size_t>(numKeys * 2));
 }
 
 void SDLInput::update() noexcept {
+
+	int numKeys = 0;
+	const Uint8 *state = SDL_GetKeyboardState(&numKeys);
+	keyStackIndex = (keyStackIndex + 1) % 2;
+	std::memcpy(reinterpret_cast<void *>(&keyStates[keyStackIndex * numKeys]), state, numKeys);
+
+	if (numKeys != prevNumKeys) {
+	}
+
 	/*	Extract mouse position.	*/
 	const uint32_t mask = SDL_GetMouseState(&this->x, &this->y);
 
@@ -50,22 +60,20 @@ void SDLInput::update() noexcept {
 
 bool SDLInput::anyKey() noexcept { return false; }
 
-bool SDLInput::getKey(const unsigned int key) {
-	const Uint8 *state = SDL_GetKeyboardState(nullptr);
-
-	return state[key];
-}
+bool SDLInput::getKey(const unsigned int key) { return getCurrentKeys()[key]; }
 
 bool SDLInput::getKeyPressed(const unsigned int key_down) {
-	const Uint8 *state = SDL_GetKeyboardState(nullptr);
+	const uint8_t *prevKeys = getPrevKeys();
+	const uint8_t *currKeys = getCurrentKeys();
 
-	return state[key_down];
+	return (prevKeys[key_down] == 0) && currKeys[key_down];
 }
 
 bool SDLInput::getKeyReleased(const unsigned int key_released) {
-	const Uint8 *state = SDL_GetKeyboardState(nullptr);
+	const uint8_t *prevKeys = getPrevKeys();
+	const uint8_t *currKeys = getCurrentKeys();
 
-	return state[key_released];
+	return prevKeys[key_released] && (currKeys[key_released] == 0);
 }
 
 bool SDLInput::getMousePosition(int *positionX, int *positionY) noexcept {

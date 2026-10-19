@@ -7,8 +7,8 @@ using namespace fragcore;
 
 BZ2Compression::BZ2Compression(const size_t compressionFactor) {
 	/*	Allocate.	*/
-	bzip2com = (bz_stream *)malloc(sizeof(bz_stream));
-	bzip2uncom = (bz_stream *)malloc(sizeof(bz_stream));
+	bzip2com = static_cast<bz_stream *>(malloc(sizeof(bz_stream)));
+	bzip2uncom = static_cast<bz_stream *>(malloc(sizeof(bz_stream)));
 
 	memset(bzip2com, 0, sizeof(bz_stream));
 	memset(bzip2uncom, 0, sizeof(bz_stream));
@@ -34,7 +34,7 @@ ssize_t BZ2Compression::inflate(const void *data_in, size_t inSize, void *out, s
 	// int len = BZ2_bzRead(&bzerror, this->bzFile, pbuffer, nbytes);
 	bzip2uncom->next_in = (char *)data_in;
 	bzip2uncom->avail_in = inSize;
-	bzip2uncom->next_out = (char *)out;
+	bzip2uncom->next_out = static_cast<char *>(out);
 	bzip2uncom->avail_out = out_size;
 
 	int err = BZ2_bzDecompress(bzip2uncom);
@@ -58,7 +58,7 @@ ssize_t BZ2Compression::deflate(const void *data_in, size_t inSize, void *out, s
 
 	bzip2com->next_in = (char *)data_in;
 	bzip2com->avail_in = inSize;
-	bzip2com->next_out = (char *)out;
+	bzip2com->next_out = static_cast<char *>(out);
 	bzip2com->avail_out = out_size;
 
 	int err = BZ2_bzCompress(bzip2com, BZ_RUN);

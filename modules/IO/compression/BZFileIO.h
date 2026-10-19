@@ -21,9 +21,9 @@
 #include <bzlib.h>
 
 namespace fragcore {
+	
 	/**
 	 * @brief
-	 *
 	 */
 	class FVDECLSPEC BZFileIO : public FileIO {
 	  public:
