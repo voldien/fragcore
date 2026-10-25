@@ -1,7 +1,6 @@
 #include "SerialIO.h"
 #include <exception>
 #include <libserialport.h>
-#include <optional>
 
 using namespace fragcore;
 
@@ -382,6 +381,7 @@ SerialIO::SerialIO(const std::string &path, IOMode mode) : port(nullptr) {
 							   (int)res);
 	}
 
+	/*	Set default.	*/
 	res = sp_set_baudrate(serialPort, 4800);
 	res = sp_set_bits(serialPort, 8);
 	res = sp_set_parity(serialPort, SP_PARITY_NONE);
@@ -406,6 +406,7 @@ SerialIO::SerialIO(const std::string &path, IOMode mode) : port(nullptr) {
 	}
 
 	this->mode = mode;
+	this->setName(path);
 }
 
 SerialIO ::~SerialIO() {

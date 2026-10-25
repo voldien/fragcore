@@ -68,7 +68,7 @@ namespace fragcore {
 			FlowControlNone = 0,
 			FlowControlXonXoff = 1,
 			FlowControlRtsCts = 2,
-			FlowControlDtrDsr = 3
+			FlowControlDtrDsr = 3,
 		};
 
 		/**

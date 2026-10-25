@@ -25,9 +25,8 @@ namespace fragcore {
 
 	/**
 	 * @brief
-	 *
 	 */
-	class FVDECLSPEC Task : public Object {
+	class FVDECLSPEC Task : public Object { // TODO: replace Object.
 	  public:
 		~Task() override = default;
 
@@ -40,6 +39,9 @@ namespace fragcore {
 
 		template <typename... Args> void succeed(Args &&...args) {}
 		template <typename... Args> void precede(Args &&...args) {}
+
+		/*	*/
+		Ref<IScheduler> &getScheduler() noexcept { return this->scheduler; }
 
 	  private:
 		Ref<IScheduler> scheduler;

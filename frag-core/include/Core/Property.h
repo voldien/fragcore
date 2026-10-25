@@ -77,7 +77,6 @@ namespace fragcore {
 		const std::type_info &getDType() const noexcept { return typeid(T); }
 
 	  protected:
-
 		const DType &get_current_value() const { return this->value; }
 		DType &get_current_value() { return this->value; }
 
@@ -88,7 +87,7 @@ namespace fragcore {
 	/**
 	 * @brief
 	 */
-	template <typename T, typename U = size_t> struct PropertyOverridable : public Property<T, U> {
+	template <typename T, typename U = size_t, typename O = bool> struct PropertyOverridable : public Property<T, U> {
 	  public:
 		using DType = T;
 
@@ -141,30 +140,30 @@ namespace fragcore {
 
 		const std::type_info &getDType() const noexcept { return typeid(T); }
 
-		void override(const bool status) noexcept { this->override_status = status; }
+		void override(const O status) noexcept { this->override_status = status; }
 		void set_override_value(const DType &value) { this->overrideValue = value; }
 		void set_none_override_value(const DType &value) { this->value = value; }
-		bool is_override() const noexcept { return this->override_status; }
+		O is_override() const noexcept { return this->override_status; }
 
 	  protected:
-
 		// const DType &get_current_value() const { return this->is_override() ? this->overrideValue : this->value; }
 		// DType &get_current_value() { return this->is_override() ? this->overrideValue : this->value; }
 
 		std::string name;
 		DType value;
 		DType overrideValue;
-		bool override_status = false;
+		O override_status = false;
 	};
 
 	/**
 	 * @brief
 	 */
-	template <typename T> struct PropertyMinMaxDefault : public Property<T> {
+	template <typename T, typename PropertyBaseU = Property<T>> struct PropertyMinMaxDefault : public PropertyBaseU {
 	  public:
-		PropertyMinMaxDefault(const std::string &name, const T &value, const T min, const T max)
-			: Property<T>(name, value), min(min), max(max) {
-			this->value = Math::clamp<T>(value, min, max);
+		PropertyMinMaxDefault(const std::string &name, const T &value, const T &min, const T &max)
+			: PropertyBaseU(name, value), min(min), max(max) {
+
+			this->assignValue(value, this->getMin(), this->getMax());
 		}
 
 		operator T() const noexcept { return this->value; }
@@ -172,8 +171,19 @@ namespace fragcore {
 		explicit operator const T() const noexcept { return this->value; }
 
 		auto &operator=(const T &other) noexcept {
-			this->value = Math::clamp<T>(other, min, max);
+			this->assignValue(other, this->getMin(), this->getMax());
 			return *this;
+		}
+
+		const T &getMin() const noexcept { return this->min; }
+		const T &getMax() const noexcept { return this->max; }
+
+		void setMin(const T &new_min) noexcept { this->min = new_min; }
+		void setMax(const T &new_max) noexcept { this->max = new_max; }
+
+	  protected:
+		inline void assignValue(T &new_value, const T &min_value, const T &max_value) noexcept {
+			this->value = Math::clamp<T>(new_value, min_value, max_value);
 		}
 
 	  protected:

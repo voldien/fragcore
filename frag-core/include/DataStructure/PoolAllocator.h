@@ -191,7 +191,7 @@ namespace fragcore {
 		/**
 		 * Get datatype size.
 		 */
-		 //TODO: move to a base class for reuse and compiler time.
+		// TODO: move to a base class for reuse and compiler time.
 		void setTypeSize(const size_t size) noexcept { this->typeSize = size; }
 		size_t getTypeSize() const noexcept { return this->typeSize; }
 
@@ -200,7 +200,7 @@ namespace fragcore {
 		 */
 		/*	TODO Fix, still some bugs!	*/
 		void resize(const size_t nrRequestedElements) {
-			size_t index = 0;
+			size_t reserved_index = 0;
 			const size_t itemSize = this->getItemSize();
 
 			assert(nrRequestedElements >= 0);
@@ -215,13 +215,8 @@ namespace fragcore {
 				}
 
 				/*	*/
-				for (index = 0; index < nrRequestedElements - 1; index++) {
-					item[index].next = &item[index + 1];
-
-					if constexpr (isClass) {
-						T *ob = new (&item[index].data) T();
-						// item[index].data = *ob;
-					}
+				for (reserved_index = 0; reserved_index < nrRequestedElements - 1; reserved_index++) {
+					item[reserved_index].next = &item[reserved_index + 1];
 				}
 
 				item[nrRequestedElements - 1].next = nullptr;
@@ -233,17 +228,17 @@ namespace fragcore {
 				}
 
 				/*  Reallocate buffer.  */
-				index = this->reserved();
+				reserved_index = this->reserved();
 				this->item = static_cast<PoolAllactorItem *>(realloc(this->item, itemSize * nrRequestedElements));
 
 				/*	*/
-				PoolAllactorItem *lastItem = &this->item[index];
+				PoolAllactorItem *lastItem = &this->item[reserved_index];
 				PoolAllactorItem *subpool = lastItem;
-				for (; index < nrRequestedElements - 1; index++) {
-					lastItem->next = &item[index + 1];
+				for (; reserved_index < nrRequestedElements - 1; reserved_index++) {
+					lastItem->next = &item[reserved_index + 1];
 					lastItem = lastItem->next;
 					if (isClass) {
-						// lastItem->data = std::move(T());
+						lastItem->data = T();
 					}
 				}
 				lastItem->next = nullptr;

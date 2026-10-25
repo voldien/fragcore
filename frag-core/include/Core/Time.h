@@ -32,13 +32,13 @@ namespace fragcore {
 		Time() = default;
 
 		void start() noexcept {
-			this->start_timestamp = steady_clock::now();
-			this->ticks = steady_clock::now();
+			this->start_timestamp = high_resolution_clock::now();
+			this->ticks = high_resolution_clock::now();
 		}
 
 		template <typename T> T getElapsed() const noexcept {
 			static_assert(std::is_floating_point_v<T>, "Must be a decimal type(float/double/half).");
-			const duration<T> time_span = duration_cast<duration<T>>(steady_clock::now() - start_timestamp);
+			const duration<T> time_span = duration_cast<duration<T>>(high_resolution_clock::now() - start_timestamp);
 			return time_span.count();
 		}
 
@@ -48,8 +48,8 @@ namespace fragcore {
 		}
 
 		void update() noexcept {
-			this->delta_data = duration_cast<duration<float>>(steady_clock::now() - this->ticks);
-			this->ticks = steady_clock::now();
+			this->delta_data = duration_cast<duration<float>>(high_resolution_clock::now() - this->ticks);
+			this->ticks = high_resolution_clock::now();
 		}
 
 		template <typename T> void update(const T &additional_time) {
@@ -73,8 +73,8 @@ namespace fragcore {
 		}
 
 	  protected: /*  */
-		steady_clock::time_point start_timestamp;
-		steady_clock::time_point ticks;
+		high_resolution_clock::time_point start_timestamp;
+		high_resolution_clock::time_point ticks;
 		duration<float> delta_data{};
 	};
 } // namespace fragcore

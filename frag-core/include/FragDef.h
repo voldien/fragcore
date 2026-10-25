@@ -240,7 +240,7 @@ namespace fragcore {
 #if defined(__pnacl__) /* portable nacl google */
 #define FV_PNACL 1
 #endif
-#if defined(__unix__) || defined(__unix) || defined(unix) /*  Unix    */
+#if defined(__unix__) || defined(__unix) || defined(unix) || (defined (__APPLE__) && defined (__MACH__)) /*  Unix    */
 #define FV_UNIX 1
 #endif
 

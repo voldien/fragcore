@@ -66,6 +66,7 @@ OPTION(BUILD_WITH_SAMPLES "Build sample codes" OFF)
 # Build external interface plugin.
 OPTION(BUILD_MODULES "Build module plugins" OFF)
 OPTION(BUILD_WITH_OPENMP "Enable OpenMP." OFF)
+MARK_AS_ADVANCED(BUILD_WITH_OPENMP)
 
 # Specific Modules.
 OPTION(BUILD_EXTERNAL_RENDERER "Building external renderer libraries" ON)
@@ -254,6 +255,7 @@ ELSEIF("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
 	IF(BUILD_WITH_PEDANTIC)
 		MESSAGE(STATUS "Using Pedantic Compilation")
 		SET(PEDANTIC_COMPILE_FLAGS "-Wextra -Wall -pedantic")
+		SET(PEDANTIC_COMPILE_FLAGS "${PEDANTIC_COMPILE_FLAGS} -Rpass=loop-vectorize -Rpass-missed=loop-vectorize -Rpass-analysis=loop-vectorize")
 		SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${PEDANTIC_COMPILE_FLAGS}")
 		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${PEDANTIC_COMPILE_FLAGS}")
 	ENDIF()

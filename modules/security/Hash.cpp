@@ -1,6 +1,6 @@
 #include "Hash.h"
+#include "magic_enum/magic_enum.hpp"
 #include <fmt/core.h>
-#include <magic_enum.hpp>
 #include <openssl/md5.h>
 #include <openssl/sha.h>
 

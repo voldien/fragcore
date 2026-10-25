@@ -27,8 +27,6 @@ namespace fragcore {
 	 * objects.
 	 */
 	class FVDECLSPEC Object : public UIDObject {
-		// using
-		// TODO: declare UID generator namespace.
 	  public:
 		Object() = default;
 		Object(const std::string &_name) : name(_name) {}

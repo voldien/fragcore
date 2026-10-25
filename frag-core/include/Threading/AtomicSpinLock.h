@@ -23,18 +23,20 @@ namespace fragcore {
 	/**
 	 * @brief
 	 */
-	class AtomicSpinlock : public ISpinLock {
-	  private:
-		std::atomic_flag atomic_flag = ATOMIC_FLAG_INIT;
-
+	class FVDECLSPEC AtomicSpinlock : public ISpinLock {
 	  public:
 		void lock() override {
-			while (atomic_flag.test_and_set(std::memory_order_acquire)) {
+			while (this->atomic_flag.test_and_set(std::memory_order_acquire)) {
 			}
 		}
-		void unlock() override { atomic_flag.clear(std::memory_order_release); }
+		void unlock() override { this->atomic_flag.clear(std::memory_order_release); }
+
+		void wait(long nanoTimeout = -1) override {}
 
 		intptr_t getNativePtr() const override { return static_cast<intptr_t>(this->atomic_flag._M_i); }
+
+	  private:
+		std::atomic_flag atomic_flag = ATOMIC_FLAG_INIT;
 	};
 } // namespace fragcore
 #endif

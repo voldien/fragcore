@@ -399,5 +399,5 @@ ZipFileSystem::~ZipFileSystem() {
 
 	struct zip *zip = static_cast<struct zip *>(this->pzip);
 	/*	*/
-	zip_close(zip);
+	int status = zip_close(zip);
 }

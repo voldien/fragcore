@@ -37,7 +37,6 @@ namespace fragcore {
 	 *
 	 * Give support for IO being read and written
 	 * asynchronous.
-	 *
 	 */
 	class FVDECLSPEC ASyncIO : public SmartReference {
 	  public:
