@@ -101,25 +101,44 @@ namespace fragcore {
 			return part;
 		}
 
-		template <typename T, typename U> static std::vector<T> &add(std::vector<T> &list, const U &value) noexcept {
+		template <typename T, typename U>
+		static std::vector<T> &add(std::vector<T> &list, const U &addder_value) noexcept {
 			static_assert(std::is_floating_point_v<T> || std::is_integral_v<T>,
 						  "Type Must Support addition operation.");
+
+#ifdef _OPENMP
+#pragma omp simd
+#endif
 			for (size_t i = 0; i < list.size(); i++) {
-				list[i] += value;
+				list[i] += addder_value;
 			}
 			return list;
 		}
 
-		template <typename T> static T sum(const std::vector<T> &list) noexcept {
-			static_assert(std::is_floating_point_v<T> || std::is_integral_v<T> || std::is_enum_v<T>,
+		template <typename T, typename U>
+		static std::vector<T> &multiply(std::vector<T> &list, const U &multiply_value) noexcept {
+			static_assert(std::is_floating_point_v<T> || std::is_integral_v<T>,
 						  "Type Must Support addition operation.");
-			return Math::sum<T>(list.data(), list.size());
+			/*	*/
+#ifdef _OPENMP
+#pragma omp simd
+#endif
+			for (size_t i = 0; i < list.size(); i++) {
+				list[i] *= multiply_value;
+			}
+			return list;
 		}
 
-		template <typename T> static T sum(const T *list, const size_t nrElements) noexcept {
+		template <typename T, typename U = T> static U sum(const std::vector<T> &list) noexcept {
 			static_assert(std::is_floating_point_v<T> || std::is_integral_v<T> || std::is_enum_v<T>,
 						  "Type Must Support addition operation.");
-			T sum = 0;
+			return Math::sum<T, U>(list.data(), list.size());
+		}
+
+		template <typename T, typename U = T> static U sum(const T *list, const size_t nrElements) noexcept {
+			static_assert(std::is_floating_point_v<T> || std::is_integral_v<T> || std::is_enum_v<T>,
+						  "Type Must Support addition operation.");
+			U sum = 0;
 			T value;
 			size_t index = 0;
 #ifdef _OPENMP
@@ -132,16 +151,16 @@ namespace fragcore {
 			return sum;
 		}
 
-		template <typename T> static T product(const std::vector<T> &list) noexcept {
+		template <typename T, typename U = T> static U product(const std::vector<T> &list) noexcept {
 			static_assert(std::is_floating_point_v<T> || std::is_integral_v<T>,
 						  "Type Must Support addition operation.");
-			return Math::product<T>(list.data(), list.size());
+			return Math::product<T, U>(list.data(), list.size());
 		}
 
-		template <typename T> static T product(const T *list, const size_t nrElements) noexcept {
+		template <typename T, typename U = T> static U product(const T *list, const size_t nrElements) noexcept {
 			static_assert(std::is_floating_point_v<T> || std::is_integral_v<T>,
 						  "Type Must Support addition operation.");
-			T product_combined = 1;
+			U product_combined = 1;
 			size_t index = 0;
 #ifdef _OPENMP
 #pragma omp simd reduction(* : product_combined) simdlen(4) linear(index : 1)
@@ -149,13 +168,15 @@ namespace fragcore {
 			for (index = 0; index < nrElements; index++) {
 				product_combined *= list[index];
 			}
+
 			return product_combined;
 		}
 
-		template <typename T> static T dot(const T *listA, const T *listB, const size_t nrElements) noexcept {
+		template <typename T, typename U = T>
+		static U dot(const T *listA, const T *listB, const size_t nrElements) noexcept {
 			static_assert(std::is_floating_point_v<T> || std::is_integral_v<T>,
 						  "Type Must Support addition operation.");
-			T sum = 0;
+			U sum = 0;
 			size_t index = 0;
 #ifdef _OPENMP
 #pragma omp simd reduction(+ : sum) simdlen(4) linear(index : 1)
@@ -166,7 +187,8 @@ namespace fragcore {
 			return sum;
 		}
 
-		template <typename T> static void pow(const T exponent, T *list, const size_t nrElements) noexcept {
+		template <typename T, typename U = T>
+		static void pow(const U &exponent, T *list, const size_t nrElements) noexcept {
 			static_assert(std::is_floating_point_v<T> || std::is_integral_v<T>,
 						  "Type Must Support addition operation.");
 			/*	*/
@@ -179,27 +201,28 @@ namespace fragcore {
 			}
 		}
 
-		template <typename T> constexpr static T mean(const T *list, const size_t nrElements) noexcept {
+		template <typename T, typename U = T> constexpr static U mean(const T *list, const size_t nrElements) noexcept {
 			static_assert(std::is_floating_point_v<T> || std::is_integral_v<T>,
 						  "Type Must Support addition operation.");
 			/*	*/
-			const T sum = Math::sum<T>(list, nrElements);
+			const U sum = Math::sum<T, U>(list, nrElements);
 			const float averageInverse = static_cast<float>(1) / static_cast<float>(nrElements);
-			return static_cast<T>(averageInverse * sum);
+			return static_cast<U>(averageInverse * sum);
 		}
 
-		template <typename T> constexpr static T mean(const std::vector<T> &list) noexcept {
+		template <typename T, typename U = T> constexpr static U mean(const std::vector<T> &list) noexcept {
 			static_assert(std::is_floating_point_v<T> || std::is_integral_v<T>,
 						  "Type Must Support addition operation.");
-			const T sum = Math::sum<T>(list);
+			const U sum = Math::sum<T, U>(list);
 			const float averageInverse = static_cast<float>(1) / static_cast<float>(list.size());
-			return static_cast<T>(averageInverse * sum);
+			return static_cast<U>(averageInverse * sum);
 		}
 
-		template <typename T> static T variance(const T *list, const size_t nrElements, const T mean) noexcept {
+		template <typename T, typename U = T>
+		constexpr static U variance(const T *list, const size_t nrElements, const T mean) noexcept {
 			static_assert(std::is_floating_point_v<T> || std::is_integral_v<T>,
 						  "Type Must Support addition operation.");
-			T sum = 0;
+			U sum = 0;
 			size_t index = 0;
 #ifdef _OPENMP
 #pragma omp simd reduction(+ : sum) simdlen(4) linear(index : 1)
@@ -208,27 +231,28 @@ namespace fragcore {
 				sum += (list[index] - mean) * (list[index] - mean);
 			}
 
-			return (static_cast<T>(1) / static_cast<T>((nrElements - 1))) * sum;
+			return (static_cast<T>(1) / static_cast<float>((nrElements - 1))) * sum;
 		}
 
-		template <typename T> static T variance(const std::vector<T> &list, const T mean) {
+		template <typename T, typename U = T> static U variance(const std::vector<T> &list, const T mean) {
 			static_assert(std::is_floating_point_v<T> || std::is_integral_v<T>,
 						  "Type Must Support addition operation.");
-			return Math::variance<T>(list.data(), list.size(), mean);
+			return Math::variance<T, U>(list.data(), list.size(), mean);
 		}
 
-		template <typename T> constexpr static T standardDeviation(const std::vector<T> &list, const T mean) {
+		template <typename T, typename U = T>
+		constexpr static U standardDeviation(const std::vector<T> &list, const T mean) {
 			static_assert(std::is_floating_point_v<T> || std::is_integral_v<T>,
 						  "Type Must Support addition operation.");
-			return static_cast<T>(std::sqrt(Math::variance<T>(list, mean)));
+			return static_cast<U>(std::sqrt(Math::variance<T, U>(list, mean)));
 		}
 
-		template <typename T>
-		static T cov(const std::vector<T> &listA, const std::vector<T> &listB, const T meanA, const T meanB) {
+		template <typename T, typename U = T>
+		static U cov(const std::vector<T> &listA, const std::vector<T> &listB, const T meanA, const T meanB) {
 			static_assert(std::is_floating_point_v<T> || std::is_integral_v<T>,
 						  "Type Must Support addition operation.");
 
-			T sum = 0;
+			U sum = 0;
 
 			const size_t nrElements = listB.size();
 #ifdef _OPENMP
@@ -238,15 +262,15 @@ namespace fragcore {
 				sum += (listA[i] - meanA) * (listB[i] - meanB);
 			}
 
-			return (static_cast<T>(1) / static_cast<T>(listA.size())) * sum;
+			return static_cast<U>((static_cast<double>(1) / static_cast<double>(listA.size())) * sum);
 		}
 
-		template <typename T>
+		template <typename T, typename U = T>
 		constexpr static T cor(const std::vector<T> &listA, const std::vector<T> &listB, const T meanA, const T meanB) {
 			static_assert(std::is_floating_point_v<T>, "Must be a decimal type(float/double/half).");
 
-			return cov<T>(listA, listB, meanA, meanB) /
-				   static_cast<T>(std::sqrt(variance<T>(listB, meanB) * variance<T>(listA, meanA)));
+			return cov<T, U>(listA, listB, meanA, meanB) /
+				   static_cast<U>(std::sqrt(variance<T, U>(listB, meanB) * variance<T, U>(listA, meanA)));
 		}
 
 		/**

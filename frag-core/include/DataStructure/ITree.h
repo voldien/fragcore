@@ -18,6 +18,7 @@
 #ifndef _FRAGCORE_TREE_H_
 #define _FRAGCORE_TREE_H_ 1
 #include "../FragDef.h"
+#include "IDataStructure.h"
 #include <utility>
 
 namespace fragcore {
@@ -25,7 +26,7 @@ namespace fragcore {
 	/**
 	 *
 	 */
-	template <typename T> class FVDECLSPEC ITree {
+	template <typename T> class FVDECLSPEC ITree : public IDataStructure<T> {
 	  public:
 		ITree() {
 			this->sibling = nullptr;
@@ -180,11 +181,11 @@ namespace fragcore {
 
 		void setChild(ITree<T> *child) noexcept { this->child = child; }
 
-	  private:						  /*  */
-		ITree<T> *parent = nullptr;	  /*	parent node.	*/
-		ITree<T> *sibling = nullptr;  /*	sibling node.	*/
-		ITree<T> *child = nullptr;	  /*	child node.	*/
-		size_t numChildren = 0; /*	number of children node attached.	*/
+	  private:						 /*  */
+		ITree<T> *parent = nullptr;	 /*	parent node.	*/
+		ITree<T> *sibling = nullptr; /*	sibling node.	*/
+		ITree<T> *child = nullptr;	 /*	child node.	*/
+		size_t numChildren = 0;		 /*	number of children node attached.	*/
 	};
 } // namespace fragcore
 #endif

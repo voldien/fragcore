@@ -18,6 +18,7 @@
 #ifndef _FRAGCORE_POOL_ALLACTOR_H_
 #define _FRAGCORE_POOL_ALLACTOR_H_ 1
 #include "../FragDef.h"
+#include "IDataStructure.h"
 #include <cassert>
 #include <cstdio>
 #include <malloc.h>
@@ -28,12 +29,7 @@ namespace fragcore {
 	/**
 	 * @brief Pool allocator
 	 */
-	template <typename T> class FVDECLSPEC PoolAllocator {
-	  private:
-		static constexpr bool isClass = std::is_class_v<T>;
-		using DType = T;
-		static constexpr unsigned int DTypeSize = sizeof(DType);
-
+	template <typename T> class FVDECLSPEC PoolAllocator : public IDataStructure<T> {
 	  public:
 		using PoolAllactorItem = struct poolallactoritem {
 			T data;
@@ -64,7 +60,7 @@ namespace fragcore {
 
 		PoolAllocator(const size_t num) : PoolAllocator() { this->resize(num); }
 
-		~PoolAllocator() { clean(); }
+		~PoolAllocator() { this->clean(); }
 
 		/**
 		 *
@@ -104,7 +100,6 @@ namespace fragcore {
 
 		/**
 		 *	Get a pointer to next object in pool allocator.
-		 *
 		 *	@return None nullptr pointer if successful.
 		 */
 		T *obtain() {
@@ -131,7 +126,6 @@ namespace fragcore {
 		}
 
 		/**
-		 *
 		 * @param element
 		 */
 		void Return(T *element) {
@@ -142,10 +136,14 @@ namespace fragcore {
 			/*	*/
 			PoolAllactorItem *alloc = reinterpret_cast<PoolAllactorItem *>(element);
 			alloc->next = item->next;
-			item->next = alloc;
+			item->next->next = alloc;
+
+			ASSERT(item != item->next, "Shall not Cyclic Pointing");
 
 			/*	*/
 			this->nrOfElements--;
+
+			ASSERT(this->nrOfElements >= 0, "Number of elements can not be negative!");
 		}
 
 		/**
@@ -155,14 +153,16 @@ namespace fragcore {
 		 */
 		bool isValidItem(const T &data) const noexcept {
 			const T *tmp = &data;
+
 			/*  If pointer is less than the base pointer.*/
 			if (static_cast<const void *>(tmp) < static_cast<const void *>(this->item)) {
 				return false;
 			}
-			/*  Check if pointer is outside the end point*/
+			/*  Check if pointer is outside the end point.	*/
 			if (tmp >= static_cast<const void *>(&this->item[this->reserved()])) {
 				return false;
 			}
+
 			/*	Check if memory is a multiple of the size from the base pointer.	*/
 			return true;
 		}
@@ -171,7 +171,7 @@ namespace fragcore {
 		 *
 		 */
 		void clean() noexcept {
-			if (isClass) {
+			if (IDataStructure<T>::isClass) {
 				delete[] this->item;
 			} else {
 				free(this->item);
@@ -182,7 +182,15 @@ namespace fragcore {
 			this->nrOfElements = 0;
 		}
 
-		bool isFull() const noexcept { return this->nrOfElements >= (size_t)std::max<int>(0, this->reserved() - 1); }
+		void returnAll() noexcept {
+
+			/*	*/
+			this->computeBlockChain(this->reserved());
+
+			this->nrOfElements = 0;
+		}
+
+		bool isFull() const noexcept { return this->nrOfElements >= std::max<size_t>(0, this->reserved() - 1); }
 
 		size_t size() const noexcept { return this->nrOfElements; }
 
@@ -208,19 +216,17 @@ namespace fragcore {
 			/*  No allocation.  */
 			if (this->reserved() == 0) {
 
-				if constexpr (isClass) {
+				if constexpr (IDataStructure<T>::isClass) {
 					this->item = new PoolAllactorItem[nrRequestedElements];
 				} else {
 					this->item = static_cast<PoolAllactorItem *>(realloc(this->item, itemSize * nrRequestedElements));
 				}
 
-				/*	*/
-				for (reserved_index = 0; reserved_index < nrRequestedElements - 1; reserved_index++) {
-					item[reserved_index].next = &item[reserved_index + 1];
-				}
+				/*	Calculate the chain.	*/
+				this->computeBlockChain(nrRequestedElements);
 
-				item[nrRequestedElements - 1].next = nullptr;
 			} else {
+
 				/*  */
 				if (nrRequestedElements < this->reserved()) {
 					throw InvalidArgumentException("Can not be downsized from {} to {}.", this->reserved(),
@@ -234,10 +240,11 @@ namespace fragcore {
 				/*	*/
 				PoolAllactorItem *lastItem = &this->item[reserved_index];
 				PoolAllactorItem *subpool = lastItem;
+				/*	Setup the next elements and initilize if they are an object type.	*/
 				for (; reserved_index < nrRequestedElements - 1; reserved_index++) {
 					lastItem->next = &item[reserved_index + 1];
 					lastItem = lastItem->next;
-					if (isClass) {
+					if (IDataStructure<T>::isClass) {
 						lastItem->data = T();
 					}
 				}
@@ -257,9 +264,14 @@ namespace fragcore {
 		T operator[](int index) const { return item[index].data; }
 
 	  protected:
+		void computeBlockChain(const size_t size) {
+			/*	*/
+			for (size_t element_index = 0; element_index < size - 1; element_index++) {
+				item[element_index].next = &item[element_index + 1];
+			}
+			item[size - 1].next = nullptr;
+		}
 		/**
-		 *
-		 * @return
 		 */
 		constexpr size_t getItemSize() const noexcept { return sizeof(PoolAllactorItem); }
 

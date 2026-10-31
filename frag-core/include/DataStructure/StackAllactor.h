@@ -19,7 +19,7 @@
 #define _FRAGCORE_STACK_ALLOCATOR_H_ 1
 #include "../FragDef.h"
 #include "Core/UIDObject.h"
-#include "DataStructure/IMemoryPool.h"
+#include "IMemoryPool.h"
 
 namespace fragcore {
 
@@ -78,11 +78,11 @@ namespace fragcore {
 		StackAllocator &operator=(const StackAllocator &other);
 		StackAllocator &operator=(StackAllocator &&other);
 
-				/*	*/
+		/*	*/
 		bool operator==(const StackAllocator &other);
 		bool operator!=(const StackAllocator &other);
 
-				/*	*/
+		/*	*/
 		bool isDataOwned() const noexcept { return this->ownData; }
 
 	  private:			/*	Attributes.	*/

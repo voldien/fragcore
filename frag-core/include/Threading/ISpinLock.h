@@ -29,7 +29,7 @@ namespace fragcore {
 		virtual ~ISpinLock() = default;
 		// TODO: add return values.
 		virtual void lock() = 0;
-		virtual void tryLock() { this->lock(); } // TODO:
+		virtual bool tryLock() noexcept = 0;
 		virtual void unlock() = 0;
 		virtual void wait(long int nanoTimeout = -1) = 0;
 

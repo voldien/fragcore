@@ -171,7 +171,7 @@ namespace fragcore {
 #define FV_X86 1
 #define FV_X86_64 1
 #endif
-#if defined(__arm__)
+#ifdef __arm__
 #define EX_ARM 1
 #endif
 
@@ -272,7 +272,7 @@ namespace fragcore {
  *	restrict declaration.
  */
 #ifndef FV_RESTRICT
-#if defined(FV_GNUC)
+#ifdef FV_GNUC
 #define FV_RESTRICT __restrict__
 #elif defined(FV_VC) || defined(FV_CLANG)
 #define FV_RESTRICT __restrict
@@ -284,7 +284,7 @@ namespace fragcore {
 /*
  *	force inline.
  */
-#if defined(FV_MSVC)
+#ifdef FV_MSVC
 #define FV_ALWAYS_INLINE __forceinline
 #elif defined(FV_GNUC) || defined(FV_CLANG)
 #define FV_ALWAYS_INLINE inline __attribute__((always_inline))
@@ -322,7 +322,7 @@ namespace fragcore {
  *	library declaration.
  */
 #if defined(FV_GNUC) || defined(FV_CLANG)
-#if defined(FV_UNIX)
+#ifdef FV_UNIX
 #define FVDECLSPEC __attribute__((__visibility__("default")))
 #else
 #define FVDECLSPEC

@@ -17,6 +17,7 @@
  */
 #ifndef _FRAGCORE_DISJOINT_SET_H_
 #define _FRAGCORE_DISJOINT_SET_H_ 1
+#include "IDataStructure.h"
 #include <algorithm>
 #include "FragDef.h"
 
@@ -27,7 +28,7 @@ namespace fragcore {
 	 *
 	 * @tparam T
 	 */
-	template <class T> class FVDECLSPEC DisjointSet {
+	template <typename T> class FVDECLSPEC DisjointSet : public IDataStructure<T> {
 
 		using Partition = struct partition {
 			int parent; /*	*/

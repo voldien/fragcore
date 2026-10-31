@@ -18,6 +18,7 @@
 #ifndef _FRAGCORE_STACK_H_
 #define _FRAGCORE_STACK_H_ 1
 #include "../FragDef.h"
+#include "IDataStructure.h"
 #include "Iterator.h"
 #include <utility>
 
@@ -28,8 +29,9 @@ namespace fragcore {
 	 *
 	 * @tparam T
 	 */
+	// TODO: use some interface
 	// TODO add atomic support
-	template <typename T> class Stack {
+	template <typename T> class Stack : public IDataStructure<T> {
 	  public:
 		Stack() {
 			this->data = nullptr;
@@ -77,23 +79,27 @@ namespace fragcore {
 			return this->data[this->nrElements - 1];
 		}
 
-		T &peek() const { return data[this->nrElements - 1]; }
+		T &peek() { return this->data[this->nrElements - 1]; }
+		const T &peek() const { return this->data[this->nrElements - 1]; }
 
-		T &pop() {
+		T &pop(const size_t popNrElements = 1) {
 			// TODO add validate
-			if (this->nrElements > 0) {
-				this->nrElements--;
-				return this->data[this->nrElements + 1];
+			if (this->nrElements > 0 && popNrElements <= this->nrElements) {
+				const size_t topStack = this->nrElements - 1;
+				this->nrElements -= popNrElements;
+				return this->data[topStack + 1];
 			}
 
 			throw RuntimeException("Stack Is Empty");
 		}
 
 		T &operator[](const size_t index) { return this->data[index]; }
-
 		const T &operator[](const size_t index) const { return this->data[index]; }
 
 		void reserve(const size_t nrOfElement) {
+
+			if constexpr (IDataStructure<T>::isClass) {
+			}
 			this->data = static_cast<T *>(realloc(this->data, nrOfElement * sizeof(T)));
 			if (this->data == nullptr) {
 				throw RuntimeException("Out of memory"); // TODO replace with the system exception.

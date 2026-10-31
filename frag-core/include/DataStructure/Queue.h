@@ -20,6 +20,7 @@
 #include "Iterator.h"
 #include <memory>
 #include <utility>
+#include "IDataStructure.h"
 
 namespace fragcore {
 	/**
@@ -29,7 +30,7 @@ namespace fragcore {
 	 * @tparam U
 	 */
 	// TODO add atomic support
-	template <class T, int U = 0> class Queue : public std::allocator<T> {
+	template <class T, int U = 0> class Queue : public std::allocator<T>, IDataStructure<T> {
 	  public:
 		static constexpr bool isClass = std::is_class_v<T>;
 		using DType = T;

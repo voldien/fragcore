@@ -29,14 +29,15 @@ namespace fragcore {
 		StdSpinLock();
 		~StdSpinLock() override;
 
-		void lock() override = 0;
-		void unlock() override = 0;
-		void wait(long int nanoTimeout = -1) override = 0;
+		void lock() override;
+		bool tryLock() noexcept override;
+		void unlock() override;
+		void wait(long int nanoTimeout = -1) override;
 
-		intptr_t getNativePtr() const override = 0;
+		intptr_t getNativePtr() const override;
 
 	  private:
-		void *spinlock; /*  */
+		size_t spinlock; /*  */
 	};
 } // namespace fragcore
 

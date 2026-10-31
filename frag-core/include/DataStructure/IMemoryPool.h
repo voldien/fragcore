@@ -26,8 +26,8 @@ namespace fragcore {
 	 */
 	class FVDECLSPEC IMemoryPool { // TODO: refractor name
 	  public:
-		size_t alloc(const size_t sizeBytes) noexcept;
-		size_t allocateAligned(const size_t sizeBytes, const unsigned int alignment) noexcept;
+		size_t alloc(const size_t sizeBytes);
+		size_t allocateAligned(const size_t sizeBytes, const unsigned int alignment);
 
 		virtual void clear() noexcept = 0;
 		virtual void freeToMarker(const size_t marker) = 0;
